@@ -30,9 +30,10 @@ Coming soon:
 - Initial targets: Wₑ, g−2, neutrino oscillations, photon redshift.
 - See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines (to be created).
 
+
 ## 📖 Learn More
 
-- [Full Book PDF](docs/QFD_Book.pdf)
+- [Full Book PDF (v5.1)](https://github.com/tracyphasespace/Quantum-Field-Dynamics/blob/main/5.1%20QFD%20Book.pdf)
 - [Technical Review](docs/QFD_Review.pdf)
 - [Whitepaper Summary](docs/QFD_Whitepaper.pdf)
 
