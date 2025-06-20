@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QFD: The 25 Aha Moments - An Infographic Exploration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #00A1E4, #FFBB33);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card {
+            background-color: #1F2937; /* bg-gray-800 */
+            border: 1px solid #374151; /* border-gray-700 */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 161, 228, 0.2), 0 4px 6px -2px rgba(0, 161, 228, 0.1);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+        }
+        .flow-diagram-box {
+            background-color: #374151; /* bg-gray-700 */
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        .flow-arrow {
+            color: #33B5E5;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        .separator-text {
+            border-top: 1px solid #374151;
+            border-bottom: 1px solid #374151;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-300">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8">
+        
+        <header class="text-center mb-12 md:mb-16">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 gradient-text">The 25 Aha Moments of QFD</h1>
+            <p class="text-lg text-gray-400 max-w-4xl mx-auto">An infographic journey through the core principles of Quantum Field Dynamics. Each card represents a fundamental shift in perspective, moving from postulated forces and particles to an emergent reality derived from a single, unified field.</p>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            
+            <!-- Moment 1: Electron Stability -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">1. Electron Stability</h3>
+                <p class="text-sm text-gray-400 mb-4">Electrons are negative density wavelets that can oscillate through positive density nuclei - no point particle "spiral of death".</p>
+                <div class="flex-grow flex flex-col justify-center my-4">
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div>
+                            <p class="text-3xl text-red-400 mb-2">✗</p>
+                            <p class="font-semibold text-sm">Point Particle</p>
+                            <p class="text-xs text-gray-500">Spiral of Death</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl text-green-400 mb-2">✓</p>
+                            <p class="font-semibold text-sm">Wavelet Oscillation</p>
+                            <p class="text-xs text-gray-500">Stable System</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Rutherford catastrophe</p>
+            </div>
+
+            <!-- Moment 2: Atomic Shells -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">2. Atomic Shells</h3>
+                <p class="text-sm text-gray-400 mb-4">Orbital patterns are geometric multipole oscillations (monopole=s, dipole=p, quadrupole=d) of a void through a nucleus.</p>
+                <div class="flex-grow flex flex-col justify-center my-4 space-y-2 text-center text-xs">
+                     <div class="flex items-center justify-center space-x-2"><div class="w-12 h-12 rounded-full border-2 border-dashed border-blue-400 flex items-center justify-center">s</div> <span class="font-mono text-gray-400">→ Monopole</span></div>
+                     <div class="flex items-center justify-center space-x-2"><div class="w-12 h-12 rounded-full border-2 border-dashed border-yellow-400 flex items-center justify-center">p</div> <span class="font-mono text-gray-400">→ Dipole</span></div>
+                     <div class="flex items-center justify-center space-x-2"><div class="w-12 h-12 rounded-full border-2 border-dashed border-red-400 flex items-center justify-center">d</div> <span class="font-mono text-gray-400">→ Quadrupole</span></div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Quantum orbital "magic"</p>
+            </div>
+
+            <!-- Moment 3: Bell's Theorem -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">3. Bell's Theorem</h3>
+                <p class="text-sm text-gray-400 mb-4">"Entangled particles" are two peaks of one extended wavelet - no faster-than-light communication needed.</p>
+                <div class="flex-grow flex flex-col justify-center my-4 p-4 bg-gray-900 rounded-lg">
+                    <div class="relative h-20 w-full">
+                        <div class="absolute inset-0 border-b-2 border-blue-400 border-dashed rounded-full transform -skew-y-3"></div>
+                        <div class="absolute bottom-[-10px] left-[15%] text-center"><p class="font-bold text-yellow-400">A</p><p class="text-xs">Peak 1</p></div>
+                        <div class="absolute bottom-[-10px] right-[15%] text-center"><p class="font-bold text-yellow-400">B</p><p class="text-xs">Peak 2</p></div>
+                        <p class="text-center text-xs text-blue-300 absolute w-full top-0">Single Extended Wavelet</p>
+                    </div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: EPR paradox</p>
+            </div>
+
+            <div class="md:col-span-2 lg:col-span-3 my-8 py-6 separator-text">
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto text-center">
+                    The journey begins at the quantum scale, redefining the very nature of particles. By treating them as stable, extended 'wavelets' instead of points, QFD provides inherent stability to the atom and offers a physical, intuitive explanation for the spooky correlations of quantum entanglement. This foundational shift from points to geometric forms is the first step toward building a more coherent reality.
+                </p>
+            </div>
+            
+            <!-- Moment 4: Dark Matter Elimination -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">4. Dark Matter Elimination</h3>
+                <p class="text-sm text-gray-400 mb-4">Galaxy rotation curves explained by black hole dynamics and wavelet interactions, not missing matter.</p>
+                <div class="flex-grow chart-container my-4">
+                    <canvas id="galaxyRotationChart"></canvas>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: 95% invisible universe problem</p>
+            </div>
+
+            <!-- Moment 5: Dark Energy Elimination -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">5. Dark Energy Elimination</h3>
+                <p class="text-sm text-gray-400 mb-4">Supernovae dimming from flux-dependent redshift near source, not cosmic acceleration.</p>
+                <div class="flex-grow chart-container my-4">
+                     <canvas id="supernovaDimmingChart"></canvas>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Cosmic acceleration mystery</p>
+            </div>
+
+            <!-- Moment 6: CMB Reinterpretation -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">6. CMB Reinterpretation</h3>
+                <p class="text-sm text-gray-400 mb-4">Cosmic microwave background is present-day thermal equilibrium, not Big Bang afterglow.</p>
+                <div class="flex-grow chart-container my-4">
+                     <canvas id="cmbChart"></canvas>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Hot Big Bang model issues</p>
+            </div>
+
+            <div class="md:col-span-2 lg:col-span-3 my-8 py-6 separator-text">
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto text-center">
+                    With a new particle ontology, QFD confronts the greatest puzzles in cosmology. The "dark" components of the universe are revealed not as mysterious substances, but as misinterpretations of known physics operating under new rules. By eliminating the need for Dark Matter and Dark Energy, QFD offers a cosmos composed entirely of what we can see and infer, explained by the dynamics of the unified ψ-field.
+                </p>
+            </div>
+
+            <!-- Moment 7: Redshift Mechanism -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">7. Redshift Mechanism</h3>
+                <p class="text-sm text-gray-400 mb-4">Cosmological redshift from lab-verified photon-photon interactions: gigawatts×zeptoseconds = zeptowatts×gigayears.</p>
+                 <div class="flex-grow flex flex-col justify-center space-y-2 my-4">
+                    <div class="flow-diagram-box text-blue-300">High-Energy Photon</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-diagram-box text-gray-400">Interacts with ψ-Field (CMB)</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-diagram-box text-red-300">Lower-Energy (Redshifted) Photon</div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Hubble expansion's physical basis</p>
+            </div>
+
+            <!-- Moment 8: Time Revolution -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">8. Time Revolution</h3>
+                <p class="text-sm text-gray-400 mb-4">Time is a positive local scalar (like temperature) measuring change rate, not a traversable dimension.</p>
+                 <div class="flex-grow grid grid-cols-2 gap-4 items-center my-4 text-center">
+                    <div>
+                        <p class="text-2xl line-through text-red-400">↔</p>
+                        <p class="text-xs mt-2">Traversable Dimension</p>
+                    </div>
+                    <div>
+                        <p class="text-4xl text-green-400">⌛</p>
+                        <p class="text-xs mt-2">Scalar Rate of Change</p>
+                    </div>
+                 </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Time travel paradoxes</p>
+            </div>
+            
+            <!-- Moment 9: Gradient Unification -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">9. Gradient Unification</h3>
+                <p class="text-sm text-gray-400 mb-4">All forces are different slopes in the same field: flat=gravity, moderate=charge, steep=nuclear, negative=electron limit.</p>
+                <div class="flex-grow chart-container my-4">
+                    <canvas id="forceGradientChart"></canvas>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Force unification</p>
+            </div>
+
+            <div class="md:col-span-2 lg:col-span-3 my-8 py-6 separator-text">
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto text-center">
+                    At the heart of QFD's unifying power is a re-evaluation of fundamental concepts. Redshift is no longer the stretching of space but a physical interaction. Time is not a dimension but an emergent measure of change. And most profoundly, the distinct forces of nature are revealed to be nothing more than different gradients in the single, underlying ψ-field.
+                </p>
+            </div>
+
+            <!-- Moment 10: Black Hole Recycling -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">10. Black Hole Recycling</h3>
+                <p class="text-sm text-gray-400 mb-4">Black holes eject matter via saddle point interactions during close encounters, not information destroyers.</p>
+                 <div class="flex-grow flex flex-col justify-center my-4 space-y-2">
+                    <div class="text-center font-bold text-lg">BH + BH</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="text-center font-bold text-lg">Merger / Close Encounter</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="text-center font-bold text-lg text-yellow-400">Matter Ejection</div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Information paradox</p>
+            </div>
+
+            <!-- Moment 11: Galaxy Formation -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">11. Galaxy Formation</h3>
+                <p class="text-sm text-gray-400 mb-4">Luminous disks form from SMBH matter ejection during collisions, not dark matter scaffolding.</p>
+                 <div class="flex-grow flex flex-col justify-center space-y-2 my-4">
+                    <div class="flow-diagram-box">SMBH Collision</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-diagram-box">Matter Ejection</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-diagram-box text-yellow-300">Luminous Galactic Disk</div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Galaxy formation without invisible framework</p>
+            </div>
+            
+            <!-- Moment 12: Static Universe -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">12. Static Universe</h3>
+                <p class="text-sm text-gray-400 mb-4">Infinite, eternal cosmos with no beginning or expansion - redshift from field interactions.</p>
+                <div class="flex-grow flex items-center justify-center my-4">
+                    <p class="text-8xl font-thin text-blue-400">∞</p>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Big Bang singularity</p>
+            </div>
+            
+            <div class="md:col-span-2 lg:col-span-3 my-8 py-6 separator-text">
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto text-center">
+                    The framework now scales up to astrophysical objects. Black holes are transformed from information sinks into cosmic recycling plants, providing a mechanism for galactic formation. This new understanding of object dynamics operates within the profound context of a static, eternal cosmos, entirely sidestepping the need for a singular beginning.
+                </p>
+            </div>
+
+            <!-- Moment 13: Planck Scale Irrelevance -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">13. Planck Scale Irrelevance</h3>
+                <p class="text-sm text-gray-400 mb-4">No initial infinite temperature or Planck-scale physics required for cosmic evolution.</p>
+                <div class="flex-grow flex flex-col justify-center my-4 space-y-4 text-center">
+                    <div>
+                        <p class="font-semibold text-red-400">Big Bang Model</p>
+                        <p class="text-sm line-through">Requires Infinite T₀</p>
+                    </div>
+                     <div>
+                        <p class="font-semibold text-green-400">QFD Model</p>
+                        <p class="text-sm">Finite, Equilibrium-Based</p>
+                    </div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Quantum gravity crisis</p>
+            </div>
+
+            <!-- Moment 14: Charge Quantization -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">14. Charge Quantization</h3>
+                <p class="text-sm text-gray-400 mb-4">Electron charge is geometrically quantized by hitting a zero-density floor - can't go "more negative".</p>
+                <div class="flex-grow flex flex-col justify-center my-4">
+                    <div class="w-full h-24 bg-gray-900 rounded-lg relative p-2">
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-yellow-400"></div>
+                        <p class="text-xs text-yellow-500 absolute bottom-1 left-2">Zero-Density Floor</p>
+                        <p class="absolute bottom-0 left-1/2 text-2xl text-blue-400">e⁻</p>
+                    </div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Elementary charge mystery</p>
+            </div>
+            
+            <!-- Moment 15: Nuclear Binding -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">15. Nuclear Binding</h3>
+                <p class="text-sm text-gray-400 mb-4">Nuclei stabilized by electron shielding geometry, not strong force - void fills concentration.</p>
+                 <div class="flex-grow flex justify-center items-center my-4 border-2 border-dashed border-gray-600 rounded-lg p-4">
+                   <div class="text-center relative">
+                        <span class="text-2xl text-blue-300">[+ Nucleus +]</span>
+                        <div class="absolute inset-0 flex items-center justify-center text-xl text-yellow-300/50">
+                            <span>e- cloud</span>
+                        </div>
+                       <div class="text-green-400 font-bold mt-2 text-sm">
+                           Geometric Stability
+                       </div>
+                   </div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Nuclear stability without a new force</p>
+            </div>
+
+            <div class="md:col-span-2 lg:col-span-3 my-8 py-6 separator-text">
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto text-center">
+                    Here, QFD demonstrates its power to simplify core physical laws. By removing the need for a Big Bang, it dissolves the quantum gravity crisis at t=0. At the particle level, it provides a physical, topological mechanism for charge quantization and, most significantly, offers a force-free model for nuclear binding based on the geometry of its electron and nuclear wavelets.
+                </p>
+            </div>
+
+            <!-- Moment 16: Variable Light Speed -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">16. Variable Light Speed</h3>
+                <p class="text-sm text-gray-400 mb-4">Speed of light c'=c_vac/√h(ψs) varies with local field density - not universal constant.</p>
+                <div class="flex-grow chart-container my-4">
+                     <canvas id="lightSpeedChart"></canvas>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Gravitational effects (unified mechanism)</p>
+            </div>
+
+            <!-- Moment 17: Singularity Avoidance -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">17. Singularity Avoidance</h3>
+                <p class="text-sm text-gray-400 mb-4">Discrete time quanta and bounded field values prevent infinite densities or curvatures.</p>
+                <div class="flex-grow chart-container my-4">
+                     <canvas id="singularityChart"></canvas>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: General relativity breakdown</p>
+            </div>
+
+            <!-- Moment 18: Geometric "i" -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">18. Geometric "i"</h3>
+                <p class="text-sm text-gray-400 mb-4">Quantum phase from real bivector rotations B²=-1, not abstract complex numbers.</p>
+                <div class="flex-grow flex flex-col justify-center space-y-4 my-4 text-center">
+                    <div class="text-lg font-mono text-red-400 line-through">e^(iθ) = cos(θ) + i sin(θ)</div>
+                    <div class="text-lg font-mono text-green-400">e^(Bθ) = cos(θ) + B sin(θ)</div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Imaginary number mystery</p>
+            </div>
+
+            <div class="md:col-span-2 lg:col-span-3 my-8 py-6 separator-text">
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto text-center">
+                    These concepts represent the deepest implications of the QFD framework. A variable speed of light becomes the unified mechanism for gravity and optics. The field's bounded nature naturally prevents the singularities that plague General Relativity. And perhaps most elegantly, the abstract imaginary unit `i` is given a physical body as a real geometric object that generates rotation.
+                </p>
+            </div>
+
+            <!-- Moment 19: Emergent Constants -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">19. Emergent Constants</h3>
+                <p class="text-sm text-gray-400 mb-4">All fundamental constants (e, ħ, G, c) calculated from field dynamics, not measured inputs.</p>
+                 <div class="flex-grow flex flex-col justify-center space-y-2 my-4">
+                    <div class="flow-diagram-box text-blue-300">L_6D Lagrangian</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-diagram-box text-gray-400">Calibration Procedure</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="grid grid-cols-4 gap-2 text-center text-xs font-bold text-yellow-300">
+                        <div>e</div><div>ħ</div><div>G</div><div>c</div>
+                    </div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Fine-tuning problem</p>
+            </div>
+            
+            <!-- Moment 20: Causal Mechanics -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">20. Causal Mechanics</h3>
+                <p class="text-sm text-gray-400 mb-4">Universe follows Hamiltonian geodesics in configuration space - deterministic evolution without time.</p>
+                <div class="flex-grow flex flex-col justify-center my-4 p-4 bg-gray-900 rounded-lg text-center">
+                    <p class="font-semibold text-green-400">Hamiltonian Geodesic</p>
+                    <div class="w-full h-1 bg-green-400 my-2"></div>
+                    <p class="text-xs text-gray-400 mb-4">A single, deterministic path.</p>
+                    
+                    <p class="font-semibold text-red-400 line-through">Probabilistic Collapse</p>
+                    <div class="w-full h-1 bg-red-400/50 my-2 relative">
+                        <div class="absolute left-1/2 top-1/2 w-1/2 h-0.5 bg-red-400/50 -translate-y-1/2 -rotate-12 origin-left"></div>
+                        <div class="absolute left-1/2 top-1/2 w-1/2 h-0.5 bg-red-400/50 -translate-y-1/2 rotate-12 origin-left"></div>
+                    </div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Quantum measurement problem</p>
+            </div>
+            
+            <!-- Moment 21: Physical Dimensional Reduction -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">21. Physical Dim. Reduction</h3>
+                <p class="text-sm text-gray-400 mb-4">A particle's physical spin axis is used to define a unique "longitudinal" momentum dimension.</p>
+                 <div class="flex-grow flex items-center justify-center my-4 text-center space-x-4">
+                    <div class="font-mono text-sm bg-gray-700 p-2 rounded">6D Phase Space<br>(x,y,z,p_x,p_y,p_z)</div>
+                    <div class="text-2xl text-blue-400">→</div>
+                    <div class="font-mono text-sm bg-blue-400/20 p-2 rounded text-blue-300">4D Spacetime<br>(x,y,z, t ← p_z)</div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: The "Hidden Dimensions" Problem</p>
+            </div>
+            
+            <div class="md:col-span-2 lg:col-span-3 my-8 py-6 separator-text">
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto text-center">
+                    This cluster of ideas showcases the deep symmetries and predictive power of QFD. Physical constants are no longer arbitrary inputs but are calculable outputs of the theory. The universe's evolution is deterministic and causal, and the very dimensions of spacetime are shown to be an emergent property of the dynamics in a more fundamental 6D phase space.
+                </p>
+            </div>
+
+            <!-- Moment 22: Weak Force Reinterpretation -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">22. Weak Force Reinterpretation</h3>
+                <p class="text-sm text-gray-400 mb-4">Radioactive decay is the geometric reconfiguration of a nuclear wavelet tunneling through a "temporal potential barrier," not a fundamental force.</p>
+                 <div class="flex-grow flex flex-col justify-center my-4">
+                    <div class="w-full h-24 bg-gray-900 rounded-lg relative p-2 text-center">
+                        <div class="absolute inset-0 border-2 border-dashed border-yellow-400 rounded-lg transform skew-y-[-2deg]"></div>
+                        <p class="text-xs text-yellow-500 absolute top-1 left-2">Temporal Potential Barrier</p>
+                         <p class="absolute left-[10%] top-[40%] text-blue-400">Unstable Nucleus</p>
+                         <p class="text-2xl absolute left-[45%] top-[35%]">→</p>
+                         <p class="absolute right-[10%] top-[40%] text-green-400">Decay Products</p>
+                    </div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Eliminates Weak Nuclear Force</p>
+            </div>
+
+            <!-- Moment 23: Stability as Quantizing Principle -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">23. Stability as Quantizing Principle</h3>
+                <p class="text-sm text-gray-400 mb-4">The discrete spectrum of observed particles arises from dynamic stability in a continuum of geometric possibilities.</p>
+                <div class="flex-grow chart-container my-4">
+                    <canvas id="stabilityChart"></canvas>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Origin of quantum discreteness</p>
+            </div>
+            
+            <!-- Moment 24: Unified Particle Ontology -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">24. Unified Particle Ontology</h3>
+                <p class="text-sm text-gray-400 mb-4">All observed matter and forces emerge from the interactions of just three fundamental wavelet archetypes.</p>
+                 <div class="flex-grow flex flex-col justify-center space-y-3 my-4">
+                    <div class="p-3 bg-blue-500/20 border border-blue-400 rounded-lg text-center font-semibold">Positive-Density "Lumps" (Nuclei)</div>
+                    <div class="p-3 bg-yellow-500/20 border border-yellow-400 rounded-lg text-center font-semibold">Negative-Density "Voids" (Electrons)</div>
+                    <div class="p-3 bg-red-500/20 border border-red-400 rounded-lg text-center font-semibold">Propagating Disturbances (Photons)</div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: Simplification of the Standard Model</p>
+            </div>
+
+            <div class="md:col-span-2 lg:col-span-3 my-8 py-6 separator-text">
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto text-center">
+                    In this final synthesis, QFD achieves its ultimate goal of ontological parsimony. The Weak Force is reinterpreted as a geometric process. The "particle zoo" is explained not by a list of fundamental entities, but by the principle that only dynamically stable configurations can persist. And all of reality is ultimately reduced to the interaction of three simple wavelet archetypes.
+                </p>
+            </div>
+            
+            <!-- Moment 25: Self-Regulating Cosmology -->
+            <div class="card rounded-xl p-6 flex flex-col">
+                <h3 class="font-bold text-xl mb-2 text-white">25. Self-Regulating Cosmology</h3>
+                <p class="text-sm text-gray-400 mb-4">Large-scale structure is the statistical signature of an eternal, self-regulating "predator-prey" cycle of black hole consumption and recycling.</p>
+                 <div class="flex-grow flex flex-col justify-center my-4">
+                     <div class="relative w-48 h-48 mx-auto">
+                         <div class="absolute inset-0 border-4 border-dashed border-blue-400 rounded-full animate-spin [animation-duration:20s]"></div>
+                         <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-800 px-2 text-xs">Consumption</div>
+                         <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-gray-800 px-2 text-xs">Recycling</div>
+                         <div class="absolute left-0 top-1/2 -translate-y-1/2 translate-x-[-50%] bg-gray-800 px-2 text-xs rotate-90">Formation</div>
+                         <div class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[50%] bg-gray-800 px-2 text-xs -rotate-90">Mergers</div>
+                     </div>
+                </div>
+                <p class="text-xs font-semibold text-center mt-4 p-2 bg-green-500/10 text-green-300 rounded">SOLVES: The initial conditions problem</p>
+            </div>
+
+        </main>
+
+        <footer class="text-center mt-16 pt-8 border-t border-gray-800">
+            <p class="text-gray-500">An exploration of Quantum Field Dynamics. Visualizations generated using Chart.js and styled HTML/CSS. <br>No SVG or Mermaid JS were used in the creation of this document.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+              return label.join(' ');
+            } else {
+              return label;
+            }
+        };
+
+        const chartJsDefaults = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: { title: tooltipTitleCallback }
+                }
+            },
+            scales: {
+                x: { ticks: { color: '#9CA3AF', font: {size: 10}}, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                y: { ticks: { color: '#9CA3AF', font: {size: 10}}, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+            }
+        };
+        
+        const colors = {
+            blue: '#33B5E5',
+            yellow: '#FFBB33',
+            red: '#FF4444',
+            green: '#00C851',
+            gray: '#4B5563'
+        };
+
+        // Chart 4: Galaxy Rotation
+        const galaxyRotationCtx = document.getElementById('galaxyRotationChart').getContext('2d');
+        new Chart(galaxyRotationCtx, {
+            type: 'line',
+            data: {
+                labels: ['0', '10', '20', '30', '40', '50'],
+                datasets: [{
+                    label: 'Expected from Visual Matter',
+                    data: [0, 220, 180, 150, 130, 110],
+                    borderColor: colors.red,
+                    tension: 0.4
+                }, {
+                    label: 'Observed / QFD Prediction',
+                    data: [0, 220, 225, 220, 222, 220],
+                    borderColor: colors.blue,
+                    tension: 0.4
+                }]
+            },
+            options: {...chartJsDefaults, plugins: { legend: { display: true, labels: {color: '#D1D5DB', boxWidth: 10, font: {size: 10}}}}}
+        });
+
+        // Chart 5: Supernova Dimming
+        const supernovaDimmingCtx = document.getElementById('supernovaDimmingChart').getContext('2d');
+        new Chart(supernovaDimmingCtx, {
+            type: 'line',
+            data: {
+                labels: ['Nearby', 'Distant'],
+                datasets: [{
+                    label: 'Expected Brightness',
+                    data: [100, 25],
+                    borderColor: colors.yellow,
+                    borderDash: [5, 5]
+                }, {
+                    label: 'Observed Brightness',
+                    data: [100, 15],
+                    borderColor: colors.red,
+                    backgroundColor: 'rgba(255, 68, 68, 0.2)'
+                }]
+            },
+            options: {...chartJsDefaults, plugins: { legend: { display: true, labels: {color: '#D1D5DB', boxWidth: 10, font: {size: 10}}}}}
+        });
+
+        // Chart 6: CMB Reinterpretation
+        const cmbCtx = document.getElementById('cmbChart').getContext('2d');
+        new Chart(cmbCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Present-Day Thermal Equilibrium (QFD)', 'Big Bang Afterglow (Standard Model)'],
+                datasets: [{
+                    data: [100, 100], // For visual comparison, not %
+                    backgroundColor: [colors.blue, colors.red],
+                    borderColor: '#1F2937',
+                    borderWidth: 4
+                }]
+            },
+            options: {...chartJsDefaults, plugins: { legend: { display: true, position: 'bottom', labels: {color: '#D1D5DB', boxWidth: 10, font: {size: 10}}}}, scales: {}}
+        });
+        
+        // Chart 9: Force Gradient
+        const forceGradientCtx = document.getElementById('forceGradientChart').getContext('2d');
+        new Chart(forceGradientCtx, {
+            type: 'line',
+            data: {
+                labels: ['Gravity', 'Charge', 'Nuclear', 'Electron Limit'],
+                datasets: [{
+                    label: 'Gradient Slope',
+                    data: [0.1, 2, 8, -2],
+                    borderColor: colors.yellow,
+                    fill: true,
+                    backgroundColor: 'rgba(255, 187, 51, 0.2)',
+                    tension: 0.4,
+                }]
+            },
+            options: {...chartJsDefaults, plugins: {legend: {display: false}}}
+        });
+
+        // Chart 16: Variable Light Speed
+        const lightSpeedCtx = document.getElementById('lightSpeedChart').getContext('2d');
+        new Chart(lightSpeedCtx, {
+            type: 'line',
+            data: {
+                labels: ['Low', 'Medium', 'High', 'Extreme'],
+                datasets: [{
+                    label: "Speed of Light (c')",
+                    data: [100, 90, 70, 40],
+                    borderColor: colors.blue,
+                    tension: 0.1
+                }]
+            },
+            options: {...chartJsDefaults, scales: {x: {title: {display: true, text: 'Field Density h(ψs)', color: '#D1D5DB'}}}}
+        });
+
+        // Chart 17: Singularity Avoidance
+        const singularityCtx = document.getElementById('singularityChart').getContext('2d');
+        new Chart(singularityCtx, {
+            type: 'line',
+            data: {
+                labels: ['0', '1', '2', '3', '4', '5'],
+                datasets: [{
+                    label: 'GR (Singularity)',
+                    data: [1, 1.5, 3, 7, 20, 100],
+                    borderColor: colors.red
+                }, {
+                    label: 'QFD (Bounded)',
+                    data: [1, 1.5, 2.8, 5, 8, 9],
+                    borderColor: colors.green
+                }]
+            },
+            options: {...chartJsDefaults, plugins: { legend: { display: true, labels: {color: '#D1D5DB', boxWidth: 10, font: {size: 10}}}}, scales: {y: {suggestedMax: 10}}}
+        });
+        
+        // Chart 23: Stability Chart
+        const stabilityCtx = document.getElementById('stabilityChart').getContext('2d');
+        new Chart(stabilityCtx, {
+            type: 'bar',
+            data: {
+                labels: ['e⁻', 'μ⁻', 'Resonance A', 'τ⁻', 'Resonance B'],
+                datasets: [{
+                    label: 'Stability (Inverse Energy)',
+                    data: [10, 8, 2, 7, 1],
+                    backgroundColor: [colors.blue, colors.blue, colors.gray, colors.blue, colors.gray],
+                }]
+            },
+            options: {...chartJsDefaults, plugins: {legend: {display: false}}, scales: {y: {title: {display: true, text: 'Relative Stability', color: '#D1D5DB'}}}}
+        });
+
+    </script>
+</body>
+</html>

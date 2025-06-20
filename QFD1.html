@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Field Dynamics: A Universe Reimagined</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+                max-height: 500px;
+            }
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #00A1E4, #FF4E50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            line-height: 1;
+            color: #33B5E5;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 gradient-text">A Universe Reimagined</h1>
+            <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">Exploring the core principles of Quantum Field Dynamics (QFD) — a framework that proposes a simpler, more elegant, and fully unified description of reality, from the smallest particle to the grandest cosmic structures.</p>
+        </header>
+
+        <main class="space-y-20">
+
+            <section id="foundation">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">The Foundation: One Field to Rule Them All</h2>
+                    <p class="mt-4 text-gray-400 max-w-2xl mx-auto">Standard physics requires a "zoo" of over 17 fundamental particles and four distinct forces. QFD starts from a radically simpler premise: all of reality emerges from the dynamics and geometry of a single, unified multivector field, ψ.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
+                    
+                    <div class="md:col-span-2 bg-gray-800 p-6 rounded-xl shadow-2xl">
+                        <h3 class="text-2xl font-bold text-center mb-4 text-[#00A1E4]">Particle Ontology Comparison</h3>
+                        <p class="text-center text-sm text-gray-400 mb-6">QFD radically simplifies the Standard Model's "particle zoo" into three fundamental wavelet archetypes.</p>
+                        <div class="chart-container h-[300px] md:h-[350px]">
+                            <canvas id="particleChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-3">
+                        <div class="bg-gray-800 p-6 rounded-xl shadow-2xl">
+                            <h3 class="text-2xl font-bold text-center mb-6 text-[#00A1E4]">Unification from a Single Field</h3>
+                            <div class="flex flex-col items-center">
+                                <div class="bg-blue-500/20 border-2 border-blue-400 text-white font-bold p-4 rounded-full shadow-lg">
+                                    ψ-Field
+                                </div>
+                                <div class="flow-arrow my-2">↓</div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                                    <div class="bg-gray-700 p-4 rounded-lg text-center">
+                                        <h4 class="font-semibold text-lg">Scalar Component ⟨ψ⟩₀</h4>
+                                        <p class="text-sm text-gray-400">Emergent Gravity & Vacuum Properties</p>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg text-center">
+                                        <h4 class="font-semibold text-lg">Vector Component ⟨ψ⟩₁</h4>
+                                        <p class="text-sm text-gray-400">Emergent Electromagnetism</p>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg text-center">
+                                        <h4 class="font-semibold text-lg">Bivector Component ⟨ψ⟩₂</h4>
+                                        <p class="text-sm text-gray-400">Emergent Spin & Quantum Phase</p>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg text-center">
+                                        <h4 class="font-semibold text-lg">Field Gradients ∇ψ</h4>
+                                        <p class="text-sm text-gray-400">Emergent Forces</p>
+                                    </div>
+                                </div>
+                                <div class="flow-arrow my-2">↓</div>
+                                 <div class="bg-green-500/20 border-2 border-green-400 text-white font-bold p-4 rounded-xl shadow-lg w-full text-center">
+                                    All Observable Physics
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="matter">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">A New Architecture for Matter</h2>
+                    <p class="mt-4 text-gray-400 max-w-2xl mx-auto">QFD proposes a force-free model for the atomic nucleus. The Strong Nuclear Force is no longer needed. Stability arises from a profound geometric and energetic balance.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-2xl">
+                        <h3 class="text-2xl font-bold mb-4 text-center text-red-400">Standard Model: The Strong Force</h3>
+                        <p class="text-sm text-gray-400 mb-6 text-center">A separate, fundamental force, ~137 times stronger than electromagnetism, is postulated to bind protons and neutrons, overcoming immense electrostatic repulsion.</p>
+                        <div class="flex justify-center items-center h-48 border-2 border-dashed border-gray-600 rounded-lg p-4">
+                           <div class="text-center">
+                               <span class="text-4xl">p+ n p+</span>
+                               <div class="text-red-400 font-bold mt-4 flex items-center justify-center gap-4">
+                                   <span class="text-2xl">↔</span>
+                                   <span>Strong Force</span>
+                                   <span class="text-2xl">↔</span>
+                               </div>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-2xl">
+                        <h3 class="text-2xl font-bold mb-4 text-center text-blue-400">QFD: Electron Shielding</h3>
+                        <p class="text-sm text-gray-400 mb-6 text-center">The nucleus is a single, positive wavelet. Stability is achieved by the geometric cancellation from the interpenetrating "negative density" electron cloud.</p>
+                         <div class="flex justify-center items-center h-48 border-2 border-dashed border-gray-600 rounded-lg p-4">
+                           <div class="text-center relative">
+                                <span class="text-4xl text-blue-300">[+ Nucleus +]</span>
+                                <div class="absolute inset-0 flex items-center justify-center text-2xl text-yellow-300/50">
+                                    <span>e- cloud</span>
+                                </div>
+                               <div class="text-green-400 font-bold mt-4">
+                                   Geometric & Energetic Stability
+                               </div>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cosmology">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">A Cosmos Without Beginning or End</h2>
+                    <p class="mt-4 text-gray-400 max-w-2xl mx-auto">QFD replaces the Big Bang narrative with a static, eternal, and self-regulating cosmos. The universe's observed properties are not relics of a primordial past but features of a present-day dynamic equilibrium.</p>
+                </div>
+
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-2xl">
+                        <h3 class="text-2xl font-bold text-center mb-4 text-[#00A1E4]">Cosmic Composition</h3>
+                        <p class="text-center text-sm text-gray-400 mb-6">The "Dark Universe" problem, where 95% of the cosmos is attributed to unseen entities, is resolved in QFD. The effects attributed to dark matter and dark energy are explained by other QFD mechanisms.</p>
+                        <div class="chart-container h-[300px] md:h-[350px]">
+                            <canvas id="cosmicCompositionChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-2xl">
+                         <h3 class="text-2xl font-bold text-center mb-6 text-[#00A1E4]">Cosmic Timeline</h3>
+                         <div class="relative p-6">
+                            <div class="mb-8">
+                                <h4 class="font-bold text-lg mb-2 text-red-400">Standard Model: Big Bang</h4>
+                                <div class="relative pl-6">
+                                    <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-red-400"></div>
+                                    <div class="relative mb-4">
+                                        <div class="absolute -left-[30px] top-1/2 -translate-y-1/2 w-4 h-4 bg-red-400 rounded-full"></div>
+                                        <p class="font-semibold">~13.8 BYA: Singularity</p>
+                                    </div>
+                                    <div class="relative">
+                                        <div class="absolute -left-[30px] top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-red-400 rounded-full"></div>
+                                        <p class="font-semibold">Present Day</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 text-blue-400">QFD: Static & Eternal</h4>
+                                 <div class="relative pl-6">
+                                    <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-blue-400"></div>
+                                     <div class="relative h-20 flex items-center">
+                                         <div class="absolute -left-[30px] top-1/2 -translate-y-1/2 w-4 h-4 bg-blue-400 rounded-full animate-pulse"></div>
+                                         <p class="font-semibold">An Eternal Cycle of Consumption & Recycling</p>
+                                     </div>
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="redshift">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">The Redshift Reinterpreted</h2>
+                    <p class="mt-4 text-gray-400 max-w-2xl mx-auto">The primary evidence for an accelerating universe comes from distant supernovae appearing dimmer than expected. QFD explains this without dark energy, proposing that redshift is an energy loss mechanism that is enhanced by the supernova's own brightness.</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-xl shadow-2xl">
+                    <h3 class="text-2xl font-bold text-center mb-4 text-[#00A1E4]">Supernova Magnitude vs. Redshift</h3>
+                     <p class="text-center text-sm text-gray-400 mb-6">This chart compares the standard model (ΛCDM), which requires dark energy to fit the data, with the QFD model, where Flux-Dependent Redshift (FDR) naturally explains the observations in a static universe.</p>
+                    <div class="chart-container md:max-w-4xl h-[400px] md:h-[500px]">
+                        <canvas id="supernovaChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center mt-20 pt-8 border-t border-gray-700">
+            <p class="text-gray-500">Infographic based on the principles of Quantum Field Dynamics. Visualizations generated using Chart.js and Tailwind CSS. No SVG or Mermaid JS used in this output.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const wrapLabel = (str, maxWidth = 16) => {
+            if (str.length <= maxWidth) {
+                return str;
+            }
+            const words = str.split(' ');
+            let lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length > maxWidth) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            });
+            if (currentLine) {
+                lines.push(currentLine.trim());
+            }
+            return lines;
+        };
+        
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+              return label.join(' ');
+            } else {
+              return label;
+            }
+        };
+
+        const chartJsDefaults = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#E5E7EB',
+                        font: { size: 14 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#9CA3AF' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                },
+                y: {
+                    ticks: { color: '#9CA3AF' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                }
+            }
+        };
+
+        const colors = {
+            blue: '#33B5E5',
+            yellow: '#F9D423',
+            orange: '#FC913A',
+            red: '#FF4E50',
+            gray: '#6B7280'
+        };
+
+        const particleChartCtx = document.getElementById('particleChart').getContext('2d');
+        new Chart(particleChartCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Standard Model Particles (>17)', 'QFD Archetypes (3)'],
+                datasets: [{
+                    label: '# of Particles',
+                    data: [17, 3],
+                    backgroundColor: [colors.red, colors.blue],
+                    borderColor: '#1F2937',
+                    borderWidth: 4
+                }]
+            },
+            options: { ...chartJsDefaults, scales: {} }
+        });
+
+        const cosmicCompositionChartCtx = document.getElementById('cosmicCompositionChart').getContext('2d');
+        new Chart(cosmicCompositionChartCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Cosmic Composition'],
+                datasets: [
+                    {
+                        label: 'ΛCDM: Ordinary Matter',
+                        data: [5],
+                        backgroundColor: colors.blue,
+                    },
+                    {
+                        label: 'ΛCDM: Dark Matter',
+                        data: [27],
+                        backgroundColor: colors.gray,
+                    },
+                    {
+                        label: 'ΛCDM: Dark Energy',
+                        data: [68],
+                        backgroundColor: '#000000',
+                    },
+                    {
+                        label: 'QFD: Unified Field',
+                        data: [100],
+                        backgroundColor: colors.yellow,
+                    }
+                ]
+            },
+            options: {
+                ...chartJsDefaults,
+                indexAxis: 'y',
+                scales: {
+                    x: { stacked: true, ticks: { color: '#9CA3AF' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    y: { stacked: true, ticks: { color: '#9CA3AF' }, grid: { display: false } }
+                }
+            }
+        });
+
+        const supernovaChartCtx = document.getElementById('supernovaChart').getContext('2d');
+        const supernovaLabels = Array.from({ length: 21 }, (_, i) => (i * 0.1).toFixed(1));
+        const qfdData = supernovaLabels.map(z => {
+            const z_num = parseFloat(z);
+            let distance_modulus = 5 * Math.log10((Math.log(z_num + 1) * 3000) / 10) + 25; 
+            if(z_num > 0.8) {
+                distance_modulus += (z_num - 0.8) * 1.5;
+            }
+            return distance_modulus;
+        });
+
+        const lcdmData = supernovaLabels.map(z => {
+            const z_num = parseFloat(z);
+            const H0 = 70;
+            const c = 300000;
+            const Omega_M = 0.3;
+            const Omega_L = 0.7;
+
+            let integral = 0;
+            const steps = 100;
+            for (let i = 0; i < steps; i++) {
+                const zi = (z_num / steps) * (i + 0.5);
+                integral += 1 / Math.sqrt(Omega_M * Math.pow(1 + zi, 3) + Omega_L);
+            }
+            const dL = (c / H0) * (1 + z_num) * (z_num / steps) * integral;
+            return 5 * Math.log10(dL) + 25;
+        });
+
+        new Chart(supernovaChartCtx, {
+            type: 'line',
+            data: {
+                labels: supernovaLabels,
+                datasets: [
+                    {
+                        label: 'ΛCDM Model (with Dark Energy)',
+                        data: lcdmData,
+                        borderColor: colors.red,
+                        backgroundColor: 'rgba(255, 78, 80, 0.2)',
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'QFD Model (with FDR)',
+                        data: qfdData,
+                        borderColor: colors.blue,
+                        backgroundColor: 'rgba(51, 181, 229, 0.2)',
+                        fill: false,
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                ...chartJsDefaults,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Redshift (z)', color: '#E5E7EB' },
+                        ticks: { color: '#9CA3AF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Distance Modulus (Apparent Brightness)', color: '#E5E7EB' },
+                        ticks: { color: '#9CA3AF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
