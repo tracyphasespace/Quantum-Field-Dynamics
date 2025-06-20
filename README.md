@@ -35,7 +35,7 @@ Coming soon:
 
 - [Full Book PDF (v5.1)](5.1%20QFD%20Book.pdf)
 - [Technical Review](QFD_Technical_Review_GitHub.md)
-- [Whitepaper Summary (PDF)](QFD_Whitepaper.pdf)
+- [Whitepaper Summary (PDF)](QFD_Whitepaper.md)
 
 
 © 2025 Tracy McSheery — Open for scientific collaboration and validation.
