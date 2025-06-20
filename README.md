@@ -6,7 +6,7 @@ Author: Tracy McSheery
 
 This repository contains the theoretical, computational, and conceptual foundation for *Quantum Field Dynamics (QFD)*, a framework for physics that reconstructs spacetime, quantum mechanics, electromagnetism, gravity, and particle structure from a single geometric field \(\psi\) defined over the Clifford Algebra \(\text{Cl}(3,3)\).
 
-## 🌌 Core Claims
+##  Core Claims
 
 - Time is emergent: a scalar ordering parameter \(\tau\), not a spacetime coordinate.
 - Gravity arises from field-induced time dilation, not curvature.
@@ -15,7 +15,7 @@ This repository contains the theoretical, computational, and conceptual foundati
 - All particles are stable solitonic wavelets of ψ.
 - No need for inflation, dark matter, dark energy, or strong/weak bosons.
 
-## 📂 Repository Structure
+##  Repository Structure
 
 - `docs/`: Theory papers, technical reviews, derivations.
 - `solver/`: Code for wavelet solvers and calibration.
@@ -23,7 +23,7 @@ This repository contains the theoretical, computational, and conceptual foundati
 - `results/`: Plots and figures from simulations.
 - `tests/`: Unit tests for solver components.
 
-## 🚀 Getting Involved
+##  Getting Involved
 
 Coming soon:  
 - An open call for contributors to help build the Grand Unified Solver (GPU-enabled SCF code).
@@ -31,7 +31,7 @@ Coming soon:
 - See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines (to be created).
 
 
-## 📖 Learn More
+##  Learn More
 
 - [Full Book PDF (v5.1)](5.1%20QFD%20Book.pdf)
 - [Technical Review](QFD_Technical_Review_GitHub.md)
