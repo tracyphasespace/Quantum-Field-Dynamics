@@ -6,13 +6,13 @@
 
 ---
 
-## 🧠 Abstract
+##  Abstract
 
 Quantum Field Dynamics (QFD) is a first-principles field theory that derives spacetime, particles, forces, and physical constants from a single multivector field ψ defined over a 6D phase space with signature (3,3). The theory is written entirely in Geometric Algebra (Cl(3,3)) and governed by a single dimensionless Lagrangian L_6D. Time, mass, charge, gravity, and quantum mechanics all emerge from its intrinsic structure, without invoking singularities, force bosons, or spacetime curvature. This whitepaper provides a compact overview of the theory's core components, predictions, and research roadmap.
 
 ---
 
-## 🔑 Core Concepts
+##  Core Concepts
 
 - **Field Definition:**  
   ψ(X, τ) is a multivector-valued field over 6D phase space (3 position + 3 momentum dimensions).  
@@ -30,7 +30,7 @@ Quantum Field Dynamics (QFD) is a first-principles field theory that derives spa
 
 ---
 
-## 🔬 Derived Physics
+##  Derived Physics
 
 | Phenomenon           | QFD Derivation                                |
 |----------------------|-----------------------------------------------|
@@ -47,7 +47,7 @@ Quantum Field Dynamics (QFD) is a first-principles field theory that derives spa
 
 ---
 
-## 📐 Constants from Calibration
+##  Constants from Calibration
 
 All dimensionful constants (ħ, G, e, c) are emergent from dimensionless wavelet solutions calibrated against known observables.
 
@@ -58,7 +58,7 @@ All dimensionful constants (ħ, G, e, c) are emergent from dimensionless wavelet
 
 ---
 
-## 🔬 Falsifiable Predictions
+##  Falsifiable Predictions
 
 - Redshift curve: exponential decay with flux loss
 - Photon-photon scattering at measurable cross-section
@@ -69,23 +69,23 @@ All dimensionful constants (ħ, G, e, c) are emergent from dimensionless wavelet
 
 ---
 
-## 📈 Research Roadmap
+##  Research Roadmap
 
-- ✅ Formal derivations complete (Book + Appendices A–N)
-- 🧩 Build SCF solver (numerical)
-- 🧪 Compare to (g–2), redshift, CMB, LSS, decay data
-- 🔭 Search for “zombie galaxies” via weak lensing
-- 📊 Publish open datasets and solver results
+-  Formal derivations complete (Book + Appendices A–N)
+-  Build SCF solver (numerical)
+-  Compare to (g–2), redshift, CMB, LSS, decay data
+-  Search for “zombie galaxies” via weak lensing
+-  Publish open datasets and solver results
 
 ---
 
-## 🌐 Repository
+##  Repository
 
 [https://github.com/tracyphasespace/Quantum-Field-Dynamics](https://github.com/tracyphasespace/Quantum-Field-Dynamics)
 
 ---
 
-## 🧾 License & Contact
+##  License & Contact
 
 Open-source under MIT License.  
 Contact: tracyphasespace (GitHub)
