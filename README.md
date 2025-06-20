@@ -34,7 +34,7 @@ Coming soon:
 ## 📖 Learn More
 
 - [Full Book PDF (v5.1)](https://github.com/tracyphasespace/Quantum-Field-Dynamics/blob/main/5.1%20QFD%20Book.pdf)
-- [Technical Review](docs/QFD_Review.pdf)
+- [Technical Review][(docs/QFD_Review.pdf)](https://github.com/tracyphasespace/Quantum-Field-Dynamics/blob/main/QFD_Technical_Review_GitHub.md)
 - [Whitepaper Summary](docs/QFD_Whitepaper.pdf)
 
 ---
