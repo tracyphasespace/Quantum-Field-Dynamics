@@ -37,6 +37,7 @@ Coming soon:
 - [Technical Review][(docs/QFD_Review.pdf)](https://github.com/tracyphasespace/Quantum-Field-Dynamics/blob/main/QFD_Technical_Review_GitHub.md)
 - [Whitepaper Summary](docs/QFD_Whitepaper.pdf)
 
+
 ---
 
 © 2025 Tracy McSheery — Open for scientific collaboration and validation.
