@@ -24,12 +24,23 @@ This repository contains the theoretical, computational, and conceptual foundati
 - `tests/`: Unit tests for solver components.
 
 ##  Getting Involved
-The foundational phase of Quantum Field Dynamics—defining the ψ-field formalism, constructing the Lagrangian, and deriving the geometric basis for gravity, quantum behavior, and cosmology—has been completed largely in solitude. This represents approximately 80% of the total theoretical effort. The remaining 20%—comprising numerical calibration, formal projection refinements, and computational modeling—falls naturally into the domain of distributed scientific expertise and computational infrastructure. This is precisely where the broader physics and mathematics community can, and should, take over.
+> “The foundational phase of QFD—defining the ψ-field, constructing the Lagrangian, and deriving the geometric basis for quantum gravity, charge, redshift, and wavelet-based matter—has been completed largely in solitude.  
+>  
+> This represents ~80% of the core theoretical effort.  
+>  
+> The remaining 20%—numeric calibration, projection refinement, and computational modeling—lies squarely in the domain of distributed scientific expertise.  
+>  
+> This is your invitation to help complete the picture.”
 
-Coming soon:  
-- An open call for contributors to help build the Grand Unified Solver (GPU-enabled SCF code).
-- Initial targets: Wₑ, g−2, neutrino oscillations, photon redshift.
-- See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines (to be created).
+🔧 **Help us build:**
+- The **Grand Unified Solver** – a GPU-enabled SCF field engine for stable ψ wavelets
+- Numerical evaluations of constants: \( g−2 \), \( \alpha \), neutrino oscillation spectra, etc.
+- Experimental tests of QFD’s predictions for redshift, charge, and mass spectra
+
+📌 _Coming soon:_
+- `CONTRIBUTING.md` – Guidelines for collaboration  
+- `solver/README.md` – Interface specs and field format  
+- `issues/` with initial research goals and modeling targets  
 
 
 ##  Learn More
