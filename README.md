@@ -24,6 +24,7 @@ This repository contains the theoretical, computational, and conceptual foundati
 - `tests/`: Unit tests for solver components.
 
 ##  Getting Involved
+The foundational phase of Quantum Field Dynamics—defining the ψ-field formalism, constructing the Lagrangian, and deriving the geometric basis for gravity, quantum behavior, and cosmology—has been completed largely in solitude. This represents approximately 80% of the total theoretical effort. The remaining 20%—comprising numerical calibration, formal projection refinements, and computational modeling—falls naturally into the domain of distributed scientific expertise and computational infrastructure. This is precisely where the broader physics and mathematics community can, and should, take over.
 
 Coming soon:  
 - An open call for contributors to help build the Grand Unified Solver (GPU-enabled SCF code).
