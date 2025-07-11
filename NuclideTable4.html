@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced QFD Chart of Nuclides</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* slate-900 */
+            color: #e2e8f0; /* slate-200 */
+            overflow: hidden; /* Prevent body scroll */
+        }
+        .chart-wrapper {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .header {
+            text-align: center;
+            padding: 0.75rem;
+            flex-shrink: 0;
+            background-color: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+        }
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            position: relative;
+        }
+        .y-axis-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .y-axis-label {
+            transform: rotate(-90deg);
+            white-space: nowrap;
+            font-weight: 600;
+            color: #94a3b8; /* slate-400 */
+        }
+        .x-axis-container {
+            position: absolute;
+            bottom: 0;
+            left: 50px; /* Offset for y-axis */
+            width: calc(100% - 50px);
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            color: #94a3b8; /* slate-400 */
+        }
+        .chart-container {
+            position: absolute;
+            top: 0;
+            left: 50px;
+            width: calc(100% - 50px);
+            height: calc(100% - 50px);
+            overflow: hidden;
+            background-color: #1e293b; /* slate-800 */
+            cursor: grab;
+        }
+        .chart-container:active {
+            cursor: grabbing;
+        }
+        #chart-grid {
+            position: absolute;
+            display: grid;
+            gap: 1px;
+            background-color: #334155; /* slate-700 */
+            border: 1px solid #475569; /* slate-600 */
+            transform-origin: 0 0;
+        }
+        .grid-cell {
+            background-color: #1e293b; /* slate-800 */
+            width: 60px; /* Fixed size for easier calculations */
+            height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            position: relative;
+        }
+        .axis-label-cell {
+            background-color: #0f172a;
+            color: #cbd5e1;
+            font-weight: 600;
+            font-size: 10px;
+        }
+        .nuclide-cell {
+            cursor: pointer;
+            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+        }
+        .nuclide-cell:hover {
+            transform: scale(1.1) !important; /* Use important to override inline style */
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(199, 210, 254, 0.4);
+        }
+        .symbol { font-size: 14px; font-weight: 700; color: white; }
+        .mass { font-size: 10px; color: #cbd5e1; }
+        .spin { font-size: 10px; color: #94a3b8; }
+        
+        /* UI Panels */
+        .ui-panel {
+            position: fixed;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 12px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .controls { top: 80px; left: 20px; }
+        .zoom-controls { top: 80px; right: 20px; }
+        .search-panel { bottom: 20px; left: 20px; }
+        .info-panel { bottom: 20px; right: 20px; max-width: 300px; }
+        .btn {
+            background: #3b82f6; color: white; border: none; padding: 6px 12px;
+            border-radius: 6px; cursor: pointer; font-size: 12px; transition: background 0.2s;
+        }
+        .btn:hover { background: #2563eb; }
+        .btn-secondary { background: #64748b; }
+        .btn-secondary:hover { background: #475569; }
+        .input {
+            background: #334155; border: 1px solid #64748b; color: white;
+            padding: 6px 10px; border-radius: 6px; font-size: 12px;
+        }
+        .toggle {
+            background: #4b5563; color: white; border: none; padding: 5px 10px;
+            border-radius: 6px; cursor: pointer; font-size: 11px; margin: 2px;
+        }
+        .toggle.active { background: #6366f1; box-shadow: 0 0 0 2px #818cf8; }
+
+        /* Modal & Tooltip */
+        .modal-overlay, .tutorial-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); z-index: 2000; display: none;
+            justify-content: center; align-items: center; padding: 1rem;
+        }
+        .modal-content, .tutorial-content {
+            background: #1e293b; border: 1px solid #475569; border-radius: 12px;
+            padding: 24px; max-width: 500px; color: white; position: relative;
+        }
+        .tooltip {
+            position: fixed; background-color: rgba(15, 23, 42, 0.95);
+            color: white; padding: 8px 12px; border-radius: 6px;
+            border: 1px solid #475569; font-size: 12px; pointer-events: none;
+            opacity: 0; transition: opacity 0.2s; max-width: 280px; z-index: 3000;
+        }
+        .tooltip h3 { font-weight: 700; margin-bottom: 4px; }
+        .tooltip p { color: #d1d5db; }
+        .tooltip .prop { color: #9ca3af; }
+    </style>
+</head>
+<body>
+
+    <div class="chart-wrapper">
+        <div class="header">
+            <h1 class="text-2xl md:text-3xl font-bold text-white">Comprehensive Chart of Nuclides</h1>
+            <p class="text-sm text-slate-400">Interactive Nuclear Data Visualization (T½ ≥ 1 hour) - <span id="header-count">Loading...</span> Nuclides | Easily Expandable Dataset</p>
+        </div>
+        <div class="main-content">
+            <div class="y-axis-container">
+                <div id="y-axis-label" class="y-axis-label">Proton Number (Z)</div>
+            </div>
+            <div class="chart-container" id="chart-container">
+                <div id="chart-grid"></div>
+            </div>
+        </div>
+        <div class="x-axis-container">
+            <div id="x-axis-label">Neutron Number (N)</div>
+        </div>
+    </div>
+    
+    <div id="tooltip" class="tooltip"></div>
+
+    <!-- UI Panels -->
+    <div class="controls ui-panel">
+        <h3 class="text-sm font-bold mb-2">Controls</h3>
+        <div class="mb-2">
+            <label class="text-xs text-slate-400 block mb-1">View Mode:</label>
+            <button id="mode-toggle" class="toggle active">Standard</button>
+        </div>
+        <div>
+            <button id="tutorial-btn" class="btn btn-secondary text-xs">Help</button>
+            <button id="reset-view" class="btn btn-secondary text-xs ml-1">Reset View</button>
+        </div>
+    </div>
+
+    <div class="zoom-controls ui-panel">
+        <label for="zoom-slider" class="text-xs text-slate-400 mb-1 block">Zoom</label>
+        <input type="range" id="zoom-slider" min="0.2" max="3" step="0.01" value="1" class="w-24">
+        <div id="zoom-display" class="text-xs text-center mt-1">100%</div>
+    </div>
+
+    <div class="search-panel ui-panel">
+        <h3 class="text-sm font-bold mb-2">Search & Filter</h3>
+        <div class="flex gap-2 mb-2">
+            <input type="text" id="search-input" placeholder="Symbol, A or Z..." class="input text-xs w-28">
+            <button id="search-btn" class="btn text-xs">Find</button>
+        </div>
+        <div class="flex gap-1 flex-wrap">
+            <button class="toggle filter-btn active" data-filter="all">All</button>
+            <button class="toggle filter-btn" data-filter="stable">Stable</button>
+            <button class="toggle filter-btn" data-filter="radioactive">Radioactive</button>
+            <button class="toggle filter-btn" data-filter="magic">Magic</button>
+        </div>
+    </div>
+
+    <div class="info-panel ui-panel">
+        <h3 class="text-sm font-bold mb-2">Statistics</h3>
+        <div id="stats-content" class="text-xs space-y-1">
+            <div>Total Nuclides: <span id="total-count">0</span></div>
+            <div>Stable: <span id="stable-count">0</span></div>
+            <div>Radioactive: <span id="radioactive-count">0</span></div>
+            <div>Displayed: <span id="visible-count">0</span></div>
+        </div>
+        <div class="mt-3">
+            <h4 class="text-xs font-bold mb-1">Legend:</h4>
+            <div class="text-xs space-y-1">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-gray-700 border border-green-400 rounded"></div>
+                    <span>Stable</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-green-300 rounded"></div>
+                    <span>Long-lived</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-yellow-300 rounded"></div>
+                    <span>Medium-lived</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-red-300 rounded"></div>
+                    <span>Short-lived</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-gray-700 border-2 border-purple-400 rounded"></div>
+                    <span>Magic Numbers</span>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 pt-2 border-t border-slate-600">
+            <p class="text-xs text-slate-400">💡 To add more nuclides: Replace the clearly marked data array in the source code with your larger dataset.</p>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div id="modal-content" class="modal-content"></div>
+    </div>
+    <div id="tutorial-overlay" class="tutorial-overlay">
+        <div class="tutorial-content">
+            <h2 class="text-2xl font-bold mb-4">Nuclear Chart Guide</h2>
+            <div id="tutorial-step"></div>
+            <div class="flex justify-between mt-6">
+                <button id="tutorial-prev" class="btn btn-secondary">Previous</button>
+                <span id="tutorial-progress" class="text-sm text-slate-400 self-center"></span>
+                <button id="tutorial-next" class="btn">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+		document.addEventListener('DOMContentLoaded', () => {
+            // ==========================================
+            // NUCLEAR DATA ARRAY - EASILY REPLACEABLE
+            // ==========================================
+            // Replace this entire array with your larger dataset
+            // Format: { symbol: "¹²C", z: 6, a: 12, mass: 12.000000, spin: "0+", halfLife: "stable", element: "Carbon" }
+            const comprehensiveNuclidesData = [
+                // Light elements (stable isotopes and key radioactive ones)
+				  { symbol: "¹H", z: 1, a: 1, mass: 1.007825032, spin: "1/2+", halfLife: "stable", element: "Hydrogen" },
+				  { symbol: "²H", z: 1, a: 2, mass: 2.014101778, spin: "1+", halfLife: "stable", element: "Hydrogen" },
+				  { symbol: "³H", z: 1, a: 3, mass: 3.016049281, spin: "1/2+", halfLife: "12.32 y", element: "Hydrogen" },
+				  { symbol: "³He", z: 2, a: 3, mass: 3.016029322, spin: "1/2+", halfLife: "stable", element: "Helium" },
+				  { symbol: "⁴He", z: 2, a: 4, mass: 4.002603254, spin: "0+", halfLife: "stable", element: "Helium" },
+				  { symbol: "⁶Li", z: 3, a: 6, mass: 6.015122887, spin: "1+", halfLife: "stable", element: "Lithium" },
+				  { symbol: "⁷Li", z: 3, a: 7, mass: 7.016003436, spin: "3/2-", halfLife: "stable", element: "Lithium" },
+				  { symbol: "⁹Be", z: 4, a: 9, mass: 9.012183066, spin: "3/2-", halfLife: "stable", element: "Beryllium" },
+				  { symbol: "¹⁰Be", z: 4, a: 10, mass: 10.0135347, spin: "0+", halfLife: "1.39 My", element: "Beryllium" },
+				  { symbol: "¹⁰B", z: 5, a: 10, mass: 10.01293695, spin: "3+", halfLife: "stable", element: "Boron" },
+				  { symbol: "¹¹B", z: 5, a: 11, mass: 11.00930536, spin: "3/2-", halfLife: "stable", element: "Boron" },
+				  { symbol: "¹²C", z: 6, a: 12, mass: 12.0000000, spin: "0+", halfLife: "stable", element: "Carbon" },
+				  { symbol: "¹³C", z: 6, a: 13, mass: 13.003354835, spin: "1/2-", halfLife: "stable", element: "Carbon" },
+				  { symbol: "¹⁴C", z: 6, a: 14, mass: 14.003241988, spin: "0+", halfLife: "5,730 y", element: "Carbon" },
+				  { symbol: "¹⁴N", z: 7, a: 14, mass: 14.003074004, spin: "1+", halfLife: "stable", element: "Nitrogen" },
+				  { symbol: "¹⁵N", z: 7, a: 15, mass: 15.000108899, spin: "1/2-", halfLife: "stable", element: "Nitrogen" },
+				  { symbol: "¹⁶O", z: 8, a: 16, mass: 15.99491462, spin: "0+", halfLife: "stable", element: "Oxygen" },
+				  { symbol: "¹⁷O", z: 8, a: 17, mass: 16.999131757, spin: "5/2+", halfLife: "stable", element: "Oxygen" },
+				  { symbol: "¹⁸O", z: 8, a: 18, mass: 17.999159613, spin: "0+", halfLife: "stable", element: "Oxygen" },
+				  { symbol: "¹⁹F", z: 9, a: 19, mass: 18.998403162, spin: "1/2+", halfLife: "stable", element: "Fluorine" },
+				  { symbol: "²⁰Ne", z: 10, a: 20, mass: 19.992440176, spin: "0+", halfLife: "stable", element: "Neon" },
+				  { symbol: "²¹Ne", z: 10, a: 21, mass: 20.993846685, spin: "3/2+", halfLife: "stable", element: "Neon" },
+				  { symbol: "²²Ne", z: 10, a: 22, mass: 21.991385114, spin: "0+", halfLife: "stable", element: "Neon" },
+		
+			  { symbol: "²³Na", z: 11, a: 23, mass: 22.989769282, spin: "3/2+", halfLife: "stable", element: "Sodium" },
+			  { symbol: "²⁴Mg", z: 12, a: 24, mass: 23.985041699, spin: "0+", halfLife: "stable", element: "Magnesium" },
+			  { symbol: "²⁵Mg", z: 12, a: 25, mass: 24.985836976, spin: "5/2+", halfLife: "stable", element: "Magnesium" },
+			  { symbol: "²⁶Mg", z: 12, a: 26, mass: 25.982592968, spin: "0+", halfLife: "stable", element: "Magnesium" },
+			  { symbol: "²⁷Al", z: 13, a: 27, mass: 26.98153853, spin: "5/2+", halfLife: "stable", element: "Aluminum" },
+			  { symbol: "²⁸Si", z: 14, a: 28, mass: 27.976926535, spin: "0+", halfLife: "stable", element: "Silicon" },
+			  { symbol: "²⁹Si", z: 14, a: 29, mass: 28.976494665, spin: "1/2+", halfLife: "stable", element: "Silicon" },
+			  { symbol: "³⁰Si", z: 14, a: 30, mass: 29.97377017, spin: "0+", halfLife: "stable", element: "Silicon" },
+			  { symbol: "³¹P", z: 15, a: 31, mass: 30.973761998, spin: "1/2+", halfLife: "stable", element: "Phosphorus" },
+			  { symbol: "³²S", z: 16, a: 32, mass: 31.972071174, spin: "0+", halfLife: "stable", element: "Sulfur" },
+			  { symbol: "³³S", z: 16, a: 33, mass: 32.971458909, spin: "3/2+", halfLife: "stable", element: "Sulfur" },
+			  { symbol: "³⁴S", z: 16, a: 34, mass: 33.967867004, spin: "0+", halfLife: "stable", element: "Sulfur" },
+			  { symbol: "³⁶S", z: 16, a: 36, mass: 35.96708071, spin: "0+", halfLife: "stable", element: "Sulfur" },
+			  { symbol: "³⁵Cl", z: 17, a: 35, mass: 34.96885268, spin: "3/2+", halfLife: "stable", element: "Chlorine" },
+			  { symbol: "³⁷Cl", z: 17, a: 37, mass: 36.96590259, spin: "3/2+", halfLife: "stable", element: "Chlorine" },
+			  { symbol: "³⁶Ar", z: 18, a: 36, mass: 35.967545105, spin: "0+", halfLife: "stable", element: "Argon" },
+			  { symbol: "³⁸Ar", z: 18, a: 38, mass: 37.96273211, spin: "0+", halfLife: "stable", element: "Argon" },
+			  { symbol: "⁴⁰Ar", z: 18, a: 40, mass: 39.962383123, spin: "0+", halfLife: "stable", element: "Argon" },
+			  { symbol: "³⁹K", z: 19, a: 39, mass: 38.963706486, spin: "3/2+", halfLife: "stable", element: "Potassium" },
+			  { symbol: "⁴⁰K", z: 19, a: 40, mass: 39.963998166, spin: "4-", halfLife: "1.25 Gy", element: "Potassium" },
+			  { symbol: "⁴¹K", z: 19, a: 41, mass: 40.961825257, spin: "3/2+", halfLife: "stable", element: "Potassium" },
+			  { symbol: "⁴⁰Ca", z: 20, a: 40, mass: 39.96259098, spin: "0+", halfLife: "stable", element: "Calcium" },
+			  { symbol: "⁴²Ca", z: 20, a: 42, mass: 41.95861801, spin: "0+", halfLife: "stable", element: "Calcium" },
+			  { symbol: "⁴³Ca", z: 20, a: 43, mass: 42.95876657, spin: "7/2-", halfLife: "stable", element: "Calcium" },
+			  { symbol: "⁴⁴Ca", z: 20, a: 44, mass: 43.95548156, spin: "0+", halfLife: "stable", element: "Calcium" },
+			  { symbol: "⁴⁶Ca", z: 20, a: 46, mass: 45.95369284, spin: "0+", halfLife: "stable", element: "Calcium" },
+			  { symbol: "⁴⁸Ca", z: 20, a: 48, mass: 47.952534, spin: "0+", halfLife: "stable", element: "Calcium" },
+			  { symbol: "⁴⁵Sc", z: 21, a: 45, mass: 44.955908, spin: "7/2-", halfLife: "stable", element: "Scandium" },
+			  { symbol: "⁴⁶Ti", z: 22, a: 46, mass: 45.9526296, spin: "0+", halfLife: "stable", element: "Titanium" },
+			  { symbol: "⁴⁷Ti", z: 22, a: 47, mass: 46.9517631, spin: "5/2-", halfLife: "stable", element: "Titanium" },
+			  { symbol: "⁴⁸Ti", z: 22, a: 48, mass: 47.9479463, spin: "0+", halfLife: "stable", element: "Titanium" },
+			  { symbol: "⁴⁹Ti", z: 22, a: 49, mass: 48.9478708, spin: "7/2-", halfLife: "stable", element: "Titanium" },
+			  { symbol: "⁵⁰Ti", z: 22, a: 50, mass: 49.9447921, spin: "0+", halfLife: "stable", element: "Titanium" },
+			  { symbol: "⁵⁰V", z: 23, a: 50, mass: 49.947156, spin: "6+", halfLife: "1.4e17 y", element: "Vanadium" },
+			  { symbol: "⁵¹V", z: 23, a: 51, mass: 50.9439595, spin: "7/2-", halfLife: "stable", element: "Vanadium" },
+			  { symbol: "⁵⁰Cr", z: 24, a: 50, mass: 49.9460418, spin: "0+", halfLife: "stable", element: "Chromium" },
+			  { symbol: "⁵²Cr", z: 24, a: 52, mass: 51.9405062, spin: "0+", halfLife: "stable", element: "Chromium" },
+			  { symbol: "⁵³Cr", z: 24, a: 53, mass: 52.940648, spin: "3/2-", halfLife: "stable", element: "Chromium" },
+			  { symbol: "⁵⁴Cr", z: 24, a: 54, mass: 53.938879, spin: "0+", halfLife: "stable", element: "Chromium" },
+			  { symbol: "⁵⁵Mn", z: 25, a: 55, mass: 54.9380451, spin: "5/2-", halfLife: "stable", element: "Manganese" },
+			  { symbol: "⁵⁴Fe", z: 26, a: 54, mass: 53.939609, spin: "0+", halfLife: "stable", element: "Iron" },
+			  { symbol: "⁵⁶Fe", z: 26, a: 56, mass: 55.9349363, spin: "0+", halfLife: "stable", element: "Iron" },
+			  { symbol: "⁵⁷Fe", z: 26, a: 57, mass: 56.9353928, spin: "1/2-", halfLife: "stable", element: "Iron" },
+			  { symbol: "⁵⁸Fe", z: 26, a: 58, mass: 57.9332744, spin: "0+", halfLife: "stable", element: "Iron" },
+			  { symbol: "⁵⁹Co", z: 27, a: 59, mass: 58.933195, spin: "7/2-", halfLife: "stable", element: "Cobalt" },
+			  { symbol: "⁵⁸Ni", z: 28, a: 58, mass: 57.935342, spin: "0+", halfLife: "stable", element: "Nickel" },
+			  { symbol: "⁶⁰Ni", z: 28, a: 60, mass: 59.930786, spin: "0+", halfLife: "stable", element: "Nickel" },
+			  { symbol: "⁶¹Ni", z: 28, a: 61, mass: 60.931056, spin: "3/2-", halfLife: "stable", element: "Nickel" },
+			  { symbol: "⁶²Ni", z: 28, a: 62, mass: 61.928345, spin: "0+", halfLife: "stable", element: "Nickel" },
+			  { symbol: "⁶⁴Ni", z: 28, a: 64, mass: 63.927966, spin: "0+", halfLife: "stable", element: "Nickel" },
+			  { symbol: "⁶³Cu", z: 29, a: 63, mass: 62.929597, spin: "3/2-", halfLife: "stable", element: "Copper" },
+			  { symbol: "⁶⁵Cu", z: 29, a: 65, mass: 64.927792, spin: "3/2-", halfLife: "stable", element: "Copper" },
+			  { symbol: "⁶⁴Zn", z: 30, a: 64, mass: 63.929145, spin: "0+", halfLife: "stable", element: "Zinc" },
+			  { symbol: "⁶⁶Zn", z: 30, a: 66, mass: 65.926034, spin: "0+", halfLife: "stable", element: "Zinc" },
+			  { symbol: "⁶⁷Zn", z: 30, a: 67, mass: 66.927128, spin: "5/2-", halfLife: "stable", element: "Zinc" },
+			  { symbol: "⁶⁸Zn", z: 30, a: 68, mass: 67.924846, spin: "0+", halfLife: "stable", element: "Zinc" },
+			  { symbol: "⁷⁰Zn", z: 30, a: 70, mass: 69.925325, spin: "0+", halfLife: "stable", element: "Zinc" },
+			  { symbol: "⁶⁹Ga", z: 31, a: 69, mass: 68.925581, spin: "3/2-", halfLife: "stable", element: "Gallium" },
+			  { symbol: "⁷¹Ga", z: 31, a: 71, mass: 70.924705, spin: "3/2-", halfLife: "stable", element: "Gallium" },
+			  { symbol: "⁷⁰Ge", z: 32, a: 70, mass: 69.924250, spin: "0+", halfLife: "stable", element: "Germanium" },
+			  { symbol: "⁷²Ge", z: 32, a: 72, mass: 71.922075, spin: "0+", halfLife: "stable", element: "Germanium" },
+			  { symbol: "⁷³Ge", z: 32, a: 73, mass: 72.923458, spin: "9/2+", halfLife: "stable", element: "Germanium" },
+			  { symbol: "⁷⁴Ge", z: 32, a: 74, mass: 73.921177, spin: "0+", halfLife: "stable", element: "Germanium" },
+			  { symbol: "⁷⁶Ge", z: 32, a: 76, mass: 75.921403, spin: "0+", halfLife: "stable", element: "Germanium" },
+			  { symbol: "⁷⁵As", z: 33, a: 75, mass: 74.921596, spin: "3/2-", halfLife: "stable", element: "Arsenic" },
+			  { symbol: "⁷⁴Se", z: 34, a: 74, mass: 73.922476, spin: "0+", halfLife: "stable", element: "Selenium" },
+			  { symbol: "⁷⁶Se", z: 34, a: 76, mass: 75.919214, spin: "0+", halfLife: "stable", element: "Selenium" },
+			  { symbol: "⁷⁷Se", z: 34, a: 77, mass: 76.919915, spin: "1/2-", halfLife: "stable", element: "Selenium" },
+			  { symbol: "⁷⁸Se", z: 34, a: 78, mass: 77.917309, spin: "0+", halfLife: "stable", element: "Selenium" },
+			  { symbol: "⁸⁰Se", z: 34, a: 80, mass: 79.916522, spin: "0+", halfLife: "stable", element: "Selenium" },
+			  { symbol: "⁸²Se", z: 34, a: 82, mass: 81.916700, spin: "0+", halfLife: "stable", element: "Selenium" },
+			  { symbol: "⁷⁹Br", z: 35, a: 79, mass: 78.918337, spin: "3/2-", halfLife: "stable", element: "Bromine" },
+			  { symbol: "⁸¹Br", z: 35, a: 81, mass: 80.916291, spin: "3/2-", halfLife: "stable", element: "Bromine" },
+			  { symbol: "⁸⁰Kr", z: 36, a: 80, mass: 79.916378, spin: "0+", halfLife: "stable", element: "Krypton" },
+			  { symbol: "⁸²Kr", z: 36, a: 82, mass: 81.913482, spin: "0+", halfLife: "stable", element: "Krypton" },
+			  { symbol: "⁸³Kr", z: 36, a: 83, mass: 82.914127, spin: "9/2+", halfLife: "stable", element: "Krypton" },
+			  { symbol: "⁸⁴Kr", z: 36, a: 84, mass: 83.911507, spin: "0+", halfLife: "stable", element: "Krypton" },
+			  { symbol: "⁸⁶Kr", z: 36, a: 86, mass: 85.910610, spin: "0+", halfLife: "stable", element: "Krypton" },
+			  { symbol: "⁸⁵Rb", z: 37, a: 85, mass: 84.911789, spin: "5/2-", halfLife: "stable", element: "Rubidium" },
+			  { symbol: "⁸⁷Rb", z: 37, a: 87, mass: 86.909183, spin: "3/2-", halfLife: "4.92e10 y", element: "Rubidium" },
+			  { symbol: "⁸⁸Sr", z: 38, a: 88, mass: 87.905614, spin: "0+", halfLife: "stable", element: "Strontium" },
+			  { symbol: "⁸⁶Sr", z: 38, a: 86, mass: 85.909260, spin: "0+", halfLife: "stable", element: "Strontium" },
+			  { symbol: "⁸⁷Sr", z: 38, a: 87, mass: 86.908877, spin: "9/2+", halfLife: "stable", element: "Strontium" },
+			  { symbol: "⁹⁰Sr", z: 38, a: 90, mass: 89.907738, spin: "0+", halfLife: "28.8 y", element: "Strontium" },
+			  { symbol: "⁸⁹Y", z: 39, a: 89, mass: 88.905848, spin: "1/2-", halfLife: "stable", element: "Yttrium" },
+			  { symbol: "⁹⁰Zr", z: 40, a: 90, mass: 89.904704, spin: "0+", halfLife: "stable", element: "Zirconium" },
+			  { symbol: "⁹¹Zr", z: 40, a: 91, mass: 90.905645, spin: "5/2+", halfLife: "stable", element: "Zirconium" },
+			  { symbol: "⁹²Zr", z: 40, a: 92, mass: 91.905040, spin: "0+", halfLife: "stable", element: "Zirconium" },
+			  { symbol: "⁹⁴Zr", z: 40, a: 94, mass: 93.906316, spin: "0+", halfLife: "stable", element: "Zirconium" },
+			  { symbol: "⁹⁶Zr", z: 40, a: 96, mass: 95.908272, spin: "0+", halfLife: "2.0e19 y", element: "Zirconium" },
+			  { symbol: "⁹³Nb", z: 41, a: 93, mass: 92.906378, spin: "9/2+", halfLife: "stable", element: "Niobium" },
+			  { symbol: "⁹²Mo", z: 42, a: 92, mass: 91.906810, spin: "0+", halfLife: "stable", element: "Molybdenum" },
+			  { symbol: "⁹⁴Mo", z: 42, a: 94, mass: 93.905089, spin: "0+", halfLife: "stable", element: "Molybdenum" },
+			  { symbol: "⁹⁵Mo", z: 42, a: 95, mass: 94.905842, spin: "5/2+", halfLife: "stable", element: "Molybdenum" },
+			  { symbol: "⁹⁶Mo", z: 42, a: 96, mass: 95.904678, spin: "0+", halfLife: "stable", element: "Molybdenum" },
+			  { symbol: "⁹⁷Mo", z: 42, a: 97, mass: 96.906021, spin: "5/2+", halfLife: "stable", element: "Molybdenum" },
+			  { symbol: "⁹⁸Mo", z: 42, a: 98, mass: 97.905408, spin: "0+", halfLife: "stable", element: "Molybdenum" },
+			  { symbol: "¹⁰⁰Mo", z: 42, a: 100, mass: 99.907477, spin: "0+", halfLife: "7.8e18 y", element: "Molybdenum" },
+			  { symbol: "⁹⁶Ru", z: 44, a: 96, mass: 95.907598, spin: "0+", halfLife: "stable", element: "Ruthenium" },
+			  { symbol: "⁹⁸Ru", z: 44, a: 98, mass: 97.905287, spin: "0+", halfLife: "stable", element: "Ruthenium" },
+			  { symbol: "⁹⁹Ru", z: 44, a: 99, mass: 98.905939, spin: "5/2+", halfLife: "stable", element: "Ruthenium" },
+			  { symbol: "¹⁰⁰Ru", z: 44, a: 100, mass: 99.904219, spin: "0+", halfLife: "stable", element: "Ruthenium" },
+			  { symbol: "¹⁰¹Ru", z: 44, a: 101, mass: 100.905582, spin: "5/2+", halfLife: "stable", element: "Ruthenium" },
+			  { symbol: "¹⁰²Ru", z: 44, a: 102, mass: 101.904349, spin: "0+", halfLife: "stable", element: "Ruthenium" },
+			  { symbol: "¹⁰⁴Ru", z: 44, a: 104, mass: 103.905430, spin: "0+", halfLife: "stable", element: "Ruthenium" },
+			  { symbol: "¹⁰³Rh", z: 45, a: 103, mass: 102.905504, spin: "1/2-", halfLife: "stable", element: "Rhodium" },
+			  { symbol: "¹⁰²Pd", z: 46, a: 102, mass: 101.905608, spin: "0+", halfLife: "stable", element: "Palladium" },
+			  { symbol: "¹⁰⁴Pd", z: 46, a: 104, mass: 103.904036, spin: "0+", halfLife: "stable", element: "Palladium" },
+			  { symbol: "¹⁰⁵Pd", z: 46, a: 105, mass: 104.905085, spin: "5/2+", halfLife: "stable", element: "Palladium" },
+			  { symbol: "¹⁰⁶Pd", z: 46, a: 106, mass: 105.903486, spin: "0+", halfLife: "stable", element: "Palladium" },
+			  { symbol: "¹⁰⁸Pd", z: 46, a: 108, mass: 107.903894, spin: "0+", halfLife: "stable", element: "Palladium" },
+			  { symbol: "¹¹⁰Pd", z: 46, a: 110, mass: 109.905152, spin: "0+", halfLife: "6.5e18 y", element: "Palladium" },
+			  { symbol: "¹⁰⁶Cd", z: 48, a: 106, mass: 105.906460, spin: "0+", halfLife: "stable", element: "Cadmium" },
+			  { symbol: "¹⁰⁸Cd", z: 48, a: 108, mass: 107.904183, spin: "0+", halfLife: "stable", element: "Cadmium" },
+			  { symbol: "¹¹⁰Cd", z: 48, a: 110, mass: 109.903006, spin: "0+", halfLife: "stable", element: "Cadmium" },
+			  { symbol: "¹¹¹Cd", z: 48, a: 111, mass: 110.904182, spin: "1/2+", halfLife: "stable", element: "Cadmium" },
+			  { symbol: "¹¹²Cd", z: 48, a: 112, mass: 111.902757, spin: "0+", halfLife: "stable", element: "Cadmium" },
+			  { symbol: "¹¹³Cd", z: 48, a: 113, mass: 112.904400, spin: "1/2+", halfLife: "7.7e15 y", element: "Cadmium" },
+			  { symbol: "¹¹⁴Cd", z: 48, a: 114, mass: 113.903358, spin: "0+", halfLife: "stable", element: "Cadmium" },
+			  { symbol: "¹¹⁶Cd", z: 48, a: 116, mass: 115.904755, spin: "0+", halfLife: "3e19 y", element: "Cadmium" },
+			  { symbol: "¹¹⁴Sn", z: 50, a: 114, mass: 113.902781, spin: "0+", halfLife: "stable", element: "Tin" },
+			  { symbol: "¹¹⁶Sn", z: 50, a: 116, mass: 115.901741, spin: "0+", halfLife: "stable", element: "Tin" },
+			  { symbol: "¹¹⁷Sn", z: 50, a: 117, mass: 116.902952, spin: "1/2+", halfLife: "stable", element: "Tin" },
+			  { symbol: "¹¹⁸Sn", z: 50, a: 118, mass: 117.901603, spin: "0+", halfLife: "stable", element: "Tin" },
+			  { symbol: "¹¹⁹Sn", z: 50, a: 119, mass: 118.903308, spin: "1/2-", halfLife: "stable", element: "Tin" },
+			  { symbol: "¹²⁰Sn", z: 50, a: 120, mass: 119.902194, spin: "0+", halfLife: "stable", element: "Tin" },
+			  { symbol: "¹²²Sn", z: 50, a: 122, mass: 121.903440, spin: "0+", halfLife: "stable", element: "Tin" },
+			  { symbol: "¹²⁴Sn", z: 50, a: 124, mass: 123.905277, spin: "0+", halfLife: "stable", element: "Tin" },
+			  { symbol: "¹²¹Sb", z: 51, a: 121, mass: 120.903816, spin: "5/2+", halfLife: "stable", element: "Antimony" },
+			  { symbol: "¹²³Sb", z: 51, a: 123, mass: 122.904214, spin: "7/2+", halfLife: "stable", element: "Antimony" },
+			  { symbol: "¹²⁰Te", z: 52, a: 120, mass: 119.904020, spin: "0+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²²Te", z: 52, a: 122, mass: 121.903044, spin: "0+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²³Te", z: 52, a: 123, mass: 122.904270, spin: "1/2+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²⁴Te", z: 52, a: 124, mass: 123.902819, spin: "0+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²⁵Te", z: 52, a: 125, mass: 124.904424, spin: "1/2+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²⁶Te", z: 52, a: 126, mass: 125.903305, spin: "0+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²⁸Te", z: 52, a: 128, mass: 127.904463, spin: "0+", halfLife: "2.2e24 y", element: "Tellurium" },
+			  { symbol: "¹³⁰Te", z: 52, a: 130, mass: 129.906223, spin: "0+", halfLife: "8.2e20 y", element: "Tellurium" },
+			  { symbol: "¹²⁹I", z: 53, a: 129, mass: 128.904988, spin: "7/2+", halfLife: "15.7 My", element: "Iodine" },
+			  { symbol: "¹³¹I", z: 53, a: 131, mass: 130.906125, spin: "7/2+", halfLife: "8.03 d", element: "Iodine" },
+			  { symbol: "¹²⁷I", z: 53, a: 127, mass: 126.904473, spin: "5/2+", halfLife: "stable", element: "Iodine" },
+			  { symbol: "¹²⁴Xe", z: 54, a: 124, mass: 123.905895, spin: "0+", halfLife: "1.8e22 y", element: "Xenon" },
+			  { symbol: "¹²⁶Xe", z: 54, a: 126, mass: 125.904274, spin: "0+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹²⁸Xe", z: 54, a: 128, mass: 127.903531, spin: "0+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹²⁹Xe", z: 54, a: 129, mass: 128.904780, spin: "1/2+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹³⁰Xe", z: 54, a: 130, mass: 129.903509, spin: "0+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹³¹Xe", z: 54, a: 131, mass: 130.905072, spin: "3/2+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹³²Xe", z: 54, a: 132, mass: 131.904153, spin: "0+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹³⁴Xe", z: 54, a: 134, mass: 133.905394, spin: "0+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹³⁶Xe", z: 54, a: 136, mass: 135.907214, spin: "0+", halfLife: "2.2e21 y", element: "Xenon" },
+			  { symbol: "²⁰⁴Pb", z: 82, a: 204, mass: 203.973044, spin: "0+", halfLife: "stable", element: "Lead" },
+			  { symbol: "²⁰⁶Pb", z: 82, a: 206, mass: 205.974465, spin: "0+", halfLife: "stable", element: "Lead" },
+			  { symbol: "²⁰⁷Pb", z: 82, a: 207, mass: 206.975897, spin: "1/2-", halfLife: "stable", element: "Lead" },
+			  { symbol: "²⁰⁸Pb", z: 82, a: 208, mass: 207.976652, spin: "0+", halfLife: "stable", element: "Lead" },
+			  { symbol: "²³²Th", z: 90, a: 232, mass: 232.038055, spin: "0+", halfLife: "14.05 Gy", element: "Thorium" },
+			  { symbol: "²³⁸U", z: 92, a: 238, mass: 238.050788, spin: "0+", halfLife: "4.47 Gy", element: "Uranium" },
+			  { symbol: "²³⁵U", z: 92, a: 235, mass: 235.043930, spin: "7/2-", halfLife: "704 My", element: "Uranium" },
+			  { symbol: "²³⁴U", z: 92, a: 234, mass: 234.040952, spin: "0+", halfLife: "245 ky", element: "Uranium" },
+			  { symbol: "²³⁹Pu", z: 94, a: 239, mass: 239.052164, spin: "1/2+", halfLife: "24.1 ky", element: "Plutonium" },
+			  { symbol: "²⁴⁰Pu", z: 94, a: 240, mass: 240.053814, spin: "0+", halfLife: "6.56 ky", element: "Plutonium" },
+			  { symbol: "¹¹³In", z: 49, a: 113, mass: 112.904058, spin: "9/2+", halfLife: "stable", element: "Indium" },
+			  { symbol: "¹¹⁵In", z: 49, a: 115, mass: 114.903878, spin: "9/2+", halfLife: "4.4e14 y", element: "Indium" },
+			  { symbol: "¹²¹Sb", z: 51, a: 121, mass: 120.903816, spin: "5/2+", halfLife: "stable", element: "Antimony" },
+			  { symbol: "¹²³Sb", z: 51, a: 123, mass: 122.904214, spin: "7/2+", halfLife: "stable", element: "Antimony" },
+			  { symbol: "¹²⁰Te", z: 52, a: 120, mass: 119.904020, spin: "0+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²²Te", z: 52, a: 122, mass: 121.903044, spin: "0+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²³Te", z: 52, a: 123, mass: 122.904269, spin: "1/2+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²⁴Te", z: 52, a: 124, mass: 123.902823, spin: "0+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²⁵Te", z: 52, a: 125, mass: 124.904430, spin: "1/2+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²⁶Te", z: 52, a: 126, mass: 125.903311, spin: "0+", halfLife: "stable", element: "Tellurium" },
+			  { symbol: "¹²⁸Te", z: 52, a: 128, mass: 127.904463, spin: "0+", halfLife: "2.2e24 y", element: "Tellurium" },
+			  { symbol: "¹³⁰Te", z: 52, a: 130, mass: 129.906224, spin: "0+", halfLife: "7.9e20 y", element: "Tellurium" },
+			  { symbol: "¹²⁴Xe", z: 54, a: 124, mass: 123.905894, spin: "0+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹²⁶Xe", z: 54, a: 126, mass: 125.904274, spin: "0+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹²⁸Xe", z: 54, a: 128, mass: 127.903530, spin: "0+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹²⁹Xe", z: 54, a: 129, mass: 128.904779, spin: "1/2+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹³⁰Xe", z: 54, a: 130, mass: 129.903508, spin: "0+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹³¹Xe", z: 54, a: 131, mass: 130.905072, spin: "3/2+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹³²Xe", z: 54, a: 132, mass: 131.904154, spin: "0+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹³⁴Xe", z: 54, a: 134, mass: 133.905395, spin: "0+", halfLife: "stable", element: "Xenon" },
+			  { symbol: "¹³⁶Xe", z: 54, a: 136, mass: 135.907220, spin: "0+", halfLife: "2.2e21 y", element: "Xenon" },
+			  { symbol: "¹³³Cs", z: 55, a: 133, mass: 132.905451, spin: "7/2+", halfLife: "stable", element: "Cesium" },
+			  { symbol: "¹³⁷Cs", z: 55, a: 137, mass: 136.907089, spin: "7/2+", halfLife: "30.17 y", element: "Cesium" },
+			  { symbol: "¹³⁴Ba", z: 56, a: 134, mass: 133.904508, spin: "0+", halfLife: "stable", element: "Barium" },
+			  { symbol: "¹³⁵Ba", z: 56, a: 135, mass: 134.905689, spin: "3/2+", halfLife: "stable", element: "Barium" },
+			  { symbol: "¹³⁶Ba", z: 56, a: 136, mass: 135.904570, spin: "0+", halfLife: "stable", element: "Barium" },
+			  { symbol: "¹³⁷Ba", z: 56, a: 137, mass: 136.905827, spin: "3/2+", halfLife: "stable", element: "Barium" },
+			  { symbol: "¹³⁸Ba", z: 56, a: 138, mass: 137.905247, spin: "0+", halfLife: "stable", element: "Barium" },
+			  { symbol: "¹³⁹La", z: 57, a: 139, mass: 138.906348, spin: "7/2+", halfLife: "stable", element: "Lanthanum" },
+			  { symbol: "¹⁴⁰Ce", z: 58, a: 140, mass: 139.905434, spin: "0+", halfLife: "stable", element: "Cerium" },
+			  { symbol: "¹⁴²Ce", z: 58, a: 142, mass: 141.909240, spin: "0+", halfLife: "5e16 y", element: "Cerium" },
+			  { symbol: "¹⁴¹Pr", z: 59, a: 141, mass: 140.907647, spin: "5/2+", halfLife: "stable", element: "Praseodymium" },
+			  { symbol: "¹⁴²Nd", z: 60, a: 142, mass: 141.907723, spin: "0+", halfLife: "stable", element: "Neodymium" },
+			  { symbol: "¹⁴³Nd", z: 60, a: 143, mass: 142.909814, spin: "7/2-", halfLife: "stable", element: "Neodymium" },
+			  { symbol: "¹⁴⁴Nd", z: 60, a: 144, mass: 143.910087, spin: "0+", halfLife: "2.29e15 y", element: "Neodymium" },
+			  { symbol: "¹⁴⁵Nd", z: 60, a: 145, mass: 144.912573, spin: "7/2-", halfLife: "stable", element: "Neodymium" },
+			  { symbol: "¹⁴⁶Nd", z: 60, a: 146, mass: 145.913112, spin: "0+", halfLife: "stable", element: "Neodymium" },
+			  { symbol: "¹⁴⁸Nd", z: 60, a: 148, mass: 147.916900, spin: "0+", halfLife: "stable", element: "Neodymium" },
+			  { symbol: "¹⁵⁰Nd", z: 60, a: 150, mass: 149.920891, spin: "0+", halfLife: "7e18 y", element: "Neodymium" },
+			  { symbol: "¹⁴⁴Sm", z: 62, a: 144, mass: 143.911999, spin: "0+", halfLife: "stable", element: "Samarium" },
+			  { symbol: "¹⁴⁷Sm", z: 62, a: 147, mass: 146.914897, spin: "7/2-", halfLife: "1.06e11 y", element: "Samarium" },
+			  { symbol: "¹⁴⁸Sm", z: 62, a: 148, mass: 147.914822, spin: "0+", halfLife: "stable", element: "Samarium" },
+			  { symbol: "¹⁴⁹Sm", z: 62, a: 149, mass: 148.917184, spin: "7/2-", halfLife: "stable", element: "Samarium" },
+			  { symbol: "¹⁵⁰Sm", z: 62, a: 150, mass: 149.917275, spin: "0+", halfLife: "stable", element: "Samarium" },
+			  { symbol: "¹⁵²Sm", z: 62, a: 152, mass: 151.919732, spin: "0+", halfLife: "stable", element: "Samarium" },
+			  { symbol: "¹⁵⁴Sm", z: 62, a: 154, mass: 153.922216, spin: "0+", halfLife: "stable", element: "Samarium" },
+			  { symbol: "¹⁵¹Eu", z: 63, a: 151, mass: 150.919850, spin: "5/2+", halfLife: "stable", element: "Europium" },
+			  { symbol: "¹⁵³Eu", z: 63, a: 153, mass: 152.921226, spin: "5/2+", halfLife: "stable", element: "Europium" },
+			  { symbol: "¹⁵²Gd", z: 64, a: 152, mass: 151.919803, spin: "0+", halfLife: "stable", element: "Gadolinium" },
+			  { symbol: "¹⁵⁴Gd", z: 64, a: 154, mass: 153.920862, spin: "0+", halfLife: "stable", element: "Gadolinium" },
+			  { symbol: "¹⁵⁵Gd", z: 64, a: 155, mass: 154.922622, spin: "3/2-", halfLife: "stable", element: "Gadolinium" },
+			  { symbol: "¹⁵⁶Gd", z: 64, a: 156, mass: 155.922120, spin: "0+", halfLife: "stable", element: "Gadolinium" },
+			  { symbol: "¹⁵⁷Gd", z: 64, a: 157, mass: 156.923957, spin: "3/2-", halfLife: "stable", element: "Gadolinium" },
+			  { symbol: "¹⁵⁸Gd", z: 64, a: 158, mass: 157.924111, spin: "0+", halfLife: "stable", element: "Gadolinium" },
+			  { symbol: "¹⁶⁰Gd", z: 64, a: 160, mass: 159.927061, spin: "0+", halfLife: "1.3e21 y", element: "Gadolinium" },
+			  { symbol: "¹⁵⁹Tb", z: 65, a: 159, mass: 158.925354, spin: "3/2+", halfLife: "stable", element: "Terbium" },
+			  { symbol: "¹⁵⁶Dy", z: 66, a: 156, mass: 155.924284, spin: "0+", halfLife: "stable", element: "Dysprosium" },
+			  { symbol: "¹⁵⁸Dy", z: 66, a: 158, mass: 157.924415, spin: "0+", halfLife: "stable", element: "Dysprosium" },
+			  { symbol: "¹⁶⁰Dy", z: 66, a: 160, mass: 159.925194, spin: "0+", halfLife: "stable", element: "Dysprosium" },
+			  { symbol: "¹⁶¹Dy", z: 66, a: 161, mass: 160.926930, spin: "5/2-", halfLife: "stable", element: "Dysprosium" },
+			  { symbol: "¹⁶²Dy", z: 66, a: 162, mass: 161.926795, spin: "0+", halfLife: "stable", element: "Dysprosium" },
+			  { symbol: "¹⁶³Dy", z: 66, a: 163, mass: 162.928728, spin: "5/2-", halfLife: "stable", element: "Dysprosium" },
+			  { symbol: "¹⁶⁴Dy", z: 66, a: 164, mass: 163.929171, spin: "0+", halfLife: "stable", element: "Dysprosium" },
+			  { symbol: "¹⁶⁵Ho", z: 67, a: 165, mass: 164.930319, spin: "7/2-", halfLife: "stable", element: "Holmium" },
+			  { symbol: "¹⁶²Er", z: 68, a: 162, mass: 161.928787, spin: "0+", halfLife: "stable", element: "Erbium" },
+			  { symbol: "¹⁶⁴Er", z: 68, a: 164, mass: 163.929211, spin: "0+", halfLife: "stable", element: "Erbium" },
+			  { symbol: "¹⁶⁶Er", z: 68, a: 166, mass: 165.930305, spin: "0+", halfLife: "stable", element: "Erbium" },
+			  { symbol: "¹⁶⁷Er", z: 68, a: 167, mass: 166.932045, spin: "7/2+", halfLife: "stable", element: "Erbium" },
+			  { symbol: "¹⁶⁸Er", z: 68, a: 168, mass: 167.932368, spin: "0+", halfLife: "stable", element: "Erbium" },
+			  { symbol: "¹⁷⁰Er", z: 68, a: 170, mass: 169.935464, spin: "0+", halfLife: "stable", element: "Erbium" },
+			  { symbol: "¹⁶⁹Tm", z: 69, a: 169, mass: 168.934211, spin: "1/2+", halfLife: "stable", element: "Thulium" },
+			  { symbol: "¹⁷⁰Yb", z: 70, a: 170, mass: 169.934759, spin: "0+", halfLife: "stable", element: "Ytterbium" },
+			  { symbol: "¹⁷²Yb", z: 70, a: 172, mass: 171.936378, spin: "0+", halfLife: "stable", element: "Ytterbium" },
+			  { symbol: "¹⁷³Yb", z: 70, a: 173, mass: 172.938207, spin: "5/2-", halfLife: "stable", element: "Ytterbium" },
+			  { symbol: "¹⁷⁴Yb", z: 70, a: 174, mass: 173.938866, spin: "0+", halfLife: "stable", element: "Ytterbium" },
+			  { symbol: "¹⁷⁶Yb", z: 70, a: 176, mass: 175.942576, spin: "0+", halfLife: "stable", element: "Ytterbium" },
+			  { symbol: "¹⁷⁵Lu", z: 71, a: 175, mass: 174.940767, spin: "7/2+", halfLife: "stable", element: "Lutetium" },
+			  { symbol: "¹⁷⁶Lu", z: 71, a: 176, mass: 175.942691, spin: "7-", halfLife: "3.78e10 y", element: "Lutetium" },
+			  { symbol: "¹⁷⁴Hf", z: 72, a: 174, mass: 173.940040, spin: "0+", halfLife: "stable", element: "Hafnium" },
+			  { symbol: "¹⁷⁶Hf", z: 72, a: 176, mass: 175.941402, spin: "0+", halfLife: "stable", element: "Hafnium" },
+			  { symbol: "¹⁷⁷Hf", z: 72, a: 177, mass: 176.943230, spin: "7/2-", halfLife: "stable", element: "Hafnium" },
+			  { symbol: "¹⁷⁸Hf", z: 72, a: 178, mass: 177.943698, spin: "0+", halfLife: "stable", element: "Hafnium" },
+			  { symbol: "¹⁷⁹Hf", z: 72, a: 179, mass: 178.945816, spin: "9/2+", halfLife: "stable", element: "Hafnium" },
+			  { symbol: "¹⁸⁰Hf", z: 72, a: 180, mass: 179.946549, spin: "0+", halfLife: "stable", element: "Hafnium" },
+			  { symbol: "¹⁸⁰Ta", z: 73, a: 180, mass: 179.947466, spin: "1+", halfLife: "1.2e15 y", element: "Tantalum" },
+			  { symbol: "¹⁸¹Ta", z: 73, a: 181, mass: 180.947996, spin: "7/2+", halfLife: "stable", element: "Tantalum" },
+			  { symbol: "¹⁸²W", z: 74, a: 182, mass: 181.948206, spin: "0+", halfLife: "stable", element: "Tungsten" },
+			  { symbol: "¹⁸³W", z: 74, a: 183, mass: 182.950223, spin: "1/2-", halfLife: "stable", element: "Tungsten" },
+			  { symbol: "¹⁸⁴W", z: 74, a: 184, mass: 183.950931, spin: "0+", halfLife: "stable", element: "Tungsten" },
+			  { symbol: "¹⁸⁶W", z: 74, a: 186, mass: 185.954362, spin: "0+", halfLife: "stable", element: "Tungsten" },
+			  { symbol: "¹⁸⁵Re", z: 75, a: 185, mass: 184.952955, spin: "5/2+", halfLife: "stable", element: "Rhenium" },
+			  { symbol: "¹⁸⁷Re", z: 75, a: 187, mass: 186.955750, spin: "5/2+", halfLife: "4.12e10 y", element: "Rhenium" },
+			  { symbol: "¹⁸⁴Os", z: 76, a: 184, mass: 183.952488, spin: "0+", halfLife: "stable", element: "Osmium" },
+			  { symbol: "¹⁸⁶Os", z: 76, a: 186, mass: 185.953835, spin: "0+", halfLife: "stable", element: "Osmium" },
+			  { symbol: "¹⁸⁷Os", z: 76, a: 187, mass: 186.955747, spin: "1/2-", halfLife: "stable", element: "Osmium" },
+			  { symbol: "¹⁸⁸Os", z: 76, a: 188, mass: 187.955835, spin: "0+", halfLife: "stable", element: "Osmium" },
+			  { symbol: "¹⁸⁹Os", z: 76, a: 189, mass: 188.958145, spin: "3/2-", halfLife: "stable", element: "Osmium" },
+			  { symbol: "¹⁹⁰Os", z: 76, a: 190, mass: 189.958443, spin: "0+", halfLife: "stable", element: "Osmium" },
+			  { symbol: "¹⁹²Os", z: 76, a: 192, mass: 191.961479, spin: "0+", halfLife: "stable", element: "Osmium" },
+			  { symbol: "¹⁹¹Ir", z: 77, a: 191, mass: 190.960591, spin: "3/2+", halfLife: "stable", element: "Iridium" },
+			  { symbol: "¹⁹³Ir", z: 77, a: 193, mass: 192.962924, spin: "3/2+", halfLife: "stable", element: "Iridium" },
+			  { symbol: "¹⁹⁴Pt", z: 78, a: 194, mass: 193.962680, spin: "0+", halfLife: "stable", element: "Platinum" },
+			  { symbol: "¹⁹⁵Pt", z: 78, a: 195, mass: 194.964791, spin: "1/2-", halfLife: "stable", element: "Platinum" },
+			  { symbol: "¹⁹⁶Pt", z: 78, a: 196, mass: 195.964952, spin: "0+", halfLife: "stable", element: "Platinum" },
+			  { symbol: "¹⁹⁸Pt", z: 78, a: 198, mass: 197.967894, spin: "0+", halfLife: "stable", element: "Platinum" },
+			  { symbol: "¹⁹⁷Au", z: 79, a: 197, mass: 196.966569, spin: "3/2+", halfLife: "stable", element: "Gold" },
+			  { symbol: "¹⁹⁶Hg", z: 80, a: 196, mass: 195.965833, spin: "0+", halfLife: "stable", element: "Mercury" },
+			  { symbol: "¹⁹⁸Hg", z: 80, a: 198, mass: 197.966769, spin: "0+", halfLife: "stable", element: "Mercury" },
+			  { symbol: "¹⁹⁹Hg", z: 80, a: 199, mass: 198.968279, spin: "1/2-", halfLife: "stable", element: "Mercury" },
+			  { symbol: "²⁰⁰Hg", z: 80, a: 200, mass: 199.968326, spin: "0+", halfLife: "stable", element: "Mercury" },
+			  { symbol: "²⁰¹Hg", z: 80, a: 201, mass: 200.970303, spin: "3/2-", halfLife: "stable", element: "Mercury" },
+			  { symbol: "²⁰²Hg", z: 80, a: 202, mass: 201.970644, spin: "0+", halfLife: "stable", element: "Mercury" },
+			  { symbol: "²⁰⁴Hg", z: 80, a: 204, mass: 203.973494, spin: "0+", halfLife: "stable", element: "Mercury" },
+			  { symbol: "²⁰⁴Pb", z: 82, a: 204, mass: 203.973044, spin: "0+", halfLife: "stable", element: "Lead" },
+			  { symbol: "²⁰⁶Pb", z: 82, a: 206, mass: 205.974465, spin: "0+", halfLife: "stable", element: "Lead" },
+			  { symbol: "²⁰⁷Pb", z: 82, a: 207, mass: 206.975897, spin: "1/2-", halfLife: "stable", element: "Lead" },
+			  { symbol: "²⁰⁸Pb", z: 82, a: 208, mass: 207.976652, spin: "0+", halfLife: "stable", element: "Lead" },
+			  { symbol: "²⁰⁹Bi", z: 83, a: 209, mass: 208.980384, spin: "9/2-", halfLife: "2.01e19 y", element: "Bismuth" },
+			  { symbol: "²³²Th", z: 90, a: 232, mass: 232.038055, spin: "0+", halfLife: "1.4e10 y", element: "Thorium" },
+			  { symbol: "²³⁸U", z: 92, a: 238, mass: 238.050788, spin: "0+", halfLife: "4.5e9 y", element: "Uranium" },
+			  { symbol: "²³⁵U", z: 92, a: 235, mass: 235.043929, spin: "7/2-", halfLife: "7.0e8 y", element: "Uranium" },
+			  { symbol: "²³⁴U", z: 92, a: 234, mass: 234.040952, spin: "0+", halfLife: "2.5e5 y", element: "Uranium" },
+            ];
+            // ==========================================
+            // END OF REPLACEABLE DATA ARRAY
+            // ==========================================
+
+            // *** FIX STARTS HERE ***
+            // The following block was causing a syntax error. It's now correctly wrapped in a .map() function.
+            // This processes the raw data into the format the chart script needs.
+            const nuclearData = comprehensiveNuclidesData.map(nuclide => {
+                const isStable = nuclide.halfLife === "stable";
+                const neutronNumber = nuclide.a - nuclide.z;
+                const isMagic = [2, 8, 20, 28, 50, 82, 126].includes(nuclide.z) || [2, 8, 20, 28, 50, 82, 126].includes(neutronNumber);
+                
+                let color, borderColor = null;
+                if (isStable) {
+                    color = "#374151"; // gray-700
+                    borderColor = "#34d399"; // emerald-400
+                } else {
+                    const halfLife = nuclide.halfLife;
+                    // Improved logic to handle scientific notation for long-lived isotopes
+                    if (halfLife.includes("e") || halfLife.includes("G") || halfLife.includes("M") || halfLife.includes("ky")) {
+                        color = "#86efac"; // green-300 (long-lived)
+                    } else if (halfLife.includes("y") || halfLife.includes("d")) {
+                        color = "#fde047"; // yellow-300 (medium-lived)
+                    } else {
+                        color = "#fca5a5"; // red-300 (short-lived)
+                    }
+                }
+                
+                // Highlight doubly magic nuclei
+                if (isMagic && [2, 8, 20, 28, 50, 82, 126].includes(nuclide.z) && [2, 8, 20, 28, 50, 82, 126].includes(neutronNumber)) {
+                    borderColor = "#a78bfa"; // violet-400
+                    if (isStable) color = "#1e293b"; // slate-800
+                }
+
+                return {
+                    symbol: nuclide.symbol,
+                    z: nuclide.z,
+                    a: nuclide.a,
+                    n: neutronNumber,
+                    mass: nuclide.mass,
+                    spin: nuclide.spin,
+                    halfLife: nuclide.halfLife,
+                    element: nuclide.element,
+                    stability: isStable ? "stable" : "radioactive",
+                    color: color,
+                    borderColor: borderColor,
+                    isMagic: isMagic
+                };
+            });
+            // *** FIX ENDS HERE ***
+
+            let currentMode = 'standard';
+            let currentZoom = 1.0;
+            let panX = 0, panY = 0;
+            let isDragging = false;
+            let lastMouseX, lastMouseY;
+            let filteredData = nuclearData;
+            let tutorialStep = 0;
+            const tutorialSteps = [
+                { title: "Nuclear Chart Overview", content: "This chart visualizes all known nuclear isotopes (nuclides) with half-lives ≥ 1 hour. Each square represents a nuclide positioned by its proton number (Z) vertically and neutron number (N) horizontally." },
+                { title: "Reading the Chart", content: "The vertical axis shows Z (proton number/atomic number), while the horizontal axis shows N (neutron number). Each nuclide displays its symbol, mass number (A), and nuclear spin." },
+                { title: "Color Coding System", content: "Colors indicate nuclear stability: Dark gray with green borders = stable, light green = long-lived radioactive (>1000 years), yellow = medium-lived, red = short-lived. Purple borders mark 'magic numbers'." },
+                { title: "Magic Numbers", content: "Purple borders highlight nuclei with 'magic numbers' of protons or neutrons (2, 8, 20, 28, 50, 82, 126). These numbers correspond to closed nuclear shells and enhanced stability." },
+                { title: "Navigation & Search", content: "Use mouse wheel or zoom slider to zoom in/out. Click and drag to pan. Search for specific nuclides by symbol, mass number, or atomic number. Use filters to show subsets of data." },
+                { title: "Detailed Information", content: "Hover over any nuclide for quick info, or click for detailed nuclear properties. The statistics panel shows counts and the legend explains the color scheme." }
+            ];
+
+            const grid = document.getElementById('chart-grid');
+            const container = document.getElementById('chart-container');
+            const tooltip = document.getElementById('tooltip');
+
+            function initializeChart() {
+                const maxZ = Math.max(...nuclearData.map(n => n.z)) + 1;
+                const maxN = Math.max(...nuclearData.map(n => n.n)) + 1;
+                const cellSize = 60;
+
+                grid.innerHTML = '';
+                grid.style.gridTemplateColumns = `repeat(${maxN + 1}, ${cellSize}px)`;
+                grid.style.gridTemplateRows = `repeat(${maxZ + 1}, ${cellSize}px)`;
+
+                // Create grid cells (Z from max to 0, N from 0 to max)
+                for (let z = maxZ; z >= 0; z--) {
+                    for (let n = 0; n <= maxN; n++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'grid-cell';
+                        cell.id = `cell-${n}-${z}`;
+                        grid.appendChild(cell);
+                    }
+                }
+                updateChart();
+                resetView();
+                updateStatistics();
+            }
+
+            function updateChart() {
+                populateNuclides();
+                updateGridPosition();
+            }
+
+            function populateNuclides() {
+                // Clear all cells
+                document.querySelectorAll('.nuclide-cell').forEach(cell => {
+                    cell.className = 'grid-cell';
+                    cell.innerHTML = '';
+                    cell.style.backgroundColor = '#1e293b';
+                    cell.style.border = 'none';
+                    cell.style.boxShadow = '';
+                    const newCell = cell.cloneNode(true);
+                    cell.parentNode.replaceChild(newCell, cell);
+                });
+
+                // Populate with filtered data
+                filteredData.forEach(nuclide => {
+                    const cell = document.getElementById(`cell-${nuclide.n}-${nuclide.z}`);
+                    if (cell) {
+                        cell.classList.add('nuclide-cell');
+                        cell.style.backgroundColor = nuclide.color;
+                        if (nuclide.borderColor) {
+                            cell.style.border = `2px solid ${nuclide.borderColor}`;
+                        }
+                        
+                        cell.innerHTML = `
+                            <span class="symbol">${nuclide.symbol}</span>
+                            <span class="mass">A=${nuclide.a}</span>
+                            <span class="spin">${nuclide.spin}</span>
+                        `;
+                        cell.dataset.nuclide = JSON.stringify(nuclide);
+
+                        cell.addEventListener('mouseenter', handleNuclideHover);
+                        cell.addEventListener('mouseleave', handleNuclideLeave);
+                        cell.addEventListener('click', handleNuclideClick);
+                    }
+                });
+                updateStatistics();
+            }
+
+            function updateStatistics() {
+                const total = nuclearData.length;
+                const stable = nuclearData.filter(n => n.stability === "stable").length;
+                const radioactive = total - stable;
+                const visible = filteredData.length;
+
+                document.getElementById('total-count').textContent = total;
+                document.getElementById('stable-count').textContent = stable;
+                document.getElementById('radioactive-count').textContent = radioactive;
+                document.getElementById('visible-count').textContent = visible;
+                document.getElementById('header-count').textContent = total;
+            }
+
+            function handleNuclideHover(e) {
+                const nuclide = JSON.parse(e.currentTarget.dataset.nuclide);
+                
+                let content = `<h3>${nuclide.element}-${nuclide.a}</h3>`;
+                content += `<p><span class="prop">Protons (Z):</span> ${nuclide.z}</p>`;
+                content += `<p><span class="prop">Neutrons (N):</span> ${nuclide.n}</p>`;
+                content += `<p><span class="prop">Mass:</span> ${nuclide.mass.toFixed(6)} u</p>`;
+                content += `<p><span class="prop">Spin:</span> ${nuclide.spin}</p>`;
+                content += `<p><span class="prop">Half-life:</span> ${nuclide.halfLife}</p>`;
+                if (nuclide.isMagic) content += `<p class="text-purple-400 font-bold"><span class="prop">Magic Numbers!</span></p>`;
+                
+                tooltip.innerHTML = content;
+                
+                const tooltipRect = tooltip.getBoundingClientRect();
+                const containerRect = document.body.getBoundingClientRect();
+                let left = e.clientX + 15;
+                let top = e.clientY + 15;
+                
+                if (left + tooltipRect.width > containerRect.width) {
+                    left = e.clientX - tooltipRect.width - 15;
+                }
+                if (top + tooltipRect.height > containerRect.height) {
+                    top = e.clientY - tooltipRect.height - 15;
+                }
+
+                tooltip.style.left = `${left}px`;
+                tooltip.style.top = `${top}px`;
+                tooltip.style.opacity = 1;
+            }
+            
+            function handleNuclideLeave() {
+                tooltip.style.opacity = 0;
+            }
+
+            function handleNuclideClick(e) {
+                const modalOverlay = document.getElementById('modal-overlay');
+                const modalContent = document.getElementById('modal-content');
+                const nuclide = JSON.parse(e.currentTarget.dataset.nuclide);
+                
+                let content = `
+                    <button class="absolute top-2 right-3 text-2xl text-slate-400 hover:text-white" onclick="closeModal()">×</button>
+                    <h3 class="text-xl font-bold mb-4">${nuclide.element}-${nuclide.a} (${nuclide.symbol})</h3>
+                    <div class="text-sm space-y-2">
+                        <p><strong class="text-sky-400">Atomic Number (Z):</strong> ${nuclide.z}</p>
+                        <p><strong class="text-sky-400">Mass Number (A):</strong> ${nuclide.a}</p>
+                        <p><strong class="text-sky-400">Neutron Number (N):</strong> ${nuclide.n}</p>
+                        <p><strong class="text-sky-400">Atomic Mass:</strong> ${nuclide.mass.toFixed(6)} u</p>
+                        <p><strong class="text-sky-400">Nuclear Spin:</strong> ${nuclide.spin}</p>
+                        <p><strong class="text-sky-400">Half-life:</strong> ${nuclide.halfLife}</p>
+                        <p><strong class="text-sky-400">Stability:</strong> ${nuclide.stability === 'stable' ? 'Stable' : 'Radioactive'}</p>
+                        ${nuclide.isMagic ? '<p><strong class="text-purple-400">Magic Numbers:</strong> Enhanced stability due to closed nuclear shells</p>' : ''}
+                    </div>
+                `;
+                modalContent.innerHTML = content;
+                modalOverlay.style.display = 'flex';
+            }
+
+            window.closeModal = () => document.getElementById('modal-overlay').style.display = 'none';
+
+            function setupEventListeners() {
+                container.addEventListener('mousedown', startPan);
+                container.addEventListener('mousemove', doPan);
+                container.addEventListener('mouseup', endPan);
+                container.addEventListener('mouseleave', endPan);
+                container.addEventListener('wheel', handleZoom, { passive: false });
+                
+                document.getElementById('zoom-slider').addEventListener('input', e => setZoom(parseFloat(e.target.value)));
+                document.getElementById('search-btn').addEventListener('click', performSearch);
+                document.getElementById('search-input').addEventListener('keypress', e => { if (e.key === 'Enter') performSearch(); });
+                
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', e => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    applyFilter(e.target.dataset.filter);
+                }));
+                
+                document.getElementById('tutorial-btn').addEventListener('click', startTutorial);
+                document.getElementById('reset-view').addEventListener('click', resetView);
+                document.getElementById('modal-overlay').addEventListener('click', (e) => { if(e.target === e.currentTarget) closeModal(); });
+                document.getElementById('tutorial-next').addEventListener('click', nextTutorialStep);
+                document.getElementById('tutorial-prev').addEventListener('click', prevTutorialStep);
+                document.getElementById('tutorial-overlay').addEventListener('click', (e) => { if(e.target === e.currentTarget) endTutorial(); });
+            }
+
+            function updateGridPosition() {
+                grid.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+            }
+
+            function startPan(e) {
+                isDragging = true;
+                container.style.cursor = 'grabbing';
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+                e.preventDefault();
+            }
+
+            function doPan(e) {
+                if (!isDragging) return;
+                const dx = e.clientX - lastMouseX;
+                const dy = e.clientY - lastMouseY;
+                
+                panX += dx;
+                panY += dy;
+
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+                updateGridPosition();
+            }
+
+            function endPan() {
+                isDragging = false;
+                container.style.cursor = 'grab';
+            }
+
+            function handleZoom(e) {
+                e.preventDefault();
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                const scaleAmount = 1 + delta;
+                
+                const newZoom = Math.max(0.2, Math.min(3, currentZoom * scaleAmount));
+                
+                const worldX = (x - panX) / currentZoom;
+                const worldY = (y - panY) / currentZoom;
+
+                panX = x - worldX * newZoom;
+                panY = y - worldY * newZoom;
+                
+                setZoom(newZoom);
+            }
+            
+            function setZoom(newZoom) {
+                currentZoom = newZoom;
+                document.getElementById('zoom-slider').value = currentZoom;
+                document.getElementById('zoom-display').textContent = `${Math.round(currentZoom * 100)}%`;
+                updateGridPosition();
+            }
+
+            function performSearch() {
+                const query = document.getElementById('search-input').value.toLowerCase().trim();
+                if (!query) return;
+                
+                const result = nuclearData.find(n => 
+                    n.symbol.toLowerCase().includes(query) || 
+                    n.element.toLowerCase().includes(query) ||
+                    n.a.toString() === query || 
+                    n.z.toString() === query ||
+                    `${n.element.toLowerCase()}-${n.a}` === query
+                );
+                
+                if (result) {
+                    const cell = document.getElementById(`cell-${result.n}-${result.z}`);
+                    if (cell) {
+                        const containerRect = container.getBoundingClientRect();
+                        const cellSize = 60;
+                        const maxZ = Math.max(...nuclearData.map(n => n.z));
+                        
+                        setZoom(1.5);
+                        panX = (containerRect.width / 2) - ((result.n + 0.5) * cellSize * currentZoom);
+                        panY = (containerRect.height / 2) - (((maxZ - result.z) + 0.5) * cellSize * currentZoom);
+                        updateGridPosition();
+
+                        cell.style.boxShadow = '0 0 25px #facc15';
+                        setTimeout(() => { cell.style.boxShadow = ''; }, 2000);
+                    }
+                } else {
+                    showModalMessage("Not Found", `The nuclide "${query}" was not found in this dataset.`);
+                }
+            }
+            
+            function applyFilter(filter) {
+                switch(filter) {
+                    case 'stable': 
+                        filteredData = nuclearData.filter(n => n.stability === 'stable'); 
+                        break;
+                    case 'radioactive': 
+                        filteredData = nuclearData.filter(n => n.stability !== 'stable'); 
+                        break;
+                    case 'magic': 
+                        filteredData = nuclearData.filter(n => n.isMagic); 
+                        break;
+                    default: 
+                        filteredData = nuclearData;
+                }
+                populateNuclides();
+            }
+            
+            function resetView() {
+                const containerRect = container.getBoundingClientRect();
+                const cellSize = 60;
+                
+                const targetZ = 6;
+                const targetN = 6;
+                const maxZ = Math.max(...nuclearData.map(n => n.z));
+                
+                const targetGridX = targetN * cellSize;
+                const targetGridY = (maxZ - targetZ) * cellSize;
+                
+                setZoom(0.8);
+                
+                panX = (containerRect.width / 2) - (targetGridX * currentZoom);
+                panY = (containerRect.height / 2) - (targetGridY * currentZoom);
+                
+                updateGridPosition();
+            }
+            
+            function startTutorial() {
+                tutorialStep = 0;
+                document.getElementById('tutorial-overlay').style.display = 'flex';
+                updateTutorialStep();
+            }
+
+            function updateTutorialStep() {
+                const step = tutorialSteps[tutorialStep];
+                document.getElementById('tutorial-step').innerHTML = `<h3 class="text-xl font-bold mb-3">${step.title}</h3><p class="text-slate-300 leading-relaxed">${step.content}</p>`;
+                document.getElementById('tutorial-progress').textContent = `Step ${tutorialStep + 1} of ${tutorialSteps.length}`;
+                document.getElementById('tutorial-prev').style.display = tutorialStep === 0 ? 'none' : 'inline-block';
+                document.getElementById('tutorial-next').textContent = tutorialStep === tutorialSteps.length - 1 ? 'Finish' : 'Next';
+            }
+
+            function nextTutorialStep() {
+                if (tutorialStep < tutorialSteps.length - 1) {
+                    tutorialStep++;
+                    updateTutorialStep();
+                } else {
+                    endTutorial();
+                }
+            }
+
+            function prevTutorialStep() {
+                if (tutorialStep > 0) {
+                    tutorialStep--;
+                    updateTutorialStep();
+                }
+            }
+            
+            function endTutorial() {
+                 document.getElementById('tutorial-overlay').style.display = 'none';
+            }
+
+            function showModalMessage(title, message) {
+                const modalOverlay = document.getElementById('modal-overlay');
+                const modalContent = document.getElementById('modal-content');
+                modalContent.innerHTML = `
+                    <button class="absolute top-2 right-3 text-2xl text-slate-400 hover:text-white" onclick="closeModal()">×</button>
+                    <h3 class="text-xl font-bold mb-4">${title}</h3>
+                    <p>${message}</p>
+                `;
+                modalOverlay.style.display = 'flex';
+            }
+
+            initializeChart();
+            setupEventListeners();
+        });
+    </script>
+</body>
+</html>
