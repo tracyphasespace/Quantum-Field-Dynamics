@@ -45,7 +45,6 @@ This repository contains the theoretical, computational, and conceptual foundati
 
 ##  Learn More
 
-- [Full Book PDF (v5.1)](5.1%20QFD%20Book.pdf)
 - [Technical Review](QFD_Technical_Review_GitHub.md)
 - [Whitepaper Summary (MD)](QFD_Whitepaper.md)
 
