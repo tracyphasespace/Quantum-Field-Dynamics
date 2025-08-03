@@ -4,6 +4,10 @@ New View on an Old Universe
 **A Unified Theory from First Principles**  
 Author: Tracy McSheery
 
+https://www.youtube.com/@QuantumFieldDynamics
+
+Each of the 'contrarian' views is explained with no math, just logic.
+
 This repository contains the theoretical, computational, and conceptual foundation for *Quantum Field Dynamics (QFD)*, a framework for physics that reconstructs spacetime, quantum mechanics, electromagnetism, gravity, and particle structure from a single geometric field \(\psi\) defined over the Clifford Algebra \(\text{Cl}(3,3)\).
 
 ##  Core Claims
