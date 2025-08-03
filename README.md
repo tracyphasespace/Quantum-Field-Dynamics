@@ -8,11 +8,11 @@ https://www.youtube.com/@QuantumFieldDynamics
 
 Each of the 'contrarian' views is explained with no math, just logic.
 
-This repository contains the theoretical, computational, and conceptual foundation for *Quantum Field Dynamics (QFD)*, a framework for physics that reconstructs spacetime, quantum mechanics, electromagnetism, gravity, and particle structure from a single geometric field \(\psi\) defined over the Clifford Algebra \(\text{Cl}(3,3)\).
+This repository contains the theoretical, computational, and conceptual foundation for *Quantum Field Dynamics (QFD)*, a framework for physics that reconstructs spacetime, quantum mechanics, electromagnetism, gravity, and particle structure from a single geometric field Psi defined over the Clifford Algebra Cl(3,3).
 
 ##  Core Claims
 
-- Time is emergent: a scalar ordering parameter \(\tau\), not a spacetime coordinate.
+- Time is emergent: a scalar ordering parameter Tau, not a spacetime coordinate.
 - Gravity arises from field-induced time dilation, not curvature.
 - Redshift is caused by ψ-mediated photon scattering, not cosmic expansion.
 - Charge is a topological winding number.
