@@ -57,12 +57,7 @@ QFD_Redshift_Demo/
 │   ├── physics.py             # QFD physics implementation
 │   └── visualization.py       # Plotting utilities
 ├── examples/                   # Example scripts
-│   ├── basic_analysis.py      # Simple redshift analysis
-│   ├── hubble_diagram.py      # Generate Hubble diagram
-│   └── lambda_cdm_comparison.py # Compare with standard model
-├── tests/                     # Unit tests
-├── docs/                      # Documentation
-└── results/                   # Output directory
+│   └── basic_analysis.py      # Simple redshift analysis
 ```
 
 ## License
