@@ -439,25 +439,24 @@ class SupernovaAnalyzer:
         output_path = Path(output_file)
         output_path.parent.mkdir(exist_ok=True)
         
-        # Prepare results for JSON serialization
-        json_results = {}
-        for key, value in self.results.items():
-            if isinstance(value, dict):
-                json_results[key] = {}
-                for subkey, subvalue in value.items():
-                    if isinstance(subvalue, np.ndarray):
-                        json_results[key][subkey] = subvalue.tolist()
-                    elif isinstance(subvalue, dict):
-                        json_results[key][subkey] = {}
-                        for subsubkey, subsubvalue in subvalue.items():
-                            if isinstance(subsubvalue, np.ndarray):
-                                json_results[key][subkey][subsubkey] = subsubvalue.tolist()
-                            else:
-                                json_results[key][subkey][subsubkey] = subsubvalue
-                    else:
-                        json_results[key][subkey] = subvalue
-            else:
-                json_results[key] = value
+        # Prepare results for JSON serialization using a recursive converter
+        def convert_numpy_to_native(o):
+            if isinstance(o, np.ndarray):
+                return o.tolist()
+            if isinstance(o, dict):
+                return {k: convert_numpy_to_native(v) for k, v in o.items()}
+            if isinstance(o, (list, tuple)):
+                return [convert_numpy_to_native(i) for i in o]
+            # Handle numpy numeric types
+            if isinstance(o, (np.int64, np.int32, np.int16, np.int8)):
+                return int(o)
+            if isinstance(o, (np.float64, np.float32, np.float16)):
+                return float(o)
+            if isinstance(o, np.bool_):
+                return bool(o)
+            return o
+
+        json_results = convert_numpy_to_native(self.results)
         
         # Add model parameters
         json_results['model_parameters'] = {
