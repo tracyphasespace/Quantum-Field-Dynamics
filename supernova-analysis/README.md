@@ -45,6 +45,10 @@ validation = analyzer.validate_against_observations()
 analyzer.create_analysis_plots()
 ```
 
+## Repository Status
+
+**Note:** This project is currently incomplete. The core logic in `supernova_analyzer.py` depends on the files `plasma_physics.py`, `qvd_scattering.py`, and `visualization.py`, which are not present in the repository. The example scripts are also missing.
+
 ## File Structure
 
 ```
@@ -53,17 +57,7 @@ QFD_Supernova_Demo/
 ├── requirements.txt             # Python dependencies
 ├── qfd_supernova/              # Main package
 │   ├── __init__.py
-│   ├── supernova_analyzer.py   # Core supernova analysis
-│   ├── plasma_physics.py       # Supernova plasma evolution
-│   ├── qvd_scattering.py      # QVD scattering physics
-│   └── visualization.py       # Multi-wavelength plotting
-├── examples/                   # Example scripts
-│   ├── basic_supernova.py     # Simple supernova analysis
-│   ├── multi_wavelength.py    # Wavelength-dependent effects
-│   └── hubble_diagram.py      # Cosmological analysis
-├── tests/                     # Unit tests
-├── docs/                      # Documentation
-└── results/                   # Output directory
+│   └── supernova_analyzer.py   # Core supernova analysis
 ```
 
 ## Scientific Background
