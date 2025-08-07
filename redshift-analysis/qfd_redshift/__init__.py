@@ -17,9 +17,4 @@ from .cosmology import QFDCosmology
 from .physics import QFDPhysics
 from .visualization import RedshiftPlotter
 
-__all__ = [
-    "RedshiftAnalyzer",
-    "QFDCosmology", 
-    "QFDPhysics",
-    "RedshiftPlotter"
-]
+__all__ = ["RedshiftAnalyzer", "QFDCosmology", "QFDPhysics", "RedshiftPlotter"]
