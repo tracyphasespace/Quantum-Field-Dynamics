@@ -17,10 +17,10 @@ import time
 from typing import Dict, List, Tuple, Optional, Union
 import logging
 
-from redshift_physics import EnhancedQVDPhysics
-from redshift_cosmology import EnhancedQVDCosmology
-from numerical_safety import validate_finite, clamp_to_range
-from error_handling import setup_qvd_logging, ErrorReporter
+from .physics import EnhancedQVDPhysics
+from .cosmology import EnhancedQVDCosmology
+from .numerical_safety import validate_finite, clamp_to_range
+from .error_handling import setup_qvd_logging, ErrorReporter
 
 logger = logging.getLogger(__name__)
 
@@ -549,7 +549,7 @@ class EnhancedRedshiftAnalyzer:
         self.results['error_summary'] = {
             'total_errors': len(self.error_reporter.errors),
             'error_types': list(set([e['type'] for e in self.error_reporter.errors])),
-            'bounds_warnings': getattr(self.physics.bounds_enforcer, 'warning_count', 0)
+            'bounds_violation_summary': self.physics.bounds_enforcer.get_violation_summary()
         }
         
         return self.results

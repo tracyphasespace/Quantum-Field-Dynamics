@@ -1,133 +1,60 @@
-# RedShift QVD Cosmological Model
+# Redshift QVD Cosmological Model
 
-A numerically stable, production-ready implementation of the Quantum Vacuum Dynamics (QVD) redshift model that provides a physics-based alternative to dark energy in cosmology.
+A numerically stable implementation of the Quantum Vacuum Dynamics (QVD) redshift model. This model provides a physically-motivated, phenomenological explanation for cosmological redshift and the Cosmic Microwave Background (CMB).
+
+**Note:** This repository implements the **wavelength-independent** QVD redshift model. It is a synergistic but distinct effect from the wavelength-dependent scattering model used for supernova analysis.
 
 ## Overview
 
-This repository contains a comprehensive implementation of the QVD redshift model that explains cosmological dimming through quantum vacuum interactions scaled from SLAC E144 experimental results. The model provides an alternative to dark energy acceleration while maintaining excellent agreement with supernova observations.
+This repository contains an implementation of the QVD redshift model. This model proposes that cosmological redshift arises from momentum exchange between photons over vast distances, an effect motivated by the physics validated at the SLAC E144 experiment.
+
+The model provides an alternative to the standard Big Bang expansion model for explaining the origin of cosmological redshift and the CMB.
 
 ## Key Features
 
-- **Physics-Based Alternative**: No dark energy required - uses E144-validated QED interactions
-- **Excellent Agreement**: 0.14 magnitude RMS error with supernova observations
-- **Numerically Stable**: 100% finite results with comprehensive bounds enforcement
-- **Production Ready**: Robust error handling, logging, and validation framework
-- **Testable Predictions**: Specific observational signatures for model validation
-- **Professional Quality**: Complete documentation, testing, and visualization
+- **Physics-Based Motivation**: The model is motivated by the principles of Quantum Vacuum Dynamics, which have been experimentally validated.
+- **Wavelength-Independent Effect**: The core redshift mechanism in this model does not depend on the wavelength of the light.
+- **Numerically Stable**: The implementation includes a robust framework for bounds enforcement and error handling to ensure reliable calculations.
+- **Testable Predictions**: The model makes specific predictions about the CMB and other cosmological observations.
 
-## Scientific Results
+## Scientific Context
 
-### Model Performance
-- **RMS Error**: 0.14 magnitudes vs observations (competitive with ΛCDM)
-- **Redshift Scaling**: z^0.6 phenomenological law fitted to data
-- **No Acceleration**: Standard Hubble expansion sufficient
-- **Physics Foundation**: Based on experimentally validated E144 interactions
+This model is part of a larger research program to explore alternatives to the standard ΛCDM cosmological model. It specifically tackles the origin of cosmological redshift and the CMB.
 
-### Key Predictions
-- **Wavelength Independence**: Redshift-dependent effects dominate
-- **IGM Enhancement**: Logarithmic growth with cosmological distance
-- **Environmental Correlations**: Host galaxy dependencies
-- **Spectral Evolution**: Specific B-V color evolution signatures
+The core of the model is a phenomenological power law that describes the amount of dimming as a function of redshift. This is enhanced by a model for the contribution of the Intergalactic Medium (IGM).
+
+**Developer's Note:** The documentation currently mentions both "Wavelength Independence" and "Spectral Evolution" as predictions. These seem contradictory. Could you please clarify if "Spectral Evolution" is a feature to be added, or if my understanding of the wavelength-independent nature of this model is incorrect?
 
 ## Quick Start
 
 ```python
-from redshift_qvd import RedshiftAnalyzer
+from redshift_qvd_package.analyzer import EnhancedRedshiftAnalyzer
 
 # Create analyzer with optimized parameters
-analyzer = RedshiftAnalyzer(
-    qvd_coupling=0.85,      # Fitted to observations
-    redshift_power=0.6,     # z^0.6 scaling law
-    hubble_constant=70.0    # km/s/Mpc
+analyzer = EnhancedRedshiftAnalyzer(
+    qvd_coupling=0.85,
+    redshift_power=0.6,
+    hubble_constant=70.0
 )
 
-# Run complete analysis
-results = analyzer.run_complete_analysis()
+# Run a complete analysis
+# Note: The analysis needs an observational data file to run.
+# results = analyzer.run_complete_analysis()
 
-# Results are guaranteed finite and physically reasonable
-print(f"RMS error vs observations: {results['validation']['rms_error']:.3f} mag")
+# print(f"RMS error vs observations: {results['validation']['rms_error']:.3f} mag")
 ```
 
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/RedShift.git
-cd RedShift
+# After cloning the repository:
 pip install -r requirements.txt
-python verify_installation.py
 ```
-
-## Cosmological Implications
-
-### Alternative to Dark Energy
-- **No Exotic Physics**: Uses established QED and plasma physics
-- **No Fine-Tuning**: Parameters fitted to observational data
-- **Testable Differences**: Clear observational discriminants from ΛCDM
-- **Physical Mechanism**: Energy loss through QVD scattering in IGM
-
-### Observational Signatures
-- **Distance-Redshift Relation**: Different scaling from ΛCDM at high z
-- **Environmental Effects**: Correlations with host galaxy properties
-- **Spectral Evolution**: Wavelength-dependent dimming patterns
-- **Temporal Variations**: Time-dependent scattering signatures
-
-## Documentation
-
-- [API Reference](docs/API_REFERENCE.md) - Complete API documentation
-- [Theoretical Background](docs/THEORETICAL_BACKGROUND.md) - Physics and mathematics
-- [Numerical Methods](docs/NUMERICAL_METHODS.md) - Computational implementation
-- [Validation Report](validation/validation_summary.txt) - Comprehensive testing results
-- [Examples](examples/) - Usage examples and tutorials
 
 ## Testing and Validation
 
 Run the complete test suite:
 
 ```bash
-python -m pytest tests/ -v
+python -m pytest redshift-analysis/RedShift/tests/ -v
 ```
-
-Run comprehensive validation:
-
-```bash
-python validation/validate_redshift_model.py
-```
-
-## Model Comparison
-
-| Aspect | QVD RedShift Model | ΛCDM Model |
-|--------|-------------------|------------|
-| **Physics** | E144-based QED | Dark energy |
-| **RMS Error** | 0.14 mag | ~0.15 mag |
-| **Free Parameters** | 2 (coupling, power) | 2 (Ωₘ, ΩΛ) |
-| **Acceleration** | Not required | Required |
-| **Testability** | Specific signatures | Limited |
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
-
-## License
-
-Copyright © 2025 PhaseSpace. All rights reserved. See [LICENSE](LICENSE) for details.
-
-## Citation
-
-If you use this code in your research, please cite:
-
-```bibtex
-@software{redshift_qvd_2025,
-  title={RedShift QVD Cosmological Model},
-  author={PhaseSpace},
-  year={2025},
-  url={https://github.com/yourusername/RedShift}
-}
-```
-
-## Support
-
-For questions or issues, please open a GitHub issue or contact the development team.
-
----
-
-**Note**: This model provides a testable alternative to dark energy cosmology. While it shows excellent agreement with current observations, further validation with upcoming survey data will be crucial for establishing its cosmological significance.
