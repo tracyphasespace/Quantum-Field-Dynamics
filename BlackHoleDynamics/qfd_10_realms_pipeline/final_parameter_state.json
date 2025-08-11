@@ -1,0 +1,422 @@
+{
+  "k_J": {
+    "value": 0.0,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.945194",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 0.0,
+        "max_value": 1.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for k_J",
+        "active": true
+      }
+    ],
+    "change_count": 6,
+    "metadata": {
+      "unit": "",
+      "note": "Incoherent photon drag; must be ~0 locally",
+      "source": "yaml_config"
+    }
+  },
+  "psi_s0": {
+    "value": -1.5,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.945205",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": -10.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for psi_s0",
+        "active": true
+      }
+    ],
+    "change_count": 6,
+    "metadata": {
+      "unit": "",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "xi": {
+    "value": 1.8,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.945225",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for xi",
+        "active": true
+      }
+    ],
+    "change_count": 8,
+    "metadata": {
+      "unit": "",
+      "note": "EM energy -> vacuum response strength",
+      "source": "yaml_config"
+    }
+  },
+  "E0": {
+    "value": 1000.0,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.917370",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 1e-06,
+        "max_value": 1000000.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for E0 (unit: arbitrary until scaled)",
+        "active": true
+      }
+    ],
+    "change_count": 2,
+    "metadata": {
+      "unit": "arbitrary until scaled",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "L0": {
+    "value": 1e-10,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.917373",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 1e-12,
+        "max_value": 1000000000000.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for L0 (unit: arbitrary until scaled)",
+        "active": true
+      }
+    ],
+    "change_count": 2,
+    "metadata": {
+      "unit": "arbitrary until scaled",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "k_c2": {
+    "value": 0.5,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.918224",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for k_c2",
+        "active": true
+      }
+    ],
+    "change_count": 2,
+    "metadata": {
+      "unit": "",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "k_EM": {
+    "value": 1.5,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.918230",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for k_EM",
+        "active": true
+      }
+    ],
+    "change_count": 2,
+    "metadata": {
+      "unit": "",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "V2": {
+    "value": -2.0,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.918748",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": -10.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for V2",
+        "active": true
+      }
+    ],
+    "change_count": 2,
+    "metadata": {
+      "unit": "",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "V4": {
+    "value": 1.0,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.918757",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for V4",
+        "active": true
+      }
+    ],
+    "change_count": 2,
+    "metadata": {
+      "unit": "",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "kappa": {
+    "value": 0.18400000000000002,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.918764",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for kappa",
+        "active": true
+      }
+    ],
+    "change_count": 2,
+    "metadata": {
+      "unit": "",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "lambda_R1": {
+    "value": null,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.894847",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for lambda_R1",
+        "active": true
+      }
+    ],
+    "change_count": 0,
+    "metadata": {
+      "unit": "",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "lambda_R2": {
+    "value": null,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.894858",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for lambda_R2",
+        "active": true
+      }
+    ],
+    "change_count": 0,
+    "metadata": {
+      "unit": "",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "lambda_R3": {
+    "value": null,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.894868",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for lambda_R3",
+        "active": true
+      }
+    ],
+    "change_count": 0,
+    "metadata": {
+      "unit": "",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "lambda_R4": {
+    "value": null,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.894878",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for lambda_R4",
+        "active": true
+      }
+    ],
+    "change_count": 0,
+    "metadata": {
+      "unit": "",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "lambda_t": {
+    "value": 2.498747493302027,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.945687",
+    "constraints": [
+      {
+        "realm": "config",
+        "type": "bounded",
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "target_value": null,
+        "tolerance": null,
+        "notes": "Configuration bounds for lambda_t",
+        "active": true
+      }
+    ],
+    "change_count": 4,
+    "metadata": {
+      "unit": "",
+      "note": "",
+      "source": "yaml_config"
+    }
+  },
+  "PPN_gamma": {
+    "value": 1.00000019,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.917357",
+    "constraints": [
+      {
+        "realm": "ppn_config",
+        "type": "target",
+        "min_value": null,
+        "max_value": null,
+        "target_value": 1.0,
+        "tolerance": 1e-05,
+        "notes": "PPN gamma parameter target from configuration",
+        "active": true
+      }
+    ],
+    "change_count": 2,
+    "metadata": {}
+  },
+  "PPN_beta": {
+    "value": 0.9999981,
+    "uncertainty": null,
+    "fixed_by_realm": null,
+    "last_modified": "2025-08-11T05:58:13.917365",
+    "constraints": [
+      {
+        "realm": "ppn_config",
+        "type": "target",
+        "min_value": null,
+        "max_value": null,
+        "target_value": 1.0,
+        "tolerance": 0.0001,
+        "notes": "PPN beta parameter target from configuration",
+        "active": true
+      }
+    ],
+    "change_count": 2,
+    "metadata": {}
+  },
+  "T_CMB_K": {
+    "value": null,
+    "uncertainty": null,
+    "fixed_by_realm": "cmb_config",
+    "last_modified": "2025-08-11T05:58:13.894926",
+    "constraints": [
+      {
+        "realm": "cmb_config",
+        "type": "fixed",
+        "min_value": null,
+        "max_value": null,
+        "target_value": 2.725,
+        "tolerance": 1e-06,
+        "notes": "CMB temperature fixed from configuration",
+        "active": true
+      }
+    ],
+    "change_count": 0,
+    "metadata": {}
+  }
+}

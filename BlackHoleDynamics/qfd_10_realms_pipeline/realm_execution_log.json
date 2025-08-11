@@ -1,0 +1,281 @@
+{
+  "execution_summary": {
+    "total_executions": 8,
+    "successful_executions": 8,
+    "failed_executions": 0,
+    "total_execution_time_ms": 0.7138252258300781,
+    "average_execution_time_ms": 0.08922815322875977,
+    "realms_executed": [
+      "realm0_cmb",
+      "unstable_realm",
+      "realm0_cmb",
+      "unstable_realm",
+      "realm0_cmb",
+      "unstable_realm",
+      "realm0_cmb",
+      "unstable_realm"
+    ],
+    "failed_realms": [],
+    "total_parameters_modified": 2,
+    "total_constraints_added": 0
+  },
+  "execution_history": [
+    {
+      "realm_name": "realm0_cmb",
+      "status": "completed",
+      "execution_time_ms": 0.08535385131835938,
+      "parameters_modified": [
+        "xi"
+      ],
+      "constraints_added": 0,
+      "notes": [
+        "Vacuum constraints applied",
+        "Thermalization set"
+      ],
+      "error_message": null,
+      "validation_status": null,
+      "validation_violations": 0,
+      "metadata": {
+        "realm_result": {
+          "status": "ok",
+          "fixed": {
+            "psi_s0": -1.5,
+            "xi": 1.8
+          },
+          "narrowed": {
+            "k_J": "Near zero for vacuum"
+          },
+          "notes": [
+            "Vacuum constraints applied",
+            "Thermalization set"
+          ]
+        },
+        "parameters_before": 12,
+        "parameters_after": 12
+      }
+    },
+    {
+      "realm_name": "unstable_realm",
+      "status": "completed",
+      "execution_time_ms": 0.3161430358886719,
+      "parameters_modified": [
+        "lambda_t"
+      ],
+      "constraints_added": 0,
+      "notes": [
+        "Caused parameter oscillation"
+      ],
+      "error_message": null,
+      "validation_status": null,
+      "validation_violations": 0,
+      "metadata": {
+        "realm_result": {
+          "status": "ok",
+          "notes": [
+            "Caused parameter oscillation"
+          ]
+        },
+        "parameters_before": 12,
+        "parameters_after": 13
+      }
+    },
+    {
+      "realm_name": "realm0_cmb",
+      "status": "completed",
+      "execution_time_ms": 0.030040740966796875,
+      "parameters_modified": [],
+      "constraints_added": 0,
+      "notes": [
+        "Vacuum constraints applied",
+        "Thermalization set"
+      ],
+      "error_message": null,
+      "validation_status": null,
+      "validation_violations": 0,
+      "metadata": {
+        "realm_result": {
+          "status": "ok",
+          "fixed": {
+            "psi_s0": -1.5,
+            "xi": 1.8
+          },
+          "narrowed": {
+            "k_J": "Near zero for vacuum"
+          },
+          "notes": [
+            "Vacuum constraints applied",
+            "Thermalization set"
+          ]
+        },
+        "parameters_before": 13,
+        "parameters_after": 13
+      }
+    },
+    {
+      "realm_name": "unstable_realm",
+      "status": "completed",
+      "execution_time_ms": 0.047206878662109375,
+      "parameters_modified": [
+        "lambda_t"
+      ],
+      "constraints_added": 0,
+      "notes": [
+        "Caused parameter oscillation"
+      ],
+      "error_message": null,
+      "validation_status": null,
+      "validation_violations": 0,
+      "metadata": {
+        "realm_result": {
+          "status": "ok",
+          "notes": [
+            "Caused parameter oscillation"
+          ]
+        },
+        "parameters_before": 13,
+        "parameters_after": 13
+      }
+    },
+    {
+      "realm_name": "realm0_cmb",
+      "status": "completed",
+      "execution_time_ms": 0.05984306335449219,
+      "parameters_modified": [],
+      "constraints_added": 0,
+      "notes": [
+        "Vacuum constraints applied",
+        "Thermalization set"
+      ],
+      "error_message": null,
+      "validation_status": null,
+      "validation_violations": 0,
+      "metadata": {
+        "realm_result": {
+          "status": "ok",
+          "fixed": {
+            "psi_s0": -1.5,
+            "xi": 1.8
+          },
+          "narrowed": {
+            "k_J": "Near zero for vacuum"
+          },
+          "notes": [
+            "Vacuum constraints applied",
+            "Thermalization set"
+          ]
+        },
+        "parameters_before": 13,
+        "parameters_after": 13
+      }
+    },
+    {
+      "realm_name": "unstable_realm",
+      "status": "completed",
+      "execution_time_ms": 0.049114227294921875,
+      "parameters_modified": [
+        "lambda_t"
+      ],
+      "constraints_added": 0,
+      "notes": [
+        "Caused parameter oscillation"
+      ],
+      "error_message": null,
+      "validation_status": null,
+      "validation_violations": 0,
+      "metadata": {
+        "realm_result": {
+          "status": "ok",
+          "notes": [
+            "Caused parameter oscillation"
+          ]
+        },
+        "parameters_before": 13,
+        "parameters_after": 13
+      }
+    },
+    {
+      "realm_name": "realm0_cmb",
+      "status": "completed",
+      "execution_time_ms": 0.056743621826171875,
+      "parameters_modified": [],
+      "constraints_added": 0,
+      "notes": [
+        "Vacuum constraints applied",
+        "Thermalization set"
+      ],
+      "error_message": null,
+      "validation_status": null,
+      "validation_violations": 0,
+      "metadata": {
+        "realm_result": {
+          "status": "ok",
+          "fixed": {
+            "psi_s0": -1.5,
+            "xi": 1.8
+          },
+          "narrowed": {
+            "k_J": "Near zero for vacuum"
+          },
+          "notes": [
+            "Vacuum constraints applied",
+            "Thermalization set"
+          ]
+        },
+        "parameters_before": 13,
+        "parameters_after": 13
+      }
+    },
+    {
+      "realm_name": "unstable_realm",
+      "status": "completed",
+      "execution_time_ms": 0.06937980651855469,
+      "parameters_modified": [
+        "lambda_t"
+      ],
+      "constraints_added": 0,
+      "notes": [
+        "Caused parameter oscillation"
+      ],
+      "error_message": null,
+      "validation_status": null,
+      "validation_violations": 0,
+      "metadata": {
+        "realm_result": {
+          "status": "ok",
+          "notes": [
+            "Caused parameter oscillation"
+          ]
+        },
+        "parameters_before": 13,
+        "parameters_after": 13
+      }
+    }
+  ],
+  "realm_dependencies": {
+    "realm0_cmb": [],
+    "realm3_scales": [
+      "realm0_cmb"
+    ],
+    "realm4_em": [
+      "realm3_scales"
+    ],
+    "realm5_electron": [
+      "realm4_em"
+    ],
+    "unstable_realm": []
+  },
+  "convergence_thresholds": {
+    "PPN_gamma": 1e-07,
+    "PPN_beta": 1e-06,
+    "T_CMB_K": 1e-08,
+    "k_J": 1e-12,
+    "xi": 0.001
+  },
+  "registered_realms": [
+    "realm0_cmb",
+    "realm3_scales",
+    "realm4_em",
+    "realm5_electron",
+    "unstable_realm"
+  ]
+}

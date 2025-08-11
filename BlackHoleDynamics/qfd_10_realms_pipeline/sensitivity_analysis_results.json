@@ -1,0 +1,609 @@
+{
+  "sensitivity_results": [
+    {
+      "observable_name": "ppn_gamma",
+      "parameter_sensitivities": {
+        "k_J": 0.0,
+        "psi_s0": 0.0,
+        "xi": 0.0,
+        "E0": 0.0,
+        "L0": 0.0,
+        "PPN_gamma": 0.999999993922529,
+        "PPN_beta": 0.0,
+        "T_CMB_K": 0.0
+      },
+      "baseline_value": 1.000001,
+      "analysis_method": "numerical_derivative_forward",
+      "perturbation_size": 1e-08,
+      "execution_time_ms": 0.1323223114013672,
+      "metadata": {
+        "parameters_analyzed": 8,
+        "method": "forward"
+      }
+    },
+    {
+      "observable_name": "ppn_gamma",
+      "parameter_sensitivities": {
+        "k_J": 0.0,
+        "psi_s0": 0.0,
+        "xi": 0.0,
+        "E0": 0.0,
+        "L0": 0.0,
+        "PPN_gamma": 0.999999993922529,
+        "PPN_beta": 0.0,
+        "T_CMB_K": 0.0
+      },
+      "baseline_value": 1.000001,
+      "analysis_method": "numerical_derivative_backward",
+      "perturbation_size": 1e-08,
+      "execution_time_ms": 0.13136863708496094,
+      "metadata": {
+        "parameters_analyzed": 8,
+        "method": "backward"
+      }
+    },
+    {
+      "observable_name": "ppn_gamma",
+      "parameter_sensitivities": {
+        "k_J": 0.0,
+        "psi_s0": 0.0,
+        "xi": 0.0,
+        "E0": 0.0,
+        "L0": 0.0,
+        "PPN_gamma": 0.999999993922529,
+        "PPN_beta": 0.0,
+        "T_CMB_K": 0.0
+      },
+      "baseline_value": 1.000001,
+      "analysis_method": "numerical_derivative_central_difference",
+      "perturbation_size": 1e-08,
+      "execution_time_ms": 0.24557113647460938,
+      "metadata": {
+        "parameters_analyzed": 8,
+        "method": "central_difference"
+      }
+    },
+    {
+      "observable_name": "ppn_beta",
+      "parameter_sensitivities": {
+        "k_J": 0.0,
+        "psi_s0": 0.0,
+        "xi": 0.0,
+        "E0": 0.0,
+        "L0": 0.0,
+        "PPN_gamma": 0.0,
+        "PPN_beta": 1.0000000050247593,
+        "T_CMB_K": 0.0
+      },
+      "baseline_value": 0.99999,
+      "analysis_method": "numerical_derivative_forward",
+      "perturbation_size": 1e-08,
+      "execution_time_ms": 0.10228157043457031,
+      "metadata": {
+        "parameters_analyzed": 8,
+        "method": "forward"
+      }
+    },
+    {
+      "observable_name": "ppn_beta",
+      "parameter_sensitivities": {
+        "k_J": 0.0,
+        "psi_s0": 0.0,
+        "xi": 0.0,
+        "E0": 0.0,
+        "L0": 0.0,
+        "PPN_gamma": 0.0,
+        "PPN_beta": 1.0000000050247593,
+        "T_CMB_K": 0.0
+      },
+      "baseline_value": 0.99999,
+      "analysis_method": "numerical_derivative_backward",
+      "perturbation_size": 1e-08,
+      "execution_time_ms": 0.07295608520507812,
+      "metadata": {
+        "parameters_analyzed": 8,
+        "method": "backward"
+      }
+    },
+    {
+      "observable_name": "ppn_beta",
+      "parameter_sensitivities": {
+        "k_J": 0.0,
+        "psi_s0": 0.0,
+        "xi": 0.0,
+        "E0": 0.0,
+        "L0": 0.0,
+        "PPN_gamma": 0.0,
+        "PPN_beta": 1.0000000050247593,
+        "T_CMB_K": 0.0
+      },
+      "baseline_value": 0.99999,
+      "analysis_method": "numerical_derivative_central_difference",
+      "perturbation_size": 1e-08,
+      "execution_time_ms": 0.10466575622558594,
+      "metadata": {
+        "parameters_analyzed": 8,
+        "method": "central_difference"
+      }
+    },
+    {
+      "observable_name": "composite_metric",
+      "parameter_sensitivities": {
+        "k_J": 0.010186340659856796,
+        "psi_s0": 0.0,
+        "xi": 199999.9993131496,
+        "E0": 0.0,
+        "L0": 0.0,
+        "PPN_gamma": 0.0,
+        "PPN_beta": 0.0,
+        "T_CMB_K": 0.0
+      },
+      "baseline_value": 100000.0000000001,
+      "analysis_method": "numerical_derivative_forward",
+      "perturbation_size": 1e-08,
+      "execution_time_ms": 0.1266002655029297,
+      "metadata": {
+        "parameters_analyzed": 8,
+        "method": "forward"
+      }
+    },
+    {
+      "observable_name": "composite_metric",
+      "parameter_sensitivities": {
+        "k_J": -0.010186340659856796,
+        "psi_s0": 0.0,
+        "xi": 199999.99640276656,
+        "E0": 0.0,
+        "L0": 0.0,
+        "PPN_gamma": 0.0,
+        "PPN_beta": 0.0,
+        "T_CMB_K": 0.0
+      },
+      "baseline_value": 100000.0000000001,
+      "analysis_method": "numerical_derivative_backward",
+      "perturbation_size": 1e-08,
+      "execution_time_ms": 0.11754035949707031,
+      "metadata": {
+        "parameters_analyzed": 8,
+        "method": "backward"
+      }
+    },
+    {
+      "observable_name": "composite_metric",
+      "parameter_sensitivities": {
+        "k_J": 0.0,
+        "psi_s0": 0.0,
+        "xi": 199999.99785795808,
+        "E0": 0.0,
+        "L0": 0.0,
+        "PPN_gamma": 0.0,
+        "PPN_beta": 0.0,
+        "T_CMB_K": 0.0
+      },
+      "baseline_value": 100000.0000000001,
+      "analysis_method": "numerical_derivative_central_difference",
+      "perturbation_size": 1e-08,
+      "execution_time_ms": 0.15878677368164062,
+      "metadata": {
+        "parameters_analyzed": 8,
+        "method": "central_difference"
+      }
+    }
+  ],
+  "monte_carlo_results": [
+    {
+      "observable_name": "ppn_gamma",
+      "parameter_statistics": {
+        "k_J": {
+          "mean": 4.999523544370332e-10,
+          "std": 2.886817175300445e-10,
+          "min": 1.8128078490955014e-12,
+          "max": 9.98877958979096e-10,
+          "percentile_25": 2.508695365847914e-10,
+          "percentile_50": 5.002396582574012e-10,
+          "percentile_75": 7.503341115725611e-10
+        },
+        "psi_s0": {
+          "mean": -1.5000462384786992,
+          "std": 0.28868037987889733,
+          "min": -1.9991920246772499,
+          "max": -1.0002077816565373,
+          "percentile_25": -1.748885850352002,
+          "percentile_50": -1.5004319366764862,
+          "percentile_75": -1.249887112734433
+        },
+        "xi": {
+          "mean": 1.999942131202546,
+          "std": 0.5773276552432842,
+          "min": 1.0018507446332514,
+          "max": 2.996754651452796,
+          "percentile_25": 1.5019286304498058,
+          "percentile_50": 2.000252658129284,
+          "percentile_75": 2.499836789889146
+        },
+        "E0": {
+          "mean": 500038.34790959035,
+          "std": 288686.95226670004,
+          "min": 527.3839689491397,
+          "max": 999778.1846346357,
+          "percentile_25": 250956.12680270127,
+          "percentile_50": 499977.30317461013,
+          "percentile_75": 749145.1856188878
+        },
+        "L0": {
+          "mean": 499942081933.02045,
+          "std": 288711336558.27686,
+          "min": 1691656026.7412493,
+          "max": 999509006083.697,
+          "percentile_25": 251088738275.52493,
+          "percentile_50": 499787831459.5178,
+          "percentile_75": 749427426150.7438
+        },
+        "PPN_gamma": {
+          "mean": 0.9999999999209708,
+          "std": 2.88689881420613e-06,
+          "min": 0.99999501748106,
+          "max": 1.0000049909641648,
+          "percentile_25": 0.9999975009743166,
+          "percentile_50": 0.999999998924527,
+          "percentile_75": 1.0000025031317452
+        },
+        "PPN_beta": {
+          "mean": 0.9999999930129186,
+          "std": 5.773521371599119e-05,
+          "min": 0.9999002295401629,
+          "max": 1.0000999346847905,
+          "percentile_25": 0.9999501804673375,
+          "percentile_50": 1.0000000720325257,
+          "percentile_75": 1.000050030669639
+        },
+        "T_CMB_K": {
+          "mean": 2.724987516507902,
+          "std": 0.3146651373280719,
+          "min": 2.1810727900598117,
+          "max": 3.2680479524908295,
+          "percentile_25": 2.4520670732726426,
+          "percentile_50": 2.7243410085600726,
+          "percentile_75": 2.9962817423208845
+        }
+      },
+      "parameter_names": [
+        "k_J",
+        "psi_s0",
+        "xi",
+        "E0",
+        "L0",
+        "PPN_gamma",
+        "PPN_beta",
+        "T_CMB_K"
+      ],
+      "n_samples": 500,
+      "baseline_value": 1.000001,
+      "execution_time_ms": 71.98548316955566,
+      "convergence_info": {
+        "converged": true,
+        "final_mean": 0.9999999999209706,
+        "final_std": 2.88689881420613e-06,
+        "mean_stability": 2.1913756517406584e-08,
+        "running_means": [
+          1.0000000016488508,
+          0.9999999932757748,
+          0.9999999931643044,
+          0.9999999962568022,
+          0.9999999950037038,
+          0.9999999950059716,
+          0.9999999871459366,
+          0.9999999958464694,
+          1.0000000015567585,
+          0.9999999999209706
+        ],
+        "running_stds": [
+          2.891346683410631e-06,
+          2.894359554845727e-06,
+          2.8914236659908343e-06,
+          2.8893116647744032e-06,
+          2.886526062546914e-06,
+          2.883614790374111e-06,
+          2.8860260498053495e-06,
+          2.8896442175598583e-06,
+          2.8895585537276057e-06,
+          2.88689881420613e-06
+        ]
+      }
+    },
+    {
+      "observable_name": "composite_metric",
+      "parameter_statistics": {
+        "k_J": {
+          "mean": 5.000107726644414e-10,
+          "std": 2.887023072530646e-10,
+          "min": 9.854690242266343e-13,
+          "max": 9.991021714622036e-10,
+          "percentile_25": 2.5089393025091343e-10,
+          "percentile_50": 5.001266826615894e-10,
+          "percentile_75": 7.49392536664501e-10
+        },
+        "psi_s0": {
+          "mean": -1.49999363864257,
+          "std": 0.28865364454918835,
+          "min": -1.999012128893192,
+          "max": -1.0018668835054418,
+          "percentile_25": -1.7499769495224944,
+          "percentile_50": -1.500075114340715,
+          "percentile_75": -1.2503753385692362
+        },
+        "xi": {
+          "mean": 1.9999562240411732,
+          "std": 0.5774226417821308,
+          "min": 1.003197294766276,
+          "max": 2.9963050427947353,
+          "percentile_25": 1.5015534948411182,
+          "percentile_50": 1.9985687629060038,
+          "percentile_75": 2.4977469282228446
+        },
+        "E0": {
+          "mean": 500051.02058737597,
+          "std": 288697.7822854591,
+          "min": 704.5131579344217,
+          "max": 999175.3019202505,
+          "percentile_25": 250941.38279295946,
+          "percentile_50": 499242.7440469477,
+          "percentile_75": 750260.7826793543
+        },
+        "L0": {
+          "mean": 500043525014.95917,
+          "std": 288684530758.2886,
+          "min": 1550357325.6083446,
+          "max": 998939787400.2991,
+          "percentile_25": 250225641048.83273,
+          "percentile_50": 500236528021.9119,
+          "percentile_75": 749830001618.3817
+        },
+        "PPN_gamma": {
+          "mean": 0.9999999999692258,
+          "std": 2.8870439905506715e-06,
+          "min": 0.9999950054781379,
+          "max": 1.0000049817256715,
+          "percentile_25": 0.9999975111248455,
+          "percentile_50": 0.9999999937613471,
+          "percentile_75": 1.000002494359257
+        },
+        "PPN_beta": {
+          "mean": 1.0000000006445593,
+          "std": 5.773440847208498e-05,
+          "min": 0.999900093971183,
+          "max": 1.0000996743895663,
+          "percentile_25": 0.9999501100584072,
+          "percentile_50": 1.000000003632366,
+          "percentile_75": 1.0000500042680784
+        },
+        "T_CMB_K": {
+          "mean": 2.7250432062254055,
+          "std": 0.3146623548139622,
+          "min": 2.180311623752566,
+          "max": 3.2688127136846794,
+          "percentile_25": 2.4534611113747715,
+          "percentile_50": 2.724850068581318,
+          "percentile_75": 2.9977811989182235
+        }
+      },
+      "parameter_names": [
+        "k_J",
+        "psi_s0",
+        "xi",
+        "E0",
+        "L0",
+        "PPN_gamma",
+        "PPN_beta",
+        "T_CMB_K"
+      ],
+      "n_samples": 500,
+      "baseline_value": 100000.0000000001,
+      "execution_time_ms": 38.732290267944336,
+      "convergence_info": {
+        "converged": true,
+        "final_mean": 133431.9481235409,
+        "final_std": 119277.88569207121,
+        "mean_stability": 0.0028651182018471543,
+        "running_means": [
+          134085.97502638906,
+          133813.5345444874,
+          133550.4731543257,
+          133355.40023271664,
+          133245.0849572342,
+          133154.6629100013,
+          132937.70288274775,
+          133201.9579901977,
+          133471.2017903256,
+          133431.9481235409
+        ],
+        "running_stds": [
+          119549.00349495244,
+          119579.92901227993,
+          119601.01033800605,
+          119558.37797260014,
+          119462.71499242511,
+          119359.18315105379,
+          119336.90511345552,
+          119362.49758156008,
+          119394.11644182887,
+          119277.88569207121
+        ]
+      }
+    }
+  ],
+  "parameter_rankings": [
+    {
+      "observable_name": "ppn_gamma",
+      "ranked_parameters": [
+        [
+          "PPN_gamma",
+          0.999999993922529
+        ],
+        [
+          "k_J",
+          0.0
+        ],
+        [
+          "psi_s0",
+          0.0
+        ],
+        [
+          "xi",
+          0.0
+        ],
+        [
+          "E0",
+          0.0
+        ],
+        [
+          "L0",
+          0.0
+        ],
+        [
+          "PPN_beta",
+          0.0
+        ],
+        [
+          "T_CMB_K",
+          0.0
+        ]
+      ],
+      "ranking_method": "sensitivity_based",
+      "total_variance_explained": 0.999999993922529,
+      "metadata": {
+        "analysis_method": "numerical_derivative_forward",
+        "perturbation_size": 1e-08
+      }
+    },
+    {
+      "observable_name": "composite_metric",
+      "ranked_parameters": [
+        [
+          "xi",
+          199999.9993131496
+        ],
+        [
+          "k_J",
+          0.010186340659856796
+        ],
+        [
+          "psi_s0",
+          0.0
+        ],
+        [
+          "E0",
+          0.0
+        ],
+        [
+          "L0",
+          0.0
+        ],
+        [
+          "PPN_gamma",
+          0.0
+        ],
+        [
+          "PPN_beta",
+          0.0
+        ],
+        [
+          "T_CMB_K",
+          0.0
+        ]
+      ],
+      "ranking_method": "sensitivity_based",
+      "total_variance_explained": 200000.00949949026,
+      "metadata": {
+        "analysis_method": "numerical_derivative_forward",
+        "perturbation_size": 1e-08
+      }
+    },
+    {
+      "observable_name": "ppn_gamma",
+      "ranked_parameters": [
+        [
+          "L0",
+          8.33542358572666e+22
+        ],
+        [
+          "E0",
+          83340156409.03595
+        ],
+        [
+          "xi",
+          0.33330722150870845
+        ],
+        [
+          "T_CMB_K",
+          0.09901414864969434
+        ],
+        [
+          "psi_s0",
+          0.08333636172702447
+        ],
+        [
+          "PPN_beta",
+          3.3333549028311772e-09
+        ],
+        [
+          "PPN_gamma",
+          8.33418476346476e-12
+        ],
+        [
+          "k_J",
+          8.333713403609641e-20
+        ]
+      ],
+      "ranking_method": "variance_based",
+      "total_variance_explained": 8.335423585734994e+22,
+      "metadata": {
+        "n_samples": 500,
+        "baseline_value": 1.000001
+      }
+    },
+    {
+      "observable_name": "composite_metric",
+      "ranked_parameters": [
+        [
+          "L0",
+          8.333875829913325e+22
+        ],
+        [
+          "E0",
+          83346409496.54234
+        ],
+        [
+          "xi",
+          0.3334169072426549
+        ],
+        [
+          "T_CMB_K",
+          0.09901239753706785
+        ],
+        [
+          "psi_s0",
+          0.08332092651152917
+        ],
+        [
+          "PPN_beta",
+          3.3332619216215577e-09
+        ],
+        [
+          "PPN_gamma",
+          8.335023003374747e-12
+        ],
+        [
+          "k_J",
+          8.334902221324291e-20
+        ]
+      ],
+      "ranking_method": "variance_based",
+      "total_variance_explained": 8.33387582992166e+22,
+      "metadata": {
+        "n_samples": 500,
+        "baseline_value": 100000.0000000001
+      }
+    }
+  ]
+}

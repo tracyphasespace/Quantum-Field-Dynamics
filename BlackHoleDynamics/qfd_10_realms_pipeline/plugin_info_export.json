@@ -1,0 +1,49 @@
+{
+  "photon_mass_constraint": {
+    "name": "photon_mass_constraint",
+    "version": "1.0.0",
+    "author": "QFD Framework",
+    "description": "Enforces experimental limits on photon mass",
+    "priority": "HIGH",
+    "dependencies": [],
+    "active": true,
+    "parameter_dependencies": [
+      "m_gamma",
+      "k_J",
+      "xi"
+    ],
+    "constraint_description": "Enforces experimental upper limit on photon mass (m_\u03b3 < 1\u00d710\u207b\u00b9\u2078 eV)"
+  },
+  "vacuum_stability": {
+    "name": "vacuum_stability",
+    "version": "1.0.0",
+    "author": "QFD Framework",
+    "description": "Ensures vacuum stability under QFD parameter modifications",
+    "priority": "CRITICAL",
+    "dependencies": [],
+    "active": true,
+    "parameter_dependencies": [
+      "n_vac",
+      "k_J",
+      "psi_s0",
+      "xi"
+    ],
+    "constraint_description": "Ensures vacuum stability by maintaining n_vac = 1 and checking parameter combinations"
+  },
+  "cosmological_constant": {
+    "name": "cosmological_constant",
+    "version": "1.0.0",
+    "author": "QFD Framework",
+    "description": "Enforces consistency with observed cosmological constant",
+    "priority": "NORMAL",
+    "dependencies": [],
+    "active": true,
+    "parameter_dependencies": [
+      "Lambda",
+      "psi_s0",
+      "xi",
+      "H0"
+    ],
+    "constraint_description": "Enforces consistency with observed cosmological constant (\u039b = 1.10e-52 m\u207b\u00b2)"
+  }
+}
