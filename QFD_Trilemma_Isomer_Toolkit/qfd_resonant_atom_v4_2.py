@@ -102,6 +102,37 @@ class TrilemmaHamiltonian:
         integrand = 4.0 * math.pi * (r*r) * f
         return torch.trapz(integrand, dx=dr)
 
+
+    # ---- exact spheroid capacitance (normalized, i.e., divided by 4*pi*eps0) ----
+    @staticmethod
+    def spheroid_capacitance_hat(a_major: torch.Tensor, b_minor: torch.Tensor, kind: str) -> torch.Tensor:
+        # C_hat = C / (4*pi*eps0) for a conducting spheroid of revolution.
+        # Uses closed forms (Queiroz 'Capacitance Calculations', eqs (7)-(8)).
+        # 'oblate': major semi-axis a (equatorial), minor b (polar), a >= b
+        #    C_hat = sqrt(a^2 - b^2) / arcsin(sqrt(a^2 - b^2)/a)
+        #    limits: sphere (b->a): C_hat->a ; thin disk (b->0): C_hat-> 2a/pi
+        # 'prolate': major semi-axis a (polar), minor b (equatorial), a >= b
+        #    C_hat = sqrt(a^2 - b^2) / ln( (a + sqrt(a^2 - b^2)) / b )
+        #    limits: sphere (b->a): C_hat->a ; long needle (b->0): C_hat->0
+        a = a_major
+        b = b_minor
+        a = torch.clamp(a, min=1e-12)
+        b = torch.clamp(b, min=1e-12, max=a-1e-12)
+        delta = torch.sqrt(torch.clamp(a*a - b*b, min=1e-24))
+        if kind == "oblate":
+            x = torch.clamp(delta / a, max=1-1e-12)
+            arcs = torch.arcsin(x)
+            C_hat = delta / torch.clamp(arcs, min=1e-18)
+        elif kind == "prolate":
+            num = a + delta
+            den = torch.clamp(b, min=1e-18)
+            ratio = torch.clamp(num / den, min=1+1e-15)
+            ln_term = torch.log(ratio)
+            C_hat = delta / torch.clamp(ln_term, min=1e-18)
+        else:
+            raise ValueError("kind must be 'oblate' or 'prolate'")
+        return C_hat
+
     # ---- finite difference derivative ----
     @staticmethod
     def central_gradient_1d(y: torch.Tensor, dx: torch.Tensor) -> torch.Tensor:
@@ -138,7 +169,7 @@ class TrilemmaHamiltonian:
         # (1) kinetic / surface (∇ψ)^2
         E_kin = self.integrate_r(r, self.c.lambda_kinetic * (dpsi_dr**2))
 
-        # (2) electrostatic ~ Q^2 / (R f_cap(s))
+        # (2) electrostatic via spheroid capacitance
         E_es  = self.c.lambda_electrostatic * (self.Q**2) / (R * f_cap)
 
         # (2b) tiny explicit area pressure ~ R^2 f_area(s)
