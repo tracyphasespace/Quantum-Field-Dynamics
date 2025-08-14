@@ -1,0 +1,44 @@
+{
+  "have_scipy": true,
+  "device": "cpu",
+  "Q": 43.0,
+  "A": 99,
+  "couplings": {
+    "lambda_kinetic": 1.0,
+    "lambda_electrostatic": 0.06,
+    "lambda_quagmire": 0.9,
+    "xi": 1.0,
+    "lambda_mass": 0.04,
+    "lambda_area": 0.02,
+    "shape_area_coeff": 0.6,
+    "shape_cap_coeff": 0.5
+  },
+  "config": {
+    "device": "cpu",
+    "nr": 320,
+    "r_pad": 6.0,
+    "s_max": 0.6,
+    "seed": 1234,
+    "niter": 14,
+    "stepsize": 0.35,
+    "bfgs_maxiter": 120,
+    "multistart_starts": 10
+  },
+  "minima": [
+    {
+      "E_total": 11.321219676811197,
+      "E_other": 11.321219676811197,
+      "I4": 3.6200035741328363e-82,
+      "E_kin": 1.150216620412099e-37,
+      "E_es": 7.547479378751305,
+      "E_area": 3.7737402980598924,
+      "E_mass": 4.706437536279293e-42,
+      "E_quag": -0.0,
+      "R": 12.456734838916958,
+      "T": 0.003113529579788388,
+      "Psi0": 7.562058353878371e-06,
+      "s": 0.5999999964280828
+    }
+  ],
+  "calibration": {}
+}

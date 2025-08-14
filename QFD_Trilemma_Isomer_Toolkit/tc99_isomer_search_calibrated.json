@@ -1,0 +1,45 @@
+{
+  "nuclide": "Tc-99m/Tc-99",
+  "Q": 43.0,
+  "A": 99,
+  "couplings": {
+    "lambda_kinetic": 1.0,
+    "lambda_electrostatic": 0.4,
+    "lambda_quagmire": 1.4,
+    "xi": 1.0,
+    "lambda_mass": 0.05,
+    "lambda_area": 0.1,
+    "shape_area_coeff": 0.6,
+    "shape_cap_coeff": 0.5
+  },
+  "config": {
+    "nr": 320,
+    "r_pad": 6.0,
+    "s_max": 0.4,
+    "R_max": 8.0,
+    "T_max": 1.0,
+    "Psi0_max": 3.0,
+    "niter": 90,
+    "stepsize": 0.35,
+    "bfgs_maxiter": 120,
+    "multistart_starts": 14,
+    "seed": 123
+  },
+  "minima_keV": [
+    {
+      "level": 0,
+      "E_keV_above_ground": 0.0,
+      "R": 8.0,
+      "T": 1.0,
+      "s": 0.4
+    },
+    {
+      "level": 1,
+      "E_keV_above_ground": 142.6,
+      "R": 8.0,
+      "T": 0.01,
+      "s": 0.4
+    }
+  ],
+  "notes": "Calibration performed by solving for lambda_quagmire with xi fixed, then local BFGS re-relaxation; keV scale set so \u0394E=142.6 keV."
+}
