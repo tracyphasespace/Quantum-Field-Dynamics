@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+title: "Universal Nuclear Scaling: Core Compression Law (Replication Kit)"
+message: "If you use this software or dataset, please cite this work."
+authors:
+  - family-names: McSheery
+    given-names: Tracy
+date-released: "2025-09-01"
+version: "1.0.0"
+repository-code: "https://github.com/tracyphasespace/Quantum-Field-Dynamics/tree/main/NuclidePredictionCurve"
