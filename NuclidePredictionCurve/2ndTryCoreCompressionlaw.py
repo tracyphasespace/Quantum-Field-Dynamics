@@ -10,10 +10,11 @@ from scipy.optimize import curve_fit
 try:
     # Build a path relative to this script file for reliability
     script_dir = Path(__file__).resolve().parent
-    csv_path = script_dir / "nuclides.csv"
+    # The parser now generates 'NuMass.csv' as per the spec.
+    csv_path = script_dir / "NuMass.csv"
     df = pd.read_csv(csv_path)
 except FileNotFoundError:
-    raise SystemExit(f"Error: nuclides.csv not found. Please place it at: {csv_path}")
+    raise SystemExit(f"Error: NuMass.csv not found. Please run the parser first. Location: {csv_path}")
 
 # Include ALL isotopes (both stable and unstable)
 all_isotopes = df.copy()
