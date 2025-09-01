@@ -1,5 +1,5 @@
 <!-- Badges -->
-![CI](https://github.com/tracyphasespace/Quantum-Field-Dynamics/actions/workflows/ci.yml/badge.svg)
+[![CI](https://github.com/tracyphasespace/Quantum-Field-Dynamics/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tracyphasespace/Quantum-Field-Dynamics/actions/workflows/ci.yml)
 
 
 
@@ -8,7 +8,7 @@
 This folder contains a **minimal, replication-grade** pipeline to reproduce the
 two-parameter law that fits **all 5,842 known isotopes**:
 
-\[ Q(A) = c_1 A^{2/3} + c_2 A \]
+Q(A) = c1·A^(2/3) + c2·A
 
 with **R² ≈ 0.98** on the complete nuclide set, and **R² ≈ 0.998** for stable
 nuclides (refit). The repo includes code and a distilled dataset (`NuMass.csv`)
@@ -19,6 +19,8 @@ so anyone can reproduce the results quickly.
 ## Quickstart
 
 ```bash
+# From repo root
+cd NuclidePredictionCurve
 # 1) (Optional) create and activate a virtual environment
 python -m venv .venv
 # Windows: .venv\Scripts\activate
@@ -79,9 +81,7 @@ compatible with this pipeline.
 ---
 
 ## Citing
-If you use this code or dataset, please cite:
-- *Universal Nuclear Scaling: A Core Compression Law For Isotopes* (preprint)
-  and the GitHub repository.
+See **CITATION.cff** in this folder for citation metadata.
 
 ---
 
