@@ -1,3 +1,8 @@
+<!-- Badges -->
+![CI](https://github.com/tracyphasespace/Quantum-Field-Dynamics/actions/workflows/ci.yml/badge.svg)
+
+
+
 # Universal Nuclear Scaling — Core Compression Law (Replication Kit)
 
 This folder contains a **minimal, replication-grade** pipeline to reproduce the
