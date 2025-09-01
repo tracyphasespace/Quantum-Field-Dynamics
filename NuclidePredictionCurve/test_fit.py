@@ -10,8 +10,8 @@ OUT = REPO_ROOT / "results_test"
 def test_pipeline_runs_and_writes_artifacts():
     assert DATA.exists(), f"Missing dataset: {DATA}"
     # Run the pipeline
-    cmd = [sys.executable, str(REPO_ROOT / "run_all.py"), "--data", str(DATA), "--outdir", str(OUT)]
-    res = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    cmd = [sys.executable, "run_all.py", "--data", "NuMass.csv", "--outdir", str(OUT.name)]
+    res = subprocess.run(cmd, capture_output=True, text=True, check=False, cwd=REPO_ROOT)
     assert res.returncode == 0, f"run_all.py failed:\nSTDOUT:\n{res.stdout}\nSTDERR:\n{res.stderr}"
 
     coeffs_path = OUT / "coefficients.json"
