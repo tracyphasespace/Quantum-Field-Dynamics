@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qfd_cmb.kernels module &mdash; QFD CMB Module 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="qfd_cmb.projector module" href="qfd_cmb.projector.html" />
+    <link rel="prev" title="qfd_cmb.visibility module" href="qfd_cmb.visibility.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            QFD CMB Module
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="qfd_cmb.html">qfd_cmb package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-qfd_cmb">Main Package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html#core-modules">Core Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="qfd_cmb.ppsi_models.html">qfd_cmb.ppsi_models module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qfd_cmb.visibility.html">qfd_cmb.visibility module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">qfd_cmb.kernels module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#qfd_cmb.kernels.sin2_mueller_coeffs"><code class="docutils literal notranslate"><span class="pre">sin2_mueller_coeffs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qfd_cmb.kernels.te_correlation_phase"><code class="docutils literal notranslate"><span class="pre">te_correlation_phase()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="qfd_cmb.projector.html">qfd_cmb.projector module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qfd_cmb.figures.html">qfd_cmb.figures module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QFD CMB Module</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active">qfd_cmb.kernels module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/qfd_cmb.kernels.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-qfd_cmb.kernels">
+<span id="qfd-cmb-kernels-module"></span><h1>qfd_cmb.kernels module<a class="headerlink" href="#module-qfd_cmb.kernels" title="Link to this heading"></a></h1>
+<p>Scattering kernels and correlation functions for photon-photon interactions.</p>
+<p>This module provides the Mueller matrix coefficients and correlation functions
+needed for computing CMB temperature and polarization spectra with photon-photon
+scattering effects.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="qfd_cmb.kernels.sin2_mueller_coeffs">
+<span class="sig-prename descclassname"><span class="pre">qfd_cmb.kernels.</span></span><span class="sig-name descname"><span class="pre">sin2_mueller_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qfd_cmb/kernels.html#sin2_mueller_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qfd_cmb.kernels.sin2_mueller_coeffs" title="Link to this definition"></a></dt>
+<dd><p>Compute Mueller matrix coefficients for sin²(θ) scattering kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mu</strong> (<em>array_like</em>) – Cosine of scattering angle, mu = cos(θ)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>w_T</strong> (<em>ndarray</em>) – Temperature (intensity) scattering weights</p></li>
+<li><p><strong>w_E</strong> (<em>ndarray</em>) – Polarization (E-mode) scattering weights</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For photon-photon scattering, the differential cross-section goes as sin²(θ),
+leading to scattering weights proportional to (1 - μ²).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qfd_cmb.kernels.te_correlation_phase">
+<span class="sig-prename descclassname"><span class="pre">qfd_cmb.kernels.</span></span><span class="sig-name descname"><span class="pre">te_correlation_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpsi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi_star</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qfd_cmb/kernels.html#te_correlation_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qfd_cmb.kernels.te_correlation_phase" title="Link to this definition"></a></dt>
+<dd><p>Compute scale-dependent TE correlation coefficient with oscillatory features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Wavenumber in 1/Mpc (used as fallback if chi_star=0)</p></li>
+<li><p><strong>rpsi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Oscillation scale in Mpc</p></li>
+<li><p><strong>ell</strong> (<em>array_like</em>) – Multipole values</p></li>
+<li><p><strong>chi_star</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Comoving distance to last scattering in Mpc</p></li>
+<li><p><strong>sigma_phase</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Damping parameter for high-ell suppression (default: 0.16)</p></li>
+<li><p><strong>phi0</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Phase offset in radians (default: 0.0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>TE correlation coefficient ρ_ℓ as function of multipole</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The correlation coefficient includes oscillatory features that can lead to
+sign changes in the TE spectrum, mimicking observed CMB data features.</p>
+</dd></dl>
+
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-prename descclassname"><span class="pre">qfd_cmb.kernels.</span></span><span class="sig-name descname"><span class="pre">sin2_mueller_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qfd_cmb/kernels.html#sin2_mueller_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Compute Mueller matrix coefficients for sin²(θ) scattering kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mu</strong> (<em>array_like</em>) – Cosine of scattering angle, mu = cos(θ)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>w_T</strong> (<em>ndarray</em>) – Temperature (intensity) scattering weights</p></li>
+<li><p><strong>w_E</strong> (<em>ndarray</em>) – Polarization (E-mode) scattering weights</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For photon-photon scattering, the differential cross-section goes as sin²(θ),
+leading to scattering weights proportional to (1 - μ²).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-prename descclassname"><span class="pre">qfd_cmb.kernels.</span></span><span class="sig-name descname"><span class="pre">te_correlation_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpsi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi_star</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qfd_cmb/kernels.html#te_correlation_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Compute scale-dependent TE correlation coefficient with oscillatory features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Wavenumber in 1/Mpc (used as fallback if chi_star=0)</p></li>
+<li><p><strong>rpsi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Oscillation scale in Mpc</p></li>
+<li><p><strong>ell</strong> (<em>array_like</em>) – Multipole values</p></li>
+<li><p><strong>chi_star</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Comoving distance to last scattering in Mpc</p></li>
+<li><p><strong>sigma_phase</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Damping parameter for high-ell suppression (default: 0.16)</p></li>
+<li><p><strong>phi0</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Phase offset in radians (default: 0.0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>TE correlation coefficient ρ_ℓ as function of multipole</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The correlation coefficient includes oscillatory features that can lead to
+sign changes in the TE spectrum, mimicking observed CMB data features.</p>
+</dd></dl>
+
+<p>The kernels module provides scattering kernel functions and correlation coefficients
+for computing polarized CMB spectra with photon-photon scattering.</p>
+<section id="sin2-mueller-coeffs">
+<h3>sin2_mueller_coeffs<a class="headerlink" href="#sin2-mueller-coeffs" title="Link to this heading"></a></h3>
+<p>Computes intensity and polarization weights for a sin²(θ) scattering kernel,
+which models the angular dependence of photon-photon scattering.</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>mu</strong><span class="classifier">array_like</span></dt><dd><p>Cosine of scattering angle, μ = cos(θ)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>w_T</strong><span class="classifier">ndarray</span></dt><dd><p>Intensity weight factor (1 - μ²)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>w_E</strong><span class="classifier">ndarray</span></dt><dd><p>Polarization efficiency factor</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="notes">
+<h4>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h4>
+<p>The sin²(θ) kernel arises naturally in photon-photon scattering calculations.
+The intensity weight is:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}w_T = \\sin^2(\\theta) = 1 - \\mu^2\end{split}\]</div>
+<p>The polarization efficiency follows a similar functional form but may include
+additional physics-dependent factors.</p>
+</section>
+</section>
+<section id="te-correlation-phase">
+<h3>te_correlation_phase<a class="headerlink" href="#te-correlation-phase" title="Link to this heading"></a></h3>
+<p>Computes the scale-dependent TE correlation coefficient that introduces sign flips
+and correlations between temperature and E-mode polarization.</p>
+<section id="id2">
+<h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>k</strong><span class="classifier">array_like</span></dt><dd><p>Wavenumber values in 1/Mpc</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>rpsi</strong><span class="classifier">float</span></dt><dd><p>Characteristic oscillation scale in Mpc</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>ell</strong><span class="classifier">int or array_like</span></dt><dd><p>Multipole moment(s)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>chi_star</strong><span class="classifier">float</span></dt><dd><p>Comoving distance to last scattering in Mpc</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>sigma_phase</strong><span class="classifier">float, optional</span></dt><dd><p>Damping parameter for large-scale suppression (default: 0.16)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>phi0</strong><span class="classifier">float, optional</span></dt><dd><p>Phase offset in radians (default: 0.0)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h4>Returns<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>rho</strong><span class="classifier">ndarray</span></dt><dd><p>TE correlation coefficient ρₗ</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="id4">
+<h4>Notes<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<p>The correlation coefficient is computed as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\\rho_\\ell = \\cos(k_{\\text{eff}} r_\\psi + \\phi_0) \\exp\\left[-\\left(\\sigma_{\\text{phase}} \\frac{\\ell}{200}\\right)^2\\right]\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(k_{\\text{eff}} = (\\ell + 0.5)/\\chi_*\)</span> for the Limber approximation.</p>
+</section>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qfd_cmb.kernels</span><span class="w"> </span><span class="kn">import</span> <span class="n">sin2_mueller_coeffs</span><span class="p">,</span> <span class="n">te_correlation_phase</span>
+
+<span class="c1"># Compute scattering weights</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">w_T</span><span class="p">,</span> <span class="n">w_E</span> <span class="o">=</span> <span class="n">sin2_mueller_coeffs</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
+
+<span class="c1"># Compute TE correlation for specific multipoles</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">ells</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">ell</span> <span class="ow">in</span> <span class="n">ells</span><span class="p">:</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">te_correlation_phase</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rpsi</span><span class="o">=</span><span class="mf">147.0</span><span class="p">,</span> <span class="n">ell</span><span class="o">=</span><span class="n">ell</span><span class="p">,</span> <span class="n">chi_star</span><span class="o">=</span><span class="mf">14065.0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ell=</span><span class="si">{</span><span class="n">ell</span><span class="si">}</span><span class="s2">: rho_max=</span><span class="si">{</span><span class="n">rho</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, rho_min=</span><span class="si">{</span><span class="n">rho</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="qfd_cmb.visibility.html" class="btn btn-neutral float-left" title="qfd_cmb.visibility module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="qfd_cmb.projector.html" class="btn btn-neutral float-right" title="qfd_cmb.projector module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, QFD Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
