@@ -1,247 +1,407 @@
-# Contributing to Enhanced RedShift QVD
+# Contributing to QFD CMB Module
 
-We welcome contributions to the Enhanced RedShift QVD project! This document provides guidelines for contributing to this cosmological modeling framework.
+Thank you for your interest in contributing to the QFD CMB Module! This document provides guidelines and instructions for contributing to the project.
+
+## Table of Contents
+
+- [Code of Conduct](#code-of-conduct)
+- [Getting Started](#getting-started)
+- [Development Setup](#development-setup)
+- [Making Changes](#making-changes)
+- [Code Style Guidelines](#code-style-guidelines)
+- [Testing](#testing)
+- [Documentation](#documentation)
+- [Submitting Changes](#submitting-changes)
+- [Review Process](#review-process)
+- [Release Process](#release-process)
 
 ## Code of Conduct
 
-This project adheres to a code of conduct that we expect all contributors to follow. Please be respectful and constructive in all interactions.
+This project adheres to a code of conduct that promotes a welcoming and inclusive environment. By participating, you are expected to uphold this code. Please report unacceptable behavior to the project maintainers.
 
-## How to Contribute
+## Getting Started
 
-### Reporting Issues
+### Prerequisites
 
-1. **Search existing issues** first to avoid duplicates
-2. **Use the issue template** when creating new issues
-3. **Provide detailed information** including:
-   - Python version and operating system
-   - Steps to reproduce the issue
-   - Expected vs actual behavior
-   - Relevant code snippets or error messages
-   - Cosmological parameters used
+- Python 3.8 or higher
+- Git
+- Basic understanding of CMB physics and numerical computing
+- Familiarity with NumPy, SciPy, and scientific Python ecosystem
 
-### Submitting Changes
+### Types of Contributions
 
-1. **Fork the repository** and create a feature branch
-2. **Follow the coding standards** described below
-3. **Add comprehensive tests** for any new functionality
-4. **Update documentation** as needed
-5. **Ensure all tests pass** including numerical stability tests
-6. **Submit a pull request** with a clear description
+We welcome several types of contributions:
+
+- **Bug reports**: Help us identify and fix issues
+- **Feature requests**: Suggest new functionality or improvements
+- **Code contributions**: Implement bug fixes, new features, or optimizations
+- **Documentation**: Improve existing docs or add new tutorials
+- **Testing**: Add test cases or improve test coverage
+- **Performance**: Optimize computational routines
 
 ## Development Setup
 
+### 1. Fork and Clone
+
 ```bash
-# Clone your fork
-git clone https://github.com/yourusername/RedShift.git
-cd RedShift
+# Fork the repository on GitHub, then clone your fork
+git clone https://github.com/yourusername/qfd-cmb.git
+cd qfd-cmb
 
-# Install development dependencies
-pip install -r requirements.txt
-pip install -e .[dev]
-
-# Run tests
-python -m pytest tests/ -v
-
-# Run validation
-python validation/validate_redshift_model.py
-
-# Verify installation
-python verify_installation.py
+# Add the upstream repository
+git remote add upstream https://github.com/username/qfd-cmb.git
 ```
 
-## Coding Standards
+### 2. Create Development Environment
 
-### Python Style
-- Follow **PEP 8** style guidelines
-- Use **type hints** for function parameters and returns
-- Write **comprehensive docstrings** for all public functions and classes
-- Use **meaningful variable names** with physics context
+```bash
+# Create and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-### Numerical Safety Requirements
-- **Always use safe mathematical operations** from `numerical_safety.py`
-- **Enforce physical bounds** using bounds enforcement systems
-- **Validate finite results** before returning values
-- **Handle edge cases** gracefully with fallback values
-- **Never allow NaN or infinite values** to propagate
+# Install in development mode with all dependencies
+pip install -e .
+pip install -r requirements-dev.txt
+```
 
-### Cosmological Accuracy
-- **Maintain physical realism** in all calculations
-- **Preserve energy conservation** principles
-- **Validate against observations** when possible
-- **Document theoretical assumptions** clearly
-- **Provide uncertainty estimates** where appropriate
+### 3. Install Pre-commit Hooks
 
-### Testing Requirements
-- **Write comprehensive tests** for all new functionality
-- **Maintain 100% finite results** in all calculations
-- **Test extreme parameter values** and edge cases
-- **Include performance benchmarks** for significant changes
-- **Validate cosmological consistency** across redshift ranges
+```bash
+# Install pre-commit hooks for code quality
+pre-commit install
+```
 
-### Documentation Standards
-- **Update API documentation** for any interface changes
-- **Add theoretical background** for new physics implementations
-- **Include usage examples** for new features
-- **Update README** if needed
-- **Document numerical methods** and stability considerations
+### 4. Verify Setup
 
-## Numerical Stability Guidelines
+```bash
+# Run tests to ensure everything works
+pytest
 
-This project prioritizes numerical stability above all else. All contributions must:
+# Run the demo to verify functionality
+python run_demo.py --outdir test_outputs
+```
 
-1. **Use safe operations**: Never use raw `np.power`, `np.log10`, `np.exp`, etc.
-2. **Enforce bounds**: All parameters must be within physical limits
-3. **Validate outputs**: All results must be finite and reasonable
-4. **Handle errors gracefully**: No crashes, always return safe fallbacks
-5. **Test extensively**: Validate under extreme conditions
+## Making Changes
 
-### Example of Good Practice
+### 1. Create a Branch
+
+```bash
+# Create a new branch for your changes
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/issue-number-description
+```
+
+### 2. Branch Naming Conventions
+
+- `feature/description` - New features
+- `fix/issue-number-description` - Bug fixes
+- `docs/description` - Documentation updates
+- `test/description` - Test improvements
+- `refactor/description` - Code refactoring
+
+### 3. Make Your Changes
+
+- Keep changes focused and atomic
+- Write clear, descriptive commit messages
+- Add tests for new functionality
+- Update documentation as needed
+
+## Code Style Guidelines
+
+### Python Code Style
+
+We follow PEP 8 with some project-specific conventions:
+
+- **Line length**: 88 characters (Black default)
+- **Imports**: Use `isort` for import organization
+- **Docstrings**: NumPy-style docstrings for all public functions
+- **Type hints**: Use type hints for function signatures where appropriate
+
+### Formatting Tools
+
+Code formatting is enforced automatically:
+
+```bash
+# Format code with Black
+black qfd_cmb/ tests/ examples/
+
+# Sort imports with isort
+isort qfd_cmb/ tests/ examples/
+
+# Check style with flake8
+flake8 qfd_cmb/ tests/ examples/
+```
+
+### Scientific Computing Conventions
+
+- Use descriptive variable names that match mathematical notation when possible
+- Include units in docstrings and comments
+- Prefer NumPy vectorized operations over loops
+- Use `np.testing.assert_allclose` for floating-point comparisons
+- Document numerical algorithms and their sources
+
+### Example Function
 
 ```python
-# Good: Uses safe operations and bounds enforcement
-def calculate_qvd_dimming(self, redshift):
-    # Enforce input bounds
-    safe_redshift = self.bounds_enforcer.enforce_redshift(redshift, "dimming_calc")
+def oscillatory_psik(k: np.ndarray, lA: float, rpsi: float) -> np.ndarray:
+    """
+    Compute oscillatory power spectrum P_ψ(k) with exponential damping.
     
-    # Use safe mathematical operations
-    base_dimming = self.qvd_coupling * safe_power(safe_redshift, self.redshift_power)
+    Parameters
+    ----------
+    k : np.ndarray
+        Wavenumber array in units of h/Mpc
+    lA : float
+        Characteristic angular scale in multipole units
+    rpsi : float
+        Characteristic comoving distance in Mpc/h
+        
+    Returns
+    -------
+    np.ndarray
+        Power spectrum values P_ψ(k) in (Mpc/h)³
+        
+    Notes
+    -----
+    Implements the model from Equation (15) of Reference [1].
     
-    # Validate intermediate results
-    base_dimming = validate_finite(base_dimming, "base_dimming", replace_with=0.0)
-    
-    # Apply physical bounds
-    return self.bounds_enforcer.enforce_dimming(base_dimming, "final_dimming")
-
-# Bad: Raw operations without safety checks
-def calculate_qvd_dimming_bad(self, redshift):
-    # Could produce NaN/Inf values
-    return self.qvd_coupling * (redshift ** self.redshift_power)  # Dangerous!
+    References
+    ----------
+    [1] Author et al., "QFD CMB Analysis", Journal, Year
+    """
+    # Implementation here
+    pass
 ```
 
-## Cosmological Guidelines
-
-### Physical Principles
-- **Respect conservation laws**: Energy, momentum, charge, baryon number
-- **Maintain causal consistency**: No faster-than-light propagation
-- **Preserve general relativity**: Consistent with spacetime geometry
-- **Honor observational constraints**: Fit within error bars of measurements
-
-### Model Development
-- **Start with established physics**: Build on experimentally validated foundations
-- **Document assumptions clearly**: State all theoretical assumptions
-- **Provide testable predictions**: Generate specific observational signatures
-- **Compare with standard models**: Quantitative comparison with ΛCDM
-
-### Validation Requirements
-- **Statistical validation**: Chi-squared, RMS error analysis
-- **Physical consistency**: Energy conservation, causality checks
-- **Observational comparison**: Direct comparison with supernova data
-- **Cross-validation**: Multiple independent validation methods
-
-## Testing Guidelines
-
-### Required Tests
-- **Unit tests** for all new functions with edge cases
-- **Integration tests** for complete workflows
-- **Numerical stability tests** ensuring finite results
-- **Physics consistency tests** validating conservation laws
-- **Performance tests** for computational efficiency
-- **Cosmological validation tests** against observations
+## Testing
 
 ### Test Structure
+
+- **Unit tests**: Test individual functions in isolation
+- **Integration tests**: Test complete workflows
+- **Scientific validation**: Compare against known results
+- **Performance tests**: Monitor computational efficiency
+
+### Writing Tests
+
 ```python
-def test_new_cosmological_function():
-    """Test description with physics context"""
-    # Test normal operation
-    result = new_function(normal_cosmological_params)
+import numpy as np
+import pytest
+from numpy.testing import assert_allclose
+
+from qfd_cmb.ppsi_models import oscillatory_psik
+
+def test_oscillatory_psik_basic():
+    """Test basic functionality of oscillatory_psik."""
+    k = np.logspace(-4, 1, 100)
+    lA = 301.0
+    rpsi = 147.0
+    
+    result = oscillatory_psik(k, lA, rpsi)
+    
+    # Check output properties
+    assert result.shape == k.shape
     assert np.all(np.isfinite(result))
-    assert is_physically_reasonable(result)
+    assert np.all(result >= 0)  # Power spectrum should be positive
+
+def test_oscillatory_psik_reference():
+    """Test against reference values."""
+    k = np.array([0.01, 0.1, 1.0])
+    lA = 301.0
+    rpsi = 147.0
     
-    # Test extreme cases
-    result_extreme = new_function(extreme_cosmological_params)
-    assert np.all(np.isfinite(result_extreme))
+    result = oscillatory_psik(k, lA, rpsi)
+    expected = np.array([1.234e-5, 2.567e-4, 3.891e-3])  # Reference values
     
-    # Test bounds enforcement
-    result_bounded = new_function(out_of_bounds_params)
-    assert is_within_physical_bounds(result_bounded)
-    
-    # Test energy conservation
-    energy_before = calculate_total_energy(initial_state)
-    energy_after = calculate_total_energy(final_state)
-    assert abs(energy_after - energy_before) < tolerance
+    assert_allclose(result, expected, rtol=1e-10)
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=qfd_cmb --cov-report=html
+
+# Run specific test file
+pytest tests/test_ppsi_models.py
+
+# Run tests matching pattern
+pytest -k "test_oscillatory"
+
+# Run tests with verbose output
+pytest -v
+```
+
+## Documentation
+
+### Docstring Requirements
+
+All public functions must have NumPy-style docstrings:
+
+- Brief description
+- Parameters section with types and descriptions
+- Returns section with types and descriptions
+- Notes section for implementation details (optional)
+- References section for scientific sources (optional)
+
+### Building Documentation
+
+```bash
+# Build HTML documentation
+cd docs/
+make html
+
+# View documentation
+open _build/html/index.html
+```
+
+### Adding Examples
+
+When adding new functionality:
+
+1. Add usage examples to docstrings
+2. Create example scripts in `examples/`
+3. Add tutorial notebooks if appropriate
+4. Update the main README if needed
+
+## Submitting Changes
+
+### 1. Prepare Your Changes
+
+```bash
+# Ensure all tests pass
+pytest
+
+# Check code style
+pre-commit run --all-files
+
+# Update documentation if needed
+cd docs/ && make html
+```
+
+### 2. Commit Your Changes
+
+```bash
+# Stage your changes
+git add .
+
+# Commit with descriptive message
+git commit -m "Add oscillatory power spectrum model
+
+- Implement oscillatory_psik function with damping
+- Add comprehensive unit tests with reference values
+- Update documentation with usage examples
+- Fixes #123"
+```
+
+### 3. Push and Create Pull Request
+
+```bash
+# Push to your fork
+git push origin feature/your-feature-name
+
+# Create pull request on GitHub
+```
+
+### Pull Request Guidelines
+
+- **Title**: Clear, descriptive title
+- **Description**: Explain what changes you made and why
+- **Testing**: Describe how you tested your changes
+- **Documentation**: Note any documentation updates
+- **Breaking changes**: Highlight any breaking changes
+- **Issues**: Reference related issues with "Fixes #123"
+
+### Pull Request Template
+
+```markdown
+## Description
+Brief description of changes made.
+
+## Type of Change
+- [ ] Bug fix (non-breaking change that fixes an issue)
+- [ ] New feature (non-breaking change that adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Documentation update
+
+## Testing
+- [ ] All existing tests pass
+- [ ] New tests added for new functionality
+- [ ] Manual testing performed
+
+## Checklist
+- [ ] Code follows project style guidelines
+- [ ] Self-review of code completed
+- [ ] Documentation updated as needed
+- [ ] Changes generate no new warnings
 ```
 
 ## Review Process
 
-All contributions go through a comprehensive review process:
+### What to Expect
 
-1. **Automated checks**: Style, tests, and numerical stability validation
-2. **Code review**: Functionality, numerical safety, and cosmological accuracy
-3. **Physics review**: Theoretical consistency and observational validity
-4. **Performance review**: Computational efficiency and scalability
-5. **Documentation review**: Clarity, completeness, and accuracy
+1. **Automated checks**: CI will run tests and style checks
+2. **Maintainer review**: Core maintainers will review your code
+3. **Feedback**: You may receive requests for changes
+4. **Approval**: Once approved, your PR will be merged
 
-## Cosmological Contribution Types
+### Review Criteria
 
-### Physics Enhancements
-- **New QVD mechanisms**: Additional scattering processes
-- **Improved cross-sections**: More accurate interaction calculations
-- **Environmental effects**: Host galaxy and IGM dependencies
-- **Temperature corrections**: CMB evolution and thermal effects
-
-### Numerical Improvements
-- **Advanced algorithms**: More efficient calculation methods
-- **GPU acceleration**: CUDA implementations for large datasets
-- **Parallel processing**: Multi-core optimization
-- **Memory optimization**: Efficient array operations
-
-### Observational Integration
-- **Survey data analysis**: Direct fitting to supernova surveys
-- **Bayesian inference**: MCMC parameter estimation
-- **Statistical methods**: Advanced error analysis techniques
-- **Data visualization**: Enhanced plotting and analysis tools
-
-### Validation Enhancements
-- **Extended test coverage**: More comprehensive validation
-- **Observational comparisons**: Direct data fitting
-- **Cross-validation**: Independent validation methods
-- **Uncertainty quantification**: Error propagation analysis
+- **Correctness**: Code works as intended
+- **Testing**: Adequate test coverage
+- **Style**: Follows project conventions
+- **Documentation**: Clear and complete
+- **Performance**: No significant performance regressions
+- **Scientific accuracy**: Results are physically reasonable
 
 ## Release Process
 
-1. **Version bump** following semantic versioning
-2. **Update CHANGELOG.md** with all changes
-3. **Run comprehensive validation suite**
-4. **Update documentation** including theoretical background
-5. **Create release notes** with scientific context
-6. **Performance benchmarking** to ensure no regressions
+### Version Numbering
 
-## Scientific Standards
+We follow [Semantic Versioning](https://semver.org/):
 
-### Publication Quality
-- **Peer-review ready**: Code suitable for scientific publication
-- **Reproducible results**: Deterministic calculations with fixed seeds
-- **Error quantification**: Comprehensive uncertainty analysis
-- **Method documentation**: Sufficient detail for reproduction
+- **MAJOR**: Incompatible API changes
+- **MINOR**: New functionality, backwards compatible
+- **PATCH**: Bug fixes, backwards compatible
 
-### Data Integrity
-- **Version control**: All changes tracked and documented
-- **Data provenance**: Clear record of data sources and processing
-- **Validation records**: Complete validation history
-- **Backup procedures**: Secure storage of results and code
+### Release Checklist
 
-## Questions?
+1. Update version numbers
+2. Update CHANGELOG.md
+3. Run full test suite
+4. Build and test documentation
+5. Create release tag
+6. Publish to PyPI
 
-If you have questions about contributing:
+## Getting Help
 
-1. Check the **theoretical background** documentation first
-2. Search **existing issues** and discussions
-3. Review **validation results** for similar cases
-4. Open a **new issue** with the "question" label
-5. Contact the **development team** for cosmological guidance
+### Communication Channels
 
-## Acknowledgments
+- **GitHub Issues**: Bug reports and feature requests
+- **GitHub Discussions**: General questions and discussions
+- **Email**: Contact maintainers directly for sensitive issues
 
-Contributors to this project are contributing to fundamental cosmological research. Your work helps advance our understanding of the universe and provides alternatives to dark energy paradigms.
+### Asking Questions
 
-Thank you for contributing to the Enhanced RedShift QVD project and advancing cosmological science!
+When asking for help:
+
+1. Search existing issues first
+2. Provide minimal reproducible example
+3. Include system information (OS, Python version, etc.)
+4. Describe expected vs. actual behavior
+5. Include relevant error messages
+
+## Recognition
+
+Contributors are recognized in:
+
+- CHANGELOG.md for each release
+- AUTHORS.md file
+- GitHub contributors page
+- Academic papers when appropriate
+
+Thank you for contributing to the QFD CMB Module!

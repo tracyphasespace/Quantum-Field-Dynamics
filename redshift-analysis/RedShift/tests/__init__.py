@@ -1,7 +1,11 @@
 """
-Test Suite for Enhanced RedShift QVD Model
-==========================================
+Test suite for QFD CMB Module
 
-Comprehensive test suite ensuring numerical stability, bounds enforcement,
-and correctness of the QVD redshift cosmological model.
+This package contains comprehensive tests for the qfd_cmb module including:
+- Unit tests for individual functions
+- Integration tests for complete workflows  
+- Numerical accuracy tests against reference values
+- Performance and regression tests
 """
+
+__version__ = "0.1.0"

@@ -1,98 +1,87 @@
 # Changelog
 
-All notable changes to the Enhanced RedShift QVD project will be documented in this file.
+All notable changes to the QFD CMB Module will be documented in this file.
 
-## [1.0.0] - 2025-08-07
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### Added
-- Initial release of the Enhanced QVD RedShift cosmological model
-- Comprehensive numerical stability framework with 100% finite results
-- Advanced bounds enforcement system for all parameters
-- Multi-layered error handling and graceful degradation
-- Complete test suite with physics, cosmology, and integration tests
-- Extensive validation framework with 5 comprehensive test categories
-- Production-ready API with backward compatibility
-- Professional visualization system with error handling
-- Comprehensive documentation including theoretical background
-
-### Key Features
-- **100% Finite Results**: All calculations guaranteed to produce finite, bounded values
-- **Physics-Based Alternative**: No dark energy required - uses E144-validated QED interactions
-- **Excellent Accuracy**: 0.14 magnitude RMS error vs supernova observations
-- **Numerical Stability**: Comprehensive bounds enforcement and safe mathematical operations
-- **High Performance**: Optimized calculations with monitoring and profiling
-- **Production Ready**: Robust error handling, logging, and validation systems
-
-### Technical Improvements
-- Enhanced numerical safety operations (safe_power, safe_log10, safe_exp, etc.)
-- Advanced bounds enforcement system with automatic parameter clamping
-- Multi-level error handling with graceful degradation
-- Comprehensive logging and monitoring systems
-- Performance optimization with calculation tracking
-- Memory-efficient array operations with validation
-
-### Scientific Enhancements
-- **Redshift-dependent QVD coupling**: z^0.6 scaling law fitted to observations
-- **IGM enhancement modeling**: Intergalactic medium effects with logarithmic growth
-- **Cosmological distance calculations**: Matter-dominated universe without dark energy
-- **ΛCDM comparison framework**: Direct statistical comparison with standard model
-- **Energy conservation validation**: Comprehensive checks for physical consistency
-
-### Documentation
-- Complete theoretical background with mathematical framework
-- Detailed API reference with usage examples
-- Comprehensive numerical methods documentation
-- Installation and setup guides with verification scripts
-- Usage examples from basic to advanced analysis
-
-### Testing Framework
-- **Unit tests**: Individual component validation with edge case testing
-- **Integration tests**: Complete workflow testing with error scenarios
-- **Physics tests**: QVD coupling, cross-sections, and energy conservation
-- **Cosmology tests**: Distance calculations, bounds enforcement, and consistency
-- **Performance tests**: Computational efficiency and scalability validation
-- **Validation tests**: Comprehensive model validation against observations
-
-### Validation Results
-- **Numerical Stability**: 100% success rate across extreme parameter ranges
-- **Cosmological Accuracy**: 0.14 mag RMS error competitive with ΛCDM
-- **Performance**: High-speed calculations with comprehensive safety checks
-- **Bounds Enforcement**: All parameters automatically constrained to physical limits
-- **Error Handling**: Graceful degradation under all tested conditions
-
-## [0.9.0] - 2025-08-06
+## [Unreleased]
 
 ### Added
-- Initial implementation of QVD redshift model
-- Basic cosmological calculations
-- Preliminary validation framework
-- Simple visualization tools
+- Comprehensive test suite with unit, integration, and scientific validation tests
+- Continuous integration with GitHub Actions
+- Code quality tools (black, flake8, isort, pre-commit)
+- API documentation with Sphinx
+- Usage examples and tutorials
+- Sample data generation utilities
+- Contribution guidelines and issue templates
 
-### Issues Fixed in 1.0.0
-- **Numerical Instability**: Eliminated all NaN and infinite value generation
-- **Parameter Bounds**: Added comprehensive bounds enforcement system
-- **Error Handling**: Implemented robust error handling and recovery
-- **Performance**: Optimized calculations with monitoring
-- **Documentation**: Added comprehensive theoretical and technical documentation
-- **Testing**: Created extensive test suite with validation framework
-- **Visualization**: Enhanced plotting with error handling and professional quality
+### Changed
+- Updated README.md with comprehensive installation and troubleshooting instructions
+- Enhanced project structure for better maintainability
 
-## Development Roadmap
+### Fixed
+- Various bug fixes and improvements identified during testing
 
-### [1.1.0] - Planned
-- **Bayesian Parameter Estimation**: MCMC fitting to observational data
-- **Extended Physics**: Temperature-dependent effects and magnetic field coupling
-- **GPU Acceleration**: CUDA implementation for large-scale surveys
-- **Real Data Integration**: Direct analysis of supernova survey datasets
+## [0.1.0] - 2025-09-04
 
-### [1.2.0] - Planned
-- **Advanced Visualization**: Interactive plots and 3D cosmological visualizations
-- **Multi-messenger Astronomy**: Gravitational wave correlation analysis
-- **Extended Redshift Range**: High-z supernova analysis capabilities
-- **Environmental Correlations**: Host galaxy dependency modeling
+### Added
+- Initial release of QFD CMB Module
+- Core modules for photon-photon scattering computations:
+  - `ppsi_models.py` - Power spectrum models with oscillatory modulation
+  - `visibility.py` - Parametric visibility functions and coordinate helpers
+  - `kernels.py` - Photon-photon sin² angular/polarization kernels
+  - `projector.py` - Limber and full line-of-sight projectors
+  - `figures.py` - Publication-quality plotting utilities
+- Demo script (`run_demo.py`) for reproducing cosmic-anchored results
+- Parameter fitting scaffold (`fit_planck.py`) with emcee integration
+- Basic Python packaging configuration
+- Apache-2.0 license
 
-### [2.0.0] - Future
-- **Non-linear QVD Effects**: Higher-order corrections and loop contributions
-- **Quantum Field Theory Extensions**: Advanced QED calculations
-- **Cosmological Parameter Inference**: Full cosmological parameter estimation
-- **Survey Integration**: Direct pipeline for LSST, Euclid, and Roman data
+### Features
+- Support for both Limber and full line-of-sight projections
+- Modular design allowing custom source functions S_T(k,η) and S_E(k,η)
+- Planck-anchored parameter defaults (ℓ_A≈301, rψ≈147 Mpc, τ≈0.054)
+- Clean, monochrome publication plots for TT/TE/EE spectra
+- CSV output format for easy data analysis
+- Compatible with Python 3.8+
+
+### Scientific Features
+- Photon-photon scattering kernel with same quadrupole geometry as Thomson
+- Oscillatory power spectrum models with exponential damping
+- Parametric visibility functions with Gaussian windows
+- Mueller matrix formalism for polarization handling
+- Support for custom cosmological parameters
+
+---
+
+## Release Notes Format
+
+### Types of Changes
+- **Added** for new features
+- **Changed** for changes in existing functionality
+- **Deprecated** for soon-to-be removed features
+- **Removed** for now removed features
+- **Fixed** for any bug fixes
+- **Security** for vulnerability fixes
+
+### Version Numbering
+This project follows [Semantic Versioning](https://semver.org/):
+- **MAJOR** version for incompatible API changes
+- **MINOR** version for backwards-compatible functionality additions
+- **PATCH** version for backwards-compatible bug fixes
+
+### Release Process
+1. Update version numbers in relevant files
+2. Update this CHANGELOG.md with new version section
+3. Create and push version tag: `git tag -a v1.0.0 -m "Release version 1.0.0"`
+4. Create GitHub release with release notes
+5. Publish to PyPI (if applicable)
+
+### Contributing to Changelog
+When contributing changes:
+1. Add entries to the [Unreleased] section
+2. Use present tense ("Add feature" not "Added feature")
+3. Include issue/PR numbers when applicable
+4. Group similar changes together
+5. Highlight breaking changes clearly
