@@ -1,0 +1,15 @@
+{
+  "created_utc": "2025-09-08T03:04:48.900776Z",
+  "species": "tau",
+  "provenance": {
+    "source": "build_min_bundles",
+    "note": "minimal placeholders"
+  },
+  "U_final": 1.0,
+  "energy": 1.0,
+  "magnetic_moment": 1.0,
+  "R_eff_final": 0.92,
+  "I_final": 1.08,
+  "Hkin_final": 1.0,
+  "Q_proxy_final": 1.0
+}

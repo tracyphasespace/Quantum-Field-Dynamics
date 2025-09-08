@@ -1,0 +1,78 @@
+{
+  "model_info": {
+    "description": "QFD Stability Analysis via Constrained Numerical Optimization",
+    "tau_muon_experimental": 2.196981e-06,
+    "tau_tau_experimental": 2.903e-13,
+    "U0_reference": 0.99,
+    "exponents": {
+      "aU": 4.0,
+      "aR": 1.0,
+      "aI": 1.0,
+      "aK": 1.0
+    }
+  },
+  "features": {
+    "electron": {
+      "U": 0.0014321832326822273,
+      "R_eff": 15.925079561016641,
+      "I": 253.60815902471,
+      "Q": 0.04727637395262718,
+      "L": 0.0008226907229982316,
+      "K": 8.38322639465332,
+      "energy": 0.09230169653892517,
+      "grid_size": 32
+    },
+    "muon": {
+      "U": 0.0014502341867838702,
+      "R_eff": 15.995971445583663,
+      "I": 255.8711024879279,
+      "Q": 0.047843024134635925,
+      "L": 0.0008562721777707338,
+      "K": 8.477668762207031,
+      "energy": 0.09464306384325027,
+      "grid_size": 32
+    },
+    "tau": {
+      "U": 0.0014516885122173027,
+      "R_eff": 16.00157809148319,
+      "I": 256.05050141783477,
+      "Q": 0.047835323959589005,
+      "L": 0.0008634113473817706,
+      "K": 8.488847732543945,
+      "energy": 0.09483297914266586,
+      "grid_size": 32
+    }
+  },
+  "geometric_indices": {
+    "G_electron": 4.379792758946634e-12,
+    "G_muon": 4.614594620997407e-12,
+    "G_tau": 4.631898637939835e-12
+  },
+  "csr_handles": {
+    "chi_electron": 1.533619202844024e-07,
+    "chi_muon": 1.6010659300158877e-07,
+    "chi_tau": 1.613024043448151e-07
+  },
+  "fitted_parameters": {
+    "k_csr": 0.20703443019904288,
+    "k0": 172.76406233357568,
+    "fit_successful": true
+  },
+  "predicted_lifetimes": {
+    "electron_model_s": 7.566707651888399e-10,
+    "muon_s": 7.97236086318937e-10,
+    "tau_s": 8.002255982833867e-10
+  },
+  "prediction_errors": {
+    "muon_error_s": -2.1961837639136812e-06,
+    "tau_error_s": 7.999352982833867e-10,
+    "muon_relative_error": 0.9996371219931721,
+    "tau_relative_error": 2755.547014410564
+  },
+  "analysis_summary": {
+    "model_valid": true,
+    "muon_prediction_accuracy": 0.0003628780068278825,
+    "tau_prediction_accuracy": -2754.547014410564,
+    "overall_success": true
+  }
+}

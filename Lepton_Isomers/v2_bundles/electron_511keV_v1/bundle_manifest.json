@@ -1,0 +1,14 @@
+{
+    "name": "electron_511keV_v1",
+    "species": "electron",
+    "summary": "summary.json",
+    "fields": null,
+    "extras": "features.json",
+    "probes": {
+      "zeeman": {
+        "B0": 0.0,
+        "available": true
+      }
+    },
+    "notes": "Migrated from the Rosetta Stone run."
+}

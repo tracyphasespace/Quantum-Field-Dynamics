@@ -1,0 +1,5 @@
+setup.py
+QFD_Phoenix_Refactored.egg-info/PKG-INFO
+QFD_Phoenix_Refactored.egg-info/SOURCES.txt
+QFD_Phoenix_Refactored.egg-info/dependency_links.txt
+QFD_Phoenix_Refactored.egg-info/top_level.txt

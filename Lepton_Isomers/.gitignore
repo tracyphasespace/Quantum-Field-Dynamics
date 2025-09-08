@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv*/ 
+.env
+# Outputs
+results/
+restore_old/
+diag_*.zip
+# Build/IDE
+dist/ build/ *.egg-info/
+.pytest_cache/ .mypy_cache/
+.vscode/ .idea/

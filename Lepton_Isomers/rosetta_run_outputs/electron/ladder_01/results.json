@@ -1,0 +1,30 @@
+{
+    "psi_field": {
+        "npy_file": "results_psi_field.npy"
+    },
+    "psi_b_field": {
+        "npy_file": "results_psi_b_field.npy"
+    },
+    "energy": 0.0932367742061615,
+    "H_final": 0.0932367742061615,
+    "particle": "electron",
+    "grid_size": 32,
+    "constants": {
+        "name": "electron",
+        "mass_eV": 510998.95,
+        "charge": -1.0,
+        "spin": 0.5,
+        "magnetic_moment": -1.001159652181643,
+        "g_factor": -2.002319304362896,
+        "rest_energy_target": 511000.0,
+        "physics_constants": {
+            "V2": 585.0,
+            "V4": 17.915,
+            "g_c": 0.985,
+            "k_csr": 0.0,
+            "q_star": 414.5848693847656
+        },
+        "notes": "Phoenix core parameters for electron calibration. CSR disabled by default."
+    },
+    "converged": true
+}

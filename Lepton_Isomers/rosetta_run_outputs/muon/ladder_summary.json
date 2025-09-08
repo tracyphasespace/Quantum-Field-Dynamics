@@ -1,0 +1,30 @@
+{
+  "converged": false,
+  "final_energy": 0.09464306384325027,
+  "final_V2": 14585.0,
+  "target_energy": 105000000.0,
+  "iterations": 3,
+  "history": [
+    {
+      "iteration": 1,
+      "V2": 585.0,
+      "energy": 0.09347568452358246,
+      "dt_max": 5e-05,
+      "converged": false
+    },
+    {
+      "iteration": 2,
+      "V2": 2585.0,
+      "energy": 0.09453688561916351,
+      "dt_max": 5e-05,
+      "converged": false
+    },
+    {
+      "iteration": 3,
+      "V2": 6585.0,
+      "energy": 0.09464306384325027,
+      "dt_max": 5e-05,
+      "converged": false
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+    "analysis_metadata": {
+        "model": "unified_stability_v2",
+        "script": "GPT_fit_lifetimes_v2.py",
+        "timestamp": "2025-09-07T15:46:07.400992Z",
+        "device": "cpu"
+    },
+    "inputs": {
+        "muon_manifest": "v2_bundles/muon_105MeV_v1/bundle_manifest.json",
+        "tau_manifest": "v2_bundles/tau_1777MeV_v1/bundle_manifest.json",
+        "electron_manifest": "v2_bundles/electron_511keV_v1/bundle_manifest.json",
+        "chi_mode": "qR_over_I",
+        "anchors_source": "anchor-bundle",
+        "anchors": {
+            "U0": 0.0014321832326822273,
+            "Re": 15.925079561016641,
+            "Ie": 253.60815902471,
+            "Ke": 8.38322639465332
+        },
+        "exponent_mode": "grid",
+        "grid": {
+            "aU": [
+                6.0,
+                7.0,
+                8.0,
+                9.0,
+                10.0
+            ],
+            "aR": [
+                0.5,
+                1.0,
+                1.5
+            ],
+            "aI": [
+                0.25,
+                0.5,
+                0.75
+            ],
+            "aK": [
+                0.5,
+                1.0,
+                1.5
+            ]
+        }
+    },
+    "fit_result": {
+        "best_exponents": {
+            "aU": 6.0,
+            "aR": 0.5,
+            "aI": 0.25,
+            "aK": 0.5
+        },
+        "beta": 1744.8293470528713,
+        "k0": 0.0,
+        "ln_k0": -45235.72921443313,
+        "sse": 9.868918137022633e-24,
+        "diagnostics": {
+            "delta_chi": -0.009081197913655359,
+            "beta_sign_ok": true,
+            "electron_check": {
+                "evaluated": true,
+                "tau_pred_seconds": 5.4776114028458685e+81,
+                "warn_unstable_electron": false
+            }
+        }
+    },
+    "species": {
+        "muon": {
+            "features": {
+                "U": 0.0014502341867838702,
+                "R_eff": 15.995971445583663,
+                "I": 255.8711024879279,
+                "K": 8.477668762207031,
+                "chi": 25.918080111303812
+            },
+            "ln_gamma_star": 0.07399059564798616,
+            "ln_tau_exp": -13.028426367238767,
+            "ln_tau_pred": -13.028426367236534,
+            "tau_pred_seconds": 2.1969811000049064e-06
+        },
+        "tau": {
+            "features": {
+                "U": 0.0014516885122173027,
+                "R_eff": 16.00157809148319,
+                "I": 256.05050141783477,
+                "K": 8.488847732543945,
+                "chi": 25.908998913390157
+            },
+            "ln_gamma_star": 0.07969606514782944,
+            "ln_tau_exp": -28.8678615238801,
+            "ln_tau_pred": -28.86786152388231,
+            "tau_pred_seconds": 2.9029999999935834e-13
+        }
+    },
+    "status": "ok",
+    "error": null
+}
