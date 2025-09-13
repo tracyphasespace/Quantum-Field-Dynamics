@@ -6,7 +6,7 @@ on:
 # Run all commands from the subfolder
 defaults:
   run:
-    working-directory: NuclidePredictionCurve
+    working-directory: projects/particle-physics/nuclide-prediction
 
 jobs:
   test:
@@ -42,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: results_ci
-          path: NuclidePredictionCurve/results_ci/
+          path: projects/particle-physics/nuclide-prediction/results_ci/
