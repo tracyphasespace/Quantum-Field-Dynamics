@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Elliptical Binary Outflow Viewer — Torque Viz + Pan/Zoom</title>
+  <style>
+    body { margin:0; background:#0f172a; color:#cbd5e1; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif; }
+    #controls { padding:1rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1rem; background:#1e293b; align-items:center; }
+    #canvas { display:block; width:100%; height:calc(100vh - 300px); background:#0f172a; cursor:grab; }
+    #canvas.dragging { cursor:grabbing; }
+    input[type=range] { width:100%; }
+    .checkbox { display:flex; align-items:center; gap:.5rem; }
+    button { background:#3b82f6; color:#fff; padding:.5rem .75rem; border:none; border-radius:.375rem; cursor:pointer; }
+    small { color:#94a3b8; display:block; font-size:.75rem; }
+    label { font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <div><label>M1: <span id="m1Val">1375</span></label><input id="m1" type="range" min="500" max="5000" value="1375"></div>
+    <div><label>M2: <span id="m2Val">500</span></label><input id="m2" type="range" min="100" max="2000" value="500"></div>
+    <div><label>Separation: <span id="dVal">195</span></label><input id="d" type="range" min="100" max="400" value="195"></div>
+    <div>
+      <label>Speed: <span id="vVal">0.80</span></label>
+      <input id="v" type="range" min="0.10" max="2.00" step="0.01" value="0.80">
+      <small>fraction of circular</small>
+    </div>
+    <div><label>Prox: <span id="pVal">150</span></label><input id="p" type="range" min="50" max="300" step="10" value="150"></div>
+    <div><label>Boost: <span id="bVal">1.00</span></label><input id="b" type="range" min="0.5" max="5.0" step="0.1" value="1.0"></div>
+    <div>
+      <label>Aperture: <span id="aVal">1.5°</span></label><input id="a" type="range" min="0.5" max="10" step="0.5" value="1.5">
+      <small>half-angle</small>
+    </div>
+    <div>
+      <label>Time: <span id="tVal">5.0×</span></label><input id="t" type="range" min="0.2" max="10.0" step="0.1" value="5.0">
+      <small>world speed</small>
+    </div>
+    <div>
+      <label>Particles: <span id="countVal">10000</span></label><input id="count" type="range" min="50" max="50000" step="10" value="10000">
+      <small>max</small>
+    </div>
+    <div>
+      <label>Rate: <span id="rVal">10/sec</span></label><input id="r" type="range" min="1" max="100" step="1" value="10">
+      <small>spawn/sec</small>
+    </div>
+
+    <div class="checkbox"><input type="checkbox" id="dual" checked><label for="dual">Dual Outflow</label></div>
+
+    <!-- Torque visualization controls -->
+    <div class="checkbox"><input type="checkbox" id="torque"><label for="torque">Torque Viz (arrows)</label></div>
+    <div>
+      <label>Vector scale: <span id="vecVal">2.0×</span></label>
+      <input id="vec" type="range" min="0.5" max="10" step="0.5" value="2.0">
+      <small>arrow length multiplier</small>
+    </div>
+    <div>
+      <label>Speed exagger.: <span id="xsVal">1.0×</span></label>
+      <input id="xs" type="range" min="1" max="10" step="0.5" value="1">
+      <small>draw-only; physics unchanged</small>
+    </div>
+    <div class="checkbox"><input type="checkbox" id="torqueColor" checked><label for="torqueColor">Torque color bins</label></div>
+
+    <div style="align-self:center;text-align:center;"><button id="restart">Restart</button></div>
+  </div>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+  // ===== DOM & labels
+  const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
+
+  const sliders = ['m1','m2','d','v','p','b','a','t','count','r','vec','xs'];
+  const labelMap = { m1:'m1Val',m2:'m2Val',d:'dVal',v:'vVal',p:'pVal',b:'bVal',a:'aVal',t:'tVal',count:'countVal',r:'rVal',vec:'vecVal',xs:'xsVal' };
+  sliders.forEach(id=>{
+    const s=document.getElementById(id), l=document.getElementById(labelMap[id]);
+    s.oninput = ()=>{
+      if(id==='v'||id==='b')       l.textContent = parseFloat(s.value).toFixed(2);
+      else if(id==='a')             l.textContent = s.value+'°';
+      else if(id==='t')             l.textContent = parseFloat(s.value).toFixed(1)+'×';
+      else if(id==='r')             l.textContent = s.value+'/sec';
+      else if(id==='vec' || id==='xs') l.textContent = parseFloat(s.value).toFixed(1)+'×';
+      else                           l.textContent = s.value;
+    };
+  });
+  document.getElementById('restart').onclick = start;
+
+  // ===== Camera (world -> screen)
+  const Cam = {
+    center: {x:0, y:0},   // world coords at screen center
+    zoom: 1.0,            // pixels per world unit multiplier
+    minZoom: 0.2,
+    maxZoom: 8.0
+  };
+  function worldToScreen(wx, wy){
+    const cx = canvas.width * 0.5, cy = canvas.height * 0.5;
+    return {
+      x: cx + (wx - Cam.center.x) * Cam.zoom,
+      y: cy + (wy - Cam.center.y) * Cam.zoom
+    };
+  }
+  function screenToWorld(sx, sy){
+    const cx = canvas.width * 0.5, cy = canvas.height * 0.5;
+    return {
+      x: (sx - cx) / Cam.zoom + Cam.center.x,
+      y: (sy - cy) / Cam.zoom + Cam.center.y
+    };
+  }
+
+  // ===== Vec helpers
+  function sub(a,b){return{x:a.x-b.x,y:a.y-b.y};}
+  function add(a,b){return{x:a.x+b.x,y:a.y+b.y};}
+  function mag(v){return Math.hypot(v.x,v.y);}
+  function norm(v){const m=mag(v);return m<1e-9?{x:0,y:0}:{x:v.x/m,y:v.y/m};}
+  function scale(v,s){return{x:v.x*s,y:v.y*s};}
+  function crossz(a,b){ return a.x*b.y - a.y*b.x; }
+
+  // ===== Color banding by radius (legacy look)
+  function pickColorByDistance(d){
+    const r=d/threshold;
+    if(r>=0.5) return '#fde047';
+    if(r>=0.25) return '#a3e635';
+    if(r>=0.125) return '#38bdf8';
+    if(r>=0.0625) return '#1e3a8a';
+    if(r>=0.03125) return '#8b5cf6';
+    if(r>=0.015625) return '#f43f5e';
+    return '#7f1d1d';
+  }
+  function torqueColorFromLz(Lz){
+    const a = Math.abs(Lz);
+    if(Lz >= 0){
+      if(a<5)   return '#9ae6b4';
+      if(a<20)  return '#34d399';
+      if(a<60)  return '#10b981';
+      return '#065f46';
+    } else {
+      if(a<5)   return '#fca5a5';
+      if(a<20)  return '#f87171';
+      if(a<60)  return '#ef4444';
+      return '#7f1d1d';
+    }
+  }
+
+  // ===== Classes
+  class Mass {
+    constructor(x,y,m,r,c){
+      this.pos={x,y};this.mass=m;this.radius=r;this.color=c;
+      this.vel={x:0,y:0};this.acc={x:0,y:0};
+    }
+    applyForce(f){
+      if(!isFinite(f.x)||!isFinite(f.y))return;
+      this.acc.x+=f.x/this.mass;this.acc.y+=f.y/this.mass;
+    }
+    update(dt){
+      this.vel.x+=this.acc.x*dt;this.vel.y+=this.acc.y*dt;
+      this.pos.x+=this.vel.x*dt;this.pos.y+=this.vel.y*dt;
+      this.acc={x:0,y:0};
+    }
+    draw(){
+      const s = worldToScreen(this.pos.x, this.pos.y);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, this.radius*Cam.zoom, 0, 2*Math.PI);
+      ctx.fillStyle=this.color;ctx.fill();
+    }
+  }
+  class Particle {
+    constructor(x,y,vx,vy,clr){
+      this.pos={x,y};this.vel={x:vx,y:vy};this.acc={x:0,y:0};
+      this.color=clr;
+    }
+    applyForce(f){
+      if(!isFinite(f.x)||!isFinite(f.y))return;
+      this.acc.x+=f.x/0.1;this.acc.y+=f.y/0.1; // implicit mass 0.1 (consistent with original)
+    }
+    update(dt){
+      this.vel.x+=this.acc.x*dt;this.vel.y+=this.acc.y*dt;
+      this.pos.x+=this.vel.x*dt;this.pos.y+=this.vel.y*dt;
+      this.acc={x:0,y:0};
+    }
+    draw(){
+      const s = worldToScreen(this.pos.x, this.pos.y);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 1.5, 0, 2*Math.PI); // render as screen-space dots
+      ctx.fillStyle=this.color;ctx.fill();
+    }
+  }
+
+  // ===== State
+  let primary, secondary, particles;
+  let entry, pericenter, exitPos, minD, prevIn=false, spawnAcc=0;
+  let threshold;
+  let L_out_accum = 0; // cumulative angular momentum carried away (viz only)
+  const BASE_DT=0.05, SOFT=20, G=1;
+
+  function resize(){
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight-document.getElementById('controls').offsetHeight;
+  }
+
+  function init(){
+    resize();
+    particles=[];entry=pericenter=exitPos=null;minD=Infinity;prevIn=false;spawnAcc=0;
+    L_out_accum = 0;
+
+    const M1    =+m1.value,
+          M2    =+m2.value,
+          Dsep  =+d.value,
+          speedFrac=+v.value,
+          Pprox =+p.value,
+          Boost =+b.value,
+          Apert =+a.value*Math.PI/180,
+          TS    =+t.value,
+          MAXP  =+count.value,
+          RATE  =+r.value,
+          DUAL  =document.getElementById('dual').checked;
+
+    // world layout centered around (0,0) initially
+    const cx=0, cy=0;
+    const r1=Dsep*(M2/(M1+M2)), r2=Dsep*(M1/(M1+M2));
+    primary   = new Mass(cx-r1, cy, M1, Math.cbrt(M1)*0.8,'#0ea5e9');
+    secondary = new Mass(cx+r2, cy, M2, Math.cbrt(M2)*0.8,'#f97316');
+
+    // initial camera center at COM
+    Cam.center = {x: (M1*(cx-r1)+M2*(cx+r2))/(M1+M2), y: cy};
+    Cam.zoom = 1.0;
+
+    // circular speed
+    const vCirc = Math.sqrt(G*(M1+M2)/Dsep),
+          vRel  = vCirc * speedFrac;
+
+    const sep = sub(secondary.pos, primary.pos),
+          rHat= norm(sep),
+          perp= { x:-rHat.y, y:rHat.x };
+
+    primary.vel.x   =  perp.x * vRel * (M2/(M1+M2));
+    primary.vel.y   =  perp.y * vRel * (M2/(M1+M2));
+    secondary.vel.x = -perp.x * vRel * (M1/(M1+M2));
+    secondary.vel.y = -perp.y * vRel * (M1/(M1+M2));
+
+    threshold = Dsep * 3;
+
+    // stash
+    Particle._boost=Boost;
+    Particle._cone =Apert;
+    Particle._max  =MAXP;
+    Particle._rate =RATE;
+    Particle._dual =DUAL;
+    Mass._dtMul    =TS;
+  }
+
+  function calcForce(a,b){
+    const r=sub(a.pos,b.pos),
+          d2=r.x*r.x+r.y*r.y+SOFT*SOFT,
+          f =(G*a.mass*b.mass)/d2,
+          dir=norm(r);
+    return scale(dir,f);
+  }
+
+  // ===== Spawn logic
+  function spawnFrom(mass,axisSource){
+    if(particles.length>=Particle._max)return;
+    const base=norm(sub(axisSource.pos,mass.pos));
+    const δ=(Math.random()*2-1)*Particle._cone;
+    const c=Math.cos(δ), s=Math.sin(δ);
+    const dir={x:base.x*c-base.y*s,y:base.x*s+base.y*c};
+    if(dir.x*base.x+dir.y*base.y<0){dir.x*=-1;dir.y*=-1;}
+
+    const boost=Particle._boost*(0.8+0.4*Math.random());
+    const offset=mass.radius+5+(Math.random()-0.5)*mass.radius*0.2;
+    const sx=mass.pos.x+dir.x*offset;
+    const sy=mass.pos.y+dir.y*offset;
+    const vx=dir.x*boost*2;
+    const vy=dir.y*boost*2;
+
+    const dsrc=mag(sub(axisSource.pos,primary.pos));
+    const color=pickColorByDistance(dsrc);
+
+    particles.push(new Particle(sx,sy,vx,vy,color));
+  }
+  function spawnParticle(){
+    spawnFrom(primary,secondary);
+    if(Particle._dual) spawnFrom(secondary,primary);
+  }
+
+  // ===== Angular momentum / torque helpers (viz only)
+  function particleLz(p, O, m){ 
+    const r = {x: p.pos.x - O.x, y: p.pos.y - O.y};
+    return crossz(r, p.vel) * m;
+  }
+  function torquez_at_mass(mass, P, F){
+    const r = {x: P.x - mass.pos.x, y: P.y - mass.pos.y};
+    return crossz(r, F);
+  }
+  function computeMassTorques(f12){
+    const COM = {
+      x: (primary.mass*primary.pos.x + secondary.mass*secondary.pos.x)/(primary.mass+secondary.mass),
+      y: (primary.mass*primary.pos.y + secondary.mass*secondary.pos.y)/(primary.mass+secondary.mass)
+    };
+    const rp = {x: primary.pos.x - COM.x,  y: primary.pos.y - COM.y};
+    const rs = {x: secondary.pos.x - COM.x, y: secondary.pos.y - COM.y};
+
+    let tau_p = crossz(rp, {x:-f12.x, y:-f12.y});
+    let tau_s = crossz(rs, f12);
+
+    for(const p of particles){
+      const Fp1 = calcForce(primary,p);
+      const Fp2 = calcForce(secondary,p);
+      tau_p += torquez_at_mass(primary,  p.pos, {x:-Fp1.x, y:-Fp1.y});
+      tau_s += torquez_at_mass(secondary, p.pos, {x:-Fp2.x, y:-Fp2.y});
+    }
+    return {tau_p, tau_s};
+  }
+
+  // ===== Update / Draw
+  function update(){
+    const dt=BASE_DT*+t.value;
+
+    // gravitational pair
+    const f12 = calcForce(primary,secondary);
+    primary.applyForce(scale(f12,-1));
+    secondary.applyForce(f12);
+
+    primary.update(dt);
+    secondary.update(dt);
+
+    // proximity markers
+    const d=mag(sub(secondary.pos,primary.pos)), inP=d<+p.value;
+    if(inP&&!prevIn){entry={...secondary.pos};pericenter=null;minD=d;spawnAcc=0;}
+    if(inP&&d<minD){minD=d;pericenter={...secondary.pos};}
+    if(!inP&&prevIn){exitPos={...secondary.pos};}
+    prevIn=inP;
+
+    if(inP){
+      spawnAcc+=Particle._rate*dt;
+      while(spawnAcc>=1){spawnParticle();spawnAcc--;}
+    }
+
+    // particle update & escape L accumulation
+    const m_p = 0.1;
+    const COM = {
+      x: (primary.mass*primary.pos.x + secondary.mass*secondary.pos.x)/(primary.mass+secondary.mass),
+      y: (primary.mass*primary.pos.y + secondary.mass*secondary.pos.y)/(primary.mass+secondary.mass)
+    };
+
+    particles = particles.filter(p=>{
+      const Fp1 = calcForce(primary,p);
+      const Fp2 = calcForce(secondary,p);
+      p.applyForce(Fp1);
+      p.applyForce(Fp2);
+      p.update(dt);
+
+      const keep = mag(sub(p.pos,primary.pos)) < threshold;
+      if(!keep){
+        L_out_accum += particleLz(p, COM, m_p);
+      }
+      return keep;
+    });
+
+    // torques for gauges
+    const torques = computeMassTorques(f12);
+    Mass._tau_p = torques.tau_p;
+    Mass._tau_s = torques.tau_s;
+  }
+
+  function drawMarker(pos,color){
+    if(!pos)return;
+    const s = worldToScreen(pos.x,pos.y);
+    ctx.strokeStyle=color;ctx.lineWidth=1.5;
+    const k=6;
+    ctx.beginPath();
+    ctx.moveTo(s.x-k,s.y);ctx.lineTo(s.x+k,s.y);
+    ctx.moveTo(s.x,s.y-k);ctx.lineTo(s.x,s.y+k);
+    ctx.stroke();
+  }
+
+  function drawArrowWorld(wx,wy,vx,vy,scale){
+    // vx,vy are world-space direction; rendered as screen-space arrow
+    const s = worldToScreen(wx,wy);
+    const sx = vx*scale*Cam.zoom, sy = vy*scale*Cam.zoom;
+    const len = Math.hypot(sx,sy);
+    if(len<1e-6) return;
+    const nx = sx/len, ny = sy/len;
+    ctx.beginPath();
+    ctx.moveTo(s.x, s.y);
+    ctx.lineTo(s.x + sx, s.y + sy);
+    const ah = Math.min(6, 0.2*len);
+    ctx.lineTo(s.x + sx - ny*ah, s.y + sy + nx*ah);
+    ctx.moveTo(s.x + sx, s.y + sy);
+    ctx.lineTo(s.x + sx + ny*ah, s.y + sy - nx*ah);
+    ctx.stroke();
+  }
+
+  function drawTorqueGauge(mass, tau){
+    const s = worldToScreen(mass.pos.x, mass.pos.y);
+    const dir = (tau>=0) ? 1 : -1;
+    const base = 30;                   // screen-space radius
+    const magA = Math.min(80, Math.sqrt(Math.abs(tau)));
+    ctx.strokeStyle = (dir>0)? '#10b981' : '#ef4444';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, base, -0.6*dir, 0.6*dir, dir<0);
+    ctx.stroke();
+    // magnitude arrow straight up/down from arc mid
+    ctx.beginPath();
+    ctx.moveTo(s.x + base, s.y);
+    ctx.lineTo(s.x + base, s.y + dir*magA*0.3);
+    ctx.stroke();
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '12px Inter, sans-serif';
+    ctx.fillText(`τ=${tau.toFixed(1)}`, s.x + base + 6, s.y + (dir>0? -6:14));
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    // axis line (secondary -> direction) — draw in world coords
+    const v=norm(sub(secondary.pos,primary.pos));
+    const a = worldToScreen(primary.pos.x, primary.pos.y);
+    const b = worldToScreen(primary.pos.x+v.x*100, primary.pos.y+v.y*100);
+    ctx.strokeStyle='rgba(255,255,255,0.25)';
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+
+    // masses
+    primary.draw();
+    secondary.draw();
+
+    // particles
+    const torqueViz = document.getElementById('torque').checked;
+    const vecScale  = +document.getElementById('vec').value;
+    const xSpeed    = +document.getElementById('xs').value;
+    const useTorqueColor = document.getElementById('torqueColor').checked;
+
+    const COM = {
+      x: (primary.mass*primary.pos.x + secondary.mass*secondary.pos.x)/(primary.mass+secondary.mass),
+      y: (primary.mass*primary.pos.y + secondary.mass*secondary.pos.y)/(primary.mass+secondary.mass)
+    };
+
+    if(!torqueViz){
+      for(const p of particles) p.draw();
+    } else {
+      const m_p = 0.1;
+      for(const p of particles){
+        const r = {x: p.pos.x - COM.x, y: p.pos.y - COM.y};
+        ctx.lineWidth = 1.25;
+        if(useTorqueColor){
+          const Lz = crossz(r, p.vel) * m_p;
+          ctx.strokeStyle = torqueColorFromLz(Lz);
+        } else {
+          ctx.strokeStyle = '#e5e7eb';
+        }
+        drawArrowWorld(p.pos.x, p.pos.y, p.vel.x * xSpeed, p.vel.y * xSpeed, vecScale);
+      }
+      drawTorqueGauge(primary,  Mass._tau_p||0);
+      drawTorqueGauge(secondary,Mass._tau_s||0);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText(`Σ L_out (about COM) = ${L_out_accum.toFixed(1)}`, 16, 20);
+    }
+
+    // markers
+    drawMarker(entry,'lime');
+    drawMarker(pericenter,'yellow');
+    drawMarker(exitPos,'red');
+  }
+
+  function loop(){ update(); draw(); requestAnimationFrame(loop); }
+  function start(){ init(); loop(); }
+
+  // ===== Mouse pan / zoom
+  let dragging=false, last={x:0,y:0};
+  canvas.addEventListener('mousedown', (e)=>{
+    dragging=true; last.x=e.clientX; last.y=e.clientY;
+    canvas.classList.add('dragging');
+  });
+  window.addEventListener('mouseup', ()=>{ dragging=false; canvas.classList.remove('dragging'); });
+  window.addEventListener('mousemove', (e)=>{
+    if(!dragging) return;
+    const dx = e.clientX - last.x;
+    const dy = e.clientY - last.y;
+    // convert screen delta to world delta
+    Cam.center.x -= dx / Cam.zoom;
+    Cam.center.y -= dy / Cam.zoom;
+    last.x = e.clientX; last.y = e.clientY;
+  });
+
+  // Wheel zoom at cursor
+  canvas.addEventListener('wheel', (e)=>{
+    e.preventDefault();
+    const mouse = {x:e.clientX, y:e.clientY};
+    const before = screenToWorld(mouse.x, mouse.y);
+    const k = Math.exp(-e.deltaY * 0.001); // zoom step
+    Cam.zoom = Math.max(Cam.minZoom, Math.min(Cam.maxZoom, Cam.zoom * k));
+    const after = screenToWorld(mouse.x, mouse.y);
+    // keep world position under cursor fixed -> adjust center
+    Cam.center.x += (before.x - after.x);
+    Cam.center.y += (before.y - after.y);
+  }, {passive:false});
+
+  // Double-click to recenter on current COM
+  canvas.addEventListener('dblclick', ()=>{
+    const COM = {
+      x: (primary.mass*primary.pos.x + secondary.mass*secondary.pos.x)/(primary.mass+secondary.mass),
+      y: (primary.mass*primary.pos.y + secondary.mass*secondary.pos.y)/(primary.mass+secondary.mass)
+    };
+    Cam.center = {...COM};
+  });
+
+  window.onresize=resize;
+  window.onload=start;
+  </script>
+</body>
+</html>

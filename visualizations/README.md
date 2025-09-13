@@ -30,6 +30,18 @@
 - Key claims and predictions
 - **Suitable for**: Quick reference, presentations
 
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/stability-vortex-sphere.html" target="_blank">`stability-vortex-sphere.html`</a>
+**Stability Analysis Visualization**
+- Vortex sphere stability dynamics
+- Field stability analysis
+- **Suitable for**: Advanced field theory research
+
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/vortex-dynamics.html" target="_blank">`vortex-dynamics.html`</a>
+**Vortex Sphere and Ring Dynamics**
+- Interactive vortex field structures
+- Topological field configurations
+- **Suitable for**: Mathematical physics, topology studies
+
 ---
 
 ## 🔬 **Particle Physics Visualizations**
@@ -40,11 +52,17 @@
 - Clickable elements with field theory explanations
 - **Suitable for**: Nuclear physicists, chemistry educators
 
-### *Coming Soon: `lepton-mass-spectrum.html`*
-**High-Precision Electron/Muon/Tau Results**
-- Interactive display of 99.99989% accuracy results
-- Energy level diagrams
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/particle-physics/electron-muon-tau.html" target="_blank">`electron-muon-tau.html`</a>
+**High-Precision Lepton Mass Spectrum**
+- Interactive electron, muon, tau mass analysis
+- Validated computational results visualization
 - **Based on**: [`projects/particle-physics/lepton-isomers/`](../projects/particle-physics/lepton-isomers/)
+
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/particle-physics/leptons-analysis.html" target="_blank">`leptons-analysis.html`</a>
+**Comprehensive Lepton Analysis**
+- Extended lepton physics visualization
+- Detailed particle interaction models
+- **Suitable for**: Particle physics research
 
 ---
 
@@ -56,10 +74,45 @@
 - Interactive ψ-field visualization around massive objects
 - **Suitable for**: Astrophysicists, cosmologists
 
-### *Coming Soon: Supernova & Redshift Visualizations*
-- Stellar collapse via QFD field dynamics
-- Redshift without cosmic expansion
-- **Based on**: [`projects/astrophysics/`](../projects/astrophysics/) computational results
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/blackhole-spray-condensation.html" target="_blank">`blackhole-spray-condensation.html`</a>
+**Black Hole Spray Condensation Model**
+- Advanced black hole dynamics visualization
+- QFD field condensation mechanisms
+- **Suitable for**: Advanced astrophysics research
+
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/blackhole-viewer.html" target="_blank">`blackhole-viewer.html`</a>
+**Interactive Black Hole Viewer**
+- Enhanced black hole field visualization
+- Multi-perspective analysis tools
+- **Suitable for**: Research and educational use
+
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/redshift-analysis.html" target="_blank">`redshift-analysis.html`</a>
+**QFD Redshift Analysis**
+- Alternative redshift mechanism without cosmic expansion
+- ψ-mediated photon scattering visualization
+- **Based on**: [`projects/astrophysics/redshift-analysis/`](../projects/astrophysics/redshift-analysis/)
+
+---
+
+## ⚛️ **Nuclear Physics Visualizations**
+
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/nuclear-physics/nuclear-scaling-mixture-v2.html" target="_blank">`nuclear-scaling-mixture-v2.html`</a>
+**Nuclear Scaling Mixture Model (Version 2)**
+- Advanced nuclear scaling law visualization
+- Interactive mixture model analysis
+- **Suitable for**: Nuclear physics research
+
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/nuclear-physics/nuclear-scaling-mixture-v3.html" target="_blank">`nuclear-scaling-mixture-v3.html`</a>
+**Nuclear Scaling Mixture Model (Version 3)**
+- Enhanced nuclear scaling analysis
+- Updated computational models
+- **Suitable for**: Advanced nuclear theory
+
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/nuclear-physics/nuclear-scaling-mixture-v4.html" target="_blank">`nuclear-scaling-mixture-v4.html`</a>
+**Nuclear Scaling Mixture Model (Version 4)**
+- Latest nuclear scaling visualization
+- Refined theoretical framework
+- **Suitable for**: Current nuclear research
 
 ---
 
