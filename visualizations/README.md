@@ -13,19 +13,19 @@
 - Visual introduction to ψ-field dynamics
 - Interactive field equations
 - Foundation for understanding all QFD physics
-- **Perfect for**: First-time QFD exploration
+- **Suitable for**: First-time QFD exploration
 
 ### [`qfd-advanced.html`](field-theory/qfd-advanced.html)
 **Advanced Field Dynamics**
 - Complex field interactions
 - Multi-component wavefield visualization
-- **Perfect for**: Graduate students, researchers
+- **Suitable for**: Graduate students, researchers
 
 ### [`qfd-infographic.html`](field-theory/qfd-infographic.html)
 **Visual Theory Summary**
 - Complete QFD theory overview
 - Key claims and predictions
-- **Perfect for**: Quick reference, presentations
+- **Suitable for**: Quick reference, presentations
 
 ---
 
@@ -35,10 +35,10 @@
 **Interactive QFD Periodic Table**
 - Nuclear mass predictions via QFD
 - Clickable elements with field theory explanations
-- **Perfect for**: Nuclear physicists, chemistry educators
+- **Suitable for**: Nuclear physicists, chemistry educators
 
 ### *Coming Soon: `lepton-mass-spectrum.html`*
-**Breakthrough Electron/Muon/Tau Results**
+**High-Precision Electron/Muon/Tau Results**
 - Interactive display of 99.99989% accuracy results
 - Energy level diagrams
 - **Based on**: [`projects/particle-physics/lepton-isomers/`](../projects/particle-physics/lepton-isomers/)
@@ -51,7 +51,7 @@
 **QFD Black Hole Field Structure**
 - Field-based black hole model (no spacetime curvature)
 - Interactive ψ-field visualization around massive objects
-- **Perfect for**: Astrophysicists, cosmologists
+- **Suitable for**: Astrophysicists, cosmologists
 
 ### *Coming Soon: Supernova & Redshift Visualizations*
 - Stellar collapse via QFD field dynamics
@@ -138,9 +138,9 @@ visualizations/
 
 ## 🌟 **What Makes These Special**
 
-**These aren't just pretty pictures.** Each visualization:
+**These are research-grade visualizations.** Each visualization:
 
-1. **Represents Validated Physics** - Based on computational results achieving 99.99989% accuracy
+1. **Represents Validated Physics** - Based on high-precision computational results
 2. **Interactive Exploration** - Click, drag, modify parameters
 3. **Educational Pathway** - Visual understanding → mathematical theory → code validation
 4. **Research Connection** - Direct links to reproducible computational projects

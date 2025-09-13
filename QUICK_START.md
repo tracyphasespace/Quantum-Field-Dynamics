@@ -7,7 +7,7 @@
 ## 🎯 **Choose Your Research Path**
 
 ### **🔬 Particle Physicist?**
-**Try our breakthrough lepton mass calculations:**
+**Try the high-precision lepton mass calculations:**
 ```bash
 cd projects/particle-physics/lepton-isomers/
 python validate_all_particles.py --electron
@@ -45,7 +45,7 @@ open books-and-documents/research-papers/QFD_Technical_Review_GitHub.md
 - **Interactive visualizations** for theory exploration
 - **Complete documentation** from theory → implementation
 
-### **Breakthrough Results Available Now**
+### **Computational Results Available**
 | Project | Domain | Accuracy | Runtime | Status |
 |---------|--------|----------|---------|---------|
 | **Lepton Isomers** | Particle Physics | 99.99989% | 17s-7h | ✅ Validated |
@@ -82,7 +82,7 @@ pip install -r requirements.txt
 
 ## ⚡ **5-Minute Demo Path**
 
-### **Step 1: Validate Our Best Result** (2 min)
+### **Step 1: Validate Lepton Results** (2 min)
 ```bash
 cd projects/particle-physics/lepton-isomers/
 python validate_all_particles.py --electron

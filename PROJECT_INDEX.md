@@ -2,15 +2,15 @@
 
 **Master Catalog of All QFD Computational Physics Projects**
 
-Navigate by research interest → Find validated code → Reproduce breakthrough results
+Navigate by research interest → Find validated code → Reproduce computational results
 
 ---
 
 ## 🔬 **Particle Physics Projects**
 
 ### [`projects/particle-physics/lepton-isomers/`](projects/particle-physics/lepton-isomers/) ⭐ **VALIDATED**
-**Ultra-High Precision Lepton Mass Calculations**
-- **Results**: Electron (99.99989%), Muon (99.99974%), Tau (100.00%)
+**High-Precision Lepton Mass Calculations**
+- **Results**: Electron (99.99989%), Muon (99.99974%), Tau (99.99999%)
 - **Runtime**: 17s, 29s, ~7h respectively
 - **Quick Start**: `python validate_all_particles.py`
 - **Status**: ✅ Production Ready - Complete validation framework
@@ -90,7 +90,7 @@ Navigate by research interest → Find validated code → Reproduce breakthrough
 
 ## 🚀 **Quick Start for Researchers**
 
-### **Try the Best Validated Project:**
+### **Try the Validated Lepton Project:**
 ```bash
 cd projects/particle-physics/lepton-isomers/
 python validate_all_particles.py --electron    # 17s → 99.99989% accuracy
@@ -121,6 +121,6 @@ python run_all_projects.py    # One-click reproduction of all results
 
 ---
 
-**Navigate by Interest** → **Run Validated Code** → **Reproduce Breakthrough Physics**
+**Navigate by Interest** → **Run Validated Code** → **Reproduce Computational Physics**
 
 *Total: 20+ computational physics projects spanning particle physics, astrophysics, and field theory*
