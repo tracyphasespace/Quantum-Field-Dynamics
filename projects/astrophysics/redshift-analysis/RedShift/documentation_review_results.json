@@ -1,0 +1,126 @@
+{
+  "readme": {
+    "adequate_length": true,
+    "missing_sections": [],
+    "has_essential_sections": true,
+    "has_code_examples": true,
+    "has_installation": true,
+    "has_badges": true
+  },
+  "docstrings": {
+    "ppsi_models": {
+      "has_module_docstring": true,
+      "functions": {
+        "oscillatory_psik": {
+          "has_docstring": true,
+          "docstring_length": 970
+        }
+      },
+      "documentation_coverage": 1.0
+    },
+    "visibility": {
+      "has_module_docstring": true,
+      "functions": {
+        "gaussian_visibility": {
+          "has_docstring": true,
+          "docstring_length": 407
+        },
+        "gaussian_window_chi": {
+          "has_docstring": true,
+          "docstring_length": 420
+        }
+      },
+      "documentation_coverage": 1.0
+    },
+    "kernels": {
+      "has_module_docstring": true,
+      "functions": {
+        "sin2_mueller_coeffs": {
+          "has_docstring": true,
+          "docstring_length": 441
+        },
+        "te_correlation_phase": {
+          "has_docstring": true,
+          "docstring_length": 723
+        }
+      },
+      "documentation_coverage": 1.0
+    },
+    "projector": {
+      "has_module_docstring": false,
+      "functions": {
+        "project_limber": {
+          "has_docstring": false,
+          "docstring_length": 0
+        },
+        "los_transfer": {
+          "has_docstring": false,
+          "docstring_length": 0
+        },
+        "project_los": {
+          "has_docstring": false,
+          "docstring_length": 0
+        }
+      },
+      "documentation_coverage": 0.0
+    },
+    "figures": {
+      "has_module_docstring": false,
+      "functions": {
+        "plot_TT": {
+          "has_docstring": false,
+          "docstring_length": 0
+        },
+        "plot_EE": {
+          "has_docstring": false,
+          "docstring_length": 0
+        },
+        "plot_TE": {
+          "has_docstring": false,
+          "docstring_length": 0
+        }
+      },
+      "documentation_coverage": 0.0
+    }
+  },
+  "examples": {
+    "examples_directory_exists": true,
+    "example_files": [
+      "advanced_fitting.py",
+      "basic_usage.py",
+      "README.md",
+      "tutorial_notebook.ipynb"
+    ],
+    "python_examples": [
+      "advanced_fitting.py",
+      "basic_usage.py"
+    ],
+    "basic_usage_runs": true,
+    "has_notebooks": true,
+    "notebooks": [
+      "tutorial_notebook.ipynb"
+    ],
+    "demo_script_exists": true,
+    "demo_help_works": true
+  },
+  "api_documentation": {
+    "docs_directory_exists": true,
+    "sphinx_config_exists": true,
+    "docs_build_success": true
+  },
+  "contributing_guidelines": {
+    "contributing_exists": true,
+    "contributing_length": 9962,
+    "contributing_missing_sections": [],
+    "contributing_complete": true,
+    "changelog_exists": true,
+    "changelog_has_versions": true,
+    "license_exists": true,
+    "license_length": 11305,
+    "license_adequate": true
+  },
+  "code_examples": {
+    "readme_python_blocks": 2,
+    "valid_readme_examples": 0
+  }
+}
