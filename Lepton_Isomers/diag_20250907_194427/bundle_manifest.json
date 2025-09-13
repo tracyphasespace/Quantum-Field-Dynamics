@@ -1,9 +1,0 @@
-{
-  "schema": "v2_bundle_manifest",
-  "species": "tau",
-  "features": "features.json",
-  "summary": "summary.json",
-  "extras": {},
-  "created_utc": "2025-09-08T02:28:00.884681+00:00",
-  "label": "1777MeV_v1"
-}
