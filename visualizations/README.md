@@ -8,20 +8,20 @@
 
 ## ⚡ **Field Theory Visualizations**
 
-### [`qfd-primer.html`](field-theory/qfd-primer.html) - **Start Here**
+### <a href="field-theory/qfd-primer.html" target="_blank">`qfd-primer.html`</a> - **Start Here**
 **Basic QFD Concepts**
 - Visual introduction to ψ-field dynamics
 - Interactive field equations
 - Foundation for understanding all QFD physics
 - **Suitable for**: First-time QFD exploration
 
-### [`qfd-advanced.html`](field-theory/qfd-advanced.html)
+### <a href="field-theory/qfd-advanced.html" target="_blank">`qfd-advanced.html`</a>
 **Advanced Field Dynamics**
 - Complex field interactions
 - Multi-component wavefield visualization
 - **Suitable for**: Graduate students, researchers
 
-### [`qfd-infographic.html`](field-theory/qfd-infographic.html)
+### <a href="field-theory/qfd-infographic.html" target="_blank">`qfd-infographic.html`</a>
 **Visual Theory Summary**
 - Complete QFD theory overview
 - Key claims and predictions
@@ -31,7 +31,7 @@
 
 ## 🔬 **Particle Physics Visualizations**
 
-### [`nuclide-table.html`](particle-physics/nuclide-table.html)
+### <a href="particle-physics/nuclide-table.html" target="_blank">`nuclide-table.html`</a>
 **Interactive QFD Periodic Table**
 - Nuclear mass predictions via QFD
 - Clickable elements with field theory explanations
@@ -47,7 +47,7 @@
 
 ## 🌌 **Astrophysics Visualizations**
 
-### [`blackhole-dynamics.html`](astrophysics/blackhole-dynamics.html)
+### <a href="astrophysics/blackhole-dynamics.html" target="_blank">`blackhole-dynamics.html`</a>
 **QFD Black Hole Field Structure**
 - Field-based black hole model (no spacetime curvature)
 - Interactive ψ-field visualization around massive objects
