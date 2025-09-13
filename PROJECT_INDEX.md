@@ -23,7 +23,7 @@ Navigate by research interest → Find validated code → Reproduce computationa
 ### `projects/particle-physics/nuclide-prediction/`
 **Complete Nuclide Mass Prediction Curves**
 - Interactive periodic table with QFD predictions
-- Visualization: <a href="visualizations/particle-physics/nuclide-table.html" target="_blank">`visualizations/particle-physics/nuclide-table.html`</a>
+- Visualization: <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/particle-physics/nuclide-table.html" target="_blank">`nuclide-table.html`</a>
 - Status: 📊 Visualization Ready
 
 ---
@@ -42,7 +42,7 @@ Navigate by research interest → Find validated code → Reproduce computationa
 
 ### `projects/astrophysics/blackhole-dynamics/`
 **QFD Black Hole Field Structure**
-- Interactive visualization: <a href="visualizations/astrophysics/blackhole-dynamics.html" target="_blank">`visualizations/astrophysics/blackhole-dynamics.html`</a>
+- Interactive visualization: <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/blackhole-dynamics.html" target="_blank">`blackhole-dynamics.html`</a>
 - Status: 🎨 Visualization Complete
 
 ---
@@ -64,13 +64,13 @@ Navigate by research interest → Find validated code → Reproduce computationa
 ## 🎨 **Interactive Visualizations**
 
 ### **Theory Visualizations**
-- <a href="visualizations/field-theory/qfd-primer.html" target="_blank">`qfd-primer.html`</a> - Basic QFD concepts
-- <a href="visualizations/field-theory/qfd-advanced.html" target="_blank">`qfd-advanced.html`</a> - Advanced field dynamics
-- <a href="visualizations/field-theory/qfd-infographic.html" target="_blank">`qfd-infographic.html`</a> - Visual theory summary
+- <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/qfd-primer.html" target="_blank">`qfd-primer.html`</a> - Basic QFD concepts
+- <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/qfd-advanced.html" target="_blank">`qfd-advanced.html`</a> - Advanced field dynamics
+- <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/qfd-infographic.html" target="_blank">`qfd-infographic.html`</a> - Visual theory summary
 
 ### **Research Results**
-- <a href="visualizations/particle-physics/nuclide-table.html" target="_blank">`nuclide-table.html`</a> - Interactive periodic predictions
-- <a href="visualizations/astrophysics/blackhole-dynamics.html" target="_blank">`blackhole-dynamics.html`</a> - QFD black hole model
+- <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/particle-physics/nuclide-table.html" target="_blank">`nuclide-table.html`</a> - Interactive periodic predictions
+- <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/blackhole-dynamics.html" target="_blank">`blackhole-dynamics.html`</a> - QFD black hole model
 
 ---
 
@@ -97,7 +97,7 @@ python validate_all_particles.py --electron    # 17s → 99.99989% accuracy
 ```
 
 ### **Explore Interactive Theory:**
-Open <a href="visualizations/field-theory/qfd-primer.html" target="_blank">`visualizations/field-theory/qfd-primer.html`</a> in browser
+Open <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/qfd-primer.html" target="_blank">`qfd-primer.html`</a> in browser
 
 ### **Read the Theory:**
 Start with [`books-and-documents/research-papers/QFD_Whitepaper.md`](books-and-documents/research-papers/QFD_Whitepaper.md)

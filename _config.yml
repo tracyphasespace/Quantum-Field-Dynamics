@@ -1,0 +1,43 @@
+# GitHub Pages Configuration for QFD Physics Repository
+title: "Quantum Field Dynamics - Computational Physics Platform"
+description: "Interactive visualizations and validated computational physics projects"
+baseurl: "/Quantum-Field-Dynamics"
+url: "https://tracyphasespace.github.io"
+
+# Theme
+theme: minima
+
+# Enable GitHub Pages
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - .git/
+  - .github/
+  - meta/
+
+# Include all HTML visualizations
+include:
+  - "visualizations/"
+  - "projects/"
+  - "books-and-documents/"
+
+# Markdown settings
+markdown: kramdown
+highlighter: rouge
+
+# Collections for better organization
+collections:
+  visualizations:
+    output: true
+    permalink: /:collection/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: "visualizations"
+    values:
+      layout: "default"
