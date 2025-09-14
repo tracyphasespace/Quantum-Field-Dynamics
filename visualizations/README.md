@@ -52,12 +52,6 @@
 - Clickable elements with field theory explanations
 - **Suitable for**: Nuclear physicists, chemistry educators
 
-### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/particle-physics/electron-muon-tau.html" target="_blank">`electron-muon-tau.html`</a>
-**High-Precision Lepton Mass Spectrum**
-- Interactive electron, muon, tau mass analysis
-- Validated computational results visualization
-- **Based on**: [`projects/particle-physics/lepton-isomers/`](../projects/particle-physics/lepton-isomers/)
-
 ### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/particle-physics/leptons-analysis.html" target="_blank">`leptons-analysis.html`</a>
 **Comprehensive Lepton Analysis**
 - Extended lepton physics visualization
