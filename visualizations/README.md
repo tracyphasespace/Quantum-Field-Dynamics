@@ -11,6 +11,8 @@
 
 ## ⚡ **Field Theory Visualizations**
 
+https://tracyphasespace.github.io/Quantum-Field-Dynamics/ 
+
 ### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/qfd-primer.html" target="_blank">`qfd-primer.html`</a> - **Start Here**
 **Basic QFD Concepts**
 - Visual introduction to ψ-field dynamics
