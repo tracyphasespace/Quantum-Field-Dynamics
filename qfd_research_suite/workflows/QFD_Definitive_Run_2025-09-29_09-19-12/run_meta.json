@@ -1,0 +1,28 @@
+{
+  "version": "Definitive_v1.0",
+  "timestamp": "2025-09-29_09-19-12",
+  "seed": 42,
+  "walkers": 32,
+  "steps": 5000,
+  "burn": 1500,
+  "thin": 25,
+  "parameters_sampled": [
+    "log10_k_J",
+    "log10_eta_prime",
+    "log10_xi",
+    "delta_mu0"
+  ],
+  "k_J_map": 30643428861197.094,
+  "H0_derived_map": 73.87288560884625,
+  "eta_prime_map": 732.3592902078365,
+  "xi_map": 0.3161872528919913,
+  "delta_mu0_map": 0.2709994404348257,
+  "k_J_med": 26788211612863.65,
+  "H0_derived_med": 64.5790163074243,
+  "eta_prime_med": 0.9446258660661164,
+  "xi_med": 0.8016737513926425,
+  "delta_mu0_med": -0.022862950999257503,
+  "chi2": 2054.1045854450513,
+  "nu": 576,
+  "reduced_chi2": 3.5661537941754364
+}

@@ -1,0 +1,42 @@
+{
+  "analysis_type": "QFD-Native Hubble Diagram",
+  "data_purity": "SALT2-free, \u039bCDM-free",
+  "global_parameters": {
+    "k_J": 30643428861197.094,
+    "eta_prime": 732.3592902078365,
+    "xi": 0.3161872528919913,
+    "delta_mu0": 0.2709994404348257,
+    "H0_derived_km_s_Mpc": 73.87288560884625
+  },
+  "dataset_summary": {
+    "n_supernovae": 3,
+    "redshift_range": [
+      0.000804,
+      0.0054
+    ],
+    "distance_range_mpc": [
+      5.0,
+      23.12684676
+    ]
+  },
+  "empirical_dimming_analysis": {
+    "median_dimming_factor": 1.4371885682658654,
+    "mean_dimming_factor": 1.9624862820852005,
+    "std_dimming_factor": 0.7453120513194923,
+    "predicted_dimming_factor": 4.0,
+    "dimming_consistency": "INCONSISTENT"
+  },
+  "model_comparison": {
+    "qfd_model": {
+      "rms_residuals_mag": 0.2782893508198119,
+      "mean_residuals_mag": -0.07100247525915056,
+      "std_residuals_mag": 0.26907919147861664
+    },
+    "lcdm_model": {
+      "rms_residuals_mag": 0.32667845548201596,
+      "mean_residuals_mag": 0.19153321503787168,
+      "std_residuals_mag": 0.2646390765049105
+    },
+    "preferred_model": "QFD"
+  }
+}
