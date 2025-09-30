@@ -6,9 +6,46 @@ Cosmological calculations for QFD redshift analysis.
 Implements standard cosmology without dark energy acceleration.
 """
 
+import math
+from typing import Sequence, Union
+
 import numpy as np
-from scipy.integrate import quad
-from typing import Union
+
+try:  # pragma: no cover - exercised indirectly via tests
+    from scipy.integrate import quad  # type: ignore
+except ModuleNotFoundError:  # pragma: no cover - fallback for test environment
+    def quad(func, a, b, limit=100):
+        """Lightweight trapezoidal integration used when SciPy is unavailable."""
+
+        steps = max(10, int(abs(b - a) * 100))
+        h = (b - a) / steps
+        total = 0.5 * (func(a) + func(b))
+        for i in range(1, steps):
+            total += func(a + i * h)
+        return total * h, None
+
+
+Number = Union[int, float]
+ArrayLike = Union[Number, Sequence[Number], np.ndarray]
+
+
+def _is_scalar(value: ArrayLike) -> bool:
+    return isinstance(value, (int, float))
+
+
+def _to_array(values: ArrayLike) -> np.ndarray:
+    if isinstance(values, np.ndarray):
+        return values
+    if isinstance(values, Sequence) and not isinstance(values, (str, bytes)):
+        return np.array(values)
+    raise TypeError("Expected a scalar or a sequence of scalars")
+
+
+def _vectorize(values: ArrayLike, func):
+    if _is_scalar(values):
+        return func(float(values))
+    arr = _to_array(values)
+    return np.array([func(float(v)) for v in arr])
 
 
 class QFDCosmology:
@@ -43,8 +80,8 @@ class QFDCosmology:
         return self.c / self.H0
 
     def comoving_distance(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate comoving distance for given redshift.
 
@@ -60,34 +97,16 @@ class QFDCosmology:
         float or array
             Comoving distance in Mpc
         """
-        if isinstance(redshift, (int, float)):
-            if redshift < 0.1:
-                # Linear regime
-                return (self.c * redshift) / self.H0
-            else:
-                # Include relativistic corrections (matter-dominated)
-                # Simple approximation: D_C = (c/H0) * (z + 0.5*z^2)
-                return (self.c / self.H0) * (redshift + 0.5 * redshift**2)
-        else:
-            # Array input
-            result = np.zeros_like(redshift)
-            linear_mask = redshift < 0.1
-            nonlinear_mask = ~linear_mask
+        def _comoving(z: float) -> float:
+            if z < 0.1:
+                return (self.c * z) / self.H0
+            return (self.c / self.H0) * (z + 0.5 * z**2)
 
-            # Linear regime
-            result[linear_mask] = (self.c * redshift[linear_mask]) / self.H0
-
-            # Nonlinear regime
-            z_nl = redshift[nonlinear_mask]
-            result[nonlinear_mask] = (self.c / self.H0) * (
-                z_nl + 0.5 * z_nl**2
-            )
-
-            return result
+        return _vectorize(redshift, _comoving)
 
     def angular_diameter_distance(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate angular diameter distance.
 
@@ -101,12 +120,17 @@ class QFDCosmology:
         float or array
             Angular diameter distance in Mpc
         """
-        d_comoving = self.comoving_distance(redshift)
-        return d_comoving / (1 + redshift)
+        if _is_scalar(redshift):
+            d_comoving = self.comoving_distance(redshift)
+            return d_comoving / (1 + float(redshift))
+
+        redshift_arr = _to_array(redshift)
+        d_comoving_arr = _to_array(self.comoving_distance(redshift_arr))
+        return d_comoving_arr / (1 + redshift_arr)
 
     def luminosity_distance(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate luminosity distance.
 
@@ -120,12 +144,17 @@ class QFDCosmology:
         float or array
             Luminosity distance in Mpc
         """
-        d_comoving = self.comoving_distance(redshift)
-        return d_comoving * (1 + redshift)
+        if _is_scalar(redshift):
+            d_comoving = self.comoving_distance(redshift)
+            return d_comoving * (1 + float(redshift))
+
+        redshift_arr = _to_array(redshift)
+        d_comoving_arr = _to_array(self.comoving_distance(redshift_arr))
+        return d_comoving_arr * (1 + redshift_arr)
 
     def distance_modulus(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate distance modulus.
 
@@ -139,15 +168,20 @@ class QFDCosmology:
         float or array
             Distance modulus in magnitudes
         """
-        d_lum = self.luminosity_distance(redshift)
-        return 5 * np.log10(d_lum * 1e6 / 10)
+        if _is_scalar(redshift):
+            d_lum = self.luminosity_distance(redshift)
+            return 5 * math.log10(d_lum * 1e6 / 10)
+
+        redshift_arr = _to_array(redshift)
+        d_lum_arr = _to_array(self.luminosity_distance(redshift_arr))
+        return np.array([5 * math.log10(val * 1e6 / 10) for val in d_lum_arr])
 
     def lambda_cdm_distance(
         self,
-        redshift: Union[float, np.ndarray],
+        redshift: ArrayLike,
         omega_m: float = 0.3,
         omega_lambda: float = 0.7,
-    ) -> Union[float, np.ndarray]:
+    ) -> ArrayLike:
         """
         Calculate ΛCDM luminosity distance for comparison.
 
@@ -169,33 +203,32 @@ class QFDCosmology:
         def integrand(z):
             return 1 / np.sqrt(omega_m * (1 + z) ** 3 + omega_lambda)
 
-        if isinstance(redshift, (int, float)):
-            if redshift < 0.01:
-                # Linear regime
-                integral = redshift
+        if _is_scalar(redshift):
+            z = float(redshift)
+            if z < 0.01:
+                integral = z
             else:
-                integral, _ = quad(integrand, 0, redshift)
+                integral, _ = quad(integrand, 0, z)
 
             d_comoving = (self.c / self.H0) * integral
-            return d_comoving * (1 + redshift)
-        else:
-            # Array input
-            result = np.zeros_like(redshift)
+            return d_comoving * (1 + z)
 
-            for i, z in enumerate(redshift):
-                if z < 0.01:
-                    integral = z
-                else:
-                    integral, _ = quad(integrand, 0, z)
+        redshift_arr = _to_array(redshift)
+        distances = []
+        for z in redshift_arr:
+            if z < 0.01:
+                integral = z
+            else:
+                integral, _ = quad(integrand, 0, z)
 
-                d_comoving = (self.c / self.H0) * integral
-                result[i] = d_comoving * (1 + z)
+            d_comoving = (self.c / self.H0) * integral
+            distances.append(d_comoving * (1 + z))
 
-            return result
+        return np.array(distances)
 
     def lookback_time(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate lookback time.
 
@@ -214,16 +247,14 @@ class QFDCosmology:
 
         hubble_time = 1 / (self.H0 * 1.022e-12)  # Convert to Gyr
 
-        if isinstance(redshift, (int, float)):
-            factor = 1 - (1 + redshift) ** (-1.5)
-            return (2 / 3) * hubble_time * factor
-        else:
-            factor = 1 - (1 + redshift) ** (-1.5)
-            return (2 / 3) * hubble_time * factor
+        def _lookback(z: float) -> float:
+            return (2 / 3) * hubble_time * (1 - (1 + z) ** (-1.5))
+
+        return _vectorize(redshift, _lookback)
 
     def age_of_universe(
-        self, redshift: Union[float, np.ndarray] = 0
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike = 0
+    ) -> ArrayLike:
         """
         Calculate age of universe at given redshift.
 
@@ -239,15 +270,14 @@ class QFDCosmology:
         """
         hubble_time = 1 / (self.H0 * 1.022e-12)  # Convert to Gyr
 
-        if isinstance(redshift, (int, float)):
-            # Matter-dominated universe age: t = (2/3H0) * (1+z)^(-3/2)
-            return (2 / 3) * hubble_time * (1 + redshift) ** (-1.5)
-        else:
-            return (2 / 3) * hubble_time * (1 + redshift) ** (-1.5)
+        def _age(z: float) -> float:
+            return (2 / 3) * hubble_time * (1 + z) ** (-1.5)
+
+        return _vectorize(redshift, _age)
 
     def critical_density(
-        self, redshift: Union[float, np.ndarray] = 0
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike = 0
+    ) -> ArrayLike:
         """
         Calculate critical density of the universe.
 
@@ -263,15 +293,16 @@ class QFDCosmology:
         """
         # Critical density: ρ_c = 3H²/(8πG)
         G = 6.674e-8  # cm³/g/s² (gravitational constant)
-        H_z = (
-            self.H0 * 1.022e-12 * (1 + redshift) ** 1.5
-        )  # H(z) for matter-dominated
 
-        return 3 * H_z**2 / (8 * np.pi * G)
+        def _critical(z: float) -> float:
+            H_z = self.H0 * 1.022e-12 * (1 + z) ** 1.5
+            return 3 * H_z**2 / (8 * math.pi * G)
+
+        return _vectorize(redshift, _critical)
 
     def sound_horizon(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate sound horizon at given redshift.
 
@@ -293,22 +324,11 @@ class QFDCosmology:
         z_eq = 3600  # Matter-radiation equality
         omega_m = 1.0  # Matter-dominated
 
-        prefactor = self.c / (self.H0 * np.sqrt(omega_m))
+        prefactor = self.c / (self.H0 * math.sqrt(omega_m))
 
-        if isinstance(redshift, (int, float)):
-            if redshift > z_eq:
-                return prefactor * 2 / np.sqrt(1 + z_eq)
-            else:
-                # Approximate for z < z_eq
-                return prefactor * np.sqrt(z_eq / (1 + redshift))
-        else:
-            result = np.zeros_like(redshift)
-            high_z_mask = redshift > z_eq
-            low_z_mask = ~high_z_mask
+        def _sound(z: float) -> float:
+            if z > z_eq:
+                return prefactor * 2 / math.sqrt(1 + z_eq)
+            return prefactor * math.sqrt(z_eq / (1 + z))
 
-            result[high_z_mask] = prefactor * 2 / np.sqrt(1 + z_eq)
-            result[low_z_mask] = prefactor * np.sqrt(
-                z_eq / (1 + redshift[low_z_mask])
-            )
-
-            return result
+        return _vectorize(redshift, _sound)

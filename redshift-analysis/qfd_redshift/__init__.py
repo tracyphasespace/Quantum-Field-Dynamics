@@ -12,9 +12,17 @@ __version__ = "1.0.0"
 __author__ = "PhaseSpace Research"
 __email__ = "research@phasespace.tech"
 
-from .redshift_analyzer import RedshiftAnalyzer
 from .cosmology import QFDCosmology
 from .physics import QFDPhysics
-from .visualization import RedshiftPlotter
 
-__all__ = ["RedshiftAnalyzer", "QFDCosmology", "QFDPhysics", "RedshiftPlotter"]
+try:  # pragma: no cover - optional dependencies
+    from .redshift_analyzer import RedshiftAnalyzer
+except ModuleNotFoundError:  # pragma: no cover - gracefully degrade
+    RedshiftAnalyzer = None
+
+try:  # pragma: no cover - optional dependencies
+    from .visualization import RedshiftPlotter
+except ModuleNotFoundError:  # pragma: no cover - gracefully degrade
+    RedshiftPlotter = None
+
+__all__ = [name for name in ("RedshiftAnalyzer", "QFDCosmology", "QFDPhysics", "RedshiftPlotter") if locals().get(name) is not None]
