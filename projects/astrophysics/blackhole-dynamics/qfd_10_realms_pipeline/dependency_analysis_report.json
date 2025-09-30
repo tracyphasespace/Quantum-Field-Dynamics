@@ -1,0 +1,118 @@
+{
+  "analysis_summary": {
+    "total_parameters": 18,
+    "parameters_with_values": 10,
+    "total_dependencies": 236,
+    "dependency_types": {
+      "constraint": 212,
+      "realm_order": 22,
+      "physics": 2
+    },
+    "critical_path_length": 5,
+    "cluster_count": 2,
+    "graph_statistics": {
+      "total_parameters": 18,
+      "total_dependencies": 225,
+      "total_clusters": 2,
+      "graph_density": 0.7352941176470589,
+      "is_connected": true,
+      "has_cycles": true,
+      "dependency_types": {
+        "constraint": 212,
+        "realm_order": 22,
+        "physics": 2
+      },
+      "dependencies_by_realm": {
+        "config": 210,
+        "ppn_config": 2,
+        "cmb_config->realm0_cmb": 2,
+        "realm0_cmb->realm3_scales": 8,
+        "realm3_scales->realm4_em": 12,
+        "ppn_theory": 1,
+        "thermalization": 1
+      },
+      "most_influential_parameter": "psi_s0",
+      "max_influence": 7.300000000000001,
+      "avg_influence": 5.955555555555556
+    }
+  },
+  "critical_path": [
+    "k_J",
+    "psi_s0",
+    "xi",
+    "E0",
+    "L0"
+  ],
+  "top_influential_parameters": [
+    [
+      "psi_s0",
+      7.300000000000001
+    ],
+    [
+      "xi",
+      7.0
+    ],
+    [
+      "k_c2",
+      7.0
+    ],
+    [
+      "k_EM",
+      7.0
+    ],
+    [
+      "V2",
+      7.0
+    ],
+    [
+      "V4",
+      7.0
+    ],
+    [
+      "kappa",
+      7.0
+    ],
+    [
+      "lambda_R1",
+      7.0
+    ],
+    [
+      "lambda_R2",
+      7.0
+    ],
+    [
+      "lambda_R3",
+      7.0
+    ]
+  ],
+  "clusters": {
+    "cluster_1": {
+      "parameters": [
+        "k_J",
+        "V2",
+        "lambda_t",
+        "lambda_R2",
+        "lambda_R1",
+        "lambda_R4",
+        "lambda_R3",
+        "T_CMB_K",
+        "V4",
+        "E0",
+        "psi_s0",
+        "kappa",
+        "L0"
+      ],
+      "size": 13
+    },
+    "cluster_2": {
+      "parameters": [
+        "k_EM",
+        "k_c2",
+        "PPN_beta",
+        "PPN_gamma",
+        "xi"
+      ],
+      "size": 5
+    }
+  }
+}

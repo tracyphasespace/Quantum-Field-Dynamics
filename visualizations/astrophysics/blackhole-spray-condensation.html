@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Particle Burst Condensation (Final)</title>
+  <style>
+    body { margin:0; background:#0f172a; color:#cbd5e1; font-family:system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif; }
+    #controls { padding:1rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1rem; background:#1e293b; align-items:center; }
+    #canvas { display:block; width:100%; height:calc(100vh - 220px); background:#0f172a; }
+    input[type=range]{ width:100% }
+    .pill { padding:.15rem .5rem; border-radius:999px; font-size:.75rem; }
+    .ok   { background:#064e3b; color:#a7f3d0; }
+    .warn { background:#a16207; color:#fef08a; }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <div><label>M1: <span id="m1Val">1375</span></label><input id="m1" type="range" min="500" max="5000" value="1375"></div>
+    <div><label>Separation: <span id="dVal">195</span></label><input id="d" type="range" min="100" max="400" value="195"></div>
+    <div>
+      <label>Speed: <span id="vVal">0.80</span></label>
+      <input id="v" type="range" min="0.10" max="2.00" step="0.01" value="0.80">
+      <small>fraction of circular</small>
+    </div>
+    <div><label>Boost: <span id="bVal">0.05</span></label><input id="b" type="range" min="0.01" max="2.0" step="0.01" value="0.05"></div>
+    <div>
+      <label>Aperture: <span id="aVal">0.5°</span></label><input id="a" type="range" min="0.5" max="10" step="0.5" value="0.5">
+      <small>half-angle</small>
+    </div>
+    <div>
+      <label>Time: <span id="tVal">10.0×</span></label><input id="t" type="range" min="0.2" max="10.0" step="0.1" value="10.0">
+      <small>world speed</small>
+    </div>
+    <div class="checkbox"><input type="checkbox" id="vectors"><label for="vectors">Vector arrows</label></div>
+    <div>
+      <label>Vector scale: <span id="vecVal">1.0×</span></label>
+      <input id="vec" type="range" min="0.5" max="10" step="0.5" value="1.0">
+    </div>
+    <div style="grid-column:1/-1; display:flex; align-items:center; gap:1rem; margin-top:.25rem;">
+      <button id="restart">Restart with New Initial Conditions</button>
+      <span id="status" class="pill warn">Initializing…</span>
+    </div>
+  </div>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+  // ---------- UI
+  const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
+  const statusEl = document.getElementById('status');
+  const sliders = ['m1','d','v','b','a','t','vec'];
+  const labelMap = { m1:'m1Val',d:'dVal',v:'vVal',b:'bVal',a:'aVal',t:'tVal',vec:'vecVal' };
+  sliders.forEach(id=>{
+    const s=document.getElementById(id), l=document.getElementById(labelMap[id]);
+    s.oninput=()=>{ if(id==='v'||id==='b') l.textContent=+s.value.toFixed?.(2)||(+s.value).toFixed(2);
+                    else if(id==='a') l.textContent=s.value+'°';
+                    else if(id==='t'||id==='vec') l.textContent=(+s.value).toFixed(1)+'×';
+                    else l.textContent=s.value; };
+  });
+  document.getElementById('restart').onclick=start;
+
+  // ---------- Camera + helpers
+  const Cam={center:{x:0,y:0}, zoom:1, minZoom:0.001, maxZoom:8};
+  function worldToScreen(wx,wy){const cx=canvas.width/2, cy=canvas.height/2; return {x:cx+(wx-Cam.center.x)*Cam.zoom, y:cy+(wy-Cam.center.y)*Cam.zoom};}
+  function sub(a,b){return{x:a.x-b.x,y:a.y-b.y};}
+  function mag(v){return Math.hypot(v.x,v.y);}
+  function norm(v){const m=mag(v); return m<1e-12?{x:0,y:0}:{x:v.x/m,y:v.y/m};}
+
+  // ---------- Physics objects
+  class Mass{
+    constructor(x,y,m){this.pos={x,y};this.mass=m;this.vel={x:0,y:0};this.acc={x:0,y:0};}
+    applyForce(f){this.acc.x+=f.x/this.mass; this.acc.y+=f.y/this.mass;}
+    update(dt){this.vel.x+=this.acc.x*dt; this.vel.y+=this.acc.y*dt; this.pos.x+=this.vel.x*dt; this.pos.y+=this.vel.y*dt; this.acc.x=this.acc.y=0;}
+  }
+  class Particle{
+    constructor(x,y,vx,vy){ this.pos={x,y}; this.vel={x:vx,y:vy}; this.acc={x:0,y:0}; this.Fx=0; this.Fy=0; }
+    applyForce(f){ this.acc.x+=f.x/0.1; this.acc.y+=f.y/0.1; } // mp=0.1
+    update(dt){ this.vel.x+=this.acc.x*dt; this.vel.y+=this.acc.y*dt; this.pos.x+=this.vel.x*dt; this.pos.y+=this.vel.y*dt; this.acc.x=this.acc.y=0; }
+    draw(){ const s=worldToScreen(this.pos.x,this.pos.y); ctx.beginPath(); ctx.arc(s.x,s.y,1.6,0,Math.PI*2); ctx.fillStyle='#38bdf8'; ctx.fill(); }
+  }
+
+  // ---------- Globals & constants
+  let particles=[];
+  let p_gen,s_gen,spawnAcc_gen,generationComplete=false;
+  const BASE_DT=0.05, SOFT=20, G=1, mp=0.1;
+  const NUM_PARTICLES = 10000;
+  const CONDENSE_SPEEDUP = 500;
+  const SUBSTEP_MAX = 0.5;
+  const TREE_REUSE = 5;
+  const BH_THETA = 0.8;
+  let threshold=0;
+
+  function resize(){ canvas.width=innerWidth; canvas.height=innerHeight-document.getElementById('controls').offsetHeight; }
+
+  // ---------- Async generator (non-blocking)
+  function generationStep(){
+    if(generationComplete) return;
+    const perFrame = 2000;
+    for(let i=0;i<perFrame;i++){
+      if(particles.length>=NUM_PARTICLES){ generationComplete=true; statusEl.textContent='Condensation Active'; statusEl.className='pill ok'; break; }
+      const internal_dt=0.02;
+      const r=sub(s_gen.pos,p_gen.pos), d2=r.x*r.x+r.y*r.y+SOFT*SOFT;
+      const f=G*p_gen.mass*s_gen.mass/d2, dir=norm(r), F12={x:dir.x*f,y:dir.y*f};
+      p_gen.applyForce({x:-F12.x,y:-F12.y}); s_gen.applyForce(F12);
+      p_gen.update(internal_dt); s_gen.update(internal_dt);
+
+      // BUG FIX: Removed faulty proximity check that prevented generation from starting.
+      spawnAcc_gen+=500*internal_dt;
+      if(spawnAcc_gen>=1){
+        const base=norm(sub(s_gen.pos,p_gen.pos));
+        const δ=(Math.random()*2-1)*(+a.value*Math.PI/180), c=Math.cos(δ), s=Math.sin(δ);
+        const dirS={x:base.x*c-base.y*s, y:base.x*s+base.y*c};
+        const boost=+b.value*(0.8+0.4*Math.random()), offset=Math.cbrt(p_gen.mass)*0.8+5;
+        const sx=p_gen.pos.x+dirS.x*offset, sy=p_gen.pos.y+dirS.y*offset;
+        const vx=dirS.x*boost*2, vy=dirS.y*boost*2;
+        particles.push(new Particle(sx,sy,vx,vy));
+        spawnAcc_gen--;
+      }
+    }
+    if (!generationComplete) {
+        statusEl.textContent=`Generating ${particles.length.toLocaleString()} / ${NUM_PARTICLES.toLocaleString()}…`;
+    }
+  }
+
+  // ---------- Barnes–Hut quadtree
+  class QNode{
+    constructor(x,y,w){ this.x=x; this.y=y; this.w=w; this.mass=0; this.cx=0; this.cy=0; this.children=null; this.body=null; }
+    insert(p){
+      if(this.children){ this._child(p).insert(p); this.mass+=mp; this.cx=(this.cx*(this.mass-mp)+p.pos.x*mp)/this.mass; this.cy=(this.cy*(this.mass-mp)+p.pos.y*mp)/this.mass; return; }
+      if(!this.body){ this.body=p; this.mass=mp; this.cx=p.pos.x; this.cy=p.pos.y; return; }
+      const b=this.body; this.body=null; this._subdivide(); this._child(b).insert(b); this._child(p).insert(p); this._reaccumulate();
+    }
+    _reaccumulate(){ let M=0,Cx=0,Cy=0; for(const c of this.children){ M+=c.mass; Cx+=c.cx*c.mass; Cy+=c.cy*c.mass; } this.mass=M; this.cx=M?Cx/M:0; this.cy=M?Cy/M:0; }
+    _subdivide(){ const hw=this.w*0.5, x=this.x, y=this.y; this.children=[new QNode(x,y,hw),new QNode(x+hw,y,hw),new QNode(x,y+hw,hw),new QNode(x+hw,y+hw,hw)]; }
+    _child(p){ const i=(p.pos.x>this.x+this.w*0.5) + 2*(p.pos.y>this.y+this.w*0.5); return this.children[i]; }
+    forceOn(p,θ,out){
+      if(this.mass===0 || (this.body===p && !this.children)) return;
+      const dx=this.cx-p.pos.x, dy=this.cy-p.pos.y, r=Math.hypot(dx,dy)||1e-9;
+      if(!this.children || (this.w/r)<θ){
+        const d2=r*r+SOFT*SOFT, f=G*(this.mass*mp)/d2; out.x+=f*dx/r; out.y+=f*dy/r;
+      } else { for(const c of this.children) c.forceOn(p,θ,out); }
+    }
+  }
+  function buildTree(ps){
+    if(!ps.length) return null;
+    let minx=Infinity,miny=Infinity,maxx=-Infinity,maxy=-Infinity;
+    for(const p of ps){ const x=p.pos.x,y=p.pos.y; if(x<minx)minx=x; if(x>maxx)maxx=x; if(y<miny)miny=y; if(y>maxy)maxy=y; }
+    const size=Math.max(maxx-minx,maxy-miny)||1, pad=size*0.1;
+    const root=new QNode(minx-pad,miny-pad,size+2*pad);
+    for(const p of ps) root.insert(p);
+    return root;
+  }
+
+  // ---------- Physics update with sub-stepping & tree reuse
+  function updateCondensation(){
+    const dtEff = BASE_DT * +t.value * CONDENSE_SPEEDUP;
+    const steps = Math.max(1, Math.ceil(dtEff / SUBSTEP_MAX));
+    const h = dtEff / steps;
+
+    let tree=null;
+    for(let i=0;i<steps;i++){
+      if(i%TREE_REUSE===0){
+        tree = buildTree(particles);
+        if(tree){
+          for(const p of particles){ const F={x:0,y:0}; tree.forceOn(p,BH_THETA,F); p.Fx=F.x; p.Fy=F.y; }
+        }
+      }
+      if(tree){ for(const p of particles){ p.applyForce({x:p.Fx,y:p.Fy}); } }
+      for(const p of particles) p.update(h);
+    }
+  }
+
+  // ---------- Camera & draw
+  function updateCamera(){
+    if(!particles.length) return;
+    let cx=0,cy=0; for(const p of particles){ cx+=p.pos.x; cy+=p.pos.y; }
+    const com={x:cx/particles.length,y:cy/particles.length};
+    particles = particles.filter(p=> mag(sub(p.pos,com)) < threshold);
+    let maxR=0; for(const p of particles){ const r=mag(sub(p.pos,com)); if(r>maxR) maxR=r; }
+    const pad=2.4, targetZoom=Math.max(Cam.minZoom, Math.min(Cam.maxZoom, Math.min(canvas.width,canvas.height)/((maxR||1)*pad)));
+    Cam.center.x = Cam.center.x*0.98 + com.x*0.02;
+    Cam.center.y = Cam.center.y*0.98 + com.y*0.02;
+    Cam.zoom     = Cam.zoom*0.98   + targetZoom*0.02;
+  }
+
+  function drawArrow(wx,wy,vx,vy,sc){
+    const s=worldToScreen(wx,wy); const sx=vx*sc*Cam.zoom, sy=vy*sc*Cam.zoom; const L=Math.hypot(sx,sy); if(L<1e-6) return;
+    const nx=sx/L, ny=sy/L, ah=Math.min(6,0.2*L);
+    ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(s.x+sx,s.y+sy);
+    ctx.moveTo(s.x+sx,s.y+sy); ctx.lineTo(s.x+sx-ny*ah,s.y+sy+nx*ah);
+    ctx.moveTo(s.x+sx,s.y+sy); ctx.lineTo(s.x+sx+ny*ah,s.y+sy-nx*ah); ctx.stroke();
+  }
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(document.getElementById('vectors').checked){
+      const vecScale=+document.getElementById('vec').value; ctx.strokeStyle='#fde047'; ctx.lineWidth=1;
+      for(const p of particles) drawArrow(p.pos.x,p.pos.y,p.vel.x,p.vel.y,vecScale);
+    } else {
+      for(const p of particles) p.draw();
+    }
+  }
+  let mainLoopId = 0;
+  // ---------- Main loop
+  function mainLoop(){
+    if(!generationComplete) generationStep(); else updateCondensation();
+    updateCamera(); draw();
+    mainLoopId = requestAnimationFrame(mainLoop);
+  }
+
+  function start(){
+    if(mainLoopId) cancelAnimationFrame(mainLoopId);
+    resize(); particles=[]; generationComplete=false;
+    const M1=+m1.value, M2=500, Dsep=+d.value, speedFrac=+v.value;
+    p_gen=new Mass(Dsep*(-M2/(M1+M2)),0,M1); s_gen=new Mass(Dsep*(M1/(M1+M2)),0,M2);
+    const vCirc=Math.sqrt(G*(M1+M2)/Dsep), vRel=vCirc*speedFrac;
+    const sep=sub(s_gen.pos,p_gen.pos), rHat=norm(sep), perp={x:-rHat.y,y:rHat.x};
+    p_gen.vel={x:perp.x*vRel*(M2/(M1+M2)), y:perp.y*vRel*(M2/(M1+M2))};
+    s_gen.vel={x:-perp.x*vRel*(M1/(M1+M2)), y:-perp.y*vRel*(M1/(M1+M2))};
+    spawnAcc_gen=0;
+    threshold = Dsep * 20000;
+    statusEl.textContent='Initializing…'; statusEl.className='pill warn';
+    mainLoopId = requestAnimationFrame(mainLoop);
+  }
+
+  window.onresize=resize;
+  window.onload=start;
+  </script>
+</body>
+</html>

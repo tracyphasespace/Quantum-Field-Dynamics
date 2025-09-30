@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset='utf-8'><title>Nuclear Scaling</title></head><body><h1>Nuclear Scaling</h1>
+<h2>Generalization from the Cleanest 2,400 to the Remaining 3,442</h2>
+<p>
+To assess generalization, we ranked all nuclides by absolute residual under the full-data 3-line (A-only) model,
+selected the best <b>2,400</b> points for training, fit the three lines only on that subset, and then predicted
+for the remaining <b>3,442</b> holdout nuclides using the nearest-line assignment.
+</p>
+<table>
+<tr><th>Split</th><th>Count</th><th>RMSE</th><th>R²</th></tr>
+<tr><td>Train (best 2,400)</td><td>2400</td><td>0.5225</td><td>0.999678</td></tr>
+<tr><td>Holdout (remaining 3,442)</td><td>3442</td><td>1.8069</td><td>0.994673</td></tr>
+<tr><td>Overall</td><td>5842</td><td>1.4268</td><td>0.997129</td></tr>
+</table>
+<p>
+The model trained on a clean subset remains highly predictive on the larger set (R²≈0.9947), with higher
+residuals on holdout as expected since the tails were not used for fitting. The overall performance (R²≈0.9971)
+matches the full-data fit closely.
+</p>
+<figure>
+<img alt="Residual CDF Train vs Holdout" src="residual_cdf_train_vs_holdout.png" style="max-width:100%;height:auto;"/>
+<figcaption>Residual CDF: the train subset is tighter by construction; the holdout remains close, indicating robust extrapolation.</figcaption>
+</figure>
+
+</body></html>

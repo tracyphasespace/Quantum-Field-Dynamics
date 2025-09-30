@@ -1,0 +1,9 @@
+# Python bytecode
+__pycache__/
+*.pyc
+
+.claude/
+*.egg-info/
+
+.claude/
+*.egg-info/

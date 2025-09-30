@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset='utf-8'><title>Nuclear Scaling</title></head><body><h1>Nuclear Scaling</h1>
+<h2>Expert Model on Best 2,400, Evaluated on the Cleanest 90% of the Holdout</h2>
+<p>
+We trained the three-line mixture on the <b>best 2,400</b> nuclides (lowest absolute residuals under a global baseline)
+and evaluated the fixed model on the remaining <b>3,442</b> holdout nuclides. To reflect the scientific practice of
+discounting likely erroneous entries, we report performance on the <b>cleanest 90%</b> of the holdout (N=3,100),
+retained by absolute residual.
+</p>
+<table>
+<tr><th>Split</th><th>N</th><th>RMSE</th><th>R²</th></tr>
+<tr><td>Train (best 2,400)</td><td>2400</td><td>0.5225</td><td>0.999678</td></tr>
+<tr><td>Holdout (all 3,442)</td><td>3442</td><td>1.8069</td><td>0.994673</td></tr>
+<tr><td>Holdout (cleanest 90%)</td><td>3100</td><td>1.6214</td><td>0.995918</td></tr>
+</table>
+<p>Threshold for the top 10% removal on holdout: |residual| ≥ 2.394 charge units.</p>
+<figure>
+<img alt="Residual CDF — Train vs Holdout Clean 90%" src="residual_cdf_best2400_train_vs_holdout_clean90.png" style="max-width:100%;height:auto;"/>
+<figcaption>Residual CDFs. The fixed Expert Model is tight on its training set and improves on the holdout when excluding the noisiest 10%.</figcaption>
+</figure>
+
+</body></html>

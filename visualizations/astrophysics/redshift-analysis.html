@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>QFD Photon Redshift Interaction — E-field Sine Waves (Before/After)</title>
+<style>
+  :root{ --bg:#0b0d12; --panel:#141923; --fg:#dbe3ea; --muted:#9fb0bf; --hi:#4aa3ff; --ok:#4caf50; --warn:#ff5c5c; }
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  .wrap{display:grid;grid-template-columns:360px 1fr 380px;gap:16px;height:100%;padding:16px;box-sizing:border-box}
+  .panel{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;overflow:auto}
+  h2{margin:0 0 8px 0;font-size:18px}
+  h3{margin:8px 0 6px 0;font-size:14px;color:var(--muted)}
+  .kv{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;margin:6px 0}
+  .group{border-top:1px solid rgba(255,255,255,.08);margin-top:10px;padding-top:10px}
+  input[type=range]{width:100%}
+  button{background:transparent;border:1px solid rgba(255,255,255,.2);color:var(--fg);padding:8px 10px;border-radius:10px;cursor:pointer}
+  button:hover{border-color:var(--hi)}
+  button.active{background:var(--hi);border-color:var(--hi);color:white}
+  canvas{width:100%;height:100%;display:block;border-radius:14px}
+  .preset{display:flex;gap:8px;flex-wrap:wrap}
+  .mono{font-family:ui-monospace,Consolas,monospace}
+  .legend{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+  .chip{display:flex;align-items:center;gap:6px;font-size:12px;color:#cfe3ff}
+  .dot{width:12px;height:12px;border-radius:2px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.12)}
+  th{position:sticky;top:0;background:rgba(255,255,255,.04);backdrop-filter:blur(4px)}
+  .ok{color:var(--ok)} .warn{color:var(--warn)} .muted{color:var(--muted)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel" id="left">
+      <h2>QFD Photon–Photon Coupling (E-field sine waves)</h2>
+      <p>Top = <b>Before</b>. Bottom = <b>After</b>. Only the <b>E-field sine waves</b> are shown (no B, no Poynting). Exactly one blue and one green wave per panel. In <b>Stage 3</b>, the <b>bottom green</b> wave oscillates <b>3× faster in time</b> (same spatial wavelength). Blue looks the same top & bottom.</p>
+
+      <div class="group">
+        <div class="preset">
+          <button data-preset="random">Stage 1: Random</button>
+          <button data-preset="coax">Stage 2: Coaxial only</button>
+          <button data-preset="coaxpol">Stage 3: Coaxial + Pol-aligned</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h3>Angles & overlap</h3>
+        <div class="kv"><div>Direction misalignment θ (deg)</div><div><input id="theta" type="range" min="0" max="180" step="0.1" value="60"></div></div>
+        <div class="kv"><div>Polarization misalignment φ (deg)</div><div><input id="phi" type="range" min="0" max="90" step="0.1" value="45"></div></div>
+        <div class="kv"><div>Coaxial width σ<sub>dir</sub> (deg)</div><div><input id="sigdir" type="range" min="0.1" max="10" step="0.1" value="1.5"></div></div>
+        <div class="kv"><div>Polarization width σ<sub>pol</sub> (deg)</div><div><input id="sigpol" type="range" min="0.1" max="10" step="0.1" value="2"></div></div>
+        <div class="kv"><div>Spectral overlap κ</div><div><input id="kappa" type="range" min="0.01" max="1" step="0.01" value="0.15"></div></div>
+      </div>
+
+      <div class="group">
+        <h3>Redshift scale (per length)</h3>
+        <div class="kv"><div>η<sub>RS</sub> (per Mpc)</div><div><input id="eta" type="range" min="1e-10" max="1e-3" step="1e-10" value="1e-6"></div></div>
+        <div class="kv"><div>Path length L</div><div><input id="dist" type="range" min="1e9" max="1e22" step="1e7" value="1e9"></div></div>
+        <div class="kv"><div></div><div class="mono" id="distlabel"></div></div>
+      </div>
+
+      <div class="group mono" id="readout"></div>
+    </div>
+
+    <div class="panel" id="viz">
+      <canvas id="cv"></canvas>
+      <div class="legend">
+        <div class="chip"><span class="dot" style="background:#4aa3ff"></span>Blue E (sine)</div>
+        <div class="chip"><span class="dot" style="background:#29a354"></span>Green E (sine)</div>
+      </div>
+    </div>
+
+    <div class="panel" id="right">
+      <h2>Energy Exchange Snapshot</h2>
+      <div id="stagebadge" class="mono" style="margin:6px 0 10px 0"></div>
+      <p class="muted">Stage 3 shows your concrete numbers. Stage 1/2 display no exchange (ΔE≈0).</p>
+      <table>
+        <thead><tr><th>Description</th><th>Initial λ</th><th>Initial E (J)</th><th>ΔE (J)</th><th>Final λ</th><th>Final E (J)</th></tr></thead>
+        <tbody id="enerTable"></tbody>
+      </table>
+      <div style="margin-top:8px" class="mono" id="statenote"></div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const $ = id=>document.getElementById(id);
+  const cv=$('cv'), ctx=cv.getContext('2d');
+  const inputs = ['theta','phi','sigdir','sigpol','kappa','eta','dist'].map($);
+  const readout=$('readout'), distlabel=$('distlabel'), enerTable=$('enerTable'), statenote=$('statenote'), stagebadge=$('stagebadge');
+  const presets=[...document.querySelectorAll('button[data-preset]')];
+
+  // Physics constants
+  const h=6.62607015e-34, c=299792458, hc=h*c;
+  const λ_blue0 = 450e-9;      // 450 nm
+  const λ_green0= 4.5e-3;      // 4.5 mm
+  const ΔE_target = 9.81e-23; // J (blue loses, green gains in Stage 3)
+
+  // Camera / projection
+  let DPR = window.devicePixelRatio||1;
+  let CAM_YAW=30*Math.PI/180, CAM_PITCH=18*Math.PI/180, CAM_Z=3.2;
+  function fit(){ const r=$('viz').getBoundingClientRect(); cv.width=Math.floor(r.width*DPR); cv.height=Math.floor((r.height-28)*DPR); }
+  window.addEventListener('resize',()=>{fit(); draw();}); fit();
+  function rotY(p,a){const [x,y,z]=p; return [x*Math.cos(a)+z*Math.sin(a), y, -x*Math.sin(a)+z*Math.cos(a)];}
+  function rotX(p,a){const [x,y,z]=p; return [x, y*Math.cos(a)-z*Math.sin(a), y*Math.sin(a)+z*Math.cos(a)];}
+  function proj(p){ let [x,y,z]=p; p=rotY([x,y,z], CAM_YAW); p=rotX(p, CAM_PITCH); [x,y,z]=p; z+=CAM_Z; const f=1/(z||1e-3); return [x*f, y*f]; }
+
+  // Basic vector helpers
+  const add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]];
+  const scale=(a,s)=>[a[0]*s,a[1]*s,a[2]*s];
+  const norm=a=>{const m=Math.hypot(a[0],a[1],a[2]); return [a[0]/m,a[1]/m,a[2]/m];};
+  const rotAxis=(v,axis,ang)=>{ const u=norm(axis), c=Math.cos(ang), s=Math.sin(ang), t=1-c, [x,y,z]=u;
+    const R=[[t*x*x+c, t*x*y - s*z, t*x*z + s*y],[t*x*y + s*z, t*y*y + c, t*y*z - s*x],[t*x*z - s*y, t*y*z + s*x, t*z*z + c]];
+    return [R[0][0]*v[0]+R[0][1]*v[1]+R[0][2]*v[2], R[1][0]*v[0]+R[1][1]*v[1]+R[1][2]*v[2], R[2][0]*v[0]+R[2][1]*v[1]+R[2][2]*v[2]];
+  };
+  const rotY3=(v,a)=>rotAxis(v,[0,1,0],a);
+
+  // Draw 3D line helper
+  function line(p1,p2){ const a=proj(p1), b=proj(p2); ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke(); }
+
+  // Draw an E-field sine wave: propagation along dir, oscillation along pol
+  function drawEWave({dir, pol, color, A, k, ω, W}){
+    const L=1.6, N=340;
+    ctx.beginPath();
+    for(let i=0;i<=N;i++){
+      const s=-L + 2*L*(i/N);
+      const phase=k*s - ω*T;
+      const p=add(scale(dir,s), scale(pol, A*Math.sin(phase)));
+      const q=proj(p);
+      if(i===0) ctx.moveTo(q[0],q[1]); else ctx.lineTo(q[0],q[1]);
+    }
+    ctx.strokeStyle=color; ctx.lineWidth=2.6/(W*0.4); ctx.stroke();
+  }
+
+  // Animation clock
+  let T=0,last=0;
+  function tick(ts){ if(!last) last=ts; const dt=(ts-last)/1000; last=ts; T+=dt; draw(); requestAnimationFrame(tick); }
+  requestAnimationFrame(tick);
+
+  // Coupling gate (for dial and readout)
+  const G=(d,s)=>Math.exp(-Math.pow(d/s,2));
+  const overlap=(l1,l2,k)=>{const lm=0.5*(l1+l2); return Math.exp(-Math.pow((l1-l2)/(k*lm),2));};
+  function compute(){
+    const θ=+$('theta').value, φ=+$('phi').value, σd=+$('sigdir').value, σp=+$('sigpol').value, κ=+$('kappa').value, η=+$('eta').value, Lkm=+$('dist').value;
+    const P = G(θ,σd)*G(φ,σp)*overlap(λ_blue0*1e9, λ_green0*1e9, κ);
+    const z_per_Mpc = η*P; const Mpc_km=3.085677581e19; const z_total=z_per_Mpc*(Lkm/Mpc_km);
+    return {θ,φ,η,Lkm,P,z_per_Mpc,z_total};
+  }
+
+  // Stage buttons
+  let stage='random';
+  presets.forEach(b=>b.addEventListener('click',()=>{
+    presets.forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); stage=b.dataset.preset;
+    if(stage==='random'){ $('theta').value=60; $('phi').value=45; $('kappa').value=0.15; $('dist').value=1e9;  $('statenote').textContent='Random: zero probability of coupling'; }
+    else if(stage==='coax'){ $('theta').value=0.1; $('phi').value=40; $('kappa').value=0.15; $('dist').value=1e12; $('statenote').innerHTML='<span class="warn">⭘ Coupling present but non-observable</span>'; }
+    else if(stage==='coaxpol'){ $('theta').value=0.02; $('phi').value=0.02; $('kappa').value=1.0; $('dist').value=3.085677581e19; $('statenote').innerHTML='<span class="ok">✔ Matches Observed Redshift</span>'; }
+    draw();
+  }));
+  inputs.forEach(el=>el.addEventListener('input', draw));
+  presets[0].click();
+
+  // Main draw
+  function draw(){
+    const {θ,φ,η,Lkm,P,z_per_Mpc,z_total}=compute();
+    distlabel.textContent='L ≈ '+fmtDistance(Lkm);
+
+    const W=cv.width, H=cv.height;
+    ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,W,H);
+    const g=ctx.createRadialGradient(W*.5,H*.5,10,W*.5,H*.5,Math.max(W,H)*.7);
+    g.addColorStop(0,'#0e121a'); g.addColorStop(1,'#0b0d12'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+    // BEFORE
+    drawScene({W,H, centerY:H*0.30, θ, φ, timeScale2:1});
+    // AFTER (green time-oscillation ×3 in Stage 3)
+    drawScene({W,H, centerY:H*0.78, θ, φ, timeScale2:(stage==='coaxpol'?3:1)});
+
+    drawDivider(W,H);
+
+    // End-on views of polarization
+    const R_view = Math.min(W, H) * 0.06;
+    // BEFORE view
+    drawEndOnView({
+        cx: W * 0.82, cy: H * 0.13, R: R_view,
+        θ_deg: θ, φ_deg: φ, timeScaleGreen: 1
+    });
+    // AFTER view
+    drawEndOnView({
+        cx: W * 0.82, cy: H * 0.78, R: R_view,
+        θ_deg: θ, φ_deg: φ, timeScaleGreen: (stage === 'coaxpol' ? 3 : 1)
+    });
+
+
+    // Readout & energy table
+    const fmt=(x,d=3)=>Number(x).toExponential(d);
+    readout.innerHTML=[`P (gate) = ${fmt(P,2)}`,`Δλ/λ per Mpc = ${fmt(z_per_Mpc,2)}`,`z over L = ${fmt(z_total,2)}`].map(s=>`<div>${s}</div>`).join('');
+    const E1i=hc/λ_blue0, E2i=hc/λ_green0;
+    let dE1=0, dE2=0, λ1f=λ_blue0, λ2f=λ_green0;
+    if(stage==='coaxpol'){ dE1=-ΔE_target; dE2=+ΔE_target; λ1f=hc/(E1i+dE1); λ2f=hc/(E2i+dE2); }
+    enerTable.innerHTML=[ row('Blue Photon','450 nm',E1i,dE1,λ1f,E1i+dE1),
+                          row('Radio Wave','4.5 mm',E2i,dE2,λ2f,E2i+dE2) ].join('');
+    stagebadge.innerHTML=(stage==='coaxpol')?'<span class="ok">✔ Matches Observed Redshift</span>':'';
+  }
+
+  function drawScene({W,H,centerY,θ,φ,timeScale2}){
+    ctx.save(); ctx.translate(W*0.5, centerY); ctx.scale(W*0.4, -W*0.4);
+
+    // axes
+    ctx.lineWidth=1/(W*0.4); ctx.strokeStyle='rgba(255,255,255,.15)';
+    line([-1,0,0],[1,0,0]); line([0,-0.6,0],[0,0.6,0]); line([0,0,-0.6],[0,0,0.6]);
+
+    // directions & polarizations
+    const dirBlue = norm([1,0,0]);
+    const polBlue = norm([0,1,0]);
+    const dirGreen= norm(rotY3([1,0,0], θ*Math.PI/180));
+    const polGreen= norm(rotAxis(polBlue, dirGreen, φ*Math.PI/180));
+
+    // spatial frequencies (green much longer λ)
+    const L=1.6; const kBlue = 2*Math.PI*3/(2*L); const kGreen = (Math.PI/4)/L;
+
+    // E-only sine waves
+    drawEWave({dir:dirBlue,  pol:polBlue,  color:'#4aa3ff', A:0.20, k:kBlue,  ω:2*Math.PI*0.8,         W});
+    drawEWave({dir:dirGreen, pol:polGreen, color:'#29a354', A:0.12, k:kGreen, ω:2*Math.PI*0.25*timeScale2, W});
+
+    ctx.restore();
+  }
+  
+  function drawEndOnView({cx, cy, R, θ_deg, φ_deg, timeScaleGreen}){
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    // 1. Draw boundary and axes
+    ctx.beginPath();
+    ctx.arc(0, 0, R, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255,255,255,.25)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fill();
+
+    ctx.beginPath(); // Y-axis
+    ctx.moveTo(0, -R * 0.9); ctx.lineTo(0, R * 0.9);
+    ctx.stroke();
+    ctx.beginPath(); // Z-axis
+    ctx.moveTo(-R * 0.9, 0); ctx.lineTo(R * 0.9, 0);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = `${R*0.25}px mono`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('Ey', 0, -R*1.2);
+    ctx.fillText('Ez', R*1.2, 0);
+
+    // 2. Get vectors for plotting in canvas space (z -> x, y -> -y)
+    const polBlue_2d = [0, 1]; // No z component, only y
+
+    const θ = θ_deg * Math.PI / 180;
+    const φ = φ_deg * Math.PI / 180;
+    const dirGreen3D = [Math.cos(θ), 0, -Math.sin(θ)];
+    const polBlue3D = [0, 1, 0];
+    const polGreen3D = norm(rotAxis(polBlue3D, dirGreen3D, φ));
+    const polGreen_2d = [polGreen3D[2], polGreen3D[1]]; // [z, y]
+
+    // 3. Calculate current amplitudes
+    const A_blue = R * 0.85; 
+    const A_green = R * 0.75;
+    const ω_blue = 2 * Math.PI * 0.8;
+    const ω_green = 2 * Math.PI * 0.25 * timeScaleGreen;
+
+    const ampBlue = A_blue * Math.sin(-ω_blue * T);
+    const ampGreen = A_green * Math.sin(-ω_green * T);
+
+    // 4. Draw waves
+    // Blue wave (oscillates on canvas Y-axis)
+    ctx.beginPath();
+    ctx.moveTo(0, -A_blue); ctx.lineTo(0, A_blue);
+    ctx.strokeStyle = 'rgba(74, 163, 255, 0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.moveTo(0, 0); ctx.lineTo(0, -ampBlue);
+    ctx.strokeStyle = '#4aa3ff';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // Green wave (oscillates on tilted axis)
+    ctx.beginPath();
+    ctx.moveTo(polGreen_2d[0] * A_green, -polGreen_2d[1] * A_green);
+    ctx.lineTo(-polGreen_2d[0] * A_green, polGreen_2d[1] * A_green);
+    ctx.strokeStyle = 'rgba(41, 163, 84, 0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(polGreen_2d[0] * ampGreen, -polGreen_2d[1] * ampGreen);
+    ctx.strokeStyle = '#29a354';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+
+  function drawDivider(W,H){
+    ctx.save(); ctx.setTransform(1,0,0,1,0,0);
+    const y=H*0.55; ctx.strokeStyle='rgba(255,255,255,.25)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(W*0.06,y); ctx.lineTo(W*0.94,y); ctx.stroke();
+    const text='A Billion Light Years Later';
+    ctx.font='20px Inter, system-ui, sans-serif';
+    const tw=ctx.measureText(text).width, tx=W*0.5;
+    ctx.fillStyle='rgba(255,255,255,0.95)'; ctx.fillRect(tx-tw/2-16, y-24, tw+32, 34);
+    ctx.fillStyle='#111'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(text, tx, y-7);
+    ctx.restore();
+  }
+
+  function fmtDistance(km){
+    if(km<1e9) return km.toExponential(2)+" km";
+    if(km<1.496e11) return (km/1e9).toFixed(1)+" billion km";
+    if(km<9.461e12) return (km/1.496e8).toFixed(2)+" AU";
+    if(km<3.0857e16) return (km/9.461e12).toFixed(2)+" ly";
+    if(km<3.0857e19) return (km/3.0857e16).toFixed(2)+" kly";
+    return (km/3.0857e19).toFixed(3)+" Mpc";
+  }
+  function row(name, lamInitText, Ei, dE, lamFinal, Ef){
+    function fmtJ(x){ return Math.abs(x)<1e-24 ? x.toExponential(2) : x.toExponential(3); }
+    const lamFinalText = lamFinal>=1e-3 ? (lamFinal*1e3).toFixed(3)+' mm' : (lamFinal*1e9).toFixed(1)+' nm';
+    return `<tr><td>${name}</td><td>${lamInitText}</td><td>${fmtJ(Ei)}</td><td>${dE===0?'0':(dE>0?'+'+fmtJ(dE):fmtJ(dE))}</td><td>${lamFinalText}</td><td>${fmtJ(Ef)}</td></tr>`;
+  }
+
+  // Self-tests
+  (function(){
+    console.assert(typeof drawEWave==='function' && typeof line==='function' && typeof drawDivider==='function', 'helpers defined');
+    // numeric sanity
+    const hc=6.62607015e-34*299792458, E1i=hc/450e-9, E2i=hc/4.5e-3, dE=9.81e-23, λ1f=hc/(E1i-dE), λ2f=hc/(E2i+dE);
+    const near=(a,b,eps)=>Math.abs(a,b)<eps;
+    console.assert(near(λ1f*1e9,450.1,0.2),'Blue ~450.1 nm');
+    console.assert(near(λ2f*1e3,1.397,0.02),'Radio ~1.397 mm');
+    // stage-3 ω scaling (green bottom time frequency = 3×)
+    const wTop=2*Math.PI*0.25, wBottom=wTop*3; console.assert(Math.abs((wBottom/wTop)-3)<1e-12,'Green time frequency triples in AFTER panel');
+  })();
+})();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Vortex Sphere Models</title>
+    <style>
+        :root {
+            --bg-color: #0b0d12;
+            --text-color: #bdc3c7;
+            --text-light-color: #e5e7eb;
+            --highlight-color: #3498db;
+            --border-color: #2c3e50;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        #main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            gap: 20px;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .info-panel {
+            width: 280px;
+            height: min(95vmin, 800px);
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: rgba(20, 25, 35, 0.3);
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        
+        .info-panel h2 {
+            color: var(--text-light-color);
+            border-bottom: 2px solid var(--highlight-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        .info-panel .equation {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.2em;
+            color: var(--text-light-color);
+            text-align: center;
+        }
+        
+        .info-panel b {
+            color: var(--text-light-color);
+        }
+
+        #canvas-container {
+            position: relative;
+            display: grid;
+            place-items: center;
+        }
+
+        canvas {
+            width: min(95vmin, 800px);
+            height: min(95vmin, 800px);
+            display: block;
+            border-radius: 12px;
+        }
+
+        #controls {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(44, 62, 80, 0.5);
+            padding: 8px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid #7f8c8d;
+            color: #bdc3c7;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: #34495e;
+            border-color: #95a5a6;
+            color: #ecf0f1;
+        }
+
+        button.active {
+            background: #2980b9;
+            border-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+
+        @media (max-width: 1400px) {
+            .info-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <button id="btn-sphere" class="active">Hill Vortex Sphere</button>
+        <button id="btn-conceptual">Conceptual Model</button>
+        <button id="btn-physical">Spin Axis</button>
+    </div>
+    <div id="main-container">
+        <div class="info-panel" id="left-panel"></div>
+        <div id="canvas-container">
+            <canvas id="cv"></canvas>
+        </div>
+        <div class="info-panel" id="right-panel"></div>
+    </div>
+    <script>
+    (function() {
+        // --- UI and State ---
+        const buttons = {
+            sphere: document.getElementById('btn-sphere'),
+            conceptual: document.getElementById('btn-conceptual'),
+            physical: document.getElementById('btn-physical'),
+        };
+        const leftPanel = document.getElementById('left-panel');
+        const rightPanel = document.getElementById('right-panel');
+        
+        let currentView = 'sphere'; // 'sphere', 'conceptual', 'physical'
+        
+        // --- Information Content ---
+        const viewInfo = {
+            sphere: {
+                left: `
+                    <h2>Hill's Spherical Vortex</h2>
+                    <p>M. J. M. Hill (1894) found an exact, stable solution to the Euler equations for a spherical region of constant vorticity within a uniform flow.</p>
+                    <p>This forms a self-contained, stable "bubble" of organized motion, perfectly balanced by the pressure of the external flow.</p>
+                `,
+                right: `
+                    <h2>Scaling Laws</h2>
+                    <p>For a Hill's Vortex, the physical properties scale non-linearly with its diameter (d):</p>
+                    <div class="equation">
+                        Moment of Inertia (I) ∝ d⁵
+                    </div>
+                    <div class="equation">
+                        Angular Momentum (L) ∝ d⁴
+                    </div>
+                    <p>These relationships are characteristic of the vortex's complex internal structure.</p>
+                `
+            },
+            conceptual: {
+                left: `
+                    <h2>Conceptual Model: The 'Spherical Wheel'</h2>
+                    <p>This view presents the vortex's components in a conceptually clear, side-on manner.</p>
+                    <p>The vertical spin axis and horizontal external flow create an intuitive analogy of a 'spherical wheel' rotating on an axle, perpendicular to its direction of travel.</p>
+                    <p><b>Note:</b> This visual analogy, while helpful, is physically inaccurate. In reality, the spin axis is <b>parallel</b> to the direction of flow, as shown in the 'Spin Axis' view.</p>
+                `,
+                right: `
+                    <h2>Principle of Stability</h2>
+                    <p>The principle of stability is a balance of forces. The outward momentum from the internal rotation is contained by the inward pressure exerted by the external stream.</p>
+                    <p>This model helps visualize that fundamental balance, even though the orientation is simplified.</p>
+                `
+            },
+            physical: {
+                left: `
+                    <h2>The Spin Axis</h2>
+                    <p>This view shows the physically correct orientation of the spin axis. It is <b>parallel</b> to the direction the vortex travels.</p>
+                    <p>The entire system is symmetrical around this axis.</p>
+                `,
+                right: `
+                    <h2>Gyroscopic Stability</h2>
+                    <p>The organized rotation of the fluid gives the vortex significant angular momentum. This creates gyroscopic stability, allowing the vortex to resist tumbling or deforming.</p>
+                    <p>This is similar to how a spinning top or a bullet remains stable in flight.</p>
+                `
+            }
+        };
+
+        function updateInfoPanels(view) {
+            const info = viewInfo[view];
+            leftPanel.style.opacity = 0;
+            rightPanel.style.opacity = 0;
+            
+            setTimeout(() => {
+                leftPanel.innerHTML = info.left;
+                rightPanel.innerHTML = info.right;
+                leftPanel.style.opacity = 1;
+                rightPanel.style.opacity = 1;
+            }, 300);
+        }
+        
+        Object.keys(buttons).forEach(key => {
+            buttons[key].addEventListener('click', () => {
+                currentView = key;
+                Object.values(buttons).forEach(btn => btn.classList.remove('active'));
+                buttons[key].classList.add('active');
+                updateInfoPanels(key);
+            });
+        });
+
+        // --- Canvas Setup ---
+        const canvas = document.getElementById('cv');
+        const ctx = canvas.getContext('2d');
+        let t0 = performance.now();
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            const w = Math.min(window.innerWidth, window.innerHeight) * 0.95;
+            canvas.width = Math.round(w * dpr);
+            canvas.height = Math.round(w * dpr);
+            canvas.style.width = canvas.style.height = Math.round(w) + 'px';
+            ctx.scale(dpr, dpr);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // --- Color, Math & Drawing Helpers ---
+        const lerp = (a, b, t) => a + (b - a) * t;
+        const C_TOP = [255, 100, 100], C_BOTTOM = [100, 100, 255], C_IN = [100, 255, 100], C_OUT = [255, 255, 100];
+        const getPoloidalColor = (angle) => {
+            const t = (angle % (Math.PI * 2) + (Math.PI * 2)) % (Math.PI * 2) / (Math.PI * 2);
+            if (t < 0.25) return [C_OUT[0] + (C_TOP[0]-C_OUT[0])*t*4, C_OUT[1] + (C_TOP[1]-C_OUT[1])*t*4, C_OUT[2] + (C_TOP[2]-C_OUT[2])*t*4];
+            if (t < 0.5)  return [C_TOP[0] + (C_IN[0]-C_TOP[0])*(t-.25)*4, C_TOP[1] + (C_IN[1]-C_TOP[1])*(t-.25)*4, C_TOP[2] + (C_IN[2]-C_TOP[2])*(t-.25)*4];
+            if (t < 0.75) return [C_IN[0] + (C_BOTTOM[0]-C_IN[0])*(t-.5)*4, C_IN[1] + (C_BOTTOM[1]-C_IN[1])*(t-.5)*4, C_IN[2] + (C_BOTTOM[2]-C_IN[2])*(t-.5)*4];
+            return [C_BOTTOM[0] + (C_OUT[0]-C_BOTTOM[0])*(t-.75)*4, C_BOTTOM[1] + (C_OUT[1]-C_BOTTOM[1])*(t-.75)*4, C_BOTTOM[2] + (C_OUT[2]-C_BOTTOM[2])*(t-.75)*4];
+        };
+        const drawArrow = (x, y, angle, size, color, alpha = 1.0) => {
+            ctx.save(); ctx.translate(x, y); ctx.rotate(angle);
+            ctx.beginPath(); ctx.moveTo(size, 0); ctx.lineTo(-size, 0); ctx.moveTo(size, 0);
+            ctx.lineTo(size * 0.5, size * 0.4); ctx.moveTo(size, 0); ctx.lineTo(size * 0.5, -size * 0.4);
+            ctx.strokeStyle = `rgba(${Math.round(color[0])}, ${Math.round(color[1])}, ${Math.round(color[2])}, ${alpha})`;
+            ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
+        };
+
+        const externalParticles = [];
+        const initializeExternalFlow = (w) => {
+            if (externalParticles.length > 0) return;
+            for (let i = 0; i < 200; i++) {
+                externalParticles.push({
+                    x: Math.random() * w * 2 - w, y: Math.random() * w - w / 2,
+                    z: Math.random() * w * 2 - w, speed: (0.5 + Math.random() * 0.5) * w * 0.005
+                });
+            }
+        };
+
+        function getDeformedPoloidalPoint(poloidalAngle) {
+            const r = 1; // Normalized radius
+            const cosA = Math.cos(poloidalAngle);
+            const sinA = Math.sin(poloidalAngle);
+            let x;
+            if (cosA >= 0) { x = r * cosA; } 
+            else { x = 0; }
+            return { x: x, y: r * sinA };
+        };
+
+        // --- MAIN ANIMATION LOOP ---
+        function frame(now) {
+            const elapsed = (now - t0) * 0.001;
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const cx = w / 2;
+            const cy = h / 2;
+
+            ctx.clearRect(0, 0, w, h);
+            const bg = ctx.createRadialGradient(cx, cy, 10, cx, cy, w * 0.55);
+            bg.addColorStop(0, '#0e121a'); bg.addColorStop(1, '#0b0d12');
+            ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+
+            let pointsToDraw = [];
+            const U_SEG = 36; const V_SEG = 18; const SPEED = 1.5; const fov = w * 1.0; const tilt = 0.6;
+            
+            let project = p => {
+                const rotY = Math.cos(tilt) * p.y - Math.sin(tilt) * p.z;
+                const rotZ = Math.sin(tilt) * p.y + Math.cos(tilt) * p.z;
+                const scale = fov / (fov + rotZ);
+                return { x: cx + p.x * scale, y: cy + rotY * scale, scale: scale, z: rotZ };
+            };
+            
+            // Shared visualization style for View 1 and 3
+            if (currentView === 'sphere' || currentView === 'physical') {
+                const R = w * 0.0125; const r = w * 0.15;
+                
+                // For physical view, change projection to be head-on
+                if (currentView === 'physical') {
+                    const physical_tilt = 0.3;
+                    project = p => {
+                        const rotY = Math.cos(physical_tilt) * p.y - Math.sin(physical_tilt) * p.z;
+                        const rotZ = Math.sin(physical_tilt) * p.y + Math.cos(physical_tilt) * p.z;
+                        const scale = fov / (fov + rotZ);
+                        return { x: cx + p.x * scale, y: cy + rotY * scale, scale: scale, z: rotZ };
+                    };
+
+                    const axisStart = project({x: 0, y: -h/2, z: 0}); const axisEnd = project({x: 0, y: h/2, z: 0});
+                    ctx.beginPath(); ctx.setLineDash([5, 10]); ctx.moveTo(axisStart.x, axisStart.y); ctx.lineTo(axisEnd.x, axisEnd.y);
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'; ctx.lineWidth = 1; ctx.stroke(); ctx.setLineDash([]);
+                }
+
+                for (let iu = 0; iu < U_SEG; iu++) {
+                    const toroidalAngle = (iu / U_SEG) * Math.PI * 2;
+                    for (let iv = 0; iv < V_SEG; iv++) {
+                        const poloidalAngle = (iv / V_SEG) * Math.PI * 2 - SPEED * elapsed;
+                        const p1_local = getDeformedPoloidalPoint(poloidalAngle);
+                        p1_local.x = R + r * p1_local.x; p1_local.y = r * p1_local.y;
+                        const p2_local = getDeformedPoloidalPoint(poloidalAngle - 0.05);
+                        p2_local.x = R + r * p2_local.x; p2_local.y = r * p2_local.y;
+
+                        const p1_3d = { x: p1_local.x * Math.cos(toroidalAngle), y: p1_local.y, z: p1_local.x * Math.sin(toroidalAngle) };
+                        const p2_3d = { x: p2_local.x * Math.cos(toroidalAngle), y: p2_local.y, z: p2_local.x * Math.sin(toroidalAngle) };
+                        const p1_proj = project(p1_3d); const p2_proj = project(p2_3d);
+                        const angle = Math.atan2(p2_proj.y - p1_proj.y, p2_proj.x - p1_proj.x);
+                        pointsToDraw.push({ z: p1_3d.z, x: p1_proj.x, y: p1_proj.y, scale: p1_proj.scale, angle: angle, color: getPoloidalColor(poloidalAngle) });
+                    }
+                }
+            }
+            // Logic for conceptual view
+            else if (currentView === 'conceptual') {
+                const R_sphere = w * 0.35;
+                initializeExternalFlow(w);
+                const project_conceptual = p => {
+                    const rotY = Math.cos(tilt) * p.y - Math.sin(tilt) * p.z;
+                    const rotZ = Math.sin(tilt) * p.y + Math.cos(tilt) * p.z;
+                    const scale = fov / (fov + rotZ + R_sphere * 3);
+                    return { x: cx + p.x * scale, y: cy + rotY * scale, scale: scale, z: rotZ };
+                };
+                
+                const axisTop = project_conceptual({x: 0, y: -h / 2, z: 0}); const axisBottom = project_conceptual({x: 0, y: h / 2, z: 0});
+                ctx.beginPath(); ctx.setLineDash([5, 10]); ctx.moveTo(axisTop.x, axisTop.y); ctx.lineTo(axisBottom.x, axisBottom.y);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'; ctx.lineWidth = 1; ctx.stroke(); ctx.setLineDash([]);
+                
+                ctx.beginPath(); const centerProj = project_conceptual({x:0, y:0, z:0});
+                ctx.arc(centerProj.x, centerProj.y, R_sphere * centerProj.scale, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(52, 152, 219, 0.3)'; ctx.lineWidth = 1.5; ctx.stroke();
+                
+                // Draw internal flow using a different logic for a true sphere
+                for (let iu = 0; iu < U_SEG; iu++) {
+                    const ringY = R_sphere * Math.cos((iu / U_SEG) * Math.PI);
+                    const ringRadius = R_sphere * Math.sin((iu / U_SEG) * Math.PI);
+                    for (let iv = 0; iv < V_SEG; iv++) {
+                        const poloidalAngle = (iv / V_SEG) * Math.PI * 2 - SPEED * elapsed;
+                        const p1_3d = { x: ringRadius * Math.cos(poloidalAngle), y: ringY, z: ringRadius * Math.sin(poloidalAngle) };
+                        const p2_3d = { x: ringRadius * Math.cos(poloidalAngle-0.1), y: ringY, z: ringRadius * Math.sin(poloidalAngle-0.1) };
+                        const p1_proj = project_conceptual(p1_3d); const p2_proj = project_conceptual(p2_3d);
+                        const angle = Math.atan2(p2_proj.y - p1_proj.y, p2_proj.x - p1_proj.x);
+                        pointsToDraw.push({ z: p1_proj.z, x: p1_proj.x, y: p1_proj.y, scale: p1_proj.scale, angle: angle, color: getPoloidalColor(poloidalAngle) });
+                    }
+                }
+                
+                externalParticles.forEach(p => {
+                    p.x += p.speed; if (p.x > w * 1.5) p.x = -w * 1.5;
+                    const distSq = p.x*p.x + p.y*p.y + p.z*p.z;
+                    if (distSq < R_sphere * R_sphere) return;
+                    const proj = project_conceptual({x: p.x, y: p.y, z: p.z});
+                    pointsToDraw.push({ z: proj.z, x: proj.x, y: proj.y, scale: proj.scale, angle: 0, color: [200, 200, 200] });
+                });
+            }
+
+            // --- Generic Drawing Loop ---
+            pointsToDraw.sort((a, b) => a.z - b.z);
+            pointsToDraw.forEach(p => {
+                const size = 4.5 * p.scale;
+                const alpha = Math.max(0.1, p.scale * 0.8);
+                drawArrow(p.x, p.y, p.angle, size, p.color, alpha);
+            });
+
+            requestAnimationFrame(frame);
+        }
+        
+        updateInfoPanels('sphere');
+        requestAnimationFrame(frame);
+    })();
+    </script>
+</body>
+</html>

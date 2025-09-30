@@ -1,0 +1,1 @@
+"""Test suite for coupling constants mapping system."""

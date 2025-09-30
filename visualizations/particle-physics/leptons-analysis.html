@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electron Muon Tau Isomers</title>
+    <style>
+        :root {
+            --bg-color: #0b0d12;
+            --text-color: #bdc3c7;
+            --text-light-color: #e5e7eb;
+            --highlight-color: #3498db;
+            --border-color: #2c3e50;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        #main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            gap: 20px;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .info-panel {
+            width: 280px;
+            height: min(95vmin, 800px);
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: rgba(20, 25, 35, 0.3);
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        
+        .info-panel h2 {
+            color: var(--text-light-color);
+            border-bottom: 2px solid var(--highlight-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        .info-panel .equation {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.2em;
+            color: var(--text-light-color);
+            text-align: center;
+        }
+        
+        .info-panel .lepton-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--highlight-color);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .info-panel table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        .info-panel th, .info-panel td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: center;
+        }
+        .info-panel th {
+            background-color: rgba(44, 62, 80, 0.5);
+            color: var(--text-light-color);
+        }
+        .info-panel tr.highlighted-row td {
+            background-color: rgba(52, 152, 219, 0.3);
+            font-weight: bold;
+            color: var(--text-light-color);
+        }
+
+
+        #canvas-container {
+            position: relative;
+            display: grid;
+            place-items: center;
+        }
+
+        canvas {
+            width: min(95vmin, 800px);
+            height: min(95vmin, 800px);
+            display: block;
+            border-radius: 12px;
+        }
+
+        #controls {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(44, 62, 80, 0.5);
+            padding: 8px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+        
+        .control-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid #7f8c8d;
+            color: #bdc3c7;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: #34495e;
+            border-color: #95a5a6;
+            color: #ecf0f1;
+        }
+
+        button.active {
+            background: #2980b9;
+            border-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+
+        @media (max-width: 1400px) {
+            .info-panel {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <div class="control-group">
+            <button id="btn-electron" class="active">Electron</button>
+            <button id="btn-muon">Muon</button>
+            <button id="btn-tau">Tau</button>
+        </div>
+    </div>
+    <div id="main-container">
+        <div class="info-panel" id="left-panel"></div>
+        <div id="canvas-container">
+            <canvas id="cv"></canvas>
+        </div>
+        <div class="info-panel" id="right-panel"></div>
+    </div>
+    <script>
+    (function() {
+        // --- UI and State ---
+        const btnElectron = document.getElementById('btn-electron');
+        const btnMuon = document.getElementById('btn-muon');
+        const btnTau = document.getElementById('btn-tau');
+        const leftPanel = document.getElementById('left-panel');
+        const rightPanel = document.getElementById('right-panel');
+        
+        let state = {
+            progress: 1.0, // Always in Hill Vortex state
+            lepton: 'electron'
+        };
+        
+        let targetState = { ...state };
+        let animatedState = { R: 0, r: 0, speed: 0, progress: 1.0 };
+        
+        const electronBase = {
+            name: "Electron",
+            R_factor: 0.02,
+            r_factor: 0.4,
+            speed: 1.5,
+            mass: "1",
+            diameter: "1x",
+            velocity: "1x"
+        };
+
+        const leptonProperties = {
+            electron: electronBase,
+            muon:     { 
+                name: "Muon",     
+                R_factor: electronBase.R_factor / 4, 
+                r_factor: electronBase.r_factor / 4, 
+                speed: electronBase.speed,
+                mass: "~207",
+                diameter: "1/4x",
+                velocity: "1x"
+            },
+            tau:      { 
+                name: "Tau",      
+                R_factor: electronBase.R_factor / 5, 
+                r_factor: electronBase.r_factor / 5, 
+                speed: electronBase.speed,
+                mass: "~3477",
+                diameter: "1/5x",
+                velocity: "1x"
+            }
+        };
+        
+        // Initialize animated state with electron properties
+        const w_init = Math.min(window.innerWidth, window.innerHeight) * 0.95;
+        animatedState.R = leptonProperties.electron.R_factor * w_init;
+        animatedState.r = leptonProperties.electron.r_factor * w_init;
+        animatedState.speed = leptonProperties.electron.speed;
+
+        function updateInfoPanels() {
+            const currentLeptonKey = state.lepton;
+            const leptonName = leptonProperties[currentLeptonKey].name;
+            const info = hillInfo; 
+
+            leftPanel.style.opacity = 0;
+            rightPanel.style.opacity = 0;
+            
+            // --- Build Table HTML ---
+            let tableHtml = `
+                <h2>Lepton Properties</h2>
+                <table>
+                    <tr><th>Lepton</th><th>Rel. Mass</th><th>Rel. Diameter</th><th>Rel. U</th></tr>
+            `;
+            for (const key in leptonProperties) {
+                const lepton = leptonProperties[key];
+                const isHighlighted = key === currentLeptonKey ? 'class="highlighted-row"' : '';
+                tableHtml += `
+                    <tr ${isHighlighted}>
+                        <td>${lepton.name}</td>
+                        <td>${lepton.mass}</td>
+                        <td>${lepton.diameter}</td>
+                        <td>${lepton.velocity}</td>
+                    </tr>
+                `;
+            }
+            tableHtml += '</table>';
+
+            setTimeout(() => {
+                leftPanel.innerHTML = `<div class="lepton-name">${leptonName}</div>` + info.left;
+                rightPanel.innerHTML = tableHtml + info.right;
+                leftPanel.style.opacity = 1;
+                rightPanel.style.opacity = 1;
+            }, 500);
+        }
+
+        function setLepton(lepton) {
+            targetState.lepton = lepton;
+            state.lepton = lepton; 
+            
+            document.querySelectorAll('.control-group button').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${lepton}`).classList.add('active');
+            updateInfoPanels();
+        }
+
+        btnElectron.addEventListener('click', () => setLepton('electron'));
+        btnMuon.addEventListener('click', () => setLepton('muon'));
+        btnTau.addEventListener('click', () => setLepton('tau'));
+
+        // --- Information Content (Only Hill Vortex is needed now) ---
+        const hillInfo = {
+            left: `
+                <h2>Hill's Spherical Vortex</h2>
+                <p>M. J. M. Hill (1894) found an exact, stable solution for a spherical region of constant vorticity within a uniform flow.</p>
+                <p>This forms a self-contained "bubble" of organized motion.</p>
+            `,
+            right: `
+                <h2>Scaling Laws</h2>
+                <p>For a Hill's Vortex, properties scale non-linearly with its diameter (d):</p>
+                <div class="equation"> Inertia (I) ∝ d⁵ </div>
+                <div class="equation"> Angular Momentum (L) ∝ d⁴ </div>
+            `
+        };
+
+        // --- Canvas Setup ---
+        const canvas = document.getElementById('cv');
+        const ctx = canvas.getContext('2d');
+        let t0 = performance.now();
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            const w = Math.min(window.innerWidth, window.innerHeight) * 0.95;
+            canvas.width = Math.round(w * dpr);
+            canvas.height = Math.round(w * dpr);
+            canvas.style.width = canvas.style.height = Math.round(w) + 'px';
+            ctx.scale(dpr, dpr);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // --- Color & Math Helpers ---
+        const lerp = (a, b, t) => a + (b - a) * t;
+        const lerpColor = (c1, c2, t) => [
+            Math.round(lerp(c1[0], c2[0], t)),
+            Math.round(lerp(c1[1], c2[1], t)),
+            Math.round(lerp(c1[2], c2[2], t))
+        ];
+
+        const C_TOP    = [255, 100, 100]; // Red
+        const C_BOTTOM = [100, 100, 255]; // Blue
+        const C_IN     = [100, 255, 100]; // Green
+        const C_OUT    = [255, 255, 100]; // Yellow
+
+        function getPoloidalColor(angle) {
+            const t = (angle % (Math.PI * 2) + (Math.PI * 2)) % (Math.PI * 2) / (Math.PI * 2);
+            if (t < 0.25) return lerpColor(C_OUT, C_TOP, t * 4);
+            if (t < 0.5)  return lerpColor(C_TOP, C_IN, (t - 0.25) * 4);
+            if (t < 0.75) return lerpColor(C_IN, C_BOTTOM, (t - 0.5) * 4);
+            return lerpColor(C_BOTTOM, C_OUT, (t - 0.75) * 4);
+        }
+
+        // --- Drawing Helper ---
+        function drawArrow(x, y, angle, size, color, alpha = 1.0) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+            ctx.beginPath();
+            ctx.moveTo(size, 0);
+            ctx.lineTo(-size, 0);
+            ctx.moveTo(size, 0);
+            ctx.lineTo(size * 0.5, size * 0.4);
+            ctx.moveTo(size, 0);
+            ctx.lineTo(size * 0.5, -size * 0.4);
+            ctx.strokeStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`;
+            ctx.lineWidth = 3.0;
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // --- Animation Loop ---
+        function frame(now) {
+            const elapsed = (now - t0) * 0.001;
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const cx = w / 2;
+            const cy = h / 2;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, w, h);
+            const bg = ctx.createRadialGradient(cx, cy, 10, cx, cy, w * 0.55);
+            bg.addColorStop(0, '#0e121a');
+            bg.addColorStop(1, '#0b0d12');
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, w, h);
+
+            // --- Update animated state ---
+            const targetProps = leptonProperties[targetState.lepton];
+            animatedState.R = lerp(animatedState.R, targetProps.R_factor * w, 0.05);
+            animatedState.r = lerp(animatedState.r, targetProps.r_factor * w, 0.05);
+            animatedState.speed = lerp(animatedState.speed, targetProps.speed, 0.05);
+
+            // --- Torus & Animation Parameters ---
+            const { R, r, speed } = animatedState;
+            const U_SEG = 36;
+            const V_SEG = 18;
+            const tilt = 0.6;
+            const animationProgress = animatedState.progress; // This will always be 1.0
+
+            // --- 3D Projection ---
+            const fov = w * 1.0;
+            const zcam = r * 3;
+            function project(p) {
+                const rotY = Math.cos(tilt) * p.y - Math.sin(tilt) * p.z;
+                const rotZ = Math.sin(tilt) * p.y + Math.cos(tilt) * p.z;
+                const scale = fov / (fov + rotZ);
+                return {
+                    x: cx + p.x * scale,
+                    y: cy + rotY * scale,
+                    scale: scale > 0 ? scale : 0,
+                    z: rotZ
+                };
+            }
+            
+            // --- Core Position Logic ---
+            function getDeformedPoloidalPoint(poloidalAngle) {
+                const cosA = Math.cos(poloidalAngle);
+                const sinA = Math.sin(poloidalAngle);
+                let x;
+                if (cosA >= 0) { x = r * cosA; } 
+                else { x = 0; }
+                return { x: R + x, y: r * sinA };
+            };
+            
+            const pointsToDraw = [];
+
+            // --- Main Calculation Loop ---
+            for (let iu = 0; iu < U_SEG; iu++) {
+                const toroidalAngle = (iu / U_SEG) * Math.PI * 2;
+                for (let iv = 0; iv < V_SEG; iv++) {
+                    const baseAngle = (iv / V_SEG) * Math.PI * 2;
+                    const circulatingAngle = baseAngle - speed * elapsed;
+
+                    const p1_local = getDeformedPoloidalPoint(circulatingAngle);
+                    const p2_local = getDeformedPoloidalPoint(circulatingAngle - 0.05);
+
+                    const p1_3d = {
+                        x: p1_local.x * Math.cos(toroidalAngle),
+                        y: p1_local.y,
+                        z: p1_local.x * Math.sin(toroidalAngle)
+                    };
+                    const p2_3d = {
+                        x: p2_local.x * Math.cos(toroidalAngle),
+                        y: p2_local.y,
+                        z: p2_local.x * Math.sin(toroidalAngle)
+                    };
+                    
+                    const p1_proj = project(p1_3d);
+                    const p2_proj = project(p2_3d);
+
+                    if (p1_proj.scale > 0 && p2_proj.scale > 0) {
+                        const angle = Math.atan2(p2_proj.y - p1_proj.y, p2_proj.x - p1_proj.x);
+                        const color = getPoloidalColor(circulatingAngle);
+                        
+                        pointsToDraw.push({
+                            z: p1_proj.z,
+                            x: p1_proj.x,
+                            y: p1_proj.y,
+                            scale: p1_proj.scale,
+                            angle: angle,
+                            color: color
+                        });
+                    }
+                }
+            }
+            
+            // --- Drawing Loop (with depth sorting) ---
+            pointsToDraw.sort((a, b) => a.z - b.z);
+
+            pointsToDraw.forEach(p => {
+                const size = 4.5 * p.scale;
+                const alpha = Math.max(0.1, p.scale * 0.8);
+                drawArrow(p.x, p.y, p.angle, size, p.color, alpha);
+            });
+
+            requestAnimationFrame(frame);
+        }
+        
+        // Initial call
+        updateInfoPanels();
+        requestAnimationFrame(frame);
+    })();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,4366 @@
+{
+  "nodes": [
+    {
+      "id": "k_J",
+      "attributes": {
+        "value": 1e-12,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 1
+      }
+    },
+    {
+      "id": "psi_s0",
+      "attributes": {
+        "value": -1.5,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 1
+      }
+    },
+    {
+      "id": "xi",
+      "attributes": {
+        "value": 2.0,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 1
+      }
+    },
+    {
+      "id": "E0",
+      "attributes": {
+        "value": 1000.0,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 1
+      }
+    },
+    {
+      "id": "L0",
+      "attributes": {
+        "value": 1e-10,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 1
+      }
+    },
+    {
+      "id": "k_c2",
+      "attributes": {
+        "value": 0.5,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 1
+      }
+    },
+    {
+      "id": "k_EM",
+      "attributes": {
+        "value": 1.5,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 1
+      }
+    },
+    {
+      "id": "V2",
+      "attributes": {
+        "value": null,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 0
+      }
+    },
+    {
+      "id": "V4",
+      "attributes": {
+        "value": null,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 0
+      }
+    },
+    {
+      "id": "kappa",
+      "attributes": {
+        "value": null,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 0
+      }
+    },
+    {
+      "id": "lambda_R1",
+      "attributes": {
+        "value": null,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 0
+      }
+    },
+    {
+      "id": "lambda_R2",
+      "attributes": {
+        "value": null,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 0
+      }
+    },
+    {
+      "id": "lambda_R3",
+      "attributes": {
+        "value": null,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 0
+      }
+    },
+    {
+      "id": "lambda_R4",
+      "attributes": {
+        "value": null,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 0
+      }
+    },
+    {
+      "id": "lambda_t",
+      "attributes": {
+        "value": null,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 0
+      }
+    },
+    {
+      "id": "PPN_gamma",
+      "attributes": {
+        "value": 1.000001,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 1
+      }
+    },
+    {
+      "id": "PPN_beta",
+      "attributes": {
+        "value": 0.99999,
+        "fixed_by": null,
+        "constraint_count": 1,
+        "change_count": 1
+      }
+    },
+    {
+      "id": "T_CMB_K",
+      "attributes": {
+        "value": 2.725,
+        "fixed_by": "cmb_config",
+        "constraint_count": 1,
+        "change_count": 1
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "k_J",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.09999999999999999,
+        "type": "realm_order",
+        "realm": "config",
+        "realm_flow": "realm0_cmb->realm3_scales"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.09999999999999999,
+        "type": "realm_order",
+        "realm": "config",
+        "realm_flow": "realm0_cmb->realm3_scales"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "PPN_gamma",
+      "attributes": {
+        "weight": 0.09999999999999999,
+        "type": "realm_order",
+        "realm_flow": "realm0_cmb->realm3_scales"
+      }
+    },
+    {
+      "source": "k_J",
+      "target": "PPN_beta",
+      "attributes": {
+        "weight": 0.09999999999999999,
+        "type": "realm_order",
+        "realm_flow": "realm0_cmb->realm3_scales"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.09999999999999999,
+        "type": "realm_order",
+        "realm": "config",
+        "realm_flow": "realm0_cmb->realm3_scales"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.09999999999999999,
+        "type": "realm_order",
+        "realm": "config",
+        "realm_flow": "realm0_cmb->realm3_scales"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "PPN_gamma",
+      "attributes": {
+        "weight": 0.09999999999999999,
+        "type": "realm_order",
+        "realm_flow": "realm0_cmb->realm3_scales"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "PPN_beta",
+      "attributes": {
+        "weight": 0.09999999999999999,
+        "type": "realm_order",
+        "realm_flow": "realm0_cmb->realm3_scales"
+      }
+    },
+    {
+      "source": "psi_s0",
+      "target": "T_CMB_K",
+      "attributes": {
+        "weight": 0.9,
+        "type": "physics",
+        "theory": "thermalization"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "xi",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm": "config",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm": "config",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm": "config",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "E0",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm": "config",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm": "config",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm": "config",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "L0",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_c2",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "k_EM",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V2",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "V4",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "kappa",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R1",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R2",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R3",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_R4",
+      "target": "lambda_t",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "E0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "L0",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "V2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "V4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "kappa",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "lambda_R1",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "lambda_R2",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "lambda_R3",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "lambda_t",
+      "target": "lambda_R4",
+      "attributes": {
+        "weight": 0.5,
+        "type": "constraint",
+        "realm": "config"
+      }
+    },
+    {
+      "source": "PPN_gamma",
+      "target": "PPN_beta",
+      "attributes": {
+        "weight": 0.8,
+        "type": "physics",
+        "realm": "ppn_config",
+        "theory": "ppn"
+      }
+    },
+    {
+      "source": "PPN_gamma",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "PPN_gamma",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "PPN_gamma",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "PPN_beta",
+      "target": "PPN_gamma",
+      "attributes": {
+        "weight": 0.8,
+        "type": "constraint",
+        "realm": "ppn_config"
+      }
+    },
+    {
+      "source": "PPN_beta",
+      "target": "xi",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "PPN_beta",
+      "target": "k_c2",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "PPN_beta",
+      "target": "k_EM",
+      "attributes": {
+        "weight": 0.3,
+        "type": "realm_order",
+        "realm_flow": "realm3_scales->realm4_em"
+      }
+    },
+    {
+      "source": "T_CMB_K",
+      "target": "k_J",
+      "attributes": {
+        "weight": 0.15,
+        "type": "realm_order",
+        "realm_flow": "cmb_config->realm0_cmb"
+      }
+    },
+    {
+      "source": "T_CMB_K",
+      "target": "psi_s0",
+      "attributes": {
+        "weight": 0.15,
+        "type": "realm_order",
+        "realm_flow": "cmb_config->realm0_cmb"
+      }
+    }
+  ],
+  "dependencies": [
+    {
+      "source_param": "k_J",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "xi",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_c2",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_EM",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V2",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "V4",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "kappa",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R1",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R2",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R3",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_R4",
+      "target_param": "lambda_t",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "k_J",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "psi_s0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "xi",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "E0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "L0",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "k_c2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "k_EM",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "V2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "V4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "kappa",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "lambda_R1",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "lambda_R2",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "lambda_R3",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "lambda_t",
+      "target_param": "lambda_R4",
+      "dependency_type": "constraint",
+      "strength": 0.5,
+      "realm": "config",
+      "description": "Both constrained by config",
+      "metadata": {}
+    },
+    {
+      "source_param": "PPN_gamma",
+      "target_param": "PPN_beta",
+      "dependency_type": "constraint",
+      "strength": 0.8,
+      "realm": "ppn_config",
+      "description": "Both constrained by ppn_config",
+      "metadata": {}
+    },
+    {
+      "source_param": "PPN_beta",
+      "target_param": "PPN_gamma",
+      "dependency_type": "constraint",
+      "strength": 0.8,
+      "realm": "ppn_config",
+      "description": "Both constrained by ppn_config",
+      "metadata": {}
+    },
+    {
+      "source_param": "T_CMB_K",
+      "target_param": "k_J",
+      "dependency_type": "realm_order",
+      "strength": 0.15,
+      "realm": "cmb_config->realm0_cmb",
+      "description": "Execution order: cmb_config before realm0_cmb",
+      "metadata": {}
+    },
+    {
+      "source_param": "T_CMB_K",
+      "target_param": "psi_s0",
+      "dependency_type": "realm_order",
+      "strength": 0.15,
+      "realm": "cmb_config->realm0_cmb",
+      "description": "Execution order: cmb_config before realm0_cmb",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "E0",
+      "dependency_type": "realm_order",
+      "strength": 0.09999999999999999,
+      "realm": "realm0_cmb->realm3_scales",
+      "description": "Execution order: realm0_cmb before realm3_scales",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "L0",
+      "dependency_type": "realm_order",
+      "strength": 0.09999999999999999,
+      "realm": "realm0_cmb->realm3_scales",
+      "description": "Execution order: realm0_cmb before realm3_scales",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "PPN_gamma",
+      "dependency_type": "realm_order",
+      "strength": 0.09999999999999999,
+      "realm": "realm0_cmb->realm3_scales",
+      "description": "Execution order: realm0_cmb before realm3_scales",
+      "metadata": {}
+    },
+    {
+      "source_param": "k_J",
+      "target_param": "PPN_beta",
+      "dependency_type": "realm_order",
+      "strength": 0.09999999999999999,
+      "realm": "realm0_cmb->realm3_scales",
+      "description": "Execution order: realm0_cmb before realm3_scales",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "E0",
+      "dependency_type": "realm_order",
+      "strength": 0.09999999999999999,
+      "realm": "realm0_cmb->realm3_scales",
+      "description": "Execution order: realm0_cmb before realm3_scales",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "L0",
+      "dependency_type": "realm_order",
+      "strength": 0.09999999999999999,
+      "realm": "realm0_cmb->realm3_scales",
+      "description": "Execution order: realm0_cmb before realm3_scales",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "PPN_gamma",
+      "dependency_type": "realm_order",
+      "strength": 0.09999999999999999,
+      "realm": "realm0_cmb->realm3_scales",
+      "description": "Execution order: realm0_cmb before realm3_scales",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "PPN_beta",
+      "dependency_type": "realm_order",
+      "strength": 0.09999999999999999,
+      "realm": "realm0_cmb->realm3_scales",
+      "description": "Execution order: realm0_cmb before realm3_scales",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "xi",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "k_c2",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "E0",
+      "target_param": "k_EM",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "xi",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "k_c2",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "L0",
+      "target_param": "k_EM",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "PPN_gamma",
+      "target_param": "xi",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "PPN_gamma",
+      "target_param": "k_c2",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "PPN_gamma",
+      "target_param": "k_EM",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "PPN_beta",
+      "target_param": "xi",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "PPN_beta",
+      "target_param": "k_c2",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "PPN_beta",
+      "target_param": "k_EM",
+      "dependency_type": "realm_order",
+      "strength": 0.3,
+      "realm": "realm3_scales->realm4_em",
+      "description": "Execution order: realm3_scales before realm4_em",
+      "metadata": {}
+    },
+    {
+      "source_param": "PPN_gamma",
+      "target_param": "PPN_beta",
+      "dependency_type": "physics",
+      "strength": 0.8,
+      "realm": "ppn_theory",
+      "description": "PPN parameters are physically related",
+      "metadata": {}
+    },
+    {
+      "source_param": "psi_s0",
+      "target_param": "T_CMB_K",
+      "dependency_type": "physics",
+      "strength": 0.9,
+      "realm": "thermalization",
+      "description": "Thermalization zeropoint determines CMB temperature",
+      "metadata": {}
+    }
+  ],
+  "clusters": [
+    {
+      "cluster_id": "cluster_1",
+      "parameters": [
+        "k_J",
+        "V2",
+        "lambda_t",
+        "lambda_R2",
+        "lambda_R1",
+        "lambda_R4",
+        "lambda_R3",
+        "T_CMB_K",
+        "V4",
+        "E0",
+        "psi_s0",
+        "kappa",
+        "L0"
+      ],
+      "coupling_strength": 0.4859259259259259,
+      "primary_realm": "cmb_config",
+      "description": "Cluster of 13 parameters with avg coupling 0.486"
+    },
+    {
+      "cluster_id": "cluster_2",
+      "parameters": [
+        "k_EM",
+        "k_c2",
+        "PPN_beta",
+        "PPN_gamma",
+        "xi"
+      ],
+      "coupling_strength": 0.457142857142857,
+      "primary_realm": "unknown",
+      "description": "Cluster of 5 parameters with avg coupling 0.457"
+    }
+  ]
+}

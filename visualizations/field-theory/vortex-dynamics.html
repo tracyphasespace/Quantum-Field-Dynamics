@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Vortex Transition</title>
+    <style>
+        :root {
+            --bg-color: #0b0d12;
+            --text-color: #bdc3c7;
+            --text-light-color: #e5e7eb;
+            --highlight-color: #3498db;
+            --border-color: #2c3e50;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        #main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            gap: 20px;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .info-panel {
+            width: 280px;
+            height: min(95vmin, 800px);
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: rgba(20, 25, 35, 0.3);
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        
+        .info-panel h2 {
+            color: var(--text-light-color);
+            border-bottom: 2px solid var(--highlight-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        .info-panel .equation {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.2em;
+            color: var(--text-light-color);
+            text-align: center;
+        }
+
+        #canvas-container {
+            position: relative;
+            display: grid;
+            place-items: center;
+        }
+
+        canvas {
+            width: min(95vmin, 800px);
+            height: min(95vmin, 800px);
+            display: block;
+            border-radius: 12px;
+        }
+
+        #controls {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(44, 62, 80, 0.5);
+            padding: 8px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid #7f8c8d;
+            color: #bdc3c7;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: #34495e;
+            border-color: #95a5a6;
+            color: #ecf0f1;
+        }
+
+        button.active {
+            background: #2980b9;
+            border-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+
+        @media (max-width: 1400px) {
+            .info-panel {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <button id="btn-ring" class="active">Vortex Ring</button>
+        <button id="btn-hill">Hill Vortex Sphere</button>
+    </div>
+    <div id="main-container">
+        <div class="info-panel" id="left-panel"></div>
+        <div id="canvas-container">
+            <canvas id="cv"></canvas>
+        </div>
+        <div class="info-panel" id="right-panel"></div>
+    </div>
+    <script>
+    (function() {
+        // --- UI and State ---
+        const btnRing = document.getElementById('btn-ring');
+        const btnHill = document.getElementById('btn-hill');
+        const leftPanel = document.getElementById('left-panel');
+        const rightPanel = document.getElementById('right-panel');
+        
+        let targetProgress = 0.0; // 0 for Ring, 1 for Hill
+        let currentProgress = 0.0; // The animated value
+
+        // --- Information Content ---
+        const ringInfo = {
+            left: `
+                <h2>Helmholtz Vorticity</h2>
+                <p>Hermann von Helmholtz (1858) established the fundamental principles of vortex motion in an ideal, incompressible fluid.</p>
+                <p>His theorems state that vortex lines move with the fluid as if they were material lines, and their strength remains constant along their length and in time.</p>
+            `,
+            right: `
+                <h2>Euler-Lagrange Equation</h2>
+                <p>Stable field configurations, like a vortex ring, are stationary solutions to the Euler-Lagrange equation, which minimizes the system's action (energy over time).</p>
+                <div class="equation">
+                   ∂ℒ/∂ψ − ∇⋅(∂ℒ/∂(∇ψ)) = 0
+                </div>
+                <p>For a static field, this often simplifies to finding a balance between the field's curvature and a potential V(ψ).</p>
+                 <div class="equation">
+                   ∇²ψ = ∂V/∂ψ
+                </div>
+            `
+        };
+
+        const hillInfo = {
+            left: `
+                <h2>Hill's Spherical Vortex</h2>
+                <p>M. J. M. Hill (1894) found an exact, stable solution to the Euler equations for a spherical region of constant vorticity within a uniform flow.</p>
+                <p>This forms a self-contained, stable "bubble" of organized motion, perfectly balanced by the pressure of the external flow.</p>
+            `,
+            right: `
+                <h2>Scaling Laws</h2>
+                <p>For a Hill's Vortex, the physical properties scale non-linearly with its diameter (d):</p>
+                <div class="equation">
+                    Moment of Inertia (I) ∝ d⁵
+                </div>
+                <div class="equation">
+                    Angular Momentum (L) ∝ d⁴
+                </div>
+                <p>These relationships are characteristic of the vortex's complex internal structure.</p>
+            `
+        };
+
+        function updateInfoPanels(state) {
+            const info = state === 'ring' ? ringInfo : hillInfo;
+            leftPanel.style.opacity = 0;
+            rightPanel.style.opacity = 0;
+            
+            setTimeout(() => {
+                leftPanel.innerHTML = info.left;
+                rightPanel.innerHTML = info.right;
+                leftPanel.style.opacity = 1;
+                rightPanel.style.opacity = 1;
+            }, 500);
+        }
+        
+        btnRing.addEventListener('click', () => {
+            targetProgress = 0.0;
+            btnRing.classList.add('active');
+            btnHill.classList.remove('active');
+            updateInfoPanels('ring');
+        });
+
+        btnHill.addEventListener('click', () => {
+            targetProgress = 1.0;
+            btnHill.classList.add('active');
+            btnRing.classList.remove('active');
+            updateInfoPanels('hill');
+        });
+
+
+        // --- Canvas Setup ---
+        const canvas = document.getElementById('cv');
+        const ctx = canvas.getContext('2d');
+        let t0 = performance.now();
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            const w = Math.min(window.innerWidth, window.innerHeight) * 0.95;
+            canvas.width = Math.round(w * dpr);
+            canvas.height = Math.round(w * dpr);
+            canvas.style.width = canvas.style.height = Math.round(w) + 'px';
+            ctx.scale(dpr, dpr);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // --- Color & Math Helpers ---
+        const lerp = (a, b, t) => a + (b - a) * t;
+        const lerpColor = (c1, c2, t) => [
+            Math.round(lerp(c1[0], c2[0], t)),
+            Math.round(lerp(c1[1], c2[1], t)),
+            Math.round(lerp(c1[2], c2[2], t))
+        ];
+
+        const C_TOP    = [255, 100, 100]; // Red
+        const C_BOTTOM = [100, 100, 255]; // Blue
+        const C_IN     = [100, 255, 100]; // Green
+        const C_OUT    = [255, 255, 100]; // Yellow
+
+        function getPoloidalColor(angle) {
+            const t = (angle % (Math.PI * 2) + (Math.PI * 2)) % (Math.PI * 2) / (Math.PI * 2);
+            if (t < 0.25) return lerpColor(C_OUT, C_TOP, t * 4);
+            if (t < 0.5)  return lerpColor(C_TOP, C_IN, (t - 0.25) * 4);
+            if (t < 0.75) return lerpColor(C_IN, C_BOTTOM, (t - 0.5) * 4);
+            return lerpColor(C_BOTTOM, C_OUT, (t - 0.75) * 4);
+        }
+
+        // --- Drawing Helper ---
+        function drawArrow(x, y, angle, size, color, alpha = 1.0) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+            ctx.beginPath();
+            ctx.moveTo(size, 0);
+            ctx.lineTo(-size, 0);
+            ctx.moveTo(size, 0);
+            ctx.lineTo(size * 0.5, size * 0.4);
+            ctx.moveTo(size, 0);
+            ctx.lineTo(size * 0.5, -size * 0.4);
+            ctx.strokeStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // --- Animation Loop ---
+        function frame(now) {
+            const elapsed = (now - t0) * 0.001;
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const cx = w / 2;
+            const cy = h / 2;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, w, h);
+            const bg = ctx.createRadialGradient(cx, cy, 10, cx, cy, w * 0.55);
+            bg.addColorStop(0, '#0e121a');
+            bg.addColorStop(1, '#0b0d12');
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, w, h);
+
+            // --- Torus & Animation Parameters ---
+            const R = w * 0.25; // Major radius of the torus
+            const r = w * 0.15; // Minor radius (baseRadius of the poloidal)
+            const U_SEG = 36;   // Number of poloidal rings
+            const V_SEG = 18;   // Number of arrows per ring
+            const SPEED = 1.5;
+            const tilt = 0.6;  // Tilt angle for 3D perspective (positive for top-down)
+
+            // Smoothly animate the current progress towards the target
+            currentProgress = lerp(currentProgress, targetProgress, 0.05);
+            const animationProgress = currentProgress;
+
+            // --- 3D Projection ---
+            const fov = w * 1.0; // Field of view
+            const zcam = R * 3;
+            function project(p) {
+                const rotY = Math.cos(tilt) * p.y - Math.sin(tilt) * p.z;
+                const rotZ = Math.sin(tilt) * p.y + Math.cos(tilt) * p.z;
+                const scale = fov / (fov + rotZ);
+                return {
+                    x: cx + p.x * scale,
+                    y: cy + rotY * scale,
+                    scale: scale
+                };
+            }
+            
+            // --- Core Position Logic for a Deforming Ring ---
+            function getDeformedPoloidalPoint(poloidalAngle, progress) {
+                const cosA = Math.cos(poloidalAngle);
+                const sinA = Math.sin(poloidalAngle);
+
+                // Start shape: a circle of radius 'r', centered at (R, 0)
+                const startX = R + r * cosA;
+                
+                // End shape: a D-shape of radius 'r', flush with the Y-axis
+                let endX;
+                if (cosA >= 0) { // Right half is a semicircle
+                    endX = r * cosA;
+                } else { // Left half is a flat line on the Y-axis (x=0)
+                    endX = 0;
+                }
+                
+                const localY = r * sinA;
+                const localX = lerp(startX, endX, progress);
+
+                return { x: localX, y: localY };
+            };
+            
+            const pointsToDraw = [];
+
+            // --- Main Calculation Loop ---
+            for (let iu = 0; iu < U_SEG; iu++) {
+                const toroidalAngle = (iu / U_SEG) * Math.PI * 2;
+
+                for (let iv = 0; iv < V_SEG; iv++) {
+                    const baseAngle = (iv / V_SEG) * Math.PI * 2;
+                    const circulatingAngle = baseAngle - SPEED * elapsed; // Clockwise flow
+
+                    const p1_local = getDeformedPoloidalPoint(circulatingAngle, animationProgress);
+                    const p2_local = getDeformedPoloidalPoint(circulatingAngle - 0.05, animationProgress); // Point ahead in flow
+
+                    const p1_3d = {
+                        x: p1_local.x * Math.cos(toroidalAngle),
+                        y: p1_local.y,
+                        z: p1_local.x * Math.sin(toroidalAngle)
+                    };
+                    const p2_3d = {
+                        x: p2_local.x * Math.cos(toroidalAngle),
+                        y: p2_local.y,
+                        z: p2_local.x * Math.sin(toroidalAngle)
+                    };
+                    
+                    const p1_proj = project(p1_3d);
+                    const p2_proj = project(p2_3d);
+
+                    const angle = Math.atan2(p2_proj.y - p1_proj.y, p2_proj.x - p1_proj.x);
+                    const color = getPoloidalColor(circulatingAngle);
+                    
+                    pointsToDraw.push({
+                        z: p1_3d.z,
+                        x: p1_proj.x,
+                        y: p1_proj.y,
+                        scale: p1_proj.scale,
+                        angle: angle,
+                        color: color
+                    });
+                }
+            }
+            
+            // --- Drawing Loop (with depth sorting) ---
+            pointsToDraw.sort((a, b) => a.z - b.z);
+
+            pointsToDraw.forEach(p => {
+                const size = 4.5 * p.scale;
+                const alpha = Math.max(0.1, p.scale * 0.8);
+                drawArrow(p.x, p.y, p.angle, size, p.color, alpha);
+            });
+
+            requestAnimationFrame(frame);
+        }
+        
+        // Initial call
+        updateInfoPanels('ring');
+        requestAnimationFrame(frame);
+    })();
+    </script>
+</body>
+</html>
+
