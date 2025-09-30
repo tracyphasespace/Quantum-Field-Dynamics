@@ -6,8 +6,26 @@ Core physics implementation for QFD redshift analysis.
 Implements wavelength-independent redshift-dependent dimming.
 """
 
+import math
+from typing import Sequence, Union
+
 import numpy as np
-from typing import Union
+
+
+Number = Union[int, float]
+ArrayLike = Union[Number, Sequence[Number], np.ndarray]
+
+
+def _is_scalar(value: ArrayLike) -> bool:
+    return isinstance(value, (int, float))
+
+
+def _to_array(values: ArrayLike) -> np.ndarray:
+    if isinstance(values, np.ndarray):
+        return values
+    if isinstance(values, Sequence) and not isinstance(values, (str, bytes)):
+        return np.array(values)
+    raise TypeError("Expected a scalar or a sequence of scalars")
 
 
 class QFDPhysics:
@@ -43,8 +61,8 @@ class QFDPhysics:
         self.path_length_factor = 1.0
 
     def calculate_redshift_dimming(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate QFD dimming for given redshift (wavelength independent).
 
@@ -61,25 +79,24 @@ class QFDPhysics:
             QFD dimming in magnitudes
         """
         # Primary redshift-dependent dimming (phenomenological)
+        if _is_scalar(redshift):
+            base_dimming = self.qfd_coupling * (
+                float(redshift) ** self.redshift_power
+            )
+            igm_contribution = self._calculate_igm_effects(redshift)
+            return max(base_dimming + igm_contribution, 0.0)
+
+        redshift_arr = _to_array(redshift)
         base_dimming = self.qfd_coupling * (
-            redshift**self.redshift_power
+            redshift_arr ** self.redshift_power
         )
-
-        # Intergalactic medium enhancement
-        igm_contribution = self._calculate_igm_effects(redshift)
-
-        # Combined dimming
+        igm_contribution = self._calculate_igm_effects(redshift_arr)
         total_dimming = base_dimming + igm_contribution
-
-        # Ensure physical bounds
-        if isinstance(redshift, (int, float)):
-            return max(total_dimming, 0)
-        else:
-            return np.maximum(total_dimming, 0)
+        return np.maximum(total_dimming, 0.0)
 
     def _calculate_igm_effects(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate intergalactic medium QFD enhancement.
 
@@ -94,27 +111,32 @@ class QFDPhysics:
             IGM contribution to dimming in magnitudes
         """
         # IGM density evolution (approximate)
-        if isinstance(redshift, (int, float)):
-            igm_density_factor = (1 + redshift) ** 3
-            log_factor = np.log10(1 + redshift) if redshift > 0 else 0
-        else:
-            igm_density_factor = (1 + redshift) ** 3
-            log_factor = np.log10(1 + redshift)
-            log_factor[redshift <= 0] = 0
+        if _is_scalar(redshift):
+            z = float(redshift)
+            igm_density_factor = (1 + z) ** 3
+            log_factor = math.log10(1 + z) if z > 0 else 0.0
+            path_enhancement = self.path_length_factor * math.sqrt(
+                igm_density_factor
+            )
+            return self.igm_enhancement * log_factor * path_enhancement
 
-        # Path length effects (cosmological distances)
-        path_enhancement = self.path_length_factor * np.sqrt(igm_density_factor)
+        redshift_arr = _to_array(redshift)
+        contributions = []
+        for z in redshift_arr:
+            igm_density_factor = (1 + z) ** 3
+            log_factor = math.log10(1 + z) if z > 0 else 0.0
+            path_enhancement = self.path_length_factor * math.sqrt(
+                igm_density_factor
+            )
+            contributions.append(
+                self.igm_enhancement * log_factor * path_enhancement
+            )
 
-        # Combined IGM contribution
-        igm_contribution = (
-            self.igm_enhancement * log_factor * path_enhancement
-        )
-
-        return igm_contribution
+        return np.array(contributions)
 
     def calculate_qfd_cross_section(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate effective QFD scattering cross-section.
 
@@ -132,20 +154,23 @@ class QFDPhysics:
         base_sigma = self.sigma_thomson  # Thomson scattering baseline
 
         # QFD enhancement factor
+        if _is_scalar(redshift):
+            qfd_enhancement = self.qfd_coupling * (
+                float(redshift) ** self.redshift_power
+            )
+            return base_sigma * (1 + qfd_enhancement)
+
+        redshift_arr = _to_array(redshift)
         qfd_enhancement = self.qfd_coupling * (
-            redshift**self.redshift_power
+            redshift_arr ** self.redshift_power
         )
-
-        # Effective cross-section
-        sigma_effective = base_sigma * (1 + qfd_enhancement)
-
-        return sigma_effective
+        return base_sigma * (1 + qfd_enhancement)
 
     def calculate_optical_depth(
         self,
-        redshift: Union[float, np.ndarray],
-        path_length_Mpc: Union[float, np.ndarray],
-    ) -> Union[float, np.ndarray]:
+        redshift: ArrayLike,
+        path_length_Mpc: ArrayLike,
+    ) -> ArrayLike:
         """
         Calculate QFD optical depth through cosmological distances.
 
@@ -163,25 +188,25 @@ class QFDPhysics:
         """
         # Effective cross-section
         sigma_qfd = self.calculate_qfd_cross_section(redshift)
-
-        # IGM number density (approximate)
         n_igm = 1e-7  # cm⁻³ (typical IGM density)
-        density_evolution = (1 + redshift) ** 3
-        n_effective = n_igm * density_evolution
 
-        # Path length in cm
-        path_length_cm = path_length_Mpc * 3.086e24
+        if _is_scalar(redshift) and _is_scalar(path_length_Mpc):
+            density_evolution = (1 + float(redshift)) ** 3
+            n_effective = n_igm * density_evolution
+            path_length_cm = float(path_length_Mpc) * 3.086e24
+            return sigma_qfd * n_effective * path_length_cm
 
-        # Optical depth
-        tau = sigma_qfd * n_effective * path_length_cm
-
-        return tau
+        redshift_arr = _to_array(redshift)
+        path_arr = _to_array(path_length_Mpc)
+        n_effective = np.array([(1 + z) ** 3 for z in redshift_arr]) * n_igm
+        path_length_cm = path_arr * 3.086e24
+        return sigma_qfd * n_effective * path_length_cm
 
     def calculate_transmission(
         self,
-        redshift: Union[float, np.ndarray],
-        path_length_Mpc: Union[float, np.ndarray],
-    ) -> Union[float, np.ndarray]:
+        redshift: ArrayLike,
+        path_length_Mpc: ArrayLike,
+    ) -> ArrayLike:
         """
         Calculate photon transmission through QFD scattering medium.
 
@@ -201,8 +226,8 @@ class QFDPhysics:
         return np.exp(-tau)
 
     def calculate_scattering_rate(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate QFD scattering rate per unit distance.
 
@@ -218,23 +243,22 @@ class QFDPhysics:
         """
         # Effective cross-section
         sigma_qfd = self.calculate_qfd_cross_section(redshift)
-
-        # IGM number density
         n_igm = 1e-7  # cm⁻³
-        density_evolution = (1 + redshift) ** 3
-        n_effective = n_igm * density_evolution
 
-        # Scattering rate per cm
+        if _is_scalar(redshift):
+            density_evolution = (1 + float(redshift)) ** 3
+            n_effective = n_igm * density_evolution
+            rate_per_cm = sigma_qfd * n_effective
+            return rate_per_cm * 3.086e24
+
+        redshift_arr = _to_array(redshift)
+        n_effective = np.array([(1 + z) ** 3 for z in redshift_arr]) * n_igm
         rate_per_cm = sigma_qfd * n_effective
-
-        # Convert to per Mpc
-        rate_per_Mpc = rate_per_cm * 3.086e24
-
-        return rate_per_Mpc
+        return rate_per_cm * 3.086e24
 
     def energy_loss_fraction(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate fractional energy loss due to QFD scattering.
 
@@ -251,14 +275,14 @@ class QFDPhysics:
         # QFD dimming in magnitudes
         dimming_mag = self.calculate_redshift_dimming(redshift)
 
-        # Convert to fractional flux loss
-        # ΔF/F = 1 - 10^(-0.4 * Δm)
+        if _is_scalar(dimming_mag):
+            flux_ratio = 10 ** (-0.4 * dimming_mag)
+            return 1 - flux_ratio
+
         flux_ratio = 10 ** (-0.4 * dimming_mag)
-        energy_loss = 1 - flux_ratio
+        return 1 - flux_ratio
 
-        return energy_loss
-
-    def validate_energy_conservation(self, redshift_array: np.ndarray) -> dict:
+    def validate_energy_conservation(self, redshift_array: ArrayLike) -> dict:
         """
         Validate energy conservation in QFD scattering.
 
@@ -272,19 +296,25 @@ class QFDPhysics:
         dict
             Energy conservation validation results
         """
+        redshift_values = (
+            redshift_array
+            if isinstance(redshift_array, np.ndarray)
+            else _to_array(redshift_array)
+        )
+
         validation = {
-            "redshifts": redshift_array,
+            "redshifts": redshift_values,
             "energy_loss": [],
             "total_energy_loss": 0,
             "conservation_satisfied": True,
         }
 
-        for z in redshift_array:
+        for z in redshift_values:
             energy_loss = self.energy_loss_fraction(z)
             validation["energy_loss"].append(energy_loss)
 
         validation["energy_loss"] = np.array(validation["energy_loss"])
-        validation["total_energy_loss"] = np.sum(validation["energy_loss"])
+        validation["total_energy_loss"] = float(np.sum(validation["energy_loss"]))
 
         # Check if energy loss is reasonable (< 50% total)
         if validation["total_energy_loss"] > 0.5:
@@ -293,8 +323,8 @@ class QFDPhysics:
         return validation
 
     def calculate_temperature_effects(
-        self, redshift: Union[float, np.ndarray]
-    ) -> Union[float, np.ndarray]:
+        self, redshift: ArrayLike
+    ) -> ArrayLike:
         """
         Calculate temperature-dependent QFD effects.
 
@@ -310,11 +340,14 @@ class QFDPhysics:
         """
         # CMB temperature evolution
         T_cmb_0 = 2.725  # K (present CMB temperature)
-        T_cmb_z = T_cmb_0 * (1 + redshift)
+        if _is_scalar(redshift):
+            T_cmb_z = T_cmb_0 * (1 + float(redshift))
+            return (T_cmb_z / T_cmb_0) ** 0.1
 
-        # Temperature-dependent QFD coupling (weak dependence)
-        temp_factor = (T_cmb_z / T_cmb_0) ** 0.1
-
+        redshift_arr = _to_array(redshift)
+        temp_factor = np.array(
+            [((T_cmb_0 * (1 + z)) / T_cmb_0) ** 0.1 for z in redshift_arr]
+        )
         return temp_factor
 
     def get_model_parameters(self) -> dict:
