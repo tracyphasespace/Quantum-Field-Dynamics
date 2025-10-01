@@ -16,8 +16,8 @@ This document describes the complete implementation of QFD black hole dynamics a
 
 ### Key Result:
 
-**✓ ALL TESTS PASSED (8/8 categories)**
-Black holes successfully modeled as information-conserving cosmic engines with NO singularities, NO one-way horizons, and NO information loss.
+**✓ ALL TESTS PASSED (10/10 categories)**
+Black holes successfully modeled as information-conserving cosmic engines with NO singularities, NO one-way horizons, and NO information loss. Now includes **unified astrophysical emitter model** integrating all five QFD redshift mechanisms.
 
 ---
 
@@ -970,6 +970,74 @@ All three share the QFD foundation: **finite-density field structures, no singul
 
 ---
 
+## Unified Astrophysical Emitter Model
+
+### Integration of Black Hole and Supernova Physics
+
+As of version 1.1, the QFD black hole module now includes a **unified astrophysical emitter model** that combines all five QFD redshift mechanisms for observable jets:
+
+#### Five QFD Mechanisms:
+
+1. **Gravitational Redshift (Black Hole)**
+   - z_grav = exp(ΔΦ/c²) - 1
+   - Photons climb out of deep potential well
+   - Dominant near black hole surface
+
+2. **Relativistic Doppler Shift (Black Hole)**
+   - z_doppler = sqrt((1+β)/(1-β)) - 1
+   - High-velocity jet ejection from Rift
+   - Significant for v ~ 0.1-0.5c
+
+3. **Plasma Veil (Supernova Physics)**
+   - z_plasma ∝ λ^(-0.8) × exp(-t/τ)
+   - Wavelength-dependent scattering
+   - Blue photons lose more energy
+
+4. **Vacuum Sear (Supernova Physics)**
+   - z_FDR ∝ Φ^(1.0) × (1/D²)
+   - Flux-dependent near-source effect
+   - Falls rapidly with distance
+
+5. **Cosmological Baseline**
+   - z_cosmo = exp(α₀L) - 1
+   - QFD tired light mechanism
+   - Dominant at large distances
+
+#### Multiplicative Combination:
+
+```
+(1 + z_total) = (1+z_grav) × (1+z_doppler) × (1+z_plasma) × (1+z_FDR) × (1+z_cosmo)
+```
+
+#### New Functions:
+
+**`calculate_jet_redshift()`** - Three mechanisms (grav + Doppler + cosmo)
+**`calculate_jet_total_redshift()`** - Five mechanisms (adds Plasma Veil + Vacuum Sear)
+
+#### Typical Results (100 Mpc observer, 0.3c jet):
+
+```
+z_gravitational: 4.29  (83.4% contribution)
+z_doppler:       0.36  (15.5% contribution)
+z_cosmological:  0.024 (1.2% contribution)
+z_plasma:        ~1e-5 (negligible)
+z_FDR:           ~1e-9 (negligible)
+z_total:         6.38
+```
+
+Near the black hole, gravitational and Doppler effects dominate. Near-source effects (plasma, FDR) are significant only for nearby observations (D < 10 Mpc) or early times.
+
+#### Observational Signatures:
+
+- **Spectral line redshifts** vary with wavelength (plasma effect)
+- **Color evolution** as ejecta expands and cools
+- **Flux-dependent** redshift for bright vs. faint jets
+- **Time-dependent** as plasma disperses
+
+See Test 9 and Test 10 in validation suite for detailed examples.
+
+---
+
 ## Future Extensions
 
 ### Immediate Enhancements
@@ -998,6 +1066,7 @@ All three share the QFD foundation: **finite-density field structures, no singul
    - 3D rendering of Rift channel
    - Animation of stratified ejection
    - Interactive parameter exploration
+   - **Jet spectroscopy plots** (new: wavelength-dependent redshift)
 
 ### Long-Term Research
 

@@ -812,6 +812,276 @@ def simulate_jet_trajectory_with_torque(system: BinaryBlackHoleSystem,
 # UTILITY FUNCTIONS
 # ============================================================================
 
+def calculate_jet_redshift(jet_position: np.ndarray,
+                          jet_velocity: np.ndarray,
+                          bh_system: BinaryBlackHoleSystem,
+                          observer_distance_Mpc: float,
+                          H0: float = 70.0) -> tuple:
+    """
+    Calculate jet redshift from three QFD mechanisms.
+
+    Physics:
+    --------
+    Black hole jets experience three distinct redshift mechanisms:
+
+    1. Gravitational Redshift (z_grav):
+       Photons lose energy climbing out of deep potential well.
+       z_grav = exp(ΔΦ/c²) - 1, where ΔΦ = Φ_jet - Φ_infinity
+
+    2. Relativistic Doppler Shift (z_doppler):
+       Photons from moving source are shifted by special relativity.
+       For radial velocity β = v/c:
+       z_doppler = sqrt((1+β)/(1-β)) - 1  (receding source)
+
+    3. Cosmological Baseline (z_cosmo):
+       QFD tired light mechanism over distance to observer.
+       z_cosmo = exp(α₀L) - 1, where α₀ = H₀/c
+
+    These combine multiplicatively:
+    (1 + z_total) = (1 + z_grav) × (1 + z_doppler) × (1 + z_cosmo)
+
+    Parameters:
+    -----------
+    jet_position : array (3,)
+        3D position of jet element (units: R_s)
+    jet_velocity : array (3,)
+        3D velocity of jet element (units: c)
+    bh_system : BinaryBlackHoleSystem
+        Binary black hole system creating jet
+    observer_distance_Mpc : float
+        Distance to observer in Mpc
+    H0 : float, optional
+        Hubble constant in km/s/Mpc (default: 70.0)
+
+    Returns:
+    --------
+    z_total : float
+        Total redshift (multiplicative combination)
+    z_grav : float
+        Gravitational redshift component
+    z_doppler : float
+        Doppler shift component
+    z_cosmo : float
+        Cosmological baseline component
+
+    Examples:
+    ---------
+    >>> system = BinaryBlackHoleSystem(bh1, bh2, separation=20.0)
+    >>> jet_pos = np.array([15.0, 0, 0])
+    >>> jet_vel = np.array([0.1, 0, 0])  # 0.1c radial
+    >>> z_tot, z_g, z_d, z_c = calculate_jet_redshift(
+    ...     jet_pos, jet_vel, system, observer_distance_Mpc=100.0
+    ... )
+    """
+    # Import baseline cosmological redshift
+    import sys
+    import os
+    # Add qfd_lib to path
+    redshift_path = os.path.abspath(os.path.join(
+        os.path.dirname(__file__),
+        '../redshift-analysis/RedShift-Enhanced'
+    ))
+    if redshift_path not in sys.path:
+        sys.path.insert(0, redshift_path)
+
+    from qfd_lib.qfd_redshift import calculate_redshift
+
+    # Constants
+    C_LIGHT = 1.0  # Velocity in units of c
+
+    # 1. Gravitational redshift
+    # Potential at jet position (negative value)
+    Phi_jet = bh_system.total_potential(jet_position)
+    # Potential at infinity (zero by definition)
+    Phi_infinity = 0.0
+    # Energy ratio: E_observed/E_emitted = exp(ΔΦ/c²)
+    # For c=1 units: z_grav = exp(ΔΦ) - 1
+    delta_Phi = Phi_infinity - Phi_jet  # Positive (climbing out of well)
+    z_grav = np.exp(delta_Phi) - 1.0
+
+    # 2. Relativistic Doppler shift
+    # Get radial velocity component (projection toward observer)
+    # Assume observer is at +x direction (far from system)
+    observer_direction = np.array([1.0, 0.0, 0.0])
+    v_radial = np.dot(jet_velocity, observer_direction)
+    beta = v_radial / C_LIGHT
+
+    # Special relativistic Doppler formula
+    # Receding source (β > 0): redshift
+    # Approaching source (β < 0): blueshift
+    if abs(beta) < 0.999:  # Numerical safety
+        z_doppler = np.sqrt((1.0 + beta) / (1.0 - beta)) - 1.0
+    else:
+        # Extreme relativistic limit
+        z_doppler = np.sign(beta) * 1e3  # Cap at z=1000
+
+    # 3. Cosmological baseline (QFD tired light)
+    z_cosmo = calculate_redshift(observer_distance_Mpc, H0=H0)
+
+    # Multiplicative combination (QFD Prime Directive)
+    one_plus_z_total = (1.0 + z_grav) * (1.0 + z_doppler) * (1.0 + z_cosmo)
+    z_total = one_plus_z_total - 1.0
+
+    return z_total, z_grav, z_doppler, z_cosmo
+
+
+def calculate_jet_total_redshift(jet_position: np.ndarray,
+                                 jet_velocity: np.ndarray,
+                                 wavelength_nm: float,
+                                 time_since_ejection_days: float,
+                                 jet_flux_erg_cm2_s: float,
+                                 distance_from_bh_cm: float,
+                                 bh_system: BinaryBlackHoleSystem,
+                                 observer_distance_Mpc: float,
+                                 electron_density_cm3: float = 1e20,
+                                 H0: float = 70.0) -> Dict[str, float]:
+    """
+    Unified astrophysical emitter model: All five QFD redshift mechanisms.
+
+    This function integrates black hole jet physics with supernova near-source
+    effects to create a complete observable model for astrophysical jets.
+
+    Physics:
+    --------
+    Five QFD energy-loss/redshift mechanisms:
+
+    1. Gravitational Redshift (Black Hole):
+       Escape from deep potential well
+       z_grav = exp(ΔΦ/c²) - 1
+
+    2. Relativistic Doppler (Black Hole):
+       High-velocity ejection from Rift
+       z_doppler = sqrt((1+β)/(1-β)) - 1
+
+    3. Plasma Veil (Supernova Physics):
+       Wavelength-dependent scattering by ejecta
+       z_plasma ∝ λ^(-0.8) × exp(-t/τ)
+
+    4. Vacuum Sear (Supernova Physics):
+       Flux-dependent photon energy loss
+       z_FDR ∝ Φ^(1.0) × (1/D²)
+
+    5. Cosmological Baseline:
+       QFD tired light over cosmic distances
+       z_cosmo = exp(α₀L) - 1
+
+    Multiplicative Combination (Prime Directive):
+    (1 + z_total) = (1+z_grav) × (1+z_doppler) × (1+z_plasma) × (1+z_FDR) × (1+z_cosmo)
+
+    Parameters:
+    -----------
+    jet_position : array (3,)
+        Position of jet element (units: R_s)
+    jet_velocity : array (3,)
+        Velocity of jet element (units: c)
+    wavelength_nm : float
+        Observed wavelength in nanometers
+    time_since_ejection_days : float
+        Time since matter ejected from Rift
+    jet_flux_erg_cm2_s : float
+        Photon flux in erg/cm²/s
+    distance_from_bh_cm : float
+        Distance from black hole surface in cm
+    bh_system : BinaryBlackHoleSystem
+        Binary BH system
+    observer_distance_Mpc : float
+        Distance to observer in Mpc
+    electron_density_cm3 : float, optional
+        Electron density in jet (default: 1e20 cm⁻³)
+    H0 : float, optional
+        Hubble constant (default: 70.0 km/s/Mpc)
+
+    Returns:
+    --------
+    result : dict
+        'z_total' : Total redshift (five mechanisms)
+        'z_gravitational' : Gravitational component
+        'z_doppler' : Doppler component
+        'z_plasma' : Plasma Veil component
+        'z_FDR' : Vacuum Sear component
+        'z_cosmological' : Baseline component
+        'contributions' : dict of percentage contributions
+
+    Examples:
+    ---------
+    >>> result = calculate_jet_total_redshift(
+    ...     jet_position=np.array([15.0, 0, 0]),
+    ...     jet_velocity=np.array([0.3, 0, 0]),
+    ...     wavelength_nm=656.3,  # H-alpha
+    ...     time_since_ejection_days=10.0,
+    ...     jet_flux_erg_cm2_s=1e12,
+    ...     distance_from_bh_cm=1e15,
+    ...     bh_system=system,
+    ...     observer_distance_Mpc=100.0
+    ... )
+    >>> print(f"Total z: {result['z_total']:.6f}")
+    >>> print(f"Dominant: {max(result['contributions'].items(), key=lambda x: x[1])}")
+    """
+    # Import supernova near-source effects
+    import sys
+    import os
+    redshift_path = os.path.abspath(os.path.join(
+        os.path.dirname(__file__),
+        '../redshift-analysis/RedShift-Enhanced'
+    ))
+    if redshift_path not in sys.path:
+        sys.path.insert(0, redshift_path)
+
+    from qfd_lib.qfd_supernova import calculate_z_plasma, calculate_z_FDR
+
+    # Get base redshifts (gravitational + Doppler + cosmological)
+    z_total_base, z_grav, z_doppler, z_cosmo = calculate_jet_redshift(
+        jet_position, jet_velocity, bh_system, observer_distance_Mpc, H0
+    )
+
+    # Add near-source effects
+    z_plasma = calculate_z_plasma(
+        wavelength_nm=wavelength_nm,
+        time_days=time_since_ejection_days,
+        electron_density_cm3=electron_density_cm3,
+        path_length_cm=distance_from_bh_cm,  # Use distance from BH as path
+        beta=0.8  # QFD Prime Directive value
+    )
+
+    z_FDR = calculate_z_FDR(
+        flux_erg_cm2_s=jet_flux_erg_cm2_s,
+        distance_cm=distance_from_bh_cm,
+        gamma=1.0  # QFD Prime Directive value
+    )
+
+    # Five-way multiplicative combination (QFD Prime Directive)
+    one_plus_z_total = ((1.0 + z_grav) * (1.0 + z_doppler) *
+                        (1.0 + z_plasma) * (1.0 + z_FDR) * (1.0 + z_cosmo))
+    z_total_unified = one_plus_z_total - 1.0
+
+    # Calculate percentage contributions
+    # Use logarithmic measure: contribution = ln(1+z_i) / ln(1+z_total)
+    ln_total = np.log(1.0 + z_total_unified) if z_total_unified > -0.99 else 1e-10
+
+    contributions = {}
+    if abs(ln_total) > 1e-10:
+        contributions['gravitational_percent'] = 100.0 * np.log(1.0 + z_grav) / ln_total
+        contributions['doppler_percent'] = 100.0 * np.log(1.0 + z_doppler) / ln_total
+        contributions['plasma_percent'] = 100.0 * np.log(1.0 + z_plasma) / ln_total
+        contributions['FDR_percent'] = 100.0 * np.log(1.0 + z_FDR) / ln_total
+        contributions['cosmological_percent'] = 100.0 * np.log(1.0 + z_cosmo) / ln_total
+    else:
+        # All contributions negligible
+        contributions = {k: 0.0 for k in ['gravitational_percent', 'doppler_percent',
+                                          'plasma_percent', 'FDR_percent',
+                                          'cosmological_percent']}
+
+    return {
+        'z_total': z_total_unified,
+        'z_gravitational': z_grav,
+        'z_doppler': z_doppler,
+        'z_plasma': z_plasma,
+        'z_FDR': z_FDR,
+        'z_cosmological': z_cosmo,
+        'contributions': contributions
+    }
+
+
 def validate_qfd_constraints(system: BinaryBlackHoleSystem) -> Dict[str, bool]:
     """
     Validate that implementation follows QFD Prime Directive.

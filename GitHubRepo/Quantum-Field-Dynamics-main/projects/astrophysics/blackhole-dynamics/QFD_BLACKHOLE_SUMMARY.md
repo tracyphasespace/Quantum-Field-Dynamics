@@ -2,11 +2,14 @@
 
 **Date:** 2025-10-01
 **Branch:** qfd-blackhole/rift-mechanism
+**Version:** 1.1 (Unified Astrophysical Emitter)
 **Status:** ✅ Complete and Validated
 
 ## Mission Accomplished
 
 Successfully implemented all three QFD black hole mechanisms according to the Prime Directive. Black holes are now modeled as **active cosmic engines** that recycle matter and seed galactic structure through the gravitational Rift mechanism.
+
+**NEW in v1.1:** Integrated all five QFD redshift mechanisms (gravitational + Doppler + Plasma Veil + Vacuum Sear + cosmological) to create a complete **unified astrophysical emitter model** for observable jets.
 
 ---
 
@@ -34,9 +37,9 @@ Successfully implemented all three QFD black hole mechanisms according to the Pr
 - **Jet Trajectory:** Full integration with torque evolution
 - **BH Recoil:** p_BH = -p_jet (momentum conservation)
 
-### 2. Validation Suite: `test_qfd_blackhole.py` (700+ lines)
+### 2. Validation Suite: `test_qfd_blackhole.py` (900+ lines)
 
-**✓ ALL TESTS PASSED (8/8 categories)**
+**✓ ALL TESTS PASSED (10/10 categories)**
 
 ### 3. Documentation: `QFD_BLACKHOLE_IMPLEMENTATION.md` (1200+ lines)
 
@@ -150,6 +153,80 @@ Direction: Opposite to jet (cos θ = -1.00) ✓
 ```
 
 **Result:** All QFD constraints satisfied, all GR concepts avoided ✓
+
+### Jet Redshift (3 Mechanisms) ✓
+
+**Test Conditions:**
+```
+Jet position:    [15.0, 0, 0] (near L1)
+Jet velocity:    0.3c radially outward
+Observer:        100 Mpc
+```
+
+**Redshift Components:**
+```
+z_gravitational: 4.291385  (83.4% contribution)
+z_doppler:       0.362770  (15.5% contribution)
+z_cosmological:  0.023624  (1.2% contribution)
+z_total:         6.381295
+```
+
+**Validation:**
+```
+✓ All redshifts finite
+✓ Gravitational > 0 (climbing out of well)
+✓ Doppler > 0 (receding source)
+✓ Cosmological > 0 (distant observer)
+✓ Multiplicative combination correct (|error| < 1e-10)
+✓ Blueshift for approaching source (β < 0)
+```
+
+**Result:** Three-mechanism jet redshift validated ✓
+
+### Unified Model (5 Mechanisms) ✓
+
+**Test Conditions:**
+```
+Jet position:           [15.0, 0, 0]
+Jet velocity:           0.3c
+Wavelength:             656.3 nm (H-alpha)
+Time since ejection:    10 days
+Flux:                   1e12 erg/cm²/s
+Distance from BH:       1e15 cm (~0.03 pc)
+Observer distance:      100 Mpc
+```
+
+**All Five Mechanisms:**
+```
+z_gravitational: 4.29138484
+z_doppler:       0.36277029
+z_plasma:        0.00000446  (wavelength-dependent)
+z_FDR:           0.00000000  (flux-dependent)
+z_cosmological:  0.02362422
+z_total:         6.38132787
+```
+
+**Contribution Breakdown:**
+```
+Gravitational: 83.4%
+Doppler:       15.5%
+Plasma:        ~0.0%
+FDR:           ~0.0%
+Cosmological:  1.2%
+Total:         100.0%
+```
+
+**Validation:**
+```
+✓ All components finite
+✓ Total redshift > 0
+✓ Five-way multiplicative correct (|error| < 1e-10)
+✓ Contributions sum to 100%
+✓ Near-source effects small at 100 Mpc
+✓ Plasma wavelength-dependent (z_plasma(450nm) > z_plasma(656nm))
+```
+
+**Result:** Unified astrophysical emitter validated ✓
 
 ### Performance ✓
 

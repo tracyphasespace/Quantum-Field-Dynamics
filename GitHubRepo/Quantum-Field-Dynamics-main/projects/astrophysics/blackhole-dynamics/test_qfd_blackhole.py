@@ -646,6 +646,232 @@ def test_performance():
     return True
 
 # ============================================================================
+# TEST 9: JET REDSHIFT (3 MECHANISMS)
+# ============================================================================
+
+def test_jet_redshift():
+    """
+    Test jet redshift calculation with three QFD mechanisms.
+
+    Validates:
+    - Gravitational redshift (escape from potential well)
+    - Relativistic Doppler shift (ejection velocity)
+    - Cosmological baseline (tired light)
+    - Multiplicative combination correctness
+    """
+    print_header("TEST 9: JET REDSHIFT (3 MECHANISMS)")
+
+    from qfd_blackhole import calculate_jet_redshift
+
+    # Create binary system
+    bh1 = QFDBlackHoleSoliton(mass=10.0, soliton_radius=2.0)
+    bh2 = QFDBlackHoleSoliton(mass=5.0, soliton_radius=1.5)
+    system = BinaryBlackHoleSystem(bh1, bh2, separation=20.0)
+
+    # Jet properties
+    jet_position = np.array([15.0, 0.0, 0.0])  # Near L1 point
+    jet_velocity = np.array([0.3, 0.0, 0.0])   # 0.3c radially outward
+    observer_distance_Mpc = 100.0
+
+    # Calculate redshift
+    z_total, z_grav, z_doppler, z_cosmo = calculate_jet_redshift(
+        jet_position, jet_velocity, system, observer_distance_Mpc
+    )
+
+    print(f"Jet position: {jet_position}")
+    print(f"Jet velocity: {jet_velocity[0]:.2f}c radial")
+    print(f"Observer distance: {observer_distance_Mpc} Mpc")
+    print()
+
+    print("Redshift Components:")
+    print(f"  z_gravitational: {z_grav:.6f}")
+    print(f"  z_doppler:       {z_doppler:.6f}")
+    print(f"  z_cosmological:  {z_cosmo:.6f}")
+    print(f"  z_total:         {z_total:.6f}")
+    print()
+
+    # Validation checks
+    checks = []
+
+    # 1. All redshifts are finite
+    all_finite = all(np.isfinite([z_grav, z_doppler, z_cosmo, z_total]))
+    checks.append(("All redshifts finite", all_finite))
+    print(f"✓ All redshifts finite: {all_finite}")
+
+    # 2. Gravitational redshift is positive (climbing out of well)
+    grav_positive = z_grav > 0
+    checks.append(("Gravitational redshift > 0", grav_positive))
+    print(f"✓ Gravitational redshift > 0: {grav_positive} (z_grav = {z_grav:.6f})")
+
+    # 3. Doppler shift is positive (receding source)
+    doppler_positive = z_doppler > 0
+    checks.append(("Doppler shift > 0 (receding)", doppler_positive))
+    print(f"✓ Doppler shift > 0: {doppler_positive} (z_doppler = {z_doppler:.6f})")
+
+    # 4. Cosmological redshift is positive (for distant observer)
+    cosmo_positive = z_cosmo > 0
+    checks.append(("Cosmological redshift > 0", cosmo_positive))
+    print(f"✓ Cosmological redshift > 0: {cosmo_positive} (z_cosmo = {z_cosmo:.6f})")
+
+    # 5. Multiplicative combination correct
+    one_plus_z_expected = (1 + z_grav) * (1 + z_doppler) * (1 + z_cosmo)
+    z_expected = one_plus_z_expected - 1
+    multiplicative_correct = abs(z_total - z_expected) < 1e-10
+    checks.append(("Multiplicative combination", multiplicative_correct))
+    print(f"✓ Multiplicative formula: |error| = {abs(z_total - z_expected):.2e}")
+
+    # 6. Test blueshift (approaching source)
+    jet_velocity_approaching = np.array([-0.2, 0.0, 0.0])  # -0.2c
+    z_tot_blue, z_g_blue, z_d_blue, z_c_blue = calculate_jet_redshift(
+        jet_position, jet_velocity_approaching, system, observer_distance_Mpc
+    )
+    doppler_negative = z_d_blue < 0
+    checks.append(("Doppler blueshift for approaching", doppler_negative))
+    print(f"✓ Doppler blueshift (β=-0.2): {doppler_negative} (z_doppler = {z_d_blue:.6f})")
+
+    print()
+    all_passed = all(check[1] for check in checks)
+    print(f"{'✓ PASS' if all_passed else '✗ FAIL'}: Jet redshift calculation")
+
+    return all_passed
+
+
+# ============================================================================
+# TEST 10: UNIFIED MODEL (5 MECHANISMS)
+# ============================================================================
+
+def test_unified_redshift():
+    """
+    Test unified astrophysical emitter with all five QFD mechanisms.
+
+    Validates:
+    - Integration of black hole and supernova physics
+    - All five mechanisms present (grav, Doppler, plasma, FDR, cosmo)
+    - Contribution percentages sum to ~100%
+    - Physical reasonableness of outputs
+    """
+    print_header("TEST 10: UNIFIED MODEL (5 MECHANISMS)")
+
+    from qfd_blackhole import calculate_jet_total_redshift
+
+    # Create binary system
+    bh1 = QFDBlackHoleSoliton(mass=10.0, soliton_radius=2.0)
+    bh2 = QFDBlackHoleSoliton(mass=5.0, soliton_radius=1.5)
+    system = BinaryBlackHoleSystem(bh1, bh2, separation=20.0)
+
+    # Jet properties
+    jet_position = np.array([15.0, 0.0, 0.0])
+    jet_velocity = np.array([0.3, 0.0, 0.0])  # 0.3c
+
+    # Observational parameters
+    wavelength_nm = 656.3  # H-alpha line
+    time_since_ejection_days = 10.0
+    jet_flux_erg_cm2_s = 1e12
+    distance_from_bh_cm = 1e15  # ~0.03 pc
+    observer_distance_Mpc = 100.0
+    electron_density_cm3 = 1e20
+
+    # Calculate unified redshift
+    result = calculate_jet_total_redshift(
+        jet_position=jet_position,
+        jet_velocity=jet_velocity,
+        wavelength_nm=wavelength_nm,
+        time_since_ejection_days=time_since_ejection_days,
+        jet_flux_erg_cm2_s=jet_flux_erg_cm2_s,
+        distance_from_bh_cm=distance_from_bh_cm,
+        bh_system=system,
+        observer_distance_Mpc=observer_distance_Mpc,
+        electron_density_cm3=electron_density_cm3
+    )
+
+    print("Jet Parameters:")
+    print(f"  Position: {jet_position}")
+    print(f"  Velocity: {jet_velocity[0]:.2f}c")
+    print(f"  Wavelength: {wavelength_nm} nm (H-alpha)")
+    print(f"  Time since ejection: {time_since_ejection_days} days")
+    print(f"  Distance from BH: {distance_from_bh_cm:.2e} cm")
+    print()
+
+    print("Redshift Components:")
+    print(f"  z_gravitational: {result['z_gravitational']:.8f}")
+    print(f"  z_doppler:       {result['z_doppler']:.8f}")
+    print(f"  z_plasma:        {result['z_plasma']:.8f}")
+    print(f"  z_FDR:           {result['z_FDR']:.8f}")
+    print(f"  z_cosmological:  {result['z_cosmological']:.8f}")
+    print(f"  z_total:         {result['z_total']:.8f}")
+    print()
+
+    print("Contribution Percentages:")
+    for key, value in result['contributions'].items():
+        mechanism = key.replace('_percent', '').replace('_', ' ').title()
+        print(f"  {mechanism:20s}: {value:6.2f}%")
+    print()
+
+    # Validation checks
+    checks = []
+
+    # 1. All components are finite
+    all_components = [result['z_gravitational'], result['z_doppler'],
+                     result['z_plasma'], result['z_FDR'],
+                     result['z_cosmological'], result['z_total']]
+    all_finite = all(np.isfinite(all_components))
+    checks.append(("All components finite", all_finite))
+    print(f"✓ All components finite: {all_finite}")
+
+    # 2. Total redshift is positive
+    total_positive = result['z_total'] > 0
+    checks.append(("Total redshift > 0", total_positive))
+    print(f"✓ Total redshift > 0: {total_positive} (z = {result['z_total']:.6f})")
+
+    # 3. Five-way multiplicative combination
+    one_plus_z_expected = ((1 + result['z_gravitational']) *
+                          (1 + result['z_doppler']) *
+                          (1 + result['z_plasma']) *
+                          (1 + result['z_FDR']) *
+                          (1 + result['z_cosmological']))
+    z_expected = one_plus_z_expected - 1
+    mult_error = abs(result['z_total'] - z_expected)
+    mult_correct = mult_error < 1e-10
+    checks.append(("Five-way multiplicative", mult_correct))
+    print(f"✓ Five-way multiplicative: |error| = {mult_error:.2e}")
+
+    # 4. Contributions sum to ~100%
+    total_contrib = sum(result['contributions'].values())
+    contrib_sum_correct = abs(total_contrib - 100.0) < 0.1
+    checks.append(("Contributions sum to 100%", contrib_sum_correct))
+    print(f"✓ Contributions sum: {total_contrib:.2f}% (expect 100%)")
+
+    # 5. Near-source effects are small (distant observer)
+    near_source_total = result['z_plasma'] + result['z_FDR']
+    near_source_small = near_source_total < 0.1 * result['z_total']
+    checks.append(("Near-source effects small at 100 Mpc", near_source_small))
+    print(f"✓ Near-source effects small: {near_source_total:.8f} << {result['z_total']:.6f}")
+
+    # 6. Plasma effect is wavelength-dependent
+    # Test at different wavelength (blue vs red)
+    result_blue = calculate_jet_total_redshift(
+        jet_position, jet_velocity,
+        wavelength_nm=450.0,  # Blue
+        time_since_ejection_days=time_since_ejection_days,
+        jet_flux_erg_cm2_s=jet_flux_erg_cm2_s,
+        distance_from_bh_cm=distance_from_bh_cm,
+        bh_system=system,
+        observer_distance_Mpc=observer_distance_Mpc,
+        electron_density_cm3=electron_density_cm3
+    )
+    # Blue light (shorter wavelength) should have larger plasma effect (β = 0.8)
+    blue_larger = result_blue['z_plasma'] > result['z_plasma']
+    checks.append(("Plasma wavelength-dependent (β=0.8)", blue_larger))
+    print(f"✓ Plasma wavelength-dependent: z_plasma(450nm) = {result_blue['z_plasma']:.8f} > z_plasma(656nm) = {result['z_plasma']:.8f}")
+
+    print()
+    all_passed = all(check[1] for check in checks)
+    print(f"{'✓ PASS' if all_passed else '✗ FAIL'}: Unified astrophysical emitter")
+
+    return all_passed
+
+
+# ============================================================================
 # MAIN TEST RUNNER
 # ============================================================================
 
@@ -672,6 +898,8 @@ def main():
         ("Conservation Laws", test_conservation_laws),
         ("Edge Cases", test_edge_cases),
         ("Performance", test_performance),
+        ("Jet Redshift (3 Mechanisms)", test_jet_redshift),
+        ("Unified Model (5 Mechanisms)", test_unified_redshift),
     ]
 
     results = []
