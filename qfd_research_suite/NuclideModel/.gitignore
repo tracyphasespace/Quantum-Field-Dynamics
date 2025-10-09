@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Output files
+*.json
+!results/trial32_*.json
+!results/phase_comparison/*.json
+*.csv
+!data/*.csv
+*.log
+*.pt
+*.pth
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test outputs
+test_*.json
+run_*.json
+sweep_results/
+tmp/
