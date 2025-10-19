@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poynting Vector: Classical vs. Geometric Algebra View</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
+            color: #F9FAFB;
+        }
+        #canvas-container {
+            width: 100%;
+            height: 80vh;
+            cursor: grab; /* Cursor change for interaction */
+        }
+        #canvas-container.grabbing {
+            cursor: grabbing;
+        }
+        canvas {
+            display: block;
+        }
+        .toggle-button {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .active-view {
+            background-color: #4F46E5;
+            color: white;
+        }
+        .inactive-view {
+            background-color: #374151;
+            color: #D1D5DB;
+        }
+        .sidebar {
+            height: 80vh;
+            overflow-y: auto;
+        }
+        /* Dynamic text overlay styles */
+        .dynamic-text {
+            position: absolute;
+            background-color: rgba(79, 70, 229, 0.8); /* Indigo-600 with opacity */
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none; /* Allows clicks to pass through */
+            transform: translate(-50%, -50%); /* Center the text */
+            transition: opacity 0.5s ease-out; /* Smooth fade-out */
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 lg:px-8">
+
+    <div class="w-full text-center mb-4">
+        <h1 class="text-3xl md:text-4xl font-bold mb-2">Poynting Vector Visualization</h1>
+        <p class="text-gray-400">Comparing the Classical and Geometric Algebra representations of electromagnetic energy flow.</p>
+    </div>
+
+    <div class="w-full flex flex-col md:flex-row gap-4 mb-4">
+        
+        <div id="left-sidebar-container" class="w-full md:w-64 lg:w-72 bg-gray-900 rounded-lg p-4 flex-shrink-0 sidebar">
+            <div id="classical-left-sidebar">
+                <h4 class="text-lg font-bold text-indigo-400 mb-2">Conceptual View</h4>
+                <p class="text-gray-300 mb-2 text-sm">The Poynting vector (S) is calculated from the cross product of the E and B fields. It represents the linear flow of energy.</p>
+                <p class="text-gray-400 mb-4 text-xs italic">In the complex formalism, the Poynting vector has both real and imaginary parts. The imaginary component, related to reactive energy, is typically discarded as it has no direct physical analog for energy flow in free space.</p>
+            </div>
+            <div id="ga-left-sidebar" class="hidden">
+                 <h4 class="text-lg font-bold text-indigo-400 mb-2">The Poynting Bivector</h4>
+                 <p class="text-gray-300 mb-2 text-sm">The yellow square represents the Poynting Bivector (E ∧ B), the fundamental object of energy flow in Geometric Algebra.</p>
+                 <ul class="space-y-3 text-gray-400 text-xs">
+                    <li><strong class="text-gray-200">A Real Geometric Plane:</strong> It visualizes the oriented plane spanned by the E and B vectors.</li>
+                    <li><strong class="text-gray-200">Area of Energy Flow:</strong> This plane is the physical area through which the wave's energy is flowing.</li>
+                    <li><strong class="text-gray-200">Visualizing Spin:</strong> The rotation of this plane as it moves forward is the direct, visual representation of the photon's intrinsic spin (angular momentum).</li>
+                    <li><strong class="text-gray-200">Position, Not Time:</strong> This view shows the wave's structure in space. The changes you see are dependent on position (x), not an independent time variable (t).</li>
+                    <li><strong class="text-gray-200">Intuitive Polarization:</strong> The Electric Field vector (E) now physically defines the wave's polarization. Its path creates the helical structure.</li>
+                 </ul>
+            </div>
+        </div>
+
+        <div id="canvas-container" class="bg-black rounded-lg shadow-2xl relative flex-grow">
+             <div id="info-overlay" class="absolute top-4 left-4 text-left p-4 bg-gray-900/80 rounded-lg max-w-xs backdrop-blur-sm">
+                <h3 id="view-title" class="text-lg font-bold text-indigo-400">Classical View</h3>
+                <p id="view-description" class="text-sm text-gray-300 mt-1">S = E × B. Energy flows as a simple vector.</p>
+            </div>
+        </div>
+
+        <div id="right-sidebar-container" class="w-full md:w-64 lg:w-72 bg-gray-900 rounded-lg p-4 flex-shrink-0 sidebar">
+            <div id="classical-right-sidebar">
+                <h4 class="text-lg font-bold text-indigo-400 mb-2">Mathematical Formalism</h4>
+                 <div class="bg-gray-800 p-3 rounded-md text-center">
+                    <p class="text-lg font-mono text-gray-200">E = E₀ e<sup>iωt</sup></p>
+                </div>
+                <hr class="my-4 border-gray-700">
+                <h5 class="font-semibold mb-2 text-gray-200">Axis Interpretation</h5>
+                <ul class="list-inside text-gray-400 space-y-1 text-sm">
+                    <li><strong class="text-red-400">X-Axis:</strong> Time (t)</li>
+                    <li><strong class="text-green-400">Y-Axis:</strong> Real Part</li>
+                    <li><strong class="text-blue-400">Z-Axis:</strong> Imaginary Part (i)</li>
+                </ul>
+            </div>
+            <div id="ga-right-sidebar" class="hidden">
+                <h4 class="text-lg font-bold text-indigo-400 mb-2">Geometric Objects</h4>
+                <ul class="space-y-2 text-gray-300 text-sm">
+                    <li><strong>E:</strong> Electric Field Vector</li>
+                    <li><strong>P:</strong> Polarization Vector (coincident with E)</li>
+                    <li><strong>B:</strong> Magnetic Field Vector</li>
+                    <li><strong>S:</strong> Poynting Vector</li>
+                    <li><strong>E ∧ B:</strong> Poynting Bivector</li>
+                </ul>
+                <hr class="my-4 border-gray-700">
+                <h5 class="font-semibold mb-2 text-gray-200">Axis Interpretation</h5>
+                <ul class="list-inside text-gray-400 space-y-1 text-sm">
+                    <li><strong class="text-red-400">X-Axis:</strong> Spatial Dim x</li>
+                    <li><strong class="text-green-400">Y-Axis:</strong> Spatial Dim y</li>
+                    <li><strong class="text-blue-400">Z-Axis:</strong> Spatial Dim z</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+   
+    <div class="flex space-x-2 p-1 bg-gray-800 rounded-lg">
+        <button id="classical-btn" class="toggle-button px-4 py-2 rounded-md font-semibold">Classical View</button>
+        <button id="ga-btn" class="toggle-button px-4 py-2 rounded-md font-semibold active-view">Geometric Algebra View</button>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        let scene, camera, renderer, controls;
+        let E_arrow, B_arrow, S_arrow, P_arrow;
+        let E_helix, B_helix;
+        let bivectorPlane;
+        let currentView = 'ga'; // Start in GA view
+        let textOverlays = []; // Array to hold dynamic text elements
+
+        const canvasContainer = document.getElementById('canvas-container');
+        const infoTitle = document.getElementById('view-title');
+        const infoDesc = document.getElementById('view-description');
+        
+        const classicalLeftSidebar = document.getElementById('classical-left-sidebar');
+        const gaLeftSidebar = document.getElementById('ga-left-sidebar');
+        const classicalRightSidebar = document.getElementById('classical-right-sidebar');
+        const gaRightSidebar = document.getElementById('ga-right-sidebar');
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 1000);
+            camera.position.set(5, 6, 15);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            canvasContainer.appendChild(renderer.domElement);
+
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+
+            // Cursor styling for controls
+            canvasContainer.addEventListener('mousedown', () => canvasContainer.classList.add('grabbing'));
+            canvasContainer.addEventListener('mouseup', () => canvasContainer.classList.remove('grabbing'));
+
+            const gridHelper = new THREE.GridHelper(40, 40, 0x444444, 0x444444);
+            scene.add(gridHelper);
+            
+            const axesHelper = new THREE.AxesHelper(5);
+            scene.add(axesHelper);
+
+            E_arrow = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0), 2, 0x3b82f6); // Blue
+            B_arrow = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0, 0), 2, 0x34d399); // Green
+            S_arrow = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 0), 3, 0xf59e0b); // Orange
+            P_arrow = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0), 2.5, 0xc084fc, 2.8, 1.2); // Purple/Magenta for Polarization
+            P_arrow.line.material.linewidth = 2; // Make it a bit thinner
+            scene.add(E_arrow, B_arrow, S_arrow, P_arrow);
+
+            const bivectorMaterial = new THREE.MeshBasicMaterial({
+                color: 0xfacc15, // Yellow
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.4
+            });
+            const bivectorGeom = new THREE.BufferGeometry();
+            bivectorPlane = new THREE.Mesh(bivectorGeom, bivectorMaterial);
+            scene.add(bivectorPlane);
+
+            const helixMaterialE = new THREE.LineBasicMaterial({ color: 0x3b82f6, transparent: true, opacity: 0.7 });
+            const helixMaterialB = new THREE.LineBasicMaterial({ color: 0x34d399, transparent: true, opacity: 0.7 });
+            const pointsE = [];
+            const pointsB = [];
+            const helixLength = 8 * Math.PI; // Total length of the helix along x-axis
+            const segments = 400;
+            for (let i = 0; i < segments; i++) {
+                const x_val = (i / (segments - 1)) * helixLength;
+                const angle = x_val;
+                pointsE.push(new THREE.Vector3(-x_val + helixLength, 2 * Math.sin(angle), 2 * Math.cos(angle)));
+                pointsB.push(new THREE.Vector3(-x_val + helixLength, 2 * Math.sin(angle - Math.PI / 2), 2 * Math.cos(angle - Math.PI / 2)));
+            }
+            E_helix = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pointsE), helixMaterialE);
+            B_helix = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pointsB), helixMaterialB);
+            scene.add(E_helix, B_helix);
+
+            window.addEventListener('resize', onWindowResize, false);
+            document.getElementById('classical-btn').addEventListener('click', () => setView('classical'));
+            document.getElementById('ga-btn').addEventListener('click', () => setView('ga'));
+
+            setView('ga'); // Start in GA view
+
+            animate();
+        }
+
+        function setView(view) {
+            currentView = view;
+            const classicalBtn = document.getElementById('classical-btn');
+            const gaBtn = document.getElementById('ga-btn');
+            
+            textOverlays.forEach(overlay => overlay.element.remove());
+            textOverlays = [];
+
+            if (view === 'classical') {
+                infoTitle.innerText = "Classical View";
+                infoDesc.innerText = "S = E × B. Energy flows as a simple vector.";
+                classicalBtn.classList.add('active-view');
+                classicalBtn.classList.remove('inactive-view');
+                gaBtn.classList.add('inactive-view');
+                gaBtn.classList.remove('active-view');
+
+                classicalLeftSidebar.classList.remove('hidden');
+                gaLeftSidebar.classList.add('hidden');
+                classicalRightSidebar.classList.remove('hidden');
+                gaRightSidebar.classList.add('hidden');
+
+                bivectorPlane.visible = false;
+                E_helix.visible = false;
+                B_helix.visible = false;
+                P_arrow.visible = false;
+                S_arrow.scale.set(1,1,1);
+                E_arrow.setLength(2);
+                B_arrow.setLength(2);
+                S_arrow.setLength(3);
+
+
+            } else {
+                infoTitle.innerText = "Geometric Algebra View";
+                infoDesc.innerText = "Energy flows via the rotating bivector plane E ∧ B.";
+                gaBtn.classList.add('active-view');
+                gaBtn.classList.remove('inactive-view');
+                classicalBtn.classList.add('inactive-view');
+                classicalBtn.classList.remove('active-view');
+                
+                classicalLeftSidebar.classList.add('hidden');
+                gaLeftSidebar.classList.remove('hidden');
+                classicalRightSidebar.classList.add('hidden');
+                gaRightSidebar.classList.remove('hidden');
+
+                bivectorPlane.visible = true;
+                E_helix.visible = true;
+                B_helix.visible = true;
+                P_arrow.visible = true;
+                S_arrow.scale.set(0.7,0.7,0.7);
+                E_arrow.setLength(2.5);
+                B_arrow.setLength(2.5);
+                S_arrow.setLength(2.5);
+                P_arrow.setLength(2.7); // Slightly longer to be visible
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = canvasContainer.clientWidth / canvasContainer.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+        }
+        
+        const clock = new THREE.Clock();
+        const helixLength = 16 * Math.PI;
+
+        function createTextOverlay(text, position3D, duration = 3) {
+            const element = document.createElement('div');
+            element.className = 'dynamic-text';
+            element.textContent = text;
+            canvasContainer.appendChild(element);
+            const overlay = { element, position3D, startTime: clock.getElapsedTime(), duration };
+            textOverlays.push(overlay);
+        }
+
+        function updateTextOverlays() {
+            textOverlays.forEach(overlay => {
+                const elapsed = clock.getElapsedTime() - overlay.startTime;
+                if (elapsed > overlay.duration) {
+                    overlay.element.style.opacity = '0';
+                    setTimeout(() => { if(overlay.element.parentElement) overlay.element.remove(); }, 500);
+                } else {
+                    overlay.element.style.opacity = `${1 - (elapsed / overlay.duration)}`;
+                }
+
+                const vector = overlay.position3D.clone().project(camera);
+                const x = (vector.x * 0.5 + 0.5) * canvasContainer.clientWidth;
+                const y = (-vector.y * 0.5 + 0.5) * canvasContainer.clientHeight;
+
+                overlay.element.style.left = `${x}px`;
+                overlay.element.style.top = `${y}px`;
+            });
+            textOverlays = textOverlays.filter(o => (clock.getElapsedTime() - o.startTime) <= o.duration);
+        }
+
+        let lastTextTriggerTime = -5;
+        const textTriggerInterval = 3;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+            
+            const e_angle = time * 2;
+            const b_angle = e_angle - Math.PI / 2;
+            
+            const e_vec_len = 2.5;
+            const b_vec_len = 2.5;
+
+            const e_vec = new THREE.Vector3(0, e_vec_len * Math.sin(e_angle), e_vec_len * Math.cos(e_angle));
+            const b_vec = new THREE.Vector3(0, b_vec_len * Math.sin(b_angle), b_vec_len * Math.cos(b_angle));
+
+
+            if (currentView === 'classical') {
+                E_arrow.position.set(0,0,0);
+                B_arrow.position.set(0,0,0);
+                S_arrow.position.set(0,0,0);
+                
+                E_arrow.setDirection(e_vec.clone().normalize());
+                E_arrow.setLength(e_vec.length());
+                B_arrow.setDirection(b_vec.clone().normalize());
+                B_arrow.setLength(b_vec.length());
+
+                const s_vec_classical = new THREE.Vector3().crossVectors(e_vec, b_vec).normalize();
+                S_arrow.setDirection(s_vec_classical);
+                S_arrow.setLength(3);
+
+            } else if (currentView === 'ga') {
+                const propagation_speed = 4;
+                const current_x_position = (helixLength / 2) - (time * propagation_speed) % helixLength;
+
+                const s_vec_ga = new THREE.Vector3().crossVectors(e_vec, b_vec).normalize();
+
+                E_arrow.position.set(current_x_position, 0, 0);
+                B_arrow.position.set(current_x_position, 0, 0);
+                P_arrow.position.set(current_x_position, 0, 0);
+
+                const e_dir = e_vec.clone().normalize();
+                const b_dir = b_vec.clone().normalize();
+                E_arrow.setDirection(e_dir);
+                B_arrow.setDirection(b_dir);
+                P_arrow.setDirection(e_dir);
+                
+                bivectorPlane.position.copy(E_arrow.position);
+
+                const corners = [
+                    e_vec.clone(),
+                    new THREE.Vector3(0, 0, 0),
+                    b_vec.clone(),
+                    e_vec.clone().add(b_vec)
+                ];
+                
+                const planeGeom = new THREE.BufferGeometry().setFromPoints(corners);
+                planeGeom.setIndex([0, 1, 2, 0, 2, 3]);
+                bivectorPlane.geometry.dispose();
+                bivectorPlane.geometry = planeGeom;
+                
+                S_arrow.position.copy(bivectorPlane.position);
+                S_arrow.setDirection(s_vec_ga);
+
+                E_helix.position.set(current_x_position - helixLength/2, 0, 0);
+                B_helix.position.set(current_x_position - helixLength/2, 0, 0);
+
+                if (time - lastTextTriggerTime > textTriggerInterval) {
+                    const randomChoice = Math.random();
+                    if (randomChoice < 0.25) {
+                         createTextOverlay("E ∧ B rotates!", bivectorPlane.position.clone().add(new THREE.Vector3(0, 3, 0)));
+                    } else if (randomChoice < 0.5) {
+                         createTextOverlay("Geometric Spin!", bivectorPlane.position.clone().add(new THREE.Vector3(0, 3, 0)));
+                    } else if (randomChoice < 0.75) {
+                         createTextOverlay("Energy plane propagates!", S_arrow.position.clone().add(s_vec_ga.clone().multiplyScalar(1.5)));
+                    } else {
+                         createTextOverlay("Polarization Vector (P)", P_arrow.position.clone().add(e_dir.clone().multiplyScalar(1.5)));
+                    }
+                    lastTextTriggerTime = time;
+                }
+                updateTextOverlays();
+            }
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        init();
+    </script>
+
+</body>
+</html>
+
