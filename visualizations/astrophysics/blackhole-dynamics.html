@@ -1,289 +1,373 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Elliptical Binary Outflow Viewer</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Black Hole Interaction — v14</title>
   <style>
-    body { margin:0; background:#0f172a; color:#cbd5e1; font-family:Inter,sans-serif; }
-    #controls { padding:1rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1rem; background:#1e293b; }
-    #canvas { display:block; width:100%; height:calc(100vh - 260px); background:#0f172a; }
-    input[type=range] { width:100%; }
-    .checkbox { display:flex; align-items:center; }
-    .checkbox input { margin-right:.5rem; }
-    button { background:#3b82f6; color:#fff; padding:.5rem; border:none; border-radius:.25rem; cursor:pointer; }
-    small { color:#94a3b8; display:block; font-size:.75rem; }
-    label { font-size:.9rem; }
+    html, body { margin:0; padding:0; height:100%; background:#0f172a; color:#e2e8f0; font-family:Inter,system-ui,Arial,sans-serif; }
+    body { display:flex; flex-direction:column; }
+    #controls { background:#111827; padding:12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; align-items:end; }
+    #canvas-container { position:relative; flex:1 1 auto; min-height:0; }
+    #legend { position:absolute; right:10px; bottom:10px; width:220px; padding:8px; background:rgba(17,24,39,.8); border-radius:8px; font-size:12px; }
+    #legend .bar { height:12px; border-radius:6px; margin-top:6px;
+      background: linear-gradient(90deg,#ff0000 0%, #ffff00 33%, #00ff00 66%, #00ffff 100%); }
+    label { display:block; font-size:12px; color:#9ca3af; margin-bottom:4px; }
+    input[type=range]{ width:100%; }
+    .row { display:flex; gap:8px; align-items:center; }
+    .row > * { flex:1; }
+    select, button, input[type=checkbox] { font-size:13px; padding:6px; background:#1f2937; color:#e5e7eb; border:1px solid #374151; border-radius:8px; }
+    button { background:#2563eb; border:none; cursor:pointer; }
+    button:hover { background:#1d4ed8; }
+    .kv { font-weight:600; color:#e5e7eb; margin-left:6px; }
+    .checkbox { display:flex; gap:8px; align-items:center; }
+    .subtle { color:#94a3b8; font-size:11px; }
   </style>
 </head>
 <body>
   <div id="controls">
-    <div><label>M1: <span id="m1Val">1375</span></label><input id="m1" type="range" min="500" max="5000" value="1375"></div>
-    <div><label>M2: <span id="m2Val">500</span></label><input id="m2" type="range" min="100" max="2000" value="500"></div>
-    <div><label>Separation: <span id="dVal">195</span></label><input id="d" type="range" min="100" max="400" value="195"></div>
-    <div>
-      <label>Speed: <span id="vVal">0.80</span></label>
-      <input id="v" type="range" min="0.10" max="2.00" step="0.01" value="0.80">
-      <small>fraction of circular</small>
+    <div><label>M1 (red): <span id="m1Val" class="kv">1375</span></label><input id="m1" type="range" min="100" max="5000" value="1375"></div>
+    <div><label>M2 (blue): <span id="m2Val" class="kv">500</span></label><input id="m2" type="range" min="100" max="5000" value="500"></div>
+    <div><label>Separation: <span id="dVal" class="kv">195</span></label><input id="d" type="range" min="100" max="400" value="195"></div>
+    <div><label>Speed (×circ): <span id="vVal" class="kv">0.80</span></label><input id="v" type="range" min="0.10" max="2.00" step="0.01" value="0.80"></div>
+    <div><label>Proximity threshold: <span id="pVal" class="kv">150</span></label><input id="p" type="range" min="50" max="300" step="5" value="150"></div>
+    <div><label>Boost: <span id="bVal" class="kv">1.0</span></label><input id="b" type="range" min="0.5" max="6.0" step="0.1" value="1.0"></div>
+    <div><label>Aperture (deg): <span id="aVal" class="kv">1.5°</span></label><input id="a" type="range" min="0.2" max="15" step="0.1" value="1.5"></div>
+    <div><label>Time scale: <span id="tVal" class="kv">5.0</span></label><input id="t" type="range" min="0.2" max="10.0" step="0.1" value="5.0"></div>
+    <div><label>Max particles: <span id="countVal" class="kv">12000</span></label><input id="count" type="range" min="100" max="60000" step="100" value="12000"></div>
+    <div><label>Spawn/sec: <span id="rVal" class="kv">12</span></label><input id="r" type="range" min="1" max="200" step="1" value="12"></div>
+
+    <div><label>Donor mode</label>
+      <select id="donorMode">
+        <option value="manualM1">Manual: M1 → M2</option>
+        <option value="manualM2">Manual: M2 → M1</option>
+        <option value="autoMass">Auto: lighter → heavier</option>
+        <option value="roche">Roche-lobe overflow</option>
+      </select>
     </div>
-    <div><label>Prox: <span id="pVal">150</span></label><input id="p" type="range" min="50" max="300" step="10" value="150"></div>
-    <div><label>Boost: <span id="bVal">1.0</span></label><input id="b" type="range" min="0.5" max="5.0" step="0.1" value="1.0"></div>
-    <div>
-      <label>Aperture: <span id="aVal">1.5°</span></label><input id="a" type="range" min="0.5" max="10" step="0.5" value="1.5">
-      <small>half‑angle</small>
+
+    <div><label>Flow mode</label>
+      <select id="flowMode">
+        <option value="accretion">Accretion (toward accretor)</option>
+        <option value="jets">Jets (away from accretor)</option>
+      </select>
     </div>
-    <div>
-      <label>Time: <span id="tVal">5.0×</span></label><input id="t" type="range" min="0.2" max="10.0" step="0.1" value="5.0">
-      <small>world speed</small>
+
+    <div class="checkbox">
+      <input type="checkbox" id="bipolar">
+      <label for="bipolar">Bipolar (emit both poles)</label>
     </div>
-    <div>
-      <label>Particles: <span id="countVal">10000</span></label><input id="count" type="range" min="50" max="50000" step="10" value="10000">
-      <small>max</small>
+
+    <div class="checkbox">
+      <input type="checkbox" id="dual">
+      <label for="dual">Secondary stream too</label>
     </div>
-    <div>
-      <label>Rate: <span id="rVal">10/sec</span></label><input id="r" type="range" min="1" max="100" step="1" value="10">
-      <small>spawn/sec</small>
+
+    <div class="row">
+      <button id="restart">Restart</button>
+      <button id="topView">Top–Down</button>
     </div>
-    <div class="checkbox"><input type="checkbox" id="dual"><label for="dual">Dual Outflow</label></div>
-    <div style="align-self:center;text-align:center;"><button id="restart">Restart</button></div>
+    <div class="subtle">Tip: “Roche-lobe” uses Eggleton’s formula; radius ∝ m^{1/3}.</div>
   </div>
-  <canvas id="canvas"></canvas>
+
+  <div id="canvas-container">
+    <div id="legend">
+      <div><strong>Mass/Proximity color</strong></div>
+      <div class="bar"></div>
+      <div class="subtle">close ↔ far (red→yellow→green→cyan)</div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
   <script>
-  // DOM & labels
-  const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
-  const sliders = ['m1','m2','d','v','p','b','a','t','count','r'];
-  const labelMap = { m1:'m1Val',m2:'m2Val',d:'dVal',v:'vVal',p:'pVal',b:'bVal',a:'aVal',t:'tVal',count:'countVal',r:'rVal' };
-  sliders.forEach(id=>{
-    const s=document.getElementById(id), l=document.getElementById(labelMap[id]);
-    s.oninput = ()=>{
-      if(id==='v'||id==='b')       l.textContent = parseFloat(s.value).toFixed(2);
-      else if(id==='a')             l.textContent = s.value+'°';
-      else if(id==='t')             l.textContent = parseFloat(s.value).toFixed(1)+'×';
-      else if(id==='r')             l.textContent = s.value+'/sec';
-      else                           l.textContent = s.value;
-    };
-  });
-  document.getElementById('restart').onclick = start;
+  (() => {
+    'use strict';
 
-  // Vec helpers
-  function sub(a,b){return{x:a.x-b.x,y:a.y-b.y};}
-  function mag(v){return Math.hypot(v.x,v.y);}
-  function norm(v){const m=mag(v);return m<1e-9?{x:0,y:0}:{x:v.x/m,y:v.y/m};}
-  function scale(v,s){return{x:v.x*s,y:v.y*s};}
-
-  // Color banding
-  function pickColorByDistance(d){
-    const r=d/threshold;
-    if(r>=0.5) return '#fde047';
-    if(r>=0.25) return '#a3e635';
-    if(r>=0.125) return '#38bdf8';
-    if(r>=0.0625) return '#1e3a8a';
-    if(r>=0.03125) return '#8b5cf6';
-    if(r>=0.015625) return '#f43f5e';
-    return '#7f1d1d';
-  }
-
-  // Mass & Particle
-  class Mass {
-    constructor(x,y,m,r,c){
-      this.pos={x,y};this.mass=m;this.radius=r;this.color=c;
-      this.vel={x:0,y:0};this.acc={x:0,y:0};
-    }
-    applyForce(f){
-      if(!isFinite(f.x)||!isFinite(f.y))return;
-      this.acc.x+=f.x/this.mass;this.acc.y+=f.y/this.mass;
-    }
-    update(dt){
-      this.vel.x+=this.acc.x*dt;this.vel.y+=this.acc.y*dt;
-      this.pos.x+=this.vel.x*dt;this.pos.y+=this.vel.y*dt;
-      this.acc={x:0,y:0};
-    }
-    draw(){
-      ctx.beginPath();
-      ctx.arc(this.pos.x,this.pos.y,this.radius,0,2*Math.PI);
-      ctx.fillStyle=this.color;ctx.fill();
-    }
-  }
-
-  class Particle {
-    constructor(x,y,vx,vy,clr){
-      this.pos={x,y};this.vel={x:vx,y:vy};this.acc={x:0,y:0};
-      this.color=clr;
-    }
-    applyForce(f){
-      if(!isFinite(f.x)||!isFinite(f.y))return;
-      this.acc.x+=f.x/0.1;this.acc.y+=f.y/0.1;
-    }
-    update(dt){
-      this.vel.x+=this.acc.x*dt;this.vel.y+=this.acc.y*dt;
-      this.pos.x+=this.vel.x*dt;this.pos.y+=this.vel.y*dt;
-      this.acc={x:0,y:0};
-    }
-    draw(){
-      ctx.beginPath();
-      ctx.arc(this.pos.x,this.pos.y,1.5,0,2*Math.PI);
-      ctx.fillStyle=this.color;ctx.fill();
-    }
-  }
-
-  // State
-  let primary, secondary, particles;
-  let entry, pericenter, exitPos, minD, prevIn=false, spawnAcc=0;
-  let threshold;
-  const BASE_DT=0.05, SOFT=20, G=1;
-
-  function resize(){
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight-document.getElementById('controls').offsetHeight;
-  }
-
-  function init(){
-    resize();
-    particles=[];entry=pericenter=exitPos=null;minD=Infinity;prevIn=false;spawnAcc=0;
-
-    const M1    =+m1.value,
-          M2    =+m2.value,
-          Dsep  =+d.value,
-          speedFrac=+v.value,
-          Pprox =+p.value,
-          Boost =+b.value,
-          Apert =+a.value*Math.PI/180,
-          TS    =+t.value,
-          MAXP  =+count.value,
-          RATE  =+r.value,
-          DUAL  =document.getElementById('dual').checked;
-
-    // center
-    const cx=canvas.width/2, cy=canvas.height/2;
-    // COM distances
-    const r1=Dsep*(M2/(M1+M2)), r2=Dsep*(M1/(M1+M2));
-    primary   = new Mass(cx-r1, cy, M1, Math.cbrt(M1)*0.8,'#0ea5e9');
-    secondary = new Mass(cx+r2, cy, M2, Math.cbrt(M2)*0.8,'#f97316');
-
-    // circular speed
-    const vCirc = Math.sqrt(G*(M1+M2)/Dsep),
-          vRel  = vCirc * speedFrac;
-
-    const sep = sub(secondary.pos, primary.pos),
-          rHat= norm(sep),
-          perp= { x:-rHat.y, y:rHat.x };
-
-    // elliptical velocities
-    primary.vel.x   =  perp.x * vRel * (M2/(M1+M2));
-    primary.vel.y   =  perp.y * vRel * (M2/(M1+M2));
-    secondary.vel.x = -perp.x * vRel * (M1/(M1+M2));
-    secondary.vel.y = -perp.y * vRel * (M1/(M1+M2));
-
-    threshold = Dsep * 3;
-
-    // stash
-    Particle._boost=Boost;
-    Particle._cone =Apert;
-    Particle._max  =MAXP;
-    Particle._rate =RATE;
-    Particle._dual =DUAL;
-    Mass._dtMul    =TS;
-  }
-
-  function calcForce(a,b){
-    const r=sub(a.pos,b.pos),
-          d2=r.x*r.x+r.y*r.y+SOFT*SOFT,
-          f =(G*a.mass*b.mass)/d2,
-          dir=norm(r);
-    return scale(dir,f);
-  }
-
-  function spawnFrom(mass,axisSource){
-    if(particles.length>=Particle._max)return;
-    const base=norm(sub(axisSource.pos,mass.pos)),
-          δ=(Math.random()*2-1)*Particle._cone,
-          c=Math.cos(δ),s=Math.sin(δ),
-          dir={x:base.x*c-base.y*s,y:base.x*s+base.y*c};
-    if(dir.x*base.x+dir.y*base.y<0){dir.x*=-1;dir.y*=-1;}
-
-    const boost=Particle._boost*(0.8+0.4*Math.random()),
-          offset=mass.radius+5+(Math.random()-0.5)*mass.radius*0.2,
-          sx=mass.pos.x+dir.x*offset,
-          sy=mass.pos.y+dir.y*offset,
-          vx=dir.x*boost*2,
-          vy=dir.y*boost*2,
-          dsrc=mag(sub(axisSource.pos,primary.pos)),
-          color=pickColorByDistance(dsrc);
-
-    particles.push(new Particle(sx,sy,vx,vy,color));
-  }
-
-  function spawnParticle(){
-    spawnFrom(primary,secondary);
-    if(Particle._dual) spawnFrom(secondary,primary);
-  }
-
-  function update(){
-    const dt=BASE_DT*+t.value;
-    // compute F on secondary by primary
-    const f12 = calcForce(primary,secondary);
-    // apply opposite to primary, and f12 to secondary
-    primary.applyForce(scale(f12,-1));
-    secondary.applyForce(f12);
-
-    primary.update(dt);
-    secondary.update(dt);
-
-    // proximity markers
-    const d=mag(sub(secondary.pos,primary.pos)), inP=d<+p.value;
-    if(inP&&!prevIn){entry={...secondary.pos};pericenter=null;minD=d;spawnAcc=0;}
-    if(inP&&d<minD){minD=d;pericenter={...secondary.pos};}
-    if(!inP&&prevIn){exitPos={...secondary.pos};}
-    prevIn=inP;
-
-    // spawn
-    if(inP){
-      spawnAcc+=Particle._rate*dt;
-      while(spawnAcc>=1){spawnParticle();spawnAcc--;}
-    }
-
-    // update/prune
-    particles=particles.filter(p=>{
-      p.applyForce(calcForce(primary,p));
-      p.applyForce(calcForce(secondary,p));
-      p.update(dt);
-      return mag(sub(p.pos,primary.pos))<threshold;
+    // ---------- DOM & config ----------
+    const container = document.getElementById('canvas-container');
+    const sliders = {}; const labels = {};
+    const controlIds = ['m1','m2','d','v','p','b','a','t','count','r'];
+    controlIds.forEach(id => {
+      sliders[id] = document.getElementById(id);
+      labels[id] = document.getElementById(id + 'Val');
     });
-  }
+    const donorModeSel = document.getElementById('donorMode');
+    const flowModeSel  = document.getElementById('flowMode');
+    const dualChk      = document.getElementById('dual');
+    const bipolarChk   = document.getElementById('bipolar');
 
-  function drawMarker(pos,color){
-    if(!pos)return;
-    ctx.strokeStyle=color;ctx.lineWidth=1.5;
-    const s=6;
-    ctx.beginPath();
-    ctx.moveTo(pos.x-s,pos.y);ctx.lineTo(pos.x+s,pos.y);
-    ctx.moveTo(pos.x,pos.y-s);ctx.lineTo(pos.x,pos.y+s);
-    ctx.stroke();
-  }
+    const config = {
+      // physics
+      G: 1.0, SOFTENING: 20.0, BASE_DT: 0.05, PARTICLE_MASS: 0.1,
+      // sliders -> runtime
+      m1: 1375, m2: 500, dSep: 195, speedFrac: 0.8,
+      prox: 150, boost: 1.0, aperture: 1.5*Math.PI/180,
+      timeScale: 5.0, maxParticles: 12000, spawnRate: 12,
+      donorMode: 'manualM1', flowMode: 'accretion',
+      dualOutflow: false, bipolar: false,
+    };
 
-  function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    // axis line
-    const v=norm(sub(secondary.pos,primary.pos));
-    ctx.strokeStyle='rgba(255,255,255,0.25)';
-    ctx.beginPath();
-    ctx.moveTo(primary.pos.x,primary.pos.y);
-    ctx.lineTo(primary.pos.x+v.x*100,primary.pos.y+v.y*100);
-    ctx.stroke();
+    let scene, camera, renderer, controls, animationId;
+    let primary, secondary;
+    let particles = [];
+    let spawnAccumulator = 0;
 
-    primary.draw();
-    secondary.draw();
-    particles.forEach(p=>p.draw());
+    const zAxis = new THREE.Vector3(0,0,1);
+    const tmpQ = new THREE.Quaternion();
+    const tmpV = new THREE.Vector3();
 
-    drawMarker(entry,'lime');
-    drawMarker(pericenter,'yellow');
-    drawMarker(exitPos,'red');
-  }
+    // ---------- utils ----------
+    function updateAllLabels() {
+      const fmt = (id, v) => {
+        v = parseFloat(v);
+        if (id==='a') return v.toFixed(1)+'°';
+        if (id==='v' || id==='b' || id==='t') return v.toFixed(2);
+        return String(Math.round(v));
+      };
+      controlIds.forEach(id => labels[id].textContent = fmt(id, sliders[id].value));
+    }
+    function readUI() {
+      config.m1 = +sliders.m1.value;
+      config.m2 = +sliders.m2.value;
+      config.dSep = +sliders.d.value;
+      config.speedFrac = +sliders.v.value;
+      config.prox = +sliders.p.value;
+      config.boost = +sliders.b.value;
+      config.aperture = (+sliders.a.value) * Math.PI/180.0;
+      config.timeScale = +sliders.t.value;
+      config.maxParticles = parseInt(sliders.count.value);
+      config.spawnRate = parseInt(sliders.r.value);
+      config.donorMode = donorModeSel.value;
+      config.flowMode = flowModeSel.value;
+      config.dualOutflow = dualChk.checked;
+      config.bipolar = bipolarChk.checked;
+      updateAllLabels();
+    }
+    function onResize() {
+      if (!camera) return;
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+    function setTopDownView() {
+      camera.position.set(0,0,600);
+      camera.up.set(0,1,0);
+      controls.target.set(0,0,0);
+    }
 
-  function loop(){ update(); draw(); requestAnimationFrame(loop); }
-  function start(){ init(); loop(); }
+    // Color ramp: red->yellow->green->cyan
+    const colorStops = [
+      { stop:0.0, color:new THREE.Color(0xff0000) },
+      { stop:0.33, color:new THREE.Color(0xffff00) },
+      { stop:0.66, color:new THREE.Color(0x00ff00) },
+      { stop:1.0, color:new THREE.Color(0x00ffff) },
+    ];
+    function ramp(t){
+      t = Math.min(1, Math.max(0, t));
+      for (let i=0;i<colorStops.length-1;i++){
+        const a=colorStops[i], b=colorStops[i+1];
+        if (t>=a.stop && t<=b.stop){
+          const u=(t-a.stop)/(b.stop-a.stop);
+          return a.color.clone().lerp(b.color, u);
+        }
+      }
+      return colorStops[colorStops.length-1].color.clone();
+    }
 
-  window.onresize=resize;
-  window.onload=start;
+    // Roche-lobe radius (Eggleton 1983)
+    function rocheLobeRadius(a, m_d, m_a){
+      const q = m_d / m_a;
+      const q13 = Math.cbrt(q);
+      const q23 = q13*q13;
+      return a * (0.49*q23) / (0.6*q23 + Math.log(1+q13));
+    }
+
+    class Body {
+      constructor(mass, radius, color, pos, vel){
+        this.mass = mass;
+        this.radius = radius;
+        this.pos = pos.clone();
+        this.vel = vel.clone();
+        this.acc = new THREE.Vector3();
+        const g = new THREE.SphereGeometry(radius, 18, 18);
+        const m = new THREE.MeshBasicMaterial({ color });
+        this.mesh = new THREE.Mesh(g, m);
+        scene.add(this.mesh);
+      }
+      destroy(){
+        scene.remove(this.mesh);
+        this.mesh.geometry.dispose();
+        this.mesh.material.dispose();
+      }
+      sync(){ this.mesh.position.copy(this.pos); }
+    }
+
+    function init(){
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, container.clientWidth/container.clientHeight, 0.1, 10000);
+      camera.position.set(0,0,600);
+      renderer = new THREE.WebGLRenderer({ antialias:true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+
+      controlIds.forEach(id=>{
+        sliders[id].addEventListener('input', updateAllLabels);
+        sliders[id].addEventListener('change', start);
+      });
+      donorModeSel.addEventListener('change', start);
+      flowModeSel.addEventListener('change', start);
+      dualChk.addEventListener('change', start);
+      bipolarChk.addEventListener('change', start);
+      document.getElementById('restart').addEventListener('click', start);
+      document.getElementById('topView').addEventListener('click', setTopDownView);
+      window.addEventListener('resize', onResize);
+
+      updateAllLabels();
+      start();
+    }
+
+    function gravForce(a,b){
+      tmpV.subVectors(b.pos, a.pos);
+      const r2 = tmpV.lengthSq();
+      const mag = (config.G * a.mass * b.mass) / (r2 + config.SOFTENING*config.SOFTENING);
+      return tmpV.normalize().multiplyScalar(mag);
+    }
+
+    function chooseDonorAccretor(){
+      const m1=config.m1, m2=config.m2;
+      if (config.donorMode==='manualM1') return { donor: primary, accretor: secondary };
+      if (config.donorMode==='manualM2') return { donor: secondary, accretor: primary };
+      if (config.donorMode==='autoMass'){
+        return (m1<=m2) ? { donor: primary, accretor: secondary } : { donor: secondary, accretor: primary };
+      }
+      // Roche mode
+      const RL1 = rocheLobeRadius(config.dSep, m1, m2);
+      const RL2 = rocheLobeRadius(config.dSep, m2, m1);
+      const over1 = primary.radius - RL1;
+      const over2 = secondary.radius - RL2;
+      if (over1>0 && over1>=over2) return { donor: primary, accretor: secondary };
+      if (over2>0 && over2>over1) return { donor: secondary, accretor: primary };
+      // If neither overflows, fall back to lighter→heavier so we still see something
+      return (m1<=m2) ? { donor: primary, accretor: secondary } : { donor: secondary, accretor: primary };
+    }
+
+    function spawnPacket(emitter, accretor, directionSign=+1){
+      if (particles.length >= config.maxParticles) return;
+      // base direction
+      let baseDir;
+      if (config.flowMode==='accretion'){
+        baseDir = new THREE.Vector3().subVectors(accretor.pos, emitter.pos).normalize();
+      } else { // jets
+        baseDir = new THREE.Vector3().subVectors(emitter.pos, accretor.pos).normalize();
+      }
+      if (directionSign<0) baseDir.negate();
+
+      // sample within cone of aperture about baseDir
+      const phi = Math.random()*Math.PI*2;
+      const u = Math.random() * (1 - Math.cos(config.aperture)) + Math.cos(config.aperture);
+      const theta = Math.acos(u);
+      const dir = new THREE.Vector3(Math.sin(theta)*Math.cos(phi), Math.sin(theta)*Math.sin(phi), Math.cos(theta));
+      tmpQ.setFromUnitVectors(zAxis, baseDir);
+      dir.applyQuaternion(tmpQ);
+
+      const boost = config.boost * (0.8 + 0.4*Math.random()) * 5;
+      const pos = emitter.pos.clone().add(dir.clone().multiplyScalar(emitter.radius + 2));
+      const vel = emitter.vel.clone().add(dir.clone().multiplyScalar(boost));
+
+      // color by proximity (closer = hotter)
+      const dist = primary.pos.distanceTo(secondary.pos);
+      const t = 1 - Math.min(1, dist / config.prox);
+      const color = ramp(t);
+      const part = new Body(config.PARTICLE_MASS, 1.0, color, pos, vel);
+      particles.push(part);
+    }
+
+    function start(){
+      if (animationId) cancelAnimationFrame(animationId);
+      if (primary) primary.destroy();
+      if (secondary) secondary.destroy();
+      particles.forEach(p=>p.destroy());
+      particles.length = 0;
+
+      readUI();
+
+      const m1=config.m1, m2=config.m2, M=m1+m2, d=config.dSep;
+      const r1 = d*(m2/M), r2 = d*(m1/M);
+      const v_circ = Math.sqrt(config.G*M/d);
+      const v0 = config.speedFrac*v_circ;
+      const v1 = v0*(m2/M), v2=v0*(m1/M);
+
+      primary   = new Body(m1, Math.cbrt(m1)*0.8, 0xff4444, new THREE.Vector3(-r1,0,0), new THREE.Vector3(0, v1,0));
+      secondary = new Body(m2, Math.cbrt(m2)*0.8, 0x4488ff, new THREE.Vector3( r2,0,0), new THREE.Vector3(0,-v2,0));
+
+      spawnAccumulator = 0;
+      setTopDownView();
+      animate();
+    }
+
+    function update(){
+      const dt = config.BASE_DT * config.timeScale;
+      const all = [primary, secondary, ...particles];
+      all.forEach(b => b.acc.set(0,0,0));
+
+      const f12 = gravForce(primary, secondary);
+      primary.acc.add( f12.clone().divideScalar(primary.mass) );
+      secondary.acc.sub( f12.clone().divideScalar(secondary.mass) );
+
+      for (let i=0;i<particles.length;i++){
+        const p = particles[i];
+        const fp = gravForce(primary, p);
+        const fs = gravForce(secondary, p);
+        p.acc.add( fp.divideScalar(p.mass) ).add( fs.divideScalar(p.mass) );
+      }
+
+      all.forEach(b => {
+        b.vel.addScaledVector(b.acc, dt);
+        b.pos.addScaledVector(b.vel, dt);
+        b.sync();
+      });
+
+      // spawning logic
+      const dist = primary.pos.distanceTo(secondary.pos);
+      if (dist < config.prox){
+        const { donor, accretor } = chooseDonorAccretor();
+        spawnAccumulator += config.spawnRate * dt;
+        while (spawnAccumulator >= 1 && particles.length < config.maxParticles){
+          spawnPacket(donor, accretor, +1);
+          if (config.bipolar) spawnPacket(donor, accretor, -1);
+          if (config.dualOutflow) {
+            spawnPacket(accretor, donor, +1);
+            if (config.bipolar) spawnPacket(accretor, donor, -1);
+          }
+          spawnAccumulator -= 1;
+        }
+      }
+
+      // cull far
+      const maxR2 = (config.dSep*6)**2;
+      const next=[];
+      for (let i=0;i<particles.length;i++){
+        if (particles[i].pos.lengthSq() < maxR2) next.push(particles[i]); else particles[i].destroy();
+      }
+      particles = next;
+    }
+
+    function animate(){
+      animationId = requestAnimationFrame(animate);
+      update();
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    // go
+    document.getElementById('topView').addEventListener('click', setTopDownView);
+    init();
+  })();
   </script>
 </body>
 </html>
