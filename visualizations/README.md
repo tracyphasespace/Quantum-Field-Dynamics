@@ -64,11 +64,12 @@ https://tracyphasespace.github.io/Quantum-Field-Dynamics/
 
 ## 🌌 **Astrophysics Visualizations**
 
-### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/blackhole-dynamics.html" target="_blank">`blackhole-dynamics.html`</a>
+### <a href="https://github.com/tracyphasespace/Quantum-Field-Dynamics/blob/main/visualizations/astrophysics/BlackHole_3D_Star_Generator.html" target="_blank">`blackhole-dynamics.html`</a>
 **QFD Black Hole Field Structure**
 - Field-based black hole model (no spacetime curvature)
 - Interactive ψ-field visualization around massive objects
 - **Suitable for**: Astrophysicists, cosmologists
+
 
 ### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/blackhole-spray-condensation.html" target="_blank">`blackhole-spray-condensation.html`</a>
 **Black Hole Spray Condensation Model**
