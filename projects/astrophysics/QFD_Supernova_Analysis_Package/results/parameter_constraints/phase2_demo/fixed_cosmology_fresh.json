@@ -1,8 +1,0 @@
-{
-  "description": "Fixed cosmological parameters from fresh MCMC",
-  "eta_prime": 65362.727923767925,
-  "zeta": 45472.44321486936,
-  "H0": 70.0,
-  "source": "QFD_Cosmology_Fitter_v5.6.py",
-  "measurement_date": "2025-09-28_19-09-21"
-}
