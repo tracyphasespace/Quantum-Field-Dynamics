@@ -1,5 +1,0 @@
-# Supernova Analysis Requirements
-
-# Core scientific computing
-numpy>=2.3.2
-matplotlib>=3.10.5
