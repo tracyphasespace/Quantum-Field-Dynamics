@@ -1,0 +1,316 @@
+{
+  "schema_version": "1.0",
+  "date_created": "2025-11-01",
+  "status": "LOCKED",
+  "locked_before_fitting": true,
+  "description": "Pre-registered quality gates for QFD supernova analysis. This schema is FROZEN before any parameter fitting to ensure credible sample selection.",
+
+  "applicable_datasets": [
+    "Pantheon+",
+    "DES-SN 5YR",
+    "Future SNe Ia catalogs"
+  ],
+
+  "filter_categories": {
+    "standard_community_filters": {
+      "description": "Baseline quality cuts used in standard cosmological analyses",
+      "gates": {
+        "z_min": {
+          "value": 0.05,
+          "unit": "dimensionless",
+          "justification": "Peculiar velocity contamination below z=0.05 (~15,000 km/s / c). Standard in cosmology analyses (Pantheon+, DES-SN).",
+          "references": [
+            "Scolnic et al. 2022 (Pantheon+)",
+            "Brout et al. 2022"
+          ]
+        },
+        "z_max": {
+          "value": 1.5,
+          "unit": "dimensionless",
+          "justification": "QFD model validated range. DES-SN 5YR extends to z=1.13, leave headroom for future datasets.",
+          "references": [
+            "QFD nuclear calibration z-range"
+          ]
+        },
+        "min_obs": {
+          "value": 20,
+          "unit": "count",
+          "justification": "Statistical requirement for robust light curve characterization. Standard threshold in SN cosmology (Pantheon+ uses N≥18).",
+          "references": [
+            "Pantheon+ prefilter",
+            "DES-SN quality criteria"
+          ]
+        },
+        "min_bands": {
+          "value": 2,
+          "unit": "count",
+          "justification": "Multi-band constraint required for color information and extinction corrections.",
+          "references": [
+            "Standard SN cosmology practice"
+          ]
+        },
+        "min_snr": {
+          "value": 5.0,
+          "unit": "dimensionless",
+          "justification": "Signal-to-noise threshold for individual epochs. More lenient than Pantheon+ (S/N≥12) to preserve high-z data, compensated by sigma_floor.",
+          "references": [
+            "Adjusted from Pantheon+ based on QFD needs"
+          ]
+        }
+      }
+    },
+
+    "qfd_specific_filters": {
+      "description": "Additional quality gates specific to QFD Bayesian inference geometry and model requirements",
+      "gates": {
+        "max_obs": {
+          "value": 150,
+          "unit": "count",
+          "justification": "CRITICAL: Upper limit to prevent MCMC pathology. Low-z SNe with 200-500 obs create degenerate likelihood geometry causing NUTS sampler failures. This is QFD-specific due to Bayesian inference architecture.",
+          "qfd_specific": true,
+          "pathology_evidence": "V11 runs show low-z batches with N>150 consistently fail NUTS divergence checks and ESS<100",
+          "references": [
+            "V11 production runs (2025-10)",
+            "NumPyro NUTS geometry requirements"
+          ]
+        },
+        "sigma_floor_jy": {
+          "value": 0.02,
+          "unit": "Jy",
+          "justification": "Systematic uncertainty floor in flux units. Accounts for calibration systematics, PSF modeling errors, host galaxy subtraction uncertainties. Prevents over-weighting of high-S/N epochs.",
+          "qfd_specific": true,
+          "implementation": "Add in quadrature to reported uncertainties: sigma_eff = sqrt(sigma_reported^2 + sigma_floor^2)",
+          "references": [
+            "DES photometric systematics budget",
+            "Standard practice in flux-based SN fitting"
+          ]
+        },
+        "max_chi2_dof": {
+          "value": 5.0,
+          "unit": "dimensionless",
+          "justification": "Extreme outlier threshold under frozen QFD parameters. Applied POST-FIT on full catalog to identify pathological objects (e.g., mis-classifications, contaminated photometry).",
+          "qfd_specific": true,
+          "application_stage": "post_fit_frozen_knobs",
+          "note": "This is NOT used to select fitting sample - only to identify outliers after fitting on clean sample with frozen params.",
+          "references": [
+            "Frozen-knobs audit methodology"
+          ]
+        },
+        "duplicate_mjd_policy": {
+          "value": "best_snr",
+          "options": ["best_snr", "average", "keep_all"],
+          "justification": "When multiple observations exist on same MJD (same night), keep only the highest S/N measurement to avoid correlated errors and MCMC geometry issues.",
+          "qfd_specific": true,
+          "implementation": "Group by (snid, band, floor(MJD)), select max(flux/flux_err)",
+          "references": [
+            "MCMC geometry conditioning best practices"
+          ]
+        },
+        "survey_whitelist": {
+          "value": ["DES"],
+          "note_pantheon_plus": ["SDSS", "PS1", "low-z", "HST"],
+          "justification": "Homogeneity requirement. Mixed surveys introduce systematic uncertainties in zeropoints, filter responses, cadences. For DES-SN 5YR: use DES-only. For Pantheon+: document inhomogeneity.",
+          "qfd_specific": true,
+          "rationale": "QFD direct photometry approach is more sensitive to survey systematics than SALT2-standardized distances",
+          "references": [
+            "QFD_DATA_INDEPENDENCE_MANIFESTO.md"
+          ]
+        }
+      }
+    },
+
+    "geometry_conditioning_filters": {
+      "description": "Optional filters for MCMC geometry optimization (not pre-registered, use in ablation tests)",
+      "status": "OPTIONAL",
+      "gates": {
+        "phase_window_days": {
+          "value": null,
+          "suggested_range": [-20, 60],
+          "unit": "days_rest_frame",
+          "justification": "Restrict to phases with SNe Ia physics well-understood. Optional: use in ablation tests to check robustness.",
+          "qfd_specific": false,
+          "note": "Not enforced in baseline - testing only"
+        },
+        "downsample_factor": {
+          "value": null,
+          "suggested_range": [1, 3],
+          "unit": "dimensionless",
+          "justification": "For SNe with extreme cadence (e.g., daily observations), downsample to avoid over-weighting. Optional: testing only.",
+          "qfd_specific": true,
+          "note": "Not enforced in baseline - addressed by max_obs threshold instead"
+        },
+        "band_balance_requirement": {
+          "value": null,
+          "suggested_min_per_band": 5,
+          "unit": "count_per_band",
+          "justification": "Ensure minimum observations per band for color constraints. Optional: testing only.",
+          "qfd_specific": false,
+          "note": "Not enforced in baseline - min_bands=2 is sufficient"
+        }
+      }
+    }
+  },
+
+  "application_workflow": {
+    "description": "Order of operations for applying quality gates",
+    "steps": [
+      {
+        "step": 1,
+        "name": "Load raw data",
+        "input": "Raw catalog (FITS, CSV, SNANA format)",
+        "output": "Standardized QFD format CSV"
+      },
+      {
+        "step": 2,
+        "name": "Apply pre-fit filters",
+        "gates_applied": [
+          "z_min",
+          "z_max",
+          "min_obs",
+          "max_obs",
+          "min_bands",
+          "min_snr",
+          "sigma_floor_jy",
+          "duplicate_mjd_policy",
+          "survey_whitelist"
+        ],
+        "output": "Clean sample CSV + sample_selection_manifest.json"
+      },
+      {
+        "step": 3,
+        "name": "Fit QFD model on clean sample",
+        "method": "V12 pipeline (NumPyro NUTS + BFGS)",
+        "output": "Frozen QFD parameters (lambda_R, eta', ...)"
+      },
+      {
+        "step": 4,
+        "name": "Frozen-knobs audit",
+        "gates_applied": [
+          "max_chi2_dof"
+        ],
+        "description": "Evaluate frozen params on FULL catalog (no exclusions). Identify outliers with chi2/dof > 5.0.",
+        "output": "Outlier list with justifications (data quality, not model selection)"
+      },
+      {
+        "step": 5,
+        "name": "Ablation tests",
+        "description": "Re-fit with varied selection criteria to demonstrate parameter stability",
+        "variants": [
+          "Include low-z (0.03 < z < 0.05)",
+          "Exclude high-z (z > 0.8)",
+          "Vary min_obs (15, 20, 25)",
+          "Vary max_obs (125, 150, 200)"
+        ],
+        "success_criterion": "Parameter posteriors overlap within 1-sigma"
+      }
+    ]
+  },
+
+  "expected_yields": {
+    "pantheon_plus": {
+      "raw": 82991,
+      "raw_sne": 922,
+      "after_prefilter": 53843,
+      "after_qfd_gates": "~50000-51000",
+      "final_sne_estimate": "~650-700"
+    },
+    "des_sn_5yr": {
+      "raw_sne": 1635,
+      "z_range": [0.1, 1.13],
+      "after_qfd_gates_estimate": "~1400-1500",
+      "homogeneity": "Single survey (DES-only)",
+      "advantage": "2x larger than Pantheon+ clean, homogeneous"
+    }
+  },
+
+  "credibility_framework": {
+    "pre_registration": {
+      "status": "LOCKED",
+      "date": "2025-11-01",
+      "frozen_before_fitting": true,
+      "version_control": "Git tag: data-gates-locked-v1"
+    },
+    "transparency_requirements": {
+      "manifest_per_run": true,
+      "manifest_includes": [
+        "Gate values used",
+        "Before/after counts for each gate",
+        "Total SNe dropped",
+        "Final sample size",
+        "Redshift distribution",
+        "Survey breakdown"
+      ],
+      "exclusion_list_versioned": true,
+      "exclusion_justifications_required": true
+    },
+    "robustness_checks": {
+      "ablation_tests_required": true,
+      "frozen_knobs_audit_required": true,
+      "parameter_stability_criterion": "1-sigma overlap across variants"
+    }
+  },
+
+  "implementation_notes": {
+    "tools_to_create": [
+      "tools/apply_quality_gates.py - Apply gates, generate manifest",
+      "tools/frozen_knobs_audit.py - Evaluate frozen params on full catalog",
+      "tools/ablation_table_generator.py - Run robustness checks"
+    ],
+    "data_format_requirements": {
+      "input_columns": [
+        "survey",
+        "snid",
+        "ra",
+        "dec",
+        "z",
+        "band",
+        "mjd",
+        "flux_nu_jy",
+        "flux_nu_jy_err",
+        "mag",
+        "mag_err",
+        "zp",
+        "zpsys",
+        "wavelength_eff_nm"
+      ],
+      "required_for_qfd": [
+        "mjd",
+        "flux_nu_jy",
+        "flux_nu_jy_err",
+        "band",
+        "z",
+        "wavelength_eff_nm"
+      ]
+    },
+    "backward_compatibility": {
+      "pantheon_plus_prefilter": "Compatible - schema includes Pantheon+ baseline gates",
+      "migration_path": "Apply this schema to existing prefiltered data, document differences"
+    }
+  },
+
+  "references": {
+    "datasets": [
+      "Sánchez et al. 2024, ApJ, 975, 5 (DES-SN 5YR)",
+      "Scolnic et al. 2022, ApJ, 938, 113 (Pantheon+)",
+      "Brout et al. 2022, ApJ, 938, 110 (Pantheon+ analysis)"
+    ],
+    "methods": [
+      "QFD_DATA_INDEPENDENCE_MANIFESTO.md",
+      "V12_DATA_INFRASTRUCTURE_PLAN.md",
+      "Cloud AI recommendations (2025-11-01)"
+    ]
+  },
+
+  "changelog": [
+    {
+      "version": "1.0",
+      "date": "2025-11-01",
+      "changes": [
+        "Initial schema creation",
+        "Locked before any V12 fitting",
+        "Incorporates standard community filters + QFD-specific gates",
+        "Pre-registered for credibility"
+      ]
+    }
+  ]
+}
