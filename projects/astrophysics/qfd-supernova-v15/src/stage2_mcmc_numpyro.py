@@ -37,7 +37,7 @@ import numpyro.distributions as dist
 from numpyro.infer import MCMC, NUTS
 
 # Import model
-from v15_model import log_likelihood_single_sn_jax
+from v15_model import log_likelihood_single_sn_jax, alpha_pred_batch
 
 def load_stage1_results(stage1_dir, lightcurves_dict, quality_cut=2000):
     """Load all Stage 1 results"""
@@ -102,6 +102,36 @@ def load_stage1_results(stage1_dir, lightcurves_dict, quality_cut=2000):
     return results
 
 @jax.jit
+def log_likelihood_alpha_space(
+    k_J: float,
+    eta_prime: float,
+    xi: float,
+    z_batch: jnp.ndarray,  # Shape: (n_sne,)
+    alpha_obs_batch: jnp.ndarray  # Shape: (n_sne,)
+) -> float:
+    """
+    Alpha-space likelihood: score globals by predicting alpha from (z; globals).
+
+    Returns total log-likelihood (summed over all SNe).
+
+    FIXED: Uses alpha_pred(z; k_J, eta_prime, xi) to compute residuals.
+    No per-SN parameters, no lightcurve physics - just alpha prediction.
+    """
+    # Predict alpha from globals
+    alpha_th = alpha_pred_batch(z_batch, k_J, eta_prime, xi)
+
+    # Residuals
+    r_alpha = alpha_obs_batch - alpha_th
+
+    # Guard against zero-variance (catches wiring bugs)
+    assert jnp.var(r_alpha) > 0, "Zero-variance r_alpha → check alpha_pred wiring"
+
+    # Simple unweighted likelihood (can add sigma_alpha later)
+    logL = -0.5 * jnp.sum(r_alpha**2)
+
+    return logL
+
+@jax.jit
 def log_likelihood_batch_jax(
     k_J: float,
     eta_prime: float,
@@ -115,6 +145,9 @@ def log_likelihood_batch_jax(
     Vectorized log-likelihood over multiple SNe.
 
     Returns: Array of shape (n_sne,) with logL for each SN
+
+    NOTE: This uses full lightcurve physics. For Stage 2, consider
+    using log_likelihood_alpha_space instead (simpler, faster).
     """
     global_params = (k_J, eta_prime, xi)
 
@@ -130,11 +163,32 @@ def log_likelihood_batch_jax(
 
     return logLs
 
+def numpyro_model_alpha_space(z_batch, alpha_obs_batch):
+    """
+    NumPyro model for global parameter inference using alpha-space likelihood.
+
+    FIXED: Uses alpha_pred(z; globals) instead of full lightcurve physics.
+    This is simpler, faster, and avoids wiring bugs.
+    """
+    # Priors
+    k_J = numpyro.sample('k_J', dist.Uniform(50, 90))
+    eta_prime = numpyro.sample('eta_prime', dist.Uniform(0.001, 0.1))
+    xi = numpyro.sample('xi', dist.Uniform(10, 50))
+
+    # Compute alpha-space log-likelihood
+    total_logL = log_likelihood_alpha_space(
+        k_J, eta_prime, xi,
+        z_batch, alpha_obs_batch
+    )
+
+    # Factor in the total log-likelihood
+    numpyro.factor('logL', total_logL)
+
 def numpyro_model(persn_params_batch, L_peaks, photometries, redshifts):
     """
-    NumPyro model for global parameter inference.
+    NumPyro model for global parameter inference (LEGACY - uses full physics).
 
-    Uses uniform priors and vectorized likelihood.
+    NOTE: Consider using numpyro_model_alpha_space instead (simpler, faster).
     """
     # Priors
     k_J = numpyro.sample('k_J', dist.Uniform(50, 90))
@@ -203,13 +257,11 @@ def main():
 
     print()
 
-    # Prepare data arrays
-    print("Preparing frozen parameters...")
+    # FIXED: Use alpha-space likelihood (simpler, faster, no wiring bugs)
+    print("Preparing alpha-space data...")
     snids = []
-    frozen_persn_params = []
-    frozen_L_peaks = []
-    photometries = []
-    redshifts = []
+    z_list = []
+    alpha_obs_list = []
 
     for snid, result in stage1_results.items():
         if snid not in all_lcs:
@@ -217,34 +269,27 @@ def main():
 
         lc = all_lcs[snid]
 
-        # Frozen per-SN params from Stage 1
+        # Extract alpha_obs from Stage 1 (persn_best order: t0, A_plasma, beta, alpha)
         persn_best = result['persn_best']
-        # Order: (t0, alpha, A_plasma, beta)
-        persn_tuple = (persn_best[0], persn_best[3], persn_best[1], persn_best[2])
-
-        # Photometry as JAX array
-        phot = jnp.array(np.column_stack([
-            lc.mjd, lc.wavelength_nm, lc.flux_jy, lc.flux_err_jy
-        ]))
+        alpha_obs = persn_best[3] if len(persn_best) == 4 else persn_best[-1]
 
         snids.append(snid)
-        frozen_persn_params.append(persn_tuple)
-        frozen_L_peaks.append(result['L_peak'])
-        photometries.append(phot)
-        redshifts.append(lc.z)
+        z_list.append(lc.z)
+        alpha_obs_list.append(alpha_obs)
 
     # Convert to JAX arrays
-    persn_params_batch = jnp.array(frozen_persn_params)
-    L_peaks_arr = jnp.array(frozen_L_peaks)
-    redshifts_arr = jnp.array(redshifts)
+    z_batch = jnp.array(z_list)
+    alpha_obs_batch = jnp.array(alpha_obs_list)
 
     print(f"  Using {len(snids)} SNe for MCMC")
+    print(f"  Redshift range: [{z_batch.min():.3f}, {z_batch.max():.3f}]")
+    print(f"  Alpha range: [{alpha_obs_batch.min():.3f}, {alpha_obs_batch.max():.3f}]")
     print()
 
-    # Setup NUTS sampler
-    print("Setting up NUTS sampler...")
+    # Setup NUTS sampler (using alpha-space model)
+    print("Setting up NUTS sampler (alpha-space likelihood)...")
     nuts_kernel = NUTS(
-        numpyro_model,
+        numpyro_model_alpha_space,  # FIXED: Use alpha-space model
         target_accept_prob=0.8,  # Higher = more accurate, slower
         max_tree_depth=10,  # Maximum trajectory length
         init_strategy=numpyro.infer.init_to_median  # Start at median of prior
@@ -271,10 +316,8 @@ def main():
     rng_key = jax.random.PRNGKey(0)
     mcmc.run(
         rng_key,
-        persn_params_batch,
-        L_peaks_arr,
-        photometries,
-        redshifts_arr
+        z_batch,  # FIXED: Just z and alpha_obs
+        alpha_obs_batch
     )
 
     elapsed = time.time() - start_time
