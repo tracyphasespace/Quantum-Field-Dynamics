@@ -70,6 +70,14 @@ def process_single_sn(result, k_J, eta_prime, xi):
 
         # Model-predicted alpha from globals (NOT reusing alpha_obs!)
         alpha_th = float(alpha_pred_batch(np.array([z]), k_J, eta_prime, xi)[0])
+
+        # Guard: Catch if alpha_pred accidentally returns alpha_obs (wiring bug)
+        if np.isclose(alpha_th, alpha_obs, rtol=1e-6):
+            raise RuntimeError(
+                f"WIRING BUG: alpha_pred({z:.3f}) = {alpha_th:.6f} ≈ alpha_obs = {alpha_obs:.6f}. "
+                "This means residuals will be zero. Check alpha_pred implementation."
+            )
+
         mu_qfd = mu_th - K * alpha_th
 
         # ΛCDM prediction
