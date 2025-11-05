@@ -26,6 +26,7 @@ import numpy as np
 from pathlib import Path
 from typing import Dict, List, Tuple
 import time
+from functools import partial
 
 # JAX and NumPyro
 import jax
@@ -101,21 +102,26 @@ def load_stage1_results(stage1_dir, lightcurves_dict, quality_cut=2000):
 
     return results
 
-@jax.jit
+@partial(jax.jit, static_argnames=("cache_bust",))
 def log_likelihood_alpha_space(
     k_J: float,
     eta_prime: float,
     xi: float,
     z_batch: jnp.ndarray,  # Shape: (n_sne,)
-    alpha_obs_batch: jnp.ndarray  # Shape: (n_sne,)
+    alpha_obs_batch: jnp.ndarray,  # Shape: (n_sne,)
+    *,
+    cache_bust: int = 0,
 ) -> float:
     """
     Alpha-space likelihood: score globals by predicting alpha from (z; globals).
 
     Returns total log-likelihood (summed over all SNe).
 
-    FIXED: Uses alpha_pred(z; k_J, eta_prime, xi) to compute residuals.
+    Uses alpha_pred(z; k_J, eta_prime, xi) to compute residuals.
     No per-SN parameters, no lightcurve physics - just alpha prediction.
+
+    Args:
+        cache_bust: Static cache-busting token to force fresh JIT compilation
     """
     # Predict alpha from globals
     alpha_th = alpha_pred_batch(z_batch, k_J, eta_prime, xi)
@@ -123,8 +129,7 @@ def log_likelihood_alpha_space(
     # Residuals
     r_alpha = alpha_obs_batch - alpha_th
 
-    # NOTE: Variance guard should be checked outside JIT (Python assert not allowed in traced code)
-    # If var(r_alpha) ≈ 0, check alpha_pred wiring (tests/test_spec_contracts.py validates this)
+    # NOTE: Variance guard is enforced outside JIT (see preflight in run_alpha_space_mcmc)
 
     # Simple unweighted likelihood (can add sigma_alpha later)
     logL = -0.5 * jnp.sum(r_alpha**2)
@@ -163,12 +168,15 @@ def log_likelihood_batch_jax(
 
     return logLs
 
-def numpyro_model_alpha_space(z_batch, alpha_obs_batch):
+def numpyro_model_alpha_space(z_batch, alpha_obs_batch, *, cache_bust: int = 0):
     """
     NumPyro model for global parameter inference using alpha-space likelihood.
 
-    FIXED: Uses alpha_pred(z; globals) instead of full lightcurve physics.
+    Uses alpha_pred(z; globals) instead of full lightcurve physics.
     This is simpler, faster, and avoids wiring bugs.
+
+    Args:
+        cache_bust: Static cache-busting token to force fresh JIT compilation
     """
     # Priors
     k_J = numpyro.sample('k_J', dist.Uniform(50, 90))
@@ -178,7 +186,8 @@ def numpyro_model_alpha_space(z_batch, alpha_obs_batch):
     # Compute alpha-space log-likelihood
     total_logL = log_likelihood_alpha_space(
         k_J, eta_prime, xi,
-        z_batch, alpha_obs_batch
+        z_batch, alpha_obs_batch,
+        cache_bust=cache_bust
     )
 
     # Factor in the total log-likelihood
@@ -313,11 +322,26 @@ def main():
     print("Running MCMC...")
     start_time = time.time()
 
+    # --- Preflight (outside JIT): ensure residual variance > 0 to catch wiring bugs early
+    print("  Preflight: checking residual variance...")
+    _alpha_th = np.array(alpha_pred_batch(np.array(z_batch), 70.0, 0.01, 30.0))
+    _var_resid = float(np.var(np.array(alpha_obs_batch) - _alpha_th))
+    if not np.isfinite(_var_resid) or _var_resid <= 0.0:
+        raise RuntimeError(f"Preflight: var(alpha_obs - alpha_pred(z; fiducials)) = {_var_resid:.6g} <= 0 — check wiring.")
+    print(f"  Preflight OK: var(residuals) = {_var_resid:.6g}")
+
+    # Optional: clear JAX in-memory caches before run to avoid sticky traces
+    jax.clear_caches()
+
+    # Cache-bust token to force a fresh trace even in a long-lived process
+    _cache_bust = int(time.time()) & 0xffff
+
     rng_key = jax.random.PRNGKey(0)
     mcmc.run(
         rng_key,
-        z_batch,  # FIXED: Just z and alpha_obs
-        alpha_obs_batch
+        z_batch,
+        alpha_obs_batch,
+        cache_bust=_cache_bust,
     )
 
     elapsed = time.time() - start_time
