@@ -85,6 +85,41 @@ def _ensure_alpha_natural(alpha_obs_array: np.ndarray) -> np.ndarray:
         return a
 
 
+def _standardize_features(z):
+    """
+    Standardize basis features to zero-mean, unit-std.
+
+    This is a pure reparameterization (no physics change) that dramatically
+    reduces posterior curvature and correlation, eliminating NUTS divergences.
+
+    Args:
+        z: Redshift array (JAX or numpy)
+
+    Returns:
+        Φ: Standardized feature matrix [N, 3]
+        stats: Dict with normalization constants {'m': [m1, m2, m3], 's': [s1, s2, s3]}
+    """
+    # Construct raw features (same as in v15_model.py)
+    phi1 = jnp.log1p(z)        # ln(1+z)
+    phi2 = z                    # linear
+    phi3 = z / (1.0 + z)       # saturating
+
+    # Standardize to zero-mean, unit-std (numerically stable)
+    def zscore(x):
+        m = jnp.mean(x)
+        s = jnp.std(x) + 1e-12  # avoid division by zero
+        return (x - m) / s, (m, s)
+
+    φ1, (m1, s1) = zscore(phi1)
+    φ2, (m2, s2) = zscore(phi2)
+    φ3, (m3, s3) = zscore(phi3)
+
+    Φ = jnp.stack([φ1, φ2, φ3], axis=-1)  # [N, 3]
+    stats = {'m': jnp.array([m1, m2, m3]), 's': jnp.array([s1, s2, s3])}
+
+    return Φ, stats
+
+
 def load_stage1_results(stage1_dir, lightcurves_dict, quality_cut=2000):
     """Load all Stage 1 results"""
     results = {}
@@ -213,29 +248,33 @@ def log_likelihood_batch_jax(
 
     return logLs
 
-def numpyro_model_alpha_space(z_batch, alpha_obs_batch, *, cache_bust: int = 0):
+def numpyro_model_alpha_space(Phi, alpha_obs_batch, *, cache_bust: int = 0):
     """
     NumPyro model for global parameter inference using alpha-space likelihood.
 
-    Uses alpha_pred(z; globals) instead of full lightcurve physics.
-    This is simpler, faster, and avoids wiring bugs.
+    Uses standardized basis features to eliminate posterior curvature/correlation.
 
     Args:
+        Phi: Standardized feature matrix [N, 3] from _standardize_features()
+        alpha_obs_batch: Observed alpha values [N]
         cache_bust: Static cache-busting token to force fresh JIT compilation
     """
-    # Priors
-    k_J = numpyro.sample('k_J', dist.Uniform(50, 90))
-    eta_prime = numpyro.sample('eta_prime', dist.Uniform(0.001, 0.1))
-    xi = numpyro.sample('xi', dist.Uniform(10, 50))
+    # Priors on standardized coefficients (well-conditioned, ~O(1) scale)
+    # Normal(0, 1) on z-scored features is equivalent to HalfNormal on raw but better geometry
+    c = numpyro.sample('c', dist.Normal(0.0, 1.0).expand([3]).to_event(1))
 
-    # Predict α from globals
-    alpha_th = alpha_pred_batch(z_batch, k_J, eta_prime, xi)
+    # Global offset to absorb residual zeropoint (Fix B from cloud.txt)
+    # Stage-1 α carries arbitrary zero point from frozen L_peak and survey calibrations
+    alpha0 = numpyro.sample('alpha0', dist.Normal(0.0, 5.0))
 
-    # Simple homoscedastic noise (tuneable). Start with ~0.05 in α-space (≈0.054 mag).
+    # Predicted alpha: alpha0 + sum_i c_i * φ_i
+    alpha_th = alpha0 + jnp.dot(Phi, c)
+
+    # Simple homoscedastic noise
     sigma_alpha = numpyro.sample('sigma_alpha', dist.HalfNormal(0.1))
 
     # Observed α
-    with numpyro.plate('data', z_batch.shape[0]):
+    with numpyro.plate('data', Phi.shape[0]):
         numpyro.sample('alpha_obs',
                        dist.Normal(alpha_th, sigma_alpha),
                        obs=alpha_obs_batch)
@@ -398,11 +437,11 @@ def main():
     # Setup NUTS sampler (using alpha-space model)
     print("Setting up NUTS sampler (alpha-space likelihood)...")
     nuts_kernel = NUTS(
-        numpyro_model_alpha_space,  # FIXED: Use alpha-space model
-        target_accept_prob=0.75,  # Slightly lower to speed warmup and avoid micro-steps
-        max_tree_depth=12,  # Increased for better exploration
-        dense_mass=True,  # Helps when parameters have different scales or are correlated
-        init_strategy=numpyro.infer.init_to_median  # Start at median of prior
+        numpyro_model_alpha_space,
+        target_accept_prob=0.85,  # Patch 2: Higher to reduce divergences on curved posteriors
+        max_tree_depth=15,         # Patch 2: Increased for better exploration
+        dense_mass=True,           # Helps with correlated dims
+        init_strategy=numpyro.infer.init_to_median
     )
 
     mcmc = MCMC(
@@ -457,13 +496,18 @@ def main():
     # Optional: clear JAX in-memory caches before run to avoid sticky traces
     jax.clear_caches()
 
+    # Standardize features (Patch 1 from cloud.txt: reduces curvature/divergences)
+    print("  Standardizing basis features...")
+    Phi, stats = _standardize_features(z_batch)
+    print(f"    Feature stats: m={stats['m']}, s={stats['s']}")
+
     # Cache-bust token to force a fresh trace even in a long-lived process
     _cache_bust = int(time.time()) & 0xffff
 
     rng_key = jax.random.PRNGKey(0)
     mcmc.run(
         rng_key,
-        z_batch,
+        Phi,  # Pass standardized features instead of z_batch
         alpha_obs_batch,
         cache_bust=_cache_bust,
     )
@@ -476,36 +520,52 @@ def main():
     print("Extracting samples...")
     samples = mcmc.get_samples()
 
+    # Back-transform standardized coefficients to physical parameters
+    print("  Back-transforming standardized coefficients to physical parameters...")
+    c_samples = np.asarray(samples['c'])  # shape: [n_samples, 3]
+    alpha0_samples_raw = np.asarray(samples['alpha0'])
+    sigma_alpha_samples = np.asarray(samples['sigma_alpha'])
+
+    # Convert standardization stats to numpy for back-transformation
+    m = np.asarray(stats['m'])  # [m1, m2, m3]
+    s = np.asarray(stats['s'])  # [s1, s2, s3]
+
+    # Physical coefficients: k_J = c1/s1, eta_prime = c2/s2, xi = c3/s3
+    k_J_samples = c_samples[:, 0] / s[0]
+    eta_prime_samples = c_samples[:, 1] / s[1]
+    xi_samples = c_samples[:, 2] / s[2]
+
+    # Physical alpha0: alpha0_phys = alpha0_raw - sum(c_i * m_i / s_i)
+    alpha0_samples = alpha0_samples_raw - np.dot(c_samples, m / s)
+
     # Enhanced diagnostics
     print()
     print("=" * 80)
-    print("SAMPLE DIAGNOSTICS")
+    print("SAMPLE DIAGNOSTICS (Physical Parameters)")
     print("=" * 80)
-    for name in ['k_J', 'eta_prime', 'xi', 'sigma_alpha']:
-        arr = np.asarray(samples[name])
+    for name, arr in [('k_J', k_J_samples), ('eta_prime', eta_prime_samples),
+                       ('xi', xi_samples), ('alpha0', alpha0_samples),
+                       ('sigma_alpha', sigma_alpha_samples)]:
         print(f"{name:12s}: mean={arr.mean():10.6f}, std={arr.std():10.6e}, min={arr.min():10.6f}, max={arr.max():10.6f}")
     print()
 
-    # Print NumPyro summary (includes ESS and Rhat)
+    # Print NumPyro summary for standardized coefficients
+    print("Standardized coefficients c (from MCMC):")
     mcmc.print_summary()
     print()
 
-    # Compute summary statistics
-    k_J_samples = np.array(samples['k_J'])
-    eta_prime_samples = np.array(samples['eta_prime'])
-    xi_samples = np.array(samples['xi'])
-    sigma_alpha_samples = np.array(samples['sigma_alpha'])
-
-    # Best-fit (median of posterior)
+    # Best-fit (median of posterior) for physical parameters
     k_J_best = float(np.median(k_J_samples))
     eta_prime_best = float(np.median(eta_prime_samples))
     xi_best = float(np.median(xi_samples))
+    alpha0_best = float(np.median(alpha0_samples))
     sigma_alpha_best = float(np.median(sigma_alpha_samples))
 
-    # Uncertainties (standard deviation)
+    # Uncertainties (standard deviation) for physical parameters
     k_J_std = float(np.std(k_J_samples))
     eta_prime_std = float(np.std(eta_prime_samples))
     xi_std = float(np.std(xi_samples))
+    alpha0_std = float(np.std(alpha0_samples))
     sigma_alpha_std = float(np.std(sigma_alpha_samples))
 
     print("=" * 80)
@@ -515,6 +575,7 @@ def main():
     print(f"  k_J = {k_J_best:.2f} ± {k_J_std:.4f}")
     print(f"  eta' = {eta_prime_best:.4f} ± {eta_prime_std:.5f}")
     print(f"  xi = {xi_best:.2f} ± {xi_std:.4f}")
+    print(f"  alpha0 (zeropoint offset) = {alpha0_best:.4f} ± {alpha0_std:.5f}")
     print(f"  sigma_alpha = {sigma_alpha_best:.4f} ± {sigma_alpha_std:.5f}")
     print()
 
@@ -533,11 +594,11 @@ def main():
 
     # Save samples as JSON
     samples_dict = {
-        'params': ['k_J', 'eta_prime', 'xi', 'sigma_alpha'],
-        'samples': np.column_stack([k_J_samples, eta_prime_samples, xi_samples, sigma_alpha_samples]).tolist(),
-        'mean': [float(np.mean(k_J_samples)), float(np.mean(eta_prime_samples)), float(np.mean(xi_samples)), float(np.mean(sigma_alpha_samples))],
-        'median': [k_J_best, eta_prime_best, xi_best, sigma_alpha_best],
-        'std': [k_J_std, eta_prime_std, xi_std, sigma_alpha_std],
+        'params': ['k_J', 'eta_prime', 'xi', 'alpha0', 'sigma_alpha'],
+        'samples': np.column_stack([k_J_samples, eta_prime_samples, xi_samples, alpha0_samples, sigma_alpha_samples]).tolist(),
+        'mean': [float(np.mean(k_J_samples)), float(np.mean(eta_prime_samples)), float(np.mean(xi_samples)), float(np.mean(alpha0_samples)), float(np.mean(sigma_alpha_samples))],
+        'median': [k_J_best, eta_prime_best, xi_best, alpha0_best, sigma_alpha_best],
+        'std': [k_J_std, eta_prime_std, xi_std, alpha0_std, sigma_alpha_std],
         'n_chains': args.nchains,
         'n_samples_per_chain': args.nsamples,
         'n_warmup': args.nwarmup,
@@ -555,10 +616,12 @@ def main():
         'k_J': k_J_best,
         'eta_prime': eta_prime_best,
         'xi': xi_best,
+        'alpha0': alpha0_best,
         'sigma_alpha': sigma_alpha_best,
         'k_J_std': k_J_std,
         'eta_prime_std': eta_prime_std,
         'xi_std': xi_std,
+        'alpha0_std': alpha0_std,
         'sigma_alpha_std': sigma_alpha_std
     }
 
