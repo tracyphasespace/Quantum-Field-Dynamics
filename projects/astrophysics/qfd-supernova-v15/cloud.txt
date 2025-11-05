@@ -122,3 +122,69 @@ Either:
 * Optionally set `dense_mass=True`, `max_tree_depth=12`.
 
 Do that and your chains should spread, posteriors unpin from priors, and runtime will scale with real work again.
+
+---
+
+## UPDATE: Sign Convention Issue Discovered (Post-Fix Run)
+
+**Status after applying fixes 1-3:**
+✅ Gradients are now LARGE and NON-ZERO:
+  - d logL / d k_J = -1.4e+05
+  - d logL / d eta_prime = -1.9e+05
+  - d logL / d xi = -1.1e+05
+
+❌ **BUT parameters still stuck at lower bounds:**
+  - k_J: 100% of samples at k_J < 50.1 (prior lower bound = 50)
+  - eta: 83% of samples at eta < 0.005 (prior lower bound = 0.001)
+  - xi: 100% of samples at xi < 10.1 (prior lower bound = 10)
+  - sigma_alpha: Exploring properly (17.41 to 17.75)
+  - Runtime: 4 minutes (still too fast)
+
+**Root Cause: SIGN CONVENTION MISMATCH**
+
+The NEGATIVE gradients mean increasing parameters DECREASES likelihood → MCMC pushes toward lower bounds.
+
+**Diagnosis:**
+1. **Stage 1 alpha_obs**: Range [14.979, 30.000] (POSITIVE values)
+2. **Stage 2 alpha_pred** (v15_model.py:107):
+   ```python
+   return -(k_J * _phi1_ln1pz(z) + eta_prime * _phi2_linear(z) + xi * _phi3_sat(z))
+   ```
+   Returns NEGATIVE values due to leading minus sign
+
+3. **Residual calculation** (stage2_mcmc_numpyro.py:130 in old code):
+   ```python
+   r_alpha = alpha_obs_batch - alpha_th
+   ```
+   = (positive) - (negative) = LARGE POSITIVE
+
+4. **Likelihood minimizes residual²** by making alpha_pred less negative (closer to alpha_obs)
+   → This happens when k_J, eta_prime, xi → 0 (lower bounds)
+
+**Evidence:**
+- Preflight check shows var(residuals) = 280.696 (huge!)
+- Alpha_obs range: [14.979, 30.000]
+- With lower-bound params (50, 0.001, 10), alpha_pred is strongly negative
+- Large positive residuals → likelihood favors smaller parameters
+
+**Possible Fixes:**
+
+**Option A:** Remove the minus sign in v15_model.py:107
+```python
+# Change from:
+return -(k_J * _phi1_ln1pz(z) + eta_prime * _phi2_linear(z) + xi * _phi3_sat(z))
+# To:
+return (k_J * _phi1_ln1pz(z) + eta_prime * _phi2_linear(z) + xi * _phi3_sat(z))
+```
+
+**Option B:** Check if Stage 1 is extracting alpha correctly
+- Verify that `persn_best[3]` is the correct alpha parameter
+- Check if Stage 1's alpha has the right sign convention
+
+**Option C:** Flip sign when loading alpha_obs in Stage 2
+```python
+# In stage2_mcmc_numpyro.py around line 285:
+alpha_obs = -persn_best[3]  # Flip sign
+```
+
+**Next Step:** Determine which stage (Stage 1 vs Stage 2) has the correct physical sign convention for alpha, then fix the inconsistency.
