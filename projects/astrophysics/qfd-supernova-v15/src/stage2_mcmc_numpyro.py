@@ -40,6 +40,51 @@ from numpyro.infer import MCMC, NUTS
 # Import model
 from v15_model import log_likelihood_single_sn_jax, alpha_pred_batch
 
+# Magnitude-to-natural-log conversion constant
+K_MAG_PER_LN = 2.5 / np.log(10.0)  # ≈ 1.0857
+
+
+def _ensure_alpha_natural(alpha_obs_array: np.ndarray) -> np.ndarray:
+    """
+    Convert Stage-1 alpha to natural-log amplitude if it's actually in magnitudes.
+
+    Canonical definition:
+    - α ≡ ln(A) (natural-log amplitude)
+    - μ_obs = μ_th - K·α, where K = 2.5/ln(10) ≈ 1.0857
+    - Larger distances → smaller flux → more negative α
+
+    Stage 1 may output α in magnitude space (Δμ, positive values like 15-30).
+    Stage 2 expects natural-log amplitude (negative values like -5 to -70).
+
+    Heuristic: if median(|alpha|) > 5, treat as magnitude residuals and convert:
+        α_nat = -α_mag / K
+
+    Args:
+        alpha_obs_array: Alpha values from Stage 1
+
+    Returns:
+        Alpha in natural-log space (negative, decreasing with z)
+    """
+    a = np.asarray(alpha_obs_array, dtype=float)
+
+    if not np.isfinite(a).all():
+        raise ValueError("alpha_obs contains NaN/inf")
+
+    median_abs = np.median(np.abs(a))
+
+    if median_abs > 5.0:
+        # Looks like magnitudes (tens). Convert to natural log amplitude.
+        print(f"[ALPHA CONVERSION] Detected magnitude-space alpha (median |α| = {median_abs:.1f})")
+        print(f"[ALPHA CONVERSION] Converting: α_nat = -α_mag / K")
+        a_nat = -a / K_MAG_PER_LN
+        print(f"[ALPHA CONVERSION] Before: [{a.min():.1f}, {np.median(a):.1f}, {a.max():.1f}]")
+        print(f"[ALPHA CONVERSION] After:  [{a_nat.min():.1f}, {np.median(a_nat):.1f}, {a_nat.max():.1f}]")
+        return a_nat
+    else:
+        print(f"[ALPHA CONVERSION] Alpha already in natural-log space (median |α| = {median_abs:.1f})")
+        return a
+
+
 def load_stage1_results(stage1_dir, lightcurves_dict, quality_cut=2000):
     """Load all Stage 1 results"""
     results = {}
@@ -290,11 +335,64 @@ def main():
 
     # Convert to JAX arrays
     z_batch = jnp.array(z_list)
-    alpha_obs_batch = jnp.array(alpha_obs_list)
+    alpha_obs_raw = np.array(alpha_obs_list)
+
+    # Convert alpha to natural-log space if needed
+    alpha_obs_natural = _ensure_alpha_natural(alpha_obs_raw)
+    alpha_obs_batch = jnp.array(alpha_obs_natural)
 
     print(f"  Using {len(snids)} SNe for MCMC")
     print(f"  Redshift range: [{z_batch.min():.3f}, {z_batch.max():.3f}]")
-    print(f"  Alpha range: [{alpha_obs_batch.min():.3f}, {alpha_obs_batch.max():.3f}]")
+    print(f"  Alpha range (natural-log): [{alpha_obs_batch.min():.3f}, {alpha_obs_batch.max():.3f}]")
+    print()
+
+    # Gradient sanity check (before MCMC setup)
+    print("Running gradient sanity checks...")
+    print("-" * 60)
+
+    def ll_k(k):
+        return log_likelihood_alpha_space(
+            k, 0.01, 30.0, z_batch, alpha_obs_batch, cache_bust=0
+        )
+
+    def ll_eta(eta):
+        return log_likelihood_alpha_space(
+            70.0, eta, 30.0, z_batch, alpha_obs_batch, cache_bust=0
+        )
+
+    def ll_xi(xi):
+        return log_likelihood_alpha_space(
+            70.0, 0.01, xi, z_batch, alpha_obs_batch, cache_bust=0
+        )
+
+    grad_k = float(jax.grad(ll_k)(70.0))
+    grad_eta = float(jax.grad(ll_eta)(0.01))
+    grad_xi = float(jax.grad(ll_xi)(30.0))
+
+    print(f"[GRADIENT CHECK] d logL / d k_J     @ 70.0 = {grad_k:.6e}")
+    print(f"[GRADIENT CHECK] d logL / d eta'    @ 0.01 = {grad_eta:.6e}")
+    print(f"[GRADIENT CHECK] d logL / d xi      @ 30.0 = {grad_xi:.6e}")
+
+    # Check alpha stats
+    print(f"[ALPHA CHECK] Range: min={alpha_obs_batch.min():.2f}, " +
+          f"median={float(np.median(alpha_obs_batch)):.2f}, max={alpha_obs_batch.max():.2f}")
+
+    # Sanity: alpha should be predominantly negative and correlate with z
+    z_sorted_idx = np.argsort(z_batch)
+    alpha_at_low_z = float(np.median(alpha_obs_batch[z_sorted_idx[:10]]))
+    alpha_at_high_z = float(np.median(alpha_obs_batch[z_sorted_idx[-10:]]))
+    print(f"[ALPHA CHECK] Median at low-z:  {alpha_at_low_z:.2f}")
+    print(f"[ALPHA CHECK] Median at high-z: {alpha_at_high_z:.2f}")
+    print(f"[ALPHA CHECK] Trend (should be negative): {alpha_at_high_z - alpha_at_low_z:.2f}")
+
+    # Preflight check: compute variance of residuals with fiducial parameters
+    alpha_pred_fid = alpha_pred_batch(z_batch, 70.0, 0.01, 30.0)
+    r_alpha_fid = alpha_obs_batch - alpha_pred_fid
+    var_r = float(jnp.var(r_alpha_fid))
+    print(f"[PREFLIGHT CHECK] var(r_alpha) with fiducial params = {var_r:.3f}")
+    if var_r < 1e-6:
+        raise RuntimeError("WIRING BUG: var(r_alpha) ≈ 0 → check alpha_pred wiring!")
+    print("-" * 60)
     print()
 
     # Setup NUTS sampler (using alpha-space model)
