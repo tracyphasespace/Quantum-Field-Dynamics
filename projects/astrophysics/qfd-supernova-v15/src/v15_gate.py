@@ -95,10 +95,15 @@ def main():
     )
 
     # LENS rule (from remaining)
+    # Explicit parentheses to clarify: "(chi² AND color-band) OR skew"
     lens_mask = (~bbh_mask) & (
-        (chi2_ndof > args.chi2_lens) & (
-            (np.abs(color_slope) >= args.color_lens_lo) & (np.abs(color_slope) <= args.color_lens_hi)
-        ) | (skew_resid > args.skew_lens)
+        (
+            (chi2_ndof > args.chi2_lens) &
+            ( (np.abs(color_slope) >= args.color_lens_lo) &
+              (np.abs(color_slope) <= args.color_lens_hi) )
+        )
+        |
+        (skew_resid > args.skew_lens)
     )
 
     flagged_bbh = snids[bbh_mask].tolist()

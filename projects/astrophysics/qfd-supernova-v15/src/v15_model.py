@@ -136,14 +136,17 @@ class QFDIntrinsicModelJAX:
 
     @staticmethod
     @jit
-    def _photospheric_radius(
+    def _photospheric_radius_cm(
         t_rest: float, t_rise: float, radius_peak: float, radius_fall_tau: float
     ) -> float:
         """
-        Photospheric radius evolution.
+        Photospheric radius evolution (returns centimeters).
 
         Rise phase (t < t_rise): Gaussian-like rise R(t) = R_peak * (t/t_rise)²
         Decline phase: Linear decline R(t) = R_peak * [1 - (t - t_rise)/τ_fall]
+
+        Returns:
+            Photospheric radius in centimeters
         """
         frac = (t_rest / t_rise) ** 2
         r1 = radius_peak * jnp.clip(frac, 0.0, 1.0)
@@ -152,6 +155,7 @@ class QFDIntrinsicModelJAX:
         r2 = radius_peak * jnp.maximum(decline, 0.0)
 
         r = jax.lax.cond(t_rest <= t_rise, lambda _: r1, lambda _: r2, None)
+        # returns centimeters
         return jax.lax.cond(t_rest < 0.0, lambda _: 0.0, lambda _: r, None)
 
     @staticmethod
@@ -187,7 +191,7 @@ class QFDIntrinsicModelJAX:
             Spectral luminosity in erg/s/nm
         """
         T_eff = QFDIntrinsicModelJAX._temperature(t_rest, temp_peak, temp_floor, temp_tau)
-        radius_m = QFDIntrinsicModelJAX._photospheric_radius(
+        radius_cm_model = QFDIntrinsicModelJAX._photospheric_radius_cm(
             t_rest, t_rise, radius_peak, radius_fall_tau
         )
 
@@ -203,9 +207,8 @@ class QFDIntrinsicModelJAX:
         surface_lum_density = emissivity * jnp.pi * planck
 
         # Total luminosity: integrate over photosphere
-        # IMPORTANT: radius_m is already in centimeters (despite variable name)
-        # Typical peak radius ~1e13–1e14 cm. Do NOT multiply by 100.
-        radius_cm = jnp.clip(radius_m, a_min=1e10, a_max=1e16)
+        # Typical peak radius ~1e13–1e14 cm.
+        radius_cm = jnp.clip(radius_cm_model, a_min=1e10, a_max=1e16)
         area_cm2 = 4.0 * jnp.pi * (radius_cm**2)
         L_lambda_cm = surface_lum_density * area_cm2
 
@@ -215,7 +218,7 @@ class QFDIntrinsicModelJAX:
             a_max=20000,
         )
         radius_norm_cm = jnp.clip(
-            QFDIntrinsicModelJAX._photospheric_radius(
+            QFDIntrinsicModelJAX._photospheric_radius_cm(
                 t_rise, t_rise, radius_peak, radius_fall_tau
             ),
             a_min=1e10,
@@ -421,11 +424,10 @@ def compute_bbh_gravitational_redshift(
     Returns:
         Dimensionless redshift contribution (capped for stability)
     """
-    radius_m = QFDIntrinsicModelJAX._photospheric_radius(
+    radius_cm_model = QFDIntrinsicModelJAX._photospheric_radius_cm(
         t_rest, t_rise, radius_peak, radius_fall_tau
     )
-    # IMPORTANT: radius_m is already in cm (despite variable name)
-    radius_cm = jnp.maximum(radius_m, MIN_PHOTOSPHERE_RADIUS_CM)
+    radius_cm = jnp.maximum(radius_cm_model, MIN_PHOTOSPHERE_RADIUS_CM)
 
     mass_extra_solar = BBH_BASELINE_MASS_SOLAR * (1.0 + jnp.abs(A_lens)) - WD_REFERENCE_MASS_SOLAR
     mass_extra_solar = jnp.maximum(mass_extra_solar, 0.0)
@@ -492,7 +494,9 @@ def qfd_lightcurve_model_jax(
 
     # QFD cosmological drag: use FIDUCIAL distance from z_obs (not fitted)
     # This keeps z_cosmo dependent only on globals (k_J) and observed z
-    D_fiducial_mpc = z_obs * C_KM_S / 70.0  # Fiducial H0=70, cosmology-free
+    # Map observed z to a fiducial distance once (H0=70) for geometric scaling only.
+    # Stage-2 inference is performed purely in α-space; do not back-propagate k_J here.
+    D_fiducial_mpc = z_obs * C_KM_S / 70.0
     z_cosmo = qfd_z_from_distance_jax(D_fiducial_mpc, k_J)
 
     # Plasma veil redshift (observer frame time, observed wavelength)
@@ -595,6 +599,8 @@ def qfd_lightcurve_model_jax_static_lens(
     t_rest = t_since_explosion  # Pure QFD: no (1+z) time dilation
 
     # QFD cosmological drag
+    # Map observed z to a fiducial distance once (H0=70) for geometric scaling only.
+    # Stage-2 inference is performed purely in α-space; do not back-propagate k_J here.
     D_fiducial_mpc = z_obs * C_KM_S / 70.0
     z_cosmo = qfd_z_from_distance_jax(D_fiducial_mpc, k_J)
 

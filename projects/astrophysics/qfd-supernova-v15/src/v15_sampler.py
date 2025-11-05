@@ -247,6 +247,10 @@ class V15Sampler:
 
     def run(self) -> Dict:
         """
+        WARNING: This sampler uses per-SN light-curve likelihoods and is **legacy**.
+        V15 production runs should use Stage-2 α-space MCMC (NumPyro), not this path.
+        To proceed anyway, set environment variable V15_ALLOW_LEGACY_SAMPLER=1.
+
         Run MCMC sampling (emcee architecture from V1).
 
         V13.1: Optionally uses multiprocessing pool for parallel SN evaluation.
@@ -254,6 +258,10 @@ class V15Sampler:
         Returns:
             Dictionary with best-fit parameters and metadata
         """
+        import os
+        if os.environ.get("V15_ALLOW_LEGACY_SAMPLER","0") != "1":
+            raise RuntimeError("Legacy sampler disabled. Use stage2_mcmc_numpyro.py for α-space inference.")
+
         if self.verbose:
             print(f"\n{'='*80}")
             print("V15 MCMC Sampling")
