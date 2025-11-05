@@ -11,6 +11,7 @@ __pycache__/
 *.h5
 *.hdf5
 *.csv
+!data/lightcurves_unified_v2_min3.csv  # Exception: include filtered dataset (13 MB)
 *.npy
 *.npz
 

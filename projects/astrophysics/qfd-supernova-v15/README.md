@@ -68,7 +68,13 @@ python src/stage3_hubble_optimized.py \
     --ncores 7
 ```
 
-## Data Format
+## Data
+
+**Included**: Filtered dataset with 5,468 SNe is provided in `data/lightcurves_unified_v2_min3.csv` (13 MB).
+
+**Build your own**: See `data/README.md` for instructions on building from DES-SN5YR + Pantheon+ raw data.
+
+### Data Format
 
 Lightcurves CSV must contain:
 - `snid`: Supernova ID
