@@ -183,15 +183,17 @@ def numpyro_model_alpha_space(z_batch, alpha_obs_batch, *, cache_bust: int = 0):
     eta_prime = numpyro.sample('eta_prime', dist.Uniform(0.001, 0.1))
     xi = numpyro.sample('xi', dist.Uniform(10, 50))
 
-    # Compute alpha-space log-likelihood
-    total_logL = log_likelihood_alpha_space(
-        k_J, eta_prime, xi,
-        z_batch, alpha_obs_batch,
-        cache_bust=cache_bust
-    )
+    # Predict α from globals
+    alpha_th = alpha_pred_batch(z_batch, k_J, eta_prime, xi)
 
-    # Factor in the total log-likelihood
-    numpyro.factor('logL', total_logL)
+    # Simple homoscedastic noise (tuneable). Start with ~0.05 in α-space (≈0.054 mag).
+    sigma_alpha = numpyro.sample('sigma_alpha', dist.HalfNormal(0.1))
+
+    # Observed α
+    with numpyro.plate('data', z_batch.shape[0]):
+        numpyro.sample('alpha_obs',
+                       dist.Normal(alpha_th, sigma_alpha),
+                       obs=alpha_obs_batch)
 
 def numpyro_model(persn_params_batch, L_peaks, photometries, redshifts):
     """
@@ -299,8 +301,9 @@ def main():
     print("Setting up NUTS sampler (alpha-space likelihood)...")
     nuts_kernel = NUTS(
         numpyro_model_alpha_space,  # FIXED: Use alpha-space model
-        target_accept_prob=0.8,  # Higher = more accurate, slower
-        max_tree_depth=10,  # Maximum trajectory length
+        target_accept_prob=0.75,  # Slightly lower to speed warmup and avoid micro-steps
+        max_tree_depth=12,  # Increased for better exploration
+        dense_mass=True,  # Helps when parameters have different scales or are correlated
         init_strategy=numpyro.infer.init_to_median  # Start at median of prior
     )
 
@@ -330,6 +333,29 @@ def main():
         raise RuntimeError(f"Preflight: var(alpha_obs - alpha_pred(z; fiducials)) = {_var_resid:.6g} <= 0 — check wiring.")
     print(f"  Preflight OK: var(residuals) = {_var_resid:.6g}")
 
+    # Gradient sanity check: ensure likelihood depends on parameters
+    print("  Gradient sanity check...")
+    def ll_k(k):
+        return log_likelihood_alpha_space(
+            k, 0.01, 30.0, z_batch, alpha_obs_batch, cache_bust=0
+        )
+    def ll_eta(eta):
+        return log_likelihood_alpha_space(
+            70.0, eta, 30.0, z_batch, alpha_obs_batch, cache_bust=0
+        )
+    def ll_xi(xi_val):
+        return log_likelihood_alpha_space(
+            70.0, 0.01, xi_val, z_batch, alpha_obs_batch, cache_bust=0
+        )
+    g_k = jax.grad(ll_k)(70.0)
+    g_eta = jax.grad(ll_eta)(0.01)
+    g_xi = jax.grad(ll_xi)(30.0)
+    print(f"    d logL / d k_J      at 70   = {float(g_k):.6e}")
+    print(f"    d logL / d eta_prime at 0.01 = {float(g_eta):.6e}")
+    print(f"    d logL / d xi        at 30   = {float(g_xi):.6e}")
+    if abs(float(g_k)) < 1e-10 or abs(float(g_eta)) < 1e-10 or abs(float(g_xi)) < 1e-10:
+        print("  WARNING: Near-zero gradient detected! Parameters may not affect likelihood.")
+
     # Optional: clear JAX in-memory caches before run to avoid sticky traces
     jax.clear_caches()
 
@@ -352,20 +378,37 @@ def main():
     print("Extracting samples...")
     samples = mcmc.get_samples()
 
+    # Enhanced diagnostics
+    print()
+    print("=" * 80)
+    print("SAMPLE DIAGNOSTICS")
+    print("=" * 80)
+    for name in ['k_J', 'eta_prime', 'xi', 'sigma_alpha']:
+        arr = np.asarray(samples[name])
+        print(f"{name:12s}: mean={arr.mean():10.6f}, std={arr.std():10.6e}, min={arr.min():10.6f}, max={arr.max():10.6f}")
+    print()
+
+    # Print NumPyro summary (includes ESS and Rhat)
+    mcmc.print_summary()
+    print()
+
     # Compute summary statistics
     k_J_samples = np.array(samples['k_J'])
     eta_prime_samples = np.array(samples['eta_prime'])
     xi_samples = np.array(samples['xi'])
+    sigma_alpha_samples = np.array(samples['sigma_alpha'])
 
     # Best-fit (median of posterior)
     k_J_best = float(np.median(k_J_samples))
     eta_prime_best = float(np.median(eta_prime_samples))
     xi_best = float(np.median(xi_samples))
+    sigma_alpha_best = float(np.median(sigma_alpha_samples))
 
     # Uncertainties (standard deviation)
     k_J_std = float(np.std(k_J_samples))
     eta_prime_std = float(np.std(eta_prime_samples))
     xi_std = float(np.std(xi_samples))
+    sigma_alpha_std = float(np.std(sigma_alpha_samples))
 
     print("=" * 80)
     print("MCMC RESULTS")
@@ -374,11 +417,7 @@ def main():
     print(f"  k_J = {k_J_best:.2f} ± {k_J_std:.4f}")
     print(f"  eta' = {eta_prime_best:.4f} ± {eta_prime_std:.5f}")
     print(f"  xi = {xi_best:.2f} ± {xi_std:.4f}")
-    print()
-
-    # Print diagnostics
-    print("MCMC Diagnostics:")
-    mcmc.print_summary()
+    print(f"  sigma_alpha = {sigma_alpha_best:.4f} ± {sigma_alpha_std:.5f}")
     print()
 
     # Check for divergences
@@ -396,11 +435,11 @@ def main():
 
     # Save samples as JSON
     samples_dict = {
-        'params': ['k_J', 'eta_prime', 'xi'],
-        'samples': np.column_stack([k_J_samples, eta_prime_samples, xi_samples]).tolist(),
-        'mean': [float(np.mean(k_J_samples)), float(np.mean(eta_prime_samples)), float(np.mean(xi_samples))],
-        'median': [k_J_best, eta_prime_best, xi_best],
-        'std': [k_J_std, eta_prime_std, xi_std],
+        'params': ['k_J', 'eta_prime', 'xi', 'sigma_alpha'],
+        'samples': np.column_stack([k_J_samples, eta_prime_samples, xi_samples, sigma_alpha_samples]).tolist(),
+        'mean': [float(np.mean(k_J_samples)), float(np.mean(eta_prime_samples)), float(np.mean(xi_samples)), float(np.mean(sigma_alpha_samples))],
+        'median': [k_J_best, eta_prime_best, xi_best, sigma_alpha_best],
+        'std': [k_J_std, eta_prime_std, xi_std, sigma_alpha_std],
         'n_chains': args.nchains,
         'n_samples_per_chain': args.nsamples,
         'n_warmup': args.nwarmup,
@@ -418,9 +457,11 @@ def main():
         'k_J': k_J_best,
         'eta_prime': eta_prime_best,
         'xi': xi_best,
+        'sigma_alpha': sigma_alpha_best,
         'k_J_std': k_J_std,
         'eta_prime_std': eta_prime_std,
-        'xi_std': xi_std
+        'xi_std': xi_std,
+        'sigma_alpha_std': sigma_alpha_std
     }
 
     with open(outdir / 'best_fit.json', 'w') as f:
@@ -431,6 +472,7 @@ def main():
     np.save(outdir / 'k_J_samples.npy', k_J_samples)
     np.save(outdir / 'eta_prime_samples.npy', eta_prime_samples)
     np.save(outdir / 'xi_samples.npy', xi_samples)
+    np.save(outdir / 'sigma_alpha_samples.npy', sigma_alpha_samples)
     print(f"  Saved numpy arrays to: {outdir / '*.npy'}")
 
     print()
