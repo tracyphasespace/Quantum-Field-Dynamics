@@ -123,8 +123,8 @@ def log_likelihood_alpha_space(
     # Residuals
     r_alpha = alpha_obs_batch - alpha_th
 
-    # Guard against zero-variance (catches wiring bugs)
-    assert jnp.var(r_alpha) > 0, "Zero-variance r_alpha → check alpha_pred wiring"
+    # NOTE: Variance guard should be checked outside JIT (Python assert not allowed in traced code)
+    # If var(r_alpha) ≈ 0, check alpha_pred wiring (tests/test_spec_contracts.py validates this)
 
     # Simple unweighted likelihood (can add sigma_alpha later)
     logL = -0.5 * jnp.sum(r_alpha**2)
