@@ -1,0 +1,124 @@
+You’ve got a classic “stuck-at-prior” NUTS: the sampler finished fast and every chain hugs the init/median because your likelihood contributed **(effectively) no gradient** to the joint. The symptom (tiny std, ≈ prior medians, 2.5 min runtime) means the model didn’t actually “see” the data.
+
+Here’s how to unstick it—**two surgical changes + a quick gradient sanity check**.
+
+---
+
+## 1) Replace `factor` with an explicit Normal likelihood (drives gradients)
+
+In `stage2_mcmc_numpyro.py`, swap the alpha-space `factor` for a plate-wise Normal on `α_obs`. This is the most robust way to ensure the parameters affect an observed site (NUTS is happiest with this).
+
+```diff
+@@
+-def numpyro_model_alpha_space(z_batch, alpha_obs_batch, *, cache_bust: int = 0):
++def numpyro_model_alpha_space(z_batch, alpha_obs_batch, *, cache_bust: int = 0):
+     # Priors
+     k_J      = numpyro.sample('k_J',      dist.Uniform(50, 90))
+     eta_prime= numpyro.sample('eta_prime',dist.Uniform(0.001, 0.1))
+     xi       = numpyro.sample('xi',       dist.Uniform(10, 50))
+ 
+-    # Compute alpha-space log-likelihood
+-    total_logL = log_likelihood_alpha_space(
+-        k_J, eta_prime, xi,
+-        z_batch, alpha_obs_batch,
+-        cache_bust=cache_bust
+-    )
+-
+-    # Factor in the total log-likelihood
+-    numpyro.factor('logL', total_logL)
++    # Predict α from globals
++    alpha_th = alpha_pred_batch(z_batch, k_J, eta_prime, xi)
++
++    # Simple homoscedastic noise (tuneable). Start with ~0.05 in α-space (≈0.054 mag).
++    sigma_alpha = numpyro.sample('sigma_alpha', dist.HalfNormal(0.1))
++
++    # Observed α
++    with numpyro.plate('data', z_batch.shape[0]):
++        numpyro.sample('alpha_obs',
++                       dist.Normal(alpha_th, sigma_alpha),
++                       obs=alpha_obs_batch)
+```
+
+Why this helps:
+
+* It **anchors** parameters to data at an observed site (no ambiguity about how `factor` interacts with tracing/jit).
+* It gives NUTS a **smooth, well-conditioned gradient** (crucial for step-size/mass adaptation).
+* You can later switch to per-SN `σ_α,i` if you export them; the structure stays the same.
+  (Your current file has the `factor` approach. This replacement is drop-in. )
+
+---
+
+## 2) Add a one-line **gradient sanity check** before running MCMC
+
+Right after you build `z_batch` and `alpha_obs_batch`, confirm the log-likelihood actually depends on `k_J`. If this prints `~0`, you know α_pred isn’t wired (or returns a constant).
+
+```python
+# Gradient sanity check (outside NumPyro, before sampler)
+import jax
+def ll_k(k):
+    return log_likelihood_alpha_space(
+        k, 0.01, 30.0, z_batch, alpha_obs_batch, cache_bust=0
+    )
+g = jax.grad(ll_k)(70.0)
+print(f"[DEBUG] d logL / d k_J at 70 = {float(g):.6e}")
+```
+
+* Expect **|g| > 0** (not ~1e-12). If ≈0, α_pred is independent of k_J (wiring bug or kernels too tiny).
+* Do the same for `eta_prime` and `xi` if needed.
+
+---
+
+## 3) (Optional) Make NUTS a bit more forgiving while debugging
+
+When you construct the kernel:
+
+```diff
+- nuts_kernel = NUTS(numpyro_model_alpha_space,
+-     target_accept_prob=0.8, max_tree_depth=10,
+-     init_strategy=numpyro.infer.init_to_median)
++ nuts_kernel = NUTS(numpyro_model_alpha_space,
++     target_accept_prob=0.75, max_tree_depth=12,
++     dense_mass=True,
++     init_strategy=numpyro.infer.init_to_median)
+```
+
+* `dense_mass=True` helps when parameters have different scales or are correlated.
+* Slightly lower `target_accept_prob` can speed warmup and avoid micro-step sizes.
+
+---
+
+## 4) Quick post-run checks (to confirm we’re off the priors)
+
+After sampling:
+
+```python
+samples = mcmc.get_samples()
+for name in ['k_J','eta_prime','xi','sigma_alpha']:
+    arr = np.asarray(samples[name])
+    print(name, "mean=", arr.mean(), "std=", arr.std(), "min=", arr.min(), "max=", arr.max())
+mcmc.print_summary()  # should show ESS>>0, Rhat~1.00
+```
+
+* You want **std well above ~1e-5**, ESS in the **hundreds+**, and `r_hat ≈ 1.00`.
+* If not, re-run the gradient sanity check; that will point straight at a disabled dependency.
+
+---
+
+## Why your run finished in 2.5 minutes with tiny std
+
+Either:
+
+* The `factor` path produced an **effectively constant** (or numerically flat) log-likelihood wrt (k_J, η′, ξ), so NUTS didn’t move from init; or
+* `alpha_pred_batch` returned a **near-constant** for your z-range (e.g., kernels too small), again giving no learnable signal; or
+* Tracing/jit reused a compile that inlined constants (less likely after your cache-bust, but the explicit Normal likelihood avoids the ambiguity).
+  All three yield negligible gradients → tiny movement → near-prior medians in minutes. The explicit Normal fixes (1) regardless, and the gradient sanity print catches (2)/(3) immediately. 
+
+---
+
+## Minimal patch summary
+
+* Replace `factor` with `Normal(alpha_th, sigma_alpha)` (observed) in `numpyro_model_alpha_space`.
+* Add the 3-line `jax.grad` check before `mcmc.run`.
+* Optionally set `dense_mass=True`, `max_tree_depth=12`.
+
+Do that and your chains should spread, posteriors unpin from priors, and runtime will scale with real work again.
