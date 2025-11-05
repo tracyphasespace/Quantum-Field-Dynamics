@@ -1,0 +1,28 @@
+# QFD Supernova V15 - Git Ignore
+
+# Results directories (too large for git)
+results/
+logs/
+cache/
+__pycache__/
+*.pyc
+
+# Large data files
+*.h5
+*.hdf5
+*.csv
+*.npy
+*.npz
+
+# Plots (can be regenerated)
+*.png
+*.pdf
+*.jpg
+
+# Python caches
+.pytest_cache/
+.ipynb_checkpoints/
+
+# IDEs
+.vscode/
+.idea/
