@@ -1,0 +1,39 @@
+# Pre-commit hooks for V15 QFD pipeline
+# Install: pip install pre-commit && pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+        language_version: python3.11
+        exclude: ^(docs/|goldens/)
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+        exclude: ^(docs/|goldens/)
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^(docs/|goldens/)
+      - id: end-of-file-fixer
+        exclude: ^(docs/|goldens/)
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+
+  - repo: local
+    hooks:
+      - id: spec-guard
+        name: V15 Spec Guard (forbid (1+z))
+        entry: python scripts/spec_guard.py
+        language: system
+        pass_filenames: false
+        always_run: true

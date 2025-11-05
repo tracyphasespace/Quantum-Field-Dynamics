@@ -26,6 +26,7 @@ import numpy as np
 from pathlib import Path
 from typing import Dict, List, Tuple
 import time
+from functools import partial
 
 # JAX and NumPyro
 import jax
@@ -38,6 +39,51 @@ from numpyro.infer import MCMC, NUTS
 
 # Import model
 from v15_model import log_likelihood_single_sn_jax, alpha_pred_batch
+
+# Magnitude-to-natural-log conversion constant
+K_MAG_PER_LN = 2.5 / np.log(10.0)  # ≈ 1.0857
+
+
+def _ensure_alpha_natural(alpha_obs_array: np.ndarray) -> np.ndarray:
+    """
+    Convert Stage-1 alpha to natural-log amplitude if it's actually in magnitudes.
+
+    Canonical definition:
+    - α ≡ ln(A) (natural-log amplitude)
+    - μ_obs = μ_th - K·α, where K = 2.5/ln(10) ≈ 1.0857
+    - Larger distances → smaller flux → more negative α
+
+    Stage 1 may output α in magnitude space (Δμ, positive values like 15-30).
+    Stage 2 expects natural-log amplitude (negative values like -5 to -70).
+
+    Heuristic: if median(|alpha|) > 5, treat as magnitude residuals and convert:
+        α_nat = -α_mag / K
+
+    Args:
+        alpha_obs_array: Alpha values from Stage 1
+
+    Returns:
+        Alpha in natural-log space (negative, decreasing with z)
+    """
+    a = np.asarray(alpha_obs_array, dtype=float)
+
+    if not np.isfinite(a).all():
+        raise ValueError("alpha_obs contains NaN/inf")
+
+    median_abs = np.median(np.abs(a))
+
+    if median_abs > 5.0:
+        # Looks like magnitudes (tens). Convert to natural log amplitude.
+        print(f"[ALPHA CONVERSION] Detected magnitude-space alpha (median |α| = {median_abs:.1f})")
+        print(f"[ALPHA CONVERSION] Converting: α_nat = -α_mag / K")
+        a_nat = -a / K_MAG_PER_LN
+        print(f"[ALPHA CONVERSION] Before: [{a.min():.1f}, {np.median(a):.1f}, {a.max():.1f}]")
+        print(f"[ALPHA CONVERSION] After:  [{a_nat.min():.1f}, {np.median(a_nat):.1f}, {a_nat.max():.1f}]")
+        return a_nat
+    else:
+        print(f"[ALPHA CONVERSION] Alpha already in natural-log space (median |α| = {median_abs:.1f})")
+        return a
+
 
 def load_stage1_results(stage1_dir, lightcurves_dict, quality_cut=2000):
     """Load all Stage 1 results"""
@@ -101,21 +147,26 @@ def load_stage1_results(stage1_dir, lightcurves_dict, quality_cut=2000):
 
     return results
 
-@jax.jit
+@partial(jax.jit, static_argnames=("cache_bust",))
 def log_likelihood_alpha_space(
     k_J: float,
     eta_prime: float,
     xi: float,
     z_batch: jnp.ndarray,  # Shape: (n_sne,)
-    alpha_obs_batch: jnp.ndarray  # Shape: (n_sne,)
+    alpha_obs_batch: jnp.ndarray,  # Shape: (n_sne,)
+    *,
+    cache_bust: int = 0,
 ) -> float:
     """
     Alpha-space likelihood: score globals by predicting alpha from (z; globals).
 
     Returns total log-likelihood (summed over all SNe).
 
-    FIXED: Uses alpha_pred(z; k_J, eta_prime, xi) to compute residuals.
+    Uses alpha_pred(z; k_J, eta_prime, xi) to compute residuals.
     No per-SN parameters, no lightcurve physics - just alpha prediction.
+
+    Args:
+        cache_bust: Static cache-busting token to force fresh JIT compilation
     """
     # Predict alpha from globals
     alpha_th = alpha_pred_batch(z_batch, k_J, eta_prime, xi)
@@ -123,8 +174,7 @@ def log_likelihood_alpha_space(
     # Residuals
     r_alpha = alpha_obs_batch - alpha_th
 
-    # Guard against zero-variance (catches wiring bugs)
-    assert jnp.var(r_alpha) > 0, "Zero-variance r_alpha → check alpha_pred wiring"
+    # NOTE: Variance guard is enforced outside JIT (see preflight in run_alpha_space_mcmc)
 
     # Simple unweighted likelihood (can add sigma_alpha later)
     logL = -0.5 * jnp.sum(r_alpha**2)
@@ -163,26 +213,32 @@ def log_likelihood_batch_jax(
 
     return logLs
 
-def numpyro_model_alpha_space(z_batch, alpha_obs_batch):
+def numpyro_model_alpha_space(z_batch, alpha_obs_batch, *, cache_bust: int = 0):
     """
     NumPyro model for global parameter inference using alpha-space likelihood.
 
-    FIXED: Uses alpha_pred(z; globals) instead of full lightcurve physics.
+    Uses alpha_pred(z; globals) instead of full lightcurve physics.
     This is simpler, faster, and avoids wiring bugs.
+
+    Args:
+        cache_bust: Static cache-busting token to force fresh JIT compilation
     """
     # Priors
     k_J = numpyro.sample('k_J', dist.Uniform(50, 90))
     eta_prime = numpyro.sample('eta_prime', dist.Uniform(0.001, 0.1))
     xi = numpyro.sample('xi', dist.Uniform(10, 50))
 
-    # Compute alpha-space log-likelihood
-    total_logL = log_likelihood_alpha_space(
-        k_J, eta_prime, xi,
-        z_batch, alpha_obs_batch
-    )
+    # Predict α from globals
+    alpha_th = alpha_pred_batch(z_batch, k_J, eta_prime, xi)
 
-    # Factor in the total log-likelihood
-    numpyro.factor('logL', total_logL)
+    # Simple homoscedastic noise (tuneable). Start with ~0.05 in α-space (≈0.054 mag).
+    sigma_alpha = numpyro.sample('sigma_alpha', dist.HalfNormal(0.1))
+
+    # Observed α
+    with numpyro.plate('data', z_batch.shape[0]):
+        numpyro.sample('alpha_obs',
+                       dist.Normal(alpha_th, sigma_alpha),
+                       obs=alpha_obs_batch)
 
 def numpyro_model(persn_params_batch, L_peaks, photometries, redshifts):
     """
@@ -279,19 +335,73 @@ def main():
 
     # Convert to JAX arrays
     z_batch = jnp.array(z_list)
-    alpha_obs_batch = jnp.array(alpha_obs_list)
+    alpha_obs_raw = np.array(alpha_obs_list)
+
+    # Convert alpha to natural-log space if needed
+    alpha_obs_natural = _ensure_alpha_natural(alpha_obs_raw)
+    alpha_obs_batch = jnp.array(alpha_obs_natural)
 
     print(f"  Using {len(snids)} SNe for MCMC")
     print(f"  Redshift range: [{z_batch.min():.3f}, {z_batch.max():.3f}]")
-    print(f"  Alpha range: [{alpha_obs_batch.min():.3f}, {alpha_obs_batch.max():.3f}]")
+    print(f"  Alpha range (natural-log): [{alpha_obs_batch.min():.3f}, {alpha_obs_batch.max():.3f}]")
+    print()
+
+    # Gradient sanity check (before MCMC setup)
+    print("Running gradient sanity checks...")
+    print("-" * 60)
+
+    def ll_k(k):
+        return log_likelihood_alpha_space(
+            k, 0.01, 30.0, z_batch, alpha_obs_batch, cache_bust=0
+        )
+
+    def ll_eta(eta):
+        return log_likelihood_alpha_space(
+            70.0, eta, 30.0, z_batch, alpha_obs_batch, cache_bust=0
+        )
+
+    def ll_xi(xi):
+        return log_likelihood_alpha_space(
+            70.0, 0.01, xi, z_batch, alpha_obs_batch, cache_bust=0
+        )
+
+    grad_k = float(jax.grad(ll_k)(70.0))
+    grad_eta = float(jax.grad(ll_eta)(0.01))
+    grad_xi = float(jax.grad(ll_xi)(30.0))
+
+    print(f"[GRADIENT CHECK] d logL / d k_J     @ 70.0 = {grad_k:.6e}")
+    print(f"[GRADIENT CHECK] d logL / d eta'    @ 0.01 = {grad_eta:.6e}")
+    print(f"[GRADIENT CHECK] d logL / d xi      @ 30.0 = {grad_xi:.6e}")
+
+    # Check alpha stats
+    print(f"[ALPHA CHECK] Range: min={alpha_obs_batch.min():.2f}, " +
+          f"median={float(np.median(alpha_obs_batch)):.2f}, max={alpha_obs_batch.max():.2f}")
+
+    # Sanity: alpha should be predominantly negative and correlate with z
+    z_sorted_idx = np.argsort(z_batch)
+    alpha_at_low_z = float(np.median(alpha_obs_batch[z_sorted_idx[:10]]))
+    alpha_at_high_z = float(np.median(alpha_obs_batch[z_sorted_idx[-10:]]))
+    print(f"[ALPHA CHECK] Median at low-z:  {alpha_at_low_z:.2f}")
+    print(f"[ALPHA CHECK] Median at high-z: {alpha_at_high_z:.2f}")
+    print(f"[ALPHA CHECK] Trend (should be negative): {alpha_at_high_z - alpha_at_low_z:.2f}")
+
+    # Preflight check: compute variance of residuals with fiducial parameters
+    alpha_pred_fid = alpha_pred_batch(z_batch, 70.0, 0.01, 30.0)
+    r_alpha_fid = alpha_obs_batch - alpha_pred_fid
+    var_r = float(jnp.var(r_alpha_fid))
+    print(f"[PREFLIGHT CHECK] var(r_alpha) with fiducial params = {var_r:.3f}")
+    if var_r < 1e-6:
+        raise RuntimeError("WIRING BUG: var(r_alpha) ≈ 0 → check alpha_pred wiring!")
+    print("-" * 60)
     print()
 
     # Setup NUTS sampler (using alpha-space model)
     print("Setting up NUTS sampler (alpha-space likelihood)...")
     nuts_kernel = NUTS(
         numpyro_model_alpha_space,  # FIXED: Use alpha-space model
-        target_accept_prob=0.8,  # Higher = more accurate, slower
-        max_tree_depth=10,  # Maximum trajectory length
+        target_accept_prob=0.75,  # Slightly lower to speed warmup and avoid micro-steps
+        max_tree_depth=12,  # Increased for better exploration
+        dense_mass=True,  # Helps when parameters have different scales or are correlated
         init_strategy=numpyro.infer.init_to_median  # Start at median of prior
     )
 
@@ -313,11 +423,49 @@ def main():
     print("Running MCMC...")
     start_time = time.time()
 
+    # --- Preflight (outside JIT): ensure residual variance > 0 to catch wiring bugs early
+    print("  Preflight: checking residual variance...")
+    _alpha_th = np.array(alpha_pred_batch(np.array(z_batch), 70.0, 0.01, 30.0))
+    _var_resid = float(np.var(np.array(alpha_obs_batch) - _alpha_th))
+    if not np.isfinite(_var_resid) or _var_resid <= 0.0:
+        raise RuntimeError(f"Preflight: var(alpha_obs - alpha_pred(z; fiducials)) = {_var_resid:.6g} <= 0 — check wiring.")
+    print(f"  Preflight OK: var(residuals) = {_var_resid:.6g}")
+
+    # Gradient sanity check: ensure likelihood depends on parameters
+    print("  Gradient sanity check...")
+    def ll_k(k):
+        return log_likelihood_alpha_space(
+            k, 0.01, 30.0, z_batch, alpha_obs_batch, cache_bust=0
+        )
+    def ll_eta(eta):
+        return log_likelihood_alpha_space(
+            70.0, eta, 30.0, z_batch, alpha_obs_batch, cache_bust=0
+        )
+    def ll_xi(xi_val):
+        return log_likelihood_alpha_space(
+            70.0, 0.01, xi_val, z_batch, alpha_obs_batch, cache_bust=0
+        )
+    g_k = jax.grad(ll_k)(70.0)
+    g_eta = jax.grad(ll_eta)(0.01)
+    g_xi = jax.grad(ll_xi)(30.0)
+    print(f"    d logL / d k_J      at 70   = {float(g_k):.6e}")
+    print(f"    d logL / d eta_prime at 0.01 = {float(g_eta):.6e}")
+    print(f"    d logL / d xi        at 30   = {float(g_xi):.6e}")
+    if abs(float(g_k)) < 1e-10 or abs(float(g_eta)) < 1e-10 or abs(float(g_xi)) < 1e-10:
+        print("  WARNING: Near-zero gradient detected! Parameters may not affect likelihood.")
+
+    # Optional: clear JAX in-memory caches before run to avoid sticky traces
+    jax.clear_caches()
+
+    # Cache-bust token to force a fresh trace even in a long-lived process
+    _cache_bust = int(time.time()) & 0xffff
+
     rng_key = jax.random.PRNGKey(0)
     mcmc.run(
         rng_key,
-        z_batch,  # FIXED: Just z and alpha_obs
-        alpha_obs_batch
+        z_batch,
+        alpha_obs_batch,
+        cache_bust=_cache_bust,
     )
 
     elapsed = time.time() - start_time
@@ -328,20 +476,37 @@ def main():
     print("Extracting samples...")
     samples = mcmc.get_samples()
 
+    # Enhanced diagnostics
+    print()
+    print("=" * 80)
+    print("SAMPLE DIAGNOSTICS")
+    print("=" * 80)
+    for name in ['k_J', 'eta_prime', 'xi', 'sigma_alpha']:
+        arr = np.asarray(samples[name])
+        print(f"{name:12s}: mean={arr.mean():10.6f}, std={arr.std():10.6e}, min={arr.min():10.6f}, max={arr.max():10.6f}")
+    print()
+
+    # Print NumPyro summary (includes ESS and Rhat)
+    mcmc.print_summary()
+    print()
+
     # Compute summary statistics
     k_J_samples = np.array(samples['k_J'])
     eta_prime_samples = np.array(samples['eta_prime'])
     xi_samples = np.array(samples['xi'])
+    sigma_alpha_samples = np.array(samples['sigma_alpha'])
 
     # Best-fit (median of posterior)
     k_J_best = float(np.median(k_J_samples))
     eta_prime_best = float(np.median(eta_prime_samples))
     xi_best = float(np.median(xi_samples))
+    sigma_alpha_best = float(np.median(sigma_alpha_samples))
 
     # Uncertainties (standard deviation)
     k_J_std = float(np.std(k_J_samples))
     eta_prime_std = float(np.std(eta_prime_samples))
     xi_std = float(np.std(xi_samples))
+    sigma_alpha_std = float(np.std(sigma_alpha_samples))
 
     print("=" * 80)
     print("MCMC RESULTS")
@@ -350,11 +515,7 @@ def main():
     print(f"  k_J = {k_J_best:.2f} ± {k_J_std:.4f}")
     print(f"  eta' = {eta_prime_best:.4f} ± {eta_prime_std:.5f}")
     print(f"  xi = {xi_best:.2f} ± {xi_std:.4f}")
-    print()
-
-    # Print diagnostics
-    print("MCMC Diagnostics:")
-    mcmc.print_summary()
+    print(f"  sigma_alpha = {sigma_alpha_best:.4f} ± {sigma_alpha_std:.5f}")
     print()
 
     # Check for divergences
@@ -372,11 +533,11 @@ def main():
 
     # Save samples as JSON
     samples_dict = {
-        'params': ['k_J', 'eta_prime', 'xi'],
-        'samples': np.column_stack([k_J_samples, eta_prime_samples, xi_samples]).tolist(),
-        'mean': [float(np.mean(k_J_samples)), float(np.mean(eta_prime_samples)), float(np.mean(xi_samples))],
-        'median': [k_J_best, eta_prime_best, xi_best],
-        'std': [k_J_std, eta_prime_std, xi_std],
+        'params': ['k_J', 'eta_prime', 'xi', 'sigma_alpha'],
+        'samples': np.column_stack([k_J_samples, eta_prime_samples, xi_samples, sigma_alpha_samples]).tolist(),
+        'mean': [float(np.mean(k_J_samples)), float(np.mean(eta_prime_samples)), float(np.mean(xi_samples)), float(np.mean(sigma_alpha_samples))],
+        'median': [k_J_best, eta_prime_best, xi_best, sigma_alpha_best],
+        'std': [k_J_std, eta_prime_std, xi_std, sigma_alpha_std],
         'n_chains': args.nchains,
         'n_samples_per_chain': args.nsamples,
         'n_warmup': args.nwarmup,
@@ -394,9 +555,11 @@ def main():
         'k_J': k_J_best,
         'eta_prime': eta_prime_best,
         'xi': xi_best,
+        'sigma_alpha': sigma_alpha_best,
         'k_J_std': k_J_std,
         'eta_prime_std': eta_prime_std,
-        'xi_std': xi_std
+        'xi_std': xi_std,
+        'sigma_alpha_std': sigma_alpha_std
     }
 
     with open(outdir / 'best_fit.json', 'w') as f:
@@ -407,6 +570,7 @@ def main():
     np.save(outdir / 'k_J_samples.npy', k_J_samples)
     np.save(outdir / 'eta_prime_samples.npy', eta_prime_samples)
     np.save(outdir / 'xi_samples.npy', xi_samples)
+    np.save(outdir / 'sigma_alpha_samples.npy', sigma_alpha_samples)
     print(f"  Saved numpy arrays to: {outdir / '*.npy'}")
 
     print()

@@ -90,12 +90,32 @@ def load_photometry(csv_path: Path, snid: str):
     return np.array(rows, dtype=np.float64)
 
 def logL_single_sn(global_params, persn_params, phot, z_obs):
-    # Use model if available
-    if v15_model is not None and hasattr(v15_model, "log_likelihood_single_sn_numpy"):
-        try:
-            return float(v15_model.log_likelihood_single_sn_numpy(global_params, persn_params, phot, z_obs))
-        except Exception:
-            pass
+    # Prefer project model if available (JAX or NumPy wrapper)
+    if v15_model is not None:
+        # Try JAX implementation with NumPy inputs converted to jnp
+        if hasattr(v15_model, "log_likelihood_single_sn_jax"):
+            try:
+                import jax.numpy as jnp
+                return float(
+                    v15_model.log_likelihood_single_sn_jax(
+                        global_params,
+                        persn_params,
+                        jnp.array(phot),
+                        float(z_obs),
+                    )
+                )
+            except Exception:
+                pass
+        # Optional: if you later add a numpy wrapper, it will be used here
+        if hasattr(v15_model, "log_likelihood_single_sn_numpy"):
+            try:
+                return float(
+                    v15_model.log_likelihood_single_sn_numpy(
+                        global_params, persn_params, phot, z_obs
+                    )
+                )
+            except Exception:
+                pass
     # Fallback surrogate likelihood (achromatic power law vs wavelength)
     mjd = phot[:,0]; flux = phot[:,1]; lam = phot[:,2]; err = np.maximum(phot[:,3], 1e-12)
     alpha = float(persn_params.get("alpha", 0.0))
