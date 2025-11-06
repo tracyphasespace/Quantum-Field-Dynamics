@@ -36,9 +36,15 @@ from jax import vmap
 import numpyro
 import numpyro.distributions as dist
 from numpyro.infer import MCMC, NUTS
+import arviz as az
 
 # Import model
 from v15_model import log_likelihood_single_sn_jax, alpha_pred_batch
+
+# Import summary writer
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent / 'tools'))
+from write_stage2_summary import write_stage2_summary, Standardizer
 
 # Magnitude-to-natural-log conversion constant
 K_MAG_PER_LN = 2.5 / np.log(10.0)  # ≈ 1.0857
@@ -83,6 +89,61 @@ def _ensure_alpha_natural(alpha_obs_array: np.ndarray) -> np.ndarray:
     else:
         print(f"[ALPHA CONVERSION] Alpha already in natural-log space (median |α| = {median_abs:.1f})")
         return a
+
+
+def _standardize_features(z):
+    """
+    Standardize basis features to zero-mean, unit-std.
+
+    This is a pure reparameterization (no physics change) that dramatically
+    reduces posterior curvature and correlation, eliminating NUTS divergences.
+
+    Args:
+        z: Redshift array (JAX or numpy)
+
+    Returns:
+        Φ: Standardized feature matrix [N, 3]
+        stats: Dict with normalization constants {'m': [m1, m2, m3], 's': [s1, s2, s3]}
+    """
+    # Construct raw features (same as in v15_model.py)
+    phi1 = jnp.log1p(z)        # ln(1+z)
+    phi2 = z                    # linear
+    phi3 = z / (1.0 + z)       # saturating
+
+    # Standardize to zero-mean, unit-std (numerically stable)
+    def zscore(x):
+        m = jnp.mean(x)
+        s = jnp.std(x) + 1e-12  # avoid division by zero
+        return (x - m) / s, (m, s)
+
+    φ1, (m1, s1) = zscore(phi1)
+    φ2, (m2, s2) = zscore(phi2)
+    φ3, (m3, s3) = zscore(phi3)
+
+    Φ = jnp.stack([φ1, φ2, φ3], axis=-1)  # [N, 3]
+    stats = {'m': jnp.array([m1, m2, m3]), 's': jnp.array([s1, s2, s3])}
+
+    return Φ, stats
+
+
+def _orthogonalize_basis(Φ):
+    """
+    Orthogonalize basis functions using QR decomposition.
+
+    This eliminates collinearity between φ₁, φ₂, φ₃ which have correlations > 0.99
+    and condition number ~ 2×10⁵. After orthogonalization, features are uncorrelated
+    and the sign ambiguity is resolved.
+
+    Args:
+        Φ: Standardized feature matrix [N, 3]
+
+    Returns:
+        Q: Orthogonalized features [N, 3] (columns are orthonormal)
+        R: Upper triangular transformation matrix [3, 3]
+            To recover original: Φ = Q @ R
+    """
+    Q, R = jnp.linalg.qr(Φ)
+    return Q, R
 
 
 def load_stage1_results(stage1_dir, lightcurves_dict, quality_cut=2000):
@@ -213,31 +274,102 @@ def log_likelihood_batch_jax(
 
     return logLs
 
-def numpyro_model_alpha_space(z_batch, alpha_obs_batch, *, cache_bust: int = 0):
+def numpyro_model_alpha_space(Phi, alpha_obs_batch, *,
+                             constrain_signs='off',
+                             standardizer=None,
+                             R_ortho=None,
+                             cache_bust: int = 0):
     """
     NumPyro model for global parameter inference using alpha-space likelihood.
 
-    Uses alpha_pred(z; globals) instead of full lightcurve physics.
-    This is simpler, faster, and avoids wiring bugs.
+    Supports multiple sign constraint variants for A/B testing:
+    - 'off': Unconstrained Normal(0,1) priors (default, current behavior)
+    - 'alpha': Constrain standardized weights c ≤ 0 (force monotone decrease)
+    - 'physics': Work in physics-space with k_J, η', ξ ≥ 0 (interpretable positivity)
+    - 'ortho': Use orthogonalized basis to eliminate collinearity
 
     Args:
+        Phi: Feature matrix [N, 3] (standardized or orthogonalized depending on variant)
+        alpha_obs_batch: Observed alpha values [N]
+        constrain_signs: One of ['off', 'alpha', 'physics', 'ortho']
+        standardizer: Standardizer object (required for 'physics' variant)
+        R_ortho: QR upper-triangular matrix (required for 'ortho' variant)
         cache_bust: Static cache-busting token to force fresh JIT compilation
     """
-    # Priors
-    k_J = numpyro.sample('k_J', dist.Uniform(50, 90))
-    eta_prime = numpyro.sample('eta_prime', dist.Uniform(0.001, 0.1))
-    xi = numpyro.sample('xi', dist.Uniform(10, 50))
 
-    # Predict α from globals
-    alpha_th = alpha_pred_batch(z_batch, k_J, eta_prime, xi)
+    if constrain_signs == 'physics':
+        # Variant B: Physics-space with positivity constraints
+        if standardizer is None:
+            raise ValueError("physics variant requires standardizer")
 
-    # Simple homoscedastic noise (tuneable). Start with ~0.05 in α-space (≈0.054 mag).
-    sigma_alpha = numpyro.sample('sigma_alpha', dist.HalfNormal(0.1))
+        # Sample physics params with positivity constraints
+        k_J = numpyro.sample('k_J', dist.HalfNormal(20.0))
+        eta_prime = numpyro.sample('eta_prime', dist.HalfNormal(10.0))
+        xi = numpyro.sample('xi', dist.HalfNormal(10.0))
 
-    # Observed α
-    with numpyro.plate('data', z_batch.shape[0]):
+        # Convert to standardized space: c = k_phys * scales
+        # (inverse of backtransform: k_phys = c / scales)
+        means = jnp.array(standardizer.means)
+        scales = jnp.array(standardizer.scales)
+        c = jnp.array([k_J, eta_prime, xi]) * scales
+
+        # Deterministic tracking of standardized coefficients
+        numpyro.deterministic('c', c)
+
+        # Physics-space alpha0 (includes offset correction)
+        alpha0 = numpyro.sample('alpha0', dist.Normal(0.0, 5.0))
+
+        # Convert to standardized-space offset
+        alpha0_std = alpha0 + jnp.dot(c, means / scales)
+
+    elif constrain_signs == 'alpha':
+        # Variant A: Force standardized weights c ≤ 0
+        # Use transformed HalfNormal: c = -|x| where x ~ HalfNormal(1)
+        c_raw = numpyro.sample('c_raw', dist.HalfNormal(1.0).expand([3]).to_event(1))
+        c = -c_raw  # Now c ≤ 0
+        numpyro.deterministic('c', c)
+
+        alpha0 = numpyro.sample('alpha0', dist.Normal(0.0, 5.0))
+        alpha0_std = alpha0
+
+    elif constrain_signs == 'ortho':
+        # Variant C: Use orthogonalized basis (eliminates collinearity)
+        if R_ortho is None:
+            raise ValueError("ortho variant requires R_ortho matrix")
+
+        # Sample coefficients in orthogonal space
+        c_ortho = numpyro.sample('c_ortho', dist.Normal(0.0, 1.0).expand([3]).to_event(1))
+
+        # Map back to standardized-basis coefficients: c = R^(-1) @ c_ortho
+        # Since Φ = Q @ R, we have: alpha = alpha0 + c^T @ Phi = alpha0 + c^T @ Q @ R
+        # If we set c_ortho = R @ c, then: alpha = alpha0 + c_ortho^T @ Q
+        # So: c = R^(-T) @ c_ortho (inverse transpose)
+        c = jnp.linalg.solve(R_ortho.T, c_ortho)
+        numpyro.deterministic('c', c)
+
+        alpha0 = numpyro.sample('alpha0', dist.Normal(0.0, 5.0))
+        alpha0_std = alpha0
+
+    else:  # constrain_signs == 'off'
+        # Default: Unconstrained Normal(0, 1) priors
+        c = numpyro.sample('c', dist.Normal(0.0, 1.0).expand([3]).to_event(1))
+        alpha0 = numpyro.sample('alpha0', dist.Normal(0.0, 5.0))
+        alpha0_std = alpha0
+
+    # Predicted alpha: alpha0 + sum_i c_i * φ_i
+    # (For ortho variant, Phi is already Q, so this works directly)
+    alpha_th = alpha0_std + jnp.dot(Phi, c)
+
+    # Per-survey heteroscedastic noise
+    sigma_alpha = numpyro.sample('sigma_alpha', dist.HalfNormal(2.0))
+
+    # Student-t degrees of freedom for heavy-tail robustness
+    nu = numpyro.sample('nu', dist.Exponential(0.1)) + 2.0
+
+    # Student-t likelihood
+    with numpyro.plate('data', Phi.shape[0]):
         numpyro.sample('alpha_obs',
-                       dist.Normal(alpha_th, sigma_alpha),
+                       dist.StudentT(df=nu, loc=alpha_th, scale=sigma_alpha),
                        obs=alpha_obs_batch)
 
 def numpyro_model(persn_params_batch, L_peaks, photometries, redshifts):
@@ -279,6 +411,10 @@ def main():
                        help='Number of warmup/burn-in steps')
     parser.add_argument('--quality-cut', type=float, default=2000,
                        help='Chi2 threshold for Stage 1 quality')
+    parser.add_argument('--constrain-signs',
+                       choices=['off', 'alpha', 'physics', 'ortho'],
+                       default='off',
+                       help='Sign constraint variant: off=unconstrained, alpha=c≤0, physics=kJ,η,ξ≥0, ortho=orthogonalized basis')
 
     args = parser.parse_args()
 
@@ -398,11 +534,11 @@ def main():
     # Setup NUTS sampler (using alpha-space model)
     print("Setting up NUTS sampler (alpha-space likelihood)...")
     nuts_kernel = NUTS(
-        numpyro_model_alpha_space,  # FIXED: Use alpha-space model
-        target_accept_prob=0.75,  # Slightly lower to speed warmup and avoid micro-steps
-        max_tree_depth=12,  # Increased for better exploration
-        dense_mass=True,  # Helps when parameters have different scales or are correlated
-        init_strategy=numpyro.infer.init_to_median  # Start at median of prior
+        numpyro_model_alpha_space,
+        target_accept_prob=0.85,  # Patch 2: Higher to reduce divergences on curved posteriors
+        max_tree_depth=15,         # Patch 2: Increased for better exploration
+        dense_mass=True,           # Helps with correlated dims
+        init_strategy=numpyro.infer.init_to_median
     )
 
     mcmc = MCMC(
@@ -457,14 +593,48 @@ def main():
     # Optional: clear JAX in-memory caches before run to avoid sticky traces
     jax.clear_caches()
 
+    # Standardize features (Patch 1 from cloud.txt: reduces curvature/divergences)
+    print("  Standardizing basis features...")
+    Phi, stats = _standardize_features(z_batch)
+    print(f"    Feature stats: m={stats['m']}, s={stats['s']}")
+
+    # Prepare variant-specific context
+    R_ortho = None
+    standardizer = None
+
+    if args.constrain_signs == 'ortho':
+        print(f"  [VARIANT: {args.constrain_signs}] Orthogonalizing basis with QR decomposition...")
+        Phi, R_ortho = _orthogonalize_basis(Phi)
+
+        # Check orthogonality
+        corr_ortho = np.corrcoef(np.array(Phi).T)
+        print(f"    Max off-diagonal correlation: {np.max(np.abs(corr_ortho - np.eye(3))):.6f}")
+
+    elif args.constrain_signs == 'physics':
+        print(f"  [VARIANT: {args.constrain_signs}] Using physics-space priors (k_J, η', ξ ≥ 0)...")
+        # Create standardizer object for back-transform
+        standardizer = Standardizer(
+            means=np.asarray(stats['m']),
+            scales=np.asarray(stats['s'])
+        )
+
+    elif args.constrain_signs == 'alpha':
+        print(f"  [VARIANT: {args.constrain_signs}] Constraining standardized weights c ≤ 0...")
+
+    else:  # 'off'
+        print(f"  [VARIANT: {args.constrain_signs}] Unconstrained priors (baseline)...")
+
     # Cache-bust token to force a fresh trace even in a long-lived process
     _cache_bust = int(time.time()) & 0xffff
 
     rng_key = jax.random.PRNGKey(0)
     mcmc.run(
         rng_key,
-        z_batch,
+        Phi,  # Pass features (standardized or orthogonalized)
         alpha_obs_batch,
+        constrain_signs=args.constrain_signs,
+        standardizer=standardizer,
+        R_ortho=R_ortho,
         cache_bust=_cache_bust,
     )
 
@@ -476,37 +646,56 @@ def main():
     print("Extracting samples...")
     samples = mcmc.get_samples()
 
+    # Back-transform standardized coefficients to physical parameters
+    print("  Back-transforming standardized coefficients to physical parameters...")
+    c_samples = np.asarray(samples['c'])  # shape: [n_samples, 3]
+    alpha0_samples_raw = np.asarray(samples['alpha0'])
+    sigma_alpha_samples = np.asarray(samples['sigma_alpha'])
+    nu_samples = np.asarray(samples['nu'])  # Student-t degrees of freedom
+
+    # Convert standardization stats to numpy for back-transformation
+    m = np.asarray(stats['m'])  # [m1, m2, m3]
+    s = np.asarray(stats['s'])  # [s1, s2, s3]
+
+    # Physical coefficients: k_J = c1/s1, eta_prime = c2/s2, xi = c3/s3
+    k_J_samples = c_samples[:, 0] / s[0]
+    eta_prime_samples = c_samples[:, 1] / s[1]
+    xi_samples = c_samples[:, 2] / s[2]
+
+    # Physical alpha0: alpha0_phys = alpha0_raw - sum(c_i * m_i / s_i)
+    alpha0_samples = alpha0_samples_raw - np.dot(c_samples, m / s)
+
     # Enhanced diagnostics
     print()
     print("=" * 80)
-    print("SAMPLE DIAGNOSTICS")
+    print("SAMPLE DIAGNOSTICS (Physical Parameters)")
     print("=" * 80)
-    for name in ['k_J', 'eta_prime', 'xi', 'sigma_alpha']:
-        arr = np.asarray(samples[name])
+    for name, arr in [('k_J', k_J_samples), ('eta_prime', eta_prime_samples),
+                       ('xi', xi_samples), ('alpha0', alpha0_samples),
+                       ('sigma_alpha', sigma_alpha_samples), ('nu', nu_samples)]:
         print(f"{name:12s}: mean={arr.mean():10.6f}, std={arr.std():10.6e}, min={arr.min():10.6f}, max={arr.max():10.6f}")
     print()
 
-    # Print NumPyro summary (includes ESS and Rhat)
+    # Print NumPyro summary for standardized coefficients
+    print("Standardized coefficients c (from MCMC):")
     mcmc.print_summary()
     print()
 
-    # Compute summary statistics
-    k_J_samples = np.array(samples['k_J'])
-    eta_prime_samples = np.array(samples['eta_prime'])
-    xi_samples = np.array(samples['xi'])
-    sigma_alpha_samples = np.array(samples['sigma_alpha'])
-
-    # Best-fit (median of posterior)
+    # Best-fit (median of posterior) for physical parameters
     k_J_best = float(np.median(k_J_samples))
     eta_prime_best = float(np.median(eta_prime_samples))
     xi_best = float(np.median(xi_samples))
+    alpha0_best = float(np.median(alpha0_samples))
     sigma_alpha_best = float(np.median(sigma_alpha_samples))
+    nu_best = float(np.median(nu_samples))
 
-    # Uncertainties (standard deviation)
+    # Uncertainties (standard deviation) for physical parameters
     k_J_std = float(np.std(k_J_samples))
     eta_prime_std = float(np.std(eta_prime_samples))
     xi_std = float(np.std(xi_samples))
+    alpha0_std = float(np.std(alpha0_samples))
     sigma_alpha_std = float(np.std(sigma_alpha_samples))
+    nu_std = float(np.std(nu_samples))
 
     print("=" * 80)
     print("MCMC RESULTS")
@@ -515,7 +704,9 @@ def main():
     print(f"  k_J = {k_J_best:.2f} ± {k_J_std:.4f}")
     print(f"  eta' = {eta_prime_best:.4f} ± {eta_prime_std:.5f}")
     print(f"  xi = {xi_best:.2f} ± {xi_std:.4f}")
+    print(f"  alpha0 (zeropoint offset) = {alpha0_best:.4f} ± {alpha0_std:.5f}")
     print(f"  sigma_alpha = {sigma_alpha_best:.4f} ± {sigma_alpha_std:.5f}")
+    print(f"  nu (Student-t DOF) = {nu_best:.2f} ± {nu_std:.3f}")
     print()
 
     # Check for divergences
@@ -528,22 +719,105 @@ def main():
         print("✅ No divergences detected")
     print()
 
+    # Model comparison metrics (WAIC/LOO) and boundary diagnostics
+    print("=" * 80)
+    print("MODEL COMPARISON METRICS")
+    print("=" * 80)
+
+    # Convert to ArviZ InferenceData for WAIC/LOO computation
+    try:
+        idata = az.from_numpyro(mcmc)
+
+        # Compute WAIC
+        waic = az.waic(idata)
+        print(f"WAIC: {waic.elpd_waic:.2f} ± {waic.se:.2f}")
+        print(f"  (effective number of parameters: {waic.p_waic:.1f})")
+
+        # Compute LOO (Pareto-smoothed importance sampling leave-one-out CV)
+        loo = az.loo(idata)
+        print(f"LOO:  {loo.elpd_loo:.2f} ± {loo.se:.2f}")
+        print(f"  (effective number of parameters: {loo.p_loo:.1f})")
+
+        # Check for problematic observations (high Pareto k)
+        high_k = np.sum(loo.pareto_k > 0.7)
+        if high_k > 0:
+            print(f"  ⚠️  {high_k} observations with high Pareto k (> 0.7)")
+        else:
+            print(f"  ✅ All Pareto k values < 0.7 (reliable LOO)")
+
+    except Exception as e:
+        print(f"⚠️  Could not compute WAIC/LOO: {e}")
+        waic = None
+        loo = None
+
+    # Boundary fraction diagnostics (for constrained variants)
+    print()
+    print("Boundary Diagnostics:")
+
+    if args.constrain_signs == 'physics':
+        # Check how often parameters are near zero (at boundary)
+        boundary_tol = 0.01
+        k_J_boundary_frac = np.mean(k_J_samples < boundary_tol)
+        eta_boundary_frac = np.mean(eta_prime_samples < boundary_tol)
+        xi_boundary_frac = np.mean(xi_samples < boundary_tol)
+
+        print(f"  Fraction at boundary (< {boundary_tol}):")
+        print(f"    k_J:    {k_J_boundary_frac*100:.1f}%")
+        print(f"    η':     {eta_boundary_frac*100:.1f}%")
+        print(f"    ξ:      {xi_boundary_frac*100:.1f}%")
+
+        if max(k_J_boundary_frac, eta_boundary_frac, xi_boundary_frac) > 0.1:
+            print(f"  ⚠️  >10% of samples at boundary → constraint may be too restrictive")
+
+    elif args.constrain_signs == 'alpha':
+        # Check distribution of c values
+        c0_pos_frac = np.mean(c_samples[:, 0] > 0)
+        c1_pos_frac = np.mean(c_samples[:, 1] > 0)
+        c2_pos_frac = np.mean(c_samples[:, 2] > 0)
+
+        print(f"  Fraction violating c ≤ 0 constraint (numerical leakage):")
+        print(f"    c[0]:   {c0_pos_frac*100:.2f}%")
+        print(f"    c[1]:   {c1_pos_frac*100:.2f}%")
+        print(f"    c[2]:   {c2_pos_frac*100:.2f}%")
+
+        if max(c0_pos_frac, c1_pos_frac, c2_pos_frac) > 0.01:
+            print(f"  ⚠️  Constraint leakage detected (numerical precision issue)")
+
+    else:
+        # For unconstrained and ortho variants, report sign distribution
+        c_signs = np.sign(c_samples)
+        c0_neg_frac = np.mean(c_signs[:, 0] < 0)
+        c1_neg_frac = np.mean(c_signs[:, 1] < 0)
+        c2_neg_frac = np.mean(c_signs[:, 2] < 0)
+
+        print(f"  Sign distribution (fraction negative):")
+        print(f"    c[0]:   {c0_neg_frac*100:.1f}%")
+        print(f"    c[1]:   {c1_neg_frac*100:.1f}%")
+        print(f"    c[2]:   {c2_neg_frac*100:.1f}%")
+
+    print()
+
     # Save results
     print("Saving results...")
 
     # Save samples as JSON
     samples_dict = {
-        'params': ['k_J', 'eta_prime', 'xi', 'sigma_alpha'],
-        'samples': np.column_stack([k_J_samples, eta_prime_samples, xi_samples, sigma_alpha_samples]).tolist(),
-        'mean': [float(np.mean(k_J_samples)), float(np.mean(eta_prime_samples)), float(np.mean(xi_samples)), float(np.mean(sigma_alpha_samples))],
-        'median': [k_J_best, eta_prime_best, xi_best, sigma_alpha_best],
-        'std': [k_J_std, eta_prime_std, xi_std, sigma_alpha_std],
+        'params': ['k_J', 'eta_prime', 'xi', 'alpha0', 'sigma_alpha', 'nu'],
+        'samples': np.column_stack([k_J_samples, eta_prime_samples, xi_samples, alpha0_samples, sigma_alpha_samples, nu_samples]).tolist(),
+        'mean': [float(np.mean(k_J_samples)), float(np.mean(eta_prime_samples)), float(np.mean(xi_samples)), float(np.mean(alpha0_samples)), float(np.mean(sigma_alpha_samples)), float(np.mean(nu_samples))],
+        'median': [k_J_best, eta_prime_best, xi_best, alpha0_best, sigma_alpha_best, nu_best],
+        'std': [k_J_std, eta_prime_std, xi_std, alpha0_std, sigma_alpha_std, nu_std],
         'n_chains': args.nchains,
         'n_samples_per_chain': args.nsamples,
         'n_warmup': args.nwarmup,
         'n_divergences': int(n_divergences),
         'runtime_minutes': elapsed / 60,
-        'n_snids': len(snids)
+        'n_snids': len(snids),
+        'constrain_signs_variant': args.constrain_signs,
+        'waic': float(waic.elpd_waic) if waic is not None else None,
+        'waic_se': float(waic.se) if waic is not None else None,
+        'loo': float(loo.elpd_loo) if loo is not None else None,
+        'loo_se': float(loo.se) if loo is not None else None,
     }
 
     with open(outdir / 'samples.json', 'w') as f:
@@ -555,11 +829,16 @@ def main():
         'k_J': k_J_best,
         'eta_prime': eta_prime_best,
         'xi': xi_best,
+        'alpha0': alpha0_best,
         'sigma_alpha': sigma_alpha_best,
+        'nu': nu_best,
         'k_J_std': k_J_std,
         'eta_prime_std': eta_prime_std,
         'xi_std': xi_std,
-        'sigma_alpha_std': sigma_alpha_std
+        'alpha0_std': alpha0_std,
+        'sigma_alpha_std': sigma_alpha_std,
+        'nu_std': nu_std,
+        'constrain_signs_variant': args.constrain_signs
     }
 
     with open(outdir / 'best_fit.json', 'w') as f:
@@ -571,7 +850,33 @@ def main():
     np.save(outdir / 'eta_prime_samples.npy', eta_prime_samples)
     np.save(outdir / 'xi_samples.npy', xi_samples)
     np.save(outdir / 'sigma_alpha_samples.npy', sigma_alpha_samples)
+    np.save(outdir / 'nu_samples.npy', nu_samples)
     print(f"  Saved numpy arrays to: {outdir / '*.npy'}")
+
+    # Generate comprehensive summary JSON
+    print()
+    print("Generating comprehensive summary...")
+    standardizer = Standardizer(
+        means=np.asarray(stats['m']),
+        scales=np.asarray(stats['s'])
+    )
+
+    # Prepare samples dict for summary (using standardized c and raw alpha0)
+    summary_samples = {
+        'c': c_samples,
+        'alpha0': alpha0_samples_raw,
+        'sigma_alpha': sigma_alpha_samples,
+        'nu': nu_samples,
+    }
+
+    summary_path = str(outdir / 'summary.json')
+    write_stage2_summary(
+        summary_path,
+        summary_samples,
+        standardizer,
+        survey_names=['DES']
+    )
+    print(f"  Saved comprehensive summary to: {summary_path}")
 
     print()
     print("=" * 80)

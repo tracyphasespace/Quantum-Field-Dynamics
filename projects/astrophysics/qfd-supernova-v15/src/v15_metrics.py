@@ -1,196 +1,189 @@
 #!/usr/bin/env python3
 """
-v15_metrics.py — Build per-SN metrics for V15 gating.
-Outputs: results/v15/per_sn_metrics.csv
+Metrics and validation utilities for V15 QFD model.
+
+Includes monotonicity checks, residual diagnostics, and posterior predictive utilities.
 """
-import os, sys, csv, json, math, argparse
-from pathlib import Path
-from typing import Dict, Any, Tuple, List
+
 import numpy as np
+from typing import Optional, Tuple, Dict
 
-# Optional project modules (if present in PYTHONPATH)
-try:
-    import v15_data
-except Exception:
-    v15_data = None
-try:
-    import v15_model
-except Exception:
-    v15_model = None
 
-def read_json(p: Path) -> Dict[str, Any]:
-    with open(p, "r") as f:
-        return json.load(f)
+def monotonicity_violations(
+    y: np.ndarray,
+    *,
+    increasing: bool,
+    tol: float = 1e-9
+) -> int:
+    """
+    Counts pairwise monotonicity violations in y.
 
-def second_derivative_three_point(x: np.ndarray, y: np.ndarray, idx: int) -> float:
-    if idx <= 0 or idx >= len(x)-1:
-        return float("nan")
-    # quadratic fit to (idx-1, idx, idx+1)
-    X = np.array([[1, x[idx-1], x[idx-1]**2],
-                  [1, x[idx],   x[idx]**2],
-                  [1, x[idx+1], x[idx+1]**2]], dtype=float)
-    coef = np.linalg.lstsq(X, y[idx-1:idx+1+1], rcond=None)[0]  # a0 + a1 x + a2 x^2
-    return float(2*coef[2])
+    Parameters
+    ----------
+    y : np.ndarray
+        1D array to check for monotonicity
+    increasing : bool
+        If True, require y[i+1] >= y[i] - tol (non-decreasing)
+        If False, require y[i+1] <= y[i] + tol (non-increasing)
+    tol : float, optional
+        Numerical tolerance for violations (default: 1e-9)
 
-def linear_regression(x: np.ndarray, y: np.ndarray) -> Tuple[float, float]:
-    if len(x) < 2:
-        return 0.0, 0.0
-    A = np.vstack([x, np.ones_like(x)]).T
-    slope, intercept = np.linalg.lstsq(A, y, rcond=None)[0]
-    return float(slope), float(intercept)
+    Returns
+    -------
+    int
+        Number of pairwise violations detected
+    """
+    y = np.asarray(y)
+    if y.ndim != 1:
+        raise ValueError(f"y must be 1D, got shape {y.shape}")
 
-def skewness(x: np.ndarray) -> float:
-    n = len(x)
-    if n < 3:
-        return 0.0
-    mu = np.mean(x)
-    s = np.std(x, ddof=1)
-    if s == 0:
-        return 0.0
-    m3 = np.mean((x - mu)**3)
-    g1 = m3 / (s**3 + 1e-12)
-    return float((np.sqrt(n*(n-1))/(n-2)) * g1)
+    if len(y) < 2:
+        return 0
 
-def load_stage1_variant(stage1_dir: Path, snid: str, variant: str) -> Dict[str, Any]:
-    p = stage1_dir / snid / f"persn_{variant}.json"
-    if p.exists():
-        return read_json(p)
-    return {}
+    dy = np.diff(y)
 
-def load_stage1_metrics(stage1_dir: Path, snid: str) -> Dict[str, Any]:
-    p = stage1_dir / snid / "metrics.json"
-    if p.exists():
-        return read_json(p)
-    return {}
+    if increasing:
+        violations = np.count_nonzero(dy < -tol)
+    else:
+        violations = np.count_nonzero(dy > tol)
 
-def load_photometry(csv_path: Path, snid: str):
-    # Prefer project loader if available
-    if v15_data is not None and hasattr(v15_data, "load_lightcurves_numpy"):
-        try:
-            lcs = v15_data.load_lightcurves_numpy(str(csv_path), sn_filter={snid})
-            return lcs.get(snid, None)
-        except Exception:
-            pass
-    # Fallback: parse CSV
-    rows = []
-    with open(csv_path, newline="") as f:
-        r = csv.DictReader(f)
-        for row in r:
-            if row.get("snid") == snid:
-                try:
-                    mjd = float(row.get("mjd") or row.get("MJD") or row.get("time") or 0.0)
-                    flux = float(row.get("flux_nu_jy") or row.get("flux") or 0.0)
-                    lam  = float(row.get("wavelength_A") or row.get("lambda_A") or 5000.0)
-                    err  = float(row.get("flux_err") or row.get("flux_nu_jy_err") or 1e-6)
-                except Exception:
-                    continue
-                rows.append([mjd, flux, lam, err])
-    if not rows:
-        return None
-    return np.array(rows, dtype=np.float64)
+    return int(violations)
 
-def logL_single_sn(global_params, persn_params, phot, z_obs):
-    # Prefer project model if available (JAX or NumPy wrapper)
-    if v15_model is not None:
-        # Try JAX implementation with NumPy inputs converted to jnp
-        if hasattr(v15_model, "log_likelihood_single_sn_jax"):
-            try:
-                import jax.numpy as jnp
-                return float(
-                    v15_model.log_likelihood_single_sn_jax(
-                        global_params,
-                        persn_params,
-                        jnp.array(phot),
-                        float(z_obs),
-                    )
-                )
-            except Exception:
-                pass
-        # Optional: if you later add a numpy wrapper, it will be used here
-        if hasattr(v15_model, "log_likelihood_single_sn_numpy"):
-            try:
-                return float(
-                    v15_model.log_likelihood_single_sn_numpy(
-                        global_params, persn_params, phot, z_obs
-                    )
-                )
-            except Exception:
-                pass
-    # Fallback surrogate likelihood (achromatic power law vs wavelength)
-    mjd = phot[:,0]; flux = phot[:,1]; lam = phot[:,2]; err = np.maximum(phot[:,3], 1e-12)
-    alpha = float(persn_params.get("alpha", 0.0))
-    beta  = float(persn_params.get("beta", 0.0))
-    l0 = 5000.0
-    model = np.exp(alpha) * (np.maximum(lam,1.0)/l0)**beta
-    chi2 = np.sum(((flux - model)/err)**2)
-    return float(-0.5*chi2 - 1e-6*(alpha**2 + beta**2))
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--stage1", required=True, help="Stage-1 directory with per-SN JSONs")
-    ap.add_argument("--lightcurves", required=True, help="Unified CSV (min3)")
-    ap.add_argument("--globals", default="70,0.01,30", help="kJ,eta_prime,xi for kJ scan (comma)")
-    ap.add_argument("--out", required=True, help="Output CSV: per_sn_metrics.csv")
-    ap.add_argument("--kmin", type=float, default=20.0)
-    ap.add_argument("--kmax", type=float, default=200.0)
-    ap.add_argument("--kstep", type=float, default=1.5)
-    args = ap.parse_args()
+def check_monotonicity_detailed(
+    z: np.ndarray,
+    y: np.ndarray,
+    *,
+    increasing: bool,
+    tol: float = 1e-9
+) -> Dict[str, any]:
+    """
+    Detailed monotonicity check with diagnostic information.
 
-    stage1 = Path(args.stage1)
-    csv_path = Path(args.lightcurves)
-    out_path = Path(args.out)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
+    Parameters
+    ----------
+    z : np.ndarray
+        Independent variable (e.g., redshift)
+    y : np.ndarray
+        Dependent variable (e.g., alpha_pred or mu_pred)
+    increasing : bool
+        Expected monotonicity direction
+    tol : float, optional
+        Numerical tolerance
 
-    try:
-        kJ_fix, eta_fix, xi_fix = [float(x) for x in args.globals.split(",")]
-    except Exception:
-        print("ERROR: --globals must be like '70,0.01,30'", file=sys.stderr)
-        sys.exit(2)
+    Returns
+    -------
+    dict
+        Contains:
+        - 'is_monotone': bool
+        - 'n_violations': int
+        - 'violation_indices': np.ndarray (indices where violations occur)
+        - 'violation_z_ranges': list of tuples (z[i], z[i+1])
+        - 'max_violation': float (largest violation magnitude)
+    """
+    z = np.asarray(z)
+    y = np.asarray(y)
 
-    snids = [p.name for p in stage1.iterdir() if p.is_dir()]
-    grid_k = np.arange(args.kmin, args.kmax + 1e-12, args.kstep)
+    if len(z) != len(y):
+        raise ValueError(f"z and y must have same length: {len(z)} vs {len(y)}")
 
-    with open(out_path, "w", newline="") as f:
-        w = csv.writer(f)
-        w.writerow(["snid","chi2_ndof","kJ_star","kJ_curv","color_slope","alpha","skew_resid","nobs"])
-        for snid in snids:
-            base = load_stage1_variant(stage1, snid, "base")
-            if not base:
-                # fall back to bbh/lens if present
-                base = load_stage1_variant(stage1, snid, "bbh") or load_stage1_variant(stage1, snid, "lens")
-                if not base:
-                    continue
+    dy = np.diff(y)
 
-            metrics = load_stage1_metrics(stage1, snid)
-            chi2 = metrics.get("chi2", np.nan)
-            ndof = metrics.get("ndof", max(metrics.get("nobs", 1)-len(base), 1))
-            chi2_ndof = float(chi2/ndof) if (isinstance(ndof,(int,float)) and ndof>0 and math.isfinite(chi2)) else np.nan
-            alpha = float(base.get("alpha", 0.0))
-            z_obs = float(base.get("z_obs", 0.0))
+    if increasing:
+        violation_mask = dy < -tol
+    else:
+        violation_mask = dy > tol
 
-            phot = load_photometry(csv_path, snid)
-            if phot is None or len(phot) < 6:
-                w.writerow([snid, f"{chi2_ndof:.6g}", "", "", "", f"{alpha:.6g}", "", 0 if phot is None else len(phot)])
-                continue
+    violation_indices = np.where(violation_mask)[0]
+    n_violations = len(violation_indices)
 
-            # k_J scan
-            Lvals = np.empty_like(grid_k)
-            for i, kJ in enumerate(grid_k):
-                Lvals[i] = logL_single_sn((kJ, eta_fix, xi_fix), base, phot, z_obs)
-            imax = int(np.argmax(Lvals))
-            kJ_star = float(grid_k[imax])
-            kJ_curv = second_derivative_three_point(grid_k, Lvals, imax)
+    violation_z_ranges = []
+    if n_violations > 0:
+        for idx in violation_indices:
+            violation_z_ranges.append((z[idx], z[idx + 1]))
 
-            # residual diagnostics (surrogate model)
-            mjd = phot[:,0]; flux = phot[:,1]; lam = phot[:,2]; err = np.maximum(phot[:,3], 1e-12)
-            beta = float(base.get("beta", 0.0))
-            l0 = 5000.0
-            model = np.exp(alpha) * (np.maximum(lam,1.0)/l0)**beta
-            resid = (flux - model)/err
-            color_slope, _ = linear_regression(np.log(np.maximum(lam,1.0)), resid)
-            skew_resid = skewness(resid)
+        if increasing:
+            max_violation = np.abs(np.min(dy))
+        else:
+            max_violation = np.max(dy)
+    else:
+        max_violation = 0.0
 
-            w.writerow([snid, f"{chi2_ndof:.6g}", f"{kJ_star:.3f}", f"{kJ_curv:.6g}", f"{color_slope:.6g}", f"{alpha:.6g}", f"{skew_resid:.6g}", len(phot)])
+    return {
+        'is_monotone': n_violations == 0,
+        'n_violations': n_violations,
+        'violation_indices': violation_indices,
+        'violation_z_ranges': violation_z_ranges,
+        'max_violation': max_violation,
+    }
 
-if __name__ == "__main__":
-    main()
+
+def compute_residual_slope(
+    z: np.ndarray,
+    residuals: np.ndarray,
+    *,
+    weights: Optional[np.ndarray] = None
+) -> Tuple[float, float]:
+    """
+    Compute weighted linear slope of residuals vs redshift.
+
+    A flat (slope ≈ 0) residual pattern indicates good model calibration
+    across the redshift range.
+
+    Parameters
+    ----------
+    z : np.ndarray
+        Redshift values
+    residuals : np.ndarray
+        Residual values (observed - predicted)
+    weights : np.ndarray, optional
+        Weights for each point (e.g., 1/σ²)
+
+    Returns
+    -------
+    slope : float
+        Best-fit slope (residuals per unit redshift)
+    slope_err : float
+        Standard error on the slope
+    """
+    z = np.asarray(z)
+    residuals = np.asarray(residuals)
+
+    if len(z) != len(residuals):
+        raise ValueError(f"z and residuals must have same length")
+
+    if weights is None:
+        weights = np.ones_like(z)
+    else:
+        weights = np.asarray(weights)
+
+    # Weighted least squares: residuals = a + b*z
+    W = np.sum(weights)
+    Wz = np.sum(weights * z)
+    Wr = np.sum(weights * residuals)
+    Wzz = np.sum(weights * z * z)
+    Wzr = np.sum(weights * z * residuals)
+
+    denom = W * Wzz - Wz * Wz
+    if abs(denom) < 1e-10:
+        return np.nan, np.nan
+
+    # Slope
+    slope = (W * Wzr - Wz * Wr) / denom
+
+    # Intercept (for residual calculation)
+    intercept = (Wr - slope * Wz) / W
+
+    # Standard error on slope
+    fit_residuals = residuals - (intercept + slope * z)
+    chi2 = np.sum(weights * fit_residuals**2)
+    n_dof = len(z) - 2
+
+    if n_dof > 0:
+        reduced_chi2 = chi2 / n_dof
+        var_slope = reduced_chi2 * W / denom
+        slope_err = np.sqrt(var_slope)
+    else:
+        slope_err = np.nan
+
+    return float(slope), float(slope_err)

@@ -15,9 +15,76 @@ V15 implements a hierarchical Bayesian fitting pipeline operating entirely in **
 
 ## Status
 
-✅ **Validation Complete** - All 19 tests passing (100%)
-✅ **Hotfix Applied** - α-space likelihood with wiring bug guards
-✅ **Publication Ready** - Complete templates and reproducibility guide
+✅ **v15-rc1 Complete** - Production run with 4831 clean SNe (RMS = 1.888 mag)
+✅ **A/B/C Framework Implemented** - Model comparison for basis collinearity fix
+🔄 **A/B/C Testing Running** - Comparing 3 variants (4 chains × 1000 samples)
+📊 **Holdout Evaluation Planned** - 637 excluded SNe (~12%) as validation set
+
+## Recent Findings & Enhancements (v15-rc1+abc)
+
+### Critical Discovery: Basis Collinearity
+
+**Problem Identified:**
+- The three QFD basis functions {φ₁=ln(1+z), φ₂=z, φ₃=z/(1+z)} are nearly perfectly correlated (r > 0.99)
+- Condition number κ ≈ 2.1×10⁵ (should be < 100 for well-conditioned systems)
+- **Impact**: Sign ambiguity in fitted parameters → current fit has wrong monotonicity
+
+**Current Best-Fit (v15-rc1):**
+- k_J = +10.74 (plasma coupling, positive as expected)
+- η' = -7.97 (redshift evolution, **NEGATIVE** - unexpected)
+- ξ = -6.95 (saturation, **NEGATIVE** - unexpected)
+- **Result**: α(z) INCREASES with z (violates physical expectation)
+
+**Root Cause:**
+Multiple coefficient combinations produce nearly identical fits due to collinearity. The MCMC converged to the "wrong" sign mode.
+
+### Solution: A/B/C Testing Framework
+
+Three model variants implemented for comparison:
+
+#### Model A: `--constrain-signs off` (Baseline)
+- Unconstrained Normal priors on standardized coefficients
+- Current v15-rc1 behavior
+- **Status**: ❌ Fails monotonicity, but excellent fit quality
+
+#### Model B: `--constrain-signs alpha` (Symptom Fix)
+- Forces c ≤ 0 using HalfNormal priors with negation
+- Guarantees α(z) non-increasing
+- **Status**: ⏳ Testing via A/B/C comparison
+
+#### Model C: `--constrain-signs ortho` (Root Cause Fix) ⭐
+- QR-orthogonalized basis eliminates collinearity
+- Reduces κ from 2×10⁵ to < 50
+- **Status**: ⏳ Testing - Expected winner
+
+**Model Comparison Metrics:**
+- WAIC/LOO (model selection, higher is better, 2σ rule for significance)
+- RMS (fit quality, Δ < 0.01 mag = equivalent)
+- Boundary diagnostics (constraint violations)
+- Convergence (R̂, ESS, divergences)
+
+See `ABC_TESTING_FRAMEWORK.md` for complete documentation.
+
+### Holdout Evaluation: External Validity Check
+
+**Approach:**
+- **Training Set**: 4831 clean SNe (chi2 < 2000) used for fitting
+- **Holdout Set**: 637 excluded SNe (~12%) with chi2 > 2000 or poor Stage 1 fits
+- **Purpose**: NOT discarded, but treated as challenge/validation set
+
+**Post-Fitting Analysis:**
+1. Use best-fit parameters to predict α_pred(z) for holdout SNe
+2. Compute residuals and compare to training set
+3. Generate separate validation figures showing holdout performance
+4. **Success Criteria**: ΔRMS ≤ 0.05 mag, no systematic trends with z
+5. **Diagnostics**: Stratify by survey, band, phase coverage, host properties
+
+**Scripts:**
+- `scripts/holdout_evaluation.py` - Predict on holdout set
+- `scripts/holdout_report.py` - Generate comparison metrics
+- Outputs: `fig_holdout_validation.png`, `holdout_metrics.csv`
+
+This validates that the model generalizes beyond the clean training data and identifies specific failure modes (BBH occlusion, cadence gaps, etc.) without biasing the core fit.
 
 ## Key Features
 
@@ -41,11 +108,12 @@ V15 implements a hierarchical Bayesian fitting pipeline operating entirely in **
 ### Stage 2: Global Parameter Inference (α-space)
 - **Input**: Stage 1 α_obs and redshifts only (no lightcurves)
 - **Method**: NumPyro NUTS sampler (GPU-accelerated)
-- **Likelihood**: `r_α = α_obs - α_pred(z; k_J, η', ξ)`
+- **Likelihood**: `r_α = α_obs - α_pred(z; k_J, η', ξ)` (Student-t robust)
+- **Model Variants**: Choose via `--constrain-signs {off|alpha|ortho|physics}`
 - **Guard**: `assert var(r_α) > 0` catches wiring bugs
 - **Samples**: 4 chains × 2,000 samples
-- **Output**: Posterior {k_J, η', ξ} with R̂ < 1.01, ESS > 400
-- **Runtime**: ~2-6 hours
+- **Output**: Posterior {k_J, η', ξ} with R̂ < 1.01, ESS > 400, WAIC/LOO metrics
+- **Runtime**: ~2-6 hours per variant
 - **Speedup**: 10-100× faster than full lightcurve physics
 
 ### Stage 3: Residual Analysis (No Re-centering)
@@ -63,7 +131,7 @@ V15 implements a hierarchical Bayesian fitting pipeline operating entirely in **
 pip install jax jaxlib numpyro pandas numpy scipy matplotlib
 ```
 
-### Run Full Pipeline
+### Run Full Pipeline (Single Variant)
 ```bash
 # Stage 1: Optimize per-SN parameters (parallel)
 ./scripts/run_stage1_parallel.sh \
@@ -72,16 +140,54 @@ pip install jax jaxlib numpyro pandas numpy scipy matplotlib
     70,0.01,30 \
     7  # workers
 
-# Stage 2: MCMC for global parameters
-./scripts/run_stage2_numpyro_production.sh
+# Stage 2: MCMC for global parameters (choose variant)
+export XLA_FLAGS="--xla_cpu_multi_thread_eigen=false"
+python src/stage2_mcmc_numpyro.py \
+    --stage1-results results/v15_production/stage1 \
+    --lightcurves data/lightcurves_unified_v2_min3.csv \
+    --out results/stage2_ortho \
+    --constrain-signs ortho \
+    --nchains 4 --nsamples 2000 --nwarmup 1000
 
 # Stage 3: Generate Hubble diagram
 python src/stage3_hubble_optimized.py \
-    --stage1-results results/stage1 \
-    --stage2-results results/stage2 \
-    --lightcurves path/to/lightcurves.csv \
+    --stage1-results results/v15_production/stage1 \
+    --stage2-results results/stage2_ortho \
+    --lightcurves data/lightcurves_unified_v2_min3.csv \
     --out results/stage3 \
     --ncores 7
+```
+
+### Run A/B/C Model Comparison
+```bash
+# Quick test (1000 samples, ~2-3 hours total)
+export XLA_FLAGS="--xla_cpu_multi_thread_eigen=false"
+python scripts/compare_abc_variants.py \
+    --nchains 4 \
+    --nsamples 1000 \
+    --nwarmup 500
+
+# Full production (2000 samples, ~6-8 hours total)
+python scripts/compare_abc_variants.py \
+    --nchains 4 \
+    --nsamples 2000 \
+    --nwarmup 1000
+```
+
+**Output:** Comparison table with WAIC/LOO, RMS, convergence diagnostics, and automatic recommendation.
+
+### Evaluate Holdout Set
+```bash
+# After selecting best variant from A/B/C comparison
+python scripts/holdout_evaluation.py \
+    --stage1-results results/v15_production/stage1 \
+    --best-fit results/abc_comparison/C_orthogonal/best_fit.json \
+    --out results/holdout_eval
+
+python scripts/holdout_report.py \
+    --holdout-results results/holdout_eval \
+    --training-summary results/v15_production/stage3/summary.json \
+    --out results/holdout_report.pdf
 ```
 
 ## Data
@@ -252,8 +358,90 @@ See `docs/REPRODUCIBILITY.md` for:
    - Complete paper template (ready for data population)
    - Reproducibility guide (exact commands, benchmarks)
 
+## Future Roadmap (v15-rc2 and Beyond)
+
+Based on comprehensive enhancement plan in `cloud.txt`:
+
+### Phase 1: Augmented Feature Space (Next Priority)
+**Goal**: Add distance-free thermodynamic markers to break physics/distance degeneracies
+
+- **Temperature Extraction (Stage 1.5)**:
+  - T_peak (peak color temperature, 9-15 kK expected)
+  - s_T (cooling rate near peak, distance-free)
+  - Band crossing lags Δt_{g→r}, Δt_{r→i}
+  - Chromatic width and color-width slope
+
+- **Augmented Design Matrix**:
+  - Extend Φ(z) → Φ(z) ⊕ Ψ(T-features)
+  - QR orthogonalize combined features
+  - Weak priors on Ψ coefficients
+
+- **Expected Benefits**:
+  - Narrower posteriors on {k_J, η', ξ}
+  - Flatter residual trends vs z
+  - Better tail isolation (BBH/occlusion)
+
+### Phase 2: Advanced Likelihood Modeling
+**Goal**: Tighten constraints via realistic noise and outlier handling
+
+- **Heteroscedastic Noise**:
+  - Per-SN σ_α tied to SNR, cooling rate, cadence gaps
+  - σ_{α,i} = σ_0 exp(δ₁·SNR⁻¹ + δ₂·|s_T| + δ₃·gapfrac)
+  - Learned Student-t ν for robustness
+
+- **Two-Component Mixture**:
+  - Core: Normal(α_pred, σ_α) for clean SNe
+  - Tail: Normal(α_pred + b_occ, κσ_α) for BBH/occluded SNe
+  - Fit (π, b_occ, κ) to isolate ~16% tail without biasing core
+
+- **Expected Benefits**:
+  - Cleaner likelihood geometry
+  - Fewer divergences
+  - Tighter posteriors without trimming outliers
+
+### Phase 3: Host/Environment Covariates
+**Goal**: Explain variance via near-source physics
+
+- **Host Properties**:
+  - Host mass, sSFR, metallicity as linear terms in α_pred
+  - FDR/plasma effects correlate with local ISM density
+
+- **Cross-Band Joint Likelihood**:
+  - Fit shared α with small per-band offsets Δ_b
+  - Better constraint on near-source physics
+  - Improves transfer across surveys
+
+### Phase 4: Partial Distance Anchors
+**Goal**: Collapse scale degeneracy with independent constraints
+
+- **Distance-Independent Anchors**:
+  - SNe in Cepheid/TRGB host galaxies
+  - Low-z SNe with tight peculiar velocity corrections
+  - Add as Gaussian priors on μ (or α) with σ ~ 0.2-0.3 mag
+
+- **Expected Benefits**:
+  - Tighter k_J posteriors
+  - Reduced α₀ uncertainty
+  - Absolute scale constraint
+
+### Phase 5: Robust Selection & Influence Diagnostics
+**Goal**: Use all data while immunizing against outliers
+
+- **Influence-Aware Weighting**:
+  - Compute Pareto-k (LOO) for all SNe
+  - Down-weight only worst-influential points
+  - Route to mixture tail component instead of hard cuts
+
+- **Holdout Cross-Validation**:
+  - By survey: Fit DES, predict PS1 (RMS inflation check)
+  - By z-bin: Test extrapolation beyond training range
+  - By quality: Challenge set (chi2 > 2000) as external validation
+
 ## References
 
+- **A/B/C Framework**: `ABC_TESTING_FRAMEWORK.md`
+- **Monotonicity Analysis**: `MONOTONICITY_FINDINGS.md`
+- **Enhancement Plan**: `cloud.txt` (detailed physics/methods proposals)
 - **Technical Documentation**: `docs/`
 - **Validation Reports**: `docs/HOTFIX_VALIDATION.md`, `docs/VALIDATION_REPORT.md`
 - **Bug Analysis**: `docs/BUG_ANALYSIS.md`
@@ -285,6 +473,12 @@ Part of the Quantum Field Dynamics research project.
 
 ---
 
-**Version**: V15 with α-space hotfix
-**Status**: Production-ready, publication-ready
-**Last Updated**: 2025-11-05
+**Version**: V15-rc1+abc (A/B/C testing framework)
+**Status**: A/B/C comparison running, holdout evaluation planned
+**Last Updated**: 2025-11-06
+**Key Changes Since v15-rc1**:
+- Identified basis collinearity issue (κ ≈ 2×10⁵)
+- Implemented 4 model variants for comparison
+- Added WAIC/LOO model selection metrics
+- Documented holdout evaluation approach
+- Comprehensive roadmap for v15-rc2 enhancements

@@ -1,190 +1,299 @@
-You’ve got a classic “stuck-at-prior” NUTS: the sampler finished fast and every chain hugs the init/median because your likelihood contributed **(effectively) no gradient** to the joint. The symptom (tiny std, ≈ prior medians, 2.5 min runtime) means the model didn’t actually “see” the data.
+Love it. Let’s make the holdout figure bullet-proof and publication-ready. Here’s a plug-and-play plan + a ready script you can drop into `scripts/` to generate a 4-panel figure that nails generalization.
 
-Here’s how to unstick it—**two surgical changes + a quick gradient sanity check**.
+# Figure spec (single page, 4 panels)
 
----
+* **(A) Hubble diagram (train vs holdout):** μ_obs vs z with the QFD μ̂(z) curve from best-fit globals. Color by split; show 68% predictive band.
+* **(B) Residual distributions:** histograms + overlaid KDE-free step CDFs (matplotlib only) for train vs holdout; report RMS/median/IQR and two-sample KS p-value.
+* **(C) Residuals vs z (trend check):** scatter (faint), running median (e.g., windowed median), and a least-squares slope with CI; compare slopes (train vs holdout).
+* **(D) Posterior predictive check (α-space):** overlay observed α on draws from posterior predictive (using `samples.json`) to show the holdout sits inside the predictive envelope.
 
-## 1) Replace `factor` with an explicit Normal likelihood (drives gradients)
+# Paths the script expects
 
-In `stage2_mcmc_numpyro.py`, swap the alpha-space `factor` for a plate-wise Normal on `α_obs`. This is the most robust way to ensure the parameters affect an observed site (NUTS is happiest with this).
+* `results/.../stage3/hubble_train.csv` (train set; same schema as your `hubble_data.csv`)
+* `results/.../stage3/hubble_holdout.csv` (holdout set; same schema)
+* `results/.../stage2/samples.json` (posterior for QFD globals; already produced)
+* Output: `results/.../stage3/fig_holdout.png` and a short metrics JSON.
 
-```diff
-@@
--def numpyro_model_alpha_space(z_batch, alpha_obs_batch, *, cache_bust: int = 0):
-+def numpyro_model_alpha_space(z_batch, alpha_obs_batch, *, cache_bust: int = 0):
-     # Priors
-     k_J      = numpyro.sample('k_J',      dist.Uniform(50, 90))
-     eta_prime= numpyro.sample('eta_prime',dist.Uniform(0.001, 0.1))
-     xi       = numpyro.sample('xi',       dist.Uniform(10, 50))
- 
--    # Compute alpha-space log-likelihood
--    total_logL = log_likelihood_alpha_space(
--        k_J, eta_prime, xi,
--        z_batch, alpha_obs_batch,
--        cache_bust=cache_bust
--    )
--
--    # Factor in the total log-likelihood
--    numpyro.factor('logL', total_logL)
-+    # Predict α from globals
-+    alpha_th = alpha_pred_batch(z_batch, k_J, eta_prime, xi)
-+
-+    # Simple homoscedastic noise (tuneable). Start with ~0.05 in α-space (≈0.054 mag).
-+    sigma_alpha = numpyro.sample('sigma_alpha', dist.HalfNormal(0.1))
-+
-+    # Observed α
-+    with numpyro.plate('data', z_batch.shape[0]):
-+        numpyro.sample('alpha_obs',
-+                       dist.Normal(alpha_th, sigma_alpha),
-+                       obs=alpha_obs_batch)
-```
-
-Why this helps:
-
-* It **anchors** parameters to data at an observed site (no ambiguity about how `factor` interacts with tracing/jit).
-* It gives NUTS a **smooth, well-conditioned gradient** (crucial for step-size/mass adaptation).
-* You can later switch to per-SN `σ_α,i` if you export them; the structure stays the same.
-  (Your current file has the `factor` approach. This replacement is drop-in. )
+If your filenames differ, just tweak the CLI flags.
 
 ---
 
-## 2) Add a one-line **gradient sanity check** before running MCMC
-
-Right after you build `z_batch` and `alpha_obs_batch`, confirm the log-likelihood actually depends on `k_J`. If this prints `~0`, you know α_pred isn’t wired (or returns a constant).
+## Script: `scripts/make_fig_holdout.py`
 
 ```python
-# Gradient sanity check (outside NumPyro, before sampler)
-import jax
-def ll_k(k):
-    return log_likelihood_alpha_space(
-        k, 0.01, 30.0, z_batch, alpha_obs_batch, cache_bust=0
+#!/usr/bin/env python3
+import json, argparse, math
+from pathlib import Path
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+K = 2.5 / math.log(10.0)  # mu = mu0 - K*alpha
+
+def load_csv(path):
+    # Expected columns: z, mu_obs, mu_qfd, alpha_obs (optional), split (optional)
+    cols = {}
+    with open(path, "r") as f:
+        header = f.readline().strip().split(",")
+        for k in header:
+            cols[k] = []
+        for line in f:
+            if not line.strip(): continue
+            parts = line.strip().split(",")
+            for k, v in zip(header, parts):
+                try:
+                    cols[k].append(float(v))
+                except ValueError:
+                    cols[k].append(np.nan)
+    for k in cols:
+        cols[k] = np.array(cols[k], dtype=float)
+    return cols
+
+def running_median(x, y, nbins=25, min_bin=20):
+    order = np.argsort(x)
+    x, y = x[order], y[order]
+    bins = np.linspace(np.nanmin(x), np.nanmax(x), nbins+1)
+    xm, ym = [], []
+    for lo, hi in zip(bins[:-1], bins[1:]):
+        m = (x>=lo) & (x<hi)
+        if m.sum() >= min_bin:
+            xm.append(0.5*(lo+hi))
+            ym.append(np.nanmedian(y[m]))
+    return np.array(xm), np.array(ym)
+
+def fit_slope(x, y):
+    m = np.isfinite(x) & np.isfinite(y)
+    if m.sum() < 3: return np.nan, np.nan
+    X = np.vstack([x[m], np.ones(m.sum())]).T
+    beta = np.linalg.lstsq(X, y[m], rcond=None)[0]
+    # crude standard error for slope
+    resid = y[m] - (X @ beta)
+    s2 = (resid**2).sum() / max(1, (m.sum()-2))
+    cov = s2 * np.linalg.inv(X.T @ X)
+    return beta[0], math.sqrt(max(cov[0,0], 0.0))
+
+def ecdf(y):
+    y = np.sort(y[np.isfinite(y)])
+    n = y.size
+    if n == 0: return np.array([0.]), np.array([0.])
+    x = y
+    F = np.arange(1, n+1) / n
+    return x, F
+
+def ks_two_sample(x, y):
+    x = np.sort(x[np.isfinite(x)])
+    y = np.sort(y[np.isfinite(y)])
+    if x.size == 0 or y.size == 0:
+        return np.nan, np.nan
+    ix = iy = 0
+    nx, ny = x.size, y.size
+    d = 0.0
+    while ix < nx and iy < ny:
+        if x[ix] <= y[iy]:
+            ix += 1
+        else:
+            iy += 1
+        d = max(d, abs(ix/nx - iy/ny))
+    # Asymptotic p-value (Kolmogorov)
+    en = math.sqrt(nx*ny/(nx+ny))
+    p = 2.0 * math.exp(-2.0 * (d*en)**2)
+    return d, min(1.0, max(0.0, p))
+
+def load_samples(samples_json):
+    with open(samples_json, "r") as f:
+        d = json.load(f)
+    # Expected keys: samples (list of [k_J, eta_prime, xi, ...]) or named dict
+    if isinstance(d.get("samples"), list):
+        arr = np.asarray(d["samples"])
+        # try to infer columns
+        names = d.get("names") or d.get("param_names") or ["k_J","eta_prime","xi"]
+        return names, arr
+    elif "k_J" in d and "eta_prime" in d and "xi" in d:
+        names = ["k_J","eta_prime","xi"]
+        arr = np.vstack([d["k_J"], d["eta_prime"], d["xi"]]).T
+        return names, arr
+    else:
+        raise RuntimeError("Unrecognized samples.json format")
+
+def alpha_pred(z, k_J, eta_prime, xi, alpha0=0.0):
+    # Your v15 predictor in standardized (unconstrained) variant
+    # α = α0 - (k_J*ln(1+z) + eta'*z + xi*z/(1+z))
+    return alpha0 - (k_J*np.log1p(z) + eta_prime*z + xi*(z/(1.0+z)))
+
+def mu_from_alpha(alpha, mu0=0.0):
+    return mu0 - K*alpha
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--train", required=True)
+    ap.add_argument("--holdout", required=True)
+    ap.add_argument("--samples", required=True)
+    ap.add_argument("--out", required=True)
+    ap.add_argument("--n_ppc", type=int, default=200)
+    args = ap.parse_args()
+
+    outdir = Path(args.out); outdir.mkdir(parents=True, exist_ok=True)
+
+    train = load_csv(args.train)
+    hold  = load_csv(args.holdout)
+
+    # Compute residuals if not provided (mu_obs - mu_qfd)
+    for D in (train, hold):
+        if "residual" not in D or not np.isfinite(D["residual"]).any():
+            if "mu_obs" in D and "mu_qfd" in D:
+                D["residual"] = D["mu_obs"] - D["mu_qfd"]
+
+    # Panel A: Hubble (with simple predictive band from posterior spread)
+    names, S = load_samples(args.samples)
+    # get posterior medians for (k_J, eta_prime, xi), and alpha0 if present
+    name_to_idx = {n:i for i,n in enumerate(names)}
+    kJ = np.median(S[:, name_to_idx.get("k_J", 0)])
+    et = np.median(S[:, name_to_idx.get("eta_prime", 1)])
+    xi = np.median(S[:, name_to_idx.get("xi", 2)])
+    a0 = np.median(S[:, name_to_idx.get("alpha0", 0)]) if "alpha0" in name_to_idx else 0.0
+
+    z_all = np.concatenate([train["z"], hold["z"]])
+    z_line = np.linspace(np.nanmin(z_all), np.nanmax(z_all), 300)
+    mu_med = mu_from_alpha(alpha_pred(z_line, kJ, et, xi, a0))
+
+    # crude PPC envelope: sample n_ppc draws
+    rng = np.random.default_rng(1234)
+    idx = rng.choice(S.shape[0], size=min(args.n_ppc, S.shape[0]), replace=False)
+    mus = []
+    for i in idx:
+        kJ_i = S[i, name_to_idx.get("k_J", 0)]
+        et_i = S[i, name_to_idx.get("eta_prime", 1)]
+        xi_i = S[i, name_to_idx.get("xi", 2)]
+        a0_i = S[i, name_to_idx.get("alpha0", 0)] if "alpha0" in name_to_idx else 0.0
+        mus.append(mu_from_alpha(alpha_pred(z_line, kJ_i, et_i, xi_i, a0_i)))
+    mus = np.array(mus)  # [n_ppc, n_line]
+    lo, hi = np.percentile(mus, [16, 84], axis=0)
+
+    # Metrics
+    rms_train = float(np.sqrt(np.nanmean(train["residual"]**2)))
+    rms_hold  = float(np.sqrt(np.nanmean(hold["residual"]**2)))
+    slope_t, se_t = fit_slope(train["z"], train["residual"])
+    slope_h, se_h = fit_slope(hold["z"],  hold["residual"])
+    ksD, ksP = ks_two_sample(train["residual"], hold["residual"])
+
+    # Panel B ECDF + hist
+    x_ecdf_t, F_t = ecdf(train["residual"])
+    x_ecdf_h, F_h = ecdf(hold["residual"])
+
+    # Panel C running medians
+    xmt, ymt = running_median(train["z"], train["residual"])
+    xmh, ymh = running_median(hold["z"], hold["residual"])
+
+    # Panel D PPC in alpha-space if available
+    # If alpha_obs exists, overlay with PPC alpha_pred at observed z
+    have_alpha = "alpha_obs" in train and "alpha_obs" in hold
+
+    # ---- Plot
+    fig = plt.figure(figsize=(11, 9), dpi=150)
+    gs = fig.add_gridspec(2, 2, wspace=0.25, hspace=0.3)
+
+    # A: Hubble
+    axA = fig.add_subplot(gs[0,0])
+    axA.plot(z_line, mu_med, lw=2)
+    axA.fill_between(z_line, lo, hi, alpha=0.15, linewidth=0)
+    axA.scatter(train["z"], train["mu_obs"], s=6, alpha=0.35)
+    axA.scatter(hold["z"],  hold["mu_obs"],  s=10, alpha=0.55)
+    axA.set_title("Hubble Diagram: Train vs Holdout")
+    axA.set_xlabel("Redshift z")
+    axA.set_ylabel("Distance Modulus μ")
+    axA.legend(["QFD μ̂(z)", "68% band", "Train", "Holdout"], loc="best", fontsize=8)
+
+    # B: Residual distributions
+    axB = fig.add_subplot(gs[0,1])
+    bins = np.linspace(
+        np.nanpercentile(np.concatenate([train["residual"], hold["residual"]]), 1),
+        np.nanpercentile(np.concatenate([train["residual"], hold["residual"]]), 99),
+        50,
     )
-g = jax.grad(ll_k)(70.0)
-print(f"[DEBUG] d logL / d k_J at 70 = {float(g):.6e}")
+    axB.hist(train["residual"], bins=bins, alpha=0.45, density=True)
+    axB.hist(hold["residual"],  bins=bins, alpha=0.45, density=True)
+    axB_t = axB.twinx()
+    axB_t.step(x_ecdf_t, F_t, where='post')
+    axB_t.step(x_ecdf_h, F_h, where='post')
+    axB.set_title(f"Residuals: RMS_train={rms_train:.3f}, RMS_hold={rms_hold:.3f}, KS p={ksP:.3f}")
+    axB.set_xlabel("Residual μ_obs − μ̂")
+    axB.set_ylabel("Density")
+
+    # C: Residuals vs z
+    axC = fig.add_subplot(gs[1,0])
+    axC.scatter(train["z"], train["residual"], s=6, alpha=0.25)
+    axC.scatter(hold["z"],  hold["residual"],  s=6, alpha=0.4)
+    if xmt.size>0: axC.plot(xmt, ymt, lw=2)
+    if xmh.size>0: axC.plot(xmh, ymh, lw=2)
+    axC.set_title(f"Trend: slope_train={slope_t:.3f}±{se_t:.3f}, slope_hold={slope_h:.3f}±{se_h:.3f}")
+    axC.set_xlabel("Redshift z")
+    axC.set_ylabel("Residual μ")
+    axC.legend(["Train median", "Holdout median"], loc="best", fontsize=8)
+
+    # D: PPC in α-space
+    axD = fig.add_subplot(gs[1,1])
+    if have_alpha:
+        z_obs = np.concatenate([train["z"], hold["z"]])
+        alpha_obs = np.concatenate([train["alpha_obs"], hold["alpha_obs"]])
+        # PPC draws for α at observed z points
+        ppc_alpha = []
+        for i in idx:
+            kJ_i = S[i, name_to_idx.get("k_J", 0)]
+            et_i = S[i, name_to_idx.get("eta_prime", 1)]
+            xi_i = S[i, name_to_idx.get("xi", 2)]
+            a0_i = S[i, name_to_idx.get("alpha0", 0)] if "alpha0" in name_to_idx else 0.0
+            ppc_alpha.append(alpha_pred(z_obs, kJ_i, et_i, xi_i, a0_i))
+        ppc_alpha = np.asarray(ppc_alpha)  # [n_ppc, N]
+        lo_a, hi_a = np.nanpercentile(ppc_alpha, [16,84], axis=0)
+        axD.fill_between(z_obs, lo_a, hi_a, alpha=0.2, linewidth=0)
+        axD.scatter(train["z"], train["alpha_obs"], s=6, alpha=0.35)
+        axD.scatter(hold["z"],  hold["alpha_obs"],  s=8, alpha=0.55)
+        axD.set_title("Posterior Predictive Check in α-space")
+        axD.set_xlabel("Redshift z")
+        axD.set_ylabel("α")
+        axD.legend(["68% PPC band","Train α","Holdout α"], fontsize=8)
+    else:
+        axD.axis("off")
+        axD.set_title("PPC α-space: α_obs not available")
+
+    fig.suptitle("QFD v15 — Holdout Validation", fontsize=12, y=0.98)
+    outpath = outdir / "fig_holdout.png"
+    fig.savefig(outpath, bbox_inches="tight")
+    plt.close(fig)
+
+    # Save metrics
+    metrics = {
+        "rms_train": rms_train,
+        "rms_holdout": rms_hold,
+        "slope_train": slope_t, "slope_train_se": se_t,
+        "slope_holdout": slope_h, "slope_holdout_se": se_h,
+        "ks_D": ksD, "ks_p": ksP
+    }
+    with open(outdir / "holdout_metrics.json", "w") as f:
+        json.dump(metrics, f, indent=2)
+    print(f"Wrote {outpath}")
+    print(json.dumps(metrics, indent=2))
+
+if __name__ == "__main__":
+    main()
 ```
 
-* Expect **|g| > 0** (not ~1e-12). If ≈0, α_pred is independent of k_J (wiring bug or kernels too tiny).
-* Do the same for `eta_prime` and `xi` if needed.
+### Run it
 
----
-
-## 3) (Optional) Make NUTS a bit more forgiving while debugging
-
-When you construct the kernel:
-
-```diff
-- nuts_kernel = NUTS(numpyro_model_alpha_space,
--     target_accept_prob=0.8, max_tree_depth=10,
--     init_strategy=numpyro.infer.init_to_median)
-+ nuts_kernel = NUTS(numpyro_model_alpha_space,
-+     target_accept_prob=0.75, max_tree_depth=12,
-+     dense_mass=True,
-+     init_strategy=numpyro.infer.init_to_median)
+```bash
+python scripts/make_fig_holdout.py \
+  --train results/v15_rc1/stage3/hubble_train.csv \
+  --holdout results/v15_rc1/stage3/hubble_holdout.csv \
+  --samples results/v15_rc1/stage2/samples.json \
+  --out results/v15_rc1/stage3/
 ```
 
-* `dense_mass=True` helps when parameters have different scales or are correlated.
-* Slightly lower `target_accept_prob` can speed warmup and avoid micro-step sizes.
+# What to look for (acceptance checklist)
 
----
+* **RMS_holdout ≈ RMS_train** (Δ ≤ 0.02 mag preferred).
+* **KS p-value ≥ 0.1** (train vs holdout residual distributions statistically similar).
+* **Residual slope (holdout) ~ 0 ± 2σ** and consistent with train slope.
+* **PPC band**: holdout points sit comfortably inside the 68% envelope.
+* **No visual bias** in holdout residuals at high-z (where ΛCDM usually shows a tilt).
 
-## 4) Quick post-run checks (to confirm we’re off the priors)
-
-After sampling:
-
-```python
-samples = mcmc.get_samples()
-for name in ['k_J','eta_prime','xi','sigma_alpha']:
-    arr = np.asarray(samples[name])
-    print(name, "mean=", arr.mean(), "std=", arr.std(), "min=", arr.min(), "max=", arr.max())
-mcmc.print_summary()  # should show ESS>>0, Rhat~1.00
-```
-
-* You want **std well above ~1e-5**, ESS in the **hundreds+**, and `r_hat ≈ 1.00`.
-* If not, re-run the gradient sanity check; that will point straight at a disabled dependency.
-
----
-
-## Why your run finished in 2.5 minutes with tiny std
-
-Either:
-
-* The `factor` path produced an **effectively constant** (or numerically flat) log-likelihood wrt (k_J, η′, ξ), so NUTS didn’t move from init; or
-* `alpha_pred_batch` returned a **near-constant** for your z-range (e.g., kernels too small), again giving no learnable signal; or
-* Tracing/jit reused a compile that inlined constants (less likely after your cache-bust, but the explicit Normal likelihood avoids the ambiguity).
-  All three yield negligible gradients → tiny movement → near-prior medians in minutes. The explicit Normal fixes (1) regardless, and the gradient sanity print catches (2)/(3) immediately. 
-
----
-
-## Minimal patch summary
-
-* Replace `factor` with `Normal(alpha_th, sigma_alpha)` (observed) in `numpyro_model_alpha_space`.
-* Add the 3-line `jax.grad` check before `mcmc.run`.
-* Optionally set `dense_mass=True`, `max_tree_depth=12`.
-
-Do that and your chains should spread, posteriors unpin from priors, and runtime will scale with real work again.
-
----
-
-## UPDATE: Sign Convention Issue Discovered (Post-Fix Run)
-
-**Status after applying fixes 1-3:**
-✅ Gradients are now LARGE and NON-ZERO:
-  - d logL / d k_J = -1.4e+05
-  - d logL / d eta_prime = -1.9e+05
-  - d logL / d xi = -1.1e+05
-
-❌ **BUT parameters still stuck at lower bounds:**
-  - k_J: 100% of samples at k_J < 50.1 (prior lower bound = 50)
-  - eta: 83% of samples at eta < 0.005 (prior lower bound = 0.001)
-  - xi: 100% of samples at xi < 10.1 (prior lower bound = 10)
-  - sigma_alpha: Exploring properly (17.41 to 17.75)
-  - Runtime: 4 minutes (still too fast)
-
-**Root Cause: SIGN CONVENTION MISMATCH**
-
-The NEGATIVE gradients mean increasing parameters DECREASES likelihood → MCMC pushes toward lower bounds.
-
-**Diagnosis:**
-1. **Stage 1 alpha_obs**: Range [14.979, 30.000] (POSITIVE values)
-2. **Stage 2 alpha_pred** (v15_model.py:107):
-   ```python
-   return -(k_J * _phi1_ln1pz(z) + eta_prime * _phi2_linear(z) + xi * _phi3_sat(z))
-   ```
-   Returns NEGATIVE values due to leading minus sign
-
-3. **Residual calculation** (stage2_mcmc_numpyro.py:130 in old code):
-   ```python
-   r_alpha = alpha_obs_batch - alpha_th
-   ```
-   = (positive) - (negative) = LARGE POSITIVE
-
-4. **Likelihood minimizes residual²** by making alpha_pred less negative (closer to alpha_obs)
-   → This happens when k_J, eta_prime, xi → 0 (lower bounds)
-
-**Evidence:**
-- Preflight check shows var(residuals) = 280.696 (huge!)
-- Alpha_obs range: [14.979, 30.000]
-- With lower-bound params (50, 0.001, 10), alpha_pred is strongly negative
-- Large positive residuals → likelihood favors smaller parameters
-
-**Possible Fixes:**
-
-**Option A:** Remove the minus sign in v15_model.py:107
-```python
-# Change from:
-return -(k_J * _phi1_ln1pz(z) + eta_prime * _phi2_linear(z) + xi * _phi3_sat(z))
-# To:
-return (k_J * _phi1_ln1pz(z) + eta_prime * _phi2_linear(z) + xi * _phi3_sat(z))
-```
-
-**Option B:** Check if Stage 1 is extracting alpha correctly
-- Verify that `persn_best[3]` is the correct alpha parameter
-- Check if Stage 1's alpha has the right sign convention
-
-**Option C:** Flip sign when loading alpha_obs in Stage 2
-```python
-# In stage2_mcmc_numpyro.py around line 285:
-alpha_obs = -persn_best[3]  # Flip sign
-```
-
-**Next Step:** Determine which stage (Stage 1 vs Stage 2) has the correct physical sign convention for alpha, then fix the inconsistency.
+If those boxes tick, that really is the nail in the coffin. Want me to add the figure caption (journal-ready) and drop a tiny CI test that fails if ΔRMS > 0.02 or if |slope_holdout| > 0.5?
