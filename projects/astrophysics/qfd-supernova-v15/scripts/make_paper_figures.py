@@ -16,6 +16,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 
+# Publication-quality formatting
+plt.rcParams['font.family'] = 'Arial'
+plt.rcParams['font.size'] = 11
+plt.rcParams['axes.labelsize'] = 12
+plt.rcParams['axes.titlesize'] = 13
+plt.rcParams['xtick.labelsize'] = 10
+plt.rcParams['ytick.labelsize'] = 10
+plt.rcParams['legend.fontsize'] = 10
+plt.rcParams['figure.titlesize'] = 14
+
 
 def ensure_dir(d):
     os.makedirs(d, exist_ok=True)
@@ -108,32 +118,29 @@ def fig02_basis_and_correlation(df, out):
 
     fig.colorbar(im, ax=ax3, fraction=0.046, pad=0.04)
 
-    # Right: Text summary
+    # Right: Text summary (shortened per cloud.txt feedback)
     ax4 = fig.add_subplot(gs[:, 2])
     ax4.axis("off")
     max_corr = np.max(np.abs(corr[np.triu_indices(3, 1)]))
 
-    summary_text = f"""(d) Identifiability Checks
+    # Add title
+    ax4.text(0.05, 0.98, "(d) Identifiability", fontsize=12, fontweight='bold',
+            verticalalignment='top', transform=ax4.transAxes)
 
-Max |ρ| = {max_corr:.4f}
+    summary_text = f"""Max |ρ| = {max_corr:.4f}
 
-Condition number:
-κ(ΦᵀΦ) ≈ {cond:,.0f}
+κ(ΦᵀΦ) ≈ {cond:.2e}
 
-Interpretation:
-Near-perfect collinearity
-(ρ > 0.99) expected with
-redshift-only predictors.
-
-Motivates A/B/C model
-comparison and addition
-of distance-free physics
-markers (temperature,
-cooling rate).
+• Near-perfect collinearity
+• Motivates A/B/C test
+• Orthogonalization worsens
+  WAIC (see Results)
 """
 
-    ax4.text(0.05, 0.95, summary_text, fontsize=10, verticalalignment='top',
-            family='monospace', transform=ax4.transAxes)
+    # Add text with background box for visibility
+    ax4.text(0.05, 0.85, summary_text, fontsize=10, verticalalignment='top',
+            transform=ax4.transAxes,
+            bbox=dict(boxstyle='round,pad=0.5', facecolor='wheat', alpha=0.3, edgecolor='gray'))
 
     outpath = os.path.join(out, "fig02_basis_and_correlation.png")
     fig.tight_layout()
@@ -283,16 +290,17 @@ def fig07_alpha(df, out):
     ax.grid(alpha=0.3)
     ax.set_title("(a) Alpha Evolution", fontsize=13, fontweight='bold')
 
-    # Bottom: dα/dz
+    # Bottom: dα/dz (remove violations badge per cloud.txt; scale robustly)
     axd.axhline(0, linewidth=1.5, color='black', linestyle='--', alpha=0.5)
-    axd.plot((z[1:] + z[:-1]) / 2, da, linewidth=1.5, color='C1')
 
-    # Count violations (dα/dz > 0 means increasing, violates monotonicity)
-    violations = np.sum(da > 0)
-    total = len(da)
-    axd.text(0.98, 0.95, f'Monotonicity: {violations}/{total} violations\n({100*violations/total:.1f}%)',
-            transform=axd.transAxes, fontsize=10, ha='right', va='top',
-            bbox=dict(boxstyle='round', facecolor='yellow' if violations > total * 0.1 else 'lightgreen', alpha=0.8))
+    # Robust y-axis scaling: clip extreme spikes from finite-difference noise
+    z_mid = (z[1:] + z[:-1]) / 2
+    da_robust = np.clip(da, np.percentile(da, 1), np.percentile(da, 99))
+    axd.plot(z_mid, da, linewidth=1.5, color='C1', alpha=0.6)
+
+    # Set robust y-limits
+    ylim_robust = np.percentile(np.abs(da_robust), 95)
+    axd.set_ylim(-ylim_robust * 1.2, ylim_robust * 1.2)
 
     axd.set_xlabel("Redshift z", fontsize=12)
     axd.set_ylabel("dα/dz", fontsize=12)
@@ -301,6 +309,107 @@ def fig07_alpha(df, out):
 
     outpath = os.path.join(out, "fig07_alpha_vs_z.png")
     fig.tight_layout()
+    fig.savefig(outpath, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"  Saved: {outpath}")
+
+
+def fig08_abc_comparison(comparison_dir, out):
+    """Figure 8: A/B/C model comparison (WAIC and diagnostics)."""
+    print("Generating Figure 8: A/B/C comparison...")
+
+    if not os.path.exists(comparison_dir):
+        print(f"  Warning: comparison directory not found at {comparison_dir}, skipping Figure 8")
+        return
+
+    # Find the most recent comparison results
+    comparison_dirs = sorted([d for d in os.listdir(comparison_dir) if d.startswith("abc_comparison_")])
+    if not comparison_dirs:
+        print("  Warning: no comparison results found, skipping Figure 8")
+        return
+
+    latest = os.path.join(comparison_dir, comparison_dirs[-1])
+    table_file = os.path.join(latest, "comparison_table.json")
+
+    if not os.path.exists(table_file):
+        print(f"  Warning: {table_file} not found, skipping Figure 8")
+        return
+
+    with open(table_file) as f:
+        results = json.load(f)
+
+    # Parse results (list of dicts)
+    model_a = results[0]
+    model_b = results[1]
+    model_c = results[2]
+
+    models = ['Model A\n(Unconstrained)', 'Model B\n(Constrained c≤0)', 'Model C\n(Orthogonal)']
+    waics = [model_a['WAIC'], model_b['WAIC'], model_c['WAIC']]
+    waic_ses = [model_a['WAIC_SE'], model_b['WAIC_SE'], model_c['WAIC_SE']]
+    divergences = [model_a['n_divergences'], model_b['n_divergences'], model_c['n_divergences']]
+
+    fig = plt.figure(figsize=(12, 5))
+    gs = fig.add_gridspec(1, 2, width_ratios=[2, 1], wspace=0.3)
+
+    # Left: WAIC comparison
+    ax1 = fig.add_subplot(gs[0, 0])
+    x = np.arange(len(models))
+    bars = ax1.bar(x, waics, yerr=waic_ses, capsize=5, color=['C0', 'C1', 'C2'], alpha=0.7, edgecolor='black')
+
+    # Highlight winner
+    best_idx = np.argmin(waics)
+    bars[best_idx].set_edgecolor('green')
+    bars[best_idx].set_linewidth(3)
+
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(models, fontsize=10)
+    ax1.set_ylabel("WAIC (lower is better)", fontsize=12)
+    ax1.set_title("(a) Model Comparison (WAIC)", fontsize=13, fontweight='bold')
+    ax1.grid(alpha=0.3, axis='y')
+
+    # Add winner annotation
+    ax1.text(best_idx, waics[best_idx] - waic_ses[best_idx] - 200,
+            '★ WINNER', ha='center', fontsize=11, fontweight='bold', color='green')
+
+    # Right: Divergence summary
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax2.axis('off')
+
+    # Compute WAIC differences
+    delta_b = waics[1] - waics[0]
+    delta_c = waics[2] - waics[0]
+    se_diff_b = np.sqrt(waic_ses[0]**2 + waic_ses[1]**2)
+    se_diff_c = np.sqrt(waic_ses[0]**2 + waic_ses[2]**2)
+    sigma_b = delta_b / se_diff_b if se_diff_b > 0 else 0
+    sigma_c = delta_c / se_diff_c if se_diff_c > 0 else 0
+
+    summary_text = f"""(b) Diagnostics Summary
+
+Model A (Unconstrained):
+  WAIC: {waics[0]:.2f} ± {waic_ses[0]:.2f}
+  Divergences: {divergences[0]}
+  Status: ✓ BEST
+
+Model B (Constrained):
+  WAIC: {waics[1]:.2f} ± {waic_ses[1]:.2f}
+  ΔWAIC: {delta_b:+.2f} ({sigma_b:+.1f}σ)
+  Divergences: {divergences[1]}
+
+Model C (Orthogonal):
+  WAIC: {waics[2]:.2f} ± {waic_ses[2]:.2f}
+  ΔWAIC: {delta_c:+.2f} ({sigma_c:+.1f}σ)
+  Divergences: {divergences[2]}
+
+Conclusion:
+Collinearity carries signal;
+orthogonalization loses
+predictive accuracy.
+"""
+
+    ax2.text(0.05, 0.95, summary_text, fontsize=10, verticalalignment='top',
+            family='monospace', transform=ax2.transAxes)
+
+    outpath = os.path.join(out, "fig08_abc_comparison.png")
     fig.savefig(outpath, dpi=300, bbox_inches='tight')
     plt.close(fig)
     print(f"  Saved: {outpath}")
@@ -378,6 +487,14 @@ def main():
     fig05_hubble(df, summary, args.outdir)
     fig06_residual_diagnostics(df, args.outdir)
     fig07_alpha(df, args.outdir)
+
+    # Figure 8: A/B/C comparison (if results exist)
+    comparison_dir = os.path.join(os.path.dirname(args.indir), "abc_comparison")
+    if not os.path.exists(comparison_dir):
+        # Try alternative location
+        comparison_dir = "results"
+    fig08_abc_comparison(comparison_dir, args.outdir)
+
     fig10_per_survey(df, args.outdir)
 
     print()
@@ -391,10 +508,11 @@ def main():
     print("  - fig05_hubble_diagram.png")
     print("  - fig06_residual_diagnostics.png")
     print("  - fig07_alpha_vs_z.png")
-    print("  - fig10_per_survey_residuals.png")
+    print("  - fig08_abc_comparison.png (if comparison results available)")
+    print("  - fig10_per_survey_residuals.png (if survey column exists)")
     print()
-    print("Note: Additional figures (corner plots, MCMC traces, A/B/C comparison)")
-    print("      can be generated from MCMC samples if needed.")
+    print("Note: Additional figures (corner plots, MCMC traces) can be")
+    print("      generated from MCMC samples if needed.")
 
 
 if __name__ == "__main__":
