@@ -1,0 +1,401 @@
+#!/usr/bin/env python3
+"""
+Generate publication-ready figures for QFD Supernova V15 paper
+
+Usage:
+    python scripts/make_paper_figures.py \
+        --in results/v15_production/stage3 \
+        --out results/v15_production/figures
+"""
+
+import json
+import argparse
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from pathlib import Path
+
+
+def ensure_dir(d):
+    os.makedirs(d, exist_ok=True)
+
+
+def phi1(z):
+    return np.log1p(z)
+
+
+def phi2(z):
+    return z
+
+
+def phi3(z):
+    return z / (1.0 + z)
+
+
+def load_hubble(in_dir):
+    """Load hubble_data.csv from Stage 3 output."""
+    df = pd.read_csv(os.path.join(in_dir, "hubble_data.csv"))
+    return df
+
+
+def load_summary(in_dir):
+    """Load summary.json from Stage 3 output."""
+    summary_file = os.path.join(in_dir, "summary.json")
+    if not os.path.exists(summary_file):
+        # Try Stage 2 directory
+        summary_file = os.path.join(os.path.dirname(in_dir), "stage2", "summary.json")
+
+    with open(summary_file) as f:
+        return json.load(f)
+
+
+def fig02_basis_and_correlation(df, out):
+    """Figure 2: Basis functions and identifiability checks."""
+    print("Generating Figure 2: Basis functions and correlation...")
+
+    z = df["z"].values
+    idx = np.argsort(z)
+    z = z[idx]
+
+    Phi = np.column_stack([phi1(z), phi2(z), phi3(z)])
+    corr = np.corrcoef(Phi, rowvar=False)
+
+    # Condition number
+    XT_X = Phi.T @ Phi
+    cond = np.linalg.cond(XT_X)
+
+    fig = plt.figure(figsize=(10, 6))
+    gs = fig.add_gridspec(2, 3, height_ratios=[1, 1], width_ratios=[3, 2, 2],
+                          hspace=0.35, wspace=0.35)
+
+    # Top-left: Basis functions
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax1.plot(z, Phi[:, 0], label="φ₁ = ln(1+z)", linewidth=2)
+    ax1.plot(z, Phi[:, 1], label="φ₂ = z", linewidth=2)
+    ax1.plot(z, Phi[:, 2], label="φ₃ = z/(1+z)", linewidth=2)
+    ax1.set_xlabel("Redshift z", fontsize=11)
+    ax1.set_ylabel("Basis function value", fontsize=11)
+    ax1.legend(loc="best", fontsize=10)
+    ax1.grid(alpha=0.3)
+    ax1.set_title("(a) Basis Functions", fontsize=12, fontweight='bold')
+
+    # Bottom-left: Derivatives
+    ax2 = fig.add_subplot(gs[1, 0])
+    ax2.plot(z[:-1], np.diff(Phi[:, 0]) / np.diff(z), label="dφ₁/dz", linewidth=2)
+    ax2.plot(z[:-1], np.diff(Phi[:, 1]) / np.diff(z), label="dφ₂/dz", linewidth=2)
+    ax2.plot(z[:-1], np.diff(Phi[:, 2]) / np.diff(z), label="dφ₃/dz", linewidth=2)
+    ax2.set_xlabel("Redshift z", fontsize=11)
+    ax2.set_ylabel("Finite difference dφ/dz", fontsize=11)
+    ax2.legend(loc="best", fontsize=10)
+    ax2.grid(alpha=0.3)
+    ax2.set_title("(b) Basis Derivatives", fontsize=12, fontweight='bold')
+
+    # Middle: Correlation matrix
+    ax3 = fig.add_subplot(gs[:, 1])
+    im = ax3.imshow(corr, vmin=-1, vmax=1, cmap='RdBu_r')
+    ax3.set_xticks([0, 1, 2])
+    ax3.set_yticks([0, 1, 2])
+    ax3.set_xticklabels(["φ₁", "φ₂", "φ₃"], fontsize=10)
+    ax3.set_yticklabels(["φ₁", "φ₂", "φ₃"], fontsize=10)
+    ax3.set_title("(c) Correlation Matrix", fontsize=12, fontweight='bold')
+
+    # Add correlation values as text
+    for i in range(3):
+        for j in range(3):
+            text = ax3.text(j, i, f'{corr[i, j]:.3f}',
+                          ha="center", va="center", color="black", fontsize=9)
+
+    fig.colorbar(im, ax=ax3, fraction=0.046, pad=0.04)
+
+    # Right: Text summary
+    ax4 = fig.add_subplot(gs[:, 2])
+    ax4.axis("off")
+    max_corr = np.max(np.abs(corr[np.triu_indices(3, 1)]))
+
+    summary_text = f"""(d) Identifiability Checks
+
+Max |ρ| = {max_corr:.4f}
+
+Condition number:
+κ(ΦᵀΦ) ≈ {cond:,.0f}
+
+Interpretation:
+Near-perfect collinearity
+(ρ > 0.99) expected with
+redshift-only predictors.
+
+Motivates A/B/C model
+comparison and addition
+of distance-free physics
+markers (temperature,
+cooling rate).
+"""
+
+    ax4.text(0.05, 0.95, summary_text, fontsize=10, verticalalignment='top',
+            family='monospace', transform=ax4.transAxes)
+
+    outpath = os.path.join(out, "fig02_basis_and_correlation.png")
+    fig.tight_layout()
+    fig.savefig(outpath, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"  Saved: {outpath}")
+
+
+def fig05_hubble(df, summary, out):
+    """Figure 5: Hubble diagram and residuals."""
+    print("Generating Figure 5: Hubble diagram...")
+
+    z = df["z"].values
+    mu_obs = df["mu_obs"].values
+    mu_qfd = df["mu_qfd"].values
+    resid = df["residual_qfd"].values if "residual_qfd" in df.columns else df["residual_mu"].values
+
+    fig, (ax, axr) = plt.subplots(2, 1, figsize=(8, 10), sharex=True,
+                                  gridspec_kw={"height_ratios": [3, 1]})
+
+    # Top: Hubble diagram
+    ax.scatter(z, mu_obs, s=3, alpha=0.4, color='gray', label="Data", rasterized=True)
+
+    # Smooth curve of QFD model
+    zgrid = np.linspace(z.min(), z.max(), 400)
+    from scipy.interpolate import UnivariateSpline
+    spl = UnivariateSpline(np.sort(z), mu_qfd[np.argsort(z)], s=len(z) * 0.5)
+    mu_model = spl(zgrid)
+    ax.plot(zgrid, mu_model, linewidth=2.5, color='C0', label="QFD Model", zorder=10)
+
+    ax.set_ylabel("Distance Modulus μ [mag]", fontsize=12)
+    ax.legend(loc="upper left", fontsize=11, framealpha=0.9)
+    ax.grid(alpha=0.3)
+    ax.set_title("(a) Hubble Diagram", fontsize=13, fontweight='bold')
+
+    # Bottom: Residuals
+    axr.axhline(0, linewidth=1.5, color='black', linestyle='--', alpha=0.5)
+    axr.scatter(z, resid, s=3, alpha=0.4, color='C1', rasterized=True)
+
+    # Running median
+    order = np.argsort(z)
+    z_sorted = z[order]
+    r_sorted = resid[order]
+    win = max(50, int(0.03 * len(z_sorted)))
+    meds = np.array([np.median(r_sorted[max(0, i - win):min(len(r_sorted), i + win)])
+                    for i in range(len(r_sorted))])
+    axr.plot(z_sorted, meds, linewidth=2, color='darkred', label='Running median', zorder=10)
+
+    rms = np.std(resid)
+    axr.text(0.98, 0.95, f'RMS = {rms:.3f} mag', transform=axr.transAxes,
+            fontsize=11, ha='right', va='top',
+            bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+
+    axr.set_xlabel("Redshift z", fontsize=12)
+    axr.set_ylabel("Residual [mag]", fontsize=12)
+    axr.legend(loc="upper left", fontsize=10)
+    axr.grid(alpha=0.3)
+    axr.set_title("(b) Residuals (Data - Model)", fontsize=13, fontweight='bold')
+
+    outpath = os.path.join(out, "fig05_hubble_diagram.png")
+    fig.tight_layout()
+    fig.savefig(outpath, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"  Saved: {outpath}")
+
+
+def fig06_residual_diagnostics(df, out):
+    """Figure 6: Residual diagnostics."""
+    print("Generating Figure 6: Residual diagnostics...")
+
+    resid = df["residual_qfd"].values if "residual_qfd" in df.columns else df["residual_mu"].values
+    z = df["z"].values
+
+    fig, axs = plt.subplots(1, 3, figsize=(14, 4.5))
+
+    # Histogram
+    axs[0].hist(resid, bins=60, color='C0', alpha=0.7, edgecolor='black')
+    rms = np.std(resid)
+    mean = np.mean(resid)
+    axs[0].axvline(mean, color='red', linestyle='--', linewidth=2, label=f'Mean = {mean:.3f}')
+    axs[0].axvline(mean + rms, color='orange', linestyle=':', linewidth=1.5, label=f'±RMS = ±{rms:.3f}')
+    axs[0].axvline(mean - rms, color='orange', linestyle=':', linewidth=1.5)
+    axs[0].set_title("(a) Residual Distribution", fontsize=12, fontweight='bold')
+    axs[0].set_xlabel("Residual [mag]", fontsize=11)
+    axs[0].set_ylabel("Count", fontsize=11)
+    axs[0].legend(loc='best', fontsize=10)
+    axs[0].grid(alpha=0.3)
+
+    # Q-Q plot
+    from scipy import stats
+    (theo, _), (slope, intercept, _) = stats.probplot(resid, dist="norm")
+    axs[1].plot(theo, np.sort(resid), '.', ms=4, alpha=0.5, color='C1')
+    axs[1].plot(theo, slope * theo + intercept, 'r-', linewidth=2, label='Normal fit')
+    axs[1].set_title("(b) Q-Q Plot vs Gaussian", fontsize=12, fontweight='bold')
+    axs[1].set_xlabel("Theoretical Quantiles", fontsize=11)
+    axs[1].set_ylabel("Ordered Residuals", fontsize=11)
+    axs[1].legend(loc='best', fontsize=10)
+    axs[1].grid(alpha=0.3)
+
+    # Running median vs z
+    order = np.argsort(z)
+    z_sorted = z[order]
+    r_sorted = resid[order]
+    win = max(25, int(0.02 * len(z_sorted)))
+    meds = np.array([np.median(r_sorted[max(0, i - win):min(len(r_sorted), i + win)])
+                    for i in range(len(r_sorted))])
+
+    axs[2].plot(z_sorted, r_sorted, '.', ms=2, alpha=0.25, color='gray', rasterized=True)
+    axs[2].plot(z_sorted, meds, linewidth=2.5, color='darkblue', label='Running median')
+    axs[2].axhline(0, linewidth=1.5, color='black', linestyle='--', alpha=0.5)
+    axs[2].set_title("(c) Running Median vs Redshift", fontsize=12, fontweight='bold')
+    axs[2].set_xlabel("Redshift z", fontsize=11)
+    axs[2].set_ylabel("Residual [mag]", fontsize=11)
+    axs[2].legend(loc='best', fontsize=10)
+    axs[2].grid(alpha=0.3)
+
+    outpath = os.path.join(out, "fig06_residual_diagnostics.png")
+    fig.tight_layout()
+    fig.savefig(outpath, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"  Saved: {outpath}")
+
+
+def fig07_alpha(df, out):
+    """Figure 7: α(z) and monotonicity diagnostics."""
+    print("Generating Figure 7: α(z) evolution...")
+
+    if "alpha" not in df.columns:
+        print("  Warning: alpha column not found, skipping Figure 7")
+        return
+
+    z = df["z"].values
+    a = df["alpha"].values
+    order = np.argsort(z)
+    z = z[order]
+    a = a[order]
+    da = np.diff(a) / np.diff(z)
+
+    fig, (ax, axd) = plt.subplots(2, 1, figsize=(8, 9), sharex=True,
+                                  gridspec_kw={"height_ratios": [3, 1]})
+
+    # Top: α(z)
+    ax.plot(z, a, linewidth=2, color='C0', label='α(z)')
+    ax.fill_between(z, a - 0.5, a + 0.5, alpha=0.2, color='C0', label='±0.5 mag band')
+    ax.set_ylabel("α(z) [mag]", fontsize=12)
+    ax.legend(loc='best', fontsize=11)
+    ax.grid(alpha=0.3)
+    ax.set_title("(a) Alpha Evolution", fontsize=13, fontweight='bold')
+
+    # Bottom: dα/dz
+    axd.axhline(0, linewidth=1.5, color='black', linestyle='--', alpha=0.5)
+    axd.plot((z[1:] + z[:-1]) / 2, da, linewidth=1.5, color='C1')
+
+    # Count violations (dα/dz > 0 means increasing, violates monotonicity)
+    violations = np.sum(da > 0)
+    total = len(da)
+    axd.text(0.98, 0.95, f'Monotonicity: {violations}/{total} violations\n({100*violations/total:.1f}%)',
+            transform=axd.transAxes, fontsize=10, ha='right', va='top',
+            bbox=dict(boxstyle='round', facecolor='yellow' if violations > total * 0.1 else 'lightgreen', alpha=0.8))
+
+    axd.set_xlabel("Redshift z", fontsize=12)
+    axd.set_ylabel("dα/dz", fontsize=12)
+    axd.grid(alpha=0.3)
+    axd.set_title("(b) Finite Difference Derivative", fontsize=13, fontweight='bold')
+
+    outpath = os.path.join(out, "fig07_alpha_vs_z.png")
+    fig.tight_layout()
+    fig.savefig(outpath, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"  Saved: {outpath}")
+
+
+def fig10_per_survey(df, out):
+    """Figure 10: Per-survey residuals."""
+    print("Generating Figure 10: Per-survey residuals...")
+
+    if "survey" not in df.columns:
+        print("  Warning: survey column not found, skipping Figure 10")
+        return
+
+    resid_col = "residual_qfd" if "residual_qfd" in df.columns else "residual_mu"
+    grp = df.groupby("survey")[resid_col]
+    surveys = list(grp.groups.keys())
+    rms = [np.sqrt(np.mean(grp.get_group(s).values ** 2)) for s in surveys]
+    counts = [len(grp.get_group(s)) for s in surveys]
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    x = np.arange(len(surveys))
+    bars = ax.bar(x, rms, color='C0', alpha=0.7, edgecolor='black')
+
+    # Add count labels on bars
+    for i, (bar, count) in enumerate(zip(bars, counts)):
+        height = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width() / 2., height + 0.02,
+               f'N={count}', ha='center', va='bottom', fontsize=9)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(surveys, rotation=45, ha="right")
+    ax.set_ylabel("RMS Residual [mag]", fontsize=12)
+    ax.set_title("Per-Survey Residual RMS", fontsize=13, fontweight='bold')
+    ax.grid(alpha=0.3, axis='y')
+
+    # Overall RMS line
+    overall_rms = np.sqrt(np.mean(df[resid_col].values ** 2))
+    ax.axhline(overall_rms, color='red', linestyle='--', linewidth=2,
+              label=f'Overall RMS = {overall_rms:.3f}')
+    ax.legend(loc='best', fontsize=11)
+
+    outpath = os.path.join(out, "fig10_per_survey_residuals.png")
+    fig.tight_layout()
+    fig.savefig(outpath, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"  Saved: {outpath}")
+
+
+def main():
+    ap = argparse.ArgumentParser(description='Generate publication-ready figures')
+    ap.add_argument("--in", dest="indir", required=True,
+                   help="Input directory (e.g., results/v15_production/stage3)")
+    ap.add_argument("--out", dest="outdir", required=True,
+                   help="Output directory for figures")
+    args = ap.parse_args()
+
+    ensure_dir(args.outdir)
+
+    print("=" * 80)
+    print("GENERATING PUBLICATION FIGURES")
+    print("=" * 80)
+    print(f"Input:  {args.indir}")
+    print(f"Output: {args.outdir}")
+    print()
+
+    # Load data
+    print("Loading data...")
+    df = load_hubble(args.indir)
+    summary = load_summary(args.indir)
+    print(f"  Loaded {len(df)} SNe from hubble_data.csv")
+    print()
+
+    # Generate figures
+    fig02_basis_and_correlation(df, args.outdir)
+    fig05_hubble(df, summary, args.outdir)
+    fig06_residual_diagnostics(df, args.outdir)
+    fig07_alpha(df, args.outdir)
+    fig10_per_survey(df, args.outdir)
+
+    print()
+    print("=" * 80)
+    print("FIGURE GENERATION COMPLETE")
+    print("=" * 80)
+    print(f"Figures written to: {args.outdir}")
+    print()
+    print("Generated:")
+    print("  - fig02_basis_and_correlation.png")
+    print("  - fig05_hubble_diagram.png")
+    print("  - fig06_residual_diagnostics.png")
+    print("  - fig07_alpha_vs_z.png")
+    print("  - fig10_per_survey_residuals.png")
+    print()
+    print("Note: Additional figures (corner plots, MCMC traces, A/B/C comparison)")
+    print("      can be generated from MCMC samples if needed.")
+
+
+if __name__ == "__main__":
+    main()

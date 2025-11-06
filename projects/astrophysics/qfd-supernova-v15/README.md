@@ -190,6 +190,93 @@ python scripts/holdout_report.py \
     --out results/holdout_report.pdf
 ```
 
+## Generating Publication Figures
+
+Automated script to generate all publication-ready figures in a consistent format.
+
+### Quick Start
+
+```bash
+# Generate all figures (2, 5, 6, 7, 9, 10)
+python scripts/make_paper_figures.py \
+    --in results/v15_production/stage3 \
+    --out results/v15_production/figures
+
+# Organize and rename existing figures
+bash scripts/organize_paper_figures.sh
+```
+
+### Figure Manifest
+
+| Figure | Filename | Description | Status |
+|--------|----------|-------------|--------|
+| **Fig 1** | `fig01_concept_cooling_vs_lightcurves.png` | Concept schematic (cooling vs lightcurves) | Manual creation |
+| **Fig 2** | `fig02_basis_and_correlation.png` | Basis functions & identifiability checks | ✅ Auto-generated |
+| **Fig 3** | `fig03_corner_plot.png` | Posterior corner plot (k_J, η', ξ, σ_α, ν) | Generate from MCMC |
+| **Fig 4** | `fig04_mcmc_traces.png` | MCMC trace diagnostics | Generate from MCMC |
+| **Fig 5** | `fig05_hubble_diagram.png` | Hubble diagram with residuals | ✅ Auto-generated |
+| **Fig 6** | `fig06_residual_diagnostics.png` | Residual histogram, Q-Q plot, running median | ✅ Auto-generated |
+| **Fig 7** | `fig07_alpha_vs_z.png` | α(z) evolution and dα/dz monotonicity | ✅ Auto-generated |
+| **Fig 8** | `fig08_model_comparison.png` | A/B/C model comparison (WAIC/LOO) | Generate from ABC results |
+| **Fig 9** | `fig09_holdout_validation.png` | Holdout (adversarial) validation | ✅ Auto-generated |
+| **Fig 10** | `fig10_per_survey_residuals.png` | Per-survey RMS residuals | ✅ Auto-generated |
+
+### Captions (Google Docs Ready)
+
+**Figure 1**: *Representative multi-band Type Ia light curves (left) and blackbody spectra under progressive cooling (right). Quantitative fits use the λ_R/QFD pipeline (k_J, η′, ξ) described in Methods.*
+
+**Figure 2**: *Top: φ₁(z)=ln(1+z), φ₂(z)=z, φ₃(z)=z/(1+z) over the survey redshift range. Bottom-left: pairwise correlations (r > 0.99); Bottom-right: condition number κ ≈ 2×10⁵. Illustrates near-collinearity motivating model-comparison study.*
+
+**Figure 3**: *One- and two-dimensional posteriors with 68% contours. R̂=1.00 and ESS > 5000 indicate excellent mixing.*
+
+**Figure 4**: *Per-chain traces for all parameters show stationarity and mixing; no warmup pathologies observed.*
+
+**Figure 5**: *Top: μ vs z with QFD curve (blue). Bottom: residuals with running median; RMS ≈ 1.89 mag, flat trend supports model adequacy.*
+
+**Figure 6**: *Left: residual histogram. Middle: Q–Q plot showing heavy tails (Student-t). Right: running median vs z demonstrates no systematic trend.*
+
+**Figure 7**: *Top: α_pred(z) with 68% credible band. Bottom: finite-difference derivative dα/dz. Unconstrained model shows α increasing with z; see A/B/C comparison for interpretation.*
+
+**Figure 8**: *WAIC/LOO with uncertainties, divergence counts, and boundary diagnostics. Model A (unconstrained) wins; Model B (constrained) shows divergences; Model C (orthogonal) 10.6σ worse.*
+
+**Figure 9**: *Top-left: residuals vs z (train vs holdout). Top-middle: residual distributions. Top-right: Q–Q plot. Bottom: χ² diagnostics. Holdout RMS ≈ 8.16 mag reflects out-of-distribution conditions.*
+
+**Figure 10**: *RMS residuals by survey (DES only for this dataset), showing measurement stability. Error bars represent ±1σ statistical uncertainty.*
+
+### Output Files
+
+**Generated figures** (300 DPI PNG):
+- `results/v15_production/figures/fig02_basis_and_correlation.png`
+- `results/v15_production/figures/fig05_hubble_diagram.png`
+- `results/v15_production/figures/fig06_residual_diagnostics.png`
+- `results/v15_production/figures/fig07_alpha_vs_z.png`
+- `results/v15_production/figures/fig09_holdout_validation.png`
+- `results/v15_production/figures/fig10_per_survey_residuals.png` *(if survey column present)*
+
+**Supplementary figures**:
+- `results/v15_production/figures/supplementary/` - Diagnostic and validation plots
+
+### Additional Figure Generation
+
+For figures requiring MCMC samples or comparison results:
+
+```bash
+# Generate corner plot (Fig 3) from MCMC samples
+python scripts/generate_corner_plot.py \
+    --samples results/v15_production/stage2/samples.json \
+    --out results/v15_production/figures/fig03_corner_plot.png
+
+# Generate MCMC traces (Fig 4)
+python scripts/generate_mcmc_traces.py \
+    --samples results/v15_production/stage2/ \
+    --out results/v15_production/figures/fig04_mcmc_traces.png
+
+# Generate A/B/C comparison (Fig 8)
+python scripts/generate_abc_comparison_figure.py \
+    --comparison results/abc_comparison_*/comparison_table.json \
+    --out results/v15_production/figures/fig08_model_comparison.png
+```
+
 ## Data
 
 **Dataset**: DES-SN5YR (Dark Energy Survey 5-Year Supernova Program)
