@@ -6,23 +6,31 @@ This directory contains the filtered lightcurve dataset used in the V15 analysis
 
 **File**: `lightcurves_unified_v2_min3.csv` (13 MB)
 
+**Source**: DES-SN5YR (Dark Energy Survey 5-Year Supernova Program)
+
 **Contents**:
-- 5,468 Type Ia supernovae
-- Combined Pantheon+ and DES-SN5YR surveys
+- 5,468 Type Ia supernovae from DES
 - Pre-filtered: ≥3 observations per band minimum
 - 118,218 photometric observations total
+- Bands: g, r, i, z (optical)
+- Redshift range: 0.05 < z < 1.0
 
 **Columns**:
 - `snid`: Supernova ID
 - `mjd`: Modified Julian Date
-- `flux_[band]`: Calibrated flux in each band (g, r, i, z)
-- `fluxerr_[band]`: Flux uncertainty
+- `flux_nu_jy`: Calibrated flux in Janskys
+- `flux_nu_jy_err`: Flux uncertainty
 - `z`: Heliocentric redshift
-- `survey`: Source survey (Pantheon+ or DES-SN5YR)
+- `band`: Observation band (g, r, i, z)
+- `survey`: Source survey (DES)
+- `source_dataset`: DES-SN5YR
+- `ra`, `dec`: Celestial coordinates
+- `wavelength_eff_nm`: Effective wavelength in nanometers
+- `snr`: Signal-to-noise ratio
 
 ## Building Your Own Dataset from DES-SN5YR
 
-If you want to build the unified dataset from scratch using DES-SN5YR + Pantheon+:
+If you want to build the dataset from scratch using DES-SN5YR public data:
 
 ### Prerequisites
 
@@ -31,12 +39,6 @@ If you want to build the unified dataset from scratch using DES-SN5YR + Pantheon
    - Files needed:
      - `DES-SN5YR_PHOT.FITS.gz` (~2 GB) - Photometry
      - `DES-SN5YR_SPEC.FITS.gz` (~10 MB) - Spectroscopic redshifts
-
-2. **Pantheon+ Data**
-   - Download from: https://github.com/PantheonPlusSH0ES/DataRelease
-   - Files needed:
-     - `Pantheon+SH0ES.dat` - Light curve data
-     - Full photometry tables
 
 ### Build Instructions
 
@@ -56,25 +58,14 @@ python ../../../October_Supernova/tools/convert_des_fits_to_qfd.py \
 - Converts DES flux units to standard format
 - Applies quality cuts (detections, flags)
 
-#### Step 2: Parse Pantheon+ Data
+#### Step 2: Apply Quality Filters
 
 ```bash
-# Parse Pantheon+ format
-python ../../../October_Supernova/tools/parse_pantheon_plus.py \
-    --input Pantheon+SH0ES.dat \
-    --phot-dir pantheon_plus_photometry/ \
-    --out pantheon_plus_converted.csv
-```
-
-#### Step 3: Create Unified Dataset
-
-```bash
-# Combine surveys with quality filtering
-python ../../../October_Supernova/tools/create_unified_dataset.py \
-    --des des_sn5yr_converted.csv \
-    --pantheon pantheon_plus_converted.csv \
-    --min-obs 3 \
-    --out lightcurves_unified_custom.csv
+# Apply minimum observation filtering
+python ../../../October_Supernova/tools/filter_lightcurves.py \
+    --input des_sn5yr_converted.csv \
+    --min-obs-per-band 3 \
+    --out lightcurves_unified_v2_min3.csv
 ```
 
 **Filtering applied**:
@@ -88,21 +79,18 @@ python ../../../October_Supernova/tools/create_unified_dataset.py \
 ```
 Total SNe: 5,468
 Total observations: 118,218
-Surveys: Pantheon+ (1,701 SNe), DES-SN5YR (3,767 SNe)
-Redshift range: 0.01 - 1.3
+Survey: DES-SN5YR
+Redshift range: 0.05 - 1.0
+Bands: g, r, i, z
 ```
 
 ### Unit Conversions
 
-**DES-SN5YR → Standard**:
-- DES flux is in "maggies" (1 maggie = 3631 Jy)
-- Conversion: `flux_standard = flux_des × 3631 × 10^(−23)` (erg/s/cm²/Hz)
-- Our code handles this automatically
-
-**Pantheon+ → Standard**:
-- Pantheon+ uses AB magnitudes
-- Conversion: `flux = 10^(−0.4 × mag) × 3631 × 10^(−23)`
+**DES-SN5YR → Standard (Janskys)**:
+- DES native flux units are converted to Janskys (Jy)
+- 1 Jy = 10^(-23) erg/s/cm²/Hz
 - Zero-point: AB mag 0 = 3631 Jy
+- Our provided dataset is already in Janskys (`flux_nu_jy` column)
 
 ## Data Format Specification
 
@@ -133,8 +121,15 @@ After loading, V15 Stage 1 applies additional filters:
 
 ## Data Acknowledgments
 
-- **DES-SN5YR**: Dark Energy Survey Collaboration (2024)
-- **Pantheon+**: Pantheon+ Team, Scolnic et al. (2022)
+**DES-SN5YR**: Dark Energy Survey Collaboration
+
+This analysis uses data from the Dark Energy Survey (DES) 5-Year Supernova Program.
+
+**Citation**:
+- DES Collaboration, Abbott, T. M. C., et al. "The Dark Energy Survey: Data Release 2" ApJS, 2021
+- Brout, D., et al. "The Dark Energy Survey Supernova Program: Cosmological Analysis and Systematic Uncertainties" ApJ, 2022
+
+**Data Access**: https://des.ncsa.illinois.edu/releases/sn
 
 Please cite original surveys when using this dataset.
 

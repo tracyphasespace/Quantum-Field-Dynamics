@@ -192,9 +192,15 @@ python scripts/holdout_report.py \
 
 ## Data
 
-**Included**: Filtered dataset with 5,468 SNe is provided in `data/lightcurves_unified_v2_min3.csv` (13 MB).
+**Dataset**: DES-SN5YR (Dark Energy Survey 5-Year Supernova Program)
 
-**Build your own**: See `data/README.md` for instructions on building from DES-SN5YR + Pantheon+ raw data.
+**Included**: Filtered dataset with 5,468 SNe is provided in `data/lightcurves_unified_v2_min3.csv` (13 MB).
+- **Source**: DES-SN5YR public release
+- **SNe**: 5,468 Type Ia supernovae from DES
+- **Observations**: 118,218 photometric measurements (g, r, i, z bands)
+- **Redshift range**: 0.05 < z < 1.0
+
+**Build your own**: See `data/README.md` for instructions on building from DES-SN5YR raw data.
 
 ### Data Format
 
