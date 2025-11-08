@@ -7,7 +7,7 @@ time dilation and thermal distributions.
 
 Panel (a): Supernova light curves at different redshifts (z=1 to z=10)
           showing cosmological time dilation effects
-Panel (b): Planck/Wien thermal distribution at different temperatures
+Panel (b): Blackbody radiation curves for temperatures T(z=1) to T(z=10)
           showing similar morphology
 
 Canvas: 244pt × 320pt (single column, 2 panels stacked)
@@ -163,31 +163,31 @@ def main():
         B = planck_distribution(wavelength, T)
 
         # Plot with same grayscale as panel (a)
+        # Label as T(z=1), T(z=2), etc. to match redshift parameterization
         ax2.plot(wavelength, B,
                 linestyle=linestyles[i],
                 linewidth=linewidths[i],
                 color=str(grays[i]),
-                label=f'$T_{i+1}$',
+                label=f'$T(z={i+1})$',
                 marker='o' if i < 3 else None,
                 markersize=2.5 if i < 3 else 0,
                 markevery=20,
                 alpha=0.8)
 
-    ax2.set_xlabel(r'Wavelength (arb. units)')
-    ax2.set_ylabel('Normalized Intensity')
+    ax2.set_xlabel(r'Wavelength (scaled to days)')
+    ax2.set_ylabel('Normalized Radiance')
     ax2.set_xlim(0, 10)
-    ax2.set_ylim(0, 0.8)
+    ax2.set_ylim(0, 1.0)
     ax2.grid(alpha=0.2)
 
     # Legend
     ax2.legend(loc='upper right', fontsize=5.5, ncol=2,
-              framealpha=0.9, columnspacing=1.0, handlelength=1.5,
-              title='Temp.', title_fontsize=5.5)
+              framealpha=0.9, columnspacing=1.0, handlelength=1.5)
 
     add_panel_label(ax2, '(b)', loc='top-left')
 
     # Panel title
-    ax2.text(0.5, 1.02, 'Planck/Wien Thermal Distribution',
+    ax2.text(0.5, 1.02, 'Blackbody Radiation Curves',
             transform=ax2.transAxes, ha='center', va='bottom',
             fontsize=7.5, fontweight='bold')
 
@@ -200,13 +200,13 @@ def main():
 
     provenance = {
         'figure': filename,
-        'title': 'Morphological comparison: Time dilation vs thermal distribution',
-        'description': 'Demonstrates similar curve shapes between cosmological time dilation and thermal distributions',
+        'title': 'Morphological comparison: Time dilation vs blackbody radiation',
+        'description': 'Demonstrates similar curve shapes between cosmological time dilation and thermal blackbody radiation',
         'panels': {
             'a': 'Supernova light curves at redshifts z=1 to z=10 showing time dilation',
-            'b': 'Planck/Wien thermal distribution at different temperatures'
+            'b': 'Blackbody radiation curves for temperatures T(z=1) to T(z=10)'
         },
-        'key_insight': 'Both phenomena produce similar morphological curve families',
+        'key_insight': 'Both phenomena produce similar morphological curve families, suggesting thermal interpretation of cosmological effects',
         'parameters': {
             'redshift_range': [1, 10],
             'n_curves': n_curves,
