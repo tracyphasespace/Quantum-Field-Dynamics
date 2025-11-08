@@ -119,8 +119,12 @@ def main():
         # Observed time axis
         t_obs = t_rest * time_dilation_factor
 
+        # Cosmological dimming: flux decreases with (1+z)^2
+        # (combination of time dilation and bandwidth compression)
+        dimming_factor = 1.0 / ((1 + z) ** 2)
+
         # Light curve (normalized flux vs observed time)
-        flux = supernova_light_curve(t_rest, t_peak=20, width=10, amplitude=1.0)
+        flux = supernova_light_curve(t_rest, t_peak=20, width=10, amplitude=dimming_factor)
 
         # Plot with color + line styles (NO markers for clean curves)
         ax1.plot(t_obs, flux,
@@ -167,6 +171,11 @@ def main():
     for i, T in enumerate(temperatures):
         # Planck distribution
         B = planck_distribution(wavelength, T)
+
+        # Apply same dimming as panel (a) for z=i+1
+        z = i + 1
+        dimming_factor = 1.0 / ((1 + z) ** 2)
+        B = B * dimming_factor
 
         # Plot with same colors/styles as panel (a) for visual consistency
         # Label as T(z=1), T(z=2), etc. to match redshift parameterization
