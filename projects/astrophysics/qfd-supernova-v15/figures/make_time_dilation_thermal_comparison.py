@@ -86,8 +86,8 @@ def main():
 
     # Create single-column figure (2 panels stacked)
     fig = create_figure_single_column(aspect_ratio=0.76)  # 244pt × 320pt
-    gs = fig.add_gridspec(2, 1, height_ratios=[1, 1], hspace=0.25,
-                          left=0.14, right=0.96, top=0.96, bottom=0.08)
+    gs = fig.add_gridspec(2, 1, height_ratios=[1, 1], hspace=0.35,  # More spacing
+                          left=0.14, right=0.96, top=0.94, bottom=0.08)  # Adjust top
 
     # Color scheme: distinct colors + line styles for monochrome-friendliness
     n_curves = 10
@@ -129,21 +129,24 @@ def main():
                 label=f'$z={z}$',
                 alpha=0.9)
 
+    # Set matching scale: max observed time for z=10 is ~2200 days
+    max_time = 200 * (1 + 10)  # 2200 days
+
     ax1.set_xlabel('Time (days)', fontsize=9)
     ax1.set_ylabel('Normalized Flux', fontsize=9)
-    ax1.set_xlim(0, 200)  # Match scale to show curves properly
-    ax1.set_ylim(0, 1.0)   # Adjusted to show full peak
+    ax1.set_xlim(0, max_time)  # 0-2200 to show all curves fully
+    ax1.set_ylim(0, 1.0)
     ax1.tick_params(axis='both', which='major', labelsize=8)
     ax1.grid(alpha=0.2)
 
     # Legend (compact, 2 columns)
-    ax1.legend(loc='upper right', fontsize=7, ncol=2,
+    ax1.legend(loc='upper right', fontsize=6.5, ncol=2,
               framealpha=0.9, columnspacing=1.0, handlelength=1.5)
 
     add_panel_label(ax1, '(a)', loc='top-left')
 
-    # Panel title
-    ax1.text(0.5, 1.02, 'Supernova Light Curves ($z=1$ to $10$)',
+    # Panel title (moved up to avoid overlap)
+    ax1.text(0.5, 1.05, 'Supernova Light Curves ($z=1$ to $10$)',
             transform=ax1.transAxes, ha='center', va='bottom',
             fontsize=9, fontweight='bold')
 
@@ -152,8 +155,9 @@ def main():
     # -------------------------------------------------------------------
     ax2 = fig.add_subplot(gs[1])
 
-    # Wavelength array (arbitrary units) - increased points for smoother curves
-    wavelength = np.linspace(0.1, 200, 2000)  # Match panel (a) scale: 0-200
+    # Wavelength array (arbitrary units) - match panel (a) scale
+    max_time = 200 * (1 + 10)  # 2200 days (same as panel a)
+    wavelength = np.linspace(0.1, max_time, 2000)  # 0-2200 to match panel (a)
 
     # Temperature range (arbitrary units, decreasing T shifts peak right)
     # Use inverse mapping so visual similarity is maximized
@@ -174,19 +178,19 @@ def main():
 
     ax2.set_xlabel(r'Wavelength (scaled to days)', fontsize=9)
     ax2.set_ylabel('Normalized Radiance', fontsize=9)
-    ax2.set_xlim(0, 200)   # Match panel (a): 0-200 for visual similarity
+    ax2.set_xlim(0, max_time)   # Match panel (a): 0-2200 for visual similarity
     ax2.set_ylim(0, 1.0)
     ax2.tick_params(axis='both', which='major', labelsize=8)
     ax2.grid(alpha=0.2)
 
     # Legend
-    ax2.legend(loc='upper right', fontsize=7, ncol=2,
+    ax2.legend(loc='upper right', fontsize=6.5, ncol=2,
               framealpha=0.9, columnspacing=1.0, handlelength=1.5)
 
     add_panel_label(ax2, '(b)', loc='top-left')
 
-    # Panel title
-    ax2.text(0.5, 1.02, 'Blackbody Radiation Curves',
+    # Panel title (moved up to avoid overlap)
+    ax2.text(0.5, 1.05, 'Blackbody Radiation Curves',
             transform=ax2.transAxes, ha='center', va='bottom',
             fontsize=9, fontweight='bold')
 
