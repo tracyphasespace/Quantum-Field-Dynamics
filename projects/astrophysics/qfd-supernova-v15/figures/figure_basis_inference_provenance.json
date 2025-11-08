@@ -1,0 +1,35 @@
+{
+  "figure": "figure_basis_inference.pdf",
+  "created": "2025-11-08T18:40:58.571810",
+  "software": {
+    "numpy": "2.3.4",
+    "matplotlib": "3.10.7"
+  },
+  "stage3_dir": "../results/v15_production/stage3",
+  "stage2_dir": "../results/v15_production/stage2",
+  "n_redshifts": 500,
+  "z_range": [
+    0.0568855170955169,
+    0.8113995446572271
+  ],
+  "condition_number": 1259545.6255671845,
+  "max_correlation": 0.9981685271459421,
+  "correlation_matrix": [
+    [
+      1.0,
+      0.9981105941393899,
+      0.9981685271459421
+    ],
+    [
+      0.9981105941393897,
+      0.9999999999999998,
+      0.9925807532595919
+    ],
+    [
+      0.9981685271459421,
+      0.992580753259592,
+      1.0
+    ]
+  ],
+  "git_sha": "c27edab34b048dceaae3a82a8361e479b48de3cb"
+}

@@ -126,7 +126,7 @@ def main():
 
     # Plot all residuals (small, transparent)
     ax1.plot(z, residuals, **LINE_STYLES['data'],
-             alpha=0.4, markersize=2, zorder=1)
+             alpha=0.4, zorder=1)
 
     # Running median and band
     ax1.plot(z_smooth, res_med, linestyle='-', linewidth=1.0,
@@ -166,7 +166,7 @@ def main():
             nuisance_label = 'Redshift z'
 
     ax2.plot(nuisance, residuals, **LINE_STYLES['data'],
-             alpha=0.4, markersize=2)
+             alpha=0.4)
 
     # Add smoothed trend (LOWESS-style binning)
     nbins = 20
@@ -202,7 +202,7 @@ def main():
     (osm, osr), (slope, intercept, r) = stats.probplot(residuals_std,
                                                          dist='norm')
 
-    ax3.plot(osm, osr, **LINE_STYLES['data'], markersize=2.5, alpha=0.7)
+    ax3.plot(osm, osr, **LINE_STYLES['data'], alpha=0.7)
 
     # Reference line
     ax3.plot(osm, slope * osm + intercept, linestyle='-',

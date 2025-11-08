@@ -1,0 +1,17 @@
+{
+  "figure": "figure_residuals.pdf",
+  "created": "2025-11-08T18:41:54.696197",
+  "software": {
+    "numpy": "2.3.4",
+    "matplotlib": "3.10.7"
+  },
+  "stage3_dir": "../results/v15_production/stage3",
+  "n_sne": 500,
+  "residual_mean": -4.809713771773782,
+  "residual_std": 1.8247488802270146,
+  "residual_median": -4.709969133732713,
+  "anderson_darling_stat": 1.7868931428869246,
+  "ks_p_value": 0.0,
+  "nuisance_parameter": "\u03b1_obs",
+  "git_sha": "c27edab34b048dceaae3a82a8361e479b48de3cb"
+}

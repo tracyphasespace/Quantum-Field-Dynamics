@@ -156,7 +156,7 @@ def main():
     ax2 = fig.add_subplot(gs[1], sharex=ax1)
 
     # Plot residuals
-    ax2.plot(z, residuals, **LINE_STYLES['data'], alpha=0.6, markersize=2)
+    ax2.plot(z, residuals, **LINE_STYLES['data'], alpha=0.6)
 
     # Binned residuals
     z_bin_res, res_bin, res_err = equal_count_bins(z, residuals, nbins=25)
