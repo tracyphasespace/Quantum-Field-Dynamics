@@ -89,13 +89,19 @@ def main():
     gs = fig.add_gridspec(2, 1, height_ratios=[1, 1], hspace=0.25,
                           left=0.14, right=0.96, top=0.96, bottom=0.08)
 
-    # Color scheme: grayscale gradient for MNRAS
+    # Color scheme: distinct colors + line styles for monochrome-friendliness
     n_curves = 10
-    grays = np.linspace(0.1, 0.7, n_curves)
+
+    # Distinct colors (colorblind-friendly palette)
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+              '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
 
     # Line styles for distinction in grayscale
-    linestyles = ['-', '-', '-', '--', '--', '--', ':', ':', '-.', '-.']
-    linewidths = [1.2, 1.0, 0.9, 1.0, 0.9, 0.8, 1.0, 0.9, 1.0, 0.9]
+    linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':', '-', '--']
+    linewidths = [2.0, 2.0, 2.0, 2.5, 2.0, 2.0, 2.0, 2.5, 2.0, 2.0]
+
+    # Markers for additional distinction
+    markers = ['o', 's', '^', 'v', 'D', 'p', '*', 'h', 'x', '+']
 
     # -------------------------------------------------------------------
     # Panel (a): Supernova Light Curves with Time Dilation
@@ -118,16 +124,16 @@ def main():
         # Light curve (normalized flux vs observed time)
         flux = supernova_light_curve(t_rest, t_peak=20, width=10, amplitude=1.0)
 
-        # Plot with grayscale
+        # Plot with color + line style + markers for multi-level distinction
         ax1.plot(t_obs, flux,
                 linestyle=linestyles[i],
                 linewidth=linewidths[i],
-                color=str(grays[i]),
+                color=colors[i],
                 label=f'$z={z}$',
-                marker='o' if i < 3 else None,
-                markersize=2.5 if i < 3 else 0,
-                markevery=80,  # Adjusted for higher point count
-                alpha=0.8)
+                marker=markers[i],
+                markersize=8,
+                markevery=100,  # Show markers periodically
+                alpha=0.9)
 
     ax1.set_xlabel('Time (days)', fontsize=75)
     ax1.set_ylabel('Normalized Flux', fontsize=75)
@@ -163,17 +169,17 @@ def main():
         # Planck distribution
         B = planck_distribution(wavelength, T)
 
-        # Plot with same grayscale as panel (a)
+        # Plot with same colors/styles as panel (a) for visual consistency
         # Label as T(z=1), T(z=2), etc. to match redshift parameterization
         ax2.plot(wavelength, B,
                 linestyle=linestyles[i],
                 linewidth=linewidths[i],
-                color=str(grays[i]),
+                color=colors[i],
                 label=f'$T(z={i+1})$',
-                marker='o' if i < 3 else None,
-                markersize=2.5 if i < 3 else 0,
-                markevery=80,  # Adjusted for higher point count
-                alpha=0.8)
+                marker=markers[i],
+                markersize=8,
+                markevery=100,  # Show markers periodically
+                alpha=0.9)
 
     ax2.set_xlabel(r'Wavelength (scaled to days)', fontsize=75)
     ax2.set_ylabel('Normalized Radiance', fontsize=75)
