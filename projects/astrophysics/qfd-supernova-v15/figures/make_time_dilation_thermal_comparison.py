@@ -27,7 +27,10 @@ from mnras_style import (
 
 def supernova_light_curve(t, t_peak=20, width=10, amplitude=1.0):
     """
-    Model supernova light curve (simplified Gaussian-like rise + exponential decay).
+    Model supernova light curve as smooth Planck-like distribution.
+
+    Uses a smooth asymmetric function similar to Planck distribution:
+    Rise × Decay for natural smoothness (no discontinuities).
 
     Args:
         t: Time array (days)
@@ -35,16 +38,14 @@ def supernova_light_curve(t, t_peak=20, width=10, amplitude=1.0):
         width: Width parameter
         amplitude: Peak amplitude
     """
-    # Rise phase (Gaussian)
-    rise = np.exp(-0.5 * ((t - t_peak) / (width * 0.5))**2)
+    # Smooth rise (power law)
+    rise_factor = 3.0
+    rise = np.power(t / t_peak, rise_factor) * np.exp(-rise_factor * (t / t_peak - 1))
 
-    # Decay phase (exponential)
-    decay = np.exp(-(t - t_peak) / (width * 1.5))
+    # Normalize to peak at 1.0
+    rise = rise / np.max(rise)
 
-    # Combine: rise until peak, then decay
-    lc = np.where(t < t_peak, rise, rise[np.argmax(rise)] * decay / decay[0])
-
-    return amplitude * lc
+    return amplitude * rise
 
 
 def planck_distribution(wavelength, T):
