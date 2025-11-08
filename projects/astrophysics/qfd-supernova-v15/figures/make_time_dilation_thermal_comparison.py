@@ -103,7 +103,7 @@ def main():
     ax1 = fig.add_subplot(gs[0])
 
     # Time array (rest frame) - increased points for smoother curves
-    t_rest = np.linspace(0, 200, 2000)
+    t_rest = np.linspace(0, 2000, 2000)  # Extended range to show full curves
 
     # Generate light curves for z=1 to z=10
     redshifts = np.arange(1, 11)
@@ -131,8 +131,8 @@ def main():
 
     ax1.set_xlabel('Time (days)', fontsize=75)
     ax1.set_ylabel('Normalized Flux', fontsize=75)
-    ax1.set_xlim(0, 210)
-    ax1.set_ylim(0, 0.8)
+    ax1.set_xlim(0, 2100)  # 10x larger to show full curves
+    ax1.set_ylim(0, 1.0)   # Adjusted to show full peak
     ax1.tick_params(axis='both', which='major', labelsize=70)
     ax1.grid(alpha=0.2)
 
@@ -153,7 +153,7 @@ def main():
     ax2 = fig.add_subplot(gs[1])
 
     # Wavelength array (arbitrary units) - increased points for smoother curves
-    wavelength = np.linspace(0.1, 10, 2000)
+    wavelength = np.linspace(0.1, 100, 2000)  # Extended range to show full curves
 
     # Temperature range (arbitrary units, decreasing T shifts peak right)
     # Use inverse mapping so visual similarity is maximized
@@ -177,7 +177,7 @@ def main():
 
     ax2.set_xlabel(r'Wavelength (scaled to days)', fontsize=75)
     ax2.set_ylabel('Normalized Radiance', fontsize=75)
-    ax2.set_xlim(0, 10)
+    ax2.set_xlim(0, 100)   # 10x larger to show full curves
     ax2.set_ylim(0, 1.0)
     ax2.tick_params(axis='both', which='major', labelsize=70)
     ax2.grid(alpha=0.2)
