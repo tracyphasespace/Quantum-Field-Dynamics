@@ -102,8 +102,8 @@ def main():
     # -------------------------------------------------------------------
     ax1 = fig.add_subplot(gs[0])
 
-    # Time array (rest frame)
-    t_rest = np.linspace(0, 200, 500)
+    # Time array (rest frame) - increased points for smoother curves
+    t_rest = np.linspace(0, 200, 2000)
 
     # Generate light curves for z=1 to z=10
     redshifts = np.arange(1, 11)
@@ -126,7 +126,7 @@ def main():
                 label=f'$z={z}$',
                 marker='o' if i < 3 else None,
                 markersize=2.5 if i < 3 else 0,
-                markevery=20,
+                markevery=80,  # Adjusted for higher point count
                 alpha=0.8)
 
     ax1.set_xlabel('Time (days)')
@@ -151,8 +151,8 @@ def main():
     # -------------------------------------------------------------------
     ax2 = fig.add_subplot(gs[1])
 
-    # Wavelength array (arbitrary units)
-    wavelength = np.linspace(0.1, 10, 500)
+    # Wavelength array (arbitrary units) - increased points for smoother curves
+    wavelength = np.linspace(0.1, 10, 2000)
 
     # Temperature range (arbitrary units, decreasing T shifts peak right)
     # Use inverse mapping so visual similarity is maximized
@@ -171,7 +171,7 @@ def main():
                 label=f'$T(z={i+1})$',
                 marker='o' if i < 3 else None,
                 markersize=2.5 if i < 3 else 0,
-                markevery=20,
+                markevery=80,  # Adjusted for higher point count
                 alpha=0.8)
 
     ax2.set_xlabel(r'Wavelength (scaled to days)')
