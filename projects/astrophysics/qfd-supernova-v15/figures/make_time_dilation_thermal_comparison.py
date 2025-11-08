@@ -135,15 +135,15 @@ def main():
                 markevery=100,  # Show markers periodically
                 alpha=0.9)
 
-    ax1.set_xlabel('Time (days)', fontsize=75)
-    ax1.set_ylabel('Normalized Flux', fontsize=75)
+    ax1.set_xlabel('Time (days)', fontsize=9)
+    ax1.set_ylabel('Normalized Flux', fontsize=9)
     ax1.set_xlim(0, 2100)  # 10x larger to show full curves
     ax1.set_ylim(0, 1.0)   # Adjusted to show full peak
-    ax1.tick_params(axis='both', which='major', labelsize=70)
+    ax1.tick_params(axis='both', which='major', labelsize=8)
     ax1.grid(alpha=0.2)
 
     # Legend (compact, 2 columns)
-    ax1.legend(loc='upper right', fontsize=55, ncol=2,
+    ax1.legend(loc='upper right', fontsize=7, ncol=2,
               framealpha=0.9, columnspacing=1.0, handlelength=1.5)
 
     add_panel_label(ax1, '(a)', loc='top-left')
@@ -151,7 +151,7 @@ def main():
     # Panel title
     ax1.text(0.5, 1.02, 'Supernova Light Curves ($z=1$ to $10$)',
             transform=ax1.transAxes, ha='center', va='bottom',
-            fontsize=75, fontweight='bold')
+            fontsize=9, fontweight='bold')
 
     # -------------------------------------------------------------------
     # Panel (b): Planck/Wien Thermal Distribution
@@ -181,15 +181,15 @@ def main():
                 markevery=100,  # Show markers periodically
                 alpha=0.9)
 
-    ax2.set_xlabel(r'Wavelength (scaled to days)', fontsize=75)
-    ax2.set_ylabel('Normalized Radiance', fontsize=75)
+    ax2.set_xlabel(r'Wavelength (scaled to days)', fontsize=9)
+    ax2.set_ylabel('Normalized Radiance', fontsize=9)
     ax2.set_xlim(0, 100)   # 10x larger to show full curves
     ax2.set_ylim(0, 1.0)
-    ax2.tick_params(axis='both', which='major', labelsize=70)
+    ax2.tick_params(axis='both', which='major', labelsize=8)
     ax2.grid(alpha=0.2)
 
     # Legend
-    ax2.legend(loc='upper right', fontsize=55, ncol=2,
+    ax2.legend(loc='upper right', fontsize=7, ncol=2,
               framealpha=0.9, columnspacing=1.0, handlelength=1.5)
 
     add_panel_label(ax2, '(b)', loc='top-left')
@@ -197,7 +197,7 @@ def main():
     # Panel title
     ax2.text(0.5, 1.02, 'Blackbody Radiation Curves',
             transform=ax2.transAxes, ha='center', va='bottom',
-            fontsize=75, fontweight='bold')
+            fontsize=9, fontweight='bold')
 
     # -------------------------------------------------------------------
     # Save figure with provenance
