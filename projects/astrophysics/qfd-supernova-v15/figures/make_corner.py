@@ -97,10 +97,10 @@ def compute_2d_contours(x, y, levels=[0.68, 0.95]):
 
     return X, Y, H.T, contour_levels
 
-def plot_1d_hist(ax, samples, label, color='black'):
+def plot_1d_hist(ax, samples, label, color='#1f77b4'):
     """Plot 1D histogram with median and percentiles."""
     ax.hist(samples, bins=30, density=True, histtype='step',
-            color=color, linewidth=0.8)
+            color=color, linewidth=1.0)
 
     # Add median and percentiles
     median = np.median(samples)
@@ -122,15 +122,16 @@ def plot_1d_hist(ax, samples, label, color='black'):
     ax.set_ylabel('')
 
 def plot_2d_contour(ax, x, y, xlabel, ylabel):
-    """Plot 2D contour with grayscale levels."""
+    """Plot 2D contour with color levels."""
     X, Y, Z, levels = compute_2d_contours(x, y, levels=[0.68, 0.95])
 
     # Plot contours (solid for 68%, dashed for 95%)
-    cs1 = ax.contour(X, Y, Z, levels=[levels[0]], colors='black',
-                     linewidths=0.8, linestyles='-')
+    # Use colorful contours: blue for 68%, orange for 95%
+    cs1 = ax.contour(X, Y, Z, levels=[levels[0]], colors='#1f77b4',
+                     linewidths=1.0, linestyles='-')
     if len(levels) > 1:
-        cs2 = ax.contour(X, Y, Z, levels=[levels[1]], colors='gray',
-                         linewidths=0.6, linestyles='--')
+        cs2 = ax.contour(X, Y, Z, levels=[levels[1]], colors='#ff7f0e',
+                         linewidths=0.8, linestyles='--')
 
     ax.set_xlabel(xlabel, fontsize=7.0)
     ax.set_ylabel(ylabel, fontsize=7.0)
@@ -163,8 +164,8 @@ def main():
 
     print(f"Plotting {n_params} parameters: {param_names}")
 
-    # Create figure
-    fig = create_figure_double_column(aspect_ratio=2.0)
+    # Create figure (aspect_ratio ~1.0 for square corner plot)
+    fig = create_figure_double_column(aspect_ratio=1.0)
 
     # Create grid
     gs = fig.add_gridspec(n_params, n_params, hspace=0.05, wspace=0.05)

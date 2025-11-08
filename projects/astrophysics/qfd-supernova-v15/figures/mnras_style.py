@@ -61,7 +61,7 @@ def setup_mnras_style():
 
         # Figure
         "figure.dpi": 72,  # Points per inch (for sizing)
-        "savefig.dpi": 600,  # High DPI for rasters within PDF
+        "savefig.dpi": 1200,  # Very high DPI for publication quality
         "savefig.bbox": "tight",
         "savefig.pad_inches": 0.02,
     })
