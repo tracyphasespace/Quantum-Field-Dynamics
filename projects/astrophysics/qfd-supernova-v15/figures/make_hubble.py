@@ -155,15 +155,15 @@ def main():
     # Panel (b): Residuals
     ax2 = fig.add_subplot(gs[1], sharex=ax1)
 
-    # Plot residuals
-    ax2.plot(z, residuals, **LINE_STYLES['data'], alpha=0.6)
+    # Plot individual residuals (all points with transparency)
+    ax2.plot(z, residuals, **LINE_STYLES['data'], alpha=0.5, zorder=1)
 
     # Binned residuals
     z_bin_res, res_bin, res_err = equal_count_bins(z, residuals, nbins=25)
     ax2.errorbar(z_bin_res, res_bin, yerr=res_err,
-                 fmt='s', markersize=4, markerfacecolor='gray',
-                 markeredgecolor='black', markeredgewidth=0.5,
-                 elinewidth=0.8, capsize=2, label='Binned', zorder=3)
+                 fmt='s', markersize=3, markerfacecolor='gray',
+                 markeredgecolor='black', markeredgewidth=0.4,
+                 elinewidth=0.6, capsize=1.5, label='Binned', zorder=3)
 
     # Zero line
     ax2.axhline(0, color='black', linestyle='-', linewidth=0.6, zorder=1)
