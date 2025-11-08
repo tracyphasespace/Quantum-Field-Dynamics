@@ -1,6 +1,6 @@
 {
   "figure": "figure_corner.pdf",
-  "created": "2025-11-08T18:41:58.299391",
+  "created": "2025-11-08T21:24:54.299430",
   "software": {
     "numpy": "2.3.4",
     "matplotlib": "3.10.7"
@@ -35,5 +35,5 @@
       "p84": 7.6764971183091895
     }
   },
-  "git_sha": "c27edab34b048dceaae3a82a8361e479b48de3cb"
+  "git_sha": "551c17c66f90192e21a6f69993c122deecfb4ad4"
 }
