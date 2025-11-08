@@ -119,9 +119,9 @@ def main():
         # Observed time axis
         t_obs = t_rest * time_dilation_factor
 
-        # Cosmological dimming: flux decreases with (1+z)^2
-        # (combination of time dilation and bandwidth compression)
-        dimming_factor = 1.0 / ((1 + z) ** 2)
+        # Cosmological dimming: normalize z=1 to 1.0, others dimmed relative to it
+        # Factor: (1+z_ref)^2 / (1+z)^2, where z_ref=1
+        dimming_factor = (1 + 1)**2 / ((1 + z) ** 2)
 
         # Light curve (normalized flux vs observed time)
         flux = supernova_light_curve(t_rest, t_peak=20, width=10, amplitude=dimming_factor)
@@ -172,9 +172,9 @@ def main():
         # Planck distribution
         B = planck_distribution(wavelength, T)
 
-        # Apply same dimming as panel (a) for z=i+1
+        # Apply same dimming as panel (a): normalize z=1 to 1.0
         z = i + 1
-        dimming_factor = 1.0 / ((1 + z) ** 2)
+        dimming_factor = (1 + 1)**2 / ((1 + z) ** 2)
         B = B * dimming_factor
 
         # Plot with same colors/styles as panel (a) for visual consistency

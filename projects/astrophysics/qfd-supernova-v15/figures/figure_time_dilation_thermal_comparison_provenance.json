@@ -1,6 +1,6 @@
 {
   "figure": "figure_time_dilation_thermal_comparison.pdf",
-  "created": "2025-11-08T21:01:11.140481",
+  "created": "2025-11-08T21:09:20.572682",
   "software": {
     "numpy": "2.3.4",
     "matplotlib": "3.10.7"
@@ -21,5 +21,5 @@
     "time_peak_rest": 20,
     "time_width": 10
   },
-  "git_sha": "4bf7e8707824a8ebd04bd48e50d9f638ce48f31d"
+  "git_sha": "a52a2c01cb727d080ba7c6e272ec1b913416a178"
 }
