@@ -166,7 +166,8 @@ def main():
 
     # Temperature range (arbitrary units, decreasing T shifts peak right)
     # Use inverse mapping so visual similarity is maximized
-    temperatures = np.linspace(1.0, 0.1, n_curves)
+    # Scale temperatures 5x lower to make curves 5x wider
+    temperatures = np.linspace(1.0, 0.1, n_curves) / 5.0
 
     for i, T in enumerate(temperatures):
         # Planck distribution
