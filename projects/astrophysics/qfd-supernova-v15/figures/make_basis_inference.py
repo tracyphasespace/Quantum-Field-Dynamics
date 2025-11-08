@@ -111,7 +111,7 @@ def main():
 
     # Create figure (2×2 grid)
     fig = create_figure_single_column(aspect_ratio=0.95)
-    gs = fig.add_gridspec(2, 2, hspace=0.35, wspace=0.35)
+    gs = fig.add_gridspec(2, 2, hspace=0.40, wspace=0.40)
 
     # Panel (a): Basis functions
     ax1 = fig.add_subplot(gs[0, 0])
@@ -125,9 +125,9 @@ def main():
 
     ax1.set_xlabel('Redshift z', fontsize=7.0)
     ax1.set_ylabel('Basis value', fontsize=7.0)
-    ax1.legend(loc='best', fontsize=6.0)
+    ax1.legend(loc='upper left', fontsize=6.0, framealpha=0.8)
     ax1.grid(alpha=0.2, linewidth=0.3)
-    add_panel_label(ax1, '(a)', loc='top-left', fontsize=7)
+    add_panel_label(ax1, '(a)', loc='top-right', fontsize=7)
 
     # Panel (b): Derivatives
     ax2 = fig.add_subplot(gs[0, 1])
@@ -147,8 +147,8 @@ def main():
              label="dφ₃/dz")
 
     ax2.set_xlabel('Redshift z', fontsize=7.0)
-    ax2.set_ylabel('Finite difference dφ/dz', fontsize=7.0)
-    ax2.legend(loc='best', fontsize=6.0)
+    ax2.set_ylabel('Derivative dφ/dz', fontsize=7.0)
+    ax2.legend(loc='upper right', fontsize=6.0, framealpha=0.8)
     ax2.grid(alpha=0.2, linewidth=0.3)
     add_panel_label(ax2, '(b)', loc='top-left', fontsize=7)
 
@@ -171,11 +171,10 @@ def main():
     ax3.set_yticks([0, 1, 2])
     ax3.set_xticklabels(['φ₁', 'φ₂', 'φ₃'], fontsize=7.0)
     ax3.set_yticklabels(['φ₁', 'φ₂', 'φ₃'], fontsize=7.0)
-    ax3.set_title('Correlation matrix ρ', fontsize=7.5)
 
     # Colorbar
     cbar = plt.colorbar(im, ax=ax3, fraction=0.046, pad=0.04)
-    cbar.set_label('ρ', fontsize=7.0)
+    cbar.set_label('Correlation ρ', fontsize=7.0)
     cbar.ax.tick_params(labelsize=6.0)
 
     add_panel_label(ax3, '(c)', loc='top-left', fontsize=7)
@@ -184,38 +183,35 @@ def main():
     ax4 = fig.add_subplot(gs[1, 1])
     ax4.axis('off')  # No axes for text box
 
-    # Create text box with metrics
+    # Create compact text box with metrics
     text_lines = [
-        "Identifiability Metrics",
+        "Identifiability",
         "",
-        f"Condition number:",
-        f"  κ = {cond:.2e}",
-        "",
-        f"Max |ρ| (off-diagonal):",
-        f"  {max_corr:.4f}",
-        "",
-        "Status:",
+        f"κ = {cond:.2e}",
+        f"max|ρ| = {max_corr:.4f}",
     ]
 
     if cond > 1e4:
-        text_lines.append("  ⚠ High collinearity")
-        text_lines.append("  Consider orthogonalization")
+        text_lines.append("")
+        text_lines.append("⚠ High collinearity")
     elif cond > 100:
-        text_lines.append("  ⚠ Moderate conditioning")
+        text_lines.append("")
+        text_lines.append("⚠ Moderate")
     else:
-        text_lines.append("  ✓ Well-conditioned")
+        text_lines.append("")
+        text_lines.append("✓ Well-conditioned")
 
     text = "\n".join(text_lines)
 
-    ax4.text(0.1, 0.95, text, transform=ax4.transAxes,
+    ax4.text(0.15, 0.85, text, transform=ax4.transAxes,
              fontsize=6.5, verticalalignment='top',
              family='monospace',
-             bbox=dict(boxstyle='round,pad=0.5',
+             bbox=dict(boxstyle='round,pad=0.4',
                       facecolor='lightgray',
                       edgecolor='black',
-                      linewidth=0.8))
+                      linewidth=0.6))
 
-    add_panel_label(ax4, '(d)', loc='top-left', fontsize=7)
+    add_panel_label(ax4, '(d)', loc='top-right', fontsize=7)
 
     # Adjust layout
     plt.tight_layout()
