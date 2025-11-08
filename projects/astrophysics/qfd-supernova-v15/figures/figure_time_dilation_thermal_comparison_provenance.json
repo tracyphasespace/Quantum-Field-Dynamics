@@ -1,0 +1,25 @@
+{
+  "figure": "figure_time_dilation_thermal_comparison.pdf",
+  "created": "2025-11-08T19:24:29.799173",
+  "software": {
+    "numpy": "2.3.4",
+    "matplotlib": "3.10.7"
+  },
+  "title": "Morphological comparison: Time dilation vs thermal distribution",
+  "description": "Demonstrates similar curve shapes between cosmological time dilation and thermal distributions",
+  "panels": {
+    "a": "Supernova light curves at redshifts z=1 to z=10 showing time dilation",
+    "b": "Planck/Wien thermal distribution at different temperatures"
+  },
+  "key_insight": "Both phenomena produce similar morphological curve families",
+  "parameters": {
+    "redshift_range": [
+      1,
+      10
+    ],
+    "n_curves": 10,
+    "time_peak_rest": 20,
+    "time_width": 10
+  },
+  "git_sha": "04a2cb996b5036ff8bc4e0186dee5726a5a3a7ab"
+}

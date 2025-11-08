@@ -5,7 +5,8 @@
 FIGS = figure_hubble.pdf \
        figure_basis_inference.pdf \
        figure_residuals.pdf \
-       figure_corner.pdf
+       figure_corner.pdf \
+       figure_time_dilation_thermal_comparison.pdf
 
 # Lock files for reproducibility
 LOCKS = environment.lock data.lock
@@ -33,6 +34,11 @@ figure_residuals.pdf: make_residuals.py mnras_style.py $(LOCKS)
 figure_corner.pdf: make_corner.py mnras_style.py $(LOCKS)
 	@echo "=== Building Figure 4: Corner Plot ==="
 	python make_corner.py
+	@echo
+
+figure_time_dilation_thermal_comparison.pdf: make_time_dilation_thermal_comparison.py mnras_style.py
+	@echo "=== Building Figure 5: Time Dilation vs Thermal Comparison ==="
+	python make_time_dilation_thermal_comparison.py
 	@echo
 
 # Generate lock files
