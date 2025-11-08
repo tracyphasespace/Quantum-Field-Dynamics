@@ -1,0 +1,13 @@
+{
+  "generated": "2025-11-08T18:07:49.849421",
+  "python_version": "3.11.14",
+  "git_sha": "793bb828d99fee8881546cfae0bc69c42643101d",
+  "packages": {
+    "numpy": "not installed",
+    "scipy": "not installed",
+    "matplotlib": "not installed",
+    "pandas": "not installed",
+    "jax": "not installed",
+    "numpyro": "not installed"
+  }
+}

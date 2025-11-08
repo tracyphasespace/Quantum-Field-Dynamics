@@ -1,0 +1,14 @@
+{
+  "generated": "2025-11-08T18:07:49.873412",
+  "data_files": {
+    "lightcurves": {
+      "path": "../data/lightcurves_unified_v2_min3.csv",
+      "size": 12485828,
+      "sha256": "81c5901422d0e48f2d98f7dde55ecf013d74ddf2fe052c87f9c91f6b970c9cd1"
+    }
+  },
+  "dataset_metadata": {
+    "n_sne": null,
+    "z_range": null
+  }
+}
