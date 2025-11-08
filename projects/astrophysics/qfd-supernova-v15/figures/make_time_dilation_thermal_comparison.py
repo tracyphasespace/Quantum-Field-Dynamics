@@ -98,10 +98,7 @@ def main():
 
     # Line styles for distinction in grayscale
     linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':', '-', '--']
-    linewidths = [2.0, 2.0, 2.0, 2.5, 2.0, 2.0, 2.0, 2.5, 2.0, 2.0]
-
-    # Markers for additional distinction
-    markers = ['o', 's', '^', 'v', 'D', 'p', '*', 'h', 'x', '+']
+    linewidths = [1.2, 1.0, 1.0, 1.2, 1.0, 1.0, 1.0, 1.2, 1.0, 1.0]
 
     # -------------------------------------------------------------------
     # Panel (a): Supernova Light Curves with Time Dilation
@@ -109,7 +106,7 @@ def main():
     ax1 = fig.add_subplot(gs[0])
 
     # Time array (rest frame) - increased points for smoother curves
-    t_rest = np.linspace(0, 2000, 2000)  # Extended range to show full curves
+    t_rest = np.linspace(0, 200, 2000)  # Match the scale to show full curves
 
     # Generate light curves for z=1 to z=10
     redshifts = np.arange(1, 11)
@@ -124,20 +121,17 @@ def main():
         # Light curve (normalized flux vs observed time)
         flux = supernova_light_curve(t_rest, t_peak=20, width=10, amplitude=1.0)
 
-        # Plot with color + line style + markers for multi-level distinction
+        # Plot with color + line styles (NO markers for clean curves)
         ax1.plot(t_obs, flux,
                 linestyle=linestyles[i],
                 linewidth=linewidths[i],
                 color=colors[i],
                 label=f'$z={z}$',
-                marker=markers[i],
-                markersize=8,
-                markevery=100,  # Show markers periodically
                 alpha=0.9)
 
     ax1.set_xlabel('Time (days)', fontsize=9)
     ax1.set_ylabel('Normalized Flux', fontsize=9)
-    ax1.set_xlim(0, 2100)  # 10x larger to show full curves
+    ax1.set_xlim(0, 200)  # Match scale to show curves properly
     ax1.set_ylim(0, 1.0)   # Adjusted to show full peak
     ax1.tick_params(axis='both', which='major', labelsize=8)
     ax1.grid(alpha=0.2)
@@ -159,7 +153,7 @@ def main():
     ax2 = fig.add_subplot(gs[1])
 
     # Wavelength array (arbitrary units) - increased points for smoother curves
-    wavelength = np.linspace(0.1, 100, 2000)  # Extended range to show full curves
+    wavelength = np.linspace(0.1, 200, 2000)  # Match panel (a) scale: 0-200
 
     # Temperature range (arbitrary units, decreasing T shifts peak right)
     # Use inverse mapping so visual similarity is maximized
@@ -176,14 +170,11 @@ def main():
                 linewidth=linewidths[i],
                 color=colors[i],
                 label=f'$T(z={i+1})$',
-                marker=markers[i],
-                markersize=8,
-                markevery=100,  # Show markers periodically
                 alpha=0.9)
 
     ax2.set_xlabel(r'Wavelength (scaled to days)', fontsize=9)
     ax2.set_ylabel('Normalized Radiance', fontsize=9)
-    ax2.set_xlim(0, 100)   # 10x larger to show full curves
+    ax2.set_xlim(0, 200)   # Match panel (a): 0-200 for visual similarity
     ax2.set_ylim(0, 1.0)
     ax2.tick_params(axis='both', which='major', labelsize=8)
     ax2.grid(alpha=0.2)

@@ -104,15 +104,15 @@ def create_figure_double_column(aspect_ratio=2.0):
     fig = plt.figure(figsize=(width_in, height_in))
     return fig
 
-# Line style definitions (distinguishable in grayscale)
+# Line style definitions (colorful + distinguishable in grayscale)
 LINE_STYLES = {
-    'qfd': {'linestyle': '-', 'linewidth': 1.2, 'color': 'black', 'label': 'QFD'},
-    'lcdm': {'linestyle': '--', 'linewidth': 0.8, 'color': 'gray', 'label': 'ΛCDM'},
-    'data': {'marker': 'o', 'markersize': 3, 'markerfacecolor': 'white',
-             'markeredgecolor': 'black', 'markeredgewidth': 0.4, 'linestyle': 'none'},
-    'basis1': {'linestyle': '-', 'linewidth': 0.8, 'color': 'black'},
-    'basis2': {'linestyle': '--', 'linewidth': 0.8, 'color': 'black'},
-    'basis3': {'linestyle': ':', 'linewidth': 0.8, 'color': 'black'},
+    'qfd': {'linestyle': '-', 'linewidth': 1.5, 'color': '#1f77b4', 'label': 'QFD'},  # Blue
+    'lcdm': {'linestyle': '--', 'linewidth': 1.2, 'color': '#ff7f0e', 'label': 'ΛCDM'},  # Orange
+    'data': {'marker': 'o', 'markersize': 4, 'markerfacecolor': '#2ca02c',  # Green
+             'markeredgecolor': 'black', 'markeredgewidth': 0.5, 'linestyle': 'none'},
+    'basis1': {'linestyle': '-', 'linewidth': 1.0, 'color': '#1f77b4'},  # Blue
+    'basis2': {'linestyle': '--', 'linewidth': 1.0, 'color': '#ff7f0e'},  # Orange
+    'basis3': {'linestyle': ':', 'linewidth': 1.2, 'color': '#2ca02c'},  # Green
 }
 
 def save_figure_with_provenance(fig, filename, provenance_data):

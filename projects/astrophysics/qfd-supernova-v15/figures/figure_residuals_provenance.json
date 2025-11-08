@@ -1,6 +1,6 @@
 {
   "figure": "figure_residuals.pdf",
-  "created": "2025-11-08T18:41:54.696197",
+  "created": "2025-11-08T20:13:25.916369",
   "software": {
     "numpy": "2.3.4",
     "matplotlib": "3.10.7"
@@ -13,5 +13,5 @@
   "anderson_darling_stat": 1.7868931428869246,
   "ks_p_value": 0.0,
   "nuisance_parameter": "\u03b1_obs",
-  "git_sha": "c27edab34b048dceaae3a82a8361e479b48de3cb"
+  "git_sha": "0a7f6e15db815eb3ff2447d2b418e7a460b4d065"
 }
