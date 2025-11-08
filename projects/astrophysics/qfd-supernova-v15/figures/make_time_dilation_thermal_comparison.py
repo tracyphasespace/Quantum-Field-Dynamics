@@ -129,12 +129,12 @@ def main():
                 label=f'$z={z}$',
                 alpha=0.9)
 
-    # Set matching scale: max observed time for z=10 is ~2200 days
-    max_time = 200 * (1 + 10)  # 2200 days
+    # Set scale to 0-100 days
+    max_time = 100
 
     ax1.set_xlabel('Time (days)', fontsize=9)
     ax1.set_ylabel('Normalized Flux', fontsize=9)
-    ax1.set_xlim(0, max_time)  # 0-2200 to show all curves fully
+    ax1.set_xlim(0, max_time)  # 0-100 days
     ax1.set_ylim(0, 1.0)
     ax1.tick_params(axis='both', which='major', labelsize=8)
     ax1.grid(alpha=0.2)
@@ -156,8 +156,8 @@ def main():
     ax2 = fig.add_subplot(gs[1])
 
     # Wavelength array (arbitrary units) - match panel (a) scale
-    max_time = 200 * (1 + 10)  # 2200 days (same as panel a)
-    wavelength = np.linspace(0.1, max_time, 2000)  # 0-2200 to match panel (a)
+    max_time = 100  # Same as panel (a)
+    wavelength = np.linspace(0.1, max_time, 2000)  # 0-100 to match panel (a)
 
     # Temperature range (arbitrary units, decreasing T shifts peak right)
     # Use inverse mapping so visual similarity is maximized
@@ -178,7 +178,7 @@ def main():
 
     ax2.set_xlabel(r'Wavelength (scaled to days)', fontsize=9)
     ax2.set_ylabel('Normalized Radiance', fontsize=9)
-    ax2.set_xlim(0, max_time)   # Match panel (a): 0-2200 for visual similarity
+    ax2.set_xlim(0, max_time)   # Match panel (a): 0-100 for visual similarity
     ax2.set_ylim(0, 1.0)
     ax2.tick_params(axis='both', which='major', labelsize=8)
     ax2.grid(alpha=0.2)
