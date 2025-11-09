@@ -1,6 +1,6 @@
 {
   "figure": "figure_basis_inference.pdf",
-  "created": "2025-11-08T17:12:46.633679",
+  "created": "2025-11-08T18:22:50.756963",
   "software": {
     "numpy": "2.3.2",
     "matplotlib": "3.10.5"
@@ -31,5 +31,5 @@
       1.0
     ]
   ],
-  "git_sha": "4639f37dc3f87013923f3b6de8c50871d62cfd3a"
+  "git_sha": "d6d828e864a4a103dbd2c8c7243d8db558a05b53"
 }

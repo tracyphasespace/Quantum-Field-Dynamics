@@ -110,29 +110,26 @@ def main():
     print(f"Max |ρ|: {max_corr:.4f}")
 
     # Create figure (2×2 grid) - 25% taller for subtitles
-    fig = create_figure_single_column(aspect_ratio=1.375)
-    gs = fig.add_gridspec(2, 2, hspace=0.5, wspace=0.35)
+    # aspect_ratio = width/height, so SMALLER = TALLER
+    fig = create_figure_single_column(aspect_ratio=0.88)
+    gs = fig.add_gridspec(2, 2, hspace=0.55, wspace=0.55)
 
     # Panel (a): Basis functions
     ax1 = fig.add_subplot(gs[0, 0])
 
-    ax1.plot(z_sorted, Phi1, linestyle='-', linewidth=0.8, color='black',
+    ax1.plot(z_sorted, Phi1, linestyle='-', linewidth=0.8, color='#1f77b4',
              label='φ₁ = ln(1+z)')
-    ax1.plot(z_sorted, Phi2, linestyle='--', linewidth=0.8, color='black',
+    ax1.plot(z_sorted, Phi2, linestyle='--', linewidth=0.8, color='#ff7f0e',
              label='φ₂ = z')
-    ax1.plot(z_sorted, Phi3, linestyle=':', linewidth=0.8, color='black',
+    ax1.plot(z_sorted, Phi3, linestyle=':', linewidth=1.0, color='#2ca02c',
              label='φ₃ = z/(1+z)')
 
     ax1.set_xlabel('Redshift z', fontsize=7.0)
     ax1.set_ylabel('Basis value', fontsize=7.0)
     ax1.legend(loc='upper left', fontsize=6.0, framealpha=0.9)
     ax1.grid(alpha=0.2, linewidth=0.3)
-    # Panel label in bottom left
-    ax1.text(0.02, 0.02, '(a)', transform=ax1.transAxes,
-             fontsize=7, verticalalignment='bottom', horizontalalignment='left',
-             fontweight='bold')
     # Subtitle below the panel
-    ax1.text(0.5, -0.22, 'Basis Functions', transform=ax1.transAxes,
+    ax1.text(0.5, -0.32, '(a) Basis Functions', transform=ax1.transAxes,
              fontsize=6.5, verticalalignment='top', horizontalalignment='center')
 
     # Panel (b): Derivatives
@@ -145,23 +142,19 @@ def main():
     dPhi3 = np.diff(Phi3) / dz
     z_mid = (z_sorted[:-1] + z_sorted[1:]) / 2
 
-    ax2.plot(z_mid, dPhi1, linestyle='-', linewidth=0.8, color='black',
+    ax2.plot(z_mid, dPhi1, linestyle='-', linewidth=0.8, color='#1f77b4',
              label="dφ₁/dz")
-    ax2.plot(z_mid, dPhi2, linestyle='--', linewidth=0.8, color='black',
+    ax2.plot(z_mid, dPhi2, linestyle='--', linewidth=0.8, color='#ff7f0e',
              label="dφ₂/dz")
-    ax2.plot(z_mid, dPhi3, linestyle=':', linewidth=0.8, color='black',
+    ax2.plot(z_mid, dPhi3, linestyle=':', linewidth=1.0, color='#2ca02c',
              label="dφ₃/dz")
 
     ax2.set_xlabel('Redshift z', fontsize=7.0)
     ax2.set_ylabel('Finite difference dφ/dz', fontsize=7.0)
     ax2.legend(loc='upper right', fontsize=6.0, framealpha=0.9)
     ax2.grid(alpha=0.2, linewidth=0.3)
-    # Panel label in bottom left
-    ax2.text(0.02, 0.02, '(b)', transform=ax2.transAxes,
-             fontsize=7, verticalalignment='bottom', horizontalalignment='left',
-             fontweight='bold')
     # Subtitle below the panel
-    ax2.text(0.5, -0.22, 'Derivatives', transform=ax2.transAxes,
+    ax2.text(0.5, -0.32, '(b) Derivatives', transform=ax2.transAxes,
              fontsize=6.5, verticalalignment='top', horizontalalignment='center')
 
     # Panel (c): Correlation matrix
@@ -189,12 +182,8 @@ def main():
     cbar.set_label('Correlation ρ', fontsize=7.0)
     cbar.ax.tick_params(labelsize=6.0)
 
-    # Panel label in bottom left
-    ax3.text(0.02, 0.02, '(c)', transform=ax3.transAxes,
-             fontsize=7, verticalalignment='bottom', horizontalalignment='left',
-             fontweight='bold', color='white')
     # Subtitle below the panel
-    ax3.text(0.5, -0.22, 'Correlation Matrix', transform=ax3.transAxes,
+    ax3.text(0.5, -0.20, '(c) Correlation Matrix', transform=ax3.transAxes,
              fontsize=6.5, verticalalignment='top', horizontalalignment='center')
 
     # Panel (d): Identifiability box
@@ -208,7 +197,7 @@ def main():
         f"Condition number:",
         f"  κ = {cond:.2e}",
         "",
-        f"Max |ρ| (off-diagonal):",
+        f"Max|ρ|off-diagonal:",
         f"  {max_corr:.4f}",
         "",
         "Status:",
@@ -229,16 +218,20 @@ def main():
              fontsize=6.5, verticalalignment='center', horizontalalignment='center',
              family='monospace')
 
-    # Panel label in bottom left
-    ax4.text(0.02, 0.02, '(d)', transform=ax4.transAxes,
-             fontsize=7, verticalalignment='bottom', horizontalalignment='left',
-             fontweight='bold')
-    # Subtitle below the panel
-    ax4.text(0.5, -0.22, 'Identifiability Metrics', transform=ax4.transAxes,
+    # Subtitle below the panel (no duplicate label needed)
+    ax4.text(0.5, -0.20, '(d) Identifiability Metrics', transform=ax4.transAxes,
              fontsize=6.5, verticalalignment='top', horizontalalignment='center')
 
     # Adjust layout
     plt.tight_layout()
+
+    # Add separator lines above (a) and (b) subtitles
+    # Get the position of the subtitles in figure coordinates
+    # Line at y position just above the subtitle text
+    fig.add_artist(plt.Line2D([0.12, 0.48], [0.455, 0.455], transform=fig.transFigure,
+                               color='black', linewidth=0.5))
+    fig.add_artist(plt.Line2D([0.52, 0.88], [0.455, 0.455], transform=fig.transFigure,
+                               color='black', linewidth=0.5))
 
     # Save with provenance
     provenance = {
