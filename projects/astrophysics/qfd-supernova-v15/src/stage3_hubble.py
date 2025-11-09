@@ -6,9 +6,10 @@ Converts alpha → distance modulus and creates Hubble diagram comparing QFD to 
 
 Usage:
     python stage3_hubble.py \
-        --stage1-results results/v15_stage1_production \
-        --stage2-results results/v15_stage2_mcmc \
-        --out results/v15_stage3_hubble \
+        --stage1-results results/v15_production/stage1 \
+        --stage2-results results/v15_production/stage2 \
+        --lightcurves data/lightcurves_unified_v2_min3.csv \
+        --out results/v15_production/stage3 \
         --quality-cut 50
 """
 
@@ -51,43 +52,109 @@ def lcdm_distance_modulus(z, H0=70.0, Omega_m=0.3):
     mu = 5 * np.log10(D_L_mpc) + 25
     return mu
 
-def load_stage1_results(stage1_dir, quality_cut=50):
-    """Load and filter Stage 1 results"""
+def load_stage1_results(stage1_dir, lightcurves_dict, quality_cut=50):
+    """Load and filter Stage 1 results (new format: persn_best.npy + metrics.json)"""
     results = []
+    failed = []
+    stage1_path = Path(stage1_dir)
 
-    for result_file in Path(stage1_dir).glob("*.json"):
+    for result_dir in stage1_path.iterdir():
+        if not result_dir.is_dir():
+            continue
+
+        snid = result_dir.name
+        metrics_file = result_dir / "metrics.json"
+        persn_file = result_dir / "persn_best.npy"
+
+        if not metrics_file.exists() or not persn_file.exists():
+            continue
+
         try:
-            with open(result_file) as f:
-                result = json.load(f)
+            # Load metrics
+            with open(metrics_file) as f:
+                metrics = json.load(f)
 
-            # Quality filters
-            if not result.get('ok', False):
+            # Load per-SN parameters
+            persn_best = np.load(persn_file)
+
+            # Get n_obs and z from lightcurve
+            if snid not in lightcurves_dict:
+                failed.append(snid)
                 continue
 
-            n_obs = result['n_obs']
-            chi2_per_obs = result['chi2'] / n_obs if n_obs > 0 else np.inf
+            lc = lightcurves_dict[snid]
+            n_obs = len(lc.mjd)
+            z = lc.z
+
+            # Quality filter
+            chi2 = metrics['chi2']
+            chi2_per_obs = chi2 / n_obs if n_obs > 0 else np.inf
 
             if chi2_per_obs > quality_cut:
+                failed.append(snid)
                 continue
 
-            if result['iters'] < 3:
+            if metrics['iters'] < 3:
+                failed.append(snid)
                 continue
 
+            # Store result with all required fields
+            result = {
+                'snid': snid,
+                'z': z,
+                'chi2': chi2,
+                'n_obs': n_obs,
+                'persn_best': persn_best,  # [L_peak, β, t₀, α]
+                'iters': metrics['iters'],
+                'ok': True
+            }
             results.append(result)
 
-        except Exception:
+        except Exception as e:
+            print(f"  Warning: Failed to load {snid}: {e}")
+            failed.append(snid)
             continue
+
+    print(f"  Loaded {len(results)} good SNe (chi2/obs < {quality_cut})")
+    if failed:
+        print(f"  Excluded {len(failed)} poor fits or missing data")
 
     return results
 
 def load_stage2_results(stage2_dir):
-    """Load Stage 2 MCMC results"""
-    samples_file = Path(stage2_dir) / "samples.json"
+    """Load Stage 2 MCMC results (supports both comprehensive and legacy formats)"""
+    stage2_path = Path(stage2_dir)
 
+    # Try comprehensive summary.json first (new A/B/C format)
+    summary_file = stage2_path / "summary.json"
+    if summary_file.exists():
+        with open(summary_file) as f:
+            samples = json.load(f)
+
+        # Check if it's the comprehensive format
+        if 'physical' in samples:
+            best_params = {
+                'k_J': samples['physical']['k_J']['mean'],
+                'eta_prime': samples['physical']['eta_prime']['mean'],
+                'xi': samples['physical']['xi']['mean']
+            }
+            return best_params, samples
+
+        # Legacy summary.json format with dict
+        elif 'mean' in samples and isinstance(samples['mean'], dict):
+            best_params = {
+                'k_J': samples['mean']['k_J'],
+                'eta_prime': samples['mean']['eta_prime'],
+                'xi': samples['mean']['xi']
+            }
+            return best_params, samples
+
+    # Fall back to samples.json (legacy array format)
+    samples_file = stage2_path / "samples.json"
     with open(samples_file) as f:
         samples = json.load(f)
 
-    # Use mean of posterior
+    # Use mean of posterior (array format)
     best_params = {
         'k_J': samples['mean'][0],
         'eta_prime': samples['mean'][1],
@@ -116,6 +183,8 @@ def main():
                        help='Directory with Stage 1 results')
     parser.add_argument('--stage2-results', required=True,
                        help='Directory with Stage 2 results')
+    parser.add_argument('--lightcurves', required=True,
+                       help='CSV file with lightcurve metadata')
     parser.add_argument('--out', required=True,
                        help='Output directory')
     parser.add_argument('--quality-cut', type=float, default=50,
@@ -132,10 +201,17 @@ def main():
     outdir = Path(args.out)
     outdir.mkdir(parents=True, exist_ok=True)
 
+    # Load lightcurves
+    print("Loading lightcurves...")
+    from v15_data import LightcurveLoader
+    loader = LightcurveLoader(Path(args.lightcurves))
+    lightcurves_dict = loader.load()
+    print(f"  Loaded {len(lightcurves_dict)} lightcurves")
+    print()
+
     # Load Stage 1 results
     print("Loading Stage 1 results...")
-    stage1_results = load_stage1_results(args.stage1_results, args.quality_cut)
-    print(f"  Loaded {len(stage1_results)} quality SNe (chi2/obs < {args.quality_cut})")
+    stage1_results = load_stage1_results(args.stage1_results, lightcurves_dict, args.quality_cut)
     print()
 
     # Load Stage 2 results

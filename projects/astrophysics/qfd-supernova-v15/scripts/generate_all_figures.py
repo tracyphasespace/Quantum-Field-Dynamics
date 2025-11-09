@@ -62,25 +62,17 @@ def figure_corner_plot(stage2_dir, out_path):
     print("FIGURE: Corner Plot (Posterior)")
     print("="*60)
 
-    # Load samples
-    samples_file = Path(stage2_dir) / "samples.json"
-    with open(samples_file, 'r') as f:
-        data = json.load(f)
-
-    # Extract physical parameters
-    params = data['params']
-    samples_array = np.array(data['samples'])
-
-    # Get indices
-    kJ_idx = params.index('k_J')
-    eta_idx = params.index('eta_prime')
-    xi_idx = params.index('xi')
+    # Load samples from .npy files (comprehensive format)
+    stage2_path = Path(stage2_dir)
+    k_J_samples = np.load(stage2_path / "k_J_samples.npy")
+    eta_samples = np.load(stage2_path / "eta_prime_samples.npy")
+    xi_samples = np.load(stage2_path / "xi_samples.npy")
 
     # Create dataframe
     df = pd.DataFrame({
-        'k_J': samples_array[:, kJ_idx],
-        'eta_prime': samples_array[:, eta_idx],
-        'xi': samples_array[:, xi_idx],
+        'k_J': k_J_samples,
+        'eta_prime': eta_samples,
+        'xi': xi_samples,
     })
 
     print(f"Loaded {len(df)} samples")

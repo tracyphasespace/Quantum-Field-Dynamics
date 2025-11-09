@@ -109,9 +109,9 @@ def main():
     print(f"Condition number κ: {cond:.2e}")
     print(f"Max |ρ|: {max_corr:.4f}")
 
-    # Create figure (2×2 grid)
-    fig = create_figure_single_column(aspect_ratio=0.95)
-    gs = fig.add_gridspec(2, 2, hspace=0.35, wspace=0.35)
+    # Create figure (2×2 grid) - 25% taller for subtitles
+    fig = create_figure_single_column(aspect_ratio=1.375)
+    gs = fig.add_gridspec(2, 2, hspace=0.5, wspace=0.35)
 
     # Panel (a): Basis functions
     ax1 = fig.add_subplot(gs[0, 0])
@@ -125,9 +125,15 @@ def main():
 
     ax1.set_xlabel('Redshift z', fontsize=7.0)
     ax1.set_ylabel('Basis value', fontsize=7.0)
-    ax1.legend(loc='best', fontsize=6.0)
+    ax1.legend(loc='upper left', fontsize=6.0, framealpha=0.9)
     ax1.grid(alpha=0.2, linewidth=0.3)
-    add_panel_label(ax1, '(a)', loc='top-left', fontsize=7)
+    # Panel label in bottom left
+    ax1.text(0.02, 0.02, '(a)', transform=ax1.transAxes,
+             fontsize=7, verticalalignment='bottom', horizontalalignment='left',
+             fontweight='bold')
+    # Subtitle below the panel
+    ax1.text(0.5, -0.22, 'Basis Functions', transform=ax1.transAxes,
+             fontsize=6.5, verticalalignment='top', horizontalalignment='center')
 
     # Panel (b): Derivatives
     ax2 = fig.add_subplot(gs[0, 1])
@@ -148,9 +154,15 @@ def main():
 
     ax2.set_xlabel('Redshift z', fontsize=7.0)
     ax2.set_ylabel('Finite difference dφ/dz', fontsize=7.0)
-    ax2.legend(loc='best', fontsize=6.0)
+    ax2.legend(loc='upper right', fontsize=6.0, framealpha=0.9)
     ax2.grid(alpha=0.2, linewidth=0.3)
-    add_panel_label(ax2, '(b)', loc='top-left', fontsize=7)
+    # Panel label in bottom left
+    ax2.text(0.02, 0.02, '(b)', transform=ax2.transAxes,
+             fontsize=7, verticalalignment='bottom', horizontalalignment='left',
+             fontweight='bold')
+    # Subtitle below the panel
+    ax2.text(0.5, -0.22, 'Derivatives', transform=ax2.transAxes,
+             fontsize=6.5, verticalalignment='top', horizontalalignment='center')
 
     # Panel (c): Correlation matrix
     ax3 = fig.add_subplot(gs[1, 0])
@@ -171,14 +183,19 @@ def main():
     ax3.set_yticks([0, 1, 2])
     ax3.set_xticklabels(['φ₁', 'φ₂', 'φ₃'], fontsize=7.0)
     ax3.set_yticklabels(['φ₁', 'φ₂', 'φ₃'], fontsize=7.0)
-    ax3.set_title('Correlation matrix ρ', fontsize=7.5)
 
     # Colorbar
     cbar = plt.colorbar(im, ax=ax3, fraction=0.046, pad=0.04)
-    cbar.set_label('ρ', fontsize=7.0)
+    cbar.set_label('Correlation ρ', fontsize=7.0)
     cbar.ax.tick_params(labelsize=6.0)
 
-    add_panel_label(ax3, '(c)', loc='top-left', fontsize=7)
+    # Panel label in bottom left
+    ax3.text(0.02, 0.02, '(c)', transform=ax3.transAxes,
+             fontsize=7, verticalalignment='bottom', horizontalalignment='left',
+             fontweight='bold', color='white')
+    # Subtitle below the panel
+    ax3.text(0.5, -0.22, 'Correlation Matrix', transform=ax3.transAxes,
+             fontsize=6.5, verticalalignment='top', horizontalalignment='center')
 
     # Panel (d): Identifiability box
     ax4 = fig.add_subplot(gs[1, 1])
@@ -207,15 +224,18 @@ def main():
 
     text = "\n".join(text_lines)
 
-    ax4.text(0.1, 0.95, text, transform=ax4.transAxes,
-             fontsize=6.5, verticalalignment='top',
-             family='monospace',
-             bbox=dict(boxstyle='round,pad=0.5',
-                      facecolor='lightgray',
-                      edgecolor='black',
-                      linewidth=0.8))
+    # Plain text without gray box, centered
+    ax4.text(0.5, 0.55, text, transform=ax4.transAxes,
+             fontsize=6.5, verticalalignment='center', horizontalalignment='center',
+             family='monospace')
 
-    add_panel_label(ax4, '(d)', loc='top-left', fontsize=7)
+    # Panel label in bottom left
+    ax4.text(0.02, 0.02, '(d)', transform=ax4.transAxes,
+             fontsize=7, verticalalignment='bottom', horizontalalignment='left',
+             fontweight='bold')
+    # Subtitle below the panel
+    ax4.text(0.5, -0.22, 'Identifiability Metrics', transform=ax4.transAxes,
+             fontsize=6.5, verticalalignment='top', horizontalalignment='center')
 
     # Adjust layout
     plt.tight_layout()

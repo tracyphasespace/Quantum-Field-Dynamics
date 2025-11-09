@@ -1,23 +1,23 @@
 {
   "figure": "figure_hubble.pdf",
-  "created": "2025-11-08T20:13:10.684607",
+  "created": "2025-11-08T16:59:26.939555",
   "software": {
-    "numpy": "2.3.4",
-    "matplotlib": "3.10.7"
+    "numpy": "2.3.2",
+    "matplotlib": "3.10.5"
   },
   "stage3_dir": "../results/v15_production/stage3",
   "stage2_dir": "../results/v15_production/stage2",
-  "n_sne": 500,
+  "n_sne": 4831,
   "z_range": [
-    0.0568855170955169,
-    0.8113995446572271
+    0.051339,
+    1.498155
   ],
   "best_fit": {
-    "k_J": 10.5,
-    "eta_prime": 0.008,
-    "xi": 6.5
+    "k_J": 10.693676943051221,
+    "eta_prime": -7.969727111026605,
+    "xi": -6.883778024953788
   },
-  "rms_residual": 1.6914083348962732,
+  "rms_residual": 1.892936579313042,
   "nbins": 30,
-  "git_sha": "0a7f6e15db815eb3ff2447d2b418e7a460b4d065"
+  "git_sha": "4639f37dc3f87013923f3b6de8c50871d62cfd3a"
 }

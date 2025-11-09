@@ -164,13 +164,39 @@ def load_stage1_results(stage1_dir, lightcurves_dict, quality_cut=2000):
     return results
 
 def load_stage2_results(stage2_dir):
-    """Load Stage 2 MCMC results"""
-    samples_file = Path(stage2_dir) / "samples.json"
+    """Load Stage 2 MCMC results (supports both comprehensive and legacy formats)"""
+    stage2_path = Path(stage2_dir)
 
+    # Try comprehensive summary.json first (new A/B/C format)
+    summary_file = stage2_path / "summary.json"
+    if summary_file.exists():
+        with open(summary_file) as f:
+            samples = json.load(f)
+
+        # Check if it's the comprehensive format
+        if 'physical' in samples:
+            best_params = {
+                'k_J': samples['physical']['k_J']['mean'],
+                'eta_prime': samples['physical']['eta_prime']['mean'],
+                'xi': samples['physical']['xi']['mean']
+            }
+            return best_params, samples
+
+        # Legacy summary.json format with dict
+        elif 'mean' in samples and isinstance(samples['mean'], dict):
+            best_params = {
+                'k_J': samples['mean']['k_J'],
+                'eta_prime': samples['mean']['eta_prime'],
+                'xi': samples['mean']['xi']
+            }
+            return best_params, samples
+
+    # Fall back to samples.json (legacy array format)
+    samples_file = stage2_path / "samples.json"
     with open(samples_file) as f:
         samples = json.load(f)
 
-    # Use mean of posterior
+    # Use mean of posterior (array format)
     best_params = {
         'k_J': samples['mean'][0],
         'eta_prime': samples['mean'][1],

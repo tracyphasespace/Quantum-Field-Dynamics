@@ -1,9 +1,9 @@
 {
   "figure": "figure_time_dilation_thermal_comparison.pdf",
-  "created": "2025-11-08T21:14:31.360440",
+  "created": "2025-11-08T16:59:33.538821",
   "software": {
-    "numpy": "2.3.4",
-    "matplotlib": "3.10.7"
+    "numpy": "2.3.2",
+    "matplotlib": "3.10.5"
   },
   "title": "Morphological comparison: Time dilation vs blackbody radiation",
   "description": "Demonstrates similar curve shapes between cosmological time dilation and thermal blackbody radiation",
@@ -21,5 +21,5 @@
     "time_peak_rest": 20,
     "time_width": 10
   },
-  "git_sha": "e0910f028b1ffedb7dada7617e76163101914211"
+  "git_sha": "4639f37dc3f87013923f3b6de8c50871d62cfd3a"
 }

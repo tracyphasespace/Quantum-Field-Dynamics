@@ -28,24 +28,43 @@ from mnras_style import (setup_mnras_style, create_figure_double_column,
                          save_figure_with_provenance, add_panel_label)
 
 def load_samples(stage2_dir):
-    """Load MCMC samples."""
-    # Try different sample file formats
-    samples_file = Path(stage2_dir) / "samples.json"
+    """Load MCMC samples from .npy files (most reliable format)."""
+    stage2_path = Path(stage2_dir)
 
+    # Load from individual .npy files (preferred - most reliable)
+    k_J_file = stage2_path / "k_J_samples.npy"
+    if k_J_file.exists():
+        samples = {
+            'k_J': np.load(stage2_path / "k_J_samples.npy"),
+            'eta_prime': np.load(stage2_path / "eta_prime_samples.npy"),
+            'xi': np.load(stage2_path / "xi_samples.npy"),
+        }
+
+        # Optional parameters
+        sigma_file = stage2_path / "sigma_alpha_samples.npy"
+        if sigma_file.exists():
+            samples['sigma_alpha'] = np.load(sigma_file)
+
+        nu_file = stage2_path / "nu_samples.npy"
+        if nu_file.exists():
+            samples['nu'] = np.load(nu_file)
+
+        return samples
+
+    # Fallback: Try JSON format
+    samples_file = stage2_path / "samples.json"
     if samples_file.exists():
         with open(samples_file) as f:
             data = json.load(f)
 
         # Extract arrays
         if 'k_J' in data and isinstance(data['k_J'], list):
-            # Samples are in lists
             samples = {
                 'k_J': np.array(data['k_J']),
                 'eta_prime': np.array(data['eta_prime']),
                 'xi': np.array(data['xi']),
             }
 
-            # Optional parameters
             if 'sigma_alpha' in data:
                 samples['sigma_alpha'] = np.array(data['sigma_alpha'])
             if 'nu' in data:
@@ -54,7 +73,7 @@ def load_samples(stage2_dir):
             return samples
 
     # Try NumPy format
-    npz_file = Path(stage2_dir) / "samples.npz"
+    npz_file = stage2_path / "samples.npz"
     if npz_file.exists():
         data = np.load(npz_file)
         return {key: data[key] for key in data.files}
