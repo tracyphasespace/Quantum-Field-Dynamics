@@ -27,3 +27,15 @@ __pycache__/
 # IDEs
 .vscode/
 .idea/
+
+# Large data files (should never be in git)
+data/DES-SN5YR*/
+*.FITS
+*.FITS.gz
+*.fits
+*.fits.gz
+*.tar.gz
+*.zip
+*_archive_*.tar.gz
+projects.zip
+chart*.png
