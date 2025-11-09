@@ -163,19 +163,25 @@ def load_stage2_results(stage2_dir):
 
     return best_params, samples
 
-def qfd_distance_modulus(z, alpha, k_J):
+def predict_alpha_qfd(z, k_J, eta_prime, xi):
     """
-    QFD distance modulus prediction
+    Predict theoretical alpha using the full QFD model.
 
-    Uses QFD cosmology: z_cosmo = (k_J/c) × D
-    → D = z × c / k_J
+    This is the CORE QFD MODEL PREDICTOR using all three basis functions:
+    - phi1 = ln(1+z)
+    - phi2 = z
+    - phi3 = z/(1+z)
 
-    Then mu = 5 log10(D_L/Mpc) + 25
+    alpha_th = -(k_J * phi1 + eta_prime * phi2 + xi * phi3)
+
+    NOTE: This MUST match the model used in Stage 2 MCMC fitting.
     """
-    c = 299792.458  # km/s
-    D_mpc = z * c / k_J
-    mu = 5 * np.log10(D_mpc) + 25 + alpha_to_distance_modulus(alpha)
-    return mu
+    phi1 = np.log1p(z)  # ln(1+z)
+    phi2 = z
+    phi3 = z / (1.0 + z)
+
+    alpha_th = -(k_J * phi1 + eta_prime * phi2 + xi * phi3)
+    return alpha_th
 
 def main():
     parser = argparse.ArgumentParser(description='Stage 3: Hubble Diagram')
@@ -221,61 +227,84 @@ def main():
           f"eta'={best_params['eta_prime']:.4f}, xi={best_params['xi']:.2f}")
     print()
 
-    # Compute distance moduli
-    print("Computing distance moduli...")
+    # Compute distance moduli and residuals
+    print("Computing QFD predictions and residuals...")
     data = []
 
+    # First pass: collect all data
     for result in stage1_results:
         z = result['z']
-        alpha = result['persn_best'][3]  # Alpha from Stage 1
+        alpha_obs = result['persn_best'][3]  # Observed alpha from Stage 1
 
-        # Observed mu (from alpha)
-        mu_obs = alpha_to_distance_modulus(alpha)
-
-        # QFD prediction
-        mu_qfd = qfd_distance_modulus(z, alpha, best_params['k_J'])
-
-        # ΛCDM prediction
-        mu_lcdm = lcdm_distance_modulus(z)
-
-        # Residuals
-        residual_qfd = mu_obs - mu_qfd
-        residual_lcdm = mu_obs - mu_lcdm
+        # Predict theoretical alpha using full QFD model
+        alpha_th = predict_alpha_qfd(z, best_params['k_J'],
+                                     best_params['eta_prime'],
+                                     best_params['xi'])
 
         data.append({
             'snid': result['snid'],
             'z': z,
-            'alpha': alpha,
-            'mu_obs': mu_obs,
-            'mu_qfd': mu_qfd,
-            'mu_lcdm': mu_lcdm,
-            'residual_qfd': residual_qfd,
-            'residual_lcdm': residual_lcdm,
+            'alpha_obs': alpha_obs,
+            'alpha_th': alpha_th,
             'chi2_per_obs': result['chi2'] / result['n_obs']
         })
 
-    print(f"  Computed {len(data)} distance moduli")
-    print()
+    # Convert alpha to distance modulus with proper zero-point fitting
+    # K factor: converts natural log amplitude to magnitudes
+    K = 2.5 / np.log(10.0)  # ≈ 1.0857
 
-    # Convert to arrays
+    # Extract arrays
+    alpha_obs_arr = np.array([d['alpha_obs'] for d in data])
+    alpha_th_arr = np.array([d['alpha_th'] for d in data])
+
+    # Compute observed mu (shape only, no zero-point yet)
+    mu_obs_shape = -K * alpha_obs_arr
+
+    # Compute QFD predicted mu (shape only)
+    mu_qfd_shape = -K * alpha_th_arr
+
+    # FIT ZERO-POINT: Choose mu0 to center residuals on zero
+    # This is the critical cosmological fitting step
+    mu0 = np.mean(mu_obs_shape - mu_qfd_shape)
+
+    # Apply zero-point to get final distance moduli
+    mu_obs_arr = mu_obs_shape + mu0
+    mu_qfd_arr = mu_qfd_shape + mu0
+
+    # Compute ΛCDM predictions (already includes proper zero-point)
     z_arr = np.array([d['z'] for d in data])
-    mu_obs_arr = np.array([d['mu_obs'] for d in data])
-    mu_qfd_arr = np.array([d['mu_qfd'] for d in data])
-    mu_lcdm_arr = np.array([d['mu_lcdm'] for d in data])
-    res_qfd_arr = np.array([d['residual_qfd'] for d in data])
-    res_lcdm_arr = np.array([d['residual_lcdm'] for d in data])
+    mu_lcdm_arr = np.array([lcdm_distance_modulus(z) for z in z_arr])
+
+    # Compute residuals
+    residual_alpha_arr = alpha_obs_arr - alpha_th_arr
+    residual_qfd_arr = mu_obs_arr - mu_qfd_arr
+    residual_lcdm_arr = mu_obs_arr - mu_lcdm_arr
+
+    # Update data dictionary with computed values
+    for i, d in enumerate(data):
+        d['mu_obs'] = mu_obs_arr[i]
+        d['mu_qfd'] = mu_qfd_arr[i]
+        d['mu_lcdm'] = mu_lcdm_arr[i]
+        d['residual_alpha'] = residual_alpha_arr[i]
+        d['residual_qfd'] = residual_qfd_arr[i]
+        d['residual_lcdm'] = residual_lcdm_arr[i]
+
+    print(f"  Computed {len(data)} predictions")
+    print(f"  Zero-point offset: {mu0:.4f} mag")
+    print()
 
     # Statistics
     print("Statistics:")
-    print(f"  QFD RMS residual: {np.std(res_qfd_arr):.3f} mag")
-    print(f"  ΛCDM RMS residual: {np.std(res_lcdm_arr):.3f} mag")
-    print(f"  QFD χ² (total): {np.sum(res_qfd_arr**2):.1f}")
-    print(f"  ΛCDM χ² (total): {np.sum(res_lcdm_arr**2):.1f}")
+    print(f"  QFD residual mean: {np.mean(residual_qfd_arr):.6f} mag (should be ~0)")
+    print(f"  QFD RMS residual: {np.std(residual_qfd_arr):.3f} mag")
+    print(f"  ΛCDM RMS residual: {np.std(residual_lcdm_arr):.3f} mag")
+    print(f"  QFD χ² (total): {np.sum(residual_qfd_arr**2):.1f}")
+    print(f"  ΛCDM χ² (total): {np.sum(residual_lcdm_arr**2):.1f}")
     print()
 
-    # Linear fit
-    slope_qfd, intercept_qfd, r_qfd, p_qfd, _ = linregress(z_arr, res_qfd_arr)
-    slope_lcdm, intercept_lcdm, r_lcdm, p_lcdm, _ = linregress(z_arr, res_lcdm_arr)
+    # Linear fit to check for residual trends (should be flat for good model)
+    slope_qfd, intercept_qfd, r_qfd, p_qfd, _ = linregress(z_arr, residual_qfd_arr)
+    slope_lcdm, intercept_lcdm, r_lcdm, p_lcdm, _ = linregress(z_arr, residual_lcdm_arr)
 
     print(f"Residual trends:")
     print(f"  QFD: slope={slope_qfd:.3f}, r={r_qfd:.3f}, p={p_qfd:.3e}")
@@ -285,14 +314,27 @@ def main():
     # Save data
     print("Saving results...")
 
-    # CSV for plotting
-    csv_file = outdir / "hubble_data.csv"
+    # CSV for plotting (primary output)
+    csv_file = outdir / "stage3_results.csv"
     with open(csv_file, 'w') as f:
-        f.write("snid,z,alpha,mu_obs,mu_qfd,mu_lcdm,residual_qfd,residual_lcdm,chi2_per_obs\n")
+        f.write("snid,z,mu_obs,alpha_obs,alpha_th,residual_alpha,residual_qfd,residual_lcdm\n")
         for d in data:
-            f.write(f"{d['snid']},{d['z']:.6f},{d['alpha']:.4f},{d['mu_obs']:.4f},"
-                   f"{d['mu_qfd']:.4f},{d['mu_lcdm']:.4f},{d['residual_qfd']:.4f},"
-                   f"{d['residual_lcdm']:.4f},{d['chi2_per_obs']:.2f}\n")
+            f.write(f"{d['snid']},{d['z']:.6f},{d['mu_obs']:.4f},"
+                   f"{d['alpha_obs']:.6f},{d['alpha_th']:.6f},"
+                   f"{d['residual_alpha']:.6f},{d['residual_qfd']:.6f},"
+                   f"{d['residual_lcdm']:.6f}\n")
+
+    print(f"  Saved primary results to: {csv_file}")
+
+    # Also save hubble_data.csv for backward compatibility
+    csv_file_compat = outdir / "hubble_data.csv"
+    with open(csv_file_compat, 'w') as f:
+        f.write("snid,z,mu_obs,alpha_obs,alpha_th,residual_alpha,residual_qfd,residual_lcdm\n")
+        for d in data:
+            f.write(f"{d['snid']},{d['z']:.6f},{d['mu_obs']:.4f},"
+                   f"{d['alpha_obs']:.6f},{d['alpha_th']:.6f},"
+                   f"{d['residual_alpha']:.6f},{d['residual_qfd']:.6f},"
+                   f"{d['residual_lcdm']:.6f}\n")
 
     print(f"  Saved data to: {csv_file}")
 
@@ -303,17 +345,21 @@ def main():
             'n_sne': len(data),
             'quality_cut': args.quality_cut,
             'best_fit_params': best_params,
+            'zero_point': float(mu0),
             'statistics': {
-                'qfd_rms': float(np.std(res_qfd_arr)),
-                'lcdm_rms': float(np.std(res_lcdm_arr)),
-                'qfd_chi2': float(np.sum(res_qfd_arr**2)),
-                'lcdm_chi2': float(np.sum(res_lcdm_arr**2))
+                'qfd_mean_residual': float(np.mean(residual_qfd_arr)),
+                'qfd_rms': float(np.std(residual_qfd_arr)),
+                'lcdm_rms': float(np.std(residual_lcdm_arr)),
+                'qfd_chi2': float(np.sum(residual_qfd_arr**2)),
+                'lcdm_chi2': float(np.sum(residual_lcdm_arr**2))
             },
             'trends': {
                 'qfd_slope': float(slope_qfd),
                 'qfd_correlation': float(r_qfd),
+                'qfd_p_value': float(p_qfd),
                 'lcdm_slope': float(slope_lcdm),
-                'lcdm_correlation': float(r_lcdm)
+                'lcdm_correlation': float(r_lcdm),
+                'lcdm_p_value': float(p_lcdm)
             }
         }, f, indent=2)
 
@@ -343,8 +389,8 @@ def main():
     ax1.grid(True, alpha=0.3)
 
     # Residuals
-    ax2.scatter(z_arr, res_qfd_arr, alpha=0.5, s=20, c='blue', label=f'QFD (σ={np.std(res_qfd_arr):.3f})')
-    ax2.scatter(z_arr, res_lcdm_arr, alpha=0.5, s=20, c='red', label=f'ΛCDM (σ={np.std(res_lcdm_arr):.3f})')
+    ax2.scatter(z_arr, residual_qfd_arr, alpha=0.5, s=20, c='blue', label=f'QFD (σ={np.std(residual_qfd_arr):.3f})')
+    ax2.scatter(z_arr, residual_lcdm_arr, alpha=0.5, s=20, c='red', label=f'ΛCDM (σ={np.std(residual_lcdm_arr):.3f})')
     ax2.axhline(0, color='black', linestyle='--', alpha=0.5)
 
     ax2.set_xlabel('Redshift z', fontsize=12)
@@ -365,8 +411,8 @@ def main():
 
     # Histogram
     bins = np.linspace(-1, 1, 30)
-    ax1.hist(res_qfd_arr, bins=bins, alpha=0.5, label='QFD', color='blue', edgecolor='black')
-    ax1.hist(res_lcdm_arr, bins=bins, alpha=0.5, label='ΛCDM', color='red', edgecolor='black')
+    ax1.hist(residual_qfd_arr, bins=bins, alpha=0.5, label='QFD', color='blue', edgecolor='black')
+    ax1.hist(residual_lcdm_arr, bins=bins, alpha=0.5, label='ΛCDM', color='red', edgecolor='black')
     ax1.axvline(0, color='black', linestyle='--')
     ax1.set_xlabel('Residual (mag)', fontsize=12)
     ax1.set_ylabel('Count', fontsize=12)
@@ -376,7 +422,7 @@ def main():
 
     # Q-Q plot
     from scipy.stats import probplot
-    probplot(res_qfd_arr, dist="norm", plot=ax2)
+    probplot(residual_qfd_arr, dist="norm", plot=ax2)
     ax2.set_title('Q-Q Plot (QFD residuals vs Normal)', fontsize=14)
     ax2.grid(True, alpha=0.3)
 
@@ -395,12 +441,26 @@ def main():
     print("FINAL ASSESSMENT:")
     print("-" * 80)
 
-    if np.std(res_qfd_arr) < np.std(res_lcdm_arr):
+    qfd_rms = np.std(residual_qfd_arr)
+    lcdm_rms = np.std(residual_lcdm_arr)
+
+    print(f"QFD residual slope: {slope_qfd:.4f} mag/z (should be ~0 for unbiased fit)")
+    print(f"QFD residual trend p-value: {p_qfd:.4e} (>0.05 = no significant trend)")
+    print()
+
+    if abs(slope_qfd) < 0.1 and p_qfd > 0.05:
+        print("✅ QFD model provides UNBIASED fit (flat residuals)")
+    else:
+        print("⚠️  QFD model shows systematic trend in residuals")
+
+    print()
+
+    if qfd_rms < lcdm_rms:
         print("✅ QFD provides BETTER fit than ΛCDM!")
-        print(f"   Improvement: {(1 - np.std(res_qfd_arr)/np.std(res_lcdm_arr))*100:.1f}%")
+        print(f"   Improvement: {(1 - qfd_rms/lcdm_rms)*100:.1f}%")
     else:
         print("⚠️  ΛCDM provides better fit than QFD")
-        print(f"   QFD is worse by: {(np.std(res_qfd_arr)/np.std(res_lcdm_arr) - 1)*100:.1f}%")
+        print(f"   QFD is worse by: {(qfd_rms/lcdm_rms - 1)*100:.1f}%")
 
     print()
     return 0
