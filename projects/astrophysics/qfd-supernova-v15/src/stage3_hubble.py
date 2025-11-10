@@ -136,7 +136,8 @@ def load_stage2_results(stage2_dir):
             best_params = {
                 'k_J': samples['physical']['k_J']['mean'],
                 'eta_prime': samples['physical']['eta_prime']['mean'],
-                'xi': samples['physical']['xi']['mean']
+                'xi': samples['physical']['xi']['mean'],
+                'alpha0': samples['physical']['alpha0']['mean']
             }
             return best_params, samples
 
@@ -163,7 +164,7 @@ def load_stage2_results(stage2_dir):
 
     return best_params, samples
 
-def predict_alpha_qfd(z, k_J, eta_prime, xi):
+def predict_alpha_qfd(z, k_J, eta_prime, xi, alpha0):
     """
     Predict theoretical alpha using the full QFD model.
 
@@ -172,7 +173,9 @@ def predict_alpha_qfd(z, k_J, eta_prime, xi):
     - phi2 = z
     - phi3 = z/(1+z)
 
-    alpha_th = -(k_J * phi1 + eta_prime * phi2 + xi * phi3)
+    alpha_th = -(k_J * phi1 + eta_prime * phi2 + xi * phi3) + alpha0
+
+    where alpha0 is the zero-point offset from MCMC fitting.
 
     NOTE: This MUST match the model used in Stage 2 MCMC fitting.
     """
@@ -180,7 +183,7 @@ def predict_alpha_qfd(z, k_J, eta_prime, xi):
     phi2 = z
     phi3 = z / (1.0 + z)
 
-    alpha_th = -(k_J * phi1 + eta_prime * phi2 + xi * phi3)
+    alpha_th = alpha0 - (k_J * phi1 + eta_prime * phi2 + xi * phi3)
     return alpha_th
 
 def main():
@@ -239,7 +242,8 @@ def main():
         # Predict theoretical alpha using full QFD model
         alpha_th = predict_alpha_qfd(z, best_params['k_J'],
                                      best_params['eta_prime'],
-                                     best_params['xi'])
+                                     best_params['xi'],
+                                     best_params['alpha0'])
 
         data.append({
             'snid': result['snid'],
@@ -265,10 +269,16 @@ def main():
 
     # FIT ZERO-POINT: Choose mu0 to center residuals on zero
     # This is the critical cosmological fitting step
+    #
+    # The zero-point mu0 is the mean offset between observations and predictions.
+    # We shift the QFD predictions to match the observed zero-point (not both curves).
+    # This ensures residuals are centered on zero by construction.
     mu0 = np.mean(mu_obs_shape - mu_qfd_shape)
 
-    # Apply zero-point to get final distance moduli
-    mu_obs_arr = mu_obs_shape + mu0
+    # Apply zero-point correction:
+    # - Keep observations as-is (they define the reference zero-point)
+    # - Shift QFD predictions to match observations
+    mu_obs_arr = mu_obs_shape
     mu_qfd_arr = mu_qfd_shape + mu0
 
     # Compute ΛCDM predictions (already includes proper zero-point)
