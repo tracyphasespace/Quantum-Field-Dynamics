@@ -411,7 +411,7 @@ def numpyro_model_ln_A_space(Phi, ln_A_obs_batch, *,
         # Therefore: ci = -k_i * scale_i
         means = jnp.array(standardizer.means)
         scales = jnp.array(standardizer.scales)
-        c = jnp.array([k_J, eta_prime, xi]) * scales  # FIXED: removed incorrect negative sign
+        c = -jnp.array([k_J, eta_prime, xi]) * scales  # CRITICAL: negative sign!
 
         # Deterministic tracking of standardized coefficients
         numpyro.deterministic('c', c)
@@ -421,7 +421,7 @@ def numpyro_model_ln_A_space(Phi, ln_A_obs_batch, *,
 
         # Convert to standardized-space offset
         # ln_A0_std = ln_A0_phys - (k_J*m1 + eta'*m2 + xi*m3)
-        ln_A0_std = ln_A0_phys + jnp.dot(c, means / scales)
+        ln_A0_std = ln_A0_phys - jnp.dot(jnp.array([k_J, eta_prime, xi]), means)
 
     elif constrain_signs == 'physics':
         # Variant B: Physics-space with positivity constraints
@@ -436,7 +436,7 @@ def numpyro_model_ln_A_space(Phi, ln_A_obs_batch, *,
         # Convert to standardized space: c = -k_phys * scales
         means = jnp.array(standardizer.means)
         scales = jnp.array(standardizer.scales)
-        c = jnp.array([k_J, eta_prime, xi]) * scales  # FIXED: removed incorrect negative sign
+        c = -jnp.array([k_J, eta_prime, xi]) * scales  # CRITICAL: negative sign!
 
         # Deterministic tracking of standardized coefficients
         numpyro.deterministic('c', c)
@@ -445,7 +445,7 @@ def numpyro_model_ln_A_space(Phi, ln_A_obs_batch, *,
         ln_A0_phys = numpyro.sample('ln_A0', dist.Normal(0.0, 5.0))
 
         # Convert to standardized-space offset
-        ln_A0_std = ln_A0_phys + jnp.dot(c, means / scales)
+        ln_A0_std = ln_A0_phys - jnp.dot(jnp.array([k_J, eta_prime, xi]), means)
 
     elif constrain_signs == 'alpha':
         # Variant A: Force standardized weights c ≤ 0
