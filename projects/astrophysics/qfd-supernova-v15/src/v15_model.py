@@ -450,36 +450,35 @@ def compute_bbh_gravitational_redshift(
 def qfd_lightcurve_model_jax(
     obs: jnp.ndarray,  # [t_obs, wavelength_obs]
     global_params: Tuple[float, float, float],  # (k_J, eta_prime, xi)
-    persn_params: Tuple[float, float, float, float],  # V15: 4 params (t0, alpha, A_plasma, beta)
+    persn_params: Tuple[float, float, float, float, float],  # V16: 5 params (restored BBH)
     L_peak: float, # L_peak is now a fixed parameter
     z_obs: float,
 ) -> float:
     """
-    V15: Pure QFD Cosmology (BBH handled via mixture model in Stage 2)
+    V16: Pure QFD Cosmology with BBH physics RESTORED
 
     Computes predicted flux for a single observation:
     1. NO ΛCDM (1+z) factors: Pure QFD cosmology
-    2. BBH effects handled via mixture model (not per-SN parameters)
+    2. BBH effects RESTORED per PHYSICS_AUDIT.md
 
     Args:
         obs: [t_obs (MJD), wavelength_obs (nm)]
         global_params: (k_J, eta_prime, xi) - QFD fundamental physics
-        persn_params: (t0, alpha, A_plasma, beta) - per-SN parameters
+        persn_params: (t0, alpha, A_plasma, beta, A_lens) - per-SN parameters
             - t0: Phase/origin (MJD)
             - alpha: Overall amplitude/normalization (log-space)
             - A_plasma: Plasma veil amplitude
             - beta: Wavelength slope of veil
+            - A_lens: BBH lensing amplitude (RESTORED)
         L_peak: Peak luminosity (erg/s) - now a fixed parameter
 
     Returns:
         Predicted flux in Jy
 
-    Note: BBH per-SN parameters (P_orb, phi_0, A_lens) removed per cloud.txt.
-          BBH population effects should be handled via mixture model in Stage 2.
+    Note: BBH physics RESTORED per PHYSICS_AUDIT.md recommendations.
     """
     k_J, eta_prime, xi = global_params
-    t0, alpha, A_plasma, beta = persn_params
-    A_lens = 0.0  # BBH lensing removed from per-SN parameters
+    t0, alpha, A_plasma, beta, A_lens = persn_params
     t_obs, wavelength_obs = obs
 
     # Time since explosion (observer frame and rest frame)
@@ -569,29 +568,27 @@ def qfd_lightcurve_model_jax(
 def qfd_lightcurve_model_jax_static_lens(
     obs: jnp.ndarray,  # [t_obs, wavelength_obs]
     global_params: Tuple[float, float, float],  # (k_J, eta_prime, xi)
-    persn_params: Tuple[float, float, float, float, float],  # V15: 5 params
+    persn_params: Tuple[float, float, float, float, float, float],  # V16: 6 params (restored BBH)
     z_obs: float,
 ) -> float:
     """
-    V15: Pure QFD Cosmology (BBH handled via mixture model)
+    V16: Pure QFD Cosmology with BBH physics RESTORED
 
-    DEPRECATED: This function kept for backward compatibility but BBH effects
-    should be handled via mixture model in Stage 2, not per-SN parameters.
+    BBH physics re-enabled after audit findings showed it was disabled.
 
     Args:
         obs: [t_obs (MJD), wavelength_obs (nm)]
         global_params: (k_J, eta_prime, xi) - QFD fundamental physics
-        persn_params: (t0, alpha, A_plasma, beta, L_peak)
+        persn_params: (t0, alpha, A_plasma, beta, L_peak, A_lens)
         z_obs: Observed heliocentric redshift
 
     Returns:
         Predicted flux in Jy
 
-    Note: A_lens_static removed per cloud.txt specification.
+    Note: A_lens restored per PHYSICS_AUDIT.md recommendations.
     """
     k_J, eta_prime, xi = global_params
-    t0, alpha, A_plasma, beta, L_peak = persn_params
-    A_lens_static = 0.0  # BBH lensing removed from per-SN parameters
+    t0, alpha, A_plasma, beta, L_peak, A_lens = persn_params
     t_obs, wavelength_obs = obs
 
     # Time since explosion (observer frame and rest frame)
@@ -606,7 +603,7 @@ def qfd_lightcurve_model_jax_static_lens(
 
     # Plasma veil redshift
     z_plasma = qfd_plasma_redshift_jax(t_since_explosion, wavelength_obs, A_plasma, beta)
-    z_bbh = compute_bbh_gravitational_redshift(t_rest, A_lens_static)
+    z_bbh = compute_bbh_gravitational_redshift(t_rest, A_lens)
 
     # Total redshift (multiplicative composition)
     z_total = (1.0 + z_cosmo) * (1.0 + z_plasma) * (1.0 + z_bbh) - 1.0
@@ -652,12 +649,13 @@ def qfd_lightcurve_model_jax_static_lens(
     flux_nu = flux_lambda_obs * (wavelength_obs * 1e-7) ** 2 / C_CM_S
     flux_jy_intrinsic = flux_nu / 1e-23
 
-    # V15-Revised: Apply STATIC BBH demagnification
-    # μ_static = 1 + A_lens_static
-    # A_lens_static < 0 → demagnification (fainter, appears more distant)
-    # A_lens_static > 0 → magnification (brighter, appears closer)
-    mu_static = 1.0 + A_lens_static
-    flux_jy = mu_static * flux_jy_intrinsic
+    # V16-Restored: Apply TIME-VARYING BBH magnification
+    # μ(t) = 1 + A_lens * cos(2π * (t - t₀) / P_orb)
+    # A_lens < 0 → net demagnification (fainter, appears more distant)
+    # A_lens > 0 → net magnification (brighter, appears closer)
+    # Time-varying component explains night-to-night flux variations
+    mu_bbh = compute_bbh_magnification(t_obs, t0, A_lens)
+    flux_jy = mu_bbh * flux_jy_intrinsic
 
     return flux_jy
 
@@ -669,19 +667,19 @@ def qfd_lightcurve_model_jax_static_lens(
 @jit
 def chi2_single_sn_jax(
     global_params: Tuple[float, float, float],  # (k_J, eta_prime, xi)
-    persn_params: Tuple[float, float, float, float],  # V15: 4 params
+    persn_params: Tuple[float, float, float, float, float],  # V16: 5 params (restored BBH)
     L_peak: float, # L_peak is now a fixed parameter
     photometry: jnp.ndarray,  # [N_obs, 4]: mjd, wavelength_nm, flux_jy, flux_jy_err
     z_obs: float,
 ) -> float:
     """
-    V15 Chi-squared for a single supernova.
+    V16 Chi-squared for a single supernova with BBH physics RESTORED.
 
     χ² = Σ [(flux_obs - flux_model) / σ]²
 
     Args:
         global_params: (k_J, eta_prime, xi) - QFD fundamental physics
-        persn_params: (t0, alpha, A_plasma, beta) - per-SN parameters (4 total)
+        persn_params: (t0, alpha, A_plasma, beta, A_lens) - per-SN parameters (5 total)
         L_peak: Peak luminosity (erg/s) - now a fixed parameter
         photometry: [N_obs, 4] array with [mjd, wavelength_nm, flux_jy, flux_jy_err]
         z_obs: Observed heliocentric redshift
@@ -689,7 +687,7 @@ def chi2_single_sn_jax(
     Returns:
         Chi-squared value
 
-    Note: BBH per-SN parameters removed per cloud.txt specification.
+    Note: BBH physics RESTORED per PHYSICS_AUDIT.md recommendations.
     """
     # Vectorize over observations
     model_fluxes = vmap(qfd_lightcurve_model_jax, in_axes=(0, None, None, None, None))(
@@ -705,17 +703,17 @@ def chi2_single_sn_jax(
 @jit
 def log_likelihood_single_sn_jax(
     global_params: Tuple[float, float, float],
-    persn_params: Tuple[float, float, float, float],  # V15: 4 params
+    persn_params: Tuple[float, float, float, float, float],  # V16: 5 params (restored BBH)
     L_peak: float,
     photometry: jnp.ndarray,
     z_obs: float,
 ) -> float:
     """
-    V15 log-likelihood for a single supernova (Gaussian errors).
+    V16 log-likelihood for a single supernova with BBH physics RESTORED.
 
     Args:
         global_params: (k_J, eta_prime, xi) - QFD fundamental physics
-        persn_params: (t0, alpha, A_plasma, beta) - per-SN parameters (4 total)
+        persn_params: (t0, alpha, A_plasma, beta, A_lens) - per-SN parameters (5 total)
         L_peak: Peak luminosity (erg/s) - now a fixed parameter
         photometry: [N_obs, 4] array with [mjd, wavelength_nm, flux_jy, flux_jy_err]
         z_obs: Observed heliocentric redshift
@@ -723,7 +721,7 @@ def log_likelihood_single_sn_jax(
     Returns:
         Log-likelihood value
 
-    Note: BBH per-SN parameters removed per cloud.txt specification.
+    Note: BBH physics RESTORED per PHYSICS_AUDIT.md recommendations.
     """
     chi2 = chi2_single_sn_jax(global_params, persn_params, L_peak, photometry, z_obs)
     return -0.5 * chi2
