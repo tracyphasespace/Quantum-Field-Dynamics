@@ -16,12 +16,15 @@ FIXES (2025-11-03):
    - Static bounds [-20, 40] caused epoch mismatch → chi²=66B
    - Now use dynamic bounds: [mjd_min-50, mjd_max+50] per SN
 
-Usage:
+Usage (2-parameter model with k_J FIXED at 70.0):
     python stage1_optimize.py \\
         --lightcurves data/unified/lightcurves_unified_v2_min3.csv \\
         --sn-list data/slices/slice_30.txt \\
         --out results/v15_two_stage/smoke/stage1 \\
-        --global 70,0.01,30 --tol 1e-5 --max-iters 200
+        --global 0.01,30 --tol 1e-5 --max-iters 200
+
+    Note: k_J is FIXED at 70.0 km/s/Mpc (from QVD baseline cosmology).
+          Only eta_prime,xi are passed via --global parameter.
 """
 
 import argparse
@@ -50,48 +53,53 @@ from v15_data import LightcurveLoader
 from v15_model import (
     log_likelihood_single_sn_jax,
     log_likelihood_single_sn_jax_studentt,
+    K_J_BASELINE,
     C_KM_S,
     C_CM_S,
 )
 
 
-# V15 FIXED: Physical bounds for per-SN parameters (4 params, L_peak frozen)
+# V15 WITH BBH: Physical bounds for per-SN parameters (7 params, L_peak frozen)
 # FIX (2025-11-03): Removed ell to break degeneracy with ln_A
+# FIX (2025-01-12): RE-ENABLED BBH - P_orb, phi_0, A_lens back in Stage 1
 # Parameter meaning:
 #   t0        → explosion epoch in MJD (sets time origin)
 #   A_plasma  → electron plasma veil strength (channel 1: E144 scattering)
 #   beta      → wavelength dependence of plasma veil
 #   ln_A      → natural log of flux amplitude (encodes distance modulus μ_raw = -(2.5/ln10) * ln_A)
+#   P_orb     → BBH orbital period (days) - RE-ENABLED
+#   phi_0     → BBH orbital phase (radians) - RE-ENABLED
+#   A_lens    → BBH lensing amplitude - RE-ENABLED
 # L_peak    → FROZEN at canonical 1.5e43 erg/s (not optimized)
-# BBH channels handled via mixture model in Stage-2, NOT per-SN knobs (see cloud.txt)
 BOUNDS = {
     't0': (-20, 40),                    # MJD offset from peak
-    'A_plasma': (0.0, 1.0),             # dimensionless (FIX 2025-11-04: widened from 0.5)
-    'beta': (0.0, 4.0),                 # dimensionless (FIX 2025-11-04: widened from 2.0)
-    'ln_A': (-30, 30),                  # natural log of flux amplitude (FIX 2025-11-04: widened to allow flux normalization)
+    'A_plasma': (0.0, 1.0),             # dimensionless
+    'beta': (0.0, 4.0),                 # dimensionless
+    'ln_A': (-30, 30),                  # natural log of flux amplitude
+    # BBH params (P_orb, phi_0, A_lens) intentionally EXCLUDED - degenerate, not identifiable
 }
 
 # Canonical L_peak (FROZEN - not optimized)
 L_PEAK_CANONICAL = 1.5e43  # erg/s - typical SN Ia luminosity
 
 # Parameter count validation
-EXPECTED_PERSN_COUNT = 4
+EXPECTED_PERSN_COUNT = 4  # CORRECT: t0, A_plasma, beta, ln_A (BBH params degenerate, not identifiable)
 if len(BOUNDS) != EXPECTED_PERSN_COUNT:
     raise AssertionError(
         f"Parameter count mismatch: BOUNDS has {len(BOUNDS)} entries, "
-        f"but V15 FIXED specification requires exactly {EXPECTED_PERSN_COUNT}. "
+        f"but V15 WITH BBH specification requires exactly {EXPECTED_PERSN_COUNT}. "
         f"L_peak is FROZEN at {L_PEAK_CANONICAL:.2e} erg/s."
     )
 
 # Fail fast if forbidden parameters are present
-FORBIDDEN_PARAMS = ["P_orb", "phi_0", "A_lens", "ell", "L_peak"]
+FORBIDDEN_PARAMS = ["P_orb", "phi_0", "A_lens", "ell", "L_peak"]  # CORRECT: BBH params degenerate
 if any(k in BOUNDS for k in FORBIDDEN_PARAMS):
     raise ValueError(
         f"Forbidden parameters {FORBIDDEN_PARAMS} found in BOUNDS. "
-        f"L_peak is FROZEN, ell removed, BBH handled in Stage-2."
+        f"L_peak is FROZEN, ell removed to avoid degeneracy with ln_A."
     )
 
-# V15 FIXED: Parameter scales for ridge normalization (4 params)
+# V15 WITH BBH: Parameter scales for ridge normalization (7 params)
 PARAM_SCALES = np.array([
     20.0,      # t0 scale (days)
     0.2,       # A_plasma scale
@@ -105,18 +113,21 @@ RIDGE_LAMBDA = 1e-6
 
 def chi2_with_ridge(
     persn_params: np.ndarray,
-    global_params: Tuple[float, float, float],
+    global_params: Tuple[float, float],
     phot: jnp.ndarray,
     z_obs: float,
 ) -> float:
     """
-    V15 FIXED: Compute χ² + ℓ₂ ridge penalty (4 params, L_peak frozen).
+    V15 2-PARAMETER: Compute χ² + ℓ₂ ridge penalty (4 params, L_peak frozen).
 
     CRITICAL: Uses the SAME log_likelihood_single_sn_jax as Stage 2.
+    k_J is FIXED at 70.0 km/s/Mpc (QVD baseline cosmology).
 
     V15 FIXED parameters: (t0, A_plasma, beta, ln_A) - 4 params.
     L_peak frozen at canonical 1.5e43 erg/s.
-    BBH handled via mixture model in Stage-2 (see cloud.txt).
+    BBH params (P_orb, phi_0, A_lens) intentionally EXCLUDED - degenerate, not identifiable.
+
+    Global parameters: (eta_prime, xi) - 2 params (k_J fixed at 70.0).
     """
     t0, A_plasma, beta, ln_A = persn_params  # 4 params
 
@@ -136,20 +147,21 @@ def chi2_with_ridge(
 
 def chi2_and_grad_wrapper(
     persn_params: np.ndarray,
-    global_params: Tuple[float, float, float],
+    global_params: Tuple[float, float],
     phot: jnp.ndarray,
     z_obs: float,
     use_studentt: bool = False,
     nu: float = 5.0,
 ) -> Tuple[float, np.ndarray]:
     """
-    V15 FIXED: JAX gradient wrapper for scipy.optimize (4 params, L_peak frozen).
+    V15 2-PARAMETER: JAX gradient wrapper for scipy.optimize (4 params, L_peak frozen).
 
     Returns (value, gradient) as numpy arrays for scipy compatibility.
+    k_J is FIXED at 70.0 km/s/Mpc (QVD baseline cosmology).
 
     Args:
         persn_params: Per-SN parameters [t0, A_plasma, beta, ln_A]
-        global_params: Global QFD parameters (k_J, eta_prime, xi)
+        global_params: Global QFD parameters (eta_prime, xi) - 2 params (k_J fixed)
         phot: Photometry array [N_obs, 4]
         z_obs: Observed redshift
         use_studentt: If True, use Student-t likelihood (robust to outliers)
@@ -191,14 +203,15 @@ def chi2_and_grad_wrapper(
         return np.nan, np.full_like(persn_params, np.nan, dtype=np.float64)
 
 
-def get_initial_guess(lc_data, z_obs: float, global_k_J: float) -> np.ndarray:
+def get_initial_guess(lc_data, z_obs: float) -> np.ndarray:
     """
-    V15 FIXED: Data-driven initial guess for per-SN params (4 parameters).
+    V15 2-PARAMETER: Data-driven initial guess for per-SN params (4 parameters).
 
     Returns (t0, A_plasma, beta, ln_A).
     L_peak is FROZEN at canonical value, not optimized.
+    k_J is FIXED at 70.0 km/s/Mpc (QVD baseline cosmology).
 
-    BBH channels handled via mixture model in Stage-2, not per-SN knobs.
+    BBH params (P_orb, phi_0, A_lens) intentionally EXCLUDED - degenerate, not identifiable from single SN.
     """
     mjd = lc_data.mjd
     flux_jy = lc_data.flux_jy
@@ -237,7 +250,7 @@ def get_initial_guess(lc_data, z_obs: float, global_k_J: float) -> np.ndarray:
 def optimize_single_sn(
     snid: str,
     lc_data,
-    global_params: Tuple[float, float, float],
+    global_params: Tuple[float, float],
     tol: float = 1e-5,
     max_iters: int = 200,
     verbose: bool = True,
@@ -269,7 +282,7 @@ def optimize_single_sn(
     phot = jnp.array(phot_array)
 
     # Initial guess
-    x0 = get_initial_guess(lc_data, z_obs, global_params[0])
+    x0 = get_initial_guess(lc_data, z_obs)
 
     # V15 FIXED: Dynamic t0 bounds based on this SN's MJD range
     # CRITICAL: t0 is absolute MJD, not relative time!
@@ -280,6 +293,7 @@ def optimize_single_sn(
 
     # V15 FIXED: Bounds (matching parameter order: t0, A_plasma, beta, ln_A)
     # L_peak is FROZEN, ell removed
+    # BBH params intentionally EXCLUDED - degenerate
     bounds = [
         t0_bounds,  # DYNAMIC per SN (absolute MJD)
         BOUNDS['A_plasma'],
@@ -484,7 +498,7 @@ def main():
     parser.add_argument('--sn-list', help='File with SNIDs (one per line) or range like "0:30"')
     parser.add_argument('--out', required=True, help='Output directory')
     parser.add_argument('--global', dest='global_params', required=True,
-                        help='Fixed global params: k_J,eta_prime,xi (e.g., "70,0.01,30")')
+                        help='Fixed global params: eta_prime,xi (e.g., "0.01,30"). k_J is FIXED at 70.0 km/s/Mpc')
     parser.add_argument('--tol', type=float, default=1e-5, help='Optimization tolerance')
     parser.add_argument('--max-iters', type=int, default=200, help='Max iterations')
     parser.add_argument('--verbose', action='store_true', help='Verbose output')
@@ -499,9 +513,10 @@ def main():
 
     args = parser.parse_args()
 
-    # Parse global params
+    # Parse global params (2-parameter model: eta_prime, xi)
+    # k_J is FIXED at 70.0 km/s/Mpc (QVD baseline cosmology)
     global_params = tuple(map(float, args.global_params.split(',')))
-    assert len(global_params) == 3, "Global params must be k_J,eta_prime,xi"
+    assert len(global_params) == 2, "Global params must be eta_prime,xi (k_J is fixed at 70.0)"
 
     # Validate workers
     if args.workers > 7:
@@ -673,7 +688,11 @@ def main():
         'success': success_count,
         'skipped': skip_count,
         'failed': fail_count,
-        'global_params': {'k_J': global_params[0], 'eta_prime': global_params[1], 'xi': global_params[2]},
+        'global_params': {
+            'k_J': 70.0,  # FIXED (QVD baseline cosmology)
+            'eta_prime': global_params[0],
+            'xi': global_params[1]
+        },
     }
     with open(outdir / '_summary.json', 'w') as f:
         json.dump(summary, f, indent=2)

@@ -34,9 +34,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "core"))
 from v15_data import LightcurveLoader
 
 
-def load_stage1_ln_A_values(stage1_dir, lightcurves_dict, quality_cut=2000):
+def load_stage1_ln_A_values(stage1_dir, lightcurves_dict, quality_cut=2000, allowed_snids=None):
     """
     Load ln_A values (natural log of amplitude) from Stage 1 results.
+
+    Args:
+        allowed_snids: Optional set of SNIDs to restrict to (for staged validation)
 
     Returns:
         dict with keys: 'ln_A', 'z', 'snids' (all numpy arrays)
@@ -50,6 +53,11 @@ def load_stage1_ln_A_values(stage1_dir, lightcurves_dict, quality_cut=2000):
 
     for snid_str, lc in lightcurves_dict.items():
         snid = int(snid_str)
+
+        # Skip if not in allowed list (for staged validation)
+        if allowed_snids is not None and snid not in allowed_snids:
+            continue
+
         # Stage 1 results are in subdirectories: stage1_dir/snid/metrics.json
         snid_dir = stage1_path / str(snid)
         metrics_file = snid_dir / "metrics.json"
@@ -123,19 +131,21 @@ def load_stage1_ln_A_values(stage1_dir, lightcurves_dict, quality_cut=2000):
 
 def compute_features(z):
     """
-    Compute feature matrix Φ from pseudocode line 252.
+    Compute feature matrix Φ for ANOMALOUS dimming only.
 
-    Φ = [ln(1 + z), z, z / (1 + z)]
+    k_J is FIXED at 70.0 km/s/Mpc (QVD baseline cosmology).
+    Only fit anomalous components: plasma veil (η') and FDR (ξ).
+
+    Φ = [z, z / (1 + z)]
 
     Returns:
-        Phi: [N, 3] feature matrix
+        Phi: [N, 2] feature matrix
     """
     z = np.asarray(z)
-    phi1 = np.log(1 + z)
-    phi2 = z
-    phi3 = z / (1 + z)
+    phi2 = z  # Plasma veil basis (corresponds to eta_prime)
+    phi3 = z / (1 + z)  # FDR basis (corresponds to xi)
 
-    return np.stack([phi1, phi2, phi3], axis=1)
+    return np.stack([phi2, phi3], axis=1)
 
 
 def standardize_features(Phi):
@@ -143,9 +153,9 @@ def standardize_features(Phi):
     Standardize features to zero mean, unit variance.
 
     Returns:
-        Phi_std: standardized features [N, 3]
-        means: mean of each feature [3]
-        scales: std of each feature [3]
+        Phi_std: standardized features [N, 2]
+        means: mean of each feature [2]
+        scales: std of each feature [2]
     """
     means = np.mean(Phi, axis=0)
     scales = np.std(Phi, axis=0)
@@ -157,30 +167,29 @@ def standardize_features(Phi):
 
 def numpyro_model(Phi_std, ln_A_obs, use_informed_priors=False, fix_nu=None):
     """
-    NumPyro model from pseudocode lines 254-260.
+    NumPyro model for ANOMALOUS dimming only (k_J FIXED at 70.0).
 
     Model:
-      c ~ Normal(0, 1) for each of 3 components (or informed priors)
+      c ~ Normal(0, 1) for each of 2 components: eta_prime, xi
       ln_A0 ~ Normal(0, 5) - intercept
       ln_A_pred = ln_A0 + Φ_std · c
       σ_ln_A ~ HalfNormal(2.0)
       ν ~ Exponential(0.1) + 2.0 (or fixed if fix_nu is provided)
       ln_A_obs ~ StudentT(ν, ln_A_pred, σ_ln_A)
     """
-    # Sample standardized coefficients
+    # Sample standardized coefficients for ANOMALOUS dimming only
     if use_informed_priors:
-        # Informed priors DIRECTLY on standardized coefficients c
-        # Using golden values from November 5, 2024 run as the mean
-        # This makes priors data-independent and stable
-        c0_golden, c1_golden, c2_golden = 1.857, -2.227, -0.766
+        # Informed priors on standardized coefficients c
+        # NOTE: These are c1 and c2 from the original 3-parameter model
+        # c0 (k_J) is now FIXED, so we only sample c1 (eta_prime) and c2 (xi)
+        c0_golden, c1_golden = -2.227, -0.766  # eta_prime, xi from Nov 5, 2024
 
         c0 = numpyro.sample('c0', dist.Normal(c0_golden, 0.5))
-        c1 = numpyro.sample('c1', dist.Normal(c1_golden, 0.5))
-        c2 = numpyro.sample('c2', dist.Normal(c2_golden, 0.3))
-        c = jnp.array([c0, c1, c2])
+        c1 = numpyro.sample('c1', dist.Normal(c1_golden, 0.3))
+        c = jnp.array([c0, c1])
     else:
         # Uninformative priors
-        c = numpyro.sample('c', dist.Normal(0.0, 1.0).expand([3]).to_event(1))
+        c = numpyro.sample('c', dist.Normal(0.0, 1.0).expand([2]).to_event(1))
 
     # Sample intercept
     ln_A0 = numpyro.sample('ln_A0', dist.Normal(0.0, 5.0))
@@ -257,17 +266,20 @@ def run_mcmc(Phi_std, ln_A_obs, nchains=2, nsamples=2000, nwarmup=1000, use_info
 
 def back_transform_to_physics(c_samples, scales):
     """
-    Back-transform from standardized space to physics space.
+    Back-transform from standardized space to physics space for ANOMALOUS dimming.
 
-    From November 5 results:
+    k_J is FIXED at 70.0 km/s/Mpc (QVD baseline), so we only transform:
+      - eta_prime (plasma veil)
+      - xi (FDR)
+
+    From standardization:
       c = k_phys * scales (forward)
       k_phys = c / scales (back-transform)
     """
-    k_J_samples = c_samples[:, 0] / scales[0]
-    eta_prime_samples = c_samples[:, 1] / scales[1]
-    xi_samples = c_samples[:, 2] / scales[2]
+    eta_prime_samples = c_samples[:, 0] / scales[0]
+    xi_samples = c_samples[:, 1] / scales[1]
 
-    return k_J_samples, eta_prime_samples, xi_samples
+    return eta_prime_samples, xi_samples
 
 
 def compute_diagnostics(samples, param_name='parameter'):
@@ -289,41 +301,46 @@ def compute_diagnostics(samples, param_name='parameter'):
     }
 
 
-def save_results(samples, k_J_samples, eta_prime_samples, xi_samples,
+def save_results(samples, eta_prime_samples, xi_samples,
                  means, scales, out_dir, use_informed_priors=False):
-    """Save MCMC results to disk."""
+    """
+    Save MCMC results to disk for ANOMALOUS dimming parameters only.
+
+    k_J is FIXED at 70.0 km/s/Mpc, so we only save (eta_prime, xi).
+    """
     out_path = Path(out_dir)
     out_path.mkdir(parents=True, exist_ok=True)
 
     # Reconstruct c array if using informed priors
     if use_informed_priors:
-        c0_samples = np.asarray(samples['c0'])
-        c1_samples = np.asarray(samples['c1'])
-        c2_samples = np.asarray(samples['c2'])
-        c_samples_arr = np.stack([c0_samples, c1_samples, c2_samples], axis=1)
+        c0_samples = np.asarray(samples['c0'])  # eta_prime in standardized space
+        c1_samples = np.asarray(samples['c1'])  # xi in standardized space
+        c_samples_arr = np.stack([c0_samples, c1_samples], axis=1)
     else:
         c_samples_arr = np.asarray(samples['c'])
 
-    # Save numpy arrays
-    np.save(out_path / 'k_J_samples.npy', k_J_samples)
+    # Save numpy arrays (2 parameters only)
     np.save(out_path / 'eta_prime_samples.npy', eta_prime_samples)
     np.save(out_path / 'xi_samples.npy', xi_samples)
     np.save(out_path / 'c_samples.npy', c_samples_arr)
 
     # Compute diagnostics
-    k_J_stats = compute_diagnostics(k_J_samples, 'k_J')
     eta_prime_stats = compute_diagnostics(eta_prime_samples, 'eta_prime')
     xi_stats = compute_diagnostics(xi_samples, 'xi')
 
     # Save best-fit (median values)
+    # NOTE: k_J = 70.0 km/s/Mpc is FIXED (from QVD baseline cosmology)
     best_fit = {
-        'k_J': k_J_stats['median'],
+        'k_J': 70.0,  # FIXED (QVD baseline)
         'eta_prime': eta_prime_stats['median'],
         'xi': xi_stats['median'],
-        'k_J_std': k_J_stats['std'],
+        'k_J_std': 0.0,  # FIXED (no uncertainty)
         'eta_prime_std': eta_prime_stats['std'],
         'xi_std': xi_stats['std']
     }
+
+    # Save as numpy array for compatibility with v15_model.py
+    np.save(out_path / 'best_fit.npy', np.array([eta_prime_stats['median'], xi_stats['median']]))
 
     with open(out_path / 'best_fit.json', 'w') as f:
         json.dump(best_fit, f, indent=2)
@@ -331,21 +348,22 @@ def save_results(samples, k_J_samples, eta_prime_samples, xi_samples,
     # Save full statistics
     results = {
         'physical': {
-            'k_J': k_J_stats,
+            'k_J': {'median': 70.0, 'std': 0.0, 'note': 'FIXED from QVD baseline cosmology'},
             'eta_prime': eta_prime_stats,
             'xi': xi_stats
         },
         'standardized': {
-            'c0': compute_diagnostics(c_samples_arr[:, 0], 'c0'),
-            'c1': compute_diagnostics(c_samples_arr[:, 1], 'c1'),
-            'c2': compute_diagnostics(c_samples_arr[:, 2], 'c2')
+            'c0': compute_diagnostics(c_samples_arr[:, 0], 'c0_eta_prime'),
+            'c1': compute_diagnostics(c_samples_arr[:, 1], 'c1_xi')
         },
         'meta': {
             'standardizer': {
                 'means': means.tolist(),
                 'scales': scales.tolist()
             },
-            'n_samples': len(k_J_samples)
+            'n_samples': len(eta_prime_samples),
+            'n_parameters': 2,
+            'note': 'k_J = 70.0 km/s/Mpc FIXED (QVD baseline)'
         }
     }
 
@@ -353,41 +371,46 @@ def save_results(samples, k_J_samples, eta_prime_samples, xi_samples,
         json.dump(results, f, indent=2)
 
     print(f"\nResults saved to: {out_dir}")
-    print(f"  best_fit.json - Median parameter values")
+    print(f"  best_fit.json - Median parameter values (k_J FIXED at 70.0)")
+    print(f"  best_fit.npy - [eta_prime, xi] for v15_model.py")
     print(f"  summary.json - Full statistics")
     print(f"  *_samples.npy - MCMC samples")
 
 
-def print_results(k_J_samples, eta_prime_samples, xi_samples):
-    """Print results summary."""
+def print_results(eta_prime_samples, xi_samples):
+    """
+    Print results summary for ANOMALOUS dimming parameters.
+
+    k_J is FIXED at 70.0 km/s/Mpc (QVD baseline cosmology).
+    """
     print("\n" + "="*80)
-    print("RESULTS")
+    print("RESULTS: ANOMALOUS DIMMING PARAMETERS")
     print("="*80)
 
     print("\nPhysical Parameters (median ± std):")
-    print(f"  k_J       = {np.median(k_J_samples):.3f} ± {np.std(k_J_samples):.3f} km/s/Mpc")
+    print(f"  k_J       = 70.000 (FIXED from QVD baseline cosmology)")
     print(f"  eta'      = {np.median(eta_prime_samples):.3f} ± {np.std(eta_prime_samples):.3f}")
     print(f"  xi        = {np.median(xi_samples):.3f} ± {np.std(xi_samples):.3f}")
 
-    print("\nExpected (November 5, 2024 golden reference):")
-    print(f"  k_J       = 10.770 ± 4.567")
-    print(f"  eta'      = -7.988 ± 1.439")
-    print(f"  xi        = -6.908 ± 3.746")
+    print("\nNOTE: This model fits ONLY the anomalous dimming component (~0.5 mag at z=0.5)")
+    print("      from plasma veil (η') and FDR (ξ) effects.")
+    print("      The baseline Hubble Law (H₀ ≈ 70 km/s/Mpc) is ALREADY explained")
+    print("      by the QVD redshift model (see RedShift directory).")
 
-    # Check if results are in expected range
-    k_J_ok = 7.5 < np.median(k_J_samples) < 13.9
-    eta_ok = -10.4 < np.median(eta_prime_samples) < -5.6
-    xi_ok = -9.0 < np.median(xi_samples) < -4.8
+    print("\nModel Assumptions (V15 Preliminary):")
+    print("  - 2-WD progenitor system (barycentric mass)")
+    print("  - Small black hole present")
+    print("  - Planck/Wien thermal broadening (NOT ΛCDM time dilation)")
+    print("  - BBH orbital lensing deferred to V16 (outliers only)")
 
-    print("\nValidation (within ±30% of Nov 5 results):")
-    print(f"  k_J:  {'✓ PASS' if k_J_ok else '✗ FAIL'}")
-    print(f"  eta': {'✓ PASS' if eta_ok else '✗ FAIL'}")
-    print(f"  xi:   {'✓ PASS' if xi_ok else '✗ FAIL'}")
-
-    if k_J_ok and eta_ok and xi_ok:
-        print("\n✓ ALL PARAMETERS WITHIN EXPECTED RANGE")
-    else:
-        print("\n✗ SOME PARAMETERS OUT OF RANGE - CHECK RESULTS")
+    # Expected ranges are from the previous 3-parameter model
+    # We need to see what the new 2-parameter model produces
+    print("\n" + "="*80)
+    print("Previous 3-Parameter Model Results (November 5, 2024):")
+    print("  k_J       = 10.770 ± 4.567 (NOW FIXED at 70.0)")
+    print("  eta'      = -7.988 ± 1.439")
+    print("  xi        = -6.908 ± 3.746")
+    print("="*80)
 
 
 def main():
@@ -404,6 +427,8 @@ def main():
                        help='Use informed priors on standardized coefficients c (from Nov 5, 2024 golden run)')
     parser.add_argument('--fix-nu', type=float, default=None,
                        help='Fix Student-t nu parameter (avoids funnel geometry, use 6.522 from golden run)')
+    parser.add_argument('--snid-list', type=str, default=None,
+                       help='JSON file with list of SNIDs to include (for staged validation)')
 
     args = parser.parse_args()
 
@@ -421,9 +446,18 @@ def main():
     all_lcs = loader.load()
     print(f"  Loaded {len(all_lcs)} lightcurves")
 
+    # Load SNID list if provided (for staged validation)
+    allowed_snids = None
+    if args.snid_list:
+        print(f"\nLoading SNID list from {args.snid_list}...")
+        with open(args.snid_list) as f:
+            snid_data = json.load(f)
+            allowed_snids = set(snid_data['snids'])
+        print(f"  Restricting to {len(allowed_snids)} SNe")
+
     # Load Stage 1 ln_A values
     print("\nLoading Stage 1 results...")
-    data = load_stage1_ln_A_values(args.stage1_results, all_lcs, args.quality_cut)
+    data = load_stage1_ln_A_values(args.stage1_results, all_lcs, args.quality_cut, allowed_snids)
 
     ln_A_obs = data['ln_A']
     z = data['z']
@@ -441,8 +475,8 @@ def main():
 
     print("Standardizing features...")
     Phi_std, means, scales = standardize_features(Phi)
-    print(f"  Means: [{means[0]:.3f}, {means[1]:.3f}, {means[2]:.3f}]")
-    print(f"  Scales: [{scales[0]:.3f}, {scales[1]:.3f}, {scales[2]:.3f}]")
+    print(f"  Means: [{means[0]:.3f}, {means[1]:.3f}]")
+    print(f"  Scales: [{scales[0]:.3f}, {scales[1]:.3f}]")
 
     # Convert to JAX arrays
     Phi_std_jax = jnp.array(Phi_std)
@@ -459,27 +493,25 @@ def main():
 
     # Handle both informed and uninformed prior cases
     if args.use_informed_priors:
-        # Reconstruct c from individual components
-        c0_samples = np.asarray(samples['c0'])
-        c1_samples = np.asarray(samples['c1'])
-        c2_samples = np.asarray(samples['c2'])
-        c_samples = np.stack([c0_samples, c1_samples, c2_samples], axis=1)
+        # Reconstruct c from individual components (2 parameters: eta_prime, xi)
+        c0_samples = np.asarray(samples['c0'])  # eta_prime in standardized space
+        c1_samples = np.asarray(samples['c1'])  # xi in standardized space
+        c_samples = np.stack([c0_samples, c1_samples], axis=1)
     else:
         # Access c directly
         c_samples = np.asarray(samples['c'])
 
-    k_J_samples, eta_prime_samples, xi_samples = back_transform_to_physics(c_samples, scales)
+    eta_prime_samples, xi_samples = back_transform_to_physics(c_samples, scales)
 
     print(f"  c samples shape: {c_samples.shape}")
-    print(f"  c[0] median: {np.median(c_samples[:, 0]):.3f}")
-    print(f"  c[1] median: {np.median(c_samples[:, 1]):.3f}")
-    print(f"  c[2] median: {np.median(c_samples[:, 2]):.3f}")
+    print(f"  c[0] (eta_prime) median: {np.median(c_samples[:, 0]):.3f}")
+    print(f"  c[1] (xi) median: {np.median(c_samples[:, 1]):.3f}")
 
     # Print results
-    print_results(k_J_samples, eta_prime_samples, xi_samples)
+    print_results(eta_prime_samples, xi_samples)
 
     # Save results
-    save_results(samples, k_J_samples, eta_prime_samples, xi_samples,
+    save_results(samples, eta_prime_samples, xi_samples,
                  means, scales, args.out, use_informed_priors=args.use_informed_priors)
 
     print("\n" + "="*80)

@@ -46,6 +46,24 @@ BBH_DEFAULT_PHASE = float(jnp.pi)  # Default BBH phase for occlusion model
 MIN_PHOTOSPHERE_RADIUS_CM = 1e12  # Guard against unrealistically small radii
 MAX_GRAVITATIONAL_Z = 0.5  # Safety cap to prevent extreme redshift excursions
 
+# ==============================================================================
+# QFD Baseline Cosmology (from QVD Redshift Model)
+# ==============================================================================
+#
+# CRITICAL: The baseline Hubble Law (H₀ ≈ 70 km/s/Mpc) is ALREADY EXPLAINED
+# by the QVD redshift model (see RedShift directory: α_QVD = 0.85, β = 0.6).
+#
+# This V15 model should ONLY fit the ANOMALOUS dimming component (~0.5 mag at z=0.5)
+# from plasma veil (η') and FDR (ξ) effects. k_J is FIXED, not fitted.
+#
+# Model Assumptions (V15 Preliminary):
+# - 2-WD progenitor system (barycentric mass)
+# - Small black hole present
+# - Planck/Wien thermal broadening (NOT ΛCDM time dilation)
+# - BBH orbital lensing corrections deferred to V16 (applied to outliers only)
+#
+K_J_BASELINE = 70.0  # km/s/Mpc - FIXED (from QVD baseline cosmology)
+
 # Iterative opacity solver parameters
 OPACITY_MAX_ITER = 20
 OPACITY_RELAX = 0.5  # Relaxation factor for stability
@@ -58,21 +76,17 @@ OPACITY_TOL = 1e-4  # Convergence tolerance
 #
 # ln_A represents the natural log of the flux amplitude (log-space normalization).
 # In Stage 1, ln_A_obs is fitted per-SN (cosmology-agnostic).
-# In Stage 2/3, ln_A_pred is predicted from global QFD parameters (k_J, eta', xi).
+# In Stage 2/3, ln_A_pred is predicted from global QFD parameters (eta', xi) ONLY.
 #
-# The prediction combines three QFD attenuation channels:
-#   1. Cosmological drag: A_drag(z; k_J)
-#   2. Plasma veil: A_plasma(z; eta')
-#   3. FDR (Flux-Dependent Redshift): A_FDR(z; xi)
+# IMPORTANT: This function models ONLY the ANOMALOUS dimming (~0.5 mag at z=0.5).
+# The baseline cosmological drag (k_J) is FIXED at 70 km/s/Mpc (from QVD model),
+# so we only fit the local supernova effects:
+#   1. Plasma veil: A_plasma(z; eta')
+#   2. FDR (Flux-Dependent Redshift): A_FDR(z; xi)
 #
 # These are smooth basis functions that will be replaced with exact QFD kernels later.
 # Normalization: ln_A_pred(0) = 0 (no offset parameter)
 #
-
-@jit
-def _phi1_ln1pz(z):
-    """Basis function for drag-like channel: log(1+z) ~ z - z²/2 + ..."""
-    return jnp.log1p(z)
 
 @jit
 def _phi2_linear(z):
@@ -85,30 +99,38 @@ def _phi3_sat(z):
     return z / (1.0 + z)
 
 @jit
-def ln_A_pred(z, k_J, eta_prime, xi):
+def ln_A_pred(z, eta_prime, xi):
     """
-    Predict log-amplitude (ln_A) vs redshift from QFD global parameters.
+    Predict log-amplitude (ln_A) vs redshift from QFD anomalous dimming parameters.
 
-    Combines three QFD attenuation channels with smooth basis functions.
+    Models ONLY the anomalous dimming component (~0.5 mag at z=0.5) from
+    local supernova effects. The baseline Hubble Law is already explained
+    by the QVD redshift model (k_J = 70 km/s/Mpc fixed).
+
+    Combines two QFD attenuation channels with smooth basis functions:
+    - Plasma veil (η'): Linear dependence on z
+    - FDR (ξ): Saturating dependence on z
+
     Signs chosen so increasing z produces dimming (negative ln_A).
 
     Args:
         z: Redshift
-        k_J: Cosmological drag parameter (km/s/Mpc)
-        eta_prime: Plasma veil parameter
-        xi: FDR parameter
+        eta_prime: Plasma veil parameter (fitted)
+        xi: FDR parameter (fitted)
 
     Returns:
-        ln_A: Predicted log-amplitude (natural log of flux amplitude, dimensionless)
+        ln_A: Predicted log-amplitude from anomalous dimming only
+              (natural log of flux amplitude, dimensionless)
 
     Normalization: ln_A_pred(0, ...) = 0
     """
-    # NOTE: Replace _phi* with derived QFD kernels when ready
-    return -(k_J * _phi1_ln1pz(z) + eta_prime * _phi2_linear(z) + xi * _phi3_sat(z))
+    # NOTE: Baseline cosmological drag (k_J) is FIXED, not fitted here
+    # Only fit anomalous components: plasma veil (η') and FDR (ξ)
+    return -(eta_prime * _phi2_linear(z) + xi * _phi3_sat(z))
 
 # Vectorized version for batches of redshifts
-ln_A_pred_batch = jit(vmap(lambda zz, kJ, epr, xii: ln_A_pred(zz, kJ, epr, xii),
-                            in_axes=(0, None, None, None)))
+ln_A_pred_batch = jit(vmap(lambda zz, epr, xii: ln_A_pred(zz, epr, xii),
+                            in_axes=(0, None, None)))
 
 
 # ==============================================================================
@@ -247,20 +269,23 @@ class QFDIntrinsicModelJAX:
 # ==============================================================================
 
 @jit
-def qfd_z_from_distance_jax(D_mpc: float, k_J: float) -> float:
+def qfd_z_from_distance_jax(D_mpc: float) -> float:
     """
     Compute QFD cosmological drag redshift from luminosity distance.
 
-    z_cosmo = (k_J / c) * D
+    z_cosmo = (K_J_BASELINE / c) * D
+
+    Uses FIXED K_J_BASELINE = 70.0 km/s/Mpc from QVD redshift model.
+    This is NOT a fitted parameter - the baseline Hubble Law is already
+    explained by the QVD model in the RedShift directory.
 
     Args:
         D_mpc: Luminosity distance (Mpc)
-        k_J: QFD drag parameter (km/s/Mpc), analogous to H₀
 
     Returns:
-        Cosmological redshift
+        Cosmological redshift (baseline component, not fitted)
     """
-    return (k_J / C_KM_S) * D_mpc
+    return (K_J_BASELINE / C_KM_S) * D_mpc
 
 
 @jit
@@ -450,7 +475,7 @@ def compute_bbh_gravitational_redshift(
 @jit
 def qfd_lightcurve_model_jax(
     obs: jnp.ndarray,  # [t_obs, wavelength_obs]
-    global_params: Tuple[float, float, float],  # (k_J, eta_prime, xi)
+    global_params: Tuple[float, float],  # (eta_prime, xi) - ONLY anomalous dimming
     persn_params: Tuple[float, float, float, float],  # V15: 4 params (t0, ln_A, A_plasma, beta)
     L_peak: float, # L_peak is now a fixed parameter
     z_obs: float,
@@ -461,10 +486,11 @@ def qfd_lightcurve_model_jax(
     Computes predicted flux for a single observation:
     1. NO ΛCDM (1+z) factors: Pure QFD cosmology
     2. BBH effects handled via mixture model (not per-SN parameters)
+    3. k_J FIXED at 70.0 km/s/Mpc - baseline Hubble Law from QVD model
 
     Args:
         obs: [t_obs (MJD), wavelength_obs (nm)]
-        global_params: (k_J, eta_prime, xi) - QFD fundamental physics
+        global_params: (eta_prime, xi) - QFD anomalous dimming (2 params, k_J FIXED)
         persn_params: (t0, ln_A, A_plasma, beta) - per-SN parameters
             - t0: Phase/origin (MJD)
             - ln_A: Natural log of flux amplitude (log-space normalization)
@@ -478,7 +504,7 @@ def qfd_lightcurve_model_jax(
     Note: BBH per-SN parameters (P_orb, phi_0, A_lens) removed per cloud.txt.
           BBH population effects should be handled via mixture model in Stage 2.
     """
-    k_J, eta_prime, xi = global_params
+    eta_prime, xi = global_params  # k_J is FIXED at K_J_BASELINE = 70.0
     t0, ln_A, A_plasma, beta = persn_params
     A_lens = 0.0  # BBH lensing removed from per-SN parameters
     t_obs, wavelength_obs = obs
@@ -494,9 +520,9 @@ def qfd_lightcurve_model_jax(
         t_rest = t_since_explosion
 
     # QFD cosmological drag: use FIDUCIAL distance from z_obs (not fitted)
-    # This keeps z_cosmo dependent only on globals (k_J) and observed z
+    # k_J is FIXED at K_J_BASELINE = 70.0 km/s/Mpc (from QVD baseline model)
     D_fiducial_mpc = z_obs * C_KM_S / 70.0  # Fiducial H0=70, cosmology-free
-    z_cosmo = qfd_z_from_distance_jax(D_fiducial_mpc, k_J)
+    z_cosmo = qfd_z_from_distance_jax(D_fiducial_mpc)  # Uses K_J_BASELINE internally
 
     # Plasma veil redshift (observer frame time, observed wavelength)
     z_plasma = qfd_plasma_redshift_jax(t_since_explosion, wavelength_obs, A_plasma, beta)
@@ -567,43 +593,42 @@ def qfd_lightcurve_model_jax(
 @jit
 def qfd_lightcurve_model_jax_static_lens(
     obs: jnp.ndarray,  # [t_obs, wavelength_obs]
-    global_params: Tuple[float, float, float],  # (k_J, eta_prime, xi)
-    persn_params: Tuple[float, float, float, float, float],  # V15: 5 params
+    global_params: Tuple[float, float],  # (eta_prime, xi) - k_J FIXED
+    persn_params: Tuple[float, float, float, float, float, float, float, float],  # V15 WITH BBH: 8 params (t0, ln_A, A_plasma, beta, L_peak, P_orb, phi_0, A_lens)
     z_obs: float,
 ) -> float:
     """
-    V15: Pure QFD Cosmology (BBH handled via mixture model)
+    V15 WITH BBH: Pure QFD Cosmology with Binary Black Hole Physics
 
-    DEPRECATED: This function kept for backward compatibility but BBH effects
-    should be handled via mixture model in Stage 2, not per-SN parameters.
+    FIX (2025-01-12): BBH RE-ENABLED - P_orb, phi_0, A_lens restored to per-SN parameters
+    UPDATE: k_J FIXED at 70.0 km/s/Mpc - baseline from QVD model
 
     Args:
         obs: [t_obs (MJD), wavelength_obs (nm)]
-        global_params: (k_J, eta_prime, xi) - QFD fundamental physics
-        persn_params: (t0, ln_A, A_plasma, beta, L_peak)
+        global_params: (eta_prime, xi) - QFD anomalous dimming (k_J FIXED at 70.0)
+        persn_params: (t0, ln_A, A_plasma, beta, L_peak, P_orb, phi_0, A_lens)
         z_obs: Observed heliocentric redshift
 
     Returns:
-        Predicted flux in Jy
+        Predicted flux in Jy with BBH time-varying lensing and gravitational redshift
 
-    Note: A_lens_static removed per cloud.txt specification.
+    Note: BBH parameters restored for full 5-mechanism confluence architecture.
     """
-    k_J, eta_prime, xi = global_params
-    t0, ln_A, A_plasma, beta, L_peak = persn_params
-    A_lens_static = 0.0  # BBH lensing removed from per-SN parameters
+    eta_prime, xi = global_params  # k_J is FIXED at K_J_BASELINE = 70.0
+    t0, ln_A, A_plasma, beta, L_peak, P_orb, phi_0, A_lens = persn_params
     t_obs, wavelength_obs = obs
 
     # Time since explosion (observer frame and rest frame)
     t_since_explosion = t_obs - t0
     t_rest = t_since_explosion  # Pure QFD: no (1+z) time dilation
 
-    # QFD cosmological drag
+    # QFD cosmological drag - k_J FIXED at K_J_BASELINE = 70.0 km/s/Mpc
     D_fiducial_mpc = z_obs * C_KM_S / 70.0
-    z_cosmo = qfd_z_from_distance_jax(D_fiducial_mpc, k_J)
+    z_cosmo = qfd_z_from_distance_jax(D_fiducial_mpc)  # Uses K_J_BASELINE internally
 
     # Plasma veil redshift
     z_plasma = qfd_plasma_redshift_jax(t_since_explosion, wavelength_obs, A_plasma, beta)
-    z_bbh = compute_bbh_gravitational_redshift(t_rest, A_lens_static)
+    z_bbh = compute_bbh_gravitational_redshift(t_rest, A_lens)  # FIX 2025-01-12: Use A_lens from params
 
     # Total redshift (multiplicative composition)
     z_total = (1.0 + z_cosmo) * (1.0 + z_plasma) * (1.0 + z_bbh) - 1.0
@@ -649,12 +674,11 @@ def qfd_lightcurve_model_jax_static_lens(
     flux_nu = flux_lambda_obs * (wavelength_obs * 1e-7) ** 2 / C_CM_S
     flux_jy_intrinsic = flux_nu / 1e-23
 
-    # V15-Revised: Apply STATIC BBH demagnification
-    # μ_static = 1 + A_lens_static
-    # A_lens_static < 0 → demagnification (fainter, appears more distant)
-    # A_lens_static > 0 → magnification (brighter, appears closer)
-    mu_static = 1.0 + A_lens_static
-    flux_jy = mu_static * flux_jy_intrinsic
+    # FIX 2025-01-12: Apply TIME-VARYING BBH lensing magnification
+    # μ(MJD) = 1 + A_lens * cos(2π * (MJD - t₀) / P_orb + φ₀)
+    # This captures week-to-week flux variations from BBH orbital motion
+    mu_bbh = compute_bbh_magnification(t_obs, t0, A_lens, P_orb, phi_0)
+    flux_jy = mu_bbh * flux_jy_intrinsic
 
     return flux_jy
 
@@ -665,7 +689,7 @@ def qfd_lightcurve_model_jax_static_lens(
 
 @jit
 def chi2_single_sn_jax(
-    global_params: Tuple[float, float, float],  # (k_J, eta_prime, xi)
+    global_params: Tuple[float, float],  # (eta_prime, xi) - k_J FIXED at 70.0
     persn_params: Tuple[float, float, float, float],  # V15: 4 params
     L_peak: float, # L_peak is now a fixed parameter
     photometry: jnp.ndarray,  # [N_obs, 4]: mjd, wavelength_nm, flux_jy, flux_jy_err
@@ -677,7 +701,7 @@ def chi2_single_sn_jax(
     χ² = Σ [(flux_obs - flux_model) / σ]²
 
     Args:
-        global_params: (k_J, eta_prime, xi) - QFD fundamental physics
+        global_params: (eta_prime, xi) - QFD anomalous dimming (k_J FIXED at 70.0)
         persn_params: (t0, ln_A, A_plasma, beta) - per-SN parameters (4 total)
         L_peak: Peak luminosity (erg/s) - now a fixed parameter
         photometry: [N_obs, 4] array with [mjd, wavelength_nm, flux_jy, flux_jy_err]
@@ -687,6 +711,7 @@ def chi2_single_sn_jax(
         Chi-squared value
 
     Note: BBH per-SN parameters removed per cloud.txt specification.
+          k_J fixed at K_J_BASELINE = 70.0 km/s/Mpc (QVD baseline cosmology).
     """
     # Vectorize over observations
     model_fluxes = vmap(qfd_lightcurve_model_jax, in_axes=(0, None, None, None, None))(
@@ -701,7 +726,7 @@ def chi2_single_sn_jax(
 
 @jit
 def log_likelihood_single_sn_jax(
-    global_params: Tuple[float, float, float],
+    global_params: Tuple[float, float],  # (eta_prime, xi) - k_J FIXED at 70.0
     persn_params: Tuple[float, float, float, float],  # V15: 4 params
     L_peak: float,
     photometry: jnp.ndarray,
@@ -711,7 +736,7 @@ def log_likelihood_single_sn_jax(
     V15 log-likelihood for a single supernova (Gaussian errors).
 
     Args:
-        global_params: (k_J, eta_prime, xi) - QFD fundamental physics
+        global_params: (eta_prime, xi) - QFD anomalous dimming (k_J FIXED at 70.0)
         persn_params: (t0, ln_A, A_plasma, beta) - per-SN parameters (4 total)
         L_peak: Peak luminosity (erg/s) - now a fixed parameter
         photometry: [N_obs, 4] array with [mjd, wavelength_nm, flux_jy, flux_jy_err]
@@ -721,6 +746,7 @@ def log_likelihood_single_sn_jax(
         Log-likelihood value
 
     Note: BBH per-SN parameters removed per cloud.txt specification.
+          k_J fixed at K_J_BASELINE = 70.0 km/s/Mpc (QVD baseline cosmology).
     """
     chi2 = chi2_single_sn_jax(global_params, persn_params, L_peak, photometry, z_obs)
     return -0.5 * chi2
@@ -728,7 +754,7 @@ def log_likelihood_single_sn_jax(
 
 @jit
 def log_likelihood_single_sn_jax_studentt(
-    global_params: Tuple[float, float, float],
+    global_params: Tuple[float, float],  # (eta_prime, xi) - k_J FIXED at 70.0
     persn_params: Tuple[float, float, float, float],  # V15: 4 params
     L_peak: float,
     photometry: jnp.ndarray,
@@ -742,7 +768,7 @@ def log_likelihood_single_sn_jax_studentt(
     to outlier observations. This helps more SNe converge by downweighting bad data points.
 
     Args:
-        global_params: (k_J, eta_prime, xi) - QFD fundamental physics
+        global_params: (eta_prime, xi) - QFD anomalous dimming (k_J FIXED at 70.0)
         persn_params: (t0, ln_A, A_plasma, beta) - per-SN parameters (4 total)
         L_peak: Peak luminosity (erg/s) - now a fixed parameter
         photometry: [N_obs, 4] array with [mjd, wavelength_nm, flux_jy, flux_jy_err]
@@ -759,6 +785,8 @@ def log_likelihood_single_sn_jax_studentt(
     For ν→∞, Student-t approaches Gaussian.
     For ν=1, Student-t becomes Cauchy (very heavy tails).
     For ν=5, good compromise between robustness and efficiency.
+
+    Note: k_J fixed at K_J_BASELINE = 70.0 km/s/Mpc (QVD baseline cosmology).
     """
     # Vectorize model over observations
     model_fluxes = vmap(qfd_lightcurve_model_jax, in_axes=(0, None, None, None, None))(
