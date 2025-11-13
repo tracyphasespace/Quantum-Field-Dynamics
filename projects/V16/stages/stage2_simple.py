@@ -34,16 +34,16 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "core"))
 from v15_data import LightcurveLoader
 
 
-def load_stage1_alpha_values(stage1_dir, lightcurves_dict, quality_cut=2000):
+def load_stage1_ln_A_values(stage1_dir, lightcurves_dict, quality_cut=2000):
     """
-    Load alpha values from Stage 1 results.
+    Load ln_A values (natural log of amplitude) from Stage 1 results.
 
     Returns:
-        dict with keys: 'alpha', 'z', 'snids' (all numpy arrays)
+        dict with keys: 'ln_A', 'z', 'snids' (all numpy arrays)
     """
     stage1_path = Path(stage1_dir)
 
-    alpha_list = []
+    ln_A_list = []
     z_list = []
     snid_list = []
     excluded = 0
@@ -72,9 +72,9 @@ def load_stage1_alpha_values(stage1_dir, lightcurves_dict, quality_cut=2000):
 
             # Load per-SN parameters
             persn_best = np.load(persn_file)
-            # persn_best = [t0, A_plasma, beta, alpha]
+            # persn_best = [t0, A_plasma, beta, ln_A]
 
-            # Quality cut: Check for boundary failures (from stage2_mcmc_numpyro.py)
+            # Quality cut: Check for boundary failures
             ln_A = persn_best[3]
             if ln_A >= 28 or ln_A <= -28:  # Near ±30 boundaries
                 excluded += 1
@@ -94,8 +94,7 @@ def load_stage1_alpha_values(stage1_dir, lightcurves_dict, quality_cut=2000):
                 excluded += 1
                 continue
 
-            alpha = ln_A
-            alpha_list.append(alpha)
+            ln_A_list.append(ln_A)
             z_list.append(lc.z)  # SupernovaData object, use attribute access
             snid_list.append(snid)
 
@@ -103,28 +102,20 @@ def load_stage1_alpha_values(stage1_dir, lightcurves_dict, quality_cut=2000):
             print(f"Warning: Failed to load SN {snid}: {e}")
             continue
 
-    print(f"  Loaded {len(alpha_list)} SNe with chi2 < {quality_cut}")
+    print(f"  Loaded {len(ln_A_list)} SNe with chi2 < {quality_cut}")
     print(f"  Excluded {excluded} SNe with chi2 >= {quality_cut}")
 
-    # Convert alpha array to numpy
-    alpha_arr = np.array(alpha_list)
+    # Convert ln_A array to numpy
+    ln_A_arr = np.array(ln_A_list)
 
-    # Alpha conversion: magnitude space → natural-log space (from stage2_mcmc_numpyro.py)
-    K_MAG_PER_LN = 2.5 / np.log(10.0)  # ≈ 1.0857
-    median_abs = np.median(np.abs(alpha_arr))
-
-    if median_abs > 5.0:
-        # Alpha in magnitude space - convert to natural-log space
-        print(f"\n  Alpha conversion: median |α| = {median_abs:.1f} > 5.0")
-        print(f"  Converting from magnitude space: α_nat = -α_mag / K")
-        print(f"  Before: [{alpha_arr.min():.1f}, {np.median(alpha_arr):.1f}, {alpha_arr.max():.1f}]")
-        alpha_arr = -alpha_arr / K_MAG_PER_LN
-        print(f"  After:  [{alpha_arr.min():.1f}, {np.median(alpha_arr):.1f}, {alpha_arr.max():.1f}]")
-    else:
-        print(f"\n  Alpha already in natural-log space (median |α| = {median_abs:.1f})")
+    # Stage 1 saves ln_A (natural logarithm of amplitude) directly
+    # No conversion needed - ln_A is already in natural log space
+    median_abs = np.median(np.abs(ln_A_arr))
+    print(f"\n  ln_A loaded from Stage 1 (median |ln_A| = {median_abs:.1f})")
+    print(f"  Range: [{ln_A_arr.min():.1f}, {np.median(ln_A_arr):.1f}, {ln_A_arr.max():.1f}]")
 
     return {
-        'alpha': alpha_arr,
+        'ln_A': ln_A_arr,
         'z': np.array(z_list),
         'snids': np.array(snid_list)
     }
@@ -164,17 +155,17 @@ def standardize_features(Phi):
     return Phi_std, means, scales
 
 
-def numpyro_model(Phi_std, alpha_obs, use_informed_priors=False):
+def numpyro_model(Phi_std, ln_A_obs, use_informed_priors=False, fix_nu=None):
     """
     NumPyro model from pseudocode lines 254-260.
 
     Model:
       c ~ Normal(0, 1) for each of 3 components (or informed priors)
       ln_A0 ~ Normal(0, 5) - intercept
-      α_pred = ln_A0 + Φ_std · c
-      σ_alpha ~ HalfNormal(2.0)
-      ν ~ Exponential(0.1) + 2.0
-      α_obs ~ StudentT(ν, α_pred, σ_alpha)
+      ln_A_pred = ln_A0 + Φ_std · c
+      σ_ln_A ~ HalfNormal(2.0)
+      ν ~ Exponential(0.1) + 2.0 (or fixed if fix_nu is provided)
+      ln_A_obs ~ StudentT(ν, ln_A_pred, σ_ln_A)
     """
     # Sample standardized coefficients
     if use_informed_priors:
@@ -194,25 +185,30 @@ def numpyro_model(Phi_std, alpha_obs, use_informed_priors=False):
     # Sample intercept
     ln_A0 = numpyro.sample('ln_A0', dist.Normal(0.0, 5.0))
 
-    # Predict alpha in standardized space
+    # Predict ln_A in standardized space
     # With standardized features and Normal(0,1) priors, c can be +/-
     # The negative signs from physics are absorbed into the c coefficients
-    alpha_pred = ln_A0 + jnp.dot(Phi_std, c)
+    ln_A_pred = ln_A0 + jnp.dot(Phi_std, c)
 
     # Sample heteroscedastic noise
-    sigma_alpha = numpyro.sample('sigma_alpha', dist.HalfNormal(2.0))
+    sigma_ln_A = numpyro.sample('sigma_ln_A', dist.HalfNormal(2.0))
 
-    # Sample Student-t degrees of freedom
-    nu = numpyro.sample('nu', dist.Exponential(0.1)) + 2.0
+    # Sample Student-t degrees of freedom (or fix to golden value)
+    if fix_nu is not None:
+        # Fix nu to avoid Student-t funnel geometry
+        nu = fix_nu
+        numpyro.deterministic('nu', nu)
+    else:
+        nu = numpyro.sample('nu', dist.Exponential(0.1)) + 2.0
 
     # Student-t likelihood (heavy tails for BBH/lensing outliers)
     with numpyro.plate('data', Phi_std.shape[0]):
-        numpyro.sample('alpha_obs',
-                       dist.StudentT(df=nu, loc=alpha_pred, scale=sigma_alpha),
-                       obs=alpha_obs)
+        numpyro.sample('ln_A_obs',
+                       dist.StudentT(df=nu, loc=ln_A_pred, scale=sigma_ln_A),
+                       obs=ln_A_obs)
 
 
-def run_mcmc(Phi_std, alpha_obs, nchains=2, nsamples=2000, nwarmup=1000, use_informed_priors=False):
+def run_mcmc(Phi_std, ln_A_obs, nchains=2, nsamples=2000, nwarmup=1000, use_informed_priors=False, fix_nu=None):
     """
     Run MCMC using NUTS sampler (pseudocode line 260).
     """
@@ -223,10 +219,12 @@ def run_mcmc(Phi_std, alpha_obs, nchains=2, nsamples=2000, nwarmup=1000, use_inf
     print(f"  Total samples: {nchains * nsamples}")
     if use_informed_priors:
         print(f"  Using informed priors on c (golden values from Nov 5, 2024)")
+    if fix_nu is not None:
+        print(f"  Fixing nu = {fix_nu:.3f} (avoids Student-t funnel)")
 
     # Set up NUTS kernel with partial application for extra args
-    def model_with_priors(Phi, alpha):
-        return numpyro_model(Phi, alpha, use_informed_priors=use_informed_priors)
+    def model_with_priors(Phi, ln_A):
+        return numpyro_model(Phi, ln_A, use_informed_priors=use_informed_priors, fix_nu=fix_nu)
 
     kernel = NUTS(model_with_priors)
 
@@ -242,7 +240,7 @@ def run_mcmc(Phi_std, alpha_obs, nchains=2, nsamples=2000, nwarmup=1000, use_inf
     # Run MCMC
     start_time = time.time()
     rng_key = jax.random.PRNGKey(42)
-    mcmc.run(rng_key, Phi_std, alpha_obs)
+    mcmc.run(rng_key, Phi_std, ln_A_obs)
     elapsed = time.time() - start_time
 
     print(f"\n  MCMC complete in {elapsed/60:.1f} minutes")
@@ -292,16 +290,25 @@ def compute_diagnostics(samples, param_name='parameter'):
 
 
 def save_results(samples, k_J_samples, eta_prime_samples, xi_samples,
-                 means, scales, out_dir):
+                 means, scales, out_dir, use_informed_priors=False):
     """Save MCMC results to disk."""
     out_path = Path(out_dir)
     out_path.mkdir(parents=True, exist_ok=True)
+
+    # Reconstruct c array if using informed priors
+    if use_informed_priors:
+        c0_samples = np.asarray(samples['c0'])
+        c1_samples = np.asarray(samples['c1'])
+        c2_samples = np.asarray(samples['c2'])
+        c_samples_arr = np.stack([c0_samples, c1_samples, c2_samples], axis=1)
+    else:
+        c_samples_arr = np.asarray(samples['c'])
 
     # Save numpy arrays
     np.save(out_path / 'k_J_samples.npy', k_J_samples)
     np.save(out_path / 'eta_prime_samples.npy', eta_prime_samples)
     np.save(out_path / 'xi_samples.npy', xi_samples)
-    np.save(out_path / 'c_samples.npy', np.asarray(samples['c']))
+    np.save(out_path / 'c_samples.npy', c_samples_arr)
 
     # Compute diagnostics
     k_J_stats = compute_diagnostics(k_J_samples, 'k_J')
@@ -329,9 +336,9 @@ def save_results(samples, k_J_samples, eta_prime_samples, xi_samples,
             'xi': xi_stats
         },
         'standardized': {
-            'c0': compute_diagnostics(np.asarray(samples['c'])[:, 0], 'c0'),
-            'c1': compute_diagnostics(np.asarray(samples['c'])[:, 1], 'c1'),
-            'c2': compute_diagnostics(np.asarray(samples['c'])[:, 2], 'c2')
+            'c0': compute_diagnostics(c_samples_arr[:, 0], 'c0'),
+            'c1': compute_diagnostics(c_samples_arr[:, 1], 'c1'),
+            'c2': compute_diagnostics(c_samples_arr[:, 2], 'c2')
         },
         'meta': {
             'standardizer': {
@@ -395,6 +402,8 @@ def main():
                        help='Chi2 threshold for Stage 1 quality cut')
     parser.add_argument('--use-informed-priors', action='store_true',
                        help='Use informed priors on standardized coefficients c (from Nov 5, 2024 golden run)')
+    parser.add_argument('--fix-nu', type=float, default=None,
+                       help='Fix Student-t nu parameter (avoids funnel geometry, use 6.522 from golden run)')
 
     args = parser.parse_args()
 
@@ -412,18 +421,18 @@ def main():
     all_lcs = loader.load()
     print(f"  Loaded {len(all_lcs)} lightcurves")
 
-    # Load Stage 1 alpha values
+    # Load Stage 1 ln_A values
     print("\nLoading Stage 1 results...")
-    data = load_stage1_alpha_values(args.stage1_results, all_lcs, args.quality_cut)
+    data = load_stage1_ln_A_values(args.stage1_results, all_lcs, args.quality_cut)
 
-    alpha_obs = data['alpha']
+    ln_A_obs = data['ln_A']
     z = data['z']
-    n_sne = len(alpha_obs)
+    n_sne = len(ln_A_obs)
 
     print(f"\nData summary:")
     print(f"  N_SNe: {n_sne}")
     print(f"  Redshift range: [{z.min():.3f}, {z.max():.3f}]")
-    print(f"  Alpha range: [{alpha_obs.min():.3f}, {alpha_obs.max():.3f}]")
+    print(f"  ln_A range: [{ln_A_obs.min():.3f}, {ln_A_obs.max():.3f}]")
 
     # Compute and standardize features
     print("\nComputing features...")
@@ -437,16 +446,28 @@ def main():
 
     # Convert to JAX arrays
     Phi_std_jax = jnp.array(Phi_std)
-    alpha_obs_jax = jnp.array(alpha_obs)
+    ln_A_obs_jax = jnp.array(ln_A_obs)
 
     # Run MCMC
-    samples, mcmc = run_mcmc(Phi_std_jax, alpha_obs_jax,
+    samples, mcmc = run_mcmc(Phi_std_jax, ln_A_obs_jax,
                              args.nchains, args.nsamples, args.nwarmup,
-                             use_informed_priors=args.use_informed_priors)
+                             use_informed_priors=args.use_informed_priors,
+                             fix_nu=args.fix_nu)
 
     # Back-transform to physics space
     print("\nBack-transforming to physics space...")
-    c_samples = np.asarray(samples['c'])
+
+    # Handle both informed and uninformed prior cases
+    if args.use_informed_priors:
+        # Reconstruct c from individual components
+        c0_samples = np.asarray(samples['c0'])
+        c1_samples = np.asarray(samples['c1'])
+        c2_samples = np.asarray(samples['c2'])
+        c_samples = np.stack([c0_samples, c1_samples, c2_samples], axis=1)
+    else:
+        # Access c directly
+        c_samples = np.asarray(samples['c'])
+
     k_J_samples, eta_prime_samples, xi_samples = back_transform_to_physics(c_samples, scales)
 
     print(f"  c samples shape: {c_samples.shape}")
@@ -459,7 +480,7 @@ def main():
 
     # Save results
     save_results(samples, k_J_samples, eta_prime_samples, xi_samples,
-                 means, scales, args.out)
+                 means, scales, args.out, use_informed_priors=args.use_informed_priors)
 
     print("\n" + "="*80)
     print("STAGE 2 COMPLETE")
