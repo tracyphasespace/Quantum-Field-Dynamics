@@ -17,6 +17,8 @@ This sandbox is a copy of the V15 clean implementation with:
 - **Stage 2 (Full)**: Production MCMC with all features (`stages/stage2_mcmc_numpyro.py`)
 - **Stage 3**: Hubble diagram analysis (`stages/stage3_hubble_optimized.py`)
 - **Documentation**: Pseudocode and technical documentation (`documents/`)
+- **Test Dataset**: Small subset of 200 SNe for quick testing (`test_dataset/`)
+- **Tools**: Comparison and analysis scripts (`tools/`)
 
 ## Recent Fixes
 
@@ -89,12 +91,33 @@ See `documents/Supernovae_Pseudocode.md` for detailed algorithm specifications.
 3. **Test thoroughly** - Compare against golden reference results
 4. **Coordinate** - Communicate with team before major changes
 
-## Data Requirements
+## Getting Started
 
-To run the analysis, you'll need:
-- Stage 1 results directory with per-SN alpha estimates
-- Unified lightcurves CSV (e.g., `lightcurves_unified_v2_min3.csv`)
-- Sufficient compute for MCMC (recommend GPU for production runs)
+### Quick Start with Test Dataset
+
+For quick testing and debugging Stage 2, use the included test dataset:
+
+```bash
+python3 stages/stage2_simple.py \
+  --stage1-results test_dataset/stage1_results \
+  --lightcurves test_dataset/lightcurves_test.csv \
+  --out test_output \
+  --nchains 2 \
+  --nsamples 2000 \
+  --nwarmup 1000 \
+  --quality-cut 2000 \
+  --use-informed-priors
+```
+
+See `test_dataset/README.md` for details.
+
+### Full Production Data
+
+For production runs matching the November 5, 2024 golden reference, you'll need:
+- Full Stage 1 results directory (~107 MB, 4727 SNe)
+- Complete unified lightcurves CSV (~12 MB)
+
+See `DATA.md` for detailed data requirements and how to obtain full datasets.
 
 ## Questions or Issues?
 
