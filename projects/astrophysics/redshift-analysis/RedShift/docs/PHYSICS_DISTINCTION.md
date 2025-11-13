@@ -1,10 +1,10 @@
-# Physics Distinction: RedShift vs Supernova QVD Models
+# Physics Distinction: RedShift vs Supernova QFD Models
 
 ## Overview
 
-While both models use QVD (Quantum Vacuum Dynamics) physics scaled from SLAC E144 experiments, they operate through **fundamentally different physical mechanisms** in different astrophysical environments.
+While both models use QFD (Quantum Field Dynamics) physics scaled from SLAC E144 experiments, they operate through **fundamentally different physical mechanisms** in different astrophysical environments.
 
-## RedShift QVD Model: Wavelength-Independent Cosmological Effects
+## RedShift QFD Model: Wavelength-Independent Cosmological Effects
 
 ### **Core Physics**
 - **Direct Photon-ψ Field Interaction**: High-energy photons interact directly with the quantum vacuum field (ψ)
@@ -21,12 +21,12 @@ High-Energy Photon + ψ Field → Modified ψ Field + Lower-Energy Photon + CMB 
 - ✅ **Redshift Dependent**: Effect scales as z^0.6 with cosmological distance
 - ✅ **No Plasma Required**: Works in intergalactic medium
 - ✅ **CMB Connection**: Energy transferred to cosmic microwave background
-- ✅ **Vacuum Interaction**: Pure QVD field effects
+- ✅ **Vacuum Interaction**: Pure QFD field effects
 
 ### **Mathematical Description**
 ```python
 # Wavelength-independent dimming
-qvd_dimming = qvd_coupling * (redshift**0.6)  # Same for all λ
+qfd_dimming = qfd_coupling * (redshift**0.6)  # Same for all λ
 
 # Direct ψ field interaction
 psi_coupling = base_coupling * igm_density * path_length
@@ -35,7 +35,7 @@ psi_coupling = base_coupling * igm_density * path_length
 cmb_enhancement = transferred_energy / cmb_energy_density
 ```
 
-## Supernova QVD Model: Wavelength-Dependent Plasma Effects
+## Supernova QFD Model: Wavelength-Dependent Plasma Effects
 
 ### **Core Physics**
 - **Plasma-Mediated Scattering**: ψ field enhances photon-electron scattering in dense plasma
@@ -58,10 +58,10 @@ Photon + Electron (in ψ-enhanced plasma) → Scattered Photon + Modified Electr
 ```python
 # Wavelength-dependent dimming
 wavelength_factor = (wavelength_nm / 550)**(-0.8)  # Blue >> Red
-qvd_dimming = base_dimming * wavelength_factor
+qfd_dimming = base_dimming * wavelength_factor
 
 # Plasma-mediated interaction
-plasma_enhancement = electron_density * qvd_cross_section * path_length
+plasma_enhancement = electron_density * qfd_cross_section * path_length
 
 # Time evolution
 temporal_factor = exp(-time_days / expansion_timescale)
@@ -80,12 +80,12 @@ temporal_factor = exp(-time_days / expansion_timescale)
 | **CMB** | Energy transfer to CMB | No direct CMB effect |
 | **Plasma** | Not required | Essential |
 
-## Unified QVD Framework
+## Unified QFD Framework
 
 ### **Common Foundation**
-Both models derive from the same fundamental QVD Lagrangian:
+Both models derive from the same fundamental QFD Lagrangian:
 ```
-L_QVD = -1/4 F_μν F^μν + 1/2 (∂_μ ψ)(∂^μ ψ) - 1/2 m_ψ² ψ² + g ψ F_μν F^μν
+L_QFD = -1/4 F_μν F^μν + 1/2 (∂_μ ψ)(∂^μ ψ) - 1/2 m_ψ² ψ² + g ψ F_μν F^μν
 ```
 
 ### **Different Coupling Regimes**
@@ -124,7 +124,7 @@ Think of photons scattering off electrons in a dense plasma, where the quantum v
 These models are **complementary**, not competing:
 - **RedShift**: Explains cosmological acceleration without dark energy
 - **Supernova**: Explains detailed supernova light curve evolution
-- **Together**: Provide complete QVD description from local to cosmological scales
+- **Together**: Provide complete QFD description from local to cosmological scales
 
 ## Experimental Tests
 
@@ -134,4 +134,4 @@ These models are **complementary**, not competing:
 3. **CMB Measurements**: RedShift model predicts energy transfer signatures
 4. **Environmental Correlations**: Different dependencies on local vs cosmological environment
 
-This distinction is crucial for understanding that QVD provides a **unified framework** operating through different mechanisms at different scales, offering alternatives to both dark energy (cosmological) and standard supernova physics (local).
+This distinction is crucial for understanding that QFD provides a **unified framework** operating through different mechanisms at different scales, offering alternatives to both dark energy (cosmological) and standard supernova physics (local).

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Comprehensive QVD Redshift Analysis Example
+Comprehensive QFD Redshift Analysis Example
 ==========================================
 
 Demonstrates advanced features including parameter studies,
@@ -15,7 +15,7 @@ from pathlib import Path
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from redshift_qvd_analyzer import EnhancedRedshiftAnalyzer
+from redshift_qfd_analyzer import EnhancedRedshiftAnalyzer
 from enhanced_visualization import EnhancedRedshiftPlotter, create_publication_figure
 import logging
 
@@ -39,7 +39,7 @@ def parameter_sensitivity_study():
             try:
                 # Create analyzer with test parameters
                 analyzer = EnhancedRedshiftAnalyzer(
-                    qvd_coupling=coupling,
+                    qfd_coupling=coupling,
                     redshift_power=power,
                     hubble_constant=70.0,
                     enable_logging=False  # Reduce output for batch processing
@@ -69,7 +69,7 @@ def parameter_sensitivity_study():
     best_rms = results_matrix[best_params]['rms_error']
     
     print(f"\nBest parameters found:")
-    print(f"  QVD Coupling: {best_params[0]:.2f}")
+    print(f"  QFD Coupling: {best_params[0]:.2f}")
     print(f"  Redshift Power: {best_params[1]:.2f}")
     print(f"  RMS Error: {best_rms:.3f} mag")
     
@@ -84,29 +84,29 @@ def statistical_analysis(analyzer):
     # Generate extended redshift range
     redshifts_fine = np.logspace(-2, -0.1, 200)  # z = 0.01 to 0.8
     
-    print("Calculating QVD dimming for extended redshift range...")
-    qvd_dimming = []
+    print("Calculating QFD dimming for extended redshift range...")
+    qfd_dimming = []
     for z in redshifts_fine:
         try:
-            dimming = analyzer.calculate_qvd_dimming(z)
-            qvd_dimming.append(dimming)
+            dimming = analyzer.calculate_qfd_dimming(z)
+            qfd_dimming.append(dimming)
         except:
-            qvd_dimming.append(0.1)  # Fallback value
+            qfd_dimming.append(0.1)  # Fallback value
     
-    qvd_dimming = np.array(qvd_dimming)
+    qfd_dimming = np.array(qfd_dimming)
     
     # Statistical analysis
     stats = {
-        'mean_dimming': np.mean(qvd_dimming),
-        'std_dimming': np.std(qvd_dimming),
-        'min_dimming': np.min(qvd_dimming),
-        'max_dimming': np.max(qvd_dimming),
-        'median_dimming': np.median(qvd_dimming),
-        'q25_dimming': np.percentile(qvd_dimming, 25),
-        'q75_dimming': np.percentile(qvd_dimming, 75)
+        'mean_dimming': np.mean(qfd_dimming),
+        'std_dimming': np.std(qfd_dimming),
+        'min_dimming': np.min(qfd_dimming),
+        'max_dimming': np.max(qfd_dimming),
+        'median_dimming': np.median(qfd_dimming),
+        'q25_dimming': np.percentile(qfd_dimming, 25),
+        'q75_dimming': np.percentile(qfd_dimming, 75)
     }
     
-    print("QVD Dimming Statistics (z = 0.01 to 0.8):")
+    print("QFD Dimming Statistics (z = 0.01 to 0.8):")
     print(f"  Mean: {stats['mean_dimming']:.3f} ± {stats['std_dimming']:.3f} mag")
     print(f"  Range: {stats['min_dimming']:.3f} to {stats['max_dimming']:.3f} mag")
     print(f"  Median: {stats['median_dimming']:.3f} mag")
@@ -116,7 +116,7 @@ def statistical_analysis(analyzer):
     try:
         # Fit log(dimming) vs log(z)
         log_z = np.log10(redshifts_fine)
-        log_dimming = np.log10(qvd_dimming)
+        log_dimming = np.log10(qfd_dimming)
         
         # Remove non-finite values
         valid_mask = np.isfinite(log_z) & np.isfinite(log_dimming)
@@ -176,19 +176,19 @@ def observational_comparison(analyzer):
     for dataset_name, data in datasets.items():
         print(f"\nComparing with {dataset_name}:")
         
-        # Calculate QVD predictions
-        qvd_predictions = []
+        # Calculate QFD predictions
+        qfd_predictions = []
         for z in data['redshifts']:
             try:
-                pred = analyzer.calculate_qvd_dimming(z)
-                qvd_predictions.append(pred)
+                pred = analyzer.calculate_qfd_dimming(z)
+                qfd_predictions.append(pred)
             except:
-                qvd_predictions.append(0.1)
+                qfd_predictions.append(0.1)
         
-        qvd_predictions = np.array(qvd_predictions)
+        qfd_predictions = np.array(qfd_predictions)
         
         # Calculate statistics
-        residuals = qvd_predictions - data['dimming']
+        residuals = qfd_predictions - data['dimming']
         rms_error = np.sqrt(np.mean(residuals**2))
         chi_squared = np.sum((residuals / data['uncertainties'])**2)
         reduced_chi_squared = chi_squared / (len(residuals) - 2)  # 2 free parameters
@@ -232,7 +232,7 @@ def create_advanced_visualizations(analyzer, results, output_dir):
         print("  Creating comprehensive analysis figure...")
         create_publication_figure(
             results, 
-            title="QVD Redshift Model: Comprehensive Analysis",
+            title="QFD Redshift Model: Comprehensive Analysis",
             save_path=output_path / "publication_figure.png"
         )
         
@@ -247,7 +247,7 @@ def create_advanced_visualizations(analyzer, results, output_dir):
         
         print("  Creating detailed model comparison...")
         if 'lambda_cdm_comparison' in results:
-            plotter.plot_qvd_vs_lambda_cdm(
+            plotter.plot_qfd_vs_lambda_cdm(
                 results['lambda_cdm_comparison'],
                 save_path=output_path / "detailed_model_comparison.png"
             )
@@ -265,9 +265,9 @@ def create_advanced_visualizations(analyzer, results, output_dir):
         print(f"  Visualization error: {e}")
 
 def main():
-    """Run comprehensive QVD redshift analysis"""
+    """Run comprehensive QFD redshift analysis"""
     
-    print("Comprehensive QVD Redshift Analysis")
+    print("Comprehensive QFD Redshift Analysis")
     print("=" * 70)
     print()
     
@@ -286,7 +286,7 @@ def main():
         print("2. Creating Enhanced Analyzer")
         print("=" * 70)
         analyzer = EnhancedRedshiftAnalyzer(
-            qvd_coupling=best_params[0],
+            qfd_coupling=best_params[0],
             redshift_power=best_params[1],
             hubble_constant=70.0,
             enable_logging=True
@@ -347,7 +347,7 @@ def main():
         print("Key files created:")
         print("  • publication_figure.png - Main publication figure")
         print("  • detailed_*.png - Individual analysis plots")
-        print("  • enhanced_qvd_redshift_results.json - Complete data")
+        print("  • enhanced_qfd_redshift_results.json - Complete data")
         
         return True
         
@@ -362,7 +362,7 @@ if __name__ == "__main__":
     
     if success:
         print("\n🎉 Comprehensive analysis completed successfully!")
-        print("This analysis demonstrates the full capabilities of the enhanced QVD redshift model.")
+        print("This analysis demonstrates the full capabilities of the enhanced QFD redshift model.")
     else:
         print("\n❌ Comprehensive analysis failed. Please check the error messages above.")
     

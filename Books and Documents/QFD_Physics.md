@@ -112,7 +112,7 @@ def qfd_plasma_redshift_jax(t_days, wavelength_nm, A_plasma, beta, tau_decay=30.
 **Implementation**: `projects/astrophysics/redshift-analysis/RedShift/qfd_cmb/`
 
 **Documented**: `RedShift/docs/PHYSICS_DISTINCTION.md:5-6, 95-98`
-> "Both models use QVD (Quantum Vacuum Dynamics) physics scaled from **SLAC E144 experiments**"
+> "Both models use QFD (Quantum Field Dynamics) physics scaled from **SLAC E144 experiments**"
 >
 > "Both scale from SLAC E144 measurements but in different limits:
 > - **RedShift**: Low-density, long-path-length regime
@@ -507,7 +507,7 @@ k_J = 10.770 ± 4.567 km/s/Mpc    (Cosmological drag)
 
 **From QFD_Whitepaper.md:88-89**:
 ```
-L_QVD = -1/4 F_μν F^μν + 1/2 (∂_μ ψ)(∂^μ ψ) - 1/2 m_ψ² ψ² + g ψ F_μν F^μν
+L_QFD = -1/4 F_μν F^μν + 1/2 (∂_μ ψ)(∂^μ ψ) - 1/2 m_ψ² ψ² + g ψ F_μν F^μν
 ```
 
 **The coupling term** `g ψ F_μν F^μν` gives:

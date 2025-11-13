@@ -3,7 +3,7 @@
 Basic Enhanced RedShift Analysis Example
 =======================================
 
-Simple example demonstrating the enhanced QVD redshift analysis with
+Simple example demonstrating the enhanced QFD redshift analysis with
 numerical stability and bounds enforcement.
 """
 
@@ -20,13 +20,13 @@ from redshift_analyzer import EnhancedRedshiftAnalyzer
 def basic_redshift_analysis():
     """Run basic enhanced redshift analysis"""
     
-    print("Enhanced QVD RedShift Analysis - Basic Example")
+    print("Enhanced QFD RedShift Analysis - Basic Example")
     print("=" * 60)
     print()
     
     # Create enhanced analyzer with default parameters
     analyzer = EnhancedRedshiftAnalyzer(
-        qvd_coupling=0.85,      # Fitted to observations
+        qfd_coupling=0.85,      # Fitted to observations
         redshift_power=0.6,     # z^0.6 scaling law
         hubble_constant=70.0,   # km/s/Mpc
         enable_logging=True,    # Enable comprehensive logging
@@ -34,7 +34,7 @@ def basic_redshift_analysis():
     )
     
     print("Model Configuration:")
-    print(f"  QVD Coupling: {analyzer.physics.qvd_coupling:.3f}")
+    print(f"  QFD Coupling: {analyzer.physics.qfd_coupling:.3f}")
     print(f"  Redshift Power: z^{analyzer.physics.redshift_power:.3f}")
     print(f"  Hubble Constant: {analyzer.cosmology.H0:.1f} km/s/Mpc")
     print(f"  Bounds Checking: {analyzer.enable_bounds_checking}")
@@ -46,8 +46,8 @@ def basic_redshift_analysis():
     test_redshifts = [0.1, 0.3, 0.5, 0.7]
     
     for z in test_redshifts:
-        dimming = analyzer.calculate_qvd_dimming(z)
-        print(f"  z = {z:.1f}: QVD dimming = {dimming:.3f} mag")
+        dimming = analyzer.calculate_qfd_dimming(z)
+        print(f"  z = {z:.1f}: QFD dimming = {dimming:.3f} mag")
     print()
     
     # Generate Hubble diagram
@@ -61,7 +61,7 @@ def basic_redshift_analysis():
     success_rate = hubble_data['points_calculated'] / len(hubble_data['redshifts']) * 100
     print(f"  Generated {len(hubble_data['redshifts'])} points")
     print(f"  Success rate: {success_rate:.1f}%")
-    print(f"  Max QVD dimming: {np.max(hubble_data['qvd_dimming']):.3f} mag")
+    print(f"  Max QFD dimming: {np.max(hubble_data['qfd_dimming']):.3f} mag")
     print()
     
     # Compare with ΛCDM
@@ -108,32 +108,32 @@ def create_basic_plots(hubble_data, comparison, validation):
     # Plot 1: Hubble diagram
     redshifts = hubble_data['redshifts']
     m_standard = hubble_data['magnitudes_standard']
-    m_qvd = hubble_data['magnitudes_qvd']
+    m_qfd = hubble_data['magnitudes_qfd']
     
     ax1.plot(redshifts, m_standard, 'k--', linewidth=2, 
              label='Standard Candle', alpha=0.7)
-    ax1.plot(redshifts, m_qvd, 'r-', linewidth=3,
-             label='Enhanced QVD Model', alpha=0.8)
+    ax1.plot(redshifts, m_qfd, 'r-', linewidth=3,
+             label='Enhanced QFD Model', alpha=0.8)
     
     ax1.set_xlabel('Redshift z')
     ax1.set_ylabel('Apparent Magnitude')
-    ax1.set_title('Enhanced QVD Hubble Diagram')
+    ax1.set_title('Enhanced QFD Hubble Diagram')
     ax1.legend()
     ax1.grid(True, alpha=0.3)
     ax1.invert_yaxis()
     
-    # Plot 2: QVD dimming evolution
-    qvd_dimming = hubble_data['qvd_dimming']
+    # Plot 2: QFD dimming evolution
+    qfd_dimming = hubble_data['qfd_dimming']
     
-    ax2.plot(redshifts, qvd_dimming, 'b-', linewidth=3, marker='o', markersize=3)
+    ax2.plot(redshifts, qfd_dimming, 'b-', linewidth=3, marker='o', markersize=3)
     ax2.set_xlabel('Redshift z')
-    ax2.set_ylabel('QVD Dimming (magnitudes)')
-    ax2.set_title('QVD Dimming vs Redshift')
+    ax2.set_ylabel('QFD Dimming (magnitudes)')
+    ax2.set_title('QFD Dimming vs Redshift')
     ax2.grid(True, alpha=0.3)
     
     # Add statistics
-    max_dimming = np.max(qvd_dimming)
-    mean_dimming = np.mean(qvd_dimming)
+    max_dimming = np.max(qfd_dimming)
+    mean_dimming = np.mean(qfd_dimming)
     ax2.text(0.05, 0.95, f'Max: {max_dimming:.3f} mag\\nMean: {mean_dimming:.3f} mag',
              transform=ax2.transAxes, fontsize=10,
              bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.8))
@@ -141,12 +141,12 @@ def create_basic_plots(hubble_data, comparison, validation):
     # Plot 3: Model comparison
     ax3.plot(comparison['redshifts'], comparison['lambda_cdm_magnitudes'],
              'orange', linewidth=2, label='ΛCDM Model', alpha=0.8)
-    ax3.plot(comparison['redshifts'], comparison['qvd_magnitudes'],
-             'red', linewidth=3, label='Enhanced QVD Model', alpha=0.8)
+    ax3.plot(comparison['redshifts'], comparison['qfd_magnitudes'],
+             'red', linewidth=3, label='Enhanced QFD Model', alpha=0.8)
     
     ax3.set_xlabel('Redshift z')
     ax3.set_ylabel('Apparent Magnitude')
-    ax3.set_title('Enhanced QVD vs ΛCDM Models')
+    ax3.set_title('Enhanced QFD vs ΛCDM Models')
     ax3.legend()
     ax3.grid(True, alpha=0.3)
     ax3.invert_yaxis()
@@ -154,10 +154,10 @@ def create_basic_plots(hubble_data, comparison, validation):
     # Plot 4: Validation results
     z_test = validation['test_redshifts']
     observed = validation['observed_dimming']
-    predicted = validation['qvd_predictions']
+    predicted = validation['qfd_predictions']
     
     ax4.plot(z_test, observed, 'go', markersize=8, label='Observed', linewidth=2)
-    ax4.plot(z_test, predicted, 'rs', markersize=8, label='Enhanced QVD', linewidth=2)
+    ax4.plot(z_test, predicted, 'rs', markersize=8, label='Enhanced QFD', linewidth=2)
     ax4.plot(z_test, predicted, 'r--', alpha=0.7)
     
     ax4.set_xlabel('Redshift z')
@@ -176,7 +176,7 @@ def create_basic_plots(hubble_data, comparison, validation):
              transform=ax4.transAxes, fontsize=10,
              bbox=dict(boxstyle='round', facecolor=status_color, alpha=0.3))
     
-    plt.suptitle('Enhanced QVD RedShift Analysis: Numerically Stable Alternative to Dark Energy', 
+    plt.suptitle('Enhanced QFD RedShift Analysis: Numerically Stable Alternative to Dark Energy', 
                  fontsize=14, fontweight='bold')
     plt.tight_layout()
     
@@ -205,13 +205,13 @@ def demonstrate_numerical_stability():
     ])
     
     print("Testing extreme redshift values:")
-    print("Redshift    | QVD Dimming | Status")
+    print("Redshift    | QFD Dimming | Status")
     print("-" * 40)
     
     all_finite = True
     for z in extreme_redshifts:
         try:
-            dimming = analyzer.calculate_qvd_dimming(z)
+            dimming = analyzer.calculate_qfd_dimming(z)
             is_finite = np.isfinite(dimming)
             is_bounded = 0.0 <= dimming <= 10.0
             
@@ -246,14 +246,14 @@ def demonstrate_bounds_enforcement():
     for coupling in extreme_couplings:
         try:
             analyzer = EnhancedRedshiftAnalyzer(
-                qvd_coupling=coupling,
+                qfd_coupling=coupling,
                 enable_logging=False
             )
             
-            actual_coupling = analyzer.physics.qvd_coupling
+            actual_coupling = analyzer.physics.qfd_coupling
             bounds = analyzer.physics.bounds_enforcer.bounds
             
-            is_bounded = (bounds.MIN_QVD_COUPLING <= actual_coupling <= bounds.MAX_QVD_COUPLING)
+            is_bounded = (bounds.MIN_QFD_COUPLING <= actual_coupling <= bounds.MAX_QFD_COUPLING)
             status = "✓ BOUNDED" if is_bounded else "❌ UNBOUNDED"
             
             coupling_str = f"{coupling}" if np.isfinite(coupling) else ("inf" if np.isinf(coupling) else "nan")

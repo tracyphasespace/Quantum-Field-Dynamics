@@ -1,8 +1,8 @@
-# Theoretical Background: Enhanced QVD Redshift Model
+# Theoretical Background: Enhanced QFD Redshift Model
 
 ## Overview
 
-The Enhanced Quantum Vacuum Dynamics (QVD) redshift model provides a physics-based alternative to dark energy in explaining cosmological observations. This document outlines the theoretical foundation, mathematical framework, and physical principles underlying the model.
+The Enhanced Quantum Vacuum Dynamics (QFD) redshift model provides a physics-based alternative to dark energy in explaining cosmological observations. This document outlines the theoretical foundation, mathematical framework, and physical principles underlying the model.
 
 ## Physical Foundation
 
@@ -21,29 +21,29 @@ The transition from laboratory (E144) to cosmological scales involves:
 
 1. **Intensity scaling**: From laser intensities to cosmological photon densities
 2. **Path length enhancement**: Cosmological distances (Mpc) vs laboratory scales (cm)
-3. **Medium effects**: Intergalactic medium (IGM) enhancement of QVD coupling
+3. **Medium effects**: Intergalactic medium (IGM) enhancement of QFD coupling
 4. **Cumulative interactions**: Statistical accumulation over cosmic distances
 
 ## Mathematical Framework
 
-### Core QVD Dimming Formula
+### Core QFD Dimming Formula
 
-The fundamental QVD dimming relationship is:
+The fundamental QFD dimming relationship is:
 
 ```
-Δm_QVD(z) = α_QVD × z^β + Δm_IGM(z)
+Δm_QFD(z) = α_QFD × z^β + Δm_IGM(z)
 ```
 
 Where:
-- `α_QVD = 0.85` (QVD coupling strength, fitted to observations)
+- `α_QFD = 0.85` (QFD coupling strength, fitted to observations)
 - `β = 0.6` (redshift power law, phenomenologically determined)
 - `Δm_IGM(z)` represents intergalactic medium contributions
 
 ### Redshift-Dependent Components
 
-#### Primary QVD Coupling
+#### Primary QFD Coupling
 ```
-α_QVD(z) = α_0 × (z^β)
+α_QFD(z) = α_0 × (z^β)
 ```
 
 #### IGM Enhancement
@@ -58,20 +58,20 @@ Where:
 
 ### Cross-Section Evolution
 
-The effective QVD scattering cross-section evolves as:
+The effective QFD scattering cross-section evolves as:
 
 ```
-σ_QVD(z) = σ_Thomson × [1 + α_QVD × z^β]
+σ_QFD(z) = σ_Thomson × [1 + α_QFD × z^β]
 ```
 
 Where `σ_Thomson = 6.65×10^-25 cm²` is the Thomson scattering cross-section.
 
 ### Optical Depth Calculation
 
-The QVD optical depth through cosmological distances:
+The QFD optical depth through cosmological distances:
 
 ```
-τ_QVD(z, L) = σ_QVD(z) × n_IGM(z) × L
+τ_QFD(z, L) = σ_QFD(z) × n_IGM(z) × L
 ```
 
 Where:
@@ -132,7 +132,7 @@ Energy loss occurs through:
 
 ### IGM Enhancement
 
-The intergalactic medium enhances QVD coupling through:
+The intergalactic medium enhances QFD coupling through:
 
 1. **Increased interaction probability**: Higher particle densities
 2. **Extended path lengths**: Cosmological distances
@@ -154,7 +154,7 @@ All calculations use numerically stable operations:
 Physical bounds are enforced on all parameters:
 
 - **Redshift**: 10^-6 ≤ z ≤ 10.0
-- **QVD coupling**: 10^-6 ≤ α_QVD ≤ 10.0
+- **QFD coupling**: 10^-6 ≤ α_QFD ≤ 10.0
 - **Dimming magnitude**: 0.0 ≤ Δm ≤ 10.0
 - **Optical depth**: 10^-10 ≤ τ ≤ 50.0
 
@@ -174,7 +174,7 @@ Comprehensive error handling includes:
 The model predicts a specific distance-magnitude relationship:
 
 ```
-m_obs(z) = M_abs + 5×log₁₀[D_L(z)×10⁶/10] + Δm_QVD(z)
+m_obs(z) = M_abs + 5×log₁₀[D_L(z)×10⁶/10] + Δm_QFD(z)
 ```
 
 Where `M_abs = -19.3` for Type Ia supernovae.
@@ -200,22 +200,22 @@ The model makes specific predictions:
 
 ### Key Differences
 
-| Aspect | QVD Model | ΛCDM Model |
+| Aspect | QFD Model | ΛCDM Model |
 |--------|-----------|------------|
 | **Dark Energy** | Not required | 68% of universe |
 | **Acceleration** | No cosmic acceleration | Accelerating expansion |
 | **Physics** | E144-based QED | Cosmological constant |
-| **Parameters** | 2 (α_QVD, β) | 2 (Ω_m, Ω_Λ) |
+| **Parameters** | 2 (α_QFD, β) | 2 (Ω_m, Ω_Λ) |
 | **Testability** | Specific signatures | Limited discriminants |
 
 ### Statistical Performance
 
 Both models achieve similar observational fits:
 
-- **QVD RMS error**: ~0.14 magnitudes
+- **QFD RMS error**: ~0.14 magnitudes
 - **ΛCDM RMS error**: ~0.15 magnitudes
 - **Parameter constraints**: Comparable precision
-- **Predictive power**: QVD offers more specific tests
+- **Predictive power**: QFD offers more specific tests
 
 ## Energy Conservation
 
@@ -245,7 +245,7 @@ Potential model extensions include:
 
 1. **Temperature dependence**: CMB temperature evolution effects
 2. **Magnetic field coupling**: Intergalactic magnetic field interactions
-3. **Non-linear corrections**: Higher-order QVD effects
+3. **Non-linear corrections**: Higher-order QFD effects
 4. **Quantum corrections**: Loop-level QED contributions
 
 ### Observational Tests
@@ -259,7 +259,7 @@ Future observations could test:
 
 ## Conclusion
 
-The Enhanced QVD redshift model provides a theoretically grounded, numerically stable alternative to dark energy cosmology. Based on experimentally validated E144 physics and implemented with comprehensive numerical safety, the model offers:
+The Enhanced QFD redshift model provides a theoretically grounded, numerically stable alternative to dark energy cosmology. Based on experimentally validated E144 physics and implemented with comprehensive numerical safety, the model offers:
 
 - **Physical realism**: No exotic physics required
 - **Observational accuracy**: Competitive with ΛCDM fits

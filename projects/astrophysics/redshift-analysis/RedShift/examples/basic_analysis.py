@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Enhanced Basic QVD Redshift Analysis Example
+Enhanced Basic QFD Redshift Analysis Example
 ===========================================
 
-Demonstrates the enhanced QVD redshift analysis with numerical safety
+Demonstrates the enhanced QFD redshift analysis with numerical safety
 and comprehensive validation.
 """
 
@@ -14,27 +14,27 @@ from pathlib import Path
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from redshift_qvd_analyzer import EnhancedRedshiftAnalyzer
+from redshift_qfd_analyzer import EnhancedRedshiftAnalyzer
 from enhanced_visualization import EnhancedRedshiftPlotter
 import logging
 
 def main():
-    """Run enhanced basic QVD redshift analysis."""
+    """Run enhanced basic QFD redshift analysis."""
     
-    print("Enhanced QVD Redshift Analysis - Basic Example")
+    print("Enhanced QFD Redshift Analysis - Basic Example")
     print("=" * 60)
     print()
     
     # Create analyzer with enhanced safety
     analyzer = EnhancedRedshiftAnalyzer(
-        qvd_coupling=0.85,      # Fitted to observations
+        qfd_coupling=0.85,      # Fitted to observations
         redshift_power=0.6,     # z^0.6 scaling law
         hubble_constant=70.0,   # km/s/Mpc
         enable_logging=True     # Enable comprehensive logging
     )
     
     print("Model Parameters:")
-    print(f"  QVD Coupling: {analyzer.model_params['qvd_coupling']}")
+    print(f"  QFD Coupling: {analyzer.model_params['qfd_coupling']}")
     print(f"  Redshift Power: z^{analyzer.model_params['redshift_power']}")
     print(f"  Hubble Constant: {analyzer.model_params['hubble_constant']} km/s/Mpc")
     print(f"  Model Version: {analyzer.model_params['model_version']}")
@@ -73,7 +73,7 @@ def main():
             print(f"Hubble Diagram:")
             print(f"  Redshift Range: {hubble_data['redshifts'][0]:.3f} - {hubble_data['redshifts'][-1]:.3f}")
             print(f"  Data Points: {len(hubble_data['redshifts'])}")
-            print(f"  Max QVD Dimming: {max(hubble_data['qvd_dimming']):.3f} mag")
+            print(f"  Max QFD Dimming: {max(hubble_data['qfd_dimming']):.3f} mag")
             print()
         
         # Error reporting
@@ -88,9 +88,9 @@ def main():
         
         print(f"\nDetailed results saved to: basic_results/")
         print("Files created:")
-        print("  • enhanced_qvd_redshift_results.json - Complete analysis data")
+        print("  • enhanced_qfd_redshift_results.json - Complete analysis data")
         print("  • hubble_diagram.png - Hubble diagram visualization")
-        print("  • qvd_vs_lambda_cdm.png - Model comparison")
+        print("  • qfd_vs_lambda_cdm.png - Model comparison")
         print("  • validation_results.png - Validation analysis")
         print("  • comprehensive_analysis.png - Complete summary")
         
@@ -100,9 +100,9 @@ def main():
         print("="*60)
         
         test_redshifts = [0.1, 0.3, 0.5, 0.7]
-        print("QVD Dimming Calculations:")
+        print("QFD Dimming Calculations:")
         for z in test_redshifts:
-            dimming = analyzer.calculate_qvd_dimming(z)
+            dimming = analyzer.calculate_qfd_dimming(z)
             print(f"  z = {z:.1f}: {dimming:.3f} mag")
         
         print("\nCosmological Distance Calculations:")

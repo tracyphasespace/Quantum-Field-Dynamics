@@ -152,7 +152,7 @@ Key files to examine:
 1. **`hubble_constant_validation.py`** - Main validation script
    - Line 31: Hubble constant H₀ = 70.0 km/s/Mpc
    - Line 39: QFD parameters (no dark energy)
-   - Line 84: QVD dimming calculation
+   - Line 84: QFD dimming calculation
    - Line 398: Main validation function
 
 2. **`qfd_cmb/`** - QFD physics modules
@@ -166,8 +166,8 @@ Key files to examine:
 Try changing parameters in `hubble_constant_validation.py`:
 
 ```python
-# Line 25-26: Adjust QVD parameters
-QVD_COUPLING = 0.85  # Try 0.7 - 1.0
+# Line 25-26: Adjust QFD parameters
+QFD_COUPLING = 0.85  # Try 0.7 - 1.0
 REDSHIFT_POWER = 0.6  # Try 0.5 - 0.7
 
 # Rerun to see impact on fit quality

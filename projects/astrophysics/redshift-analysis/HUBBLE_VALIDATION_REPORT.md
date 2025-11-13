@@ -39,7 +39,7 @@ This report demonstrates that **Quantum Field Dynamics (QFD) successfully replic
 | H₀ | 70.0 km/s/Mpc | Hubble constant (SAME) |
 | Ω_m | 1.0 | Matter density (matter-dominated) |
 | Ω_Λ | **0.0** | **NO dark energy (0% of universe)** |
-| α_QVD | 0.85 | QVD coupling strength |
+| α_QFD | 0.85 | QFD coupling strength |
 | β | 0.6 | Redshift power (z^0.6 scaling) |
 | Physics | Photon-ψ field interactions | SLAC E144-validated QED |
 
@@ -71,12 +71,12 @@ m_obs = M_abs + 5·log₁₀[D_L(z; Ω_Λ=0.7) × 10⁶ / 10]
 ```
 m_obs = M_abs + 5·log₁₀[D_L(z; Ω_Λ=0) × 10⁶ / 10] + α·z^β
                 └─────────────┬─────────────┘   └──┬──┘
-                    Geometric distance           QVD dimming
+                    Geometric distance           QFD dimming
                   (matter-dominated)        (replaces dark energy)
 ```
 
 Where:
-- `α = 0.85` (QVD coupling strength)
+- `α = 0.85` (QFD coupling strength)
 - `β = 0.6` (redshift power law)
 - `D_L(z; Ω_Λ=0)` = luminosity distance in matter-dominated universe
 
@@ -105,7 +105,7 @@ Where:
 | 0.6 | 23.439 | 23.615 | +0.176 |
 | 0.7 | 23.847 | 24.039 | +0.192 |
 
-**Note:** Small systematic offset is absorbed by QVD dimming term, while maintaining excellent overall fit.
+**Note:** Small systematic offset is absorbed by QFD dimming term, while maintaining excellent overall fit.
 
 ---
 
@@ -121,7 +121,7 @@ QFD demonstrates that:
 ### 2. Experimentally Grounded Physics
 
 Unlike dark energy:
-- QVD is based on **SLAC E144 experimental validation**
+- QFD is based on **SLAC E144 experimental validation**
 - Photon-photon scattering is **well-understood QED**
 - Scaling from laboratory → cosmological regime is **systematic**
 
@@ -162,7 +162,7 @@ QFD makes specific predictions that differ from ΛCDM:
 Includes:
 - Hubble diagram (observations vs. models)
 - Residual analysis
-- QVD dimming component
+- QFD dimming component
 - Luminosity distance comparison
 - Statistical summary
 - Model component breakdown
@@ -236,7 +236,7 @@ What we attribute to mysterious dark energy causing cosmic acceleration may simp
 
 ### Related Work
 - CMB analysis using QFD photon scattering
-- Supernova dimming from QVD plasma interactions
+- Supernova dimming from QFD plasma interactions
 - Unified framework from local to cosmological scales
 
 ---
