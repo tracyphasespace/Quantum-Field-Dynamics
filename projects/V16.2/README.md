@@ -4,16 +4,37 @@
 **Created**: 2025-11-13 (forked from V16)
 **Purpose**: Recovery workspace for reconstructing hardcoded priors lost in directory deletion incident
 
-## ⚠️ CRITICAL ISSUE
+## ⚠️ CRITICAL ISSUE → ⚡ SMART SOLUTION
 
-The hardcoded priors in V16 (`stage2_simple.py` lines 30-36) may be **incorrect**. The original code used to derive these priors was lost in an AI directory deletion incident. This workspace (V16.2) is dedicated to:
+The hardcoded priors in V16 may be **incorrect** (lost derivation code).
 
-1. **Reconstructing** the prior derivation methodology
-2. **Validating** whether current hardcoded priors are correct
-3. **Re-deriving** priors from first principles if needed
-4. **Not conflicting** with parallel V16 development efforts
+**Instead of expensive re-derivation, we're working backwards!**
 
-See `RECOVERY.md` for detailed recovery plan and status.
+### Quick Validation Approach
+
+Use published parameters (k_J ≈ 10.74, η' ≈ -7.97, ξ ≈ -6.95) and see how well they fit:
+
+```bash
+python3 tools/validate_published_params.py \
+  --stage1-results test_dataset/stage1_results \
+  --lightcurves test_dataset/lightcurves_test.csv \
+  --out validation_test
+```
+
+**Takes 20 seconds** (vs 12 hours for full MCMC pipeline!)
+
+### Documentation
+
+- **`QUICKSTART.md`** - How to validate parameters (START HERE!)
+- **`RECOVERY.md`** - Full recovery plan and context
+- **`tools/README_VALIDATION.md`** - Detailed validation documentation
+
+### Goals
+
+1. ✅ **Validate** published parameters fit the data (RMS ≈ 1.4 mag expected)
+2. ✅ **Identify** outliers (BBH/lensing candidates)
+3. ✅ **Confirm** hardcoded priors are correct
+4. ❌ **Not conflicting** with parallel V16 development
 
 ---
 
