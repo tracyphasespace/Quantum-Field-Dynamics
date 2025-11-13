@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 """
-Stage 1: Per-SN Nuisance Parameter Optimization (V15 FIXED)
+Stage 1: Per-SN Nuisance Parameter Optimization (V16 RESTORED)
 
-Optimizes (t0, A_plasma, beta, ln_A) for each SN with fixed global params and L_peak.
+Optimizes (t0, A_plasma, beta, ln_A, A_lens) for each SN with fixed global params and L_peak.
 Uses L-BFGS-B with JAX gradients for GPU acceleration.
+
+RESTORES (2025-01-13):
+1. BBH Physics Re-enabled per PHYSICS_AUDIT.md
+   - A_lens parameter RESTORED to allow BBH lensing effects
+   - Enables modeling of ~16% of SNe with BBH signatures
+   - Time-varying magnification and gravitational redshift now active
 
 FIXES (2025-11-03):
 1. Freeze L_peak to break degeneracy with ln_A
@@ -49,33 +55,35 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "core"))
 from v15_data import LightcurveLoader
 from v15_model import (
     log_likelihood_single_sn_jax,
-    log_likelihood_single_sn_jax_studentt,
+    # log_likelihood_single_sn_jax_studentt,  # TODO: Not yet implemented in v15_model
     C_KM_S,
     C_CM_S,
 )
 
 
-# V15 FIXED: Physical bounds for per-SN parameters (4 params, L_peak frozen)
+# V16 RESTORED: Physical bounds for per-SN parameters (5 params, L_peak frozen)
 # FIX (2025-11-03): Removed ell to break degeneracy with ln_A
+# RESTORE (2025-01-13): Added A_lens back per PHYSICS_AUDIT.md
 # Parameter meaning:
 #   t0        → explosion epoch in MJD (sets time origin)
 #   A_plasma  → electron plasma veil strength (channel 1: E144 scattering)
 #   beta      → wavelength dependence of plasma veil
 #   ln_A      → natural log of flux amplitude (encodes distance modulus μ_raw = -(2.5/ln10) * ln_A)
+#   A_lens    → BBH lensing amplitude (RESTORED per PHYSICS_AUDIT.md)
 # L_peak    → FROZEN at canonical 1.5e43 erg/s (not optimized)
-# BBH channels handled via mixture model in Stage-2, NOT per-SN knobs (see cloud.txt)
 BOUNDS = {
     't0': (-20, 40),                    # MJD offset from peak
     'A_plasma': (0.0, 1.0),             # dimensionless (FIX 2025-11-04: widened from 0.5)
     'beta': (0.0, 4.0),                 # dimensionless (FIX 2025-11-04: widened from 2.0)
     'ln_A': (-30, 30),                  # natural log of flux amplitude (FIX 2025-11-04: widened to allow flux normalization)
+    'A_lens': (-0.5, 0.5),              # BBH lensing amplitude (RESTORED 2025-01-13)
 }
 
 # Canonical L_peak (FROZEN - not optimized)
 L_PEAK_CANONICAL = 1.5e43  # erg/s - typical SN Ia luminosity
 
 # Parameter count validation
-EXPECTED_PERSN_COUNT = 4
+EXPECTED_PERSN_COUNT = 5
 if len(BOUNDS) != EXPECTED_PERSN_COUNT:
     raise AssertionError(
         f"Parameter count mismatch: BOUNDS has {len(BOUNDS)} entries, "
@@ -84,19 +92,20 @@ if len(BOUNDS) != EXPECTED_PERSN_COUNT:
     )
 
 # Fail fast if forbidden parameters are present
-FORBIDDEN_PARAMS = ["P_orb", "phi_0", "A_lens", "ell", "L_peak"]
+FORBIDDEN_PARAMS = ["P_orb", "phi_0", "ell", "L_peak"]
 if any(k in BOUNDS for k in FORBIDDEN_PARAMS):
     raise ValueError(
         f"Forbidden parameters {FORBIDDEN_PARAMS} found in BOUNDS. "
-        f"L_peak is FROZEN, ell removed, BBH handled in Stage-2."
+        f"L_peak is FROZEN, ell removed. A_lens RESTORED per PHYSICS_AUDIT.md."
     )
 
-# V15 FIXED: Parameter scales for ridge normalization (4 params)
+# V16 RESTORED: Parameter scales for ridge normalization (5 params)
 PARAM_SCALES = np.array([
     20.0,      # t0 scale (days)
     0.2,       # A_plasma scale
     1.0,       # beta scale
     5.0,       # ln_A scale (log-amplitude)
+    0.2,       # A_lens scale (BBH lensing amplitude)
 ])
 
 # ℓ₂ ridge regularization strength
@@ -110,19 +119,19 @@ def chi2_with_ridge(
     z_obs: float,
 ) -> float:
     """
-    V15 FIXED: Compute χ² + ℓ₂ ridge penalty (4 params, L_peak frozen).
+    V16 RESTORED: Compute χ² + ℓ₂ ridge penalty (5 params, L_peak frozen).
 
     CRITICAL: Uses the SAME log_likelihood_single_sn_jax as Stage 2.
 
-    V15 FIXED parameters: (t0, A_plasma, beta, ln_A) - 4 params.
+    V16 RESTORED parameters: (t0, A_plasma, beta, ln_A, A_lens) - 5 params.
     L_peak frozen at canonical 1.5e43 erg/s.
-    BBH handled via mixture model in Stage-2 (see cloud.txt).
+    A_lens RESTORED per PHYSICS_AUDIT.md recommendations.
     """
-    t0, A_plasma, beta, ln_A = persn_params  # 4 params
+    t0, A_plasma, beta, ln_A, A_lens = persn_params  # 5 params
 
     # Use frozen canonical L_peak
     L_peak = L_PEAK_CANONICAL
-    persn_tuple = (t0, ln_A, A_plasma, beta)
+    persn_tuple = (t0, ln_A, A_plasma, beta, A_lens)
 
     log_L = log_likelihood_single_sn_jax(global_params, persn_tuple, L_peak, phot, z_obs)
     chi2 = -2.0 * log_L
@@ -143,12 +152,12 @@ def chi2_and_grad_wrapper(
     nu: float = 5.0,
 ) -> Tuple[float, np.ndarray]:
     """
-    V15 FIXED: JAX gradient wrapper for scipy.optimize (4 params, L_peak frozen).
+    V16 RESTORED: JAX gradient wrapper for scipy.optimize (5 params, L_peak frozen).
 
     Returns (value, gradient) as numpy arrays for scipy compatibility.
 
     Args:
-        persn_params: Per-SN parameters [t0, A_plasma, beta, ln_A]
+        persn_params: Per-SN parameters [t0, A_plasma, beta, ln_A, A_lens]
         global_params: Global QFD parameters (k_J, eta_prime, xi)
         phot: Photometry array [N_obs, 4]
         z_obs: Observed redshift
@@ -157,20 +166,19 @@ def chi2_and_grad_wrapper(
     """
     # Create closure for JAX
     def objective(params_jax):
-        t0, A_plasma, beta, ln_A = params_jax  # 4 params
+        t0, A_plasma, beta, ln_A, A_lens = params_jax  # 5 params
 
         # Use frozen canonical L_peak
         L_peak = L_PEAK_CANONICAL
-        persn_tuple = (t0, ln_A, A_plasma, beta)
+        persn_tuple = (t0, ln_A, A_plasma, beta, A_lens)
 
         # Choose likelihood function based on use_studentt flag
         if use_studentt:
             # Student-t likelihood (heavier tails, robust to outliers)
-            log_L = log_likelihood_single_sn_jax_studentt(
-                global_params, persn_tuple, L_peak, phot, z_obs, nu
+            # TODO: log_likelihood_single_sn_jax_studentt not yet implemented in v15_model
+            raise NotImplementedError(
+                "Student-t likelihood not yet implemented. Set use_studentt=False."
             )
-            # Negative log-likelihood (we minimize this)
-            nll = -log_L
         else:
             # Gaussian likelihood (original)
             log_L = log_likelihood_single_sn_jax(global_params, persn_tuple, L_peak, phot, z_obs)
@@ -193,12 +201,12 @@ def chi2_and_grad_wrapper(
 
 def get_initial_guess(lc_data, z_obs: float, global_k_J: float) -> np.ndarray:
     """
-    V15 FIXED: Data-driven initial guess for per-SN params (4 parameters).
+    V16 RESTORED: Data-driven initial guess for per-SN params (5 parameters).
 
-    Returns (t0, A_plasma, beta, ln_A).
+    Returns (t0, A_plasma, beta, ln_A, A_lens).
     L_peak is FROZEN at canonical value, not optimized.
 
-    BBH channels handled via mixture model in Stage-2, not per-SN knobs.
+    BBH physics RESTORED per PHYSICS_AUDIT.md recommendations.
     """
     mjd = lc_data.mjd
     flux_jy = lc_data.flux_jy
@@ -219,15 +227,19 @@ def get_initial_guess(lc_data, z_obs: float, global_k_J: float) -> np.ndarray:
     # Need exp(ln_A) ~ 10^8, so ln_A ~ ln(10^8) = 18.4
     ln_A_guess = 18.0
 
-    # Return as (t0, A_plasma, beta, ln_A) - exactly 4 params
+    # A_lens: BBH lensing amplitude (RESTORED 2025-01-13)
+    # Start at zero (no BBH effect), optimizer will fit if needed
+    A_lens_guess = 0.0
+
+    # Return as (t0, A_plasma, beta, ln_A, A_lens) - exactly 5 params
     persn0 = np.array([
-        t0_guess, A_plasma_guess, beta_guess, ln_A_guess
+        t0_guess, A_plasma_guess, beta_guess, ln_A_guess, A_lens_guess
     ], dtype=np.float64)
 
-    # Validation: ensure exactly 4 parameters
-    if persn0.shape[0] != 4:
+    # Validation: ensure exactly 5 parameters
+    if persn0.shape[0] != 5:
         raise ValueError(
-            f"V15 FIXED Stage-1 expects exactly 4 per-SN parameters [t0, A_plasma, beta, ln_A]. "
+            f"V16 RESTORED Stage-1 expects exactly 5 per-SN parameters [t0, A_plasma, beta, ln_A, A_lens]. "
             f"Got {persn0.shape[0]} parameters. L_peak is frozen at {L_PEAK_CANONICAL:.2e} erg/s."
         )
 

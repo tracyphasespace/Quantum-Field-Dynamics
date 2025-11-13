@@ -5,5 +5,8 @@ __pycache__/
 .claude/
 *.egg-info/
 
-.claude/
-*.egg-info/
+# Test and output directories
+test_output*/
+*_output/
+results/
+stage*_output/

@@ -301,7 +301,12 @@ def save_results(samples, k_J_samples, eta_prime_samples, xi_samples,
     np.save(out_path / 'k_J_samples.npy', k_J_samples)
     np.save(out_path / 'eta_prime_samples.npy', eta_prime_samples)
     np.save(out_path / 'xi_samples.npy', xi_samples)
-    np.save(out_path / 'c_samples.npy', np.asarray(samples['c']))
+    # Handle both informed (c0, c1, c2) and uninformed (c) priors
+    if 'c' in samples:
+        c_samples_to_save = np.asarray(samples['c'])
+    else:
+        c_samples_to_save = np.stack([samples['c0'], samples['c1'], samples['c2']], axis=1)
+    np.save(out_path / 'c_samples.npy', c_samples_to_save)
 
     # Compute diagnostics
     k_J_stats = compute_diagnostics(k_J_samples, 'k_J')
@@ -329,9 +334,9 @@ def save_results(samples, k_J_samples, eta_prime_samples, xi_samples,
             'xi': xi_stats
         },
         'standardized': {
-            'c0': compute_diagnostics(np.asarray(samples['c'])[:, 0], 'c0'),
-            'c1': compute_diagnostics(np.asarray(samples['c'])[:, 1], 'c1'),
-            'c2': compute_diagnostics(np.asarray(samples['c'])[:, 2], 'c2')
+            'c0': compute_diagnostics(c_samples_to_save[:, 0], 'c0'),
+            'c1': compute_diagnostics(c_samples_to_save[:, 1], 'c1'),
+            'c2': compute_diagnostics(c_samples_to_save[:, 2], 'c2')
         },
         'meta': {
             'standardizer': {
@@ -446,7 +451,12 @@ def main():
 
     # Back-transform to physics space
     print("\nBack-transforming to physics space...")
-    c_samples = np.asarray(samples['c'])
+    # Handle both informed (c0, c1, c2) and uninformed (c) priors
+    if 'c' in samples:
+        c_samples = np.asarray(samples['c'])
+    else:
+        # Reconstruct c from c0, c1, c2
+        c_samples = np.stack([samples['c0'], samples['c1'], samples['c2']], axis=1)
     k_J_samples, eta_prime_samples, xi_samples = back_transform_to_physics(c_samples, scales)
 
     print(f"  c samples shape: {c_samples.shape}")
