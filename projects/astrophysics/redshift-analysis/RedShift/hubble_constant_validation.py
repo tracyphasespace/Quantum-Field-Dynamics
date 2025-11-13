@@ -36,7 +36,7 @@ OMEGA_M_QFD = 1.0
 OMEGA_LAMBDA_QFD = 0.0
 
 # QFD-specific parameters (fitted to observations)
-QVD_COUPLING = 0.85  # QVD interaction strength
+QFD_COUPLING = 0.85  # QFD interaction strength
 REDSHIFT_POWER = 0.6  # z^0.6 scaling law
 
 
@@ -137,18 +137,18 @@ def distance_modulus(D_L_Mpc):
     return 5.0 * np.log10(D_L_Mpc * 1e6 / 10.0)
 
 
-def qvd_dimming(z, alpha=QVD_COUPLING, beta=REDSHIFT_POWER):
+def qfd_dimming(z, alpha=QFD_COUPLING, beta=REDSHIFT_POWER):
     """
-    Calculate QVD-induced dimming from photon-ψ field interactions.
+    Calculate QFD-induced dimming from photon-ψ field interactions.
 
-    This replaces dark energy acceleration with QVD physics.
+    This replaces dark energy acceleration with QFD physics.
 
     Parameters:
     -----------
     z : float or array
         Redshift
     alpha : float
-        QVD coupling strength
+        QFD coupling strength
     beta : float
         Redshift power law exponent
 
@@ -162,7 +162,7 @@ def qvd_dimming(z, alpha=QVD_COUPLING, beta=REDSHIFT_POWER):
     # Ensure non-negative redshifts
     z_safe = np.maximum(z, 1e-6)
 
-    # QVD dimming follows z^β scaling
+    # QFD dimming follows z^β scaling
     dimming = alpha * z_safe**beta
 
     if len(dimming) == 1:
@@ -182,13 +182,13 @@ def apparent_magnitude_qfd(z, M_abs=M_ABS_SN):
     Calculate apparent magnitude in QFD cosmology.
 
     This includes both the geometric distance (matter-dominated)
-    and the QVD dimming effect (replaces dark energy).
+    and the QFD dimming effect (replaces dark energy).
     """
     D_L = luminosity_distance_qfd(z)
     mu = distance_modulus(D_L)
-    Delta_m_qvd = qvd_dimming(z)
+    Delta_m_qfd = qfd_dimming(z)
 
-    return M_abs + mu + Delta_m_qvd
+    return M_abs + mu + Delta_m_qfd
 
 
 def generate_mock_observations(n_points=50):
@@ -238,7 +238,7 @@ def validate_hubble_constant():
     print(f"  H₀ = {H0_STANDARD} km/s/Mpc (SAME)")
     print(f"  Ω_m = {OMEGA_M_QFD} (Matter-dominated)")
     print(f"  Ω_Λ = {OMEGA_LAMBDA_QFD} (NO Dark Energy)")
-    print(f"  QVD coupling α = {QVD_COUPLING}")
+    print(f"  QFD coupling α = {QFD_COUPLING}")
     print(f"  Redshift power β = {REDSHIFT_POWER} (z^{REDSHIFT_POWER} scaling)")
     print()
 
@@ -311,10 +311,10 @@ def validate_hubble_constant():
     print("  • Standard Hubble constant H₀ = 70 km/s/Mpc")
     print("  • NO dark energy (Ω_Λ = 0)")
     print("  • NO cosmic acceleration")
-    print("  • Photon-ψ field interactions (QVD physics)")
+    print("  • Photon-ψ field interactions (QFD physics)")
     print()
     print("This demonstrates that dark energy may be unnecessary!")
-    print("Observations can be explained by QVD quantum field effects.")
+    print("Observations can be explained by QFD quantum field effects.")
     print()
 
     return {
@@ -378,17 +378,17 @@ def create_validation_plots(results, output_dir='validation_output'):
     ax2.legend(fontsize=10)
     ax2.grid(True, alpha=0.3)
 
-    # Plot 3: QVD Dimming Component
+    # Plot 3: QFD Dimming Component
     ax3 = plt.subplot(2, 3, 3)
     z_plot = np.linspace(0.01, 0.8, 100)
-    dimming = qvd_dimming(z_plot)
+    dimming = qfd_dimming(z_plot)
 
     ax3.plot(z_plot, dimming, 'g-', linewidth=3)
     ax3.fill_between(z_plot, 0, dimming, alpha=0.3, color='green')
 
     ax3.set_xlabel('Redshift z', fontsize=12)
-    ax3.set_ylabel('QVD Dimming (mag)', fontsize=12)
-    ax3.set_title(f'QVD Effect: Δm ∝ z^{REDSHIFT_POWER}', fontsize=14, fontweight='bold')
+    ax3.set_ylabel('QFD Dimming (mag)', fontsize=12)
+    ax3.set_title(f'QFD Effect: Δm ∝ z^{REDSHIFT_POWER}', fontsize=14, fontweight='bold')
     ax3.grid(True, alpha=0.3)
 
     # Add physics annotation
@@ -447,11 +447,11 @@ def create_validation_plots(results, output_dir='validation_output'):
 
     # Show components of QFD magnitude
     mu_qfd = distance_modulus(D_L_qfd)
-    Delta_m_qvd = qvd_dimming(z_plot)
+    Delta_m_qfd = qfd_dimming(z_plot)
 
     ax6.plot(z_plot, mu_qfd, 'b-', linewidth=2, label='Geometric distance', alpha=0.7)
-    ax6.plot(z_plot, Delta_m_qvd, 'g-', linewidth=2, label='QVD dimming', alpha=0.7)
-    ax6.plot(z_plot, mu_qfd + Delta_m_qvd, 'r-', linewidth=3, label='Total (QFD)', alpha=0.9)
+    ax6.plot(z_plot, Delta_m_qfd, 'g-', linewidth=2, label='QFD dimming', alpha=0.7)
+    ax6.plot(z_plot, mu_qfd + Delta_m_qfd, 'r-', linewidth=3, label='Total (QFD)', alpha=0.9)
 
     ax6.set_xlabel('Redshift z', fontsize=12)
     ax6.set_ylabel('Magnitude Components', fontsize=12)
@@ -492,7 +492,7 @@ def save_validation_results(results, output_dir='validation_output'):
             'qfd': {
                 'Omega_m': OMEGA_M_QFD,
                 'Omega_Lambda': OMEGA_LAMBDA_QFD,
-                'qvd_coupling': QVD_COUPLING,
+                'qfd_coupling': QFD_COUPLING,
                 'redshift_power': REDSHIFT_POWER
             }
         },
