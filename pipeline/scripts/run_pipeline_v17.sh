@@ -14,7 +14,7 @@ echo
 
 # --- Configuration ---
 # Define paths relative to the v15_clean directory, where this script is run from
-V17_DIR="./v17"
+V17_DIR="./pipeline"
 STAGES_DIR="$V17_DIR/stages"
 DATA_FILE="$V17_DIR/data/lightcurves_unified_v2_min3.csv" # This symlink points to the full dataset
 STAGE1_RESULTS_DIR="../results/v15_clean/stage1_fullscale" # Using pre-computed V15 results

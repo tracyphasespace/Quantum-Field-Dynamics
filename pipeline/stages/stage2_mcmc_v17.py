@@ -117,11 +117,11 @@ def find_distance_for_redshift(k_J, eta_prime, A_plasma, beta, z_obs):
         final_low, final_high, _ = jax.lax.while_loop(cond_fun, body_fun, (low, high, 0))
         return (final_low + final_high) / 2.0
 
-    low, high = 1.0, 20000.0
+    low, high = 1.0, 200000.0
     f_low = residual_func(low)
     f_high = residual_func(high)
     is_bracketed = (jnp.sign(f_low) != jnp.sign(f_high))
-    return jnp.where(is_bracketed, find_root(residual_func, low, high), jnp.nan)
+    return jnp.where(is_bracketed, find_root(residual_func, low, high), high)
 
 
 # --- NumPyro MCMC Model ---
@@ -132,7 +132,7 @@ def numpyro_model_v17(z_obs, m_obs, A_plasma, beta):
     k_J = numpyro.sample('k_J', dist.Normal(70.0, 10.0))
     eta_prime = numpyro.sample('eta_prime', dist.Normal(0.0, 1.0))
     xi = numpyro.sample('xi', dist.Normal(0.0, 1.0))
-    sigma_m = numpyro.sample('sigma_m', dist.HalfNormal(0.2))
+    sigma_m = numpyro.sample('sigma_m', dist.HalfNormal(0.2).mask(False)) + 1e-6
 
     def process_single_sn(z_obs_single, A_plasma_single, beta_single):
         distance = find_distance_for_redshift(k_J, eta_prime, A_plasma_single, beta_single, z_obs_single)
@@ -154,6 +154,8 @@ def numpyro_model_v17(z_obs, m_obs, A_plasma, beta):
 # --- Main Execution ---
 def main(args):
     print("--- V17 Stage 2 MCMC (Pure Functional, No Dicts) ---")
+    jax.config.update("jax_enable_x64", True)
+    numpyro.set_host_device_count(1)
     
     try:
         data = load_real_data(args.lightcurves, args.stage1_results, args.max_sne)

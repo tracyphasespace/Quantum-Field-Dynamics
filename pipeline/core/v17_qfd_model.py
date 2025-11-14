@@ -58,7 +58,10 @@ def predict_apparent_magnitude(xi: float, distance_mpc: float, z_drag: float, z_
 
     # --- c) Planck/Wien Thermal Broadening Effect ---
     total_physical_redshift = (1 + z_drag) * (1 + z_local) - 1
-    delta_mu_thermal = xi * (jnp.log10(1 + total_physical_redshift))**2
+    
+    # Ensure argument to log10 is positive for numerical stability
+    one_plus_total_redshift_clamped = jnp.maximum(1 + total_physical_redshift, 1e-6) # Clamp to a small positive value
+    delta_mu_thermal = xi * (jnp.log10(one_plus_total_redshift_clamped))**2
 
     # Final apparent magnitude is the geometric dimming PLUS the thermal effect
     m_apparent = mu_geometric + abs_magnitude + delta_mu_thermal
