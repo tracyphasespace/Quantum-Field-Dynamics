@@ -91,7 +91,7 @@ def load_real_data(lightcurve_path, stage1_dir, max_sne=50):
 
 
 # --- NumPyro MCMC Model ---
-def numpyro_model_v18(z_obs, ln_A_obs, A_plasma, beta):
+def numpyro_model_v18(z_obs, ln_A_obs):
     """
     Defines the MCMC model for fitting the global QFD parameters using ln_A basis.
     """
@@ -141,7 +141,7 @@ def main_v18(args):
     
     print(f"Running MCMC on {len(data['z_obs'])} supernovae...")
     rng_key = jax.random.PRNGKey(0)
-    mcmc.run(rng_key, data['z_obs'], data['ln_A_obs'], data['A_plasma'], data['beta'])
+    mcmc.run(rng_key, data['z_obs'], data['ln_A_obs'])
     
     print("\n--- MCMC complete. Results: ---")
     mcmc.print_summary()

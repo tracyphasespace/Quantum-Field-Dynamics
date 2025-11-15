@@ -83,12 +83,9 @@ def load_real_data(lightcurve_path: str, stage1_dir: str, max_sne: int = 50) -> 
 
     print(f"Successfully loaded {len(z_obs_list)} supernovae.")
 
-    ln_A_obs = np.array(ln_A_obs_list, dtype=np.float64)
-    ln_A_obs -= np.mean(ln_A_obs)
-
     return {
         "z_obs": np.array(z_obs_list, dtype=np.float64),
-        "ln_A_obs": ln_A_obs,
+        "ln_A_obs": np.array(ln_A_obs_list, dtype=np.float64),
         "A_plasma": np.array(A_plasma_list, dtype=np.float64),
         "beta": np.array(beta_list, dtype=np.float64),
     }

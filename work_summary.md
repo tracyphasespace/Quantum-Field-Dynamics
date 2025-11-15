@@ -21,7 +21,15 @@ A new `V18` model was developed, incorporating a series of significant changes t
 
 *   **Switch to `emcee` for Stage 2:** To address the performance issues with `NumPyro` for this simple model, a new script `stage2_mcmc_v18_emcee.py` was created. This script uses the `emcee` sampler, which is well-suited for this type of problem and can be easily parallelized across multiple CPU cores using `multiprocessing`. This change provided a significant performance improvement, bringing the run time from hours to minutes.
 
-*   **Normalization of `ln_A_obs`:** The final key to resolving the model misspecification was the normalization of the `ln_A_obs` values from Stage 1. The `ln_A_pred` function is designed to predict the *deviation* from the baseline, while the `ln_A` values from Stage 1 were absolute values. By subtracting the mean from `ln_A_obs`, the values were centered around 0, which allowed the model to fit the data correctly.
+*   **Normalization of `ln_A_obs` (and subsequent removal):** Initially, `ln_A_obs` values from Stage 1 were mean-subtracted to center them around 0, allowing the model to fit the data correctly. However, for consistency between the `NumPyro` and `emcee` implementations, this explicit mean-centering was later removed from the `emcee` version, allowing the `ln_A_pred` function to absorb any necessary offset.
+
+## Tiny Optional Tweaks Implemented
+
+Based on user feedback, the following minor improvements were made:
+
+1.  **Dropped unused arguments in `numpyro_model_v18`:** The `A_plasma` and `beta` arguments were removed from the `numpyro_model_v18` function signature and the `mcmc.run` call in `stage2_mcmc_v18.py`, as they were not utilized in the `ln_A` basis model. This makes the model API cleaner.
+2.  **Consistent centering of `ln_A`:** The explicit mean-centering of `ln_A_obs` in `stage2_mcmc_v18_emcee.py` was removed to ensure consistency with the `NumPyro` version. Now, `ln_A_pred` is expected to absorb the offset.
+3.  **Documented the role of `K_J_BASELINE`:** A comment was added to `v17_lightcurve_model.py` explaining that `k_J = K_J_BASELINE + k_J_corr` and clarifying the physical baseline.
 
 ## Current Status of Stage 2 MCMC (V18)
 
@@ -55,4 +63,3 @@ The work described above has been captured in the following Git commits:
 *   `FIX: Resolve pickling issue in emcee script`
 *   `FIX: Normalize ln_A_obs values to resolve model misspecification`
 *   `DOCS: Update work summary with final V18 results`
-

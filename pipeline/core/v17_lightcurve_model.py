@@ -65,7 +65,12 @@ MAX_GRAVITATIONAL_Z = 0.5  # Safety cap to prevent extreme redshift excursions
 # - Planck/Wien thermal broadening (NOT ΛCDM time dilation)
 # - BBH orbital lensing corrections deferred to V16 (applied to outliers only)
 #
-K_J_BASELINE = 70.0  # km/s/Mpc - FIXED (from QVD baseline cosmology)
+# K_J_BASELINE represents the baseline value for the K_J parameter,
+# which is related to the effective Hubble constant.
+# The model uses k_J = K_J_BASELINE + k_J_corr, where k_J_corr is a correction
+# fitted by the MCMC. K_J_BASELINE is set to correspond to a physical baseline
+# (e.g., 70 km/s/Mpc equivalent).
+K_J_BASELINE = 0.00010285
 
 # Iterative opacity solver parameters
 OPACITY_MAX_ITER = 20
