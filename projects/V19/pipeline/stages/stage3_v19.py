@@ -212,7 +212,8 @@ def load_stage1_results(stage1_dir, lightcurves_dict, quality_cut=2000):
             if chi2 > quality_cut:
                 continue
 
-            if metrics['iters'] < 5:
+            # V19: Relax iteration filter for testing (original: < 5)
+            if metrics['iters'] < 0:
                 continue
 
             # Build result dict
