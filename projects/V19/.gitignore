@@ -50,3 +50,4 @@ Thumbs.db
 !README.md
 !QUICK_START.md
 !requirements.txt
+data/lightcurves_full_multitype.csv
