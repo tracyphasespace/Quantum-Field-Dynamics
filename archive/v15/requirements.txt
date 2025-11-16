@@ -1,0 +1,50 @@
+# QFD Supernova V15 - Python Dependencies
+# Generated: 2025-11-12
+# Python version: 3.12.5
+#
+# To install: pip install -r requirements.txt
+#
+# For GPU support (NVIDIA):
+#   Install CUDA 13+ first, then use: pip install -r requirements.txt
+
+# Core scientific computing
+numpy==2.3.2
+scipy==1.16.1
+pandas==2.3.1
+
+# JAX (GPU-accelerated computing)
+# Note: For CPU-only, use: pip install jax jaxlib
+# For GPU (CUDA 13), these will auto-detect CUDA:
+jax[cuda13]==0.8.0
+jaxlib==0.8.0
+
+# NumPyro (Bayesian inference)
+numpyro==0.19.0
+
+# ArviZ (MCMC diagnostics)
+arviz==0.22.0
+
+# Visualization
+matplotlib==3.10.5
+seaborn>=0.13.0  # Not in pip list but likely used
+corner==2.2.3
+
+# Optional but recommended
+jaxopt==0.8.5  # JAX optimization
+blackjax==1.2.5  # Alternative MCMC backend
+
+# For data loading (if needed)
+# astropy>=5.3  # Uncomment if using FITS files
+# h5py>=3.9  # Uncomment if using HDF5 files
+
+# Development/testing (optional)
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+# black>=23.0.0
+# flake8>=6.1.0
+
+# Notes for researchers:
+# 1. GPU highly recommended for Stage 2 (50-100x faster than CPU)
+# 2. Minimum 16GB RAM recommended for full dataset (4,727 SNe)
+# 3. For reproducibility, use exact versions listed above
+# 4. If you get CUDA errors, check: nvidia-smi and ensure CUDA 13+ is installed

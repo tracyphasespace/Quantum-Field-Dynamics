@@ -1,0 +1,137 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qfd-cmb"
+version = "0.1.0"
+description = "Photon-Photon Scattering Projection for CMB TT/TE/EE Spectra"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "QFD Project", email = "contact@qfd-project.org"}
+]
+maintainers = [
+    {name = "QFD Project", email = "contact@qfd-project.org"}
+]
+keywords = ["cosmology", "cmb", "photon-photon-scattering", "quantum-field-theory"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Scientific/Engineering :: Physics",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.20.0",
+    "scipy>=1.7.0",
+    "matplotlib>=3.3.0",
+    "pandas>=1.3.0",
+]
+
+[project.optional-dependencies]
+fitting = ["emcee>=3.0.0"]
+dev = [
+    "pytest>=6.0.0",
+    "pytest-cov>=2.10.0",
+    "black>=21.0.0",
+    "flake8>=3.8.0",
+    "isort>=5.0.0",
+    "pre-commit>=2.15.0",
+]
+docs = [
+    "sphinx>=4.0.0",
+    "sphinx-rtd-theme>=1.0.0",
+    "numpydoc>=1.1.0",
+    "jupyter>=1.0.0",
+    "nbsphinx>=0.8.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/qfd-project/qfd-cmb"
+Repository = "https://github.com/qfd-project/qfd-cmb.git"
+Documentation = "https://qfd-cmb.readthedocs.io"
+"Bug Tracker" = "https://github.com/qfd-project/qfd-cmb/issues"
+
+[project.scripts]
+qfd-demo = "run_demo:main"
+qfd-fit = "fit_planck:main"
+
+[tool.setuptools]
+packages = ["qfd_cmb"]
+
+[tool.setuptools.package-data]
+qfd_cmb = ["*.py"]
+
+# Black configuration
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+# isort configuration
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["qfd_cmb"]
+known_third_party = ["numpy", "scipy", "matplotlib", "pandas", "emcee", "pytest"]
+
+# pytest configuration
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["qfd_cmb"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "setup.py",
+    "*/venv/*",
+    "*/.venv/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]

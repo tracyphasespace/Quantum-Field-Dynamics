@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples &mdash; QFD CMB Module 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="qfd_cmb.figures module" href="api/qfd_cmb.figures.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            QFD CMB Module
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage-examples">Basic Usage Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simple-power-spectrum-calculation">Simple Power Spectrum Calculation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#computing-cmb-angular-power-spectra">Computing CMB Angular Power Spectra</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#parameter-studies">Parameter Studies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#varying-oscillation-parameters">Varying Oscillation Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comparing-with-standard-model">Comparing with Standard Model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-calculations">Advanced Calculations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#polarization-spectra">Polarization Spectra</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#line-of-sight-vs-limber-comparison">Line-of-Sight vs Limber Comparison</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-benchmarking">Performance Benchmarking</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">QFD CMB Module</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
+<p>This section provides detailed examples of using the QFD CMB Module for various
+scientific calculations.</p>
+<div class="toctree-wrapper compound">
+</div>
+<section id="basic-usage-examples">
+<h2>Basic Usage Examples<a class="headerlink" href="#basic-usage-examples" title="Link to this heading"></a></h2>
+<section id="simple-power-spectrum-calculation">
+<h3>Simple Power Spectrum Calculation<a class="headerlink" href="#simple-power-spectrum-calculation" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qfd_cmb</span><span class="w"> </span><span class="kn">import</span> <span class="n">oscillatory_psik</span>
+
+<span class="c1"># Define wavenumber range</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+<span class="c1"># Compute power spectrum with default parameters</span>
+<span class="n">Pk</span> <span class="o">=</span> <span class="n">oscillatory_psik</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+<span class="c1"># Plot the result</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">Pk</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;k [1/Mpc]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;P(k)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;QFD Oscillatory Power Spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="computing-cmb-angular-power-spectra">
+<h3>Computing CMB Angular Power Spectra<a class="headerlink" href="#computing-cmb-angular-power-spectra" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qfd_cmb</span><span class="w"> </span><span class="kn">import</span> <span class="n">oscillatory_psik</span><span class="p">,</span> <span class="n">gaussian_window_chi</span><span class="p">,</span> <span class="n">project_limber</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qfd_cmb.figures</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_TT</span>
+
+<span class="c1"># Define grids</span>
+<span class="n">ells</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)</span>
+<span class="n">chi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+
+<span class="c1"># Define visibility window</span>
+<span class="n">chi_star</span> <span class="o">=</span> <span class="mf">14065.0</span>  <span class="c1"># Comoving distance to last scattering</span>
+<span class="n">sigma_chi</span> <span class="o">=</span> <span class="mf">250.0</span>   <span class="c1"># Width of last scattering surface</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">gaussian_window_chi</span><span class="p">(</span><span class="n">chi</span><span class="p">,</span> <span class="n">chi_star</span><span class="p">,</span> <span class="n">sigma_chi</span><span class="p">)</span>
+
+<span class="c1"># Define power spectrum function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Pk_func</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">oscillatory_psik</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rpsi</span><span class="o">=</span><span class="mf">147.0</span><span class="p">,</span> <span class="n">Aosc</span><span class="o">=</span><span class="mf">0.55</span><span class="p">)</span>
+
+<span class="c1"># Compute TT spectrum</span>
+<span class="n">Ctt</span> <span class="o">=</span> <span class="n">project_limber</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">Pk_func</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">chi</span><span class="p">)</span>
+
+<span class="c1"># Plot the result</span>
+<span class="n">plot_TT</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">Ctt</span><span class="p">,</span> <span class="s1">&#39;tt_spectrum.png&#39;</span><span class="p">)</span>
+
+<span class="c1"># Also create custom plot</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">ells</span><span class="o">*</span><span class="p">(</span><span class="n">ells</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Ctt</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Multipole $</span><span class="se">\\</span><span class="s1">ell$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">ell(</span><span class="se">\\</span><span class="s1">ell+1)C_</span><span class="se">\\</span><span class="s1">ell^</span><span class="si">{TT}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;QFD CMB Temperature Power Spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="parameter-studies">
+<h2>Parameter Studies<a class="headerlink" href="#parameter-studies" title="Link to this heading"></a></h2>
+<section id="varying-oscillation-parameters">
+<h3>Varying Oscillation Parameters<a class="headerlink" href="#varying-oscillation-parameters" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qfd_cmb</span><span class="w"> </span><span class="kn">import</span> <span class="n">oscillatory_psik</span><span class="p">,</span> <span class="n">gaussian_window_chi</span><span class="p">,</span> <span class="n">project_limber</span>
+
+<span class="c1"># Define grids</span>
+<span class="n">ells</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="n">chi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">gaussian_window_chi</span><span class="p">(</span><span class="n">chi</span><span class="p">,</span> <span class="mf">14065.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">)</span>
+
+<span class="c1"># Parameter values to explore</span>
+<span class="n">rpsi_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">140</span><span class="p">,</span> <span class="mi">147</span><span class="p">,</span> <span class="mi">154</span><span class="p">]</span>  <span class="c1"># Different oscillation scales</span>
+<span class="n">Aosc_values</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]</span>  <span class="c1"># Different oscillation amplitudes</span>
+
+<span class="c1"># Study rpsi dependence</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">rpsi</span> <span class="ow">in</span> <span class="n">rpsi_values</span><span class="p">:</span>
+    <span class="n">Pk_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">oscillatory_psik</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rpsi</span><span class="o">=</span><span class="n">rpsi</span><span class="p">,</span> <span class="n">Aosc</span><span class="o">=</span><span class="mf">0.55</span><span class="p">)</span>
+    <span class="n">Ctt</span> <span class="o">=</span> <span class="n">project_limber</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">Pk_func</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">chi</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">ells</span><span class="o">*</span><span class="p">(</span><span class="n">ells</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Ctt</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+               <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;$r_</span><span class="se">\\</span><span class="s1">psi = </span><span class="si">{</span><span class="n">rpsi</span><span class="si">}</span><span class="s1">$ Mpc&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Multipole $</span><span class="se">\\</span><span class="s1">ell$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">ell(</span><span class="se">\\</span><span class="s1">ell+1)C_</span><span class="se">\\</span><span class="s1">ell^</span><span class="si">{TT}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Effect of Oscillation Scale&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Study Aosc dependence</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">Aosc</span> <span class="ow">in</span> <span class="n">Aosc_values</span><span class="p">:</span>
+    <span class="n">Pk_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">oscillatory_psik</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rpsi</span><span class="o">=</span><span class="mf">147.0</span><span class="p">,</span> <span class="n">Aosc</span><span class="o">=</span><span class="n">Aosc</span><span class="p">)</span>
+    <span class="n">Ctt</span> <span class="o">=</span> <span class="n">project_limber</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">Pk_func</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">chi</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">ells</span><span class="o">*</span><span class="p">(</span><span class="n">ells</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Ctt</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+               <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;$A_</span><span class="se">{{\\</span><span class="s1">text</span><span class="se">{{</span><span class="s1">osc</span><span class="se">}}}}</span><span class="s1"> = </span><span class="si">{</span><span class="n">Aosc</span><span class="si">}</span><span class="s1">$&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Multipole $</span><span class="se">\\</span><span class="s1">ell$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">ell(</span><span class="se">\\</span><span class="s1">ell+1)C_</span><span class="se">\\</span><span class="s1">ell^</span><span class="si">{TT}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Effect of Oscillation Amplitude&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="comparing-with-standard-model">
+<h3>Comparing with Standard Model<a class="headerlink" href="#comparing-with-standard-model" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qfd_cmb</span><span class="w"> </span><span class="kn">import</span> <span class="n">oscillatory_psik</span><span class="p">,</span> <span class="n">gaussian_window_chi</span><span class="p">,</span> <span class="n">project_limber</span>
+
+<span class="c1"># Define grids</span>
+<span class="n">ells</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)</span>
+<span class="n">chi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">gaussian_window_chi</span><span class="p">(</span><span class="n">chi</span><span class="p">,</span> <span class="mf">14065.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">)</span>
+
+<span class="c1"># Standard model (no oscillations)</span>
+<span class="n">Pk_standard</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">oscillatory_psik</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">Aosc</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">Ctt_standard</span> <span class="o">=</span> <span class="n">project_limber</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">Pk_standard</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">chi</span><span class="p">)</span>
+
+<span class="c1"># QFD model (with oscillations)</span>
+<span class="n">Pk_qfd</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">oscillatory_psik</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rpsi</span><span class="o">=</span><span class="mf">147.0</span><span class="p">,</span> <span class="n">Aosc</span><span class="o">=</span><span class="mf">0.55</span><span class="p">)</span>
+<span class="n">Ctt_qfd</span> <span class="o">=</span> <span class="n">project_limber</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">Pk_qfd</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">chi</span><span class="p">)</span>
+
+<span class="c1"># Plot comparison</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+<span class="c1"># Main comparison plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">ells</span><span class="o">*</span><span class="p">(</span><span class="n">ells</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Ctt_standard</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+           <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Standard Model&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">ells</span><span class="o">*</span><span class="p">(</span><span class="n">ells</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Ctt_qfd</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+           <span class="n">label</span><span class="o">=</span><span class="s1">&#39;QFD Model&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Multipole $</span><span class="se">\\</span><span class="s1">ell$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">ell(</span><span class="se">\\</span><span class="s1">ell+1)C_</span><span class="se">\\</span><span class="s1">ell^</span><span class="si">{TT}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;CMB Temperature Spectra: Standard vs QFD&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># Residual plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">residual</span> <span class="o">=</span> <span class="p">(</span><span class="n">Ctt_qfd</span> <span class="o">-</span> <span class="n">Ctt_standard</span><span class="p">)</span> <span class="o">/</span> <span class="n">Ctt_standard</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">residual</span><span class="p">,</span> <span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Multipole $</span><span class="se">\\</span><span class="s1">ell$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Relative Difference [%]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;QFD vs Standard Model Residuals&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-calculations">
+<h2>Advanced Calculations<a class="headerlink" href="#advanced-calculations" title="Link to this heading"></a></h2>
+<section id="polarization-spectra">
+<h3>Polarization Spectra<a class="headerlink" href="#polarization-spectra" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qfd_cmb</span><span class="w"> </span><span class="kn">import</span> <span class="n">oscillatory_psik</span><span class="p">,</span> <span class="n">gaussian_window_chi</span><span class="p">,</span> <span class="n">project_limber</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qfd_cmb.kernels</span><span class="w"> </span><span class="kn">import</span> <span class="n">sin2_mueller_coeffs</span><span class="p">,</span> <span class="n">te_correlation_phase</span>
+
+<span class="c1"># Define grids</span>
+<span class="n">ells</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="n">chi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">gaussian_window_chi</span><span class="p">(</span><span class="n">chi</span><span class="p">,</span> <span class="mf">14065.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">)</span>
+
+<span class="c1"># Base power spectrum</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Pk_base</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">oscillatory_psik</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rpsi</span><span class="o">=</span><span class="mf">147.0</span><span class="p">,</span> <span class="n">Aosc</span><span class="o">=</span><span class="mf">0.55</span><span class="p">)</span>
+
+<span class="c1"># TT spectrum (temperature)</span>
+<span class="n">Ctt</span> <span class="o">=</span> <span class="n">project_limber</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">Pk_base</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">chi</span><span class="p">)</span>
+
+<span class="c1"># EE spectrum (simplified - would need proper polarization calculation)</span>
+<span class="c1"># This is a schematic example</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Pk_EE</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">Pk_base</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>  <span class="c1"># EE is typically ~10% of TT</span>
+
+<span class="n">Cee</span> <span class="o">=</span> <span class="n">project_limber</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">Pk_EE</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">chi</span><span class="p">)</span>
+
+<span class="c1"># TE spectrum with correlation</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Pk_TE</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="c1"># Simplified TE correlation</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="mf">147.0</span><span class="p">)</span>  <span class="c1"># Oscillatory correlation</span>
+    <span class="k">return</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Pk_base</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">Pk_EE</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+
+<span class="n">Cte</span> <span class="o">=</span> <span class="n">project_limber</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">Pk_TE</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">chi</span><span class="p">)</span>
+
+<span class="c1"># Plot all spectra</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">ells</span><span class="o">*</span><span class="p">(</span><span class="n">ells</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Ctt</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">ell$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">ell(</span><span class="se">\\</span><span class="s1">ell+1)C_</span><span class="se">\\</span><span class="s1">ell^</span><span class="si">{TT}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;TT Spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">ells</span><span class="o">*</span><span class="p">(</span><span class="n">ells</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Cee</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">ell$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">ell(</span><span class="se">\\</span><span class="s1">ell+1)C_</span><span class="se">\\</span><span class="s1">ell^</span><span class="si">{EE}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;EE Spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="c1"># Handle sign for TE spectrum</span>
+<span class="n">sign</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">Cte</span> <span class="o">+</span> <span class="mf">1e-30</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">ells</span><span class="o">*</span><span class="p">(</span><span class="n">ells</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Cte</span><span class="p">),</span> <span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">ell$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;sign×$</span><span class="se">\\</span><span class="s1">ell(</span><span class="se">\\</span><span class="s1">ell+1)|C_</span><span class="se">\\</span><span class="s1">ell^</span><span class="si">{TE}</span><span class="s1">|$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;TE Spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="line-of-sight-vs-limber-comparison">
+<h3>Line-of-Sight vs Limber Comparison<a class="headerlink" href="#line-of-sight-vs-limber-comparison" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qfd_cmb</span><span class="w"> </span><span class="kn">import</span> <span class="n">oscillatory_psik</span><span class="p">,</span> <span class="n">gaussian_window_chi</span><span class="p">,</span> <span class="n">project_limber</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qfd_cmb.projector</span><span class="w"> </span><span class="kn">import</span> <span class="n">los_transfer</span><span class="p">,</span> <span class="n">project_los</span>
+
+<span class="c1"># Define grids for comparison</span>
+<span class="n">ells_low</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Low ells where differences matter</span>
+<span class="n">ells_high</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># Full range for Limber</span>
+
+<span class="n">chi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">gaussian_window_chi</span><span class="p">(</span><span class="n">chi</span><span class="p">,</span> <span class="mf">14065.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">)</span>
+
+<span class="n">k_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">eta_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">14000</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+
+<span class="c1"># Power spectrum function</span>
+<span class="n">Pk_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">oscillatory_psik</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rpsi</span><span class="o">=</span><span class="mf">147.0</span><span class="p">,</span> <span class="n">Aosc</span><span class="o">=</span><span class="mf">0.55</span><span class="p">)</span>
+
+<span class="c1"># Limber calculation</span>
+<span class="n">Cl_limber</span> <span class="o">=</span> <span class="n">project_limber</span><span class="p">(</span><span class="n">ells_high</span><span class="p">,</span> <span class="n">Pk_func</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">chi</span><span class="p">)</span>
+
+<span class="c1"># Line-of-sight calculation (simplified example)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">S_func</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">eta</span><span class="p">):</span>
+    <span class="c1"># Simplified source function</span>
+    <span class="n">eta_star</span> <span class="o">=</span> <span class="mi">13500</span>  <span class="c1"># Approximate conformal time at last scattering</span>
+    <span class="n">sigma_eta</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">eta</span> <span class="o">-</span> <span class="n">eta_star</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma_eta</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Compute transfer functions</span>
+<span class="n">Delta</span> <span class="o">=</span> <span class="n">los_transfer</span><span class="p">(</span><span class="n">ells_low</span><span class="p">,</span> <span class="n">k_grid</span><span class="p">,</span> <span class="n">eta_grid</span><span class="p">,</span> <span class="n">S_func</span><span class="p">)</span>
+
+<span class="c1"># Project to get spectrum</span>
+<span class="n">Cl_los</span> <span class="o">=</span> <span class="n">project_los</span><span class="p">(</span><span class="n">ells_low</span><span class="p">,</span> <span class="n">k_grid</span><span class="p">,</span> <span class="n">Pk_func</span><span class="p">,</span> <span class="n">Delta</span><span class="p">,</span> <span class="n">Delta</span><span class="p">)</span>
+
+<span class="c1"># Compare results</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="c1"># Full Limber result</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ells_high</span><span class="p">,</span> <span class="n">ells_high</span><span class="o">*</span><span class="p">(</span><span class="n">ells_high</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Cl_limber</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span>
+           <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Limber Approximation&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+<span class="c1"># Line-of-sight result for low ells</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ells_low</span><span class="p">,</span> <span class="n">ells_low</span><span class="o">*</span><span class="p">(</span><span class="n">ells_low</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Cl_los</span><span class="p">,</span> <span class="s1">&#39;ro&#39;</span><span class="p">,</span>
+           <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Line-of-Sight (low $</span><span class="se">\\</span><span class="s1">ell$)&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Multipole $</span><span class="se">\\</span><span class="s1">ell$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">ell(</span><span class="se">\\</span><span class="s1">ell+1)C_</span><span class="se">\\</span><span class="s1">ell^</span><span class="si">{TT}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Limber vs Line-of-Sight Projection Methods&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+
+<span class="c1"># Inset showing low-ell region</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.axes_grid1.inset_locator</span><span class="w"> </span><span class="kn">import</span> <span class="n">inset_axes</span>
+<span class="n">axins</span> <span class="o">=</span> <span class="n">inset_axes</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">(),</span> <span class="n">width</span><span class="o">=</span><span class="s2">&quot;40%&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="s2">&quot;40%&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ells_high</span><span class="p">[:</span><span class="mi">50</span><span class="p">],</span> <span class="n">ells_high</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">ells_high</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Cl_limber</span><span class="p">[:</span><span class="mi">50</span><span class="p">],</span>
+             <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ells_low</span><span class="p">[:</span><span class="mi">30</span><span class="p">],</span> <span class="n">ells_low</span><span class="p">[:</span><span class="mi">30</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">ells_low</span><span class="p">[:</span><span class="mi">30</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Cl_los</span><span class="p">[:</span><span class="mi">30</span><span class="p">],</span>
+             <span class="s1">&#39;ro&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-benchmarking">
+<h3>Performance Benchmarking<a class="headerlink" href="#performance-benchmarking" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qfd_cmb</span><span class="w"> </span><span class="kn">import</span> <span class="n">oscillatory_psik</span><span class="p">,</span> <span class="n">gaussian_window_chi</span><span class="p">,</span> <span class="n">project_limber</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">benchmark_calculation</span><span class="p">(</span><span class="n">n_ells</span><span class="p">,</span> <span class="n">n_chi</span><span class="p">,</span> <span class="n">n_runs</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Benchmark the Limber projection calculation.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Setup</span>
+    <span class="n">ells</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_ells</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">chi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="n">n_chi</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">gaussian_window_chi</span><span class="p">(</span><span class="n">chi</span><span class="p">,</span> <span class="mf">14065.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">)</span>
+    <span class="n">Pk_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">oscillatory_psik</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">rpsi</span><span class="o">=</span><span class="mf">147.0</span><span class="p">,</span> <span class="n">Aosc</span><span class="o">=</span><span class="mf">0.55</span><span class="p">)</span>
+
+    <span class="c1"># Timing runs</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_runs</span><span class="p">):</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">Cl</span> <span class="o">=</span> <span class="n">project_limber</span><span class="p">(</span><span class="n">ells</span><span class="p">,</span> <span class="n">Pk_func</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">chi</span><span class="p">)</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
+
+    <span class="n">avg_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+    <span class="n">std_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">avg_time</span><span class="p">,</span> <span class="n">std_time</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ells</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">chi</span><span class="p">)</span>
+
+<span class="c1"># Run benchmarks</span>
+<span class="n">test_cases</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>    <span class="c1"># Small</span>
+    <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>   <span class="c1"># Medium</span>
+    <span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>  <span class="c1"># Large</span>
+    <span class="p">(</span><span class="mi">5000</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span>  <span class="c1"># Very large</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performance Benchmark Results:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;N_ells&#39;</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;N_chi&#39;</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Time (s)&#39;</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Std (s)&#39;</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">n_ells</span><span class="p">,</span> <span class="n">n_chi</span> <span class="ow">in</span> <span class="n">test_cases</span><span class="p">:</span>
+    <span class="n">avg_time</span><span class="p">,</span> <span class="n">std_time</span><span class="p">,</span> <span class="n">actual_ells</span><span class="p">,</span> <span class="n">actual_chi</span> <span class="o">=</span> <span class="n">benchmark_calculation</span><span class="p">(</span><span class="n">n_ells</span><span class="p">,</span> <span class="n">n_chi</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">actual_ells</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">actual_chi</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">avg_time</span><span class="si">:</span><span class="s2">&lt;12.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">std_time</span><span class="si">:</span><span class="s2">&lt;10.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api/qfd_cmb.figures.html" class="btn btn-neutral float-left" title="qfd_cmb.figures module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, QFD Project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
