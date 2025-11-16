@@ -1,0 +1,46 @@
+# Data files (too large for git)
+data/raw/
+data/processed/*.csv
+data/processed/*.parquet
+data/*.zip
+data/*.tar.gz
+
+# Results (generated outputs)
+results/
+*.pkl
+*.npy
+*.h5
+*.hdf5
+
+# Notebook outputs
+notebooks/*.ipynb_checkpoints/
+notebooks/*.nbconvert/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keep test data and documentation
+!data/processed/lightcurves_test_10sne.csv
+!data/README.md
+!docs/
