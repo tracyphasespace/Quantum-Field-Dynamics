@@ -249,7 +249,7 @@ class QFDIntrinsicModelJAX:
         wavelength_cm_64 = jnp.clip(wavelength_nm_64 * 1e-7, a_min=1e-8, a_max=1e-4)  # Reasonable wavelength range
         expo_64 = H_PLANCK * C_CM_S / (wavelength_cm_64 * K_BOLTZ * T_eff_64)
         planck_64 = (2.0 * H_PLANCK * C_CM_S**2) / (
-            wavelength_cm_64**5 * jnp.expm1(jnp.clip(expo_64, a_max=80))
+            wavelength_cm_64**5 * jnp.expm1(jnp.clip(expo_64, a_max=100))
         )
         # More aggressive clipping for planck to prevent overflow in gradients
         planck_64 = jnp.nan_to_num(planck_64, nan=0.0, posinf=1e10, neginf=0.0)
@@ -291,7 +291,7 @@ class QFDIntrinsicModelJAX:
 
         # Convert to erg/s/nm and apply scaling
         L_lambda_nm_64 = L_lambda_cm_64 * 1e-7 * scale_64 * envelope_64
-        return jnp.maximum(jnp.asarray(jnp.nan_to_num(L_lambda_nm_64, nan=0.0, posinf=1e30, neginf=0.0), dtype=jnp.float32), 1e-30)
+        return jnp.asarray(jnp.nan_to_num(L_lambda_nm_64, nan=0.0, posinf=1e30, neginf=0.0), dtype=jnp.float32)
 
 
 # ==============================================================================
@@ -541,6 +541,7 @@ def qfd_lightcurve_model_jax(
     # Rest-frame wavelength: remove *local* plasma/BBH contributions
     wavelength_rest = wavelength_obs / (1.0 + z_plasma + z_bbh)
 
+    # Intrinsic spectral luminosity
     L_intrinsic = QFDIntrinsicModelJAX.spectral_luminosity(
         t_rest,
         wavelength_rest,
@@ -630,9 +631,6 @@ def qfd_lightcurve_model_jax_static_lens(
     wavelength_rest = wavelength_obs / (1.0 + z_plasma + z_bbh)
 
     # Intrinsic spectral luminosity
-    # Rest-frame wavelength: remove *local* plasma/BBH contributions
-    wavelength_rest = wavelength_obs / (1.0 + z_plasma + z_bbh)
-
     L_intrinsic = QFDIntrinsicModelJAX.spectral_luminosity(
         t_rest,
         wavelength_rest,
