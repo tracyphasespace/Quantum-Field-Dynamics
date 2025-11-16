@@ -388,8 +388,9 @@ def qfd_tau_total_jax(
         tau_total = OPACITY_RELAX * tau_new + (1.0 - OPACITY_RELAX) * tau_total
         return tau_total, i
 
-    # Temporarily bypass iterative loop for debugging
-    tau_total = tau_plasma
+    # CRITICAL FIX 2 of 2: Enable the iterative solver for self-consistent opacity.
+    # eta_prime and xi are now ACTIVE in the physics model.
+    tau_total, _ = jax.lax.fori_loop(0, OPACITY_MAX_ITER, body_fn, (tau_plasma, 0))
 
     # Final dimmed flux
     flux_lambda_dimmed = flux_lambda_geometric * jnp.exp(-tau_total)
@@ -529,8 +530,9 @@ def qfd_lightcurve_model_jax(
     D_fiducial_mpc = z_obs * C_KM_S / jnp.maximum(k_J_total, 1e-3)
     z_cosmo = qfd_z_from_distance_jax(D_fiducial_mpc)  # uses K_J_BASELINE internally
 
-    # Plasma veil (no BBH)
-    z_plasma = qfd_plasma_redshift_jax(t_since_explosion, wavelength_obs, A_plasma, beta)
+    # CRITICAL FIX 1 of 2: Disable redshift-based plasma effect to prevent double-counting.
+    # The Plasma Veil is now modeled *only* as an opacity effect in qfd_tau_total_jax().
+    z_plasma = 0.0
 
     # NO BBH gravitational redshift in Stage 1
     z_bbh = 0.0
@@ -620,8 +622,10 @@ def qfd_lightcurve_model_jax_static_lens(
     D_fiducial_mpc = z_obs * C_KM_S / 70.0
     z_cosmo = qfd_z_from_distance_jax(D_fiducial_mpc)  # Uses K_J_BASELINE internally
 
-    # Plasma veil redshift
-    z_plasma = qfd_plasma_redshift_jax(t_since_explosion, wavelength_obs, A_plasma, beta)
+    # CRITICAL FIX 1 of 2: Disable redshift-based plasma effect to prevent double-counting.
+    # The Plasma Veil is now modeled *only* as an opacity effect in qfd_tau_total_jax().
+    # Setting z_plasma = 0.0 ensures wavelength_rest is unaffected by plasma.
+    z_plasma = 0.0
     z_bbh = compute_bbh_gravitational_redshift(t_rest, A_lens)  # FIX 2025-01-12: Use A_lens from params
 
     # Total redshift (multiplicative composition)
