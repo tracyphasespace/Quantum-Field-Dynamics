@@ -11,3 +11,4 @@ test_output*/
 results/
 stage*_output/
 projects/V19/
+v18/data/*.csv
