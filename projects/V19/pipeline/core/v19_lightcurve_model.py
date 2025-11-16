@@ -388,8 +388,8 @@ def qfd_tau_total_jax(
         tau_total = OPACITY_RELAX * tau_new + (1.0 - OPACITY_RELAX) * tau_total
         return tau_total, i
 
-    # Temporarily bypass iterative loop for debugging
-    tau_total = tau_plasma
+    # Iteratively solve for self-consistent opacity (eta_prime and xi are now ACTIVE)
+    tau_total, _ = jax.lax.fori_loop(0, OPACITY_MAX_ITER, body_fn, (tau_plasma, 0))
 
     # Final dimmed flux
     flux_lambda_dimmed = flux_lambda_geometric * jnp.exp(-tau_total)
