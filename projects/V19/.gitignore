@@ -1,0 +1,52 @@
+# Data files (regenerate locally)
+data/raw/
+data/processed/*.csv
+data/*.zip
+data/*.tar.gz
+
+# Except test data
+!data/*test*.csv
+
+# Results (generated outputs)
+results/
+*.pkl
+*.npz
+*.npy
+*.h5
+*.hdf5
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Jupyter notebooks
+*.ipynb_checkpoints/
+
+# Environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Keep documentation and test data
+!docs/
+!README.md
+!QUICK_START.md
+!requirements.txt
