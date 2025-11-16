@@ -1,4 +1,5 @@
-# QFD Supernova V18 - Python Dependencies
+# QFD Supernova V18.1 - Python Dependencies
+# V18.1 includes CRITICAL PHYSICS FIXES (FDR enabled + pure opacity model)
 # To install: pip install -r requirements.txt
 
 # Core scientific computing
@@ -7,17 +8,26 @@ scipy==1.11.4
 pandas==2.1.4
 
 # JAX (GPU-accelerated computing)
+# For CPU: pip install "jax[cpu]"
+# For CUDA 12.x GPU: pip install "jax[cuda12]"
 jax==0.4.23
 jaxlib==0.4.23
 
-# NumPyro (Bayesian inference)
+# NumPyro (Bayesian inference - used in Stage 2)
 numpyro==0.13.2
 
-# emcee (MCMC)
+# emcee (MCMC sampler - used in Stage 2)
 emcee==3.1.4
 
 # Progress bar
 tqdm==4.66.1
 
-# Visualization
+# Visualization (plotting Hubble diagrams - used in Stage 3)
 matplotlib==3.8.2
+
+# HDF5 support (for MCMC chain storage - used in Stage 2)
+h5py==3.10.0
+
+# Astropy (ONLY needed for dataset extraction from FITS files)
+# Not required if using pre-generated CSV
+# astropy==6.0.0
