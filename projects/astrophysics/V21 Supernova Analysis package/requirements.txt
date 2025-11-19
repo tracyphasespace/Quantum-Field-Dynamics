@@ -1,0 +1,8 @@
+numpy
+pandas
+matplotlib
+scipy
+jax
+jaxlib
+tqdm
+psutil
