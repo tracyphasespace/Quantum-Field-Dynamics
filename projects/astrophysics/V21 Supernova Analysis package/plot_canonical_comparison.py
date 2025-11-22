@@ -150,21 +150,19 @@ def load_and_process_data(results_file):
     return df
 
 
-def calibrate_distance_modulus(df):
+def calculate_M_corr(df):
     """
-    Auto-calibrate M_corr by forcing median residual at z<0.1 to be zero
-    against linear Hubble law.
-
-    Linear Hubble: μ = 5*log10(c*z/H0) + 25
+    Calculate M_corr by forcing median residual at z<0.1 to be zero
+    against linear Hubble law, using robust anchoring.
     """
-    print("\nCalibrating distance modulus...")
+    print("\nCalculating M_corr for calibration...")
 
     # Select low-z SNe for calibration
     low_z = df[df['z'] < 0.1].copy()
 
     if len(low_z) == 0:
-        print("  WARNING: No SNe with z<0.1 for calibration!")
-        M_corr = 0.0
+        print("  WARNING: No SNe with z<0.1 for M_corr calculation!")
+        return 0.0
     else:
         # ROBUST ANCHORING
         mu_linear = 5.0 * np.log10((C_KM_S / H0) * low_z['z']) + 25.0
@@ -177,18 +175,23 @@ def calibrate_distance_modulus(df):
         
         M_corr = -np.median(residuals[clean_mask])
 
-        print(f"  N(z<0.1) = {len(low_z)}")
+        print(f"  N(z<0.1) = {len(low_z)} for M_corr calculation")
         print(f"  Median residual: {med:.3f}")
-        print(f"  M_corr = {M_corr:.3f}")
+        print(f"  Calculated M_corr = {M_corr:.3f}")
+        return M_corr
 
-    # Apply calibration
+
+def apply_calibration_offset(df, M_corr):
+    """
+    Apply the calculated M_corr and the manual 5.0 magnitude offset to the DataFrame.
+    """
     df['mu_obs'] = df['mu_obs_uncal'] + M_corr
     
     # MANUAL CALIBRATION OFFSET (as per user's diagnosis)
     # This shifts the data points up by 5 magnitudes to align with the model predictions
     df['mu_obs'] = df['mu_obs'] + 5.0
 
-    return df, M_corr
+    return df
 
 
 def bin_data(df, z_bins):
@@ -339,6 +342,86 @@ def plot_hubble_diagram(df, binned_data, eta_qfd, output_file):
     plt.close()
 
 
+def plot_hubble_diagram_with_all_data(full_df, filtered_df, binned_data, eta_qfd, output_file):
+    """
+    Generate Hubble Diagram with all successfully fitted SNe in the background,
+    and the filtered 'cosmology-grade' SNe overlaid.
+    """
+    print(f"\nGenerating Hubble diagram with all data: {output_file}")
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8),
+                                    gridspec_kw={'height_ratios': [3, 1], 'hspace': 0.05})
+
+    # Model predictions
+    z_model = np.linspace(0.01, full_df['z'].max(), 200)
+    mu_lcdm = distance_modulus_lcdm_vec(z_model)
+    mu_qfd = distance_modulus_qfd(z_model, eta_qfd)
+    mu_empty = distance_modulus_empty(z_model)
+
+    # Top panel: Distance modulus vs redshift
+    # All successfully fitted SNe (faint gray background)
+    ax1.scatter(full_df['z'], full_df['mu_obs'], s=5, alpha=0.05, color='gray',
+                label=f'All Fitted SNe (N={len(full_df)})')
+
+    # Filtered 'cosmology-grade' SNe (more prominent)
+    ax1.scatter(filtered_df['z'], filtered_df['mu_obs'], s=10, alpha=0.3, color='orange',
+                label=f'Cosmology-Grade SNe (N={len(filtered_df)})')
+
+    # Binned data (black points with error bars)
+    ax1.errorbar(binned_data['z_mean'], binned_data['mu_mean'],
+                 yerr=binned_data['mu_err'], fmt='o', color='black',
+                 markersize=6, capsize=3, capthick=1.5, linewidth=1.5,
+                 label=f'Binned Data (N={len(binned_data)} bins)', zorder=10)
+
+    # Model predictions
+    ax1.plot(z_model, mu_lcdm, '--', color='blue', linewidth=2,
+             label='ΛCDM (Ω$_m$=0.3, Ω$_Λ$=0.7)', zorder=5)
+    ax1.plot(z_model, mu_qfd, '-', color='green', linewidth=2.5,
+             label=f'QFD (η={eta_qfd:.3f})', zorder=5)
+
+    ax1.set_ylabel('Distance Modulus μ', fontsize=12)
+    ax1.legend(loc='upper left', frameon=True, fontsize=10)
+    ax1.grid(alpha=0.3, linestyle=':')
+    ax1.set_xticklabels([])  # Remove x-axis labels (shared with bottom panel)
+
+    # Bottom panel: Residuals relative to Empty Universe
+    # All successfully fitted SNe
+    residuals_empty_all_fitted = full_df['mu_obs'].values - distance_modulus_empty(full_df['z'].values)
+    ax2.scatter(full_df['z'], residuals_empty_all_fitted, s=5, alpha=0.05, color='gray')
+
+    # Filtered 'cosmology-grade' SNe
+    residuals_empty_filtered = filtered_df['mu_obs'].values - distance_modulus_empty(filtered_df['z'].values)
+    ax2.scatter(filtered_df['z'], residuals_empty_filtered, s=10, alpha=0.3, color='orange')
+
+    # Binned data
+    residuals_empty_binned = binned_data['mu_mean'].values - distance_modulus_empty(binned_data['z_mean'].values)
+    ax2.errorbar(binned_data['z_mean'], residuals_empty_binned,
+                 yerr=binned_data['mu_err'], fmt='o', color='black',
+                 markersize=6, capsize=3, capthick=1.5, linewidth=1.5, zorder=10)
+
+    # Model residuals
+    residuals_lcdm = mu_lcdm - mu_empty
+    residuals_qfd = mu_qfd - mu_empty
+
+    ax2.plot(z_model, residuals_lcdm, '--', color='blue', linewidth=2, zorder=5)
+    ax2.plot(z_model, residuals_qfd, '-', color='green', linewidth=2.5, zorder=5)
+    ax2.axhline(0, color='red', linestyle=':', linewidth=1.5, alpha=0.7,
+                label='Empty Universe')
+
+    ax2.set_xlabel('Redshift z', fontsize=12)
+    ax2.set_ylabel('Δμ (vs Empty)', fontsize=11)
+    ax2.legend(loc='upper left', frameon=True, fontsize=9)
+    ax2.grid(alpha=0.3, linestyle=':')
+
+    # Set consistent x-limits
+    ax1.set_xlim(0, full_df['z'].max() * 1.05)
+    ax2.set_xlim(0, full_df['z'].max() * 1.05)
+
+    plt.savefig(output_file, dpi=300, bbox_inches='tight')
+    print(f"  Saved: {output_file}")
+    plt.close()
+
+
 def plot_time_dilation_test(df, binned_data, output_file):
     """
     Generate Figure 2: Time Dilation Test (Stretch vs Redshift).
@@ -421,38 +504,74 @@ def main():
     print("="*80)
     print()
 
-    # Load and process data
-    df = load_and_process_data(results_file)
-    df, M_corr = calibrate_distance_modulus(df)
+    # Load raw data (before any filtering for cosmological analysis)
+    raw_df = pd.read_csv(results_file)
+    raw_df['snid'] = raw_df['snid'].astype(str)
+    print(f"Loading data from {results_file}...")
+    print(f"  Total SNe: {len(raw_df)}")
+    print(f"  SNe with redshift data: {(~raw_df['z'].isna()).sum()}")
 
-    # Bin data for plotting
+    # Add mu_obs_uncal to raw_df for M_corr calculation
+    raw_df['mu_obs_uncal'] = -1.0857 * raw_df['ln_A']
+
+    # Apply filters to create the 'cosmology-grade' sample (for M_corr calculation and fitting)
+    filtered_df_for_M_corr = raw_df[
+        (raw_df['stretch'] > 0.5) &
+        (raw_df['stretch'] < 2.8) &
+        (raw_df['z'] > 0.01) &
+        (~raw_df['z'].isna())
+    ].copy()
+    
+    # Calculate M_corr using the filtered data
+    M_corr = calculate_M_corr(filtered_df_for_M_corr)
+    
+    # Apply calibration to raw_df
+    raw_df_calibrated = apply_calibration_offset(raw_df.copy(), M_corr)
+
+    # Re-apply filters to create the final 'cosmology-grade' sample from the calibrated raw_df
+    filtered_df = raw_df_calibrated[
+        (raw_df_calibrated['stretch'] > 0.5) &
+        (raw_df_calibrated['stretch'] < 2.8) &
+        (raw_df_calibrated['z'] > 0.01) &
+        (~raw_df_calibrated['z'].isna())
+    ].copy()
+    print(f"  After filtering for cosmology-grade sample: {len(filtered_df)}")
+    print(f"    0.5 < stretch < 2.8 and z > 0.01")
+    
+    # Bin only the filtered data for fitting and plotting
     z_bins = np.concatenate([
         np.arange(0.01, 0.1, 0.02),
         np.arange(0.1, 0.5, 0.05),
         np.arange(0.5, 1.0, 0.1),
         [1.0, 1.5, 2.0]
     ])
-    binned_data = bin_data(df, z_bins)
+    binned_data = bin_data(filtered_df, z_bins)
 
-    print(f"\nBinned data: {len(binned_data)} bins")
+    print(f"\nBinned data for fitting: {len(binned_data)} bins")
 
-    # Fit QFD model
+    # Fit QFD model using the binned filtered data
     eta_qfd, chi2_qfd = fit_qfd_eta(binned_data)
 
     # Generate plots
-    plot_hubble_diagram(df, binned_data, eta_qfd,
+    plot_hubble_diagram(filtered_df, binned_data, eta_qfd,
                         output_dir / 'canonical_comparison.png')
-    plot_time_dilation_test(df, binned_data,
+    plot_time_dilation_test(filtered_df, binned_data,
                             output_dir / 'time_dilation_test.png')
+
+    # Generate the new plot with all data
+    plot_hubble_diagram_with_all_data(raw_df_calibrated, filtered_df, binned_data, eta_qfd,
+                                      output_dir / 'hubble_diagram_with_all_data.png')
+
 
     # Summary statistics
     print("\n" + "="*80)
     print("SUMMARY")
     print("="*80)
     print(f"\nDataset:")
-    print(f"  N(SNe) = {len(df)}")
-    print(f"  Redshift range: {df['z'].min():.3f} - {df['z'].max():.3f}")
-    print(f"  Stretch range: {df['stretch'].min():.2f} - {df['stretch'].max():.2f}")
+    print(f"  Total SNe in raw data: {len(raw_df_calibrated)}")
+    print(f"  N(SNe) in filtered data: {len(filtered_df)}")
+    print(f"  Redshift range: {filtered_df['z'].min():.3f} - {filtered_df['z'].max():.3f}")
+    print(f"  Stretch range: {filtered_df['stretch'].min():.2f} - {filtered_df['stretch'].max():.2f}")
     print(f"\nCalibration:")
     print(f"  M_corr = {M_corr:.3f}")
     print(f"\nQFD Best Fit:")
@@ -461,6 +580,7 @@ def main():
     print(f"\nOutput:")
     print(f"  {output_dir}/canonical_comparison.png")
     print(f"  {output_dir}/time_dilation_test.png")
+    print(f"  {output_dir}/hubble_diagram_with_all_data.png") # New plot
     print("="*80)
 
 
