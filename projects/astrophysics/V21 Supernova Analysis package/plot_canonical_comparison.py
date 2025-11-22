@@ -281,7 +281,7 @@ def plot_hubble_diagram(df, binned_data, eta_qfd, output_file):
                                     gridspec_kw={'height_ratios': [3, 1], 'hspace': 0.05})
 
     # Model predictions
-    z_model = np.linspace(0.01, df['z'].max(), 200)
+    z_model = np.linspace(0.01, 2.5, 200)
     mu_lcdm = distance_modulus_lcdm_vec(z_model)
     mu_qfd = distance_modulus_qfd(z_model, eta_qfd)
     mu_empty = distance_modulus_empty(z_model)
@@ -289,12 +289,12 @@ def plot_hubble_diagram(df, binned_data, eta_qfd, output_file):
     # Top panel: Distance modulus vs redshift
     # Individual SNe (gray background)
     ax1.scatter(df['z'], df['mu_obs'], s=5, alpha=0.1, color='gray',
-                label='Individual SNe')
+                label=f'Individual SNe (N={len(df)})')
 
     # Binned data (black points with error bars)
     ax1.errorbar(binned_data['z_mean'], binned_data['mu_mean'],
                  yerr=binned_data['mu_err'], fmt='o', color='black',
-                 markersize=6, capsize=3, capthick=1.5, linewidth=1.5,
+                 markersize=6, capsize=4, capthick=2, linewidth=2,
                  label='Binned Data', zorder=10)
 
     # Model predictions
@@ -317,7 +317,7 @@ def plot_hubble_diagram(df, binned_data, eta_qfd, output_file):
     residuals_empty_binned = binned_data['mu_mean'].values - distance_modulus_empty(binned_data['z_mean'].values)
     ax2.errorbar(binned_data['z_mean'], residuals_empty_binned,
                  yerr=binned_data['mu_err'], fmt='o', color='black',
-                 markersize=6, capsize=3, capthick=1.5, linewidth=1.5, zorder=10)
+                 markersize=6, capsize=4, capthick=2, linewidth=2, zorder=10)
 
     # Model residuals
     residuals_lcdm = mu_lcdm - mu_empty
@@ -332,10 +332,16 @@ def plot_hubble_diagram(df, binned_data, eta_qfd, output_file):
     ax2.set_ylabel('Δμ (vs Empty)', fontsize=11)
     ax2.legend(loc='upper left', frameon=True, fontsize=9)
     ax2.grid(alpha=0.3, linestyle=':')
+    
+    # Add annotation for residuals
+    ax2.text(0.98, 0.05, 'Δμ = μ - μ_empty(z)\nExtreme outliers off-panel',
+             transform=ax2.transAxes, fontsize=8,
+             verticalalignment='bottom', horizontalalignment='right')
 
-    # Set consistent x-limits
-    ax1.set_xlim(0, df['z'].max() * 1.05)
-    ax2.set_xlim(0, df['z'].max() * 1.05)
+    # Set consistent x-limits and y-limits for residual plot
+    ax1.set_xlim(0, 2.5)
+    ax2.set_xlim(0, 2.5)
+    ax2.set_ylim(-5, 5)
 
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     print(f"  Saved: {output_file}")
