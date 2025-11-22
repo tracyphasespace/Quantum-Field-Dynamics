@@ -277,6 +277,10 @@ def plot_hubble_diagram(df, binned_data, eta_qfd, output_file):
     """
     print(f"\nGenerating Hubble diagram: {output_file}")
 
+    # Apply redshift cutoff for this plot
+    df = df[df['z'] < 2.5].copy()
+    binned_data = binned_data[binned_data['z_mean'] < 2.5].copy()
+
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8),
                                     gridspec_kw={'height_ratios': [3, 1], 'hspace': 0.05})
 
@@ -355,11 +359,16 @@ def plot_hubble_diagram_with_all_data(full_df, filtered_df, binned_data, eta_qfd
     """
     print(f"\nGenerating Hubble diagram with all data: {output_file}")
 
+    # Apply redshift cutoff for this plot
+    full_df = full_df[full_df['z'] < 2.5].copy()
+    filtered_df = filtered_df[filtered_df['z'] < 2.5].copy()
+    binned_data = binned_data[binned_data['z_mean'] < 2.5].copy()
+
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8),
                                     gridspec_kw={'height_ratios': [3, 1], 'hspace': 0.05})
 
     # Model predictions
-    z_model = np.linspace(0.01, full_df['z'].max(), 200)
+    z_model = np.linspace(0.01, 2.5, 200)
     mu_lcdm = distance_modulus_lcdm_vec(z_model)
     mu_qfd = distance_modulus_qfd(z_model, eta_qfd)
     mu_empty = distance_modulus_empty(z_model)
@@ -376,7 +385,7 @@ def plot_hubble_diagram_with_all_data(full_df, filtered_df, binned_data, eta_qfd
     # Binned data (black points with error bars)
     ax1.errorbar(binned_data['z_mean'], binned_data['mu_mean'],
                  yerr=binned_data['mu_err'], fmt='o', color='black',
-                 markersize=6, capsize=3, capthick=1.5, linewidth=1.5,
+                 markersize=6, capsize=4, capthick=2, linewidth=2,
                  label=f'Binned Data (N={len(binned_data)} bins)', zorder=10)
 
     # Model predictions
@@ -403,7 +412,7 @@ def plot_hubble_diagram_with_all_data(full_df, filtered_df, binned_data, eta_qfd
     residuals_empty_binned = binned_data['mu_mean'].values - distance_modulus_empty(binned_data['z_mean'].values)
     ax2.errorbar(binned_data['z_mean'], residuals_empty_binned,
                  yerr=binned_data['mu_err'], fmt='o', color='black',
-                 markersize=6, capsize=3, capthick=1.5, linewidth=1.5, zorder=10)
+                 markersize=6, capsize=4, capthick=2, linewidth=2, zorder=10)
 
     # Model residuals
     residuals_lcdm = mu_lcdm - mu_empty
@@ -419,9 +428,15 @@ def plot_hubble_diagram_with_all_data(full_df, filtered_df, binned_data, eta_qfd
     ax2.legend(loc='upper left', frameon=True, fontsize=9)
     ax2.grid(alpha=0.3, linestyle=':')
 
-    # Set consistent x-limits
-    ax1.set_xlim(0, full_df['z'].max() * 1.05)
-    ax2.set_xlim(0, full_df['z'].max() * 1.05)
+    # Add annotation for residuals
+    ax2.text(0.98, 0.05, 'Δμ = μ - μ_empty(z)\nExtreme outliers off-panel',
+             transform=ax2.transAxes, fontsize=8,
+             verticalalignment='bottom', horizontalalignment='right')
+
+    # Set consistent x-limits and y-limits for residual plot
+    ax1.set_xlim(0, 2.5)
+    ax2.set_xlim(0, 2.5)
+    ax2.set_ylim(-5, 5)
 
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     print(f"  Saved: {output_file}")
@@ -438,6 +453,10 @@ def plot_time_dilation_test(df, binned_data, output_file):
     CRITICAL FIX: Normalize stretch by mean value at z<0.1 to set s(z=0) = 1.0
     """
     print(f"\nGenerating time dilation test: {output_file}")
+
+    # Apply redshift cutoff for this plot
+    df = df[df['z'] < 2.5].copy()
+    binned_data = binned_data[binned_data['z_mean'] < 2.5].copy()
 
     # NORMALIZE STRETCH: Force s(z=0) = 1.0 by dividing by low-z mean
     low_z_mask = df['z'] < 0.1
@@ -456,13 +475,13 @@ def plot_time_dilation_test(df, binned_data, output_file):
     fig, ax = plt.subplots(figsize=(10, 6))
 
     # Model predictions
-    z_model = np.linspace(0, min(df['z'].max(), 2.0), 100)  # Cap at z=2 for clarity
+    z_model = np.linspace(0, 2.5, 100)  # Cap at z=2.5 for clarity
     stretch_lcdm = 1 + z_model  # ΛCDM: s = 1+z
     stretch_qfd = np.ones_like(z_model)  # QFD: s = 1.0
 
     # Individual SNe (gray background)
     ax.scatter(df['z'], df['stretch_norm'], s=5, alpha=0.1, color='gray',
-               label='Individual SNe')
+               label=f'Individual SNe (N={len(df)})')
 
     # Binned data (black points with error bars)
     ax.errorbar(binned_data['z_mean'], binned_data['stretch_norm_mean'],
@@ -481,7 +500,7 @@ def plot_time_dilation_test(df, binned_data, output_file):
     ax.set_title('Falsification of Cosmological Time Dilation', fontsize=14, fontweight='bold')
     ax.legend(loc='upper left', frameon=True, fontsize=11)
     ax.grid(alpha=0.3, linestyle=':')
-    ax.set_xlim(0, min(df['z'].max(), 2.0) * 1.05)
+    ax.set_xlim(0, 2.5)
     ax.set_ylim(0.5, 2.5)  # Focus on relevant range
 
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
