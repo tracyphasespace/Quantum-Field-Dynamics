@@ -44,6 +44,16 @@ https://tracyphasespace.github.io/Quantum-Field-Dynamics/
 - Topological field configurations
 - **Suitable for**: Mathematical physics, topology studies
 
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/Neutrino.HTML" target="_blank">`Neutrino.HTML`</a>
+**Neutrino Dynamics**
+- Visualization of neutrino field dynamics.
+- **Suitable for**: Particle physics, field theory research
+
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/PoyntingVector4.HTML" target="_blank">`PoyntingVector4.HTML`</a>
+**Poynting Vector Visualization**
+- Visualization of the Poynting vector in 4D.
+- **Suitable for**: Electrodynamics, field theory research
+
 ---
 
 ## 🔬 **Particle Physics Visualizations**
@@ -64,12 +74,16 @@ https://tracyphasespace.github.io/Quantum-Field-Dynamics/
 
 ## 🌌 **Astrophysics Visualizations**
 
-### <a href="https://github.com/tracyphasespace/Quantum-Field-Dynamics/blob/main/visualizations/astrophysics/BlackHole_3D_Star_Generator.html" target="_blank">`blackhole-dynamics.html`</a>
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/blackhole-dynamics.html" target="_blank">`blackhole-dynamics.html`</a>
 **QFD Black Hole Field Structure**
 - Field-based black hole model (no spacetime curvature)
 - Interactive ψ-field visualization around massive objects
 - **Suitable for**: Astrophysicists, cosmologists
 
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/BlackHole_3D_Star_Generator.html" target="_blank">`BlackHole_3D_Star_Generator.html`</a>
+**3D Black Hole Star Generator**
+- Interactive 3D visualization of star generation around a black hole.
+- **Suitable for**: Astrophysicists, cosmologists
 
 ### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/blackhole-spray-condensation.html" target="_blank">`blackhole-spray-condensation.html`</a>
 **Black Hole Spray Condensation Model**
@@ -88,6 +102,11 @@ https://tracyphasespace.github.io/Quantum-Field-Dynamics/
 - Alternative redshift mechanism without cosmic expansion
 - ψ-mediated photon scattering visualization
 - **Based on**: [`projects/astrophysics/redshift-analysis/`](../projects/astrophysics/redshift-analysis/)
+
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/SuperNova.HTML" target="_blank">`SuperNova.HTML`</a>
+**Supernova Dynamics**
+- Visualization of supernova explosion dynamics.
+- **Suitable for**: Astrophysicists, computational physicists
 
 ---
 
@@ -160,9 +179,9 @@ Each visualization links to corresponding computational validation:
 
 | Category | Available Now | In Development | Planned |
 |----------|---------------|----------------|---------|
-| **Field Theory** | 3 interactive demos | Enhanced mathematics | Clifford algebra visualizations |
-| **Particle Physics** | 1 nuclide table | Lepton mass spectrum | Wavelet structure diagrams |
-| **Astrophysics** | 1 black hole model | Supernova evolution | Redshift mechanism demos |
+| **Field Theory** | 5 interactive demos | Enhanced mathematics | Clifford algebra visualizations |
+| **Particle Physics** | 2 interactive demos | Lepton mass spectrum | Wavelet structure diagrams |
+| **Astrophysics** | 4 interactive demos | Supernova evolution | Redshift mechanism demos |
 
 ---
 
