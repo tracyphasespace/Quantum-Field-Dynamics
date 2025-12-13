@@ -1,0 +1,20 @@
+name = "QFD_SpectralGap"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["QFDSpectralGap"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+
+[[lean_lib]]
+name = "QFDSpectralGap"
+
+[[lean_lib]]
+name = "QFD"
