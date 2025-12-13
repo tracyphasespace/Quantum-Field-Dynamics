@@ -1,12 +1,1 @@
-# Python bytecode
-__pycache__/
-*.pyc
-
-.claude/
-*.egg-info/
-
-# Test and output directories
-test_output*/
-*_output/
-results/
-stage*_output/
+/.lake
