@@ -1,107 +1,227 @@
 Quantum Field Dynamics (QFD)
 
-A Unified Physical Framework and a Computationally Solvable Model for the Constants of Nature.
+A Unified Physical Framework and Grand Unified Solver for the Constants of Nature.
 
-This repository contains the complete theoretical and computational framework for Quantum Field Dynamics (QFD). QFD is a first-principles theory that reconstructs all of observed physics—including particles, forces, and 4D spacetime—as the emergent, stable solutions of a single multivector field ψ in a 6-coordinate Cl(3,3) phase space.
+![alt text](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-The theory's central claim is that the fundamental constants of our universe are not arbitrary inputs but are the unique, calculable outputs of a well-posed, massively over-constrained, and computationally tractable optimization problem, which we term the "Grand Unified Solver."
 
-Key Verifiable Result: The Core Compression Law for Nuclides
+![alt text](https://img.shields.io/badge/Verified-Lean%204-green)
 
-As a primary validation of the QFD framework, a two-term law for nuclear stability was derived from the theory's first principles. This law posits that the charge (Q) of any nucleus is a direct function of its mass number (A) based on geometric and field-compression effects:
 
-Q(A) = c₁A²/³ + c₂A
+![alt text](https://img.shields.io/badge/Code-Python%203.10-blue)
 
-When this theoretically-derived law was tested against the comprehensive NuBase 2020 dataset, containing ~5,800 known isotopes, it accounted for R² ≈ 0.98 of the variance across the entire chart. This is not a post-hoc curve-fit; it is the successful empirical validation of a core theoretical prediction.
+"What if the parameters of the universe aren't inputs, but outputs?"
 
-Reproduce the Key Result
+This repository contains the complete theoretical, mathematical, and computational framework for Quantum Field Dynamics (QFD). QFD is a first-principles theory that reconstructs particles, forces, and cosmology as emergent solutions of a single multivector field 
+𝜓
+ψ
+ in a 6-coordinate 
+𝐶
+𝑙
+(
+3
+,
+3
+)
+Cl(3,3)
+ Phase Space.
 
-You can verify this primary result on your own machine in three steps.
+Unlike standard alternative theories, QFD is not just a manuscript; it is a codebase. It rejects the Big Bang, General Relativity, and the Standard Model in favor of a static, geometric universe where Time is an emergent scalar (viscosity) and Matter is topological geometry (solitons).
 
-1. Clone the repository and navigate to the root directory:
+🏗️ The Three Pillars of Validation
+
+This repository validates the theory across three rigorous distinct domains. All claims are backed by executable code.
+
+1. Formal Verification (Logic)
+
+Location: projects/Lean4/
+Tool: Lean 4 Theorem Prover
+Physics theories often hide behind "hand-waving." We prove the fundamental architecture formally.
+
+✅ EmergentAlgebra.lean: Mathematically proves that the centralizer of an internal rotation in 6D phase space must manifest as 4D Minkowski Spacetime (
+𝐶
+𝑙
+(
+3
+,
+1
+)
+Cl(3,1)
+).
+
+✅ SpectralGap.lean: Rigorously proves that if topological angular momentum is quantized, an energy gap 
+Δ
+𝐸
+ΔE
+ naturally "freezes out" the extra dimensions, rendering them unobservable without compactification.
+
+2. Microphysics (Solitons & Nuclides)
+
+Location: projects/particle-physics/
+Tool: PyTorch / Python / SciPy
+
+The Phoenix Solver: Minimizes the QFD Hamiltonian to generate stable particle states. It attempts to derive the masses of the Lepton ladder (Electron, Muon, Tau) as resonant isomers of the electron vortex, rather than inputting them.
+
+Nuclide Prediction: Contains the verification of the Core Compression Law (
+𝑄
+∝
+𝑐
+1
+𝐴
+2
+/
+3
++
+𝑐
+2
+𝐴
+Q∝c
+1
+	​
+
+A
+2/3
++c
+2
+	​
+
+A
+). We fit the "zero-stress backbone" of nuclear stability across ~5,800 isotopes (
+𝑅
+2
+≈
+0.98
+R
+2
+≈0.98
+), demonstrating that the "Strong Force" is an emergent pressure balance between nuclear density and the electron cloud.
+
+3. Cosmology (Supernovae & Redshift)
+
+Location: projects/astrophysics/
+Tool: JAX / NumPyro / Bayesian Inference
+We test the QFD "Static Universe" against raw observational data.
+
+Time Dilation Falsification: Analysis of 4,800+ SNe Ia (DES-SN5YR) showing that light-curve width does not stretch by 
+(
+1
++
+𝑧
+)
+(1+z)
+ when selection bias is removed, falsifying metric expansion.
+
+Redshift Forensics: Demonstrates that SNe Ia residuals show a 5.2:1 asymmetry (Dark vs. Bright outliers), proving that "Dark Energy" is actually flux-dependent scattering ("Plasma Veil") and gravitational lensing, not cosmic acceleration.
+
+🧪 Reproduce Key Results
+
+You can verify the physics on your own machine.
+
+A. Verify the Nuclear Scaling Law
+
+This script reproduces the "Force-Free" nuclear fit against the NuBase dataset.
+
 code
 Bash
 download
 content_copy
 expand_less
-
 git clone https://github.com/tracyphasespace/Quantum-Field-Dynamics.git
 cd Quantum-Field-Dynamics
-2. Install dependencies:
-
-(Ensure you have Python 3.8+ installed)```bash
 pip install -r requirements.txt
+python projects/particle-physics/nuclide-prediction/run_core_compression.py
+B. Verify the Logic (Lean 4)
+
+If you have a Lean 4 installation:
 
 code
-Code
+Bash
 download
 content_copy
 expand_less
-IGNORE_WHEN_COPYING_START
-IGNORE_WHEN_COPYING_END
-#### 3. Run the validation script:
-```bash
-python validation/reproduce_nuclide_law.py
+cd projects/Lean4
+lake build QFD.SpectralGap
+lake build QFD.EmergentAlgebra
 
-Expected Output:
-The script will process the included NuBase2020.txt dataset and produce the following:
+Output: Build completed successfully confirms the theorems hold.
 
-Console output confirming the fit:
+C. Run the Supernova Forensic
+
+(Requires JAX installed with CUDA support recommended)
 
 code
-Code
+Bash
 download
 content_copy
 expand_less
-IGNORE_WHEN_COPYING_START
-IGNORE_WHEN_COPYING_END
-Validation Successful.
-Model: Q(A) = c1*A**(2/3) + c2*A
-Coefficients: c1 = [VALUE], c2 = [VALUE]
-R-squared against ~5800 isotopes: 0.979...
+python projects/astrophysics/V21_Supernova_Analysis/run_static_fit.py
 
-A plot saved to results/Nuclide_Backbone_Fit.png, visually confirming the model's accuracy.
+Outputs the Hubble Diagram comparing ΛCDM residuals vs. the QFD Static model residuals.
 
-Core Principles of the QFD Framework
+🌌 Core Claims of the Framework
 
-Geometric Unification (Cl(3,3) Algebra): All forces (gravity, EM, nuclear) emerge as different geometric gradients of the single ψ-field. The imaginary unit i is replaced by a physical bivector B where B²=-1.
+Gravity is Refraction: Mass concentrates the 
+𝜓
+ψ
+-field. A dense field has a higher refractive index 
+𝑛
+=
+ℎ
+n=
+h
+	​
 
-Emergent Time & Spacetime: Time is not a fundamental dimension but an emergent, positive scalar ordering parameter (τ). Our (3+1)D spacetime is a dynamically suppressed effective theory that emerges from the 6C phase space, enforced by the symmetries of stable particles.
+. Light bends around stars and clocks slow down (Time Dilation) due to simple refraction, not curved spacetime.
 
-A Static, Self-Regulating Cosmos: The Big Bang is replaced by an eternal, steady-state universe. Cosmic redshift is a calculable photon-field interaction, and the CMB is the universe's present-day thermal equilibrium.
+Matter is Geometry: Particles are not points; they are Q-Ball Solitons and Hill Vortices. Stability is enforcing by the "Cavitation Limit" (a vacuum floor preventing infinite collapse).
 
-Particles as Geometric Solitons: All particles are stable, localized wavelets of the ψ-field. Mass and charge are emergent, calculable properties of a wavelet's geometry.
+Redshift is Interaction: Light gets "tired" via a specific coherence-preserving forward scattering mechanism ("Cosmic Drag"). The scattered light becomes the CMB.
 
-No Hidden Entities: The framework provides mechanistic explanations for cosmological phenomena without invoking dark matter, dark energy, or inflation.
+No Heat Death: 95% of the universe's mass is "Zombie Galaxies"—non-luminous baryonic matter hiding in voids. These act as the thermodynamic heat sinks for the universe, recycling starlight and maintaining equilibrium.
 
-Falsifiable Predictions
+⚡ Falsifiable Predictions
 
-QFD makes several concrete, near-term predictions that distinguish it from the Standard Model and ΛCDM:
+This is not philosophy; it is falsifiable science. QFD is wrong if:
 
-"Zombie Galaxies" as Dark Matter: Over 90% of the universe's baryonic matter exists as non-luminous, gravitationally-bound "zombie galaxies" in cosmic voids. This provides the universe's missing mass without requiring new particles and is testable with deep lensing surveys.
+Experimental: The Muon/Electron mass ratio cannot be derived from the Phoenix Hamiltonian parameters.
 
-Supernova Dimming is Wavelength-Dependent: The anomalous dimming of distant supernovae is a near-source scattering effect. This predicts they should appear systematically bluer than expected, a testable prediction for JWST and the Roman Space Telescope.
+Observational: High-z Quasar spectra show line-broadening proportional to redshift (QFD predicts lines stay sharp; only the packet envelope broadens).
 
-Gravitational Deflection of Matter vs. Light: The framework predicts that slow-moving massive particles (e.g., cold neutrons) will experience exactly half the gravitational deflection of light, a key distinguishing test from General Relativity.
+Mathematical: The Spectral Gap inequality is disproven.
 
-Repository Navigation
+📂 Repository Structure
 
-docs/: The complete manuscript for the book, "Quantum Field Dynamics," and supporting theoretical papers.
+docs/: The complete manuscript (700+ pages) and supporting Trojan Horse papers.
 
-validation/: Scripts to reproduce the key empirical validations of the theory, such as reproduce_nuclide_law.py.
+projects/Lean4/: (NEW) Formal proofs verifying the mathematical consistency of dimensional reduction and quantization.
 
-solvers/: The source code for the QFD computational solvers for various domains (atomic, cosmological, etc.).
+projects/particle-physics/:
 
-data/: The raw experimental datasets used for validation (e.g., NuBase2020.txt, union2.1_data.txt).
+/phoenix_solver: Vortex simulation engine.
 
-results/: Directory where output plots and data from the validation scripts are saved.
+/nuclide-prediction: Nuclear stability fits.
 
-Contribution and Collaboration
+projects/astrophysics/:
 
-The theoretical foundation of QFD is laid; the next phase is computational validation and refinement. This is an open invitation to the scientific community to test, critique, and extend this work. The most productive way to engage is through the GitHub Issues tab, where specific research problems, computational challenges, and theoretical questions are cataloged.
+/V21_Supernova_Analysis: (NEW) Bayesian analysis of DES5YR data.
 
-License and Citation
+/redshift-analysis: FDTD simulations of photon-vacuum scattering.
 
-This work is licensed under the MIT License. If you use the concepts, code, or data from this repository in your research, please cite the main manuscript:
+/black-hole-dynamics: Simulation of Galactic Spiral formation via tidal interactions (The "Rift").
 
-McSheery, T. (2025). Quantum Field Dynamics: A Dynamic View of a Steady State Universe. https://github.com/tracyphasespace/Quantum-Field-Dynamics
+data/: Source datasets (NuBase2020, Pantheon+, DES-SN5YR).
+
+Contributing
+
+The theoretical foundation is complete. We are now in the Computation & Verification phase.
+
+Mathematicians: Check the Lean4 definitions for topological robustness.
+
+Physicists: Run the phoenix_solver and stress-test the Hamiltonian parameters.
+
+Data Scientists: Audit the NumPyro models in the Supernova analysis.
+
+License
+
+MIT License. Please cite:
+McSheery, T. (2025). Quantum Field Dynamics: A Dynamic View of a Steady State Universe. GitHub.
