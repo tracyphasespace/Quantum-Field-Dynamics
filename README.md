@@ -1,131 +1,57 @@
-Quantum Field Dynamics (QFD)
-
-A Unified Physical Framework and Grand Unified Solver for the Constants of Nature.
-
-![alt text](https://img.shields.io/badge/License-MIT-yellow.svg)
-
-
-![alt text](https://img.shields.io/badge/Verified-Lean%204-green)
-
-
-![alt text](https://img.shields.io/badge/Code-Python%203.10-blue)
-
-"What if the parameters of the universe aren't inputs, but outputs?"
-
-This repository contains the complete theoretical, mathematical, and computational framework for Quantum Field Dynamics (QFD). QFD is a first-principles theory that reconstructs particles, forces, and cosmology as emergent solutions of a single multivector field 
-𝜓
-ψ
- in a 6-coordinate 
-𝐶
-𝑙
-(
-3
-,
-3
-)
-Cl(3,3)
- Phase Space.
-
-Unlike standard alternative theories, QFD is not just a manuscript; it is a codebase. It rejects the Big Bang, General Relativity, and the Standard Model in favor of a static, geometric universe where Time is an emergent scalar (viscosity) and Matter is topological geometry (solitons).
-
-🏗️ The Three Pillars of Validation
-
-This repository validates the theory across three rigorous distinct domains. All claims are backed by executable code.
-
-1. Formal Verification (Logic)
-
-Location: projects/Lean4/
-Tool: Lean 4 Theorem Prover
-Physics theories often hide behind "hand-waving." We prove the fundamental architecture formally.
-
-✅ EmergentAlgebra.lean: Mathematically proves that the centralizer of an internal rotation in 6D phase space must manifest as 4D Minkowski Spacetime (
-𝐶
-𝑙
-(
-3
-,
-1
-)
-Cl(3,1)
-).
-
-✅ SpectralGap.lean: Rigorously proves that if topological angular momentum is quantized, an energy gap 
-Δ
-𝐸
-ΔE
- naturally "freezes out" the extra dimensions, rendering them unobservable without compactification.
-
-2. Microphysics (Solitons & Nuclides)
-
-Location: projects/particle-physics/
-Tool: PyTorch / Python / SciPy
-
-The Phoenix Solver: Minimizes the QFD Hamiltonian to generate stable particle states. It attempts to derive the masses of the Lepton ladder (Electron, Muon, Tau) as resonant isomers of the electron vortex, rather than inputting them.
-
-Nuclide Prediction: Contains the verification of the Core Compression Law (
-𝑄
-∝
-𝑐
-1
-𝐴
-2
-/
-3
-+
-𝑐
-2
-𝐴
-Q∝c
-1
-	​
-
-A
-2/3
-+c
-2
-	​
-
-A
-). We fit the "zero-stress backbone" of nuclear stability across ~5,800 isotopes (
-𝑅
-2
-≈
-0.98
-R
-2
-≈0.98
-), demonstrating that the "Strong Force" is an emergent pressure balance between nuclear density and the electron cloud.
-
-3. Cosmology (Supernovae & Redshift)
-
-Location: projects/astrophysics/
-Tool: JAX / NumPyro / Bayesian Inference
-We test the QFD "Static Universe" against raw observational data.
-
-Time Dilation Falsification: Analysis of 4,800+ SNe Ia (DES-SN5YR) showing that light-curve width does not stretch by 
-(
-1
-+
-𝑧
-)
-(1+z)
- when selection bias is removed, falsifying metric expansion.
-
-Redshift Forensics: Demonstrates that SNe Ia residuals show a 5.2:1 asymmetry (Dark vs. Bright outliers), proving that "Dark Energy" is actually flux-dependent scattering ("Plasma Veil") and gravitational lensing, not cosmic acceleration.
-
-🧪 Reproduce Key Results
-
-You can verify the physics on your own machine.
-
-A. Verify the Nuclear Scaling Law
-
-This script reproduces the "Force-Free" nuclear fit against the NuBase dataset.
-
 code
-Bash
+Markdown
 download
 content_copy
 expand_less
+# Quantum Field Dynamics (QFD)
+
+**A Unified Physical Framework and Grand Unified Solver for the Constants of Nature.**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Lean 4](https://img.shields.io/badge/Verified-Lean%204-green)](projects/Lean4)
+[![Python 3.10+](https://img.shields.io/badge/Code-Python%203.10-blue)](projects/)
+
+> **"What if the parameters of the universe aren't inputs, but outputs?"**
+
+This repository contains the complete theoretical, mathematical, and computational framework for **Quantum Field Dynamics (QFD)**. QFD is a first-principles theory that reconstructs particles, forces, and cosmology as emergent solutions of a single multivector field (ψ) in a 6-coordinate Cl(3,3) Phase Space.
+
+Unlike standard alternative theories, QFD is not just a manuscript; it is a **codebase**. It rejects the Big Bang, General Relativity, and the Standard Model in favor of a static, geometric universe where Time is an emergent scalar (viscosity) and Matter is topological geometry (solitons).
+
+---
+
+## 🏗️ The Three Pillars of Validation
+
+This repository validates the theory across three rigorous distinct domains. All claims are backed by executable code.
+
+### 1. Formal Verification (Logic)
+**Location:** [`projects/Lean4/`](projects/Lean4/)  
+**Tool:** **Lean 4 Theorem Prover**  
+Physics theories often hide behind "hand-waving." We prove the fundamental architecture formally.
+*   ✅ **EmergentAlgebra.lean:** Mathematically proves that the centralizer of an internal rotation in 6D phase space **must** manifest as 4D Minkowski Spacetime (Cl(3,1)).
+*   ✅ **SpectralGap.lean:** Rigorously proves that if topological angular momentum is quantized, an energy gap ΔE naturally "freezes out" the extra dimensions, rendering them unobservable without compactification.
+
+### 2. Microphysics (Solitons & Nuclides)
+**Location:** [`projects/particle-physics/`](projects/particle-physics/)  
+**Tool:** **PyTorch / Python / SciPy**  
+*   **The Phoenix Solver:** Minimizes the QFD Hamiltonian to generate stable particle states. It attempts to *derive* the masses of the Lepton ladder (Electron, Muon, Tau) as resonant isomers of the electron vortex, rather than inputting them.
+*   **Nuclide Prediction:** Contains the verification of the **Core Compression Law** (Q ∝ c₁A^(2/3) + c₂A). We fit the "zero-stress backbone" of nuclear stability across ~5,800 isotopes (R² ≈ 0.98), demonstrating that the "Strong Force" is an emergent pressure balance between nuclear density and the electron cloud.
+
+### 3. Cosmology (Supernovae & Redshift)
+**Location:** [`projects/astrophysics/`](projects/astrophysics/)  
+**Tool:** **JAX / NumPyro / Bayesian Inference**  
+We test the QFD "Static Universe" against raw observational data.
+*   **Time Dilation Falsification:** Analysis of 4,800+ SNe Ia (DES-SN5YR) showing that light-curve width does *not* stretch by (1+z) when selection bias is removed, falsifying metric expansion.
+*   **Redshift Forensics:** Demonstrates that SNe Ia residuals show a **5.2:1 asymmetry** (Dark vs. Bright outliers), proving that "Dark Energy" is actually flux-dependent scattering ("Plasma Veil") and gravitational lensing, not cosmic acceleration.
+
+---
+
+## 🧪 Reproduce Key Results
+
+You can verify the physics on your own machine.
+
+### A. Verify the Nuclear Scaling Law
+This script reproduces the "Force-Free" nuclear fit against the NuBase dataset.
+```bash
 git clone https://github.com/tracyphasespace/Quantum-Field-Dynamics.git
 cd Quantum-Field-Dynamics
 pip install -r requirements.txt
@@ -160,20 +86,9 @@ Outputs the Hubble Diagram comparing ΛCDM residuals vs. the QFD Static model re
 
 🌌 Core Claims of the Framework
 
-Gravity is Refraction: Mass concentrates the 
-𝜓
-ψ
--field. A dense field has a higher refractive index 
-𝑛
-=
-ℎ
-n=
-h
-	​
+Gravity is Refraction: Mass concentrates the ψ-field. A dense field has a higher refractive index n = √h. Light bends around stars and clocks slow down (Time Dilation) due to simple refraction, not curved spacetime.
 
-. Light bends around stars and clocks slow down (Time Dilation) due to simple refraction, not curved spacetime.
-
-Matter is Geometry: Particles are not points; they are Q-Ball Solitons and Hill Vortices. Stability is enforcing by the "Cavitation Limit" (a vacuum floor preventing infinite collapse).
+Matter is Geometry: Particles are not points; they are Q-Ball Solitons and Hill Vortices. Stability is enforced by the "Cavitation Limit" (a vacuum floor preventing infinite collapse).
 
 Redshift is Interaction: Light gets "tired" via a specific coherence-preserving forward scattering mechanism ("Cosmic Drag"). The scattered light becomes the CMB.
 
@@ -225,3 +140,9 @@ License
 
 MIT License. Please cite:
 McSheery, T. (2025). Quantum Field Dynamics: A Dynamic View of a Steady State Universe. GitHub.
+
+code
+Code
+download
+content_copy
+expand_less
