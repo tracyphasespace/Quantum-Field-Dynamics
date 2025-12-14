@@ -158,7 +158,7 @@ theorem internal_dims_not_spacetime :
     ¬is_spacetime_generator gamma5 ∧
     ¬is_spacetime_generator gamma6 := by
   unfold is_spacetime_generator centralizes_internal_bivector
-  exact ⟨not_false, not_false⟩
+  simp
 
 /-- The signature of spacetime generators is exactly (+,+,+,-) -/
 theorem spacetime_signature :
@@ -301,7 +301,7 @@ theorem spacetime_has_four_dimensions :
     (¬is_spacetime_generator gamma5 ∧
      ¬is_spacetime_generator gamma6) := by
   unfold is_spacetime_generator centralizes_internal_bivector
-  exact ⟨⟨trivial, trivial, trivial, trivial⟩, ⟨not_false, not_false⟩⟩
+  simp
 
 /-!
 ## 10. Connection to Spectral Gap Theorem

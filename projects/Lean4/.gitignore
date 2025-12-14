@@ -1,0 +1,21 @@
+# Lean build artifacts
+.lake/
+lake-packages/
+build/
+
+# Temporary files
+*.Zone.Identifier
+*_lean.txt
+*~
+*.bak
+*.tmp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
