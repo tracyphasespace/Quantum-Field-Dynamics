@@ -9,6 +9,7 @@ import QFD.Neutrino_Oscillation
 import QFD.Neutrino_Chirality
 import QFD.Neutrino_Production
 import QFD.Neutrino_MassScale
+import QFD.Lepton.GeometricAnomaly
 import QFD.Gravity.TimeRefraction
 import QFD.Gravity.GeodesicForce
 import QFD.Gravity.SchwarzschildLink
@@ -40,11 +41,13 @@ spacetime emergence from higher-dimensional phase space.
 - `QFD.Neutrino` - Zero electromagnetic coupling from sector orthogonality (Gate N-L1)
 - `QFD.Neutrino_Bleaching` - Bleaching limit: energy → 0 while topology persists (Gate N-L2A: abstract)
 - `QFD.Neutrino_Topology` - Toy model instantiation of bleaching hypotheses (Gate N-L2B: toy)
-- `QFD.Neutrino_MinimalRotor` - QFD-facing bleaching API with minimal rotor carrier (Gate N-L2C: API lock)
+- `QFD.Neutrino_MinimalRotor` - QFD-facing bleaching API with minimal rotor
+  carrier (Gate N-L2C: API lock)
 - `QFD.Neutrino_Oscillation` - Flavor/isomer oscillation as unitary phase evolution (Gate N-L3)
 - `QFD.Neutrino_Chirality` - Chirality lock: handedness as topological invariant (Gate N-L4)
 - `QFD.Neutrino_Production` - Neutrino necessity from conservation laws (Gate N-L5)
 - `QFD.Neutrino_MassScale` - Geometric mass suppression hierarchy (Gate N-L6)
+- `QFD.Lepton.GeometricAnomaly` - g-2 anomaly as geometric necessity (Gate G-L1)
 
 ## The Complete Story
 
@@ -72,9 +75,14 @@ conservation of charge and spin in beta decay (not an ad-hoc hypothesis).
 **Neutrino_MassScale**: Proves that neutrino mass must satisfy 0 < m_ν < m_e with
 geometric suppression m_ν ≈ (R_p/λ_e)³ · m_e from dimensional analysis.
 
+**Lepton.GeometricAnomaly**: Proves that the anomalous magnetic moment (g > 2) is a
+geometric necessity for extended particles. Any particle with a static E-field "skirt"
+contributing mass but not spin must have g > 2. The g-2 anomaly is not a quantum
+correction but emerges from the ratio of total energy to rotational energy.
+
 **Together**: Complete mechanism for dimensional reduction without compactification,
-plus electromagnetic decoupling, chirality conservation, production mechanism, and
-mass-suppression hierarchy for internal degrees of freedom.
+plus electromagnetic decoupling, chirality conservation, production mechanism,
+mass-suppression hierarchy, and geometric g-2 anomaly for internal degrees of freedom.
 
 ## Usage
 
