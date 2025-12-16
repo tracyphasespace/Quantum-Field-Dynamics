@@ -9,6 +9,14 @@ import QFD.Neutrino_Oscillation
 import QFD.Neutrino_Chirality
 import QFD.Neutrino_Production
 import QFD.Neutrino_MassScale
+import QFD.Gravity.TimeRefraction
+import QFD.Gravity.GeodesicForce
+import QFD.Gravity.SchwarzschildLink
+import QFD.Nuclear.TimeCliff
+import QFD.Classical.Conservation
+import QFD.Soliton.HardWall
+import QFD.Soliton.Quantization
+import QFD.Empirical.CoreCompression
 
 /-!
 # QFD - Quantum Field Dynamics Formalization
@@ -21,6 +29,14 @@ spacetime emergence from higher-dimensional phase space.
 - `QFD.SpectralGap` - Dynamical suppression of extra dimensions (Z.4)
 - `QFD.EmergentAlgebra` - Algebraic inevitability of 4D Minkowski space (Z.4.A)
 - `QFD.ToyModel` - Blueprint verification using Fourier series
+- `QFD.Soliton.HardWall` - Vacuum cavitation boundary and vortex quantization (Layer 1)
+- `QFD.Soliton.Quantization` - Charge quantization from hard wall constraint (Layer 1)
+- `QFD.Gravity.TimeRefraction` - Time dilation from density gradients (Gate G-L1, Layer 2)
+- `QFD.Gravity.GeodesicForce` - Acceleration from time refraction gradient (Gate G-L2, Layer 2)
+- `QFD.Gravity.SchwarzschildLink` - Connection to Schwarzschild metric (Gate G-L3, Layer 3)
+- `QFD.Nuclear.TimeCliff` - Nuclear potential well from exponential density (Gate N-L2, Layer 2)
+- `QFD.Classical.Conservation` - Energy conservation and bound states (Gate C-1, Layer 3)
+- `QFD.Empirical.CoreCompression` - Valley of stability from elastic energy minimization (Gate C-2, Layer 4)
 - `QFD.Neutrino` - Zero electromagnetic coupling from sector orthogonality (Gate N-L1)
 - `QFD.Neutrino_Bleaching` - Bleaching limit: energy → 0 while topology persists (Gate N-L2A: abstract)
 - `QFD.Neutrino_Topology` - Toy model instantiation of bleaching hypotheses (Gate N-L2B: toy)
