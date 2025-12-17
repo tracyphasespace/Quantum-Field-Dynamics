@@ -166,8 +166,24 @@ theorem continuous_soliton_charge_positive (Q_target : ℝ) (hQ : 0 < Q_target) 
     ∃ A, A < 0 ∧ total_charge ctx A = Q_target := by
   -- Since Q = A * σ⁶ * (-40), and -40 < 0:
   -- For Q > 0, we need A < 0
-  -- Blueprint: Full proof requires careful field_simp manipulation
-  sorry
+  -- Choose A = -Q_target / (σ⁶ * 40)
+  use -Q_target / (ctx.σ^6 * 40)
+  constructor
+  · -- Prove A < 0
+    apply div_neg_of_neg_of_pos
+    · linarith
+    · apply mul_pos (pow_pos ctx.h_σ 6) (by norm_num : (0 : ℝ) < 40)
+  · -- Prove total_charge ctx A = Q_target
+    unfold total_charge
+    have h_pos : ctx.σ^6 * 40 ≠ 0 := by
+      apply ne_of_gt
+      apply mul_pos (pow_pos ctx.h_σ 6) (by norm_num : (0 : ℝ) < 40)
+    calc -Q_target / (ctx.σ^6 * 40) * ctx.σ^6 * (-40)
+        = -Q_target * ctx.σ^6 * (-40) / (ctx.σ^6 * 40) := by ring
+      _ = Q_target * ctx.σ^6 * 40 / (ctx.σ^6 * 40) := by ring
+      _ = Q_target * (ctx.σ^6 * 40 / (ctx.σ^6 * 40)) := by ring
+      _ = Q_target * 1 := by rw [div_self h_pos]
+      _ = Q_target := by ring
 
 /--
 **Corollary**: Existence of the Elementary Charge Unit.
