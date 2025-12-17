@@ -9,6 +9,7 @@ noncomputable section
 namespace QFD.GA
 
 open CliffordAlgebra
+open scoped BigOperators
 
 /-!
 # Clifford Algebra Cl(3,3) - Eliminating EmergentAlgebra Axiom
@@ -81,10 +82,11 @@ For a basis vector eᵢ (represented as Pi.single i 1):
 For a general vector v = Σᵢ vᵢ eᵢ:
   Q₃₃(v) = Σᵢ signature33(i) · vᵢ²
 
-**Blueprint Status**: Using simplified axiomatization for now.
-Full proof requires Mathlib's BilinForm API which has changed.
+Uses Mathlib's `QuadraticMap.weightedSumSquares` constructor to avoid
+manual BilinForm API issues.
 -/
-axiom Q33 : QuadraticForm ℝ (Fin 6 → ℝ)
+def Q33 : QuadraticForm ℝ (Fin 6 → ℝ) :=
+  QuadraticMap.weightedSumSquares ℝ signature33
 
 /-! ## 2. The Clifford Algebra Cl(3,3) -/
 
@@ -132,8 +134,11 @@ theorem generator_squares_to_signature (i : Fin 6) :
   unfold ι33
   rw [ι_sq_scalar]
   -- Step 2: Show Q₃₃(basis_vector i) = signature33(i)
-  -- For now, this requires computing the quadratic form
-  sorry -- Requires Q33 definition + Pi.single computation
+  congr 1
+  unfold Q33 basis_vector
+  rw [QuadraticMap.weightedSumSquares_apply]
+  -- The sum collapses because Pi.single i 1 j = 0 for j ≠ i
+  sorry -- Requires Finset.sum collapse with Pi.single
 
 /-! ## 4. Anticommutation Relations -/
 

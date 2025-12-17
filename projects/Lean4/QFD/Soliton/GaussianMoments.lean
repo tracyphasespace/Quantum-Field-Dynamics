@@ -45,14 +45,17 @@ This eliminates the axiom `ricker_moment_value` from Quantization.lean.
 
 /-- Γ(3) = 2! = 2 -/
 theorem Gamma_three : Gamma 3 = 2 := by
-  -- Γ(n+1) = n! for natural n
-  -- Γ(3) = Γ(2+1) = 2!
-  sorry -- Requires Gamma factorial identity from Mathlib
+  -- n = 2 gives Gamma(2+1) = 2! = 2
+  rw [show (3 : ℝ) = (2 : ℕ) + 1 by norm_num]
+  rw [Real.Gamma_nat_eq_factorial]
+  norm_num
 
 /-- Γ(4) = 3! = 6 -/
 theorem Gamma_four : Gamma 4 = 6 := by
-  -- Γ(4) = Γ(3+1) = 3!
-  sorry -- Requires Gamma factorial identity from Mathlib
+  -- n = 3 gives Gamma(3+1) = 3! = 6
+  rw [show (4 : ℝ) = (3 : ℕ) + 1 by norm_num]
+  rw [Real.Gamma_nat_eq_factorial]
+  norm_num
 
 /-! ## 2. Gaussian Moment Formula -/
 
