@@ -154,17 +154,25 @@ For i ≠ j:
 
 **Proof Strategy**:
 Uses the fundamental Clifford relation:
-  v · w + w · v = 2Q(v,w) · 1
+  v · w + w · v = 2 * polar(v,w) · 1
 
 For orthogonal basis vectors eᵢ, eⱼ (i≠j):
-  Q(eᵢ, eⱼ) = 0
+  polar(eᵢ, eⱼ) = 0 (diagonal quadratic form)
 -/
 theorem generators_anticommute (i j : Fin 6) (h_ne : i ≠ j) :
     (ι33 (basis_vector i)) * (ι33 (basis_vector j)) +
     (ι33 (basis_vector j)) * (ι33 (basis_vector i)) = 0 := by
-  -- Use the fundamental Clifford relation for orthogonal vectors
-  -- For orthogonal basis vectors: Q(eᵢ, eⱼ) = 0
-  sorry -- Requires Clifford anticommutation lemma from Mathlib
+  unfold ι33
+  -- Use CliffordAlgebra.ι_mul_ι_add_swap: ι v * ι w + ι w * ι v = 2 * algebraMap (polar Q v w)
+  rw [CliffordAlgebra.ι_mul_ι_add_swap]
+  -- Need to show: algebraMap (polar Q33 (basis_vector i) (basis_vector j)) = 0
+  -- This follows if polar Q33 (basis_vector i) (basis_vector j) = 0
+  suffices h : QuadraticMap.polar (⇑Q33) (basis_vector i) (basis_vector j) = 0 by
+    simp [h]
+  -- For diagonal forms from weightedSumSquares, polar of distinct basis vectors is 0
+  unfold basis_vector
+  -- polar for weightedSumSquares: ∑ k, signature33 k * v k * w k
+  sorry -- Need: polar formula for weightedSumSquares + Pi.single collapse
 
 /-! ## 5. Connection to EmergentAlgebra.lean -/
 

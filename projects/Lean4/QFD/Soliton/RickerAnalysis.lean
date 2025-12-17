@@ -86,14 +86,9 @@ theorem ricker_negative_minimum (A : ℝ) (h_neg : A < 0) (x : ℝ) :
 theorem S_deriv (x : ℝ) :
     HasDerivAt S (- x * exp (-x^2 / 2) * (3 - x^2)) x := by
   unfold S
-  -- Product rule: d/dx[(1-x²)exp(-x²/2)]
-  -- = (1-x²)·d/dx[exp(-x²/2)] + exp(-x²/2)·d/dx[(1-x²)]
-  -- = (1-x²)·(-x)·exp(-x²/2) + exp(-x²/2)·(-2x)
-  -- = exp(-x²/2)·[-(1-x²)·x - 2x]
-  -- = exp(-x²/2)·[-x + x³ - 2x]
-  -- = exp(-x²/2)·[x³ - 3x]
-  -- = -x·exp(-x²/2)·(3 - x²)
-  sorry -- Requires product rule + chain rule from Mathlib
+  -- For now, this requires careful handling of product/chain rule
+  -- The computation is straightforward but Mathlib API is tricky
+  sorry -- Product rule + chain rule (non-blocking)
 
 /-- S'(x) = 0 occurs at x = 0 and x = ±√3 -/
 theorem S_critical_points (x : ℝ) :
