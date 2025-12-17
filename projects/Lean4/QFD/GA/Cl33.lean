@@ -138,7 +138,11 @@ theorem generator_squares_to_signature (i : Fin 6) :
   unfold Q33 basis_vector
   rw [QuadraticMap.weightedSumSquares_apply]
   -- The sum collapses because Pi.single i 1 j = 0 for j ≠ i
-  sorry -- Requires Finset.sum collapse with Pi.single
+  classical
+  have hi : i ∈ (Finset.univ : Finset (Fin 6)) := by simp
+  -- Use Finset.sum_eq_single_of_mem to isolate the i term
+  simpa [Pi.single_apply] using
+    Finset.sum_eq_single_of_mem hi (fun j _ hji => by simp [Pi.single_apply, hji])
 
 /-! ## 4. Anticommutation Relations -/
 
