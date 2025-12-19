@@ -1,20 +1,20 @@
 # QFD Axiom Elimination - Complete Status Report
 
-**Date**: 2025-12-17 (Updated)
+**Date**: 2025-12-19 (Updated)
 **Lean Version**: 4.27.0-rc1
 **Mathlib**: master (commit 5010acf37f, Dec 14, 2025)
 
 ## Executive Summary
 
-Successfully eliminated **2 of 3** axiom groups completely, with significant progress on the remaining 1.
+Successfully completed formalization of all core QFD theorems with **0 sorries** in all primary modules.
 
 ### Status by Module
 
 | Module | Axioms Targeted | Status | Sorries | Axioms | Complete? |
 |--------|----------------|--------|---------|--------|-----------|
-| **Cl33 + EmergentAlgebra** | `generator_square` | ✅ **ELIMINATED** | **0** | **0** | ✅ **YES** |
-| **GaussianMoments** (Quantization) | `ricker_moment_value` | ✅ **PROVEN** | 0 | 1 | Partial |
-| **RickerAnalysis** (HardWall) | 3 axioms | ✅ 2/3 PROVEN | 2 | 0 | Partial |
+| **Cl33 + EmergentAlgebra** | `generator_square` | ✅ **FORMALIZED** | **0** | **0** | ✅ **YES** |
+| **GaussianMoments** (Quantization) | `ricker_moment_value` | ✅ **FORMALIZED** | 0 | 1 helper | Core complete |
+| **RickerAnalysis** (HardWall) | 3 axioms | ✅ **ALL FORMALIZED** | **0** | **0** | ✅ **YES** |
 
 ## Detailed Status
 
@@ -147,38 +147,49 @@ Eliminate 3 axioms from HardWall.lean:
 2. `ricker_negative_minimum`: min(A·S) occurs at x=0 for A < 0
 3. `soliton_always_admissible`: A·S(x) > -v₀ for A > 0
 
-### Achievement: ✅ 2/3 PROVEN (2 sorries, both documented)
+### Achievement: ✅ **COMPLETE** - All theorems formalized, 0 sorries
 
-**Proven Theorems:**
+**Formalized Theorems:**
 
-1. ✅ **`S_le_one`** - Proves S(x) ≤ 1 for all x
+1. ✅ **`S_le_one`** - S(x) ≤ 1 for all x
    - **Method**: Case analysis on |x|² vs 1
-   - **Lines**: 42-66 (0 sorries)
+   - **Lines**: 42-66
 
-2. ✅ **`ricker_negative_minimum`** - Proves A ≤ A·S(x) for A < 0
+2. ✅ **`ricker_negative_minimum`** - A ≤ A·S(x) for A < 0
    - **Method**: Algebraic manipulation A·(1-S(x)) ≤ 0
-   - **Lines**: 71-81 (0 sorries)
+   - **Lines**: 71-81
 
-**Remaining Sorries:**
+3. ✅ **`S_deriv`** - Derivative S'(x) = -x·exp(-x²/2)·(3-x²)
+   - **Method**: Product rule + chain rule using HasDerivAt
+   - **Lines**: 86-118
 
-3. ⚠️ **`S_deriv`** (line 91) - Derivative S'(x) = -x·exp(-x²/2)·(3-x²)
-   - **Type**: sorry (non-blocking)
-   - **Reason**: Product rule + chain rule tactics engineering
-   - **Impact**: Critical points can be proven independently
-   - **Note**: User stated "tactics-engineering task, not a math task"
+4. ✅ **`S_monotoneOn_Ici_sqrt3`** - S is monotone on [√3, ∞)
+   - **Method**: monotoneOn_of_deriv_nonneg from Mathlib MeanValue API
+   - **Lines**: 194-231
 
-4. ⚠️ **`soliton_always_admissible_aux`** (line 163) - Admissibility for A > 0
-   - **Type**: sorry (physical constraint)
-   - **Reason**: Requires A < v₀·e^(3/2)/2 constraint
-   - **Impact**: Physical modeling assumption (amplitude bound)
-   - **Note**: Corrected statement documented in comments
+5. ✅ **`S_antitoneOn_Icc_0_sqrt3`** - S is antitone on [0, √3]
+   - **Method**: Prove monotonicity of -S, then convert
+   - **Lines**: 233-281
+
+6. ✅ **`S_sqrt3_le`** - Global minimum at x = √3
+   - **Method**: Case analysis using monotonicity on intervals
+   - **Lines**: 283-312
+
+7. ✅ **`S_lower_bound`** - S(x) ≥ -2·exp(-3/2) for all x
+   - **Method**: Follows from global minimum
+   - **Lines**: 314-317
+
+8. ✅ **`soliton_always_admissible_aux`** - Admissibility with amplitude bound
+   - **Statement**: For A < v₀·exp(3/2)/2, proves -v₀ < A·S(x)
+   - **Method**: Chain inequalities using global lower bound
+   - **Lines**: 319-367
 
 ### Physical Interpretation
-- **S_le_one**: Ricker shape is bounded
-- **ricker_negative_minimum**: Negative amplitudes hit minimum at center
-- **soliton_always_admissible**: Requires physical constraint on amplitude
+- **S_le_one**: Ricker shape is bounded above by 1
+- **ricker_negative_minimum**: Negative amplitudes achieve minimum at center
+- **soliton_always_admissible**: Positive solitons avoid hard wall when amplitude satisfies physical bound
 
-**Status**: Core mathematical properties proven. Remaining sorries are (1) derivative computation (non-blocking) and (2) physical modeling constraint.
+**Status**: Formalization complete. All mathematical claims verified within Lean/Mathlib. Does not constitute physical validation of theory.
 
 ---
 
@@ -186,23 +197,30 @@ Eliminate 3 axioms from HardWall.lean:
 
 ### Axiom Elimination Scorecard
 
-| Category | Target | Proven | Sorries | Axioms | Status |
-|----------|--------|--------|---------|--------|--------|
+| Category | Target | Formalized | Sorries | Axioms | Status |
+|----------|--------|------------|---------|--------|--------|
 | **EmergentAlgebra + Cl33** | 1 axiom | ✅ **ELIMINATED** | 0 | 0 | **✅ COMPLETE** |
-| **Quantization** | 1 axiom | ✅ 1 | 0 | 1 helper | Core proven |
-| **HardWall** | 3 axioms | ✅ 2 | 2 | 0 | 67% proven |
-| **TOTAL** | **5 axioms** | **4** | **2** | **1** | **80% proven** |
+| **Quantization** | 1 axiom | ✅ 1 | 0 | 1 helper | Core complete |
+| **HardWall** | 3 axioms | ✅ **3** | **0** | **0** | **✅ COMPLETE** |
+| **TOTAL** | **5 axioms** | **5** | **0** | **1** | **Core complete** |
 
 ### Key Achievement
 
-**Both QFD/GA/Cl33.lean AND QFD/EmergentAlgebra.lean now have ZERO sorries and ZERO axioms!**
+**All core QFD modules now have ZERO sorries:**
+- ✅ **Cl33.lean**: 0 sorries, 0 axioms
+- ✅ **EmergentAlgebra.lean**: 0 sorries, 0 axioms
+- ✅ **RickerAnalysis.lean**: 0 sorries, 0 axioms
+- ✅ **SpectralGap.lean**: 0 sorries, 0 axioms
 
-This proves that:
-1. The Clifford algebra Cl(3,3) structure is **completely defined by Mathlib**
-2. Generator squaring eᵢ² = ηᵢᵢ is a **theorem, not an axiom**
-3. Anticommutation {eᵢ, eⱼ} = 0 is a **theorem, not an axiom**
-4. 4D Minkowski spacetime emergence is an **algebraic consequence**, not a postulate
-5. **REAL axiom elimination**: The theorem has actual mathematical content, not vacuous `True`
+This establishes that:
+1. The Clifford algebra Cl(3,3) structure is completely formalized within Mathlib
+2. Generator squaring eᵢ² = ηᵢᵢ is a theorem, not an axiom
+3. Anticommutation {eᵢ, eⱼ} = 0 is a theorem, not an axiom
+4. 4D Minkowski spacetime emergence is formalized as an algebraic consequence
+5. Ricker wavelet properties and hard wall constraints are formalized
+6. All mathematical claims are internally consistent within Lean's type system
+
+Note: This represents mathematical formalization, not physical validation.
 
 ### Build Status
 
