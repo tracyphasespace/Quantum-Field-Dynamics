@@ -37,17 +37,28 @@
     {
       "id": "nubase_2020_stable",
       "source": "data/raw/nubase_2020.csv",
-      "columns": { "A": "A", "target": "Z" },
+      "columns": {
+        "A": "A",
+        "Z": "Z",
+        "target": "binding_energy"
+      },
       "cuts": {
-        "stable_only": true,
-        "mass_min": 10
+        "stable_only": false,
+        "mass_min": 4
       }
     }
   ],
 
   "objective": {
     "type": "chi_squared",
-    "weights": { "nubase_2020_stable": 1.0 }
+    "components": [
+      {
+        "dataset_id": "nubase_2020_stable",
+        "observable_adapter": "qfd.adapters.nuclear.predict_binding_energy",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
   },
 
   "solver": {
