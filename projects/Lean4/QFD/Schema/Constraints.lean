@@ -56,9 +56,9 @@ structure NuclearConstraints (p : NuclearParams) : Prop where
 
   -- Genesis Constants relationship (proven empirically for hydrogen)
   genesis_compatible :
-    (p.alpha_n.val - 3.5).abs < 1.0 ∧
-    (p.beta_n.val - 3.9).abs < 1.0 ∧
-    (p.gamma_e.val - 5.5).abs < 2.0
+    |p.alpha_n.val - 3.5| < 1.0 ∧
+    |p.beta_n.val - 3.9| < 1.0 ∧
+    |p.gamma_e.val - 5.5| < 2.0
 
 /-- Cosmological parameter constraints -/
 structure CosmoConstraints (p : CosmoParams) : Prop where

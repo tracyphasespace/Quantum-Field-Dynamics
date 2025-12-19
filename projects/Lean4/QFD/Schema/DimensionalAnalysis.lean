@@ -39,7 +39,6 @@ instance : Neg Dimensions where
 /-- A physical quantity with value and dimensions. -/
 structure Quantity (d : Dimensions) where
   val : ℝ
-  deriving Repr
 
 /-! ## Fundamental Units -/
 
@@ -73,8 +72,9 @@ def Quantity.inv {d : Dimensions} (a : Quantity d) : Quantity (-d) :=
 
 instance {d : Dimensions} : Add (Quantity d) := ⟨Quantity.add⟩
 instance {d : Dimensions} : Sub (Quantity d) := ⟨Quantity.sub⟩
-instance {d1 d2 : Dimensions} : Mul (Quantity d1) := ⟨fun a => Quantity.mul a⟩ -- loose typing for demo
-instance {d1 d2 : Dimensions} : Div (Quantity d1) := ⟨fun a => Quantity.div a⟩
+
+-- Note: Mul and Div cannot be instances because result dimensions depend on inputs
+-- Use Quantity.mul and Quantity.div directly, or define custom operators
 
 /-! ## Constants -/
 
