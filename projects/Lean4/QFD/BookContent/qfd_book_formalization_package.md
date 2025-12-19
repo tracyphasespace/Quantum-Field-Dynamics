@@ -191,11 +191,12 @@ NEW Appendix: Formal Verification of QFD Mathematics
 
 Whichever version(s) you choose, make sure to communicate:
 
-1. ✅ **Zero sorries**: All core theorems completely proven
+1. ✅ **Zero sorries**: All core theorems completely formalized
 2. ✅ **Independently verifiable**: Anyone can clone and build
-3. ✅ **Standard library**: Proven against Mathlib (not custom axioms)
-4. ✅ **Specific files**: Clear mapping from physical claims to formal proofs
+3. ✅ **Standard library**: Formalized against Mathlib (not custom axioms)
+4. ✅ **Specific files**: Clear mapping from physical claims to formalizations
 5. ✅ **Current status**: Repository is active and maintained
+6. ⚠️ **Important**: Formalization establishes mathematical consistency, not physical validation
 
 ---
 
@@ -206,10 +207,11 @@ Whichever version(s) you choose, make sure to communicate:
 The emergence of 4D spacetime from Cl(3,3) is not an assumption but a
 mathematical theorem.¹
 
-¹Machine-verified proof available: EmergentAlgebra.lean at
+¹Machine-verified formalization available: EmergentAlgebra.lean at
 https://github.com/tracyphasespace/Quantum-Field-Dynamics. All
-proofs build with zero incomplete steps (0 sorries). See Appendix Z
-for verification details.
+formalizations build with zero incomplete steps (0 sorries). See Appendix Z
+for verification details. Note: Formalization establishes internal consistency,
+not physical validation.
 ```
 
 ### Example 2: Appendix Introduction
@@ -233,8 +235,8 @@ at the end of this appendix.
 │ FORMAL VERIFICATION STATUS                  │
 │                                             │
 │ Theorem Z.4.A (Emergent Spacetime): ✅      │
-│ File: EmergentAlgebra.lean (345 lines)     │
-│ Status: 0 sorries (completely proven)       │
+│ File: EmergentAlgebra.lean (370 lines)     │
+│ Status: 0 sorries (completely formalized)   │
 │                                             │
 │ Verify: github.com/tracyphasespace/...     │
 └─────────────────────────────────────────────┘
@@ -261,4 +263,6 @@ at the end of this appendix.
 
 ---
 
-*All content accurate as of December 14, 2025. Repository status: Production-ready, all core theorems proven.*
+*All content accurate as of December 19, 2025. Repository status: All core theorems formalized with 0 sorries.*
+
+**Note**: Formalization demonstrates internal mathematical consistency within Lean/Mathlib, not physical validation of the theory.
