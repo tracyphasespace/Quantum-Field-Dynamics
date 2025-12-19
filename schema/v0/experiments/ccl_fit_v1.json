@@ -1,0 +1,61 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "exp_2025_ccl_initial_fit",
+  "description": "Fit the QFD geometric backbone (c1, c2) to stable isotopes. Target is Z (Charge).",
+
+  "model": {
+    "id": "qfd.nuclear.ccl",
+    "variant": "backbone_only"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c1",
+      "value": 0.5,
+      "role": "coupling",
+      "bounds": [0.1, 2.0],
+      "units": "unitless",
+      "prior": { "type": "gaussian", "args": { "mu": 0.5, "sigma": 0.5 } }
+    },
+    {
+      "name": "nuclear.c2",
+      "value": 0.5,
+      "role": "coupling",
+      "bounds": [0.1, 1.0],
+      "units": "unitless"
+    },
+    {
+      "name": "calibration.offset",
+      "value": 0.0,
+      "role": "nuisance",
+      "frozen": true,
+      "description": "Global charge offset if needed (fixed to 0 for physics runs)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "nubase_2020_stable",
+      "source": "data/raw/nubase_2020.csv",
+      "columns": { "A": "A", "target": "Z" },
+      "cuts": {
+        "stable_only": true,
+        "mass_min": 10
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "weights": { "nubase_2020_stable": 1.0 }
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1e-6
+    }
+  }
+}
