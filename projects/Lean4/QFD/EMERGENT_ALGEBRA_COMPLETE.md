@@ -1,8 +1,8 @@
 # QFD Emergent Algebra - Algebraic Inevitability of 4D Spacetime ✅
 
-**Date**: December 13, 2025
-**Status**: ✅ **COMPLETE** - Algebraic emergence proven
-**File**: `QFD/EmergentAlgebra.lean`
+**Date**: December 17, 2025 (Updated)
+**Status**: ✅ **COMPLETE** - Algebraic emergence proven, axiom eliminated
+**Files**: `QFD/EmergentAlgebra.lean`, `QFD/GA/Cl33.lean`
 **Paper Reference**: QFD Appendix Z.2, Z.4.A
 
 ---
@@ -11,10 +11,11 @@
 
 Successfully formalized the **algebraic inevitability** of 4D Minkowski spacetime, proving that the choice of internal rotation plane algebraically determines the emergent geometry.
 
-✅ **Rigorous formalization** - NO `sorry` statements
+✅ **Rigorous formalization** - NO `sorry` statements, NO axioms
 ✅ **Clean compilation** - 0 errors, 0 warnings
 ✅ **Complete proofs** - All theorems proven
-✅ **Lightweight approach** - Avoided full CliffordAlgebra library overhead
+✅ **Axiom eliminated** - `generator_square` now a real theorem using Mathlib's CliffordAlgebra
+✅ **Bridge to Mathlib** - Connects lightweight approach to heavyweight Cl33 implementation
 ✅ **Clear structure** - 6D → 4D reduction via centralizer
 
 ---
@@ -306,26 +307,51 @@ Build completed successfully
 
 Clean build: **0 errors, 0 warnings, 0 sorries**
 
-### Design Choice: Lightweight vs Mathlib
+### Design Choice: Lightweight + Bridge to Mathlib
 
-**Could have used**: Mathlib's `CliffordAlgebra` (full library)
+**Approach**: Hybrid - lightweight pedagogical + rigorous Mathlib foundation
 
-**Chose instead**: Lightweight custom generators
+**Implementation**:
+- **EmergentAlgebra.lean**: Lightweight custom `Generator` type for clarity
+- **Cl33.lean**: Rigorous Mathlib `CliffordAlgebra` implementation
+- **Bridge**: `γ33` function connects abstract generators to concrete Cl33
 
-**Reason**:
-- Mathlib's CliffordAlgebra is very general and complex
-- We only need basic commutation relations
-- Custom approach is clearer and more direct
-- Proves the essential algebraic logic without overhead
+**Benefits**:
+- Clear pedagogical presentation (lightweight generators)
+- Rigorous mathematical foundation (Mathlib CliffordAlgebra)
+- **Zero axioms**: Former `axiom generator_square` is now a proven theorem
+- Best of both worlds: readability AND rigor
+
+**Axiom Elimination**:
+```lean
+-- Before: axiom (vacuous)
+axiom generator_square (a : Generator) : True
+
+-- After: real theorem with mathematical content
+def γ33 (a : Generator) : QFD.GA.Cl33 :=
+  QFD.GA.ι33 (QFD.GA.basis_vector (genIndex a))
+
+theorem generator_square (a : Generator) :
+    (γ33 a) * (γ33 a) = algebraMap ℝ QFD.GA.Cl33 (QFD.GA.signature33 (genIndex a)) := by
+  simpa [γ33] using QFD.GA.generator_squares_to_signature (i := genIndex a)
+```
 
 ### File Statistics
 
-- **Lines**: 345
+**EmergentAlgebra.lean**:
+- **Lines**: 370
 - **Inductive types**: 1 (Generator)
-- **Definitions**: 4 (metric, internalBivector, centralizes_internal_bivector, is_spacetime_generator)
-- **Theorems**: 7 (all proven)
+- **Definitions**: 5 (metric, genIndex, γ33, internalBivector, centralizes_internal_bivector, is_spacetime_generator)
+- **Theorems**: 8 (all proven, including former axiom `generator_square`)
 - **Sorries**: 0 ✅
+- **Axioms**: 0 ✅ (was 1, now eliminated)
 - **Warnings**: 0 ✅
+
+**Cl33.lean** (foundation):
+- **Lines**: 265
+- **Theorems**: 3 (all proven)
+- **Sorries**: 0 ✅
+- **Axioms**: 0 ✅
 
 ---
 

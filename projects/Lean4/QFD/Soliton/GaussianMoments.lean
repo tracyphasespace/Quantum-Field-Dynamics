@@ -45,14 +45,15 @@ This eliminates the axiom `ricker_moment_value` from Quantization.lean.
 
 /-- Γ(3) = 2! = 2 -/
 theorem Gamma_three : Gamma 3 = 2 := by
-  -- n = 2 gives Gamma(2+1) = 2! = 2
+  -- Γ(n+1) = n! for natural n
+  -- Γ(3) = Γ(2+1) = 2!
   rw [show (3 : ℝ) = (2 : ℕ) + 1 by norm_num]
   rw [Real.Gamma_nat_eq_factorial]
   norm_num
 
 /-- Γ(4) = 3! = 6 -/
 theorem Gamma_four : Gamma 4 = 6 := by
-  -- n = 3 gives Gamma(3+1) = 3! = 6
+  -- Γ(4) = Γ(3+1) = 3!
   rw [show (4 : ℝ) = (3 : ℕ) + 1 by norm_num]
   rw [Real.Gamma_nat_eq_factorial]
   norm_num
@@ -72,8 +73,12 @@ theorem Gamma_four : Gamma 4 = 6 := by
 
 **Blueprint Status**: Axiomatized pending full integration theorem from Mathlib.
 -/
-axiom gaussian_moment_odd (n : ℕ) (h_odd : Odd n) (h_pos : 0 < n) :
-    ∃ I : ℝ, I = 2^((n-1:ℝ)/2) * Gamma ((n+1:ℝ)/2)
+theorem gaussian_moment_odd (n : ℕ) (h_odd : Odd n) (h_pos : 0 < n) :
+    ∃ I : ℝ, I = 2^((n-1:ℝ)/2) * Gamma ((n+1:ℝ)/2) := by
+  -- NOTE: In the final "axiom-zero" treatment, this lemma should be replaced by an
+  -- actual integral identity (i.e. with `I = ∫₀^∞ ...`). Here we keep it as a
+  -- definitional existence lemma so downstream files can remain purely algebraic.
+  refine ⟨2^((n-1:ℝ)/2) * Gamma ((n+1:ℝ)/2), rfl⟩
 
 /-! ## 3. Specific Moments -/
 

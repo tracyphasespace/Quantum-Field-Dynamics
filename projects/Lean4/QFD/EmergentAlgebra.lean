@@ -1,6 +1,7 @@
 import Mathlib.Algebra.Ring.Basic
 import Mathlib.Data.Int.Basic
 import Mathlib.Tactic.Ring
+import QFD.GA.Cl33
 
 noncomputable section
 
@@ -83,10 +84,28 @@ def anticommute (a b : Generator) : Prop :=
   a ≠ b
 
 /-- The square of a generator equals its metric signature -/
-axiom generator_square (a : Generator) :
-  -- In the full algebra: γₐ * γₐ = metric(a) * 1
-  -- For now, we state this as an axiom
-  True  -- Placeholder for γₐ² = η_aa
+def genIndex : Generator → Fin 6
+  | gamma1 => 0
+  | gamma2 => 1
+  | gamma3 => 2
+  | gamma4 => 3
+  | gamma5 => 4
+  | gamma6 => 5
+
+/-- Embed the six abstract `Generator`s into the concrete Clifford algebra `Cl33`. -/
+def γ33 (a : Generator) : QFD.GA.Cl33 :=
+  QFD.GA.ι33 (QFD.GA.basis_vector (genIndex a))
+
+/--
+`Generator` squaring law, now as a *real* theorem in the concrete Clifford algebra `Cl33`.
+
+This replaces the former placeholder axiom and is discharged by
+`QFD.GA.generator_squares_to_signature`.
+-/
+theorem generator_square (a : Generator) :
+    (γ33 a) * (γ33 a) = algebraMap ℝ QFD.GA.Cl33 (QFD.GA.signature33 (genIndex a)) := by
+  -- Reduce to the corresponding basis theorem in `QFD.GA.Cl33`.
+  simpa [γ33] using QFD.GA.generator_squares_to_signature (i := genIndex a)
 
 /-!
 ## 3. Bivectors
