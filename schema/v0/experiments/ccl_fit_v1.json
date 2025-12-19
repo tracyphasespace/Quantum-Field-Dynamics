@@ -11,18 +11,18 @@
   "parameters": [
     {
       "name": "nuclear.c1",
-      "value": 0.5,
+      "value": 1.0,
       "role": "coupling",
-      "bounds": [0.1, 2.0],
-      "units": "unitless",
-      "prior": { "type": "gaussian", "args": { "mu": 0.5, "sigma": 0.5 } }
+      "bounds": [0.5, 1.5],
+      "units": "dimensionless",
+      "prior": { "type": "gaussian", "args": { "mu": 1.0, "sigma": 0.3 } }
     },
     {
       "name": "nuclear.c2",
-      "value": 0.5,
+      "value": 0.05,
       "role": "coupling",
-      "bounds": [0.1, 1.0],
-      "units": "unitless"
+      "bounds": [0.0, 0.1],
+      "units": "dimensionless"
     },
     {
       "name": "calibration.offset",
