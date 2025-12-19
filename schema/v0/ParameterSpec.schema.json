@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://qfd.physics/schema/v0/ParameterSpec.schema.json",
+  "title": "QFD Parameter Specification",
+  "description": "Defines a single coupling constant or nuisance parameter for the Grand Solver",
+  "type": "object",
+  "required": ["name", "type", "role"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Canonical parameter name (e.g., 'k_J', 'V4', 'c1')",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+    },
+    "symbol": {
+      "type": "string",
+      "description": "LaTeX-style symbol (e.g., 'k_J', 'V_4', 'c_1')"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["real", "positive_real", "bounded_real", "vector", "function"],
+      "description": "Parameter value type"
+    },
+    "shape": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 1},
+      "description": "Shape for vector/tensor parameters (e.g., [3] for 3-vector)"
+    },
+    "init": {
+      "description": "Initial value or array of values",
+      "oneOf": [
+        {"type": "number"},
+        {"type": "array", "items": {"type": "number"}}
+      ]
+    },
+    "bounds": {
+      "type": "object",
+      "properties": {
+        "min": {"type": "number"},
+        "max": {"type": "number"}
+      },
+      "description": "Parameter bounds for optimization"
+    },
+    "prior": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["uniform", "normal", "lognormal", "truncated_normal", "fixed"]
+        },
+        "params": {
+          "type": "object",
+          "description": "Prior distribution parameters (mean, std, etc.)"
+        }
+      },
+      "description": "Bayesian prior distribution"
+    },
+    "units": {
+      "type": "string",
+      "description": "Physical units (e.g., 'km/s/Mpc', 'eV', 'dimensionless')"
+    },
+    "role": {
+      "type": "string",
+      "enum": ["coupling", "scale", "nuisance", "calibration", "derived"],
+      "description": "Parameter category"
+    },
+    "identifiability": {
+      "type": "string",
+      "enum": ["global", "dataset_specific", "observable_specific", "poorly_identified"],
+      "description": "Scope of parameter identifiability"
+    },
+    "frozen": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, parameter is fixed during optimization"
+    },
+    "sensitivity": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "Typical impact on observables"
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["nuclear", "cosmology", "particle", "gravity", "astrophysics"]
+      },
+      "description": "Which physics domains use this parameter"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of physical meaning"
+    },
+    "references": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Citations or references for this parameter"
+    }
+  }
+}

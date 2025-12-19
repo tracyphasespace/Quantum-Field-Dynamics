@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://qfd.physics/schema/v0/ModelSpec.schema.json",
+  "title": "QFD Model Specification",
+  "description": "Defines the physical model, equations, and computational backend",
+  "type": "object",
+  "required": ["model_id", "variant", "equations"],
+  "properties": {
+    "model_id": {
+      "type": "string",
+      "description": "Unique model identifier (e.g., 'qfd.nuclear.binding.v2')",
+      "pattern": "^qfd\\.[a-z]+\\.[a-z_]+(\\.[a-z0-9]+)?$"
+    },
+    "variant": {
+      "type": "string",
+      "enum": ["ricker", "gaussian", "hill_vortex", "soliton", "perturbative", "lattice"],
+      "description": "Field ansatz or computational approach"
+    },
+    "equations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["term", "implementation"],
+        "properties": {
+          "term": {
+            "type": "string",
+            "description": "Physics term name (e.g., 'kinetic', 'V4_potential', 'coulomb')"
+          },
+          "implementation": {
+            "type": "string",
+            "description": "Python module path (e.g., 'qfd.solvers.terms.kinetic_3d')"
+          },
+          "active": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether this term is included in this run"
+          },
+          "weight": {
+            "type": "number",
+            "default": 1.0,
+            "description": "Multiplicative factor for this term"
+          }
+        }
+      },
+      "description": "List of energy/action terms in the model"
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["cavitation", "normalization", "boundary_condition", "symmetry"]
+          },
+          "description": {"type": "string"},
+          "implementation": {"type": "string"}
+        }
+      },
+      "description": "Hard constraints on field configurations"
+    },
+    "grid": {
+      "type": "object",
+      "properties": {
+        "dimension": {"type": "integer", "minimum": 1, "maximum": 6},
+        "points": {
+          "oneOf": [
+            {"type": "integer"},
+            {"type": "array", "items": {"type": "integer"}}
+          ]
+        },
+        "extent": {
+          "type": "object",
+          "properties": {
+            "min": {"type": "number"},
+            "max": {"type": "number"},
+            "units": {"type": "string"}
+          }
+        },
+        "boundary": {
+          "type": "string",
+          "enum": ["periodic", "dirichlet", "neumann", "open"]
+        }
+      },
+      "description": "Spatial grid specification for field solver"
+    },
+    "backend": {
+      "type": "object",
+      "properties": {
+        "framework": {
+          "type": "string",
+          "enum": ["torch", "jax", "numpy", "fenics", "lattice_qcd"]
+        },
+        "device": {
+          "type": "string",
+          "enum": ["cpu", "cuda", "mps", "tpu"]
+        },
+        "precision": {
+          "type": "string",
+          "enum": ["float32", "float64"]
+        },
+        "deterministic": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "description": "Computational backend configuration"
+    },
+    "computed_constants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "expression": {"type": "string"},
+          "units": {"type": "string"}
+        }
+      },
+      "description": "Derived quantities computed from parameters"
+    },
+    "documentation": {
+      "type": "object",
+      "properties": {
+        "paper_reference": {"type": "string"},
+        "equation_refs": {"type": "array", "items": {"type": "string"}},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

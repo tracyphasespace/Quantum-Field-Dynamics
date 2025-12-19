@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://qfd.physics/schema/v0/RunSpec.schema.json",
+  "title": "QFD Run Specification",
+  "description": "Complete specification for a reproducible Grand Solver run",
+  "type": "object",
+  "required": ["schema_version", "run_id", "model", "parameters", "datasets", "objective", "solver"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1.0",
+      "description": "RunSpec schema version for compatibility checking"
+    },
+    "run_id": {
+      "type": "string",
+      "description": "Unique run identifier (e.g., 'core_compression_fit_001')"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of this run's purpose"
+    },
+    "git": {
+      "type": "object",
+      "properties": {
+        "repo": {"type": "string"},
+        "commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{7,40}$",
+          "description": "Git commit hash (short or full)"
+        },
+        "branch": {"type": "string"},
+        "dirty": {
+          "type": "boolean",
+          "description": "Whether working directory had uncommitted changes"
+        },
+        "remote_url": {"type": "string"}
+      },
+      "description": "Git provenance for reproducibility"
+    },
+    "model": {
+      "description": "Model specification (inline or reference)",
+      "oneOf": [
+        {"$ref": "ModelSpec.schema.json"},
+        {"type": "string", "description": "Path to ModelSpec file"}
+      ]
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {"$ref": "ParameterSpec.schema.json"},
+          {"type": "string", "description": "Path to ParameterSpec file"}
+        ]
+      },
+      "description": "List of all parameters for this run"
+    },
+    "datasets": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {"$ref": "DatasetSpec.schema.json"},
+          {"type": "string", "description": "Path to DatasetSpec file"}
+        ]
+      },
+      "description": "List of datasets to fit"
+    },
+    "objective": {
+      "oneOf": [
+        {"$ref": "ObjectiveSpec.schema.json"},
+        {"type": "string", "description": "Path to ObjectiveSpec file"}
+      ],
+      "description": "Objective function definition"
+    },
+    "solver": {
+      "type": "object",
+      "required": ["method"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["scipy_minimize", "emcee", "dynesty", "gradient_descent", "adam", "custom"]
+        },
+        "config": {
+          "type": "object",
+          "properties": {
+            "max_iter": {"type": "integer"},
+            "tolerance": {"type": "number"},
+            "n_walkers": {"type": "integer"},
+            "n_samples": {"type": "integer"},
+            "learning_rate": {"type": "number"},
+            "batch_size": {"type": "integer"}
+          },
+          "description": "Solver-specific configuration"
+        },
+        "seed": {
+          "type": "integer",
+          "description": "Random seed for reproducibility"
+        },
+        "parallel": {
+          "type": "object",
+          "properties": {
+            "n_processes": {"type": "integer"},
+            "backend": {
+              "type": "string",
+              "enum": ["multiprocessing", "mpi", "dask", "ray"]
+            }
+          }
+        }
+      }
+    },
+    "compute": {
+      "type": "object",
+      "properties": {
+        "backend": {
+          "type": "string",
+          "enum": ["numpy", "torch", "jax"]
+        },
+        "device": {
+          "type": "string",
+          "enum": ["cpu", "cuda", "mps"]
+        },
+        "precision": {
+          "type": "string",
+          "enum": ["float32", "float64"]
+        },
+        "memory_limit_gb": {"type": "number"}
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {
+        "directory": {"type": "string"},
+        "save_trace": {"type": "boolean", "default": true},
+        "save_diagnostics": {"type": "boolean", "default": true},
+        "save_checkpoints": {"type": "boolean", "default": false},
+        "checkpoint_interval": {"type": "integer"},
+        "formats": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["json", "hdf5", "npz", "zarr", "arrow"]
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "author": {"type": "string"},
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "tags": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

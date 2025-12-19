@@ -1,0 +1,242 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://qfd.physics/schema/v0/ResultSpec.schema.json",
+  "title": "QFD Result Specification",
+  "description": "Complete results from a Grand Solver run with posteriors and diagnostics",
+  "type": "object",
+  "required": ["schema_version", "run_id", "status", "parameters", "objective_value"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1.0",
+      "description": "ResultSpec schema version"
+    },
+    "run_id": {
+      "type": "string",
+      "description": "Matches RunSpec.run_id for provenance"
+    },
+    "runspec_path": {
+      "type": "string",
+      "description": "Path to original RunSpec file"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["success", "failed", "partial", "timeout"],
+      "description": "Overall run status"
+    },
+    "message": {
+      "type": "string",
+      "description": "Human-readable status message or error description"
+    },
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "best_fit": {
+          "type": "object",
+          "description": "Best-fit parameter values",
+          "additionalProperties": {"type": "number"}
+        },
+        "initial": {
+          "type": "object",
+          "description": "Initial parameter values",
+          "additionalProperties": {"type": "number"}
+        },
+        "uncertainties": {
+          "type": "object",
+          "description": "Parameter uncertainties (1-sigma)",
+          "additionalProperties": {"type": "number"}
+        },
+        "covariance": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {"type": "number"}
+          },
+          "description": "Covariance matrix (if available)"
+        },
+        "correlation": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {"type": "number"}
+          },
+          "description": "Correlation matrix"
+        }
+      }
+    },
+    "objective_value": {
+      "type": "object",
+      "required": ["final", "initial"],
+      "properties": {
+        "final": {
+          "type": "number",
+          "description": "Final objective function value (chi-squared, NLL, etc.)"
+        },
+        "initial": {
+          "type": "number",
+          "description": "Initial objective function value"
+        },
+        "improvement": {
+          "type": "number",
+          "description": "Improvement from initial to final"
+        },
+        "per_dataset": {
+          "type": "object",
+          "description": "Objective breakdown by dataset",
+          "additionalProperties": {"type": "number"}
+        }
+      }
+    },
+    "goodness_of_fit": {
+      "type": "object",
+      "properties": {
+        "chi_squared": {"type": "number"},
+        "reduced_chi_squared": {"type": "number"},
+        "dof": {"type": "integer", "description": "Degrees of freedom"},
+        "p_value": {"type": "number"},
+        "aic": {"type": "number", "description": "Akaike Information Criterion"},
+        "bic": {"type": "number", "description": "Bayesian Information Criterion"}
+      }
+    },
+    "diagnostics": {
+      "type": "object",
+      "properties": {
+        "convergence": {
+          "type": "object",
+          "properties": {
+            "converged": {"type": "boolean"},
+            "n_iterations": {"type": "integer"},
+            "n_function_evals": {"type": "integer"},
+            "termination_reason": {"type": "string"}
+          }
+        },
+        "gradient_norm": {"type": "number"},
+        "condition_number": {"type": "number"},
+        "eigenvalues": {
+          "type": "array",
+          "items": {"type": "number"},
+          "description": "Eigenvalues of Hessian at best fit"
+        },
+        "outliers": {
+          "type": "object",
+          "properties": {
+            "n_rejected": {"type": "integer"},
+            "indices": {"type": "array", "items": {"type": "integer"}},
+            "reason": {"type": "string"}
+          }
+        }
+      }
+    },
+    "trace": {
+      "type": "object",
+      "properties": {
+        "path": {"type": "string", "description": "Path to full optimization trace file"},
+        "format": {"type": "string", "enum": ["hdf5", "npz", "zarr", "arrow"]},
+        "n_steps": {"type": "integer"}
+      },
+      "description": "Reference to full parameter trace (if saved)"
+    },
+    "posterior": {
+      "type": "object",
+      "properties": {
+        "samples_path": {"type": "string"},
+        "n_samples": {"type": "integer"},
+        "burn_in": {"type": "integer"},
+        "acceptance_rate": {"type": "number"},
+        "effective_sample_size": {
+          "type": "object",
+          "additionalProperties": {"type": "number"}
+        },
+        "gelman_rubin": {
+          "type": "object",
+          "additionalProperties": {"type": "number"},
+          "description": "R-hat convergence diagnostic for MCMC"
+        }
+      },
+      "description": "Posterior sampling diagnostics (for Bayesian methods)"
+    },
+    "residuals": {
+      "type": "object",
+      "properties": {
+        "mean": {"type": "number"},
+        "std": {"type": "number"},
+        "max_abs": {"type": "number"},
+        "by_dataset": {
+          "type": "object",
+          "description": "Residual statistics per dataset",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "mean": {"type": "number"},
+              "std": {"type": "number"},
+              "max_abs": {"type": "number"}
+            }
+          }
+        },
+        "path": {
+          "type": "string",
+          "description": "Path to full residual arrays"
+        }
+      }
+    },
+    "timing": {
+      "type": "object",
+      "properties": {
+        "total_seconds": {"type": "number"},
+        "setup_seconds": {"type": "number"},
+        "optimization_seconds": {"type": "number"},
+        "postprocessing_seconds": {"type": "number"},
+        "per_iteration_ms": {"type": "number"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "git_commit": {"type": "string"},
+        "git_dirty": {"type": "boolean"},
+        "start_time": {"type": "string", "format": "date-time"},
+        "end_time": {"type": "string", "format": "date-time"},
+        "hostname": {"type": "string"},
+        "python_version": {"type": "string"},
+        "package_versions": {
+          "type": "object",
+          "additionalProperties": {"type": "string"}
+        },
+        "random_seed": {"type": "integer"}
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {
+        "directory": {"type": "string"},
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "path": {"type": "string"},
+              "type": {"type": "string", "enum": ["trace", "diagnostics", "plot", "report", "checkpoint"]},
+              "format": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "severity": {"type": "string", "enum": ["info", "warning", "error"]},
+          "message": {"type": "string"},
+          "source": {"type": "string"}
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Human-readable notes about this run"
+    }
+  }
+}

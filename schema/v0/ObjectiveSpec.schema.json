@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://qfd.physics/schema/v0/ObjectiveSpec.schema.json",
+  "title": "QFD Objective Function Specification",
+  "description": "Defines the optimization objective (chi-squared, likelihood, etc.)",
+  "type": "object",
+  "required": ["type", "components"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["chi_squared", "negative_log_likelihood", "posterior", "custom"],
+      "description": "Objective function type"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["dataset_id", "observable_adapter"],
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "description": "References DatasetSpec.dataset_id"
+          },
+          "observable_adapter": {
+            "type": "string",
+            "description": "Function that maps model state to prediction (e.g., 'qfd.adapters.predict_binding_energy')"
+          },
+          "weight": {
+            "type": "number",
+            "default": 1.0,
+            "description": "Relative weight in multi-dataset fits"
+          },
+          "active": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "description": "List of dataset contributions to objective"
+    },
+    "regularization": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["l1", "l2", "prior_penalty", "smoothness", "custom"]
+          },
+          "params": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Parameter names this regularization applies to"
+          },
+          "strength": {
+            "type": "number",
+            "description": "Regularization coefficient"
+          }
+        }
+      },
+      "description": "Regularization terms (priors as penalties)"
+    },
+    "normalization": {
+      "type": "string",
+      "enum": ["per_datapoint", "per_dataset", "none"],
+      "default": "per_datapoint",
+      "description": "How to normalize chi-squared contributions"
+    }
+  }
+}

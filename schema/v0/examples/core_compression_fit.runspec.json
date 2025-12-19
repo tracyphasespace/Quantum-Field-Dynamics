@@ -1,0 +1,305 @@
+{
+  "$schema": "../RunSpec.schema.json",
+  "schema_version": "0.1.0",
+  "run_id": "core_compression_fit_001",
+  "description": "Fit nuclear surface/volume terms (c1, c2) to binding energy data from AME2020",
+
+  "model": {
+    "model_id": "qfd.nuclear.binding.v2",
+    "variant": "ricker",
+    "equations": [
+      {
+        "term": "kinetic",
+        "implementation": "qfd.solvers.nuclear.terms.kinetic_3d",
+        "active": true,
+        "weight": 1.0
+      },
+      {
+        "term": "V4_potential",
+        "implementation": "qfd.solvers.nuclear.terms.quartic_well",
+        "active": true,
+        "weight": 1.0
+      },
+      {
+        "term": "coulomb",
+        "implementation": "qfd.solvers.nuclear.terms.coulomb_direct",
+        "active": true,
+        "weight": 1.0
+      },
+      {
+        "term": "surface_tension",
+        "implementation": "qfd.solvers.nuclear.terms.surface_area",
+        "active": true,
+        "weight": 1.0
+      }
+    ],
+    "grid": {
+      "dimension": 3,
+      "points": [64, 64, 64],
+      "extent": {
+        "min": 0.0,
+        "max": 10.0,
+        "units": "fm"
+      },
+      "boundary": "dirichlet"
+    },
+    "backend": {
+      "framework": "torch",
+      "device": "cpu",
+      "precision": "float64",
+      "deterministic": true
+    },
+    "documentation": {
+      "paper_reference": "QFD Appendix N (Nuclear Genesis)",
+      "equation_refs": ["N.12", "N.15", "N.23"],
+      "notes": "Ricker ansatz with V4 quartic well and geometric coulomb shielding"
+    }
+  },
+
+  "parameters": [
+    {
+      "name": "c1",
+      "symbol": "c_1",
+      "type": "positive_real",
+      "init": 1.0,
+      "bounds": {
+        "min": 0.5,
+        "max": 1.5
+      },
+      "prior": {
+        "type": "uniform",
+        "params": {
+          "min": 0.5,
+          "max": 1.5
+        }
+      },
+      "units": "dimensionless",
+      "role": "coupling",
+      "identifiability": "global",
+      "frozen": false,
+      "sensitivity": "high",
+      "domains": ["nuclear"],
+      "description": "Surface term coefficient in binding energy formula (scales with A^(2/3))",
+      "references": ["QFD Appendix N.4"]
+    },
+    {
+      "name": "c2",
+      "symbol": "c_2",
+      "type": "bounded_real",
+      "init": 0.05,
+      "bounds": {
+        "min": 0.0,
+        "max": 0.1
+      },
+      "prior": {
+        "type": "uniform",
+        "params": {
+          "min": 0.0,
+          "max": 0.1
+        }
+      },
+      "units": "dimensionless",
+      "role": "coupling",
+      "identifiability": "global",
+      "frozen": false,
+      "sensitivity": "medium",
+      "domains": ["nuclear"],
+      "description": "Volume correction term in binding energy (linear in A)",
+      "references": ["QFD Appendix N.4"]
+    },
+    {
+      "name": "V4",
+      "symbol": "V_4",
+      "type": "positive_real",
+      "init": 11000000.0,
+      "bounds": {
+        "min": 1000000.0,
+        "max": 100000000.0
+      },
+      "prior": {
+        "type": "lognormal",
+        "params": {
+          "mean": 16.21,
+          "std": 0.5
+        }
+      },
+      "units": "eV",
+      "role": "scale",
+      "identifiability": "global",
+      "frozen": true,
+      "sensitivity": "high",
+      "domains": ["nuclear", "particle"],
+      "description": "Quartic potential depth (determines binding energy scale)",
+      "references": ["QFD Appendix N.2"]
+    },
+    {
+      "name": "g_c",
+      "symbol": "g_c",
+      "type": "bounded_real",
+      "init": 0.985,
+      "bounds": {
+        "min": 0.9,
+        "max": 1.0
+      },
+      "prior": {
+        "type": "truncated_normal",
+        "params": {
+          "mean": 0.985,
+          "std": 0.01,
+          "min": 0.9,
+          "max": 1.0
+        }
+      },
+      "units": "dimensionless",
+      "role": "coupling",
+      "identifiability": "global",
+      "frozen": true,
+      "sensitivity": "high",
+      "domains": ["nuclear", "particle"],
+      "description": "Geometric charge coupling (Coulomb shielding factor, 0 ≤ g_c ≤ 1)",
+      "references": ["QFD Appendix C.3"]
+    },
+    {
+      "name": "normalization_scale",
+      "symbol": "N_0",
+      "type": "positive_real",
+      "init": 1.0,
+      "bounds": {
+        "min": 0.95,
+        "max": 1.05
+      },
+      "prior": {
+        "type": "normal",
+        "params": {
+          "mean": 1.0,
+          "std": 0.01
+        }
+      },
+      "units": "dimensionless",
+      "role": "nuisance",
+      "identifiability": "dataset_specific",
+      "frozen": false,
+      "sensitivity": "low",
+      "domains": ["nuclear"],
+      "description": "Overall normalization for AME2020 data (accounts for systematic calibration)",
+      "references": []
+    }
+  ],
+
+  "datasets": [
+    {
+      "dataset_id": "nuclides.ame2020.stable",
+      "observable": "binding_energy",
+      "source": {
+        "type": "file",
+        "path": "data/nuclear/AME2020_stable_binding.csv",
+        "format": "csv",
+        "columns": {
+          "A": "mass_number",
+          "Z": "charge",
+          "BE": "binding_energy_MeV",
+          "dBE": "binding_energy_uncertainty_MeV"
+        }
+      },
+      "selection": {
+        "criteria": [
+          {
+            "field": "A",
+            "operator": ">=",
+            "value": 4
+          },
+          {
+            "field": "A",
+            "operator": "<=",
+            "value": 240
+          },
+          {
+            "field": "stability",
+            "operator": "==",
+            "value": "stable"
+          }
+        ],
+        "description": "Stable nuclides with 4 ≤ A ≤ 240 (excludes hydrogen isotopes)"
+      },
+      "transforms": [
+        {
+          "name": "convert_units",
+          "function": "qfd.data.transforms.MeV_to_eV",
+          "params": {}
+        }
+      ],
+      "likelihood": {
+        "type": "gaussian",
+        "error_model": "independent",
+        "uncertainty_column": "dBE",
+        "outlier_rejection": {
+          "method": "sigma_clip",
+          "threshold": 5.0
+        }
+      },
+      "metadata": {
+        "experiment": "AME2020",
+        "publication": "Atomic Mass Evaluation 2020",
+        "doi": "10.1016/j.cpc.2021.108092",
+        "year": 2020,
+        "n_points": 287,
+        "notes": "Stable nuclides only, excludes very light nuclei (A < 4)"
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "nuclides.ame2020.stable",
+        "observable_adapter": "qfd.adapters.nuclear.predict_binding_energy",
+        "weight": 1.0,
+        "active": true
+      }
+    ],
+    "regularization": [
+      {
+        "type": "l2",
+        "params": ["c1", "c2"],
+        "strength": 0.001
+      }
+    ],
+    "normalization": "per_datapoint"
+  },
+
+  "solver": {
+    "method": "scipy_minimize",
+    "config": {
+      "max_iter": 500,
+      "tolerance": 1e-6
+    },
+    "seed": 42,
+    "parallel": {
+      "n_processes": 4,
+      "backend": "multiprocessing"
+    }
+  },
+
+  "compute": {
+    "backend": "torch",
+    "device": "cpu",
+    "precision": "float64",
+    "memory_limit_gb": 8.0
+  },
+
+  "outputs": {
+    "directory": "results/core_compression_fit_001",
+    "save_trace": true,
+    "save_diagnostics": true,
+    "save_checkpoints": false,
+    "formats": ["json", "hdf5"]
+  },
+
+  "metadata": {
+    "author": "QFD Research Team",
+    "created": "2025-12-19T00:00:00Z",
+    "tags": ["nuclear", "binding_energy", "coupling_fit", "v0"],
+    "notes": "Initial core compression fit to establish baseline c1/c2 values with V4 and g_c frozen at proven values"
+  }
+}

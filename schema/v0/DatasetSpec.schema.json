@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://qfd.physics/schema/v0/DatasetSpec.schema.json",
+  "title": "QFD Dataset Specification",
+  "description": "Defines observational data, selection cuts, and likelihood model",
+  "type": "object",
+  "required": ["dataset_id", "observable", "source"],
+  "properties": {
+    "dataset_id": {
+      "type": "string",
+      "description": "Unique dataset identifier (e.g., 'nuclides.ame2020', 'cmb.planck2018')"
+    },
+    "observable": {
+      "type": "string",
+      "description": "What is being measured (e.g., 'binding_energy', 'power_spectrum', 'g_minus_2')"
+    },
+    "source": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["file", "url", "database", "synthetic"]
+        },
+        "path": {"type": "string"},
+        "format": {
+          "type": "string",
+          "enum": ["csv", "json", "hdf5", "fits", "npy"]
+        },
+        "columns": {
+          "type": "object",
+          "description": "Column mapping (e.g., {'A': 'mass_number', 'Z': 'charge'})"
+        }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "properties": {
+        "criteria": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {"type": "string"},
+              "operator": {
+                "type": "string",
+                "enum": ["==", "!=", "<", "<=", ">", ">=", "in", "not_in"]
+              },
+              "value": {"description": "Comparison value"}
+            }
+          }
+        },
+        "description": {"type": "string"}
+      },
+      "description": "Data selection cuts (e.g., 'stable_only', 'Z < 20')"
+    },
+    "transforms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "function": {"type": "string"},
+          "params": {"type": "object"}
+        }
+      },
+      "description": "Data preprocessing transformations"
+    },
+    "likelihood": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["gaussian", "student_t", "poisson", "log_normal", "custom"]
+        },
+        "error_model": {
+          "type": "string",
+          "enum": ["independent", "correlated", "systematic_only"]
+        },
+        "uncertainty_column": {
+          "type": "string",
+          "description": "Column name for measurement uncertainties"
+        },
+        "covariance_matrix": {
+          "type": "string",
+          "description": "Path to covariance matrix file (if correlated)"
+        },
+        "outlier_rejection": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "type": "string",
+              "enum": ["none", "sigma_clip", "studentize", "robust"]
+            },
+            "threshold": {"type": "number"}
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "experiment": {"type": "string"},
+        "publication": {"type": "string"},
+        "doi": {"type": "string"},
+        "year": {"type": "integer"},
+        "n_points": {"type": "integer"},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}
