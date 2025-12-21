@@ -1,0 +1,84 @@
+{
+  "schema_version": "v0.3",
+  "experiment_id": "exp_2025_cmb_vacuum_soliton",
+  "description": "SOLITON VACUUM TEST: Non-linear domain structure hypothesis. Tests if CMB peaks arise from vacuum lattice geometry (Q-balls at cosmic scale) rather than acoustic oscillations. FREE fit of r_domain to test if 147 Mpc emerges from data.",
+
+  "model": {
+    "id": "qfd.cosmology.vacuum_domains",
+    "variant": "soliton_form_factor"
+  },
+
+  "parameters": [
+    {
+      "name": "r_domain",
+      "value": 100.0,
+      "role": "coupling",
+      "bounds": [50.0, 300.0],
+      "units": "Mpc",
+      "description": "CRITICAL TEST: Characteristic size of vacuum soliton domains. Analogous to nuclear radius L₀ ~ 1 fm. If optimizer finds ~147 Mpc, domain hypothesis supported. If not, reveals true vacuum scale.",
+      "prior": {"type": "uniform", "args": {"min": 50.0, "max": 300.0}}
+    },
+    {
+      "name": "beta_wall",
+      "value": 4.0,
+      "role": "coupling",
+      "bounds": [1.0, 10.0],
+      "units": "dimensionless",
+      "description": "Domain wall sharpness from non-linear potential V(ρ) = β ρ⁴. Higher values → sharper peaks (stronger non-linearity). Links to Lean 4 stability criterion.",
+      "prior": {"type": "uniform", "args": {"min": 1.0, "max": 10.0}}
+    },
+    {
+      "name": "A_norm",
+      "value": 1.0,
+      "role": "nuisance",
+      "bounds": [1.0e-3, 1.0e+3],
+      "units": "dimensionless",
+      "description": "Overall amplitude normalization. Converts form factor to physical units (μK²). Unlike linear model, soliton form factor has natural O(1) amplitude, so A_norm should be small.",
+      "prior": {"type": "uniform", "args": {"min": 1.0e-3, "max": 1.0e+3}}
+    },
+    {
+      "name": "D_M",
+      "value": 14156.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "Mpc",
+      "description": "Comoving distance to last scattering surface (z ≈ 1090). Fixed from standard cosmology. Sets k = ℓ/D_M relation."
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "planck_tt_mock",
+      "source": "../../data/raw/planck_2018_power_spectra_mock.csv",
+      "columns": {
+        "ell": "ell",
+        "target": "C_ell_TT_LCDM",
+        "sigma": "sigma_TT"
+      },
+      "cuts": {
+        "ell": {"min": 30, "max": 2000}
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "planck_tt_mock",
+        "observable_adapter": "qfd.adapters.cosmology.cmb_vacuum_domains.predict_cmb_power_spectrum_domains",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1.0e-6
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "exp_2025_ccl_ame2020_production",
+  "description": "Production run: Core Compression Law Q(A) = c1·A^(2/3) + c2·A fitted to AME2020 dataset. Target R² ≈ 0.98 (all isotopes).",
+
+  "model": {
+    "id": "qfd.nuclear.ccl",
+    "variant": "charge_prediction"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c1",
+      "value": 1.0,
+      "role": "coupling",
+      "bounds": [0.0, 2.0],
+      "units": "dimensionless",
+      "description": "Surface term coefficient in Core Compression Law"
+    },
+    {
+      "name": "nuclear.c2",
+      "value": 0.4,
+      "role": "coupling",
+      "bounds": [0.0, 1.0],
+      "units": "dimensionless",
+      "description": "Volume term coefficient in Core Compression Law"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "ame2020_ccl",
+      "source": "data/raw/ame2020_ccl.csv",
+      "columns": {
+        "A": "A",
+        "Z": "Z",
+        "target": "target",
+        "sigma": "sigma"
+      },
+      "cuts": {
+        "stable_only": false,
+        "mass_min": 1
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "ame2020_ccl",
+        "observable_adapter": "qfd.adapters.nuclear.predict_charge",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1e-6
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "exp_2025_ccl_ame2020_phase2",
+  "description": "Phase 2: Core Compression Law Q(A) = c1·A^(2/3) + c2·A with PROVEN Lean 4 constraints from QFD/Nuclear/CoreCompressionLaw.lean. Bounds: c1 ∈ (0, 1.5), c2 ∈ [0.2, 0.5]. Target R² ≈ 0.98.",
+
+  "model": {
+    "id": "qfd.nuclear.ccl",
+    "variant": "charge_prediction"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c1",
+      "value": 0.5,
+      "role": "coupling",
+      "bounds": [0.001, 1.499],
+      "units": "dimensionless",
+      "description": "Surface term coefficient (Lean proven: 0 < c1 < 1.5)"
+    },
+    {
+      "name": "nuclear.c2",
+      "value": 0.35,
+      "role": "coupling",
+      "bounds": [0.2, 0.5],
+      "units": "dimensionless",
+      "description": "Volume term coefficient (Lean proven: 0.2 ≤ c2 ≤ 0.5)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "ame2020_ccl",
+      "source": "data/raw/ame2020_ccl.csv",
+      "columns": {
+        "A": "A",
+        "Z": "Z",
+        "target": "target",
+        "sigma": "sigma"
+      },
+      "cuts": {
+        "stable_only": false,
+        "mass_min": 1
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "ame2020_ccl",
+        "observable_adapter": "qfd.adapters.nuclear.predict_charge",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1e-6
+    }
+  }
+}

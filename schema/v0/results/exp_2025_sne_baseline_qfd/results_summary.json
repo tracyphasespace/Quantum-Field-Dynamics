@@ -1,0 +1,47 @@
+{
+  "experiment_id": "exp_2025_sne_baseline_qfd",
+  "fit": {
+    "algo": "L-BFGS-B",
+    "loss_best": 2705.432976706903,
+    "n_function_evals": 48,
+    "n_iterations": 9,
+    "params_best": {
+      "H0": 72.94897878656309,
+      "Omega_M": 1.0,
+      "alpha_QFD": 0.6872432623835142,
+      "beta": 0.5085074006605694
+    },
+    "success": true
+  },
+  "provenance": {
+    "datasets": [
+      {
+        "id": "union21_sne",
+        "rows_final": 580,
+        "rows_raw": 580,
+        "sha256": "afb07236f93e35612320f529d7a9e76e9a9353f80f7be47caac05e0533d45a81"
+      }
+    ],
+    "environment": {
+      "jsonschema_version": "4.25.1",
+      "numpy_version": "1.26.4",
+      "pandas_version": "2.1.4",
+      "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "python_version": "3.12.5",
+      "scipy_version": "1.11.4"
+    },
+    "experiment_path": "/home/tracy/development/QFD_SpectralGap/schema/v0/experiments/sne_baseline_qfd.json",
+    "git": {
+      "commit": "fcd773c6094d17c776822d89b9c8b9ae607e6dcb",
+      "dirty": true,
+      "repo": "/home/tracy/development/QFD_SpectralGap"
+    },
+    "schema_dir": "/home/tracy/development/QFD_SpectralGap/schema/v0",
+    "schema_hashes": {
+      "DatasetSpec_v03.schema.json": "09a7e89c87ec9bd36769b4a39d01082a13bc55d4cea66a0104e5d01dab130610",
+      "ObjectiveSpec_v03.schema.json": "842b4d24b9b57fb1ed1f7a3c1a5e6a239390d33af8df4f0210a0699c6a500ee4",
+      "ParameterSpec.schema.json": "fdf5fd330c6449d26b019a218997b1448d33b56201b92e448b401c405638fc5a",
+      "RunSpec_v03.schema.json": "c0d72b4c01271803fbd104610e62fc06248df6be08f289d328ab553b40a5626e"
+    }
+  }
+}

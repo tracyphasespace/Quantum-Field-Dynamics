@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "DatasetSpec_v03.schema.json",
+  "title": "QFD Dataset Specification (v0.3)",
+  "description": "Simplified dataset spec for dynamic adapter pattern",
+  "type": "object",
+  "required": ["id", "source", "columns"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique dataset identifier"
+    },
+    "source": {
+      "type": "string",
+      "description": "Path to data file (CSV, JSON, etc.)"
+    },
+    "columns": {
+      "type": "object",
+      "description": "Column name mappings",
+      "required": ["target"],
+      "properties": {
+        "A": {"type": "string"},
+        "Z": {"type": "string"},
+        "target": {"type": "string"},
+        "sigma": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "cuts": {
+      "type": "object",
+      "description": "Data selection cuts",
+      "properties": {
+        "stable_only": {"type": "boolean"},
+        "mass_min": {"type": "number"},
+        "mass_max": {"type": "number"}
+      },
+      "additionalProperties": true
+    }
+  }
+}

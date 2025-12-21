@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "RunSpec_v03.schema.json",
+  "title": "QFD RunSpec (v0.3)",
+  "description": "Complete experiment specification for Grand Solver v0.3",
+  "type": "object",
+  "required": ["schema_version", "experiment_id", "model", "parameters", "datasets", "objective", "solver"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Schema version (e.g., 'v0.1')"
+    },
+    "experiment_id": {
+      "type": "string",
+      "description": "Unique experiment identifier"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable experiment description"
+    },
+    "model": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string"},
+        "variant": {"type": "string"}
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "ParameterSpec.schema.json"}
+    },
+    "datasets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "DatasetSpec_v03.schema.json"}
+    },
+    "objective": {
+      "$ref": "ObjectiveSpec_v03.schema.json"
+    },
+    "solver": {
+      "type": "object",
+      "required": ["method"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["scipy.minimize", "mcmc", "nested_sampling"]
+        },
+        "options": {
+          "type": "object",
+          "properties": {
+            "algo": {"type": "string"},
+            "maxiter": {"type": "integer", "minimum": 1},
+            "tol": {"type": "number", "minimum": 0}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "schema_version": "v0.3",
+  "experiment_id": "exp_2025_des5yr_qfd_scattering",
+  "description": "QFD photon-photon scattering fit to DES5YR SNe (dark energy alternative hypothesis)",
+
+  "model": {
+    "id": "qfd.cosmology.distance_modulus.scattering",
+    "variant": "matter_only_plus_scattering"
+  },
+
+  "parameters": [
+    {
+      "name": "H0",
+      "value": 70.0,
+      "role": "coupling",
+      "bounds": [50.0, 100.0],
+      "units": "km/s/Mpc",
+      "description": "Hubble constant (expansion rate today)"
+    },
+    {
+      "name": "alpha_QFD",
+      "value": 0.8,
+      "role": "coupling",
+      "bounds": [0.0, 2.0],
+      "units": "dimensionless",
+      "description": "QFD scattering coupling strength (τ = α × z^β), constrained by Lean proof: 0 < α < 2",
+      "prior": { "type": "uniform", "args": { "min": 0.0, "max": 2.0 } }
+    },
+    {
+      "name": "beta",
+      "value": 0.6,
+      "role": "coupling",
+      "bounds": [0.4, 1.0],
+      "units": "dimensionless",
+      "description": "Redshift power law exponent (sub-linear to linear)",
+      "prior": { "type": "uniform", "args": { "min": 0.4, "max": 1.0 } }
+    },
+    {
+      "name": "Omega_M",
+      "value": 1.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "dimensionless",
+      "description": "Matter density parameter - FROZEN at 1.0 (matter-only universe, no dark energy)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "des5yr_full_no_cuts",
+      "source": "data/raw/des5yr_full.csv",
+      "columns": {
+        "redshift": "redshift",
+        "target": "distance_modulus",
+        "sigma": "sigma_mu"
+      },
+      "cuts": {}
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "des5yr_full_no_cuts",
+        "observable_adapter": "qfd.adapters.cosmology.predict_distance_modulus",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1e-8
+    }
+  }
+}

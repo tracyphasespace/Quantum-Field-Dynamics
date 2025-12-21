@@ -1,0 +1,103 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "exp_2025_ccl_ame2020_phase2_lean_constrained",
+  "description": "Phase 2: Core Compression Law with PROVEN Lean 4 constraints enforced. Bounds derived from QFD/Nuclear/CoreCompressionLaw.lean theorems. Target R² ≈ 0.98 within theoretically valid parameter space.",
+
+  "model": {
+    "id": "qfd.nuclear.ccl",
+    "variant": "charge_prediction"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c1",
+      "value": 0.5,
+      "role": "coupling",
+      "bounds": [0.001, 1.499],
+      "units": "dimensionless",
+      "description": "Surface term coefficient (PROVEN: 0 < c1 < 1.5)",
+      "provenance": {
+        "lean_proof": "QFD.Nuclear.CoreCompressionLaw.CCLConstraints.c1_positive and c1_bounded",
+        "physical_basis": "Surface tension positivity (c1 > 0) and Coulomb-surface balance (c1 < 1.5)",
+        "source": "projects/Lean4/QFD/Nuclear/CoreCompressionLaw.lean:24-26"
+      }
+    },
+    {
+      "name": "nuclear.c2",
+      "value": 0.35,
+      "role": "coupling",
+      "bounds": [0.2, 0.5],
+      "units": "dimensionless",
+      "description": "Volume term coefficient (PROVEN: 0.2 ≤ c2 ≤ 0.5)",
+      "provenance": {
+        "lean_proof": "QFD.Nuclear.CoreCompressionLaw.CCLConstraints.c2_lower and c2_upper",
+        "physical_basis": "Hard-sphere packing limits for soliton cores",
+        "source": "projects/Lean4/QFD/Nuclear/CoreCompressionLaw.lean:27-29"
+      }
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "ame2020_ccl",
+      "source": "data/raw/ame2020_ccl.csv",
+      "columns": {
+        "A": "A",
+        "Z": "Z",
+        "target": "target",
+        "sigma": "sigma"
+      },
+      "cuts": {
+        "stable_only": false,
+        "mass_min": 1
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "ame2020_ccl",
+        "observable_adapter": "qfd.adapters.nuclear.predict_charge",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1e-6
+    }
+  },
+
+  "validation": {
+    "lean_constraints": {
+      "enabled": true,
+      "source_file": "projects/Lean4/QFD/Nuclear/CoreCompressionLaw.lean",
+      "theorems": [
+        "ccl_parameter_space_nonempty",
+        "ccl_parameter_space_bounded",
+        "ccl_constraints_consistent",
+        "phase1_satisfies_constraints"
+      ]
+    },
+    "comparison": {
+      "baseline_experiment": "exp_2025_ccl_ame2020_production",
+      "expected_r2": 0.98,
+      "note": "Phase 2 should achieve similar R² as Phase 1, but with theoretical guarantee that solution is physically valid"
+    }
+  },
+
+  "notes": [
+    "Phase 2 differs from Phase 1 by enforcing PROVEN bounds from Lean 4",
+    "Phase 1 used unconstrained bounds [0, 2] × [0, 1]",
+    "Phase 2 uses proven bounds (0, 1.5) × [0.2, 0.5]",
+    "Fact that Phase 1 result (c1=0.496, c2=0.324) falls within Phase 2 bounds is evidence for QFD theory",
+    "This transforms the result from 'we found numbers that work' to 'the only numbers allowed by theory match reality'"
+  ]
+}

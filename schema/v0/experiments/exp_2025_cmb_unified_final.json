@@ -1,0 +1,101 @@
+{
+  "schema_version": "v0.3",
+  "experiment_id": "exp_2025_cmb_unified_final",
+  "description": "FINAL UNIFIED MODEL: Complete transport-geometry unification with spherical scattering kernel, non-linear sharpening (beta_wall), proper normalization, and spectral tilt. When alpha=0, this EXACTLY matches the geometric model. This is the definitive test of the radius (147 Mpc) vs diameter (274 Mpc) hypothesis.",
+
+  "model": {
+    "id": "qfd.cosmo.unified_final",
+    "variant": "complete_transport"
+  },
+
+  "parameters": [
+    {
+      "name": "r_psi",
+      "value": 137.0,
+      "role": "coupling",
+      "bounds": [130.0, 160.0],
+      "units": "Mpc",
+      "description": "Domain RADIUS. Test if r ~ 137-147 Mpc emerges (confirming 274 Mpc = diameter).",
+      "prior": {"type": "uniform", "args": {"min": 130.0, "max": 160.0}}
+    },
+    {
+      "name": "beta_wall",
+      "value": 4.0,
+      "role": "coupling",
+      "bounds": [1.0, 10.0],
+      "units": "dimensionless",
+      "description": "Domain wall sharpness from V(ρ) = β ρ⁴. CRITICAL parameter - controls (|F|²)^(1/β) sharpening.",
+      "prior": {"type": "uniform", "args": {"min": 1.0, "max": 10.0}}
+    },
+    {
+      "name": "A_norm",
+      "value": 1.0,
+      "role": "nuisance",
+      "bounds": [0.1, 100.0],
+      "units": "dimensionless",
+      "description": "Amplitude normalization",
+      "prior": {"type": "uniform", "args": {"min": 0.1, "max": 100.0}}
+    },
+    {
+      "name": "alpha",
+      "value": 0.0,
+      "role": "coupling",
+      "bounds": [-0.2, 0.2],
+      "units": "dimensionless",
+      "description": "Spectral tilt (Blue Interaction). α=0 → pure geometry. Expected |α| << 1.",
+      "prior": {"type": "uniform", "args": {"min": -0.2, "max": 0.2}}
+    },
+    {
+      "name": "scale_factor",
+      "value": 1.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "dimensionless",
+      "description": "1.0 = fit radius, 2.0 = fit diameter"
+    },
+    {
+      "name": "chi_star",
+      "value": 14156.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "Mpc",
+      "description": "Comoving distance to last scattering (z=1090)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "planck_2018_tt",
+      "source": "../../data/raw/planck_2018_power_spectra_mock.csv",
+      "columns": {
+        "ell": "ell",
+        "target": "C_ell_TT_LCDM",
+        "sigma": "sigma_TT"
+      },
+      "cuts": {
+        "ell": {"min": 30, "max": 2500}
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "planck_2018_tt",
+        "observable_adapter": "qfd.adapters.cosmology.cmb_boltzmann_transport.predict_cmb_transport_spectrum",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1.0e-6
+    }
+  }
+}

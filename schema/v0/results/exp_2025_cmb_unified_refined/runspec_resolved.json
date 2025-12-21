@@ -1,0 +1,117 @@
+{
+  "datasets": [
+    {
+      "columns": {
+        "ell": "ell",
+        "sigma": "sigma_TT",
+        "target": "C_ell_TT_LCDM"
+      },
+      "cuts": {
+        "ell": {
+          "max": 2500,
+          "min": 30
+        }
+      },
+      "id": "planck_2018_tt",
+      "source": "../../data/raw/planck_2018_power_spectra_mock.csv"
+    }
+  ],
+  "description": "REFINED UNIFIED MODEL: Transport with spherical scattering kernel. Tests the hypothesis that 274 Mpc (geometric fit) = 2 \u00d7 137 Mpc (radius). Includes proper \u2113(\u2113+1)/(2\u03c0) normalization and spectral tilt. This should match the geometric model's fit quality while revealing transport physics.",
+  "experiment_id": "exp_2025_cmb_unified_refined",
+  "model": {
+    "id": "qfd.cosmo.unified_refined",
+    "variant": "spherical_transport"
+  },
+  "objective": {
+    "components": [
+      {
+        "active": true,
+        "dataset_id": "planck_2018_tt",
+        "observable_adapter": "qfd.adapters.cosmology.cmb_boltzmann_transport.predict_cmb_transport_spectrum",
+        "weight": 1.0
+      }
+    ],
+    "type": "chi_squared"
+  },
+  "parameters": [
+    {
+      "bounds": [
+        130.0,
+        160.0
+      ],
+      "description": "Domain RADIUS (not diameter). Test if r ~ 137-147 Mpc emerges, confirming 274 Mpc = 2r (diameter).",
+      "name": "r_psi",
+      "prior": {
+        "args": {
+          "max": 160.0,
+          "min": 130.0
+        },
+        "type": "uniform"
+      },
+      "role": "coupling",
+      "units": "Mpc",
+      "value": 137.0
+    },
+    {
+      "bounds": [
+        0.1,
+        100.0
+      ],
+      "description": "Amplitude normalization (\u03bcK\u00b2 scaling)",
+      "name": "A_norm",
+      "prior": {
+        "args": {
+          "max": 100.0,
+          "min": 0.1
+        },
+        "type": "uniform"
+      },
+      "role": "nuisance",
+      "units": "dimensionless",
+      "value": 1.0
+    },
+    {
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "description": "Spectral tilt (Blue Interaction). \u03b1=0 is pure geometry, \u03b1>0 favors high-\u2113 (blue), \u03b1<0 favors low-\u2113 (red).",
+      "name": "alpha",
+      "prior": {
+        "args": {
+          "max": 0.5,
+          "min": -0.5
+        },
+        "type": "uniform"
+      },
+      "role": "coupling",
+      "units": "dimensionless",
+      "value": 0.0
+    },
+    {
+      "description": "Scale factor: 1.0 = fit radius directly, 2.0 = fit diameter. Set to 1.0 to test radius hypothesis.",
+      "frozen": true,
+      "name": "scale_factor",
+      "role": "coupling",
+      "units": "dimensionless",
+      "value": 1.0
+    },
+    {
+      "description": "Comoving distance to last scattering surface (z=1090)",
+      "frozen": true,
+      "name": "chi_star",
+      "role": "coupling",
+      "units": "Mpc",
+      "value": 14156.0
+    }
+  ],
+  "schema_version": "v0.3",
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1e-06
+    }
+  }
+}

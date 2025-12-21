@@ -1,0 +1,123 @@
+{
+  "schema_version": "v0.3",
+  "experiment_id": "exp_2025_joint_sne_cmb_radiative_transfer",
+  "description": "Joint fit of DES5YR SNe + COBE FIRAS CMB using two-channel radiative transfer model. Critical test: Can scattering explain SNe dimming while preserving CMB blackbody?",
+
+  "model": {
+    "id": "qfd.cosmology.radiative_transfer.two_channel",
+    "variant": "three_module_full"
+  },
+
+  "parameters": [
+    {
+      "name": "H0",
+      "value": 70.0,
+      "role": "coupling",
+      "bounds": [50.0, 100.0],
+      "units": "km/s/Mpc",
+      "description": "Hubble constant (expansion rate today)"
+    },
+    {
+      "name": "alpha",
+      "value": 0.51,
+      "role": "coupling",
+      "bounds": [0.0, 2.0],
+      "units": "dimensionless",
+      "description": "Module 1: Optical depth coupling (Lean constrained: 0 < α < 2)",
+      "prior": { "type": "uniform", "args": { "min": 0.0, "max": 2.0 } }
+    },
+    {
+      "name": "beta",
+      "value": 0.73,
+      "role": "coupling",
+      "bounds": [0.4, 1.0],
+      "units": "dimensionless",
+      "description": "Module 1: Redshift power law exponent (Lean constrained: 0.4 ≤ β ≤ 1.0)",
+      "prior": { "type": "uniform", "args": { "min": 0.4, "max": 1.0 } }
+    },
+    {
+      "name": "k_drift",
+      "value": 0.01,
+      "role": "coupling",
+      "bounds": [0.0, 0.1],
+      "units": "dimensionless",
+      "description": "Module 2: Fractional frequency drift per unit distance (achromatic)",
+      "prior": { "type": "uniform", "args": { "min": 0.0, "max": 0.1 } }
+    },
+    {
+      "name": "y_eff",
+      "value": 0.0,
+      "role": "coupling",
+      "bounds": [0.0, 1.5e-5],
+      "units": "dimensionless",
+      "description": "Module 3: Compton y-distortion strength (FIRAS constrained: y < 1.5e-5)",
+      "prior": { "type": "uniform", "args": { "min": 0.0, "max": 1.5e-5 } }
+    },
+    {
+      "name": "T_bg",
+      "value": 2.72548,
+      "role": "coupling",
+      "frozen": true,
+      "units": "K",
+      "description": "Module 3: CMB background temperature (COBE FIRAS measurement)"
+    },
+    {
+      "name": "Omega_M",
+      "value": 1.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "dimensionless",
+      "description": "Matter density - FROZEN at 1.0 (matter-only universe, no dark energy)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "des5yr_full_no_cuts",
+      "source": "data/raw/des5yr_full.csv",
+      "columns": {
+        "redshift": "redshift",
+        "target": "distance_modulus",
+        "sigma": "sigma_mu"
+      },
+      "cuts": {}
+    },
+    {
+      "id": "cobe_firas_spectrum",
+      "source": "data/raw/cobe_firas_spectrum.csv",
+      "columns": {
+        "frequency": "frequency",
+        "target": "intensity",
+        "sigma": "intensity_error"
+      },
+      "cuts": {}
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "des5yr_full_no_cuts",
+        "observable_adapter": "qfd.adapters.cosmology.radiative_transfer.predict_distance_modulus_rt",
+        "weight": 1.0,
+        "active": true
+      },
+      {
+        "dataset_id": "cobe_firas_spectrum",
+        "observable_adapter": "qfd.adapters.cosmology.radiative_transfer.predict_cmb_spectrum",
+        "weight": 1e6,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 2000,
+      "tol": 1e-8
+    }
+  }
+}

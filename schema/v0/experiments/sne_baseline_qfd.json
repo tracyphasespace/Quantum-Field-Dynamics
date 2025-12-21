@@ -1,0 +1,82 @@
+{
+  "schema_version": "v0.3",
+  "experiment_id": "exp_2025_sne_baseline_qfd",
+  "description": "BASELINE SNe FIT: QFD scattering model on Union2.1 SNe data. Establishes baseline scattering parameters (alpha_QFD, beta) for cross-validation with CMB. Tests if same vacuum structure that explains CMB also explains SNe dimming without dark energy.",
+
+  "model": {
+    "id": "qfd.sne.baseline",
+    "variant": "scattering_only"
+  },
+
+  "parameters": [
+    {
+      "name": "H0",
+      "value": 70.0,
+      "role": "coupling",
+      "bounds": [60.0, 80.0],
+      "units": "km/s/Mpc",
+      "description": "Hubble constant",
+      "prior": {"type": "uniform", "args": {"min": 60.0, "max": 80.0}}
+    },
+    {
+      "name": "alpha_QFD",
+      "value": 0.8,
+      "role": "coupling",
+      "bounds": [0.0, 2.0],
+      "units": "dimensionless",
+      "description": "QFD scattering strength. Will compare to CMB-derived value.",
+      "prior": {"type": "uniform", "args": {"min": 0.0, "max": 2.0}}
+    },
+    {
+      "name": "beta",
+      "value": 0.6,
+      "role": "coupling",
+      "bounds": [0.4, 1.0],
+      "units": "dimensionless",
+      "description": "Redshift power law exponent for optical depth",
+      "prior": {"type": "uniform", "args": {"min": 0.4, "max": 1.0}}
+    },
+    {
+      "name": "Omega_M",
+      "value": 1.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "dimensionless",
+      "description": "Matter density - FROZEN at 1.0 (no dark energy test)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "union21_sne",
+      "source": "../../data/raw/union21_sne.csv",
+      "columns": {
+        "redshift": "zCMB",
+        "target": "target",
+        "sigma": "sigma"
+      },
+      "cuts": {}
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "union21_sne",
+        "observable_adapter": "qfd.adapters.cosmology.distance_modulus.predict_distance_modulus",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1.0e-6
+    }
+  }
+}

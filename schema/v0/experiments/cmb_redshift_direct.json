@@ -1,0 +1,110 @@
+{
+  "schema_version": "v0.3",
+  "experiment_id": "exp_2025_cmb_redshift_direct",
+  "description": "RED TEAM EVALUATION: Direct QFD-CMB fit WITHOUT ΛCDM baseline. Tests if r_ψ ≈ 147 Mpc emerges from optimization to Planck data, validating QFD photon-photon scattering hypothesis.",
+
+  "model": {
+    "id": "qfd.cosmology.redshift_direct",
+    "variant": "limber_projection"
+  },
+
+  "parameters": [
+    {
+      "name": "rpsi",
+      "value": 100.0,
+      "role": "coupling",
+      "bounds": [50.0, 300.0],
+      "units": "Mpc",
+      "description": "ψ-field correlation scale - THE CRITICAL HYPOTHESIS. If optimizer finds ~147 Mpc (sound horizon), QFD is validated. If not, new physics emerges.",
+      "prior": {"type": "uniform", "args": {"min": 50.0, "max": 300.0}}
+    },
+    {
+      "name": "Aosc",
+      "value": 0.5,
+      "role": "coupling",
+      "bounds": [0.0, 0.99],
+      "units": "dimensionless",
+      "description": "Oscillation amplitude (unitarity bound: Aosc < 1). Determines strength of acoustic-like features.",
+      "prior": {"type": "uniform", "args": {"min": 0.0, "max": 0.99}}
+    },
+    {
+      "name": "A_norm",
+      "value": 1.0e+6,
+      "role": "nuisance",
+      "bounds": [1.0e+0, 1.0e+20],
+      "units": "dimensionless",
+      "description": "Overall amplitude normalization. Converts dimensionless P_ψ(k) to physical CMB units (μK²). Analogous to A_s in standard cosmology.",
+      "prior": {"type": "uniform", "args": {"min": 1.0e+0, "max": 1.0e+20}}
+    },
+    {
+      "name": "ns",
+      "value": 0.96,
+      "role": "coupling",
+      "bounds": [0.90, 1.00],
+      "units": "dimensionless",
+      "description": "Spectral index. Standard inflation predicts ns ≈ 0.96. Test if QFD requires different value.",
+      "prior": {"type": "uniform", "args": {"min": 0.90, "max": 1.00}}
+    },
+    {
+      "name": "sigma_osc",
+      "value": 0.025,
+      "role": "nuisance",
+      "bounds": [0.001, 0.100],
+      "units": "dimensionless",
+      "description": "Gaussian damping scale for oscillations. Mimics Silk damping at high-k.",
+      "prior": {"type": "uniform", "args": {"min": 0.001, "max": 0.100}}
+    },
+    {
+      "name": "chi_star",
+      "value": 14156.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "Mpc",
+      "description": "Comoving distance to last scattering surface (z ≈ 1090). Fixed from standard cosmology."
+    },
+    {
+      "name": "sigma_chi",
+      "value": 250.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "Mpc",
+      "description": "Width of last scattering visibility function. Fixed from recombination physics."
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "planck_tt_mock",
+      "source": "data/raw/planck_2018_power_spectra_mock.csv",
+      "columns": {
+        "ell": "ell",
+        "target": "C_ell_TT_LCDM",
+        "sigma": "sigma_TT"
+      },
+      "cuts": {
+        "ell": {"min": 30, "max": 2000}
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "planck_tt_mock",
+        "observable_adapter": "qfd.adapters.cosmology.redshift_direct.predict_cmb_power_spectrum_direct",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1.0e-6
+    }
+  }
+}

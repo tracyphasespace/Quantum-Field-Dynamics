@@ -1,0 +1,92 @@
+{
+  "schema_version": "v0.3",
+  "experiment_id": "exp_2025_cmb_unified_refined",
+  "description": "REFINED UNIFIED MODEL: Transport with spherical scattering kernel. Tests the hypothesis that 274 Mpc (geometric fit) = 2 × 137 Mpc (radius). Includes proper ℓ(ℓ+1)/(2π) normalization and spectral tilt. This should match the geometric model's fit quality while revealing transport physics.",
+
+  "model": {
+    "id": "qfd.cosmo.unified_refined",
+    "variant": "spherical_transport"
+  },
+
+  "parameters": [
+    {
+      "name": "r_psi",
+      "value": 137.0,
+      "role": "coupling",
+      "bounds": [130.0, 160.0],
+      "units": "Mpc",
+      "description": "Domain RADIUS (not diameter). Test if r ~ 137-147 Mpc emerges, confirming 274 Mpc = 2r (diameter).",
+      "prior": {"type": "uniform", "args": {"min": 130.0, "max": 160.0}}
+    },
+    {
+      "name": "A_norm",
+      "value": 1.0,
+      "role": "nuisance",
+      "bounds": [0.1, 100.0],
+      "units": "dimensionless",
+      "description": "Amplitude normalization (μK² scaling)",
+      "prior": {"type": "uniform", "args": {"min": 0.1, "max": 100.0}}
+    },
+    {
+      "name": "alpha",
+      "value": 0.0,
+      "role": "coupling",
+      "bounds": [-0.5, 0.5],
+      "units": "dimensionless",
+      "description": "Spectral tilt (Blue Interaction). α=0 is pure geometry, α>0 favors high-ℓ (blue), α<0 favors low-ℓ (red).",
+      "prior": {"type": "uniform", "args": {"min": -0.5, "max": 0.5}}
+    },
+    {
+      "name": "scale_factor",
+      "value": 1.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "dimensionless",
+      "description": "Scale factor: 1.0 = fit radius directly, 2.0 = fit diameter. Set to 1.0 to test radius hypothesis."
+    },
+    {
+      "name": "chi_star",
+      "value": 14156.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "Mpc",
+      "description": "Comoving distance to last scattering surface (z=1090)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "planck_2018_tt",
+      "source": "../../data/raw/planck_2018_power_spectra_mock.csv",
+      "columns": {
+        "ell": "ell",
+        "target": "C_ell_TT_LCDM",
+        "sigma": "sigma_TT"
+      },
+      "cuts": {
+        "ell": {"min": 30, "max": 2500}
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "planck_2018_tt",
+        "observable_adapter": "qfd.adapters.cosmology.cmb_boltzmann_transport.predict_cmb_transport_spectrum",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1.0e-6
+    }
+  }
+}

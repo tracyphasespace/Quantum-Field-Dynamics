@@ -1,0 +1,84 @@
+{
+  "schema_version": "v0.3",
+  "experiment_id": "exp_2025_cmb_scattering_resonance",
+  "description": "Test of the Boltzmann Transport Model: CMB peaks as scattering resonances of the vacuum lattice.",
+
+  "model": {
+    "id": "qfd.cosmo.transport",
+    "variant": "scattering_resonance"
+  },
+
+  "parameters": [
+    {
+      "name": "r_psi",
+      "value": 147.0,
+      "role": "coupling",
+      "bounds": [100.0, 300.0],
+      "units": "Mpc",
+      "description": "Radius of the vacuum soliton domain (Resonance Scale)",
+      "prior": {"type": "uniform", "args": {"min": 100.0, "max": 300.0}}
+    },
+    {
+      "name": "A_norm",
+      "value": 5000.0,
+      "role": "nuisance",
+      "bounds": [1000.0, 10000.0],
+      "units": "uK^2",
+      "description": "Base thermodynamic power amplitude",
+      "prior": {"type": "uniform", "args": {"min": 1000.0, "max": 10000.0}}
+    },
+    {
+      "name": "alpha",
+      "value": 1.0,
+      "role": "coupling",
+      "bounds": [0.0, 2.0],
+      "units": "dimensionless",
+      "description": "Frequency dependence of interaction",
+      "prior": {"type": "uniform", "args": {"min": 0.0, "max": 2.0}}
+    },
+    {
+      "name": "chi_star",
+      "value": 14156.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "Mpc",
+      "description": "Comoving distance to scattering shell (Mpc)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "planck_2018_tt",
+      "source": "../../data/raw/planck_2018_power_spectra_mock.csv",
+      "columns": {
+        "ell": "ell",
+        "target": "C_ell_TT_LCDM",
+        "sigma": "sigma_TT"
+      },
+      "cuts": {
+        "ell": {"min": 30, "max": 2500}
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "planck_2018_tt",
+        "observable_adapter": "qfd.adapters.cosmology.cmb_boltzmann_transport.predict_cmb_transport_spectrum",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1.0e-6
+    }
+  }
+}

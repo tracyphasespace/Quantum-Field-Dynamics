@@ -1,0 +1,135 @@
+{
+  "datasets": [
+    {
+      "columns": {
+        "ell": "ell",
+        "sigma": "sigma_TT",
+        "target": "C_ell_TT_LCDM"
+      },
+      "cuts": {
+        "ell": {
+          "max": 2500,
+          "min": 30
+        }
+      },
+      "id": "planck_2018_tt",
+      "source": "../../data/raw/planck_2018_power_spectra_mock.csv"
+    }
+  ],
+  "description": "FINAL UNIFIED MODEL: Complete transport-geometry unification with spherical scattering kernel, non-linear sharpening (beta_wall), proper normalization, and spectral tilt. When alpha=0, this EXACTLY matches the geometric model. This is the definitive test of the radius (147 Mpc) vs diameter (274 Mpc) hypothesis.",
+  "experiment_id": "exp_2025_cmb_unified_final",
+  "model": {
+    "id": "qfd.cosmo.unified_final",
+    "variant": "complete_transport"
+  },
+  "objective": {
+    "components": [
+      {
+        "active": true,
+        "dataset_id": "planck_2018_tt",
+        "observable_adapter": "qfd.adapters.cosmology.cmb_boltzmann_transport.predict_cmb_transport_spectrum",
+        "weight": 1.0
+      }
+    ],
+    "type": "chi_squared"
+  },
+  "parameters": [
+    {
+      "bounds": [
+        130.0,
+        160.0
+      ],
+      "description": "Domain RADIUS. Test if r ~ 137-147 Mpc emerges (confirming 274 Mpc = diameter).",
+      "name": "r_psi",
+      "prior": {
+        "args": {
+          "max": 160.0,
+          "min": 130.0
+        },
+        "type": "uniform"
+      },
+      "role": "coupling",
+      "units": "Mpc",
+      "value": 137.0
+    },
+    {
+      "bounds": [
+        1.0,
+        10.0
+      ],
+      "description": "Domain wall sharpness from V(\u03c1) = \u03b2 \u03c1\u2074. CRITICAL parameter - controls (|F|\u00b2)^(1/\u03b2) sharpening.",
+      "name": "beta_wall",
+      "prior": {
+        "args": {
+          "max": 10.0,
+          "min": 1.0
+        },
+        "type": "uniform"
+      },
+      "role": "coupling",
+      "units": "dimensionless",
+      "value": 4.0
+    },
+    {
+      "bounds": [
+        0.1,
+        100.0
+      ],
+      "description": "Amplitude normalization",
+      "name": "A_norm",
+      "prior": {
+        "args": {
+          "max": 100.0,
+          "min": 0.1
+        },
+        "type": "uniform"
+      },
+      "role": "nuisance",
+      "units": "dimensionless",
+      "value": 1.0
+    },
+    {
+      "bounds": [
+        -0.2,
+        0.2
+      ],
+      "description": "Spectral tilt (Blue Interaction). \u03b1=0 \u2192 pure geometry. Expected |\u03b1| << 1.",
+      "name": "alpha",
+      "prior": {
+        "args": {
+          "max": 0.2,
+          "min": -0.2
+        },
+        "type": "uniform"
+      },
+      "role": "coupling",
+      "units": "dimensionless",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 = fit radius, 2.0 = fit diameter",
+      "frozen": true,
+      "name": "scale_factor",
+      "role": "coupling",
+      "units": "dimensionless",
+      "value": 1.0
+    },
+    {
+      "description": "Comoving distance to last scattering (z=1090)",
+      "frozen": true,
+      "name": "chi_star",
+      "role": "coupling",
+      "units": "Mpc",
+      "value": 14156.0
+    }
+  ],
+  "schema_version": "v0.3",
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1e-06
+    }
+  }
+}

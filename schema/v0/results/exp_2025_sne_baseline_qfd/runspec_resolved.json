@@ -1,0 +1,104 @@
+{
+  "datasets": [
+    {
+      "columns": {
+        "redshift": "zCMB",
+        "sigma": "sigma",
+        "target": "target"
+      },
+      "cuts": {},
+      "id": "union21_sne",
+      "source": "../../data/raw/union21_sne.csv"
+    }
+  ],
+  "description": "BASELINE SNe FIT: QFD scattering model on Union2.1 SNe data. Establishes baseline scattering parameters (alpha_QFD, beta) for cross-validation with CMB. Tests if same vacuum structure that explains CMB also explains SNe dimming without dark energy.",
+  "experiment_id": "exp_2025_sne_baseline_qfd",
+  "model": {
+    "id": "qfd.sne.baseline",
+    "variant": "scattering_only"
+  },
+  "objective": {
+    "components": [
+      {
+        "active": true,
+        "dataset_id": "union21_sne",
+        "observable_adapter": "qfd.adapters.cosmology.distance_modulus.predict_distance_modulus",
+        "weight": 1.0
+      }
+    ],
+    "type": "chi_squared"
+  },
+  "parameters": [
+    {
+      "bounds": [
+        60.0,
+        80.0
+      ],
+      "description": "Hubble constant",
+      "name": "H0",
+      "prior": {
+        "args": {
+          "max": 80.0,
+          "min": 60.0
+        },
+        "type": "uniform"
+      },
+      "role": "coupling",
+      "units": "km/s/Mpc",
+      "value": 70.0
+    },
+    {
+      "bounds": [
+        0.0,
+        2.0
+      ],
+      "description": "QFD scattering strength. Will compare to CMB-derived value.",
+      "name": "alpha_QFD",
+      "prior": {
+        "args": {
+          "max": 2.0,
+          "min": 0.0
+        },
+        "type": "uniform"
+      },
+      "role": "coupling",
+      "units": "dimensionless",
+      "value": 0.8
+    },
+    {
+      "bounds": [
+        0.4,
+        1.0
+      ],
+      "description": "Redshift power law exponent for optical depth",
+      "name": "beta",
+      "prior": {
+        "args": {
+          "max": 1.0,
+          "min": 0.4
+        },
+        "type": "uniform"
+      },
+      "role": "coupling",
+      "units": "dimensionless",
+      "value": 0.6
+    },
+    {
+      "description": "Matter density - FROZEN at 1.0 (no dark energy test)",
+      "frozen": true,
+      "name": "Omega_M",
+      "role": "coupling",
+      "units": "dimensionless",
+      "value": 1.0
+    }
+  ],
+  "schema_version": "v0.3",
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1e-06
+    }
+  }
+}

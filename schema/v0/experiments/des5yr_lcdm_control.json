@@ -1,0 +1,71 @@
+{
+  "schema_version": "v0.3",
+  "experiment_id": "exp_2025_des5yr_lcdm_control",
+  "description": "Standard ΛCDM cosmology fit to DES5YR Type Ia SNe (baseline for dark energy hypothesis)",
+
+  "model": {
+    "id": "qfd.cosmology.distance_modulus.lcdm",
+    "variant": "standard"
+  },
+
+  "parameters": [
+    {
+      "name": "H0",
+      "value": 70.0,
+      "role": "coupling",
+      "bounds": [50.0, 100.0],
+      "units": "km/s/Mpc",
+      "description": "Hubble constant (expansion rate today)"
+    },
+    {
+      "name": "Omega_M",
+      "value": 0.3,
+      "role": "coupling",
+      "bounds": [0.2, 0.4],
+      "units": "dimensionless",
+      "description": "Matter density parameter"
+    },
+    {
+      "name": "Omega_Lambda",
+      "value": 0.7,
+      "role": "coupling",
+      "bounds": [0.6, 0.8],
+      "units": "dimensionless",
+      "description": "Dark energy density parameter (cosmological constant)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "des5yr_full_no_cuts",
+      "source": "data/raw/des5yr_full.csv",
+      "columns": {
+        "redshift": "redshift",
+        "target": "distance_modulus",
+        "sigma": "sigma_mu"
+      },
+      "cuts": {}
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "des5yr_full_no_cuts",
+        "observable_adapter": "qfd.adapters.cosmology.predict_distance_modulus",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1e-8
+    }
+  }
+}

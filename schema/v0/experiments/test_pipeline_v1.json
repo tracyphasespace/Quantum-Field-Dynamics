@@ -1,0 +1,81 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "exp_2025_pipeline_test",
+  "description": "End-to-end test of v0.3 dynamic adapter pipeline with synthetic data",
+
+  "model": {
+    "id": "qfd.nuclear.ccl",
+    "variant": "backbone_only"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c1",
+      "value": 1.0,
+      "role": "coupling",
+      "bounds": [0.5, 1.5],
+      "units": "dimensionless"
+    },
+    {
+      "name": "nuclear.c2",
+      "value": 0.05,
+      "role": "coupling",
+      "bounds": [0.0, 0.1],
+      "units": "dimensionless"
+    },
+    {
+      "name": "V4",
+      "value": 11000000,
+      "role": "coupling",
+      "bounds": [10000000, 12000000],
+      "units": "eV",
+      "frozen": false
+    },
+    {
+      "name": "g_c",
+      "value": 0.985,
+      "role": "coupling",
+      "bounds": [0.9, 1.0],
+      "units": "dimensionless",
+      "frozen": true
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "test_nuclei",
+      "source": "data/raw/test_nuclei.csv",
+      "columns": {
+        "A": "A",
+        "Z": "Z",
+        "target": "binding_energy",
+        "sigma": "sigma"
+      },
+      "cuts": {
+        "stable_only": false,
+        "mass_min": 4
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "test_nuclei",
+        "observable_adapter": "qfd.adapters.nuclear.predict_binding_energy",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 500,
+      "tol": 1e-6
+    }
+  }
+}

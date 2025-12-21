@@ -1,0 +1,109 @@
+{
+  "datasets": [
+    {
+      "columns": {
+        "ell": "ell",
+        "sigma": "sigma_TT",
+        "target": "C_ell_TT_LCDM"
+      },
+      "cuts": {
+        "ell": {
+          "max": 2000,
+          "min": 30
+        }
+      },
+      "id": "planck_tt_mock",
+      "source": "../../data/raw/planck_2018_power_spectra_mock.csv"
+    }
+  ],
+  "description": "SOLITON VACUUM TEST: Non-linear domain structure hypothesis. Tests if CMB peaks arise from vacuum lattice geometry (Q-balls at cosmic scale) rather than acoustic oscillations. FREE fit of r_domain to test if 147 Mpc emerges from data.",
+  "experiment_id": "exp_2025_cmb_vacuum_soliton",
+  "model": {
+    "id": "qfd.cosmology.vacuum_domains",
+    "variant": "soliton_form_factor"
+  },
+  "objective": {
+    "components": [
+      {
+        "active": true,
+        "dataset_id": "planck_tt_mock",
+        "observable_adapter": "qfd.adapters.cosmology.cmb_vacuum_domains.predict_cmb_power_spectrum_domains",
+        "weight": 1.0
+      }
+    ],
+    "type": "chi_squared"
+  },
+  "parameters": [
+    {
+      "bounds": [
+        50.0,
+        300.0
+      ],
+      "description": "CRITICAL TEST: Characteristic size of vacuum soliton domains. Analogous to nuclear radius L\u2080 ~ 1 fm. If optimizer finds ~147 Mpc, domain hypothesis supported. If not, reveals true vacuum scale.",
+      "name": "r_domain",
+      "prior": {
+        "args": {
+          "max": 300.0,
+          "min": 50.0
+        },
+        "type": "uniform"
+      },
+      "role": "coupling",
+      "units": "Mpc",
+      "value": 100.0
+    },
+    {
+      "bounds": [
+        1.0,
+        10.0
+      ],
+      "description": "Domain wall sharpness from non-linear potential V(\u03c1) = \u03b2 \u03c1\u2074. Higher values \u2192 sharper peaks (stronger non-linearity). Links to Lean 4 stability criterion.",
+      "name": "beta_wall",
+      "prior": {
+        "args": {
+          "max": 10.0,
+          "min": 1.0
+        },
+        "type": "uniform"
+      },
+      "role": "coupling",
+      "units": "dimensionless",
+      "value": 4.0
+    },
+    {
+      "bounds": [
+        0.001,
+        1000.0
+      ],
+      "description": "Overall amplitude normalization. Converts form factor to physical units (\u03bcK\u00b2). Unlike linear model, soliton form factor has natural O(1) amplitude, so A_norm should be small.",
+      "name": "A_norm",
+      "prior": {
+        "args": {
+          "max": 1000.0,
+          "min": 0.001
+        },
+        "type": "uniform"
+      },
+      "role": "nuisance",
+      "units": "dimensionless",
+      "value": 1.0
+    },
+    {
+      "description": "Comoving distance to last scattering surface (z \u2248 1090). Fixed from standard cosmology. Sets k = \u2113/D_M relation.",
+      "frozen": true,
+      "name": "D_M",
+      "role": "coupling",
+      "units": "Mpc",
+      "value": 14156.0
+    }
+  ],
+  "schema_version": "v0.3",
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 1000,
+      "tol": 1e-06
+    }
+  }
+}

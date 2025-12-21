@@ -1,0 +1,109 @@
+{
+  "schema_version": "v0.3",
+  "experiment_id": "exp_2025_planck_vacuum_refraction_tt",
+  "description": "Test QFD vacuum refraction hypothesis: Can oscillatory modulation from ψ-field correlation explain CMB acoustic peaks without primordial inflation? Fit to TT power spectrum only.",
+
+  "model": {
+    "id": "qfd.cosmology.vacuum_refraction",
+    "variant": "tt_only"
+  },
+
+  "parameters": [
+    {
+      "name": "r_psi",
+      "value": 100.0,
+      "role": "coupling",
+      "bounds": [10.0, 500.0],
+      "units": "Mpc",
+      "description": "Correlation length of ψ-field (determines oscillation frequency)",
+      "prior": {"type": "uniform", "args": {"min": 10.0, "max": 500.0}}
+    },
+    {
+      "name": "A_osc",
+      "value": 0.1,
+      "role": "coupling",
+      "bounds": [0.0, 0.99],
+      "units": "dimensionless",
+      "description": "Oscillation amplitude (Lean constrained: 0 ≤ A_osc < 1, unitarity)",
+      "prior": {"type": "uniform", "args": {"min": 0.0, "max": 0.99}}
+    },
+    {
+      "name": "phi",
+      "value": 0.0,
+      "role": "coupling",
+      "bounds": [-3.14159, 3.14159],
+      "units": "radians",
+      "description": "Phase offset (Lean constrained: -π ≤ φ ≤ π)",
+      "prior": {"type": "uniform", "args": {"min": -3.14159, "max": 3.14159}}
+    },
+    {
+      "name": "z_CMB",
+      "value": 1090.0,
+      "role": "coupling",
+      "frozen": true,
+      "units": "dimensionless",
+      "description": "Redshift of last scattering surface"
+    },
+    {
+      "name": "H0",
+      "value": 67.4,
+      "role": "coupling",
+      "frozen": true,
+      "units": "km/s/Mpc",
+      "description": "Hubble constant (Planck 2018 best-fit)"
+    },
+    {
+      "name": "Omega_M",
+      "value": 0.315,
+      "role": "coupling",
+      "frozen": true,
+      "units": "dimensionless",
+      "description": "Matter density (Planck 2018 best-fit)"
+    },
+    {
+      "name": "Omega_Lambda",
+      "value": 0.685,
+      "role": "coupling",
+      "frozen": true,
+      "units": "dimensionless",
+      "description": "Dark energy density (Planck 2018 best-fit)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "planck_tt_power_spectrum",
+      "source": "data/raw/planck_2018_power_spectra_mock.csv",
+      "columns": {
+        "ell": "ell",
+        "C_ell_TT_LCDM": "C_ell_TT_LCDM",
+        "target": "C_ell_TT_obs",
+        "sigma": "sigma_TT"
+      },
+      "cuts": {
+        "ell": {"min": 2, "max": 2450}
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "planck_tt_power_spectrum",
+        "observable_adapter": "qfd.adapters.cosmology.cmb_power_spectrum.predict_cmb_power_spectrum_tt",
+        "weight": 1.0,
+        "active": true
+      }
+    ]
+  },
+
+  "solver": {
+    "method": "scipy.minimize",
+    "options": {
+      "algo": "L-BFGS-B",
+      "maxiter": 2000,
+      "tol": 1e-8
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ObjectiveSpec_v03.schema.json",
+  "title": "QFD Objective Specification (v0.3)",
+  "description": "Multi-component objective with dynamic adapters",
+  "type": "object",
+  "required": ["type", "components"],
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["chi_squared", "sse", "likelihood"],
+      "description": "Objective function type"
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["dataset_id", "observable_adapter"],
+        "additionalProperties": false,
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "description": "Dataset ID to use for this component"
+          },
+          "observable_adapter": {
+            "type": "string",
+            "description": "Full path to adapter function (e.g., qfd.adapters.nuclear.predict_binding_energy)"
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Weight for this component in total objective"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether this component is active"
+          }
+        }
+      }
+    }
+  }
+}
