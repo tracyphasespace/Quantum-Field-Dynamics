@@ -1,0 +1,104 @@
+{
+  "test": "Grid Convergence",
+  "particle": "electron",
+  "beta": 3.1,
+  "target_mass": 1.0,
+  "timestamp": "2025-12-22T12:10:00.668995",
+  "grid_resolutions": [
+    {
+      "num_r": 50,
+      "num_theta": 10,
+      "R": 0.43188010351495776,
+      "U": 0.02438918915246423,
+      "amplitude": 0.9214475960152426,
+      "E_circulation": 1.2357785961523673,
+      "E_stabilization": 0.2357785986881976,
+      "E_total": 0.9999999974641697,
+      "residual": 2.5358303235023527e-09,
+      "converged": true,
+      "iterations": 69,
+      "function_evals": 140
+    },
+    {
+      "num_r": 100,
+      "num_theta": 20,
+      "R": 0.44599320002083065,
+      "U": 0.02431007797771981,
+      "amplitude": 0.9382050333102967,
+      "E_circulation": 1.2360936270831686,
+      "E_stabilization": 0.23609362786375307,
+      "E_total": 0.9999999992194155,
+      "residual": 7.805844859376521e-10,
+      "converged": true,
+      "iterations": 73,
+      "function_evals": 148
+    },
+    {
+      "num_r": 200,
+      "num_theta": 40,
+      "R": 0.44897467205145947,
+      "U": 0.024369198331185164,
+      "amplitude": 0.951289542079356,
+      "E_circulation": 1.243684079978749,
+      "E_stabilization": 0.2436840803466143,
+      "E_total": 0.9999999996321347,
+      "residual": 3.67865293782188e-10,
+      "converged": true,
+      "iterations": 75,
+      "function_evals": 152
+    },
+    {
+      "num_r": 400,
+      "num_theta": 80,
+      "R": 0.4506160106826538,
+      "U": 0.02442434353629551,
+      "amplitude": 0.9588919239734448,
+      "E_circulation": 1.2496354928616238,
+      "E_stabilization": 0.24963549314502997,
+      "E_total": 0.9999999997165938,
+      "residual": 2.8340618740685386e-10,
+      "converged": true,
+      "iterations": 75,
+      "function_evals": 150
+    }
+  ],
+  "convergence_analysis": {
+    "convergence_data": [
+      {
+        "grid": "(50, 10)",
+        "drift_R_percent": 4.15784320208959,
+        "drift_U_percent": 0.1439317448963881,
+        "drift_amplitude_percent": 3.904958110716047,
+        "drift_E_total_percent": 2.25242413673385e-07
+      },
+      {
+        "grid": "(100, 20)",
+        "drift_R_percent": 1.0258869086386597,
+        "drift_U_percent": 0.46783471746495625,
+        "drift_amplitude_percent": 2.157374584763006,
+        "drift_E_total_percent": 4.971782986717016e-08
+      },
+      {
+        "grid": "(200, 40)",
+        "drift_R_percent": 0.36424330078902223,
+        "drift_U_percent": 0.22577968176871158,
+        "drift_amplitude_percent": 0.7928299012662591,
+        "drift_E_total_percent": 8.44591063992704e-09
+      },
+      {
+        "grid": "(400, 80)",
+        "drift_R_percent": 0.0,
+        "drift_U_percent": 0.0,
+        "drift_amplitude_percent": 0.0,
+        "drift_E_total_percent": 0.0
+      }
+    ],
+    "success_criteria": {
+      "max_parameter_drift_percent": 0.7928299012662591,
+      "energy_drift_percent": 8.44591063992704e-09,
+      "parameter_converged": true,
+      "energy_converged": true,
+      "overall_pass": true
+    }
+  }
+}

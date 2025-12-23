@@ -1,0 +1,51 @@
+{
+  "test": "Golden Loop - \u03b2 from Fine Structure Constant",
+  "description": "Test if \u03b2 derived from \u03b1 = 1/137.036... produces electron mass",
+  "timestamp": "2025-12-22T13:06:38.639939",
+  "beta_from_alpha": {
+    "beta": 3.058230856,
+    "beta_name": "\u03b2 from \u03b1 (fine structure)",
+    "converged": true,
+    "R": 0.43871872866876405,
+    "U": 0.024041132510003192,
+    "amplitude": 0.9113675648099089,
+    "E_circulation": 1.208911374131172,
+    "E_stabilization": 0.20891137418149408,
+    "E_total": 0.9999999999496778,
+    "residual": 5.032219085876477e-11,
+    "accuracy_percent": 99.99999999496778,
+    "E_stab_analytic": 0.2053650228695603,
+    "E_stab_error_percent": 1.6975386456712767
+  },
+  "beta_from_nuclear": {
+    "beta": 3.1,
+    "beta_name": "\u03b2 from nuclear fits",
+    "converged": true,
+    "R": 0.43902363860373217,
+    "U": 0.024088953200773165,
+    "amplitude": 0.9145928192709472,
+    "E_circulation": 1.2137245210057503,
+    "E_stabilization": 0.21372451975275653,
+    "E_total": 1.0000000012529937,
+    "residual": 1.252993708789063e-09,
+    "accuracy_percent": 99.99999987470063,
+    "E_stab_analytic": 0.21008330201057698,
+    "E_stab_error_percent": 1.7036967711481215
+  },
+  "comparison": {
+    "beta_shift_percent": -1.3473917419354797,
+    "R_shift_percent": -0.0694518263157438,
+    "U_shift_percent": -0.1985170977393825,
+    "amplitude_shift_percent": -0.3526437550219597,
+    "E_circ_shift_percent": -0.3965600753118221,
+    "E_stab_shift_percent": -2.2520324653579515,
+    "max_parameter_shift_percent": 0.3526437550219597,
+    "within_1_percent": true,
+    "within_2_percent": true
+  },
+  "conclusion": {
+    "converged": true,
+    "golden_loop_closed": true,
+    "narrative": "\u03b2 from fine structure constant successfully predicts electron mass"
+  }
+}

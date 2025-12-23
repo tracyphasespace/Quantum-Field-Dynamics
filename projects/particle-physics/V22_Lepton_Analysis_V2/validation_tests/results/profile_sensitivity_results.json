@@ -1,0 +1,79 @@
+{
+  "test": "Profile Sensitivity",
+  "particle": "electron",
+  "beta": 3.1,
+  "beta_fixed": true,
+  "target_mass": 1.0,
+  "grid": {
+    "num_r": 100,
+    "num_theta": 20
+  },
+  "timestamp": "2025-12-22T12:11:02.826919",
+  "profiles_tested": [
+    "parabolic",
+    "quartic",
+    "gaussian",
+    "linear"
+  ],
+  "results": [
+    {
+      "profile": "parabolic",
+      "converged": true,
+      "R": 0.43902363860373217,
+      "U": 0.024088953200773165,
+      "amplitude": 0.9145928192709472,
+      "E_circulation": 1.2137245210057503,
+      "E_stabilization": 0.21372451975275653,
+      "E_total": 1.0000000012529937,
+      "residual": 1.252993708789063e-09,
+      "accuracy_percent": 99.99999987470063,
+      "iterations": 71
+    },
+    {
+      "profile": "quartic",
+      "converged": true,
+      "R": 0.46045356423760153,
+      "U": 0.023179542066361532,
+      "amplitude": 0.940783040514167,
+      "E_circulation": 1.1238288513013792,
+      "E_stabilization": 0.12382885209824925,
+      "E_total": 0.99999999920313,
+      "residual": 7.968700144189711e-10,
+      "accuracy_percent": 99.999999920313,
+      "iterations": 75
+    },
+    {
+      "profile": "gaussian",
+      "converged": true,
+      "R": 0.443102758478476,
+      "U": 0.02501746223473649,
+      "amplitude": 0.8804622000062565,
+      "E_circulation": 1.3090248697958111,
+      "E_stabilization": 0.30902487119682215,
+      "E_total": 0.9999999985989889,
+      "residual": 1.401011084922743e-09,
+      "accuracy_percent": 99.99999985989889,
+      "iterations": 74
+    },
+    {
+      "profile": "linear",
+      "converged": true,
+      "R": 0.46422166799773934,
+      "U": 0.023091323675547858,
+      "amplitude": 0.9346987681107997,
+      "E_circulation": 1.1152795906574766,
+      "E_stabilization": 0.1152795924936148,
+      "E_total": 0.9999999981638619,
+      "residual": 1.8361381304288216e-09,
+      "accuracy_percent": 99.9999998163862,
+      "iterations": 73
+    }
+  ],
+  "analysis": {
+    "num_profiles_tested": 4,
+    "num_converged": 4,
+    "all_accurate": true,
+    "beta_robust": true,
+    "parabolic_essential": false
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "test": "Three Leptons with \u03b2 from Fine Structure Constant",
+  "beta_source": "\u03b1 = 1/137.036... \u2192 \u03b2 = 3.058230856",
+  "timestamp": "2025-12-23T10:13:45.622888",
+  "results": [
+    {
+      "particle": "electron",
+      "target_mass": 1.0,
+      "converged": true,
+      "R": 0.43871872866876405,
+      "U": 0.024041132510003192,
+      "amplitude": 0.9113675648099089,
+      "E_circulation": 1.208911374131172,
+      "E_stabilization": 0.20891137418149408,
+      "E_total": 0.9999999999496778,
+      "residual": 5.032219085876477e-11,
+      "accuracy_percent": 99.99999999496778
+    },
+    {
+      "particle": "muon",
+      "target_mass": 206.7682826,
+      "converged": true,
+      "R": 0.44962787274308347,
+      "U": 0.3146082741410002,
+      "amplitude": 0.9663578521564429,
+      "E_circulation": 207.0216054623731,
+      "E_stabilization": 0.25332280507955673,
+      "E_total": 206.76828265729353,
+      "residual": 5.729353347305732e-08,
+      "accuracy_percent": 99.99999997229094
+    },
+    {
+      "particle": "tau",
+      "target_mass": 3477.228,
+      "converged": true,
+      "R": 0.4929661665659031,
+      "U": 1.2894500231216615,
+      "amplitude": 0.9589139064642769,
+      "E_circulation": 3477.55292627663,
+      "E_stabilization": 0.32492647932473245,
+      "E_total": 3477.227999797305,
+      "residual": 2.0269499145797454e-07,
+      "accuracy_percent": 99.99999999417078
+    }
+  ],
+  "analysis": {
+    "beta": 3.058230856,
+    "all_converged": true,
+    "electron": {
+      "particle": "electron",
+      "target_mass": 1.0,
+      "converged": true,
+      "R": 0.43871872866876405,
+      "U": 0.024041132510003192,
+      "amplitude": 0.9113675648099089,
+      "E_circulation": 1.208911374131172,
+      "E_stabilization": 0.20891137418149408,
+      "E_total": 0.9999999999496778,
+      "residual": 5.032219085876477e-11,
+      "accuracy_percent": 99.99999999496778
+    },
+    "muon": {
+      "particle": "muon",
+      "target_mass": 206.7682826,
+      "converged": true,
+      "R": 0.44962787274308347,
+      "U": 0.3146082741410002,
+      "amplitude": 0.9663578521564429,
+      "E_circulation": 207.0216054623731,
+      "E_stabilization": 0.25332280507955673,
+      "E_total": 206.76828265729353,
+      "residual": 5.729353347305732e-08,
+      "accuracy_percent": 99.99999997229094
+    },
+    "tau": {
+      "particle": "tau",
+      "target_mass": 3477.228,
+      "converged": true,
+      "R": 0.4929661665659031,
+      "U": 1.2894500231216615,
+      "amplitude": 0.9589139064642769,
+      "E_circulation": 3477.55292627663,
+      "E_stabilization": 0.32492647932473245,
+      "E_total": 3477.227999797305,
+      "residual": 2.0269499145797454e-07,
+      "accuracy_percent": 99.99999999417078
+    },
+    "scaling_validated": true
+  }
+}

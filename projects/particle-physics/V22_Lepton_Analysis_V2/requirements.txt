@@ -1,0 +1,8 @@
+# V22 Lepton Analysis - Python Dependencies
+# Version 2.0 - Scientific Release
+
+numpy>=1.20.0
+scipy>=1.7.0
+
+# Optional: For enhanced numerical methods
+# matplotlib>=3.3.0  # For visualization (not required for replication)
