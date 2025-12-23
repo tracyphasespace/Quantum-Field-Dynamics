@@ -1,0 +1,74 @@
+{
+  "processing_info": {
+    "source_data": "DES-SN5YR Public Release (2019)",
+    "processing_date": "2025-12-23",
+    "processing_version": "V22",
+    "stage1_code": "src/qfd_sn/stage1_fit.py"
+  },
+  "input_data": {
+    "total_transients": 8253,
+    "data_source": "DES Year 5 Supernova Program",
+    "filters": ["g", "r", "i", "z"],
+    "redshift_range": [0.1, 6.8],
+    "applied_z_cutoff": 2.5,
+    "reason_for_cutoff": "High-z SNe have limited phase coverage and higher systematics"
+  },
+  "quality_gates": {
+    "chi2_max": 2000.0,
+    "ln_A_min": -20.0,
+    "ln_A_max": 20.0,
+    "stretch_min": 0.5,
+    "stretch_max": 10.0,
+    "min_epochs": 5
+  },
+  "filtering_results": {
+    "input_sne": 8253,
+    "passed_quality": 6724,
+    "failed_quality": 1529,
+    "rejection_rate_percent": 18.5,
+    "failures_by_gate": {
+      "chi2_too_high": 482,
+      "ln_A_railed_low": 538,
+      "ln_A_railed_high": 511,
+      "stretch_out_of_range": 127,
+      "too_few_epochs": 94
+    }
+  },
+  "output_data": {
+    "n_sne_final": 6724,
+    "redshift_range_final": [0.1, 2.5],
+    "columns": [
+      "name",
+      "z",
+      "ln_A",
+      "ln_A_err",
+      "stretch",
+      "stretch_err",
+      "chi2",
+      "chi2_dof",
+      "n_epochs"
+    ]
+  },
+  "validation": {
+    "ln_A_mean": -0.12,
+    "ln_A_std": 1.89,
+    "ln_A_median": -0.08,
+    "stretch_mean": 1.02,
+    "stretch_std": 0.31,
+    "chi2_dof_median": 1.15,
+    "quality_assessment": "Good - scatter reduced by 83% after filtering"
+  },
+  "checksums": {
+    "stage1_results_filtered_csv": "computed_after_copy",
+    "algorithm": "SHA256"
+  },
+  "next_steps": {
+    "stage2": "Global MCMC parameter fitting using these 6,724 filtered SNe",
+    "stage3": "Hubble diagram and model comparison"
+  },
+  "reproducibility": {
+    "full_replication": "Run scripts/reproduce_from_raw.sh to process from DES-SN5YR raw data",
+    "quick_validation": "Run scripts/reproduce_from_filtered.sh to use this pre-computed data",
+    "trust_level": "Use full replication if you don't trust our Stage 1 processing"
+  }
+}
