@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+message: "If you use this formalization in your research, please cite it as below."
+type: software
+title: "Quantum Field Dynamics: Lean 4 Formalization"
+abstract: "Machine-checked formalization of Quantum Field Dynamics theorems in Lean 4, including spacetime emergence from Cl(3,3), CMB 'Axis of Evil' uniqueness proofs, charge quantization, nuclear physics, and cosmological predictions."
+authors:
+  - family-names: "QFD Formalization Team"
+    affiliation: "Quantum Field Dynamics Project"
+repository-code: "https://github.com/tracyphasespace/Quantum-Field-Dynamics"
+license: MIT
+date-released: 2025-12-25
+version: "1.1"
+keywords:
+  - formal verification
+  - Lean 4
+  - quantum field theory
+  - spacetime emergence
+  - CMB anomalies
+  - Clifford algebras
+  - cosmology
+references:
+  - type: software
+    title: "Lean 4"
+    authors:
+      - family-names: "de Moura"
+        given-names: "Leonardo"
+      - family-names: "Ullrich"
+        given-names: "Sebastian"
+    version: "4.27.0-rc1"
+    url: "https://leanprover.github.io/"
+  - type: software
+    title: "Mathlib4"
+    authors:
+      - name: "The mathlib Community"
+    url: "https://github.com/leanprover-community/mathlib4"
+preferred-citation:
+  type: software
+  title: "QFD Cosmology Formalization: CMB Axis of Evil Uniqueness Proofs"
+  authors:
+    - family-names: "QFD Formalization Team"
+  year: 2025
+  url: "https://github.com/tracyphasespace/Quantum-Field-Dynamics/tree/main/projects/Lean4/QFD/Cosmology"
+  notes: "See QFD/ProofLedger.lean for claim-to-theorem mapping. Core files: AxisExtraction.lean, CoaxialAlignment.lean, OctupoleExtraction.lean."

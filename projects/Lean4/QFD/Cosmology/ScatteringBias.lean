@@ -1,9 +1,11 @@
 -- QFD/Cosmology/ScatteringBias.lean
 import QFD.Schema.Couplings
+import QFD.Math.ReciprocalIneq
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 noncomputable section
 
@@ -94,11 +96,24 @@ theorem scattering_inflates_distance (d_true : ℝ) (S : ℝ)
     (h_S_pos : S > 0)
     (h_S_sub : S < 1) :
     d_true / sqrt S > d_true := by
-  sorry
-  -- Proof sketch:
-  -- 1. S < 1 → sqrt(S) < 1 (square root preserves order)
-  -- 2. sqrt(S) < 1 → 1/sqrt(S) > 1 (reciprocal reverses inequality)
-  -- 3. d_true / sqrt(S) = d_true * (1/sqrt(S)) > d_true * 1 = d_true
+  have hsqrt_pos : 0 < sqrt S := by exact Real.sqrt_pos.2 h_S_pos
+  have hsqrt_lt_one : sqrt S < 1 := by
+    have : sqrt S < sqrt 1 := by
+      exact Real.sqrt_lt_sqrt (le_of_lt h_S_pos) (by linarith)
+    simpa using this
+  -- d_true < d_true / sqrt S iff d_true * sqrt S < d_true * 1
+  -- (multiply by sqrt S, reverse inequality since < 1)
+  have h1 : d_true * sqrt S < d_true * 1 := by
+    exact mul_lt_mul_of_pos_left hsqrt_lt_one h_d
+  -- Now divide both sides by sqrt S > 0
+  have h2 : d_true * sqrt S / sqrt S < d_true * 1 / sqrt S := by
+    exact div_lt_div_of_pos_right h1 hsqrt_pos
+  -- Simplify: d_true * sqrt S / sqrt S = d_true
+  have h3 : d_true * sqrt S / sqrt S = d_true := by
+    rw [mul_div_assoc, div_self (ne_of_gt hsqrt_pos), mul_one]
+  -- So d_true < d_true / sqrt S
+  rw [h3] at h2
+  simpa using h2
 
 /--
 **Theorem 3: Magnitude Dimming is Always Positive**
@@ -110,12 +125,22 @@ theorem magnitude_dimming_nonnegative (S : ℝ)
     (h_S_pos : S > 0)
     (h_S_bounded : S ≤ 1) :
     -2.5 * log S / log 10 ≥ 0 := by
-  sorry
-  -- Proof sketch:
-  -- 1. S ≤ 1 → log(S) ≤ log(1) = 0
-  -- 2. log(10) > 0 (since 10 > 1)
-  -- 3. log(S) ≤ 0 and log(10) > 0 → log(S)/log(10) ≤ 0
-  -- 4. -2.5 * (≤ 0) ≥ 0
+  have hlogS : log S ≤ 0 := by
+    have h := Real.log_le_log (by linarith) h_S_bounded
+    simpa using (le_trans h (by simp))
+  have hlog10 : 0 < log (10 : ℝ) := by
+    exact Real.log_pos (by norm_num)
+  -- log S ≤ 0 and log 10 > 0, so (log S) / (log 10) ≤ 0
+  have hdiv : (log S) / (log 10) ≤ 0 := by
+    exact QFD.Math.div_nonpos_of_nonpos_of_pos hlogS hlog10
+  -- -2.5 ≤ 0 and (log S) / (log 10) ≤ 0, so product ≥ 0
+  -- Use: a ≤ 0 and b ≤ 0 implies 0 ≤ a * b (product of two nonpositive is nonneg)
+  have h_neg : -2.5 ≤ (0 : ℝ) := by norm_num
+  have h_prod : 0 ≤ (-2.5) * (log S / log 10) := by
+    exact QFD.Math.mul_nonneg_of_nonpos_of_nonpos h_neg hdiv
+  calc (-2.5 : ℝ) * log S / log 10
+      = (-2.5 : ℝ) * (log S / log 10) := by ring
+    _ ≥ 0 := h_prod
 
 /--
 **Theorem 4: Optical Depth Monotonicity**
@@ -127,7 +152,7 @@ This captures the physical expectation that more distant sources experience
 more scattering.
 -/
 theorem survival_decreases_with_tau (tau1 tau2 : ℝ)
-    (h_tau1 : tau1 ≥ 0)
+    (_h_tau1 : tau1 ≥ 0)
     (h_tau2 : tau2 ≥ tau1) :
     exp (-tau2) ≤ exp (-tau1) := by
   have h_neg : -tau2 ≤ -tau1 := by linarith
@@ -180,7 +205,22 @@ theorem correction_factor_ge_one (tau : ℝ) (h_tau : tau ≥ 0) :
   by_cases h : tau = 0
   · rw [h]
     norm_num
-  · sorry  -- Proof sketch: exp(-tau) < 1 → sqrt(exp(-tau)) < 1 → 1/sqrt(...) > 1
+  · have htau_pos : tau > 0 := lt_of_le_of_ne h_tau (Ne.symm h)
+    have hS_pos : 0 < exp (-tau) := exp_pos (-tau)
+    have hS_lt : exp (-tau) < 1 := by
+      have : -tau < 0 := by linarith
+      have : exp (-tau) < exp 0 := exp_lt_exp.mpr this
+      simpa using (by simpa [exp_zero] using this)
+    have hsqrt_pos : 0 < Real.sqrt (exp (-tau)) := Real.sqrt_pos.2 hS_pos
+    have hsqrt_lt_one : Real.sqrt (exp (-tau)) < 1 := by
+      have : Real.sqrt (exp (-tau)) < Real.sqrt 1 := by
+        exact Real.sqrt_lt_sqrt (le_of_lt hS_pos) hS_lt
+      simpa using this
+    have hone_lt : (1 : ℝ) / 1 < 1 / (Real.sqrt (exp (-tau))) := by
+      simpa using QFD.Math.one_div_lt_one_div_of_lt hsqrt_pos hsqrt_lt_one
+    -- strict > implies ≥
+    have : 1 < 1 / Real.sqrt (exp (-tau)) := by simpa using hone_lt
+    linarith
 
 /-! ## Statistical Predictions for Pantheon+ Analysis -/
 

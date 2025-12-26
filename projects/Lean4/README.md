@@ -2,10 +2,32 @@
 
 Rigorous formalization of Quantum Field Dynamics spacetime emergence theorems in Lean 4.
 
+## ⭐ Quick Start - For Reviewers
+
+**Verifying the CMB "Axis of Evil" formalization (paper-ready)**:
+
+1. **Start with the proof ledger**: Read [`QFD/ProofLedger.lean`](QFD/ProofLedger.lean) - claims CO.4-CO.6
+2. **Grep-able index**: See [`QFD/CLAIMS_INDEX.txt`](QFD/CLAIMS_INDEX.txt) for all theorem locations
+3. **Build verification**:
+   ```bash
+   lake build QFD.Cosmology.AxisExtraction QFD.Cosmology.CoaxialAlignment
+   ```
+4. **Full documentation**: [`QFD/Cosmology/README_FORMALIZATION_STATUS.md`](QFD/Cosmology/README_FORMALIZATION_STATUS.md)
+
+**Status**: 11 theorems, 0 sorry, 1 axiom (standard ℝ³ fact), paper integration guide ready.
+
+---
+
 ## Overview
 
-This directory contains complete, formally verified proofs of the QFD dimensional reduction mechanism:
+This directory contains complete, formally verified proofs across multiple QFD domains:
 
+### **Cosmology** (Paper-Ready ✅)
+- **CMB "Axis of Evil"** - Quadrupole/octupole axis uniqueness and coaxial alignment
+- 11 theorems including sign-flip falsifier and monotone invariance
+- See [`QFD/Cosmology/`](QFD/Cosmology/) and [`QFD/ProofLedger.lean`](QFD/ProofLedger.lean)
+
+### **Spacetime Emergence**
 1. **EmergentAlgebra.lean** - Algebraic inevitability of 4D Minkowski space
 2. **SpectralGap.lean** - Dynamical suppression of extra dimensions
 3. **ToyModel.lean** - Verification via Fourier series
