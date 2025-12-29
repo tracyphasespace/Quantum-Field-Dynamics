@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "source": "Particle Data Group 2024",
+    "reference": "https://pdg.lbl.gov/",
+    "note": "Experimental values for charged lepton masses"
+  },
+  "leptons": {
+    "electron": {
+      "mass_MeV": 0.51099895,
+      "uncertainty_MeV": 1.5e-7,
+      "compton_wavelength_fm": 386.15926764,
+      "source": "PDG 2024 - Table 1.1"
+    },
+    "muon": {
+      "mass_MeV": 105.6583755,
+      "uncertainty_MeV": 0.0000023,
+      "compton_wavelength_fm": 1.867594306,
+      "source": "PDG 2024 - Table 1.1"
+    },
+    "tau": {
+      "mass_MeV": 1776.86,
+      "uncertainty_MeV": 0.12,
+      "compton_wavelength_fm": 0.111046,
+      "source": "PDG 2024 - Table 1.1"
+    }
+  },
+  "constants": {
+    "hbar_c_MeV_fm": 197.3269804,
+    "fine_structure_constant": 0.0072973525643,
+    "inverse_alpha": 137.035999177,
+    "proton_mass_MeV": 938.27208816,
+    "source": "CODATA 2018"
+  }
+}

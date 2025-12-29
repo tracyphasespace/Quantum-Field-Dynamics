@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - name: "QFD Research Group"
+title: "Charged Lepton Mass Spectrum: QFD Model"
+version: 1.0.0
+date-released: 2025-12-28
+url: "https://github.com/tracyphasespace/Quantum-Field-Dynamics/tree/main/projects/particle-physics/lepton-mass-spectrum"
+license: MIT
+repository-code: "https://github.com/tracyphasespace/Quantum-Field-Dynamics"
+keywords:
+  - quantum-field-dynamics
+  - lepton-masses
+  - vacuum-refraction
+  - bayesian-inference
+  - mcmc
+  - hill-vortex
+abstract: >
+  A computational model for charged lepton masses (electron, muon, tau)
+  based on Quantum Fluid Dynamics (QFD). The model treats leptons as
+  solitonic structures in the quantum vacuum, described by Hill's
+  spherical vortex geometry with a three-parameter energy functional.
+  Parameters (β, ξ, τ) are estimated using Bayesian MCMC inference.
