@@ -160,22 +160,26 @@ noncomputable def betaRelativeOffset : ℝ :=
 /-- Main validation theorem: β from MCMC matches Golden Loop within 0.5% -/
 theorem beta_golden_loop_validated :
   betaRelativeOffset < 0.005 := by
-  sorry  -- Numerical: |3.0627 - 3.058| / 3.058 = 0.00153 < 0.005
+  unfold betaRelativeOffset relativeOffset mcmcBeta goldenLoopBeta
+  norm_num
 
 /-- β from MCMC within 1σ of Golden Loop prediction -/
 theorem beta_within_one_sigma :
   approxEqual mcmcBeta goldenLoopBeta mcmcBetaUncertainty := by
-  sorry  -- Numerical: |3.0627 - 3.058| = 0.0047 < 0.1491
+  unfold approxEqual mcmcBeta goldenLoopBeta mcmcBetaUncertainty
+  norm_num
 
 /-- ξ consistent with order unity expectation -/
 theorem xi_order_unity_confirmed :
   approxEqual mcmcXi theoreticalXi 0.5 := by
-  sorry  -- Numerical: |0.9655 - 1.0| = 0.0345 < 0.5
+  unfold approxEqual mcmcXi theoreticalXi
+  norm_num
 
 /-- τ consistent with order unity expectation -/
 theorem tau_order_unity_confirmed :
   approxEqual mcmcTau theoreticalTau 0.5 := by
-  sorry  -- Numerical: |1.0073 - 1.0| = 0.0073 < 0.5
+  unfold approxEqual mcmcTau theoreticalTau
+  norm_num
 
 /-- All three stiffnesses are order unity (balanced vacuum) -/
 theorem balanced_vacuum_stiffnesses :
