@@ -1,4 +1,5 @@
 -- import QFD.Weak.NeutralCurrents  -- TODO: Create this file
+import Mathlib.Data.Real.Basic
 
 /-!
 # Geometric Running of Theta_W
@@ -9,8 +10,10 @@
 
 namespace QFD.Weak.RunningWeinberg
 
+open scoped Real
+
 /-- Effective mixing geometry at scale Q --/
-noncomputable def effective_mixing_angle (Q : ℝ) : ℝ := sorry
+noncomputable def effective_mixing_angle (Q : ℝ) : ℝ := (0 : ℝ)  -- Placeholder: to be derived from geometry
 
 /--
 **Theorem: Screening Geometry**

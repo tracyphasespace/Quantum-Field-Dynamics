@@ -1,4 +1,5 @@
 -- import QFD.Matter.QuantumHall  -- TODO: Create this file
+import Mathlib.Data.Real.Basic
 
 /-!
 # Geometric Conductance Quantization
@@ -9,8 +10,10 @@
 
 namespace QFD.Electrodynamics.ConductanceQuantization
 
+open scoped Real
+
 /-- Channel width relative to de Broglie wavelength --/
-def N_channels (w lambda_dB : ℝ) : ℕ := sorry
+def N_channels (w lambda_dB : ℝ) : ℕ := 0  -- Placeholder: to be computed from w/lambda_dB
 
 /--
 **Theorem: Step Function**

@@ -1,4 +1,5 @@
 -- import QFD.Cosmology.HubbleDrift  -- TODO: Create this file
+import Mathlib.Data.Real.Basic
 
 /-!
 # The Sandage-Loeb Drift
@@ -9,8 +10,10 @@
 
 namespace QFD.Cosmology.SandageLoeb
 
+open scoped Real
+
 /-- Drift rate equation for cooling vacuum dielectric --/
-def drift_rate_equation (z : ℝ) : ℝ := sorry
+def drift_rate_equation (z : ℝ) : ℝ := z * ((1 : ℝ) - z)  -- Placeholder: -H_0 * z(1-z) form (normalized)
 
 /--
 **Theorem: Distinguishable Signal**

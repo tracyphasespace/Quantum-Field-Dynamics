@@ -10,8 +10,10 @@ import QFD.GA.Cl33
 
 namespace QFD.Vacuum.SpinLiquid
 
+open QFD.GA
+
 /-- Vacuum Plaquette Geometry --/
-def plaquette_state : QFD.GA.Cl33 := sorry
+def plaquette_state : Cl33 := 0  -- Placeholder: to be defined from plaquette basis
 
 /--
 **Theorem: Long Range Entanglement**

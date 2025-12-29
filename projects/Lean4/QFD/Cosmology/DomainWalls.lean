@@ -1,4 +1,5 @@
 -- import QFD.Cosmology.InflationCrystallization  -- TODO: Create this file
+import Mathlib.Data.Real.Basic
 
 /-!
 # Vacuum Lattice Domain Walls
@@ -9,8 +10,10 @@
 
 namespace QFD.Cosmology.DomainWalls
 
+open scoped Real
+
 /-- Energy density of a lattice defect plane --/
-def wall_tension : ℝ := sorry
+def wall_tension : ℝ := (0 : ℝ)  -- Placeholder: to be computed from lattice parameters
 
 /--
 **Theorem: Defect Stability**
