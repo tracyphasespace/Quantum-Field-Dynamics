@@ -1,6 +1,6 @@
 # Lean-Python Cross-Reference: Proofs ↔ Models ↔ Solvers
 
-**Date**: 2025-12-21
+**Date**: 2025-12-26
 **Purpose**: Map Lean theorem names to Python model implementations and solver code
 
 ---
@@ -232,7 +232,7 @@ def charge (A sigma v_0 : ℝ) : ℝ :=
 
 ### Python: Charge Quantization Model
 
-**File**: `projects/particle-physics/lepton-isomers/src/solvers/hamiltonian.py`
+**File**: `projects/particle-physics/lepton-mass-spectrum/` (D-flow circulation formalism)
 
 **Implementation** (lines 45-70):
 ```python
@@ -441,7 +441,7 @@ def anomalous_moment (E_rot E_skirt : ℝ) : ℝ :=
 
 ### Python: g-2 Model
 
-**File**: `projects/particle-physics/lepton-isomers/src/solvers/zeeman_experiments.py`
+**File**: `projects/particle-physics/lepton-mass-spectrum/scripts/derive_v4_circulation.py`
 
 **Implementation** (lines 100-130):
 ```python
@@ -489,7 +489,7 @@ def S (R : ℝ) : ℝ := (1 - R^2/2) * Real.exp (-R^2/2)
 
 ### Python: Ricker Profile
 
-**File**: `projects/particle-physics/lepton-isomers/src/solvers/hamiltonian.py`
+**File**: `projects/particle-physics/lepton-mass-spectrum/` (Hill vortex density profiles)
 
 **Implementation** (lines 200-230):
 ```python
@@ -603,7 +603,7 @@ cd /home/tracy/development/QFD_SpectralGap/schema/v0
 python check_lean_json_consistency.py
 
 # Run Python unit tests
-pytest projects/particle-physics/lepton-isomers/src/tests/
+pytest projects/particle-physics/lepton-mass-spectrum/
 pytest projects/astrophysics/redshift-analysis/RedShift/tests/
 ```
 
@@ -617,12 +617,12 @@ pytest projects/astrophysics/redshift-analysis/RedShift/tests/
 |---------------------------------|----------------------------------------------------------|------------------------------|
 | QFD/Schema/Constraints.lean     | schema/v0/\*.schema.json, check_lean_json_consistency.py | Parameter validation         |
 | QFD/Nuclear/CoreCompression.lean| particle-physics/deuterium-tests/qfd_result_schema.py    | Nuclear backbone Q(A)        |
-| QFD/Soliton/Quantization.lean   | lepton-isomers/src/solvers/hamiltonian.py                | Charge quantization          |
-| QFD/Soliton/RickerAnalysis.lean | lepton-isomers/src/solvers/hamiltonian.py                | Ricker profile bounds        |
+| QFD/Soliton/Quantization.lean   | lepton-mass-spectrum/ (D-flow circulation)               | Charge quantization          |
+| QFD/Soliton/RickerAnalysis.lean | lepton-mass-spectrum/ (Hill vortex profiles)             | Ricker profile bounds        |
 | QFD/Gravity/TimeRefraction.lean | blackhole-dynamics/qfd_10_realms_pipeline/common/solvers.py| Gravitational potential  |
 | QFD/Cosmology/VacuumRefraction.lean| redshift-analysis/RedShift/qfd_cmb/ppsi_models.py     | CMB power spectrum           |
 | QFD/Cosmology/ScatteringBias.lean| V21 Supernova Analysis package/v17_lightcurve_model.py | Supernova distance modulus   |
-| QFD/Lepton/GeometricAnomaly.lean| lepton-isomers/src/solvers/zeeman_experiments.py         | Anomalous magnetic moment    |
+| QFD/Lepton/GeometricAnomaly.lean| lepton-mass-spectrum/scripts/derive_v4_circulation.py    | Anomalous magnetic moment    |
 | QFD/StabilityCriterion.lean     | schema/v0/solve_v03.py                                   | Vacuum stability solver      |
 
 ---
