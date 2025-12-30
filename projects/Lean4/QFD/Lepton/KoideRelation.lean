@@ -9,31 +9,51 @@ import QFD.Lepton.Generations
 /-!
 # The Geometric Koide Relation
 
-**Status**: ✅✅ BREAKTHROUGH - Euler's Formula Proven! (Roots of Unity from Mathlib)
-**Purpose**: Formally connects Mass Spectrum to Geometric Projection angles.
+**Status**: ✅ Mathematical Proof Complete (0 sorries)
+**Purpose**: Rigorously prove that Q = 2/3 follows from the symmetric mass parametrization
 
-## Proof Strategy Using Mathlib
+## What This Proof Establishes
 
-### ✅ FULLY PROVEN (0 sorries):
-1. **`omega_is_primitive_root`**: ω = exp(2πi/3) is a primitive 3rd root of unity
-   - Uses: `Complex.isPrimitiveRoot_exp` from Mathlib
-2. **`sum_third_roots_eq_zero`**: 1 + ω + ω² = 0
-   - Uses: **`IsPrimitiveRoot.geom_sum_eq_zero`** from Mathlib ✅
-   - **KEY RESULT**: This is the core mathematical claim, rigorously proven!
-3. **`sum_cos_symm`**: cos(δ) + cos(δ+2π/3) + cos(δ+4π/3) = 0 ✅ **NEW!**
-   - **Euler's formula PROVEN**: cos(x) = Re(exp(ix)) using complex conjugation
-   - **Complex sum PROVEN**: exp(iδ)(1 + ω + ω²) = 0 from roots of unity
-   - **Exponential algebra PROVEN**: 2 steps with `push_cast` + `ring_nf`
-   - **Cast matching PROVEN**: `ofReal_add` handles ↑(a+b) = ↑a + ↑b
-   - **Total: 0 sorries** - Complete rigorous proof from first principles!
+### QFD Hypothesis (Physical Assumption - NOT proven in Lean)
+Lepton masses follow the parametrization:
+```
+m_k = μ(1 + √2·cos(δ + 2πk/3))²  for k = 0, 1, 2
+```
+where μ is a mass scale and δ is a phase angle.
 
-### Remaining work (1 sorry):
-- `koide_relation_is_universal`: Full Koide Q = 2/3 proof (algebraic simplification)
+**Status**: Physical hypothesis fitted to experimental lepton masses (δ ≈ 0.222)
 
-**Net result**: **Massive reduction from 3 sorries → 1 sorry**:
-- Before: 3 sorries (roots of unity assumed, Euler assumed, cast matching assumed)
-- After: 1 sorry (only the final Q=2/3 algebraic calculation remains)
-- **All trigonometric identities now rigorously proven from Mathlib!**
+### Lean-Verified Mathematical Consequence (Proven)
+
+**Main Result**: `theorem koide_relation_is_universal`
+```
+IF masses satisfy the hypothesis above
+THEN KoideQ = (Σm_k)/(Σ√m_k)² = 2/3  (exactly)
+```
+
+**What this proves**: The Koide quotient Q = 2/3 is a *mathematical necessity* given
+the parametrization, not a numerical coincidence or empirical fit.
+
+**What this does NOT prove**:
+- That leptons must follow this parametrization (physical claim, not mathematical)
+- That the parametrization arises from Cl(3,3) geometry (QFD interpretation)
+- That δ is determined by fundamental principles (it's fitted to data)
+
+## Proven Theorems (0 sorries)
+
+1. **`omega_is_primitive_root`**: ω = exp(2πi/3) is primitive 3rd root of unity
+2. **`sum_third_roots_eq_zero`**: 1 + ω + ω² = 0 (from Mathlib)
+3. **`sum_cos_symm`**: cos(δ) + cos(δ+2π/3) + cos(δ+4π/3) = 0
+4. **`sum_cos_sq_symm`**: cos²(δ) + cos²(δ+2π/3) + cos²(δ+4π/3) = 3/2
+5. **`koide_relation_is_universal`**: Parametrization → Q = 2/3
+
+## Proof Strategy
+
+- **Numerator**: Σm_k = 6μ (using trigonometric sum identities)
+- **Denominator**: (Σ√m_k)² = 9μ (using square root algebra)
+- **Result**: 6μ/9μ = 2/3 (exact, not approximate)
+
+All steps verified in Lean 4 with Mathlib, zero sorries.
 -/
 
 namespace QFD.Lepton.KoideRelation
@@ -138,28 +158,132 @@ lemma sum_cos_symm (delta : ℝ) :
   simp
 
 /--
-**Theorem: The Koide Formula**
+Sum of squared cosines at symmetric angles equals 3/2.
+This is the key algebraic step for proving the Koide relation.
+
+Uses double-angle formula cos²x = (1 + cos(2x))/2 and sum_cos_symm.
 -/
-theorem koide_relation_is_universal
-  (mu delta : ℝ) (h_mu : mu > 0)
-  -- Algebraic assumption: Koide relation Q = 2/3
-  -- This follows from the geometric mass formulas and trigonometric identities.
-  -- Detailed algebra:
-  -- - sqrt(m) terms involve 1 + sqrt(2)cos(angle)
-  -- - Sum sqrt(m) = 3 * sqrt(mu)
-  -- - Denominator: (3*sqrt(mu))² = 9*mu
-  -- - Numerator terms: mu * (1 + 2*sqrt(2)*cos + 2*cos²)
-  -- - Sum numerator = mu * (3 + 0 + 2*(3/2)) = 6*mu
-  -- - Q = (6*mu) / (9*mu) = 6/9 = 2/3
-  (h_koide_q :
-    let m_e   := geometricMass .x   mu delta
-    let m_mu  := geometricMass .xy  mu delta
-    let m_tau := geometricMass .xyz mu delta
-    KoideQ m_e m_mu m_tau = 2/3) :
+lemma sum_cos_sq_symm (δ : ℝ) :
+  cos δ ^ 2 + cos (δ + 2*π/3) ^ 2 + cos (δ + 4*π/3) ^ 2 = 3/2 := by
+  -- Apply double-angle formula to each term
+  rw [cos_sq δ, cos_sq (δ + 2*π/3), cos_sq (δ + 4*π/3)]
+  -- Normalize angles: 2*(δ + 2π/3) = 2*δ + 4*π/3 and 2*(δ + 4*π/3) = 2*δ + 8*π/3
+  have h1 : (2:ℝ) * (δ + 2*π/3) = 2*δ + 4*π/3 := by ring
+  have h2 : (2:ℝ) * (δ + 4*π/3) = 2*δ + 8*π/3 := by ring
+  rw [h1, h2]
+  -- Use periodicity: cos(2δ + 8π/3) = cos(2δ + 2π/3) since 8π/3 - 2π = 2π/3
+  have sum_cos_zero : cos (2*δ) + cos (2*δ + 4*π/3) + cos (2*δ + 8*π/3) = 0 := by
+    have h_period : cos (2*δ + 8*π/3) = cos (2*δ + 2*π/3) := by
+      have : (2:ℝ)*δ + 8*π/3 = 2*δ + 2*π/3 + 2*π := by ring
+      rw [this, cos_add_two_pi]
+    calc cos (2*δ) + cos (2*δ + 4*π/3) + cos (2*δ + 8*π/3)
+        = cos (2*δ) + cos (2*δ + 4*π/3) + cos (2*δ + 2*π/3) := by rw [h_period]
+      _ = cos (2*δ) + cos (2*δ + 2*π/3) + cos (2*δ + 4*π/3) := by ring
+      _ = 0 := sum_cos_symm (2*δ)
+  -- Final algebraic simplification: combine fractions and apply sum_cos_zero
+  calc 1 / 2 + cos (2 * δ) / 2 + (1 / 2 + cos (2 * δ + 4 * π / 3) / 2)
+          + (1 / 2 + cos (2 * δ + 8 * π / 3) / 2)
+      = (1 + 1 + 1 + cos (2*δ) + cos (2*δ + 4*π/3) + cos (2*δ + 8*π/3)) / 2 := by ring
+    _ = (3 + (cos (2*δ) + cos (2*δ + 4*π/3) + cos (2*δ + 8*π/3))) / 2 := by ring
+    _ = (3 + 0) / 2 := by rw [sum_cos_zero]
+    _ = 3 / 2 := by norm_num
+
+/--
+**Theorem: Koide Quotient from Symmetric Mass Parametrization**
+
+**QFD Hypothesis (assumed, not proven)**:
+Lepton masses follow the parametrization:
+  m_k = μ(1 + √2·cos(δ + 2πk/3))²  for k = 0, 1, 2
+
+**Mathematical Consequence (proven in this theorem)**:
+Given the parametrization above, the Koide quotient Q = 2/3 exactly.
+
+**What this proves**: Q = 2/3 is mathematically necessary given the parametrization,
+not a numerical coincidence or empirical parameter.
+
+**What this does NOT prove**:
+- That leptons must follow this parametrization (physical claim)
+- That the parametrization arises from Cl(3,3) geometry (QFD interpretation)
+- That δ is determined by fundamental principles (δ ≈ 0.222 is fitted to data)
+
+**Proof strategy**:
+- Numerator: Σm_k = μ·[3 + 2√2·Σcos θ_k + 2·Σcos²θ_k] = μ·[3 + 0 + 3] = 6μ
+- Denominator: (Σ√m_k)² = (√μ·[3 + √2·Σcos θ_k])² = (3√μ)² = 9μ
+- Result: Q = 6μ/9μ = 2/3
+
+**Parameters**:
+- `mu` : mass scale (must be positive)
+- `delta` : phase angle (empirically δ ≈ 0.222 for leptons)
+- `h_pos0, h_pos1, h_pos2` : positivity requirements for square root extraction
+-/
+theorem koide_relation_is_universal (mu delta : ℝ) (h_mu : mu > 0)
+  (h_pos0 : 1 + sqrt 2 * cos delta > 0)
+  (h_pos1 : 1 + sqrt 2 * cos (delta + 2 * π / 3) > 0)
+  (h_pos2 : 1 + sqrt 2 * cos (delta + 4 * π / 3) > 0) :
   let m_e   := geometricMass .x   mu delta
   let m_mu  := geometricMass .xy  mu delta
   let m_tau := geometricMass .xyz mu delta
   KoideQ m_e m_mu m_tau = 2/3 := by
-  exact h_koide_q
+  unfold KoideQ geometricMass generationIndex
+  simp only [Nat.cast_zero, Nat.cast_one, Nat.cast_ofNat, zero_mul, add_zero]
+
+  -- Trig identities
+  have h_sum_cos := sum_cos_symm delta
+  have h_sum_cos_sq := sum_cos_sq_symm delta
+
+  -- Abbreviations
+  let c0 := cos delta
+  let c1 := cos (delta + 2 * π / 3)
+  let c2 := cos (delta + 4 * π / 3)
+
+  -- Expand (1 + √2*c)²
+  have h_sq : ∀ c, (1 + sqrt 2 * c)^2 = 1 + 2 * sqrt 2 * c + 2 * c^2 := by
+    intro c
+    have : sqrt 2 ^ 2 = 2 := Real.sq_sqrt (by norm_num)
+    ring_nf; rw [this]; ring
+
+  -- NUMERATOR = 6μ
+  have h_num : mu * (1 + sqrt 2 * c0)^2 + mu * (1 + sqrt 2 * c1)^2 +
+      mu * (1 + sqrt 2 * c2)^2 = 6 * mu := by
+    simp only [h_sq]
+    calc mu * (1 + 2 * sqrt 2 * c0 + 2 * c0^2) + mu * (1 + 2 * sqrt 2 * c1 + 2 * c1^2)
+            + mu * (1 + 2 * sqrt 2 * c2 + 2 * c2^2)
+        = mu * (3 + 2 * sqrt 2 * (c0 + c1 + c2) + 2 * (c0^2 + c1^2 + c2^2)) := by ring
+      _ = mu * (3 + 2 * sqrt 2 * 0 + 2 * (3/2)) := by rw [h_sum_cos, h_sum_cos_sq]
+      _ = mu * (3 + 0 + 2 * (3/2)) := by ring
+      _ = mu * (3 + 3) := by ring
+      _ = mu * 6 := by ring
+      _ = 6 * mu := by ring
+
+  -- DENOMINATOR = 9μ
+  have h_den : (sqrt (mu * (1 + sqrt 2 * c0)^2) + sqrt (mu * (1 + sqrt 2 * c1)^2)
+      + sqrt (mu * (1 + sqrt 2 * c2)^2))^2 = 9 * mu := by
+    have h_sqrt : ∀ c, 1 + sqrt 2 * c > 0 →
+        sqrt (mu * (1 + sqrt 2 * c)^2) = sqrt mu * (1 + sqrt 2 * c) := by
+      intro c hc
+      rw [Real.sqrt_mul (le_of_lt h_mu), Real.sqrt_sq (le_of_lt hc)]
+    rw [h_sqrt c0 h_pos0, h_sqrt c1 h_pos1, h_sqrt c2 h_pos2]
+    have h_sum : sqrt mu * (1 + sqrt 2 * c0) + sqrt mu * (1 + sqrt 2 * c1)
+        + sqrt mu * (1 + sqrt 2 * c2) = 3 * sqrt mu := by
+      calc sqrt mu * (1 + sqrt 2 * c0) + sqrt mu * (1 + sqrt 2 * c1)
+              + sqrt mu * (1 + sqrt 2 * c2)
+          = sqrt mu * (3 + sqrt 2 * (c0 + c1 + c2)) := by ring
+        _ = sqrt mu * (3 + sqrt 2 * 0) := by rw [h_sum_cos]
+        _ = sqrt mu * 3 := by ring
+        _ = 3 * sqrt mu := by ring
+    rw [h_sum]
+    have : (sqrt mu)^2 = mu := Real.sq_sqrt (le_of_lt h_mu)
+    calc (3 * sqrt mu)^2 = 9 * (sqrt mu)^2 := by ring
+      _ = 9 * mu := by rw [this]
+
+  -- FINAL: Q = 6μ / 9μ = 2/3
+  -- The goal uses explicit cosines; simplify angle coefficients first
+  have ha1 : (1:ℝ) * (2 * π / 3) = 2 * π / 3 := by ring
+  have ha2 : (2:ℝ) * (2 * π / 3) = 4 * π / 3 := by ring
+  simp only [ha1, ha2]
+  -- Now the goal matches our c0, c1, c2 abbreviations
+  rw [h_num, h_den]
+  field_simp
+  norm_num
 
 end QFD.Lepton.KoideRelation
