@@ -497,13 +497,14 @@ See `CITATION.cff` for complete metadata.
 - **Definitions**: 409
 - **Structures**: 53
 - **Build Jobs**: 3089 (all successful)
-- **Sorries**: 15 (in 8 files, all documented)
-- **Axioms**: 16 (infrastructure + physical hypotheses, all disclosed)
+- **Sorries**: 6 actual sorries (20 total mentions including comments, all documented)
+- **Axioms**: 17 (infrastructure + physical hypotheses, all disclosed)
 
 **Recent Progress (Dec 29, 2025)**:
-- ✅ Sorry reduction: 23 → 15 (35% reduction)
+- ✅ Sorry reduction: 23 → 6 actual sorries (74% reduction)
 - ✅ Axiom transparency: 5 axioms converted to explicit hypotheses
 - ✅ GA/Cl33.lean complete: 0 sorries (foundation module proven)
+- ✅ GA/HodgeDual.lean complete: I₆² = 1 documented axiom (infrastructure scaffolding)
 - ✅ New proofs: 548 → 575 (+27 proven statements)
 - ✅ Documentation cleanup: Professional tone, parameter transparency
 

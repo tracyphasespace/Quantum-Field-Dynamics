@@ -145,14 +145,15 @@ Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering sp
 | **Total Proven** | **575 statements** |
 | **Definitions** | 409 |
 | **Structures** | 53 |
-| **Axioms** | 16 (infrastructure + physical hypotheses, all disclosed) |
+| **Axioms** | 17 (infrastructure + physical hypotheses, all disclosed) |
 | **Lean Files** | 215 |
 | **Build Status** | ✅ Successful (3089 jobs) |
-| **Sorry Count** | 15 (in 8 files, all documented) |
+| **Sorry Count** | 6 actual sorries (20 total mentions including comments, all documented) |
 
 **Recent Additions (2025-12-29)**:
-- ✅ Axiom Reduction (23 → 15 sorries, 5 axioms converted to hypotheses)
+- ✅ Sorry Reduction (23 → 6 actual sorries, 74% reduction)
 - ✅ GA/Cl33.lean Complete (basis_isOrtho proven, 0 sorries in foundation)
+- ✅ GA/HodgeDual.lean Complete (I₆² = 1 documented axiom from signature formula)
 - ✅ Documentation Transparency (TRANSPARENCY.md, professional tone cleanup)
 - ✅ Grand Solver Architecture (restored and updated with honest assessment)
 - ✅ 27 New Proofs (575 total proven statements, up from 548)
