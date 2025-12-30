@@ -22,6 +22,29 @@ a lepton consists of:
 
 This geometric structure forces g > 2 **necessarily**, without any quantum corrections.
 
+## CRITICAL: Two Different "Densities" (Dec 29, 2025 Clarification)
+
+**For angular momentum (spin)**:
+  ρ_eff(r) ∝ v²(r) — Energy-based density
+
+  This applies to the ROTATING component only (the kinetic energy of circulation).
+  Mass follows energy, and energy follows velocity squared.
+  Result: L = ℏ/2 from flywheel geometry (see VortexStability.lean)
+
+**For the E_total decomposition (this file)**:
+  E_rotation = kinetic energy of circulating flow (carries spin)
+  E_skirt = electrostatic field energy E² of Coulomb tail (doesn't rotate)
+
+  The skirt is STATIC (doesn't participate in circulation), so it adds mass
+  but NOT angular momentum. This is why g > 2.
+
+**Both are correct** — they describe different aspects of the same physical system:
+- Energy-based ρ_eff: For computing angular momentum integrals
+- E_rot + E_skirt: For computing the g-factor ratio
+
+The skirt's mass comes from the electrostatic field energy ∫E²dV, not from
+rotation. This is fundamentally different from the rotating vortex core.
+
 ## The Theorem
 
 If a particle has:

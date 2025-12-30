@@ -4,10 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Essential Documentation
 
+**⚠️ CRITICAL: Read FIRST if touching vacuum constants!**
+- **CRITICAL_CONSTANTS.md** - Validated physics constants, contamination prevention
+
 **Read these guides before starting work**:
 
 1. **AI_WORKFLOW.md** - Mandatory workflow for all AI assistants (build verification, error handling)
-2. **MATHLIB_SEARCH_GUIDE.md** - How to find Mathlib theorems, handle type system issues (NEW!)
+2. **MATHLIB_SEARCH_GUIDE.md** - How to find Mathlib theorems, handle type system issues
 3. **COMPLETE_GUIDE.md** - Full system architecture, proof patterns, theorem index
 4. **PROTECTED_FILES.md** - Core infrastructure files (DO NOT MODIFY)
 
@@ -15,6 +18,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **WORK_QUEUE.md** - Prioritized task list
 - **BUILD_STATUS.md** - Current build health, sorry count
 - **CLAIMS_INDEX.txt** - All 482 proven theorems (grep-able)
+
+**Validation tools**:
+- **verify_constants.sh** - Check for contaminated constant definitions
 
 ## Repository Overview
 
@@ -482,24 +488,24 @@ For papers using this formalization:
 
 See `CITATION.cff` for complete metadata.
 
-## Key Statistics (as of 2025-12-27)
+## Key Statistics (as of 2025-12-29)
 
-- **Lean Files**: **180** (was ~71, **+109 NEW FILES created today!** 🎉)
-  - Nuclear: 15 new files
-  - Electrodynamics: 13 new files
-  - Cosmology: 12 new files
-  - QM_Translation, Gravity, GA: 11 new files each
-  - Weak: 8 new files
-  - Lepton: 7 new files
-  - Additional domains: 21 new files
-- **Proven Theorems**: 364
-- **Proven Lemmas**: 118
-- **Total Proven**: **482 statements**
-- **Definitions**: 316
-- **Structures**: 47
-- **Build Jobs**: 3165 (was 3081, +84)
-- **Sorries**: 16 (in multiple files, most documented)
-- **Axioms**: 43 (infrastructure + 2 in Unitarity - disclosed)
+- **Lean Files**: **215**
+- **Proven Theorems**: **451**
+- **Proven Lemmas**: **124**
+- **Total Proven**: **575 statements**
+- **Definitions**: 409
+- **Structures**: 53
+- **Build Jobs**: 3089 (all successful)
+- **Sorries**: 15 (in 8 files, all documented)
+- **Axioms**: 16 (infrastructure + physical hypotheses, all disclosed)
+
+**Recent Progress (Dec 29, 2025)**:
+- ✅ Sorry reduction: 23 → 15 (35% reduction)
+- ✅ Axiom transparency: 5 axioms converted to explicit hypotheses
+- ✅ GA/Cl33.lean complete: 0 sorries (foundation module proven)
+- ✅ New proofs: 548 → 575 (+27 proven statements)
+- ✅ Documentation cleanup: Professional tone, parameter transparency
 
 ## Support
 

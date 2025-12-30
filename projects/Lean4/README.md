@@ -1,6 +1,6 @@
 # QFD Lean 4 Formalization
 
-**Version 1.1** | **Release Date**: 2025-12-25
+**Version 1.3** | **Release Date**: 2025-12-29
 
 Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering spacetime emergence, cosmology, nuclear physics, and particle physics.
 
@@ -13,7 +13,7 @@ Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering sp
 **Want to verify the CMB "Axis of Evil" formalization?**
 
 1. **Start here**: [`QFD/ProofLedger.lean`](QFD/ProofLedger.lean) - Claims CO.4-CO.6
-2. **Search theorems**: [`QFD/CLAIMS_INDEX.txt`](QFD/CLAIMS_INDEX.txt) - All 271 theorems
+2. **Search theorems**: [`QFD/CLAIMS_INDEX.txt`](QFD/CLAIMS_INDEX.txt) - All 575 proven statements
 3. **Build & verify**:
    ```bash
    lake build QFD.Cosmology.AxisExtraction QFD.Cosmology.CoaxialAlignment
@@ -34,7 +34,7 @@ Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering sp
 
 **Want to help complete the formalization?**
 
-**🚨 START HERE - Two Required Documents**:
+**🚨 START HERE - Three Required Documents**:
 
 1. **[`AI_WORKFLOW.md`](AI_WORKFLOW.md)** ⭐ **READ FIRST**
    - Build verification requirements (MANDATORY)
@@ -42,7 +42,13 @@ Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering sp
    - Common errors and solutions
    - Completion report template
 
-2. **[`WORK_QUEUE.md`](WORK_QUEUE.md)** 📋 **WHAT TO DO**
+2. **[`CRITICAL_CONSTANTS.md`](CRITICAL_CONSTANTS.md)** ⚠️ **VALIDATION REQUIRED**
+   - ⚠️ **alpha_circ = e/(2π) NOT 1/(2π)** - Common AI contamination!
+   - All vacuum parameters with Python validation
+   - Step-by-step verification protocol
+   - **READ THIS before touching any vacuum constants!**
+
+3. **[`WORK_QUEUE.md`](WORK_QUEUE.md)** 📋 **WHAT TO DO**
    - Prioritized task list (65 modules)
    - Detailed task instructions
    - Expected outcomes
@@ -54,6 +60,7 @@ Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering sp
 - `BasisReduction.lean` - Automation engine (USE THIS!)
 - `BasisProducts.lean` - Pre-computed products
 - `BasisOperations.lean` - Core lemmas
+- `QFD/Vacuum/VacuumParameters.lean` - **AUTHORITATIVE** source for all constants
 
 **Protected Files**: [`PROTECTED_FILES.md`](PROTECTED_FILES.md) - Don't modify these!
 
@@ -129,26 +136,33 @@ Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering sp
 
 ---
 
-## Statistics (Updated 2025-12-27)
+## Statistics (Updated 2025-12-29)
 
 | Metric | Value |
 |--------|-------|
-| **Proven Theorems** | 269 |
-| **Proven Lemmas** | 100 |
-| **Total Proven** | **369 statements** |
-| **Definitions** | 316 |
-| **Structures** | 47 |
-| **Axioms** | 43 (infrastructure + 2 in Unitarity) |
-| **Lean Files** | 90 |
-| **Build Status** | ✅ Successful (3080+ jobs) |
-| **Sorry Count** | 12 (in 8 files, down from 26) |
+| **Proven Theorems** | 451 |
+| **Proven Lemmas** | 124 |
+| **Total Proven** | **575 statements** |
+| **Definitions** | 409 |
+| **Structures** | 53 |
+| **Axioms** | 16 (infrastructure + physical hypotheses, all disclosed) |
+| **Lean Files** | 215 |
+| **Build Status** | ✅ Successful (3089 jobs) |
+| **Sorry Count** | 15 (in 8 files, all documented) |
 
-**Recent Additions (2025-12-27)**:
-- ✅ Heisenberg Uncertainty (✅ VERIFIED 0 sorries - xp_noncomm proven via metric contradiction)
-- ✅ Maxwell Geometric Equation (✅ VERIFIED 0 sorries - field decomposition complete)
+**Recent Additions (2025-12-29)**:
+- ✅ Axiom Reduction (23 → 15 sorries, 5 axioms converted to hypotheses)
+- ✅ GA/Cl33.lean Complete (basis_isOrtho proven, 0 sorries in foundation)
+- ✅ Documentation Transparency (TRANSPARENCY.md, professional tone cleanup)
+- ✅ Grand Solver Architecture (restored and updated with honest assessment)
+- ✅ 27 New Proofs (575 total proven statements, up from 548)
+
+**Additions (2025-12-27)**:
+- ✅ Heisenberg Uncertainty (xp_noncomm proven via metric contradiction)
+- ✅ Maxwell Geometric Equation (field decomposition complete)
 - ✅ Enhanced Conjugation (reverse_B_phase, geometric_norm_sq)
 - ✅ Grade Projection (scalar_part, real_energy_density defined)
-- ✅ BasisReduction Automation (clifford_simp tactic - 207 lines)
+- ✅ BasisReduction Automation (clifford_simp tactic)
 
 **Previous Additions (2025-12-26)**:
 - ✅ Schrödinger Evolution (geometric phase rotation, eliminates complex i)
@@ -174,7 +188,7 @@ Lean4/
 └── QFD/
     ├── ProofLedger.lean         ⭐ START HERE (claim → theorem mapping)
     ├── PROOF_INDEX.md           ← Quick theorem lookup guide
-    ├── CLAIMS_INDEX.txt         ← Grep-able theorem list (271 theorems)
+    ├── CLAIMS_INDEX.txt         ← Grep-able theorem list (575 proven statements)
     ├── THEOREM_STATEMENTS.txt   ← Complete theorem signatures
     ├── CONCERN_CATEGORIES.md    ← Critical assumptions tracked
     ├── LEAN_PYTHON_CROSSREF.md  ← Lean ↔ Python traceability
@@ -349,4 +363,5 @@ See [`CITATION.cff`](CITATION.cff) for complete citation metadata.
 **Last Updated**: 2025-12-26
 **Build Status**: ✅ All proofs verified (3081 jobs)
 **Paper Status**: ✅ MNRAS manuscript ready
-**QM Translation**: ✅ Complex numbers eliminated (geometric phase rotation)
+
+> **Transparency**: The lepton-soliton model is still exploratory—see `TRANSPARENCY_SUMMARY.md` for the current provenance of β (from α + c₁/c₂), ξ/τ (Stage 2 fits), and α_circ (muon calibration).

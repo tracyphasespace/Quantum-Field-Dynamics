@@ -187,18 +187,4 @@ theorem electron_thermal_advantage
     · exact h_T
   apply div_lt_div_of_pos_left h_num_pos h_me h_mass_ratio
 
-/-! ## 8. Angle Dependence (Rotating Fields) -/
-
-/-- In rotating scalar field φ(r,θ), the binding energy has angular structure.
-
-    Escape is easier along equatorial plane (θ = π/2) where ∂Φ/∂θ is minimum.
-
-    This will be formalized in RotationDynamics.lean.
--/
-axiom binding_energy_angle_dependent :
-  ∀ (r theta : ℝ) (rho : ℝ → ℝ → ℝ),
-    0 < r → 0 ≤ theta → theta ≤ π →
-    ∃ (Phi : ℝ → ℝ → ℝ),
-      Phi r theta = -(c_light^2 / 2) * kappa_qfd * rho r theta
-
 end QFD.Rift.ChargeEscape
