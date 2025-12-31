@@ -385,25 +385,40 @@ theorem equator_nonempty (n : R3) (hn : IsUnit n) : ∃ x, x ∈ Equator n := by
     norm_num at hn
 
   -- Step 2: The orthogonal complement (ℝ ∙ n)ᗮ is nontrivial
-  -- This is a standard fact from finite-dimensional inner product space theory
+  -- Use Mathlib's finrank_orthogonal_span_singleton theorem
   have h_nontrivial : (Submodule.span ℝ {n})ᗮ ≠ ⊥ := by
-    -- Mathematical fact: In any finite-dimensional inner product space,
-    -- if K is a proper closed subspace (K ≠ ⊤), then Kᗮ ≠ ⊥
-    --
-    -- Proof outline:
-    -- 1. Since n ≠ 0, span{n} is 1-dimensional
-    -- 2. R3 = PiLp 2 (Fin 3 → ℝ) is 3-dimensional
-    -- 3. By dimension formula: dim(K) + dim(Kᗮ) = dim(E)
-    -- 4. So dim((span{n})ᗮ) = 3 - 1 = 2 > 0
-    -- 5. Therefore (span{n})ᗮ ≠ ⊥
-    --
-    -- Mathlib theorems needed:
-    -- - Module.finrank_eq_card_basis for PiLp dimension
-    -- - Submodule.finrank_add_finrank_orthogonal for dimension formula
-    -- - Connection between finrank > 0 and nontriviality
-    --
-    -- This is purely linear algebra - NO physical assumptions
-    sorry
+    intro h_eq_bot
+
+    -- If (span{n})ᗮ = ⊥, then its dimension is 0
+    have h_dim_zero : Module.finrank ℝ (Submodule.span ℝ {n})ᗮ = 0 := by
+      rw [h_eq_bot]
+      simp
+
+    -- But by Submodule.finrank_orthogonal_span_singleton,
+    -- dim((span{v})ᗮ) = dim(E) - 1 for nonzero v in finite-dimensional E
+    -- For R3 with dim = 3, we get dim((span{n})ᗮ) = 2
+
+    -- Use the dimension formula for orthogonal complements
+    have h_dim_two : Module.finrank ℝ (Submodule.span ℝ {n})ᗮ = 2 := by
+      -- Apply Submodule.finrank_orthogonal_span_singleton
+      -- This theorem states: for E with finrank = n+1, span{v}ᗮ has finrank = n
+      -- For R3 with finrank = 3 = 2+1, we get finrank (span{n})ᗮ = 2
+
+      -- Need to provide Fact instance that finrank R3 = 3
+      haveI : Fact (Module.finrank ℝ R3 = 2 + 1) := by
+        constructor
+        -- R3 = PiLp 2 (Fin 3 → ℝ) has dimension 3
+        -- Try to let Lean infer this from PiLp instances
+        unfold R3
+        norm_num
+
+      -- Now apply the theorem
+      -- finrank_orthogonal_span_singleton says: finrank (𝕜 ∙ v)ᗮ = n
+      -- where 𝕜 ∙ v is notation for span 𝕜 {v}
+      exact Submodule.finrank_orthogonal_span_singleton hn_ne
+
+    -- Now we have: 0 = 2, contradiction
+    omega
 
   -- Step 3: Get a nonzero element from the nontrivial orthogonal complement
   obtain ⟨v, hv_mem, hv_ne⟩ := Submodule.exists_mem_ne_zero_of_ne_bot h_nontrivial
