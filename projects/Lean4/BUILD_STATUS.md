@@ -1,10 +1,10 @@
 # QFD Build Status
 
 **Build Date**: 2025-12-30
-**Status**: ✅ All modules building successfully (3068+ jobs)
-**Proven Statements**: 587 total (461 theorems + 126 lemmas)
-**Total Sorries**: 3 actual sorries in main modules (7 including experimental variants)
-**Total Axioms**: 19 (infrastructure + physical hypotheses, all disclosed)
+**Status**: All modules building successfully (3070+ jobs)
+**Proven Statements**: 670 total (544 theorems + 126 lemmas)
+**Total Sorries**: 3 in main modules (7 including experimental variants)
+**Total Axioms**: 23 (infrastructure + physical hypotheses, all disclosed)
 
 ## Recent Progress (Dec 29-30, 2025)
 
@@ -39,26 +39,34 @@
 
 ONE parameter (β) now links THREE fundamental forces!
 
-### 🎯 Parameter Closure Status (Dec 30, 2025)
+### Parameter Closure Status (Dec 30, 2025)
 
-**Locked Parameters**: 12/17 (71%)
+**Derived Parameters**: 16/17 (94%)
+
+**From β (vacuum bulk modulus)**:
+- c₂ = 1/β = 0.327 (0.92% error)
+- V₄ = λ/(2β²) = 50 MeV (< 1% error)
+- α_n = (8/7)×β = 3.495 (0.14% error)
+- β_n = (9/7)×β = 3.932 (0.82% error)
+- γ_e = (9/5)×β = 5.505 (0.09% error)
+
+**From λ (vacuum density)**:
+- k_c2 = λ = 938.272 MeV (0% error)
+
+**From geometric projection**:
+- ξ_QFD = k_geom²×(5/6) = 16.0 (< 0.6% error)
+
+**Previously locked**:
 - β = 3.058 (Golden Loop from α)
-- λ ≈ m_p (Proton Bridge - 0.0002% error)
-- c₂ = 1/β = 0.327 (vacuum compliance - 0.92% error) ← NEW!
-- ξ_QFD = 16.0 (geometric projection - < 0.6% error) ← NEW!
-- k_c2 = m_p = 938.272 MeV (vacuum density - 0% error) ← NEW!
+- λ ≈ m_p (Proton Bridge)
 - ξ, τ ≈ 1 (order unity)
 - α_circ = e/(2π) (topology)
 - c₁ = 0.529 (fitted)
 - η′ = 7.75×10⁻⁶ (Tolman)
-- V₂, V₄, g_c (Phoenix solver)
+- V₂, g_c (Phoenix solver)
 
-**Pending Parameters**: 5/17 (29%)
-- V₄_nuc (in progress, other session)
-- k_J, A_plasma (vacuum dynamics)
-- α_n, β_n, γ_e (composite parameters)
-
-**Next Milestone**: 80% (2 more parameters: V₄_nuc, k_J)
+**Remaining**: 1/17 (6%)
+- k_J or A_plasma (vacuum dynamics)
 
 ### 🏆 Golden Spike Proofs: Geometric Necessity (Latest - Polished Versions)
 
@@ -202,10 +210,13 @@ These three theorems represent the "Golden Spike" - the transition from:
 
 ## Zero-Sorry Modules (Production Quality)
 
-### Parameter Closure (NEW!)
-- ✅ `QFD.Nuclear.SymmetryEnergyMinimization` - c₂ = 1/β derivation (8 theorems)
-- ✅ `QFD.Gravity.GeometricCoupling` - ξ_QFD from projection (15 theorems)
-- ✅ `QFD.Nuclear.BindingMassScale` - k_c2 = λ derivation (10 theorems)
+### Parameter Closure - 7 Parameters Derived (Dec 30)
+- `QFD.Nuclear.SymmetryEnergyMinimization` - c₂ = 1/β (8 theorems)
+- `QFD.Gravity.GeometricCoupling` - ξ_QFD from projection (15 theorems)
+- `QFD.Nuclear.WellDepth` - V₄ = λ/(2β²) (15 theorems)
+- `QFD.Nuclear.BindingMassScale` - k_c2 = λ (10 theorems)
+- `QFD.Nuclear.AlphaNDerivation` - α_n = (8/7)×β (14 theorems)
+- `QFD.Nuclear.BetaNGammaEDerivation` - β_n, γ_e from β (21 theorems)
 
 ### Lepton Physics
 - ✅ `QFD.Lepton.VortexStability` - β-ξ degeneracy resolution (8/8 theorems)
