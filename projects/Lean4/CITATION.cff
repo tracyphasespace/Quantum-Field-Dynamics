@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this formalization in your research, please cite it as below."
 type: software
 title: "Quantum Field Dynamics: Lean 4 Formalization"
-abstract: "Machine-checked formalization of Quantum Field Dynamics theorems in Lean 4, including spacetime emergence from Cl(3,3), CMB 'Axis of Evil' uniqueness proofs, lepton mass spectrum and magnetic properties, black hole information conservation, Noether conservation laws, Dirac algebra realization, charge quantization, nuclear physics, and cosmological predictions. 575 proven statements (451 theorems + 124 lemmas) across 215 Lean files with 409 definitions and 53 structures."
+abstract: "Machine-checked formalization of Quantum Field Dynamics theorems in Lean 4, including spacetime emergence from Cl(3,3), CMB 'Axis of Evil' uniqueness proofs, lepton mass spectrum and magnetic properties, black hole information conservation, Noether conservation laws, Dirac algebra realization, charge quantization, nuclear physics, and cosmological predictions. 482 actually proven statements (358 theorems + 124 lemmas) across 215 Lean files with 409 definitions and 53 structures. Note: 93 additional placeholder theorems (marked 'True := trivial') are undergoing triage - see PLACEHOLDER_DISCLOSURE.md for details."
 authors:
   - family-names: "QFD Formalization Team"
     affiliation: "Quantum Field Dynamics Project"

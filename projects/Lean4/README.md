@@ -13,7 +13,7 @@ Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering sp
 **Want to verify the CMB "Axis of Evil" formalization?**
 
 1. **Start here**: [`QFD/ProofLedger.lean`](QFD/ProofLedger.lean) - Claims CO.4-CO.6
-2. **Search theorems**: [`QFD/CLAIMS_INDEX.txt`](QFD/CLAIMS_INDEX.txt) - All 575 proven statements
+2. **Search theorems**: [`QFD/CLAIMS_INDEX.txt`](QFD/CLAIMS_INDEX.txt) - 482 proven + 93 placeholders ([disclosure](PLACEHOLDER_DISCLOSURE.md))
 3. **Build & verify**:
    ```bash
    lake build QFD.Cosmology.AxisExtraction QFD.Cosmology.CoaxialAlignment
@@ -136,13 +136,16 @@ Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering sp
 
 ---
 
-## Statistics (Updated 2025-12-29)
+## Statistics (Updated 2025-12-30)
+
+⚠️ **Critical Update**: External code review discovered 93 theorems using `True := trivial` (placeholders, not proofs). Statistics corrected below. See [`PLACEHOLDER_DISCLOSURE.md`](PLACEHOLDER_DISCLOSURE.md) for full details and cleanup plan.
 
 | Metric | Value |
 |--------|-------|
-| **Proven Theorems** | 451 |
+| **Actually Proven Theorems** | **358** (was 451, corrected for 93 placeholders) |
 | **Proven Lemmas** | 124 |
-| **Total Proven** | **575 statements** |
+| **Total Actually Proven** | **482 statements** (was 575, corrected for 93 placeholders) |
+| **Placeholder Theorems** | **93** (`True := trivial` - awaiting triage, [see disclosure](PLACEHOLDER_DISCLOSURE.md)) |
 | **Definitions** | 409 |
 | **Structures** | 53 |
 | **Axioms** | 17 (infrastructure + physical hypotheses, all disclosed) |
@@ -150,13 +153,18 @@ Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering sp
 | **Build Status** | ✅ Successful (3089 jobs) |
 | **Sorry Count** | 6 actual sorries (20 total mentions including comments, all documented) |
 
+**Recent Additions (2025-12-30)**:
+- ⚠️ **Placeholder Disclosure** (93 `True := trivial` theorems discovered, statistics corrected)
+- ✅ Statistics Transparency (482 actually proven, not 575 - see PLACEHOLDER_DISCLOSURE.md)
+- ✅ Cleanup Plan (triage into: prove, delete, convert to axiom, convert to sorry)
+
 **Recent Additions (2025-12-29)**:
 - ✅ Sorry Reduction (23 → 6 actual sorries, 74% reduction)
 - ✅ GA/Cl33.lean Complete (basis_isOrtho proven, 0 sorries in foundation)
 - ✅ GA/HodgeDual.lean Complete (I₆² = 1 documented axiom from signature formula)
 - ✅ Documentation Transparency (TRANSPARENCY.md, professional tone cleanup)
 - ✅ Grand Solver Architecture (restored and updated with honest assessment)
-- ✅ 27 New Proofs (575 total proven statements, up from 548)
+- ✅ 27 New Proofs (482 actual + 93 placeholders = 575 total, corrected from 548)
 
 **Additions (2025-12-27)**:
 - ✅ Heisenberg Uncertainty (xp_noncomm proven via metric contradiction)
@@ -182,6 +190,7 @@ Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering sp
 Lean4/
 ├── README.md                    ← You are here
 ├── COMPLETE_GUIDE.md            ← Full system documentation
+├── PLACEHOLDER_DISCLOSURE.md    ⚠️ 93 placeholder theorems (critical transparency)
 ├── CITATION.cff                 ← Software citation for papers
 ├── lakefile.toml                ← Build configuration
 ├── lean-toolchain               ← Lean version (4.27.0-rc1)
@@ -189,7 +198,7 @@ Lean4/
 └── QFD/
     ├── ProofLedger.lean         ⭐ START HERE (claim → theorem mapping)
     ├── PROOF_INDEX.md           ← Quick theorem lookup guide
-    ├── CLAIMS_INDEX.txt         ← Grep-able theorem list (575 proven statements)
+    ├── CLAIMS_INDEX.txt         ← Grep-able theorem list (482 proven + 93 placeholders)
     ├── THEOREM_STATEMENTS.txt   ← Complete theorem signatures
     ├── CONCERN_CATEGORIES.md    ← Critical assumptions tracked
     ├── LEAN_PYTHON_CROSSREF.md  ← Lean ↔ Python traceability
