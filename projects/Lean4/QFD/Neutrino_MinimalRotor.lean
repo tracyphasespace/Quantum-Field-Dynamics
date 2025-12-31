@@ -11,131 +11,235 @@ open Filter
 /-!
 # Gate N-L2C: QFD Minimal Rotor + Bleaching Specialization
 
-This file locks the **API** for the QFD-facing bleaching specialization.
-All definitions here are axiomatized placeholders that will be replaced
-with concrete implementations once the QFD field model is fully specified.
+This file defines the **API specification** for QFD neutrino field bleaching
+using Lean 4's typeclass system for explicit dependency declaration.
 
-Goal:
-1) Define a MinimalRotor carrier (pure winding eigenmode).
-2) Define QTop_rotor : MinimalRotor → ℤ.
-3) Prove QTop invariance under λ ≠ 0 scaling (on rotor carrier).
-4) Instantiate BleachingHypotheses for QFD-facing Energy/QTop.
-5) Export the two theorems:
-   - qfd_like_energy_vanishes
-   - qfd_like_topology_persists
+## Design Pattern: Typeclass API Specification
+
+Rather than hiding assumptions as axioms, we define a typeclass `QFDFieldSpec`
+that explicitly lists all requirements. This makes dependencies transparent:
+- **Before**: 8 hidden `axiom` declarations (implicit assumptions)
+- **After**: 1 explicit typeclass spec + 1 instance variable (transparent contract)
+
+## API Contract
+
+The QFD field model must provide (via `QFDFieldSpec`):
+1. A type `Ψ` representing field configurations
+2. Normed space structure on `Ψ`
+3. Energy functional `Energy : Ψ → ℝ`
+4. Topological charge `QTop : Ψ → ℤ`
+5. Scaling laws under bleaching
+
+## Implementation Strategy
+
+**Current**: API specification (requirements explicitly listed)
+**Future**: Concrete instance from QFD Hamiltonian/Lagrangian
+
+## Deliverables
+
+- `qfd_like_energy_vanishes`: Energy → 0 under bleaching
+- `qfd_like_topology_persists`: Topological charge invariant
 -/
 
 /-!
-## QFD-facing types and functions (axiomatized for now)
+## QFD Field Specification (Typeclass)
 
-These will be replaced with concrete definitions from the QFD ψ-field model.
+This typeclass explicitly declares all requirements for a QFD field theory.
 -/
 
--- The QFD state space (to be defined).
-opaque Ψ_QFD : Type
+/-- Specification for a QFD neutrino field theory.
 
--- Instance chain for normed space structure (axiomatized for now)
-axiom inst_seminormedAddCommGroup : SeminormedAddCommGroup Ψ_QFD
-attribute [instance] inst_seminormedAddCommGroup
+**Purpose**: Explicitly list all requirements that a concrete QFD field
+implementation must satisfy.
 
-axiom inst_normedAddCommGroup : NormedAddCommGroup Ψ_QFD
-attribute [instance] inst_normedAddCommGroup
+**Status**: This is an API contract, not a hidden assumption. Any file
+importing this module can see exactly what's required.
 
-axiom inst_normedSpace : NormedSpace ℝ Ψ_QFD
-attribute [instance] inst_normedSpace
+**Implementation**: Will be instantiated when the QFD Hamiltonian is complete.
+-/
+class QFDFieldSpec (Ψ : Type) extends SeminormedAddCommGroup Ψ,
+    NormedAddCommGroup Ψ, NormedSpace ℝ Ψ where
+  /-- Energy functional E : Ψ → ℝ.
 
-axiom inst_smul : SMul ℝ Ψ_QFD
-attribute [instance] inst_smul
+  **Physical meaning**: ∫ ℋ dV where ℋ is Hamiltonian density.
 
--- QFD energy functional (to be derived from Hamiltonian/Lagrangian).
-axiom Energy_QFD : Ψ_QFD → ℝ
+  **Requirement**: Must scale quadratically under bleaching.
+  -/
+  Energy : Ψ → ℝ
 
--- QFD topological charge (to be derived from winding/rotor current).
-axiom QTop_QFD : Ψ_QFD → ℤ
+  /-- Topological charge Q : Ψ → ℤ.
 
--- Energy scaling hypothesis.
-axiom energy_qfd_scaling : ∀ (ψ : Ψ_QFD) (lam : ℝ),
-  Energy_QFD (bleach ψ lam) = (lam ^ 2) * Energy_QFD ψ
+  **Physical meaning**: ∮ J_μ dS^μ where J is topological current.
 
--- Topological invariance hypothesis.
-axiom qtop_qfd_invariant : ∀ (ψ : Ψ_QFD) (lam : ℝ),
-  lam ≠ 0 → QTop_QFD (bleach ψ lam) = QTop_QFD ψ
+  **Requirement**: Must be invariant under nonzero rescaling.
+  -/
+  QTop : Ψ → ℤ
 
+  /-- Energy scaling law: E(λψ) = λ² E(ψ).
+
+  **Physical justification**: Energy quadratic in field derivatives.
+
+  **Implementation requirement**: To be proven from QFD Lagrangian.
+  -/
+  energy_scale_sq : ∀ (ψ : Ψ) (lam : ℝ),
+    Energy (bleach ψ lam) = (lam ^ 2) * Energy ψ
+
+  /-- Topological invariance: Q(λψ) = Q(ψ) for λ ≠ 0.
+
+  **Physical justification**: Topology independent of amplitude.
+
+  **Implementation requirement**: To be proven from current conservation.
+  -/
+  qtop_invariant : ∀ (ψ : Ψ) (lam : ℝ),
+    lam ≠ 0 → QTop (bleach ψ lam) = QTop ψ
 
 /-!
-## 1) Minimal rotor carrier
+## Module Variables (Explicit Dependencies)
+
+We declare a variable for the QFD field type and require it to satisfy
+the `QFDFieldSpec`. This makes all dependencies explicit and visible.
 -/
 
-/-- Predicate: ψ has minimal nontrivial winding (±1). -/
+section QFDFieldApplication
+
+-- The QFD field type (abstract for now).
+-- Status: Variable, not axiom - makes dependency explicit.
+-- Implementation: Will be the concrete QFD ψ-field type.
+variable {Ψ_QFD : Type} [QFDFieldSpec Ψ_QFD]
+
+/-!
+## Minimal Rotor Carrier
+-/
+
+/-- Predicate: ψ has minimal nontrivial winding (±1).
+
+**Physical meaning**: Simplest topologically nontrivial configuration.
+
+**Examples**: Single vortex, single soliton.
+-/
 def IsMinimalRotor (ψ : Ψ_QFD) : Prop :=
-  QTop_QFD ψ = (1 : ℤ) ∨ QTop_QFD ψ = (-1 : ℤ)
+  QFDFieldSpec.QTop ψ = (1 : ℤ) ∨ QFDFieldSpec.QTop ψ = (-1 : ℤ)
 
-/-- Carrier type for minimal rotors. -/
+/-- Subtype of minimal rotor configurations.
+
+**Physical meaning**: Space of simplest topological excitations.
+
+**Properties**: Closed under bleaching (topology preserved).
+-/
 def MinimalRotor : Type :=
   { ψ : Ψ_QFD // IsMinimalRotor ψ }
 
-/-- Rotor topological charge (definitional). -/
-def QTop_rotor (r : MinimalRotor) : ℤ :=
-  QTop_QFD r.1
+/-- Topological charge of a minimal rotor.
+
+**Values**: Either +1 or -1 (by definition).
+
+**Invariant**: Preserved under bleaching.
+-/
+def QTop_rotor (r : @MinimalRotor Ψ_QFD _) : ℤ :=
+  QFDFieldSpec.QTop r.1
 
 
 /-!
-## 2) Bleaching preserves minimal-rotor property
+## Bleaching Preserves Minimal Rotor Property
 -/
 
-/-- Bleach a minimal rotor by λ ≠ 0, staying in the MinimalRotor subtype. -/
-def bleachRotor (r : MinimalRotor) (lam : ℝ) (hlam : lam ≠ 0) : MinimalRotor := by
+/-- Bleach a minimal rotor by λ ≠ 0.
+
+**Physical meaning**: Rescale field amplitude, preserve topology.
+
+**Result**: Another minimal rotor with same topological charge.
+
+**Proof**: Uses topological invariance from `QFDFieldSpec`.
+-/
+def bleachRotor (r : @MinimalRotor Ψ_QFD _) (lam : ℝ) (hlam : lam ≠ 0) : @MinimalRotor Ψ_QFD _ := by
   refine ⟨bleach r.1 lam, ?_⟩
-  have hq : QTop_QFD (bleach r.1 lam) = QTop_QFD r.1 := qtop_qfd_invariant r.1 lam hlam
+  have hq : QFDFieldSpec.QTop (bleach r.1 lam) = QFDFieldSpec.QTop r.1 :=
+    QFDFieldSpec.qtop_invariant r.1 lam hlam
   rcases r.2 with h1 | hneg1
   · left; simpa [hq] using h1
   · right; simpa [hq] using hneg1
 
-/-- QTop_rotor is invariant under λ ≠ 0 bleaching. -/
-theorem qtop_rotor_invariant (r : MinimalRotor) (lam : ℝ) (hlam : lam ≠ 0) :
+/-- Topological charge invariance for minimal rotors.
+
+**Statement**: QTop(bleach(r, λ)) = QTop(r) for λ ≠ 0
+
+**Significance**: Topology is scale-invariant.
+-/
+theorem qtop_rotor_invariant (r : @MinimalRotor Ψ_QFD _) (lam : ℝ) (hlam : lam ≠ 0) :
     QTop_rotor (bleachRotor r lam hlam) = QTop_rotor r := by
-  simp [QTop_rotor, bleachRotor, qtop_qfd_invariant r.1 lam hlam]
+  simp [QTop_rotor, bleachRotor, QFDFieldSpec.qtop_invariant r.1 lam hlam]
 
 
 /-!
-## 3) Instantiate BleachingHypotheses
+## BleachingHypotheses Instantiation
 -/
 
-/-- QFD-facing BleachingHypotheses instance. -/
+/-- QFD-facing BleachingHypotheses instance.
+
+**Purpose**: Package `QFDFieldSpec` into standard bleaching interface.
+
+**Usage**: Allows generic bleaching theorems to work with QFD fields.
+-/
 def bleachingHypothesesQFD : BleachingHypotheses Ψ_QFD :=
-{ Energy := Energy_QFD
-  QTop := QTop_QFD
-  energy_scale_sq := energy_qfd_scaling
-  qtop_invariant := qtop_qfd_invariant }
+{ Energy := QFDFieldSpec.Energy
+  QTop := QFDFieldSpec.QTop
+  energy_scale_sq := QFDFieldSpec.energy_scale_sq
+  qtop_invariant := QFDFieldSpec.qtop_invariant }
 
 
 /-!
-## 4) Exported theorems (Gate N-L2C deliverables)
+## Main Theorems (Gate N-L2C Deliverables)
 -/
 
-/-- Energy vanishes under bleaching (QFD-facing specialization). -/
+/-- Energy vanishes under bleaching to zero.
+
+**Statement**: As λ → 0, E(λψ) → 0
+
+**Physical meaning**: Field energy → 0 as amplitude vanishes.
+
+**Derivation**: E(λψ) = λ²E(ψ) → 0 as λ → 0
+
+**Significance**: "Bleaching to vacuum" interpretation validated.
+-/
 theorem qfd_like_energy_vanishes (ψ : Ψ_QFD) :
-    Tendsto (fun lam : ℝ => Energy_QFD (bleach ψ lam)) (𝓝 0) (𝓝 0) :=
+    Tendsto (fun lam : ℝ => QFDFieldSpec.Energy (bleach ψ lam)) (𝓝 0) (𝓝 0) :=
   BleachingHypotheses.tendsto_energy_bleach_zero bleachingHypothesesQFD ψ
 
-/-- Topology persists under bleaching for λ ≠ 0 (QFD-facing specialization). -/
+/-- Topology persists under nonzero bleaching.
+
+**Statement**: Q(λψ) = Q(ψ) for λ ≠ 0
+
+**Physical meaning**: Topological charge robust against amplitude changes.
+
+**Derivation**: Direct from topological invariance requirement.
+
+**Significance**: Topology is fundamental, scale-independent property.
+-/
 theorem qfd_like_topology_persists (ψ : Ψ_QFD) (lam : ℝ) (hlam : lam ≠ 0) :
-    QTop_QFD (bleach ψ lam) = QTop_QFD ψ :=
+    QFDFieldSpec.QTop (bleach ψ lam) = QFDFieldSpec.QTop ψ :=
   BleachingHypotheses.qtop_bleach_eq bleachingHypothesesQFD ψ hlam
 
 
 /-!
-## 5) Rotor-specialized corollaries
+## Rotor-Specialized Corollaries
 -/
 
-/-- MinimalRotor energy vanishes under bleaching. -/
-theorem minimalRotor_energy_vanishes (r : MinimalRotor) :
-    Tendsto (fun lam : ℝ => Energy_QFD (bleach r.1 lam)) (𝓝 0) (𝓝 0) :=
+/-- Minimal rotor energy vanishes under bleaching.
+
+**Specialization**: Apply `qfd_like_energy_vanishes` to minimal rotors.
+-/
+theorem minimalRotor_energy_vanishes (r : @MinimalRotor Ψ_QFD _) :
+    Tendsto (fun lam : ℝ => QFDFieldSpec.Energy (bleach r.1 lam)) (𝓝 0) (𝓝 0) :=
   qfd_like_energy_vanishes r.1
 
-/-- MinimalRotor topology persists under nonzero bleaching. -/
-theorem minimalRotor_topology_persists (r : MinimalRotor) (lam : ℝ) (hlam : lam ≠ 0) :
-    QTop_QFD (bleach r.1 lam) = QTop_QFD r.1 :=
+/-- Minimal rotor topology persists under bleaching.
+
+**Specialization**: Apply `qfd_like_topology_persists` to minimal rotors.
+-/
+theorem minimalRotor_topology_persists (r : @MinimalRotor Ψ_QFD _) (lam : ℝ) (hlam : lam ≠ 0) :
+    QFDFieldSpec.QTop (bleach r.1 lam) = QFDFieldSpec.QTop r.1 :=
   qfd_like_topology_persists r.1 lam hlam
+
+end QFDFieldApplication
 
 end QFD.Neutrino
