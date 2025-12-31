@@ -242,14 +242,18 @@ theorem koide_relation_is_universal (mu delta : ℝ) (h_mu : mu > 0)
     have : sqrt 2 ^ 2 = 2 := Real.sq_sqrt (by norm_num)
     ring_nf; rw [this]; ring
 
-  -- NUMERATOR = 6μ
+  -- NUMERATOR = 6μ (geometric cancellation proof)
   have h_num : mu * (1 + sqrt 2 * c0)^2 + mu * (1 + sqrt 2 * c1)^2 +
       mu * (1 + sqrt 2 * c2)^2 = 6 * mu := by
     simp only [h_sq]
     calc mu * (1 + 2 * sqrt 2 * c0 + 2 * c0^2) + mu * (1 + 2 * sqrt 2 * c1 + 2 * c1^2)
             + mu * (1 + 2 * sqrt 2 * c2 + 2 * c2^2)
         = mu * (3 + 2 * sqrt 2 * (c0 + c1 + c2) + 2 * (c0^2 + c1^2 + c2^2)) := by ring
-      _ = mu * (3 + 2 * sqrt 2 * 0 + 2 * (3/2)) := by rw [h_sum_cos, h_sum_cos_sq]
+      -- Geometric cancellation: the linear sum (c0 + c1 + c2) = 0 (vectors sum to zero)
+      _ = mu * (3 + 2 * sqrt 2 * 0 + 2 * (3/2)) := by
+          rw [h_sum_cos]    -- Apply sum_cos_symm: cross-terms cancel
+          rw [h_sum_cos_sq] -- Apply sum_cos_sq_symm: quadratic terms sum to 3/2
+      -- Simplify: 0 from linear terms, 3 from quadratic terms
       _ = mu * (3 + 0 + 2 * (3/2)) := by ring
       _ = mu * (3 + 3) := by ring
       _ = mu * 6 := by ring
