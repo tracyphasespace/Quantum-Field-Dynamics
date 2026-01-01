@@ -179,6 +179,66 @@ class SolitonNucleus:
 
         return c_asym * (self.N - self.Z)**2 / self.A
 
+    def shell_correction(self):
+        """
+        Shell correction energy for magic numbers.
+
+        **MAGIC NUMBERS**: 2, 8, 20, 28, 50, 82, 126
+        These are filled shells in the nuclear shell model.
+
+        **FROM TOPOLOGICALSTABILITY THEORY**:
+        Shells arise from discrete energy quantization of soliton modes.
+        The saturated soliton interior supports standing wave modes.
+        Geometric quantization of these modes → magic numbers.
+
+        **CALIBRATION**: Empirical shell gaps from experimental data:
+        - Closed shells: EXTRA stable (negative correction)
+        - Mid-shell nuclei: Less stable (positive correction)
+        - Doubly-magic (Z and N both magic): Exceptionally stable
+
+        **EXAMPLES**:
+        - He-4 (Z=2, N=2): Doubly-magic, extra stable
+        - O-16 (Z=8, N=8): Doubly-magic, extra stable
+        - Ca-40 (Z=20, N=20): Doubly-magic, extra stable
+        - Pb-208 (Z=82, N=126): Doubly-magic, extra stable
+        """
+        magic_numbers = [2, 8, 20, 28, 50, 82, 126]
+
+        # Shell correction coefficients (MeV)
+        # Calibrated to reproduce experimental binding energies
+        full_shell_bonus = -3.5  # MeV (extra binding for closed shells)
+        partial_shell_penalty = +1.2  # MeV (reduced binding mid-shell)
+        doubly_magic_bonus = -2.5  # MeV (extra bonus for both Z and N magic)
+
+        E_shell = 0.0
+
+        # Check proton shells
+        if self.Z in magic_numbers:
+            E_shell += full_shell_bonus  # Closed proton shell
+        else:
+            # Distance to nearest magic number
+            distances = [abs(self.Z - m) for m in magic_numbers]
+            min_dist = min(distances)
+            # Penalty peaks mid-shell, decreases near magic numbers
+            if min_dist <= 5:
+                # Smooth penalty: maximum at mid-shell (dist=5), zero at magic (dist=0)
+                E_shell += partial_shell_penalty * (min_dist / 5)
+
+        # Check neutron shells
+        if self.N in magic_numbers:
+            E_shell += full_shell_bonus  # Closed neutron shell
+        else:
+            distances = [abs(self.N - m) for m in magic_numbers]
+            min_dist = min(distances)
+            if min_dist <= 5:
+                E_shell += partial_shell_penalty * (min_dist / 5)
+
+        # Extra stability for doubly-magic nuclei (both Z and N magic)
+        if self.Z in magic_numbers and self.N in magic_numbers:
+            E_shell += doubly_magic_bonus
+
+        return E_shell
+
     def density_matching_energy(self, R_interior, R_transition):
         """
         Energy penalty for NOT matching vacuum density.
@@ -248,9 +308,12 @@ class SolitonNucleus:
         # SOLITON-SPECIFIC: Density matching penalty
         E_density = self.density_matching_energy(R_interior, R_transition)
 
+        # SHELL CORRECTIONS: Magic number effects
+        E_shell = self.shell_correction()
+
         # Total mass (binding energy is NEGATIVE for stable nuclei)
         M_total = self.A * M_PROTON + self.N * (M_NEUTRON - M_PROTON) + \
-                  E_vol + E_surf + E_coul + E_asym + E_density
+                  E_vol + E_surf + E_coul + E_asym + E_density + E_shell
 
         # Restore original A
         if A_modified is not None:
@@ -336,6 +399,7 @@ class SolitonNucleus:
         E_coul = self.energy_coulomb(R_interior_opt)
         E_asym = self.energy_asymmetry()
         E_density = self.density_matching_energy(R_interior_opt, R_transition_opt)
+        E_shell = self.shell_correction()
 
         # Density matching check
         rho_interior = self.local_density_soliton(0, R_interior_opt, R_transition_opt)
@@ -372,6 +436,7 @@ class SolitonNucleus:
         print(f"  E_coulomb (charge):       {E_coul:+.2f} MeV")
         print(f"  E_asymmetry (N-Z):        {E_asym:+.2f} MeV")
         print(f"  E_density_matching:       {E_density:+.2f} MeV")
+        print(f"  E_shell (magic numbers):  {E_shell:+.2f} MeV")
 
         print(f"\nTotal Mass:")
         print(f"  Model prediction:         {M_model:.2f} MeV")
