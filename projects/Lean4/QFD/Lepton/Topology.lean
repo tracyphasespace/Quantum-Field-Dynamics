@@ -1,31 +1,31 @@
 import Mathlib.Topology.Homotopy.Basic
+import Mathlib.Geometry.Euclidean.Sphere.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import QFD.GA.Cl33
 
 /-!
 # The Topological Protection Theorem (Why Matter is Stable)
 
-**Bounty Target**: Cluster 3 (Mass-as-Geometry)
-**Value**: 5,000 Points (Axiom Elimination)
-**Status**: ✅ VERIFIED (0 Sorries)
-**Author**: QFD Formalization Bot
-**Date**: 2025-12-26
+**Status**: Core theorem proven (0 sorries)
+**Axiom Status**: 3 axioms - standard algebraic topology results not yet in Mathlib4
 
-## The "Heresy" Being Patched
-Standard Model: Lepton Number is conserved. An electron cannot just disappear into photons.
-Why? "It's a law."
+## Physical Mechanism
 
-QFD: An electron is a knot in the vacuum field with Winding Number 1.
-To remove it, you must "untie" it. But $\pi_3(S^3) \cong \mathbb{Z}$ means the winding
-number is an integer invariant under continuous deformation.
-You cannot turn an integer 1 into 0 smoothly.
+Standard Model: Lepton number is conserved by fiat.
 
-## The Proof Structure
-1.  **Configuration Space**: We map physical space ($S^3$ via 1-point compactification)
-    to the Rotor Group Manifold (which is geometrically $S^3$).
-2.  **Homotopy Invariance**: We invoke the standard topological property that
-    the Degree of a map $S^3 \to S^3$ is invariant under homotopy.
-3.  **Physical Consequence**: Continuous time evolution is a homotopy.
-    Therefore, particle number cannot change during smooth evolution.
+QFD: An electron is a topological defect (winding number 1) in the vacuum field.
+The conservation law follows from π₃(S³) ≅ ℤ: winding numbers are homotopy invariants.
+Continuous time evolution cannot change an integer winding number.
+
+## Mathematical Foundation
+
+The proof relies on three standard results from algebraic topology:
+1. Maps S³ → S³ have an integer-valued degree (winding number)
+2. Homotopic maps have equal degree (homotopy invariance)
+3. Constant maps have degree 0 (vacuum state)
+
+These are classical theorems but not yet formalized in Mathlib4.
+See AXIOM_INVENTORY.md for elimination strategy (Mathlib singular homology).
 
 -/
 
@@ -33,29 +33,43 @@ namespace QFD.Lepton.Topology
 
 open ContinuousMap
 
-/--
-**Mathematical Prerequisite: The Homotopy Group $\pi_3(S^3) \cong \mathbb{Z}$**
-Since constructing the full homotopy group library in this file would be too large,
-we utilize an `axiom` (or opaque definition) to represent the well-known mathematical
-fact that maps from Sphere to Sphere have an integer degree that is homotopy-invariant.
+/-!
+## Type Definitions
+
+We use ℝ⁴ unit spheres from Mathlib as the standard model for S³.
+Physical space (compactified) and the rotor group are both homeomorphic to S³.
 -/
--- Represents the 3-Sphere (Physical Space compactified)
-opaque Sphere3 : Type
-noncomputable axiom Sphere3_top : TopologicalSpace Sphere3
-noncomputable instance : TopologicalSpace Sphere3 := Sphere3_top
 
--- Represents the Rotor Group Space (The Manifold of Spinors, |R|=1)
--- Also topologically a 3-Sphere.
-opaque RotorGroup : Type
-noncomputable axiom RotorGroup_top : TopologicalSpace RotorGroup
-noncomputable instance : TopologicalSpace RotorGroup := RotorGroup_top
+/-- The 3-sphere: unit sphere in ℝ⁴ (physical space via 1-point compactification) -/
+abbrev Sphere3 : Type := Metric.sphere (0 : EuclideanSpace ℝ (Fin 4)) 1
 
--- Axiom: There exists a Winding Number function (Degree)
--- Standard Topology result: Degree is an integer.
+/-- The rotor group manifold (unit quaternions, topologically S³) -/
+abbrev RotorGroup : Type := Metric.sphere (0 : EuclideanSpace ℝ (Fin 4)) 1
+
+/-!
+## Algebraic Topology Axioms
+
+The following three axioms encode standard results from algebraic topology
+that are not yet formalized in Mathlib4:
+
+1. **Degree map existence**: π₃(S³) ≅ ℤ (Hurewicz theorem)
+2. **Homotopy invariance**: Degree is a homotopy invariant (fundamental in topology)
+3. **Vacuum normalization**: Constant map has degree 0 (definition of degree)
+
+**Mathlib Status**: Singular homology is formalized (Topaz, 2023), which provides
+the mathematical foundation for degree theory. However, the explicit degree map
+and homotopy invariance theorem are not yet available in Mathlib4.
+
+**Elimination Path**: Once Mathlib4 includes degree theory for sphere maps,
+these axioms can be replaced with `import Mathlib.AlgebraicTopology.DegreeTheory`.
+-/
+
+/-- The degree (winding number) of a map S³ → S³ is an integer.
+    Standard result: This is the induced homomorphism on π₃(S³) ≅ ℤ. -/
 axiom winding_number : C(Sphere3, RotorGroup) → ℤ
 
--- Axiom: Homotopic maps have the same Winding Number.
--- This is the definition of degree theory.
+/-- Homotopic maps have equal degree (fundamental homotopy invariance).
+    Standard result: Degree factors through homotopy classes [S³, S³] ≅ ℤ. -/
 axiom degree_homotopy_invariant {f g : C(Sphere3, RotorGroup)} :
   ContinuousMap.Homotopic f g → winding_number f = winding_number g
 
@@ -80,10 +94,8 @@ A state is stable if its winding number is non-zero.
 def IsStableParticle (psi : C(Sphere3, RotorGroup)) : Prop :=
   winding_number psi ≠ 0
 
-/--
-**The Vacuum State**
-A trivial mapping (constant map) corresponds to winding number 0.
--/
+/-- The trivial vacuum state has winding number 0.
+    Standard result: Constant maps have degree 0 by definition. -/
 axiom vacuum_winding : ∃ (vac : C(Sphere3, RotorGroup)), winding_number vac = 0
 
 -----------------------------------------------------------
@@ -121,21 +133,20 @@ theorem topological_protection
 -----------------------------------------------------------
 
 /-!
-### Conclusion
+## Physical Implications
 
-The "Law of Conservation of Lepton Number" is revealed to be a topological constraint.
+Lepton number conservation emerges from topology:
 
-1.  **Why Electrons Don't Decay**: There is no path in the configuration space
-    connecting the Winding=1 sector to the Winding=0 sector that does not pass
-    through a singularity (where the field map is undefined).
+1. **Stability mechanism**: No continuous path connects winding-1 (electron) to winding-0 (vacuum)
+   without passing through a field singularity.
 
-2.  **The Singularity**: A "Topological Phase Slip" requires the amplitude $A$ to
-    go to zero at a point (the knot core) to allow the loops to cross and untie.
+2. **Energy barrier**: Creating a singularity (A → 0) requires concentrating energy density
+   beyond typical interaction scales, providing kinetic stability over cosmological timescales.
 
-3.  **The Energy Barrier**: Driving $A \to 0$ requires immense energy density.
-    This "activation energy" is what keeps matter stable for the age of the universe.
+3. **Discrete spectrum**: Winding numbers are integers, giving a discrete particle spectrum
+   rather than a continuum.
 
-    Matter is frozen light knots.
+This explains why matter is stable without invoking ad hoc conservation laws.
 -/
 
 end QFD.Lepton.Topology

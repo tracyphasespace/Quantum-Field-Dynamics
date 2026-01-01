@@ -1,548 +1,619 @@
-QFD/Neutrino_Chirality.lean:91:chirality_invariant_under_bleaching
-QFD/Neutrino_Chirality.lean:111:chirality_gap (L R : Vortex) :
-QFD/QM_Translation/Heisenberg.lean:35:basis_sq (i : Fin 6) : e i * e i = algebraMap ℝ Cl33 (signature33 i) := by
-QFD/QM_Translation/Heisenberg.lean:38:basis_anticomm {i j : Fin 6} (h : i ≠ j) : e i * e j = - e j * e i := by
-QFD/QM_Translation/Heisenberg.lean:108:xp_noncomm : commutator X_op P_op ≠ 0 := by
-QFD/QM_Translation/Heisenberg.lean:134:uncertainty_is_bivector_area :
-QFD/QM_Translation/ParticleLifetime.lean:13:instability_law : True := trivial
-QFD/QM_Translation/SpinStatistics.lean:12:rotor_exchange_antisymmetry (psi1 psi2 : Cl33) : True := trivial
-QFD/QM_Translation/MeasurementCollapse.lean:10:decoherence_as_rotor_alignment :
-QFD/QM_Translation/LandauLevels.lean:16:landau_level_quantization : True := trivial
-QFD/QM_Translation/QuantumEraser.lean:14:erasure_restores_interference : True := trivial
-QFD/QM_Translation/EntanglementGeometry.lean:15:correlation_is_geometric_constraint : True := trivial
-QFD/QM_Translation/BerryPhase.lean:15:berry_phase_is_curvature : True := trivial
-QFD/QM_Translation/DiracRealization.lean:44:basis_sq (i : Fin 6) : e i * e i = algebraMap ℝ Cl33 (signature33 i) := by
-QFD/QM_Translation/DiracRealization.lean:46:basis_anticomm {i j : Fin 6} (h : i ≠ j) : e i * e j = - e j * e i := by
-QFD/QM_Translation/DiracRealization.lean:109:gamma_square_signature (μ : Fin 4) :
-QFD/QM_Translation/DiracRealization.lean:130:gamma_anticommute (μ ν : Fin 4) (h : μ ≠ ν) :
-QFD/QM_Translation/DiracRealization.lean:145:dirac_algebra (μ ν : Fin 4) :
-QFD/QM_Translation/TunnelingTime.lean:13:tunneling_phase_saturation : True := trivial
-QFD/QM_Translation/PauliExclusion.lean:19:rotor_exchange_antisymmetry (ψ₁ ψ₂ : Cl33) :
-QFD/QM_Translation/PauliExclusion.lean:25:exclusion_principle (ψ : Cl33) : ψ ∧ ψ = 0 := by
-QFD/QM_Translation/PauliBridge_Test.lean:16:spatial_sq_one_stub (i : Fin 6) (h : i.val < 3) : e i * e i = 1 := by
-QFD/QM_Translation/Zitterbewegung.lean:16:velocity_oscillation : True := trivial
-QFD/QM_Translation/RealDiracEquation.lean:89:mass_is_internal_momentum
-QFD/QM_Translation/RealDiracEquation.lean:119:dirac_form_equivalence
-QFD/QM_Translation/PauliBridge.lean:46:spatial_sq_one (i : Fin 6) (h : i < 3) : e i * e i = 1 := by
-QFD/QM_Translation/PauliBridge.lean:64:anticomm_neq {i j : Fin 6} (h : i ≠ j) : e i * e j = -(e j * e i) := by
-QFD/QM_Translation/PauliBridge.lean:94:pauli_squares_to_one : 
-QFD/QM_Translation/PauliBridge.lean:106:pauli_anticommute : sigma_x * sigma_y = -(sigma_y * sigma_x) := by
-QFD/QM_Translation/PauliBridge.lean:115:pseudoscalar_is_imaginary : I_spatial * I_spatial = -1 := by
-QFD/QM_Translation/PauliBridge.lean:160:pauli_product_is_pseudovector :
-QFD/QM_Translation/SchrodingerEvolution.lean:62:B_sq_neg_one : B * B = -1 :=
-QFD/QM_Translation/SchrodingerEvolution.lean:73:phase_group_law (a b : ℝ) :
-QFD/QM_Translation/SchrodingerEvolution.lean:184:phase_unitarity (theta : ℝ) :
-QFD/QM_Translation/SchrodingerEvolution.lean:205:schrodinger_derivative_identity (theta : ℝ) :
-QFD/ProofLedger.lean:946:files using the file paths provided.
-QFD/GA/GradeProjection.lean:30:scalar_product_symmetric (a b : Cl33) :
-QFD/GA/GradeProjection.lean:43:scalar_part_smul (r : ℝ) (x : Cl33) :
-QFD/GA/GradeProjection.lean:51:real_energy_density_nonneg (psi : Cl33) :
-QFD/GA/BasisOperations.lean:26:basis_sq (i : Fin 6) : e i * e i = algebraMap ℝ Cl33 (signature33 i) := by
-QFD/GA/BasisOperations.lean:31:basis_anticomm {i j : Fin 6} (h : i ≠ j) : e i * e j = - e j * e i := by
-QFD/GA/HodgeDual.lean:26:I6_square : I_6 * I_6 = 1 := by
-QFD/GA/BasisProducts.lean:40:e0_e3_e0 : e 0 * e 3 * e 0 = - e 3 := by
-QFD/GA/BasisProducts.lean:52:e0_e2_e0 : e 0 * e 2 * e 0 = - e 2 := by
-QFD/GA/BasisProducts.lean:64:e3_e0_e3 : e 3 * e 0 * e 3 = e 0 := by
-QFD/GA/BasisProducts.lean:77:e2_e3_e2 : e 2 * e 3 * e 2 = - e 3 := by
-QFD/GA/BasisProducts.lean:89:e3_e2_e3 : e 3 * e 2 * e 3 = e 2 := by
-QFD/GA/BasisProducts.lean:106:e0_e3_e0_e2_e3 : e 0 * e 3 * e 0 * e 2 * e 3 = - e 2 := by
-QFD/GA/BasisProducts.lean:116:e0_e2_e0_e2_e3 : e 0 * e 2 * e 0 * e 2 * e 3 = - e 3 := by
-QFD/GA/BasisProducts.lean:133:bivector_left_contract {i j : Fin 6} (h : i ≠ j) :
-QFD/GA/BasisProducts.lean:145:bivector_right_contract {i j : Fin 6} (h : i ≠ j) :
-QFD/GA/BasisProducts.lean:159:e0e3_mul_e0 : (e 0 * e 3) * e 0 = - e 3 := by
-QFD/GA/BasisProducts.lean:164:e0e2_mul_e0 : (e 0 * e 2) * e 0 = - e 2 := by
-QFD/GA/BasisProducts.lean:173:scalar_triple_product (c : ℝ) (i j k : Fin 6) :
-QFD/GA/Conjugation.lean:34:reverse_basis_vector (i : Fin 6) :
-QFD/GA/Conjugation.lean:39:reverse_product (x y : Cl33) :
-QFD/GA/Conjugation.lean:48:reverse_B_phase : reverse B_phase = - B_phase := by
-QFD/GA/BasisReduction.lean:36:basis_swap_sort {i j : Fin 6} (h : i < j) :
-QFD/GA/BasisReduction.lean:45:e_swap {i j : Fin 6} (h : i < j) :
-QFD/GA/BasisReduction.lean:56:basis_sq_simplify (i : Fin 6) :
-QFD/GA/BasisReduction.lean:63:e_sq (i : Fin 6) :
-QFD/GA/BasisReduction.lean:73:sandwich_absorption {i j : Fin 6} (h : i ≠ j) :
-QFD/GA/BasisReduction.lean:108:scalar_basis_commute (c : ℝ) (i : Fin 6) :
-QFD/GA/BasisReduction.lean:114:scalar_assoc (c : ℝ) (x y : Cl33) :
-QFD/GA/BasisReduction.lean:144:poynting_energy : (e 0 * e 3) * e 0 + (e 0 * e 2) * e 0 = - e 3 - e 2 := by
-QFD/GA/Cl33Instances.lean:17:signature33_ne_zero (i : Fin 6) : signature33 i ≠ 0 := by
-QFD/GA/Cl33Instances.lean:29:zero_ne_one_Cl33 : (0 : Cl33) ≠ 1 := zero_ne_one
-QFD/GA/Cl33Instances.lean:43:algebraMap_injective : Function.Injective (algebraMap ℝ Cl33) := by
-QFD/GA/Cl33Instances.lean:56:basis_vector_ne_zero (i : Fin 6) : ι33 (basis_vector i) ≠ 0 := by
-QFD/GA/PhaseCentralizer.lean:38:basis_sq (i : Fin 6) :
-QFD/GA/PhaseCentralizer.lean:43:basis_anticomm {i j : Fin 6} (h : i ≠ j) :
-QFD/GA/PhaseCentralizer.lean:54:basis_neq_neg (i : Fin 6) : e i ≠ - e i := by
-QFD/GA/PhaseCentralizer.lean:115:phase_rotor_is_imaginary : B_phase * B_phase = -1 := by
-QFD/GA/PhaseCentralizer.lean:138:spacetime_vectors_in_centralizer (i : Fin 6) (h : i < 4) :
-QFD/GA/PhaseCentralizer.lean:164:internal_vectors_notin_centralizer (i : Fin 6) (h : 4 ≤ i) :
-QFD/GA/Cl33.lean:119:generator_squares_to_signature (i : Fin 6) :
-QFD/GA/Cl33.lean:152:generators_anticommute (i j : Fin 6) (h_ne : i ≠ j) :
-QFD/GA/Cl33.lean:213:basis_isOrtho (i j : Fin 6) (h_ne : i ≠ j) :
-QFD/GA/Cl33.lean:227:generators_anticommute_alt (i j : Fin 6) (h_ne : i ≠ j) :
-QFD/GA/Cl33.lean:239:signature_values :
-QFD/GA/MultivectorGrade.lean:51:zero_isScalar : isScalar (0 : Cl33) := by
-QFD/GA/MultivectorGrade.lean:56:smul_scalar_isScalar {r : ℝ} {x : Cl33} (h : isScalar x) :
-QFD/GA/MultivectorGrade.lean:63:add_scalar_isScalar {x y : Cl33} (hx : isScalar x) (hy : isScalar y) :
-QFD/GA/MultivectorDefs.lean:82:wedge_antisymm (a b : Cl33) : wedge a b = -(wedge b a) := by
-QFD/GA/MultivectorDefs.lean:89:wedge_basis_eq_mul {i j : Fin 6} (h : i ≠ j) : wedge (e i) (e j) = e i * e j := by
-QFD/GA/MultivectorDefs.lean:112:wedge_basis_anticomm {i j : Fin 6} (h : i ≠ j) :
-QFD/GA/MultivectorDefs.lean:133:triple_wedge_equals_geometric {i j k : Fin 6}
-QFD/GA/MultivectorDefs.lean:140:wedge_triple_antisymm {i j k : Fin 6} (_h1 : i ≠ j) (h2 : j ≠ k) (_h3 : i ≠ k) :
-QFD/GA/MultivectorDefs.lean:157:wedge_mul_left {i j : Fin 6} (h : i ≠ j) :
-QFD/GA/MultivectorDefs.lean:176:wedge_mul_right {i j : Fin 6} (_ : i ≠ j) :
-QFD/AdjointStability_Complete.lean:56:signature_pm1 (i : Fin 6) : signature i = 1 ∨ signature i = -1 := by
-QFD/AdjointStability_Complete.lean:61:swap_sign_pm1 (I : BasisIndex) : swap_sign I = 1 ∨ swap_sign I = -1 := by
-QFD/AdjointStability_Complete.lean:66:prod_signature_pm1 (I : BasisIndex) :
-QFD/AdjointStability_Complete.lean:97:blade_square_pm1 (I : BasisIndex) :
-QFD/AdjointStability_Complete.lean:127:adjoint_cancels_blade (I : BasisIndex) :
-QFD/AdjointStability_Complete.lean:157:energy_is_positive_definite (Ψ : Multivector) :
-QFD/AdjointStability_Complete.lean:173:energy_zero_iff_zero (Ψ : Multivector) :
-QFD/AdjointStability_Complete.lean:219:l6c_kinetic_stable (gradΨ : Multivector) :
-QFD/Neutrino_MassScale.lean:57:neutrino_mass_hierarchy (ctx : MassContext) (h_scale : ctx.R_p < ctx.lambda_e) :
-QFD/SpacetimeEmergence_Complete.lean:66:Q33_on_single (i : Fin 6) :
-QFD/SpacetimeEmergence_Complete.lean:78:basis_sq (i : Fin 6) :
-QFD/SpacetimeEmergence_Complete.lean:86:basis_orthogonal (i j : Fin 6) (hij : i ≠ j) :
-QFD/SpacetimeEmergence_Complete.lean:133:basis_anticomm (i j : Fin 6) (hij : i ≠ j) :
-QFD/SpacetimeEmergence_Complete.lean:146:spatial_commutes_with_B (i : Fin 3) :
-QFD/SpacetimeEmergence_Complete.lean:174:time_commutes_with_B :
-QFD/SpacetimeEmergence_Complete.lean:191:internal_4_anticommutes_with_B :
-QFD/SpacetimeEmergence_Complete.lean:217:internal_5_anticommutes_with_B :
-QFD/SpacetimeEmergence_Complete.lean:245:emergent_signature_is_minkowski :
-QFD/SpacetimeEmergence_Complete.lean:263:time_is_momentum_direction :
-QFD/Baryogenesis/SakharovConditions.lean:11:geometric_baryon_asymmetry :
-QFD/Cosmology/DomainWalls.lean:20:domain_wall_existence :
-QFD/Cosmology/InflationCrystallization.lean:12:nucleation_drives_expansion : True := trivial
-QFD/Cosmology/Polarization.lean:22:cos_sq_decomposition (x : ℝ) :
-QFD/Cosmology/Polarization.lean:112:polarization_fraction_bounded (s : StokesParameters) (h_I : s.I > 0)
-QFD/Cosmology/Polarization.lean:220:polarization_inherits_quadrupole (cos_theta : ℝ) (theta_pol : ℝ)
-QFD/Cosmology/Polarization.lean:346:QFD_predicts_E_dominance :
-QFD/Cosmology/Polarization.lean:399:polarization_extends_axis_of_evil :
-QFD/Cosmology/Polarization.lean:469:AxisSet_polPattern_eq_pm (n : R3) (hn : IsUnit n) (A B : ℝ) (hA : 0 < A) :
-QFD/Cosmology/DarkMatterDensity.lean:13:rotation_curve_flattening : True := trivial
-QFD/Cosmology/InflationDrift.lean:12:spectral_tilt_geometry :
-QFD/Cosmology/HubbleTension.lean:16:tension_arises_from_metric_assumption : True := trivial
-QFD/Cosmology/CosmicRestFrame.lean:14:dipole_minimization_frame : True := trivial
-QFD/Cosmology/OctupoleExtraction.lean:34:one_sub_P3_sq_factor (t : ℝ) :
-QFD/Cosmology/OctupoleExtraction.lean:41:quad_pos_left (t : ℝ) : 0 < (5 * t ^ 2 - 5 * t + 2) := by
-QFD/Cosmology/OctupoleExtraction.lean:46:quad_pos_right (t : ℝ) : 0 < (5 * t ^ 2 + 5 * t + 2) := by
-QFD/Cosmology/OctupoleExtraction.lean:52:abs_P3_le_one_of_abs_le_one {t : ℝ} (ht : |t| ≤ 1) : |P3 t| ≤ 1 := by
-QFD/Cosmology/OctupoleExtraction.lean:88:abs_octPattern_le_one_of_unit (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
-QFD/Cosmology/OctupoleExtraction.lean:100:abs_P3_eq_one_iff (t : ℝ) (ht : |t| ≤ 1) :
-QFD/Cosmology/OctupoleExtraction.lean:143:AxisSet_octAxisPattern_eq_pm (n : R3) (hn : IsUnit n) :
-QFD/Cosmology/OctupoleExtraction.lean:214:AxisSet_octTempPattern_eq_pm (n : R3) (hn : IsUnit n) (A B : ℝ) (hA : 0 < A) :
-QFD/Cosmology/DarkEnergy.lean:13:negative_pressure_from_elasticity : True := trivial
-QFD/Cosmology/VariableSpeedOfLight.lean:21:superluminal_early_contact :
-QFD/Cosmology/QuantizedRedshift.lean:12:z_is_discrete_distribution :
-QFD/Cosmology/ZeroPointEnergy.lean:16:zpe_finite_integral : True := trivial
-QFD/Cosmology/AnthropicBypass.lean:12:fine_structure_is_fixed_point :
-QFD/Cosmology/RadiativeTransfer.lean:101:survival_decreases (z1 z2 : ℝ) (alpha : Unitless) (beta : Unitless)
-QFD/Cosmology/RadiativeTransfer.lean:142:achromatic_preserves_ratios (nu1 nu2 : ℝ) (z : ℝ) (k : Unitless)
-QFD/Cosmology/RadiativeTransfer.lean:207:firas_constrains_y (nu : ℝ) (T : ℝ) (y_eff : Unitless)
-QFD/Cosmology/RadiativeTransfer.lean:237:energy_conserved (nu : ℝ) (z : ℝ) (p : RadiativeTransferParams)
-QFD/Cosmology/RadiativeTransfer.lean:272:distance_correction_positive (z : ℝ) (p : RadiativeTransferParams)
-QFD/Cosmology/RadiativeTransfer.lean:318:model_is_falsifiable :
-QFD/Cosmology/CoaxialAlignment.lean:35:axis_unique_from_AxisSet {n m : R3} (hn : IsUnit n) (hm : IsUnit m) :
-QFD/Cosmology/CoaxialAlignment.lean:69:coaxial_quadrupole_octupole
-QFD/Cosmology/CoaxialAlignment.lean:118:coaxial_from_shared_maximizer
-QFD/Cosmology/KernelAxis.lean:30:abs_ip_le_one_of_unit (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
-QFD/Cosmology/KernelAxis.lean:38:abs_ip_nn_eq_one (n : R3) (hn : IsUnit n) : |ip n n| = 1 := by
-QFD/Cosmology/KernelAxis.lean:45:abs_ip_nneg_eq_one (n : R3) (hn : IsUnit n) : |ip n (-n)| = 1 := by
-QFD/Cosmology/KernelAxis.lean:58:AxisSet_absKernelPattern_eq_pm
-QFD/Cosmology/VacuumDensityMatch.lean:17:constant_density_is_weightless : True := trivial
-QFD/Cosmology/AxisOfEvil.lean:106:cos_sq_decomposition (x : ℝ) :
-QFD/Cosmology/AxisOfEvil.lean:118:quadrupole_monopole_ratio :
-QFD/Cosmology/AxisOfEvil.lean:140:cos_cube_decomposition (x : ℝ) :
-QFD/Cosmology/AxisOfEvil.lean:156:even_filter_no_odd_multipoles (x : ℝ) :
-QFD/Cosmology/AxisOfEvil.lean:211:filter_axis_is_motion_vector (v : ObserverMotion) :
-QFD/Cosmology/AxisOfEvil.lean:266:angular_selection_implies_quadrupole (cos_theta : ℝ)
-QFD/Cosmology/AxisOfEvil.lean:328:axis_of_evil_is_falsifiable :
-QFD/Cosmology/AxisOfEvil.lean:339:dipole_alignment_effect : True := trivial
-QFD/Cosmology/HubbleDrift.lean:19:redshift_is_exponential_decay (E : ℝ → ℝ) (H : ℝ)
-QFD/Cosmology/AxisExtraction.lean:43:quadPattern_eq_affine_score (n x : R3) :
-QFD/Cosmology/AxisExtraction.lean:49:score_le_one_of_unit (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
-QFD/Cosmology/AxisExtraction.lean:67:n_mem_AxisSet_quadPattern (n : R3) (hn : IsUnit n) :
-QFD/Cosmology/AxisExtraction.lean:94:score_neg (n x : R3) : score n (-x) = score n x := by
-QFD/Cosmology/AxisExtraction.lean:98:neg_n_mem_AxisSet_quadPattern (n : R3) (hn : IsUnit n) :
-QFD/Cosmology/AxisExtraction.lean:125:AxisSet_affine (f : R3 → ℝ) (a b : ℝ) (ha : 0 < a) :
-QFD/Cosmology/AxisExtraction.lean:152:AxisSet_monotone (f : R3 → ℝ) (g : ℝ → ℝ)
-QFD/Cosmology/AxisExtraction.lean:172:ip_eq_one_iff_eq (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
-QFD/Cosmology/AxisExtraction.lean:178:ip_eq_neg_one_iff_eq_neg (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
-QFD/Cosmology/AxisExtraction.lean:184:quadPattern_le_one_of_unit (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
-QFD/Cosmology/AxisExtraction.lean:204:AxisSet_quadPattern_eq_pm (n : R3) (hn : IsUnit n) :
-QFD/Cosmology/AxisExtraction.lean:288:AxisSet_tempPattern_eq_pm (n : R3) (hn : IsUnit n) (A B : ℝ) (hA : 0 < A) :
-QFD/Cosmology/AxisExtraction.lean:317:quadPattern_at_equator (n x : R3) (_hn : IsUnit n) (hx : x ∈ Equator n) :
-QFD/Cosmology/AxisExtraction.lean:331:quadPattern_ge_at_equator (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
-QFD/Cosmology/AxisExtraction.lean:356:quadPattern_gt_at_non_equator (n x : R3) (_hn : IsUnit n) (_hx : IsUnit x)
-QFD/Cosmology/AxisExtraction.lean:402:AxisSet_tempPattern_eq_equator (n : R3) (hn : IsUnit n) (A B : ℝ) (hA : A < 0) :
-QFD/Cosmology/VacuumRefraction.lean:139:modulation_bounded (ell : ℝ) (p : VacuumRefractionParams)
-QFD/Cosmology/VacuumRefraction.lean:168:modulation_preserves_positivity (ell : ℝ) (C_ell_base : ℝ)
-QFD/Cosmology/VacuumRefraction.lean:184:modulation_periodic (ell : ℝ) (p : VacuumRefractionParams) (h_p : VacuumRefractionConstraints p) :
-QFD/Cosmology/VacuumRefraction.lean:220:unitarity_implies_physical (p : VacuumRefractionParams) (z_CMB : ℝ)
-QFD/Cosmology/VacuumRefraction.lean:308:vacuum_refraction_is_falsifiable :
-QFD/Cosmology/ScatteringBias.lean:78:survival_fraction_bounded (tau : ℝ) (h_pos : tau ≥ 0) :
-QFD/Cosmology/ScatteringBias.lean:94:scattering_inflates_distance (d_true : ℝ) (S : ℝ)
-QFD/Cosmology/ScatteringBias.lean:124:magnitude_dimming_nonnegative (S : ℝ)
-QFD/Cosmology/ScatteringBias.lean:154:survival_decreases_with_tau (tau1 tau2 : ℝ)
-QFD/Cosmology/ScatteringBias.lean:179:theory_is_falsifiable :
-QFD/Cosmology/ScatteringBias.lean:202:correction_factor_ge_one (tau : ℝ) (h_tau : tau ≥ 0) :
-QFD/Cosmology/GZKCutoff.lean:13:high_energy_friction : True := trivial
-QFD/Cosmology/ArrowOfTime.lean:15:time_is_irreversible : True := trivial
-QFD/Cosmology/SandageLoeb.lean:21:drift_signal_distinct_from_expansion :
-QFD/Cosmology/BAO.lean:24:bao_scale_geometric :
-QFD/Cosmology/RealTimeCosmology.lean:15:realtime_redshift_derivative :
-QFD/Cosmology/CoincidenceProblem.lean:17:epoch_of_acceleration : True := trivial
-QFD/Nuclear/DeuteronFit.lean:50:deuteron_potential_well_exists
-QFD/Nuclear/IsomerDecay.lean:17:gamma_emission_quantized (n : ℕ) :
-QFD/Nuclear/FusionRate.lean:14:tunneling_probability_geometric : True := trivial
-QFD/Nuclear/ProtonRadius.lean:14:muon_measures_smaller_radius : True := trivial
-QFD/Nuclear/TimeCliff.lean:56:solitonDensity_pos {A r₀ : ℝ} (hA : 0 < A) (r : ℝ) :
-QFD/Nuclear/TimeCliff.lean:65:solitonDensity_decreasing
-QFD/Nuclear/TimeCliff.lean:86:nuclearPotential_eq
-QFD/Nuclear/TimeCliff.lean:95:wellDepth
-QFD/Nuclear/TimeCliff.lean:104:hasDerivAt_exp_constMul (a r : ℝ) :
-QFD/Nuclear/TimeCliff.lean:120:hasDerivAt_solitonDensity'
-QFD/Nuclear/TimeCliff.lean:140:nuclearPotential_deriv
-QFD/Nuclear/TimeCliff.lean:176:nuclearForce_closed_form
-QFD/Nuclear/TimeCliff.lean:207:bound_state_existence_blueprint : True := by
-QFD/Nuclear/TimeCliff.lean:211:force_unification_blueprint : True := by
-QFD/Nuclear/ValleyOfStability.lean:13:slope_deviation_heavy_nuclei : True := trivial
-QFD/Nuclear/NeutronStarEOS.lean:15:pressure_divergence_at_critical_density : True := trivial
-QFD/Nuclear/Confinement.lean:13:linear_confinement_potential : True := trivial
-QFD/Nuclear/ProtonSpin.lean:16:spin_sum_matches_observation :
-QFD/Nuclear/QCDLattice.lean:13:regge_trajectory_linear : True := trivial
-QFD/Nuclear/SuperfluidGlitches.lean:13:discrete_glitch_magnitude : True := trivial
-QFD/Nuclear/CoreCompression.lean:75:energy_minimized_at_backbone (c1 c2 k : ℝ) (hk : 0 < k) :
-QFD/Nuclear/CoreCompression.lean:85:energy_nonnegative (Q c1 c2 k : ℝ) (hk : 0 < k) :
-QFD/Nuclear/CoreCompression.lean:95:minimum_unique (Q c1 c2 k : ℝ) (hk : 0 < k)
-QFD/Nuclear/CoreCompression.lean:132:beta_decay_reduces_stress
-QFD/Nuclear/MagicNumbers.lean:16:magic_sequence :
-QFD/Nuclear/BoundaryCondition.lean:29:boundary_stability (profile : WallProfile) :
-QFD/Nuclear/BarrierTransparency.lean:17:resonance_catalysis : True := trivial
-QFD/Nuclear/YukawaDerivation.lean:56:soliton_gradient_is_yukawa (A lam : ℝ) (r : ℝ) (h_r : r ≠ 0) :
-QFD/Nuclear/YukawaDerivation.lean:66:parameter_identification (g_sq m k A lam : ℝ) (r : ℝ) (h_r : r ≠ 0) 
-QFD/Nuclear/CoreCompressionLaw.lean:52:ccl_parameter_space_nonempty :
-QFD/Nuclear/CoreCompressionLaw.lean:64:ccl_parameter_space_bounded :
-QFD/Nuclear/CoreCompressionLaw.lean:77:ccl_constraints_consistent :
-QFD/Nuclear/CoreCompressionLaw.lean:104:stability_requires_bounds (p : CCLParams) :
-QFD/Nuclear/CoreCompressionLaw.lean:129:check_ccl_sound (p : CCLParams) :
-QFD/Nuclear/CoreCompressionLaw.lean:165:phase1_satisfies_constraints :
-QFD/Nuclear/CoreCompressionLaw.lean:189:theory_is_falsifiable :
-QFD/Nuclear/StabilityLimit.lean:13:vacuum_breakdown_z120 : True := trivial
-QFD/Nuclear/SelectionRules.lean:21:forbidden_transition_zero_overlap :
-QFD/Conservation/TimeReversal.lean:15:cpt_invariance_geometric : True := trivial
-QFD/Conservation/NeutrinoID.lean:103:F_EM_commutes_B : F_EM * B = B * F_EM := by
-QFD/Conservation/NeutrinoID.lean:114:F_EM_commutes_one_add_B : F_EM * (1 + B) = (1 + B) * F_EM := by
-QFD/Conservation/NeutrinoID.lean:117:F_EM_commutes_P_Internal : F_EM * P_Internal = P_Internal * F_EM := by
-QFD/Conservation/NeutrinoID.lean:121:neutrino_has_zero_coupling : Interaction F_EM Neutrino_State = 0 := by
-QFD/Conservation/NeutrinoID.lean:153:conservation_requires_remainder :
-QFD/Conservation/Unitarity.lean:64:information_partition (c : Fin 6 → ℝ) :
-QFD/Conservation/NeutrinoMixing.lean:24:det_pmnsRotor (θ : ℝ) : (pmnsRotor θ).det = 1 := by
-QFD/Conservation/NeutrinoMixing.lean:31:mixing_matrix_is_geometric_rotor (theta : ℝ) :
-QFD/Conservation/Noether.lean:76:decomposition_identity (coeffs : Fin 6 → ℝ) :
-QFD/Conservation/Noether.lean:111:conservation_requires_balancing
-QFD/Conservation/BellsInequality.lean:12:chsh_bound_geometric : True := trivial
-QFD/AngularSelection.lean:92:angular_selection_is_cosine
-QFD/Lepton/KoideRelation.lean:64:omega_is_primitive_root : IsPrimitiveRoot omega 3 := by
-QFD/Lepton/KoideRelation.lean:69:sum_third_roots_eq_zero : 1 + omega + omega^2 = 0 := by
-QFD/Lepton/KoideRelation.lean:83:sum_cos_symm (delta : ℝ) :
-QFD/Lepton/KoideRelation.lean:143:koide_relation_is_universal
-QFD/Lepton/FineStructure.lean:73:fine_structure_constraint
-QFD/Lepton/Generations.lean:30:e_sq_one (i : Fin 6) (h : i < 3) : e i * e i = 1 := by
-QFD/Lepton/Generations.lean:33:e_anticomm {i j : Fin 6} (h : i ≠ j) : e i * e j = - (e j * e i) := by
-QFD/Lepton/Generations.lean:38:one_ne_neg_one : (1 : Cl33) ≠ -1 := by
-QFD/Lepton/Generations.lean:46:two_e1_ne_zero : (2 : ℝ) • e 1 ≠ 0 := by
-QFD/Lepton/Generations.lean:56:e01_sq : (e 0 * e 1) * (e 0 * e 1) = -1 := by
-QFD/Lepton/Generations.lean:65:e012_sq : (e 0 * e 1 * e 2) * (e 0 * e 1 * e 2) = -1 := by
-QFD/Lepton/Generations.lean:90:basis_x_ne_xy : IsomerBasis .x ≠ IsomerBasis .xy := by
-QFD/Lepton/Generations.lean:97:basis_x_ne_xyz : IsomerBasis .x ≠ IsomerBasis .xyz := by
-QFD/Lepton/Generations.lean:104:basis_xy_ne_x : IsomerBasis .xy ≠ IsomerBasis .x := fun h => basis_x_ne_xy h.symm
-QFD/Lepton/Generations.lean:105:basis_xyz_ne_x : IsomerBasis .xyz ≠ IsomerBasis .x := fun h => basis_x_ne_xyz h.symm
-QFD/Lepton/Generations.lean:107:basis_xy_ne_xyz : IsomerBasis .xy ≠ IsomerBasis .xyz := by
-QFD/Lepton/Generations.lean:143:basis_xyz_ne_xy : IsomerBasis .xyz ≠ IsomerBasis .xy :=
-QFD/Lepton/Generations.lean:147:generations_are_distinct (g1 g2 : GenerationAxis) :
-QFD/Lepton/Generations.lean:161:existence_of_three_isomers (basis_topology : Cl33) :
-QFD/Lepton/MassSpectrum.lean:63:qfd_potential_is_confining (p : SolitonParams) :
-QFD/Lepton/MassSpectrum.lean:147:geometric_mass_condition (m_e m_mu m_tau : ℝ)
-QFD/Lepton/VortexStability.lean:115:v22_is_degenerate (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
-QFD/Lepton/VortexStability.lean:147:v22_beta_R_perfectly_correlated (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
-QFD/Lepton/VortexStability.lean:201:degeneracy_broken_existence (g : HillGeometry) (β ξ mass : ℝ)
-QFD/Lepton/VortexStability.lean:261:cube_strict_mono (a b : ℝ) (ha : 0 < a) (hb : 0 < b) (h : a < b) :
-QFD/Lepton/VortexStability.lean:274:degeneracy_broken_uniqueness (g : HillGeometry) (β ξ : ℝ)
-QFD/Lepton/VortexStability.lean:315:degeneracy_broken (g : HillGeometry) (β ξ mass : ℝ)
-QFD/Lepton/VortexStability.lean:332:energy_derivative_positive (g : HillGeometry) (β ξ R : ℝ)
-QFD/Lepton/VortexStability.lean:354:beta_xi_uncorrelated (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
-QFD/Lepton/VortexStability.lean:383:beta_offset_relation (g : HillGeometry) (β_true ξ_true R_true : ℝ)
-QFD/Lepton/VortexStability.lean:419:beta_offset_is_three_percent (g : HillGeometry)
-QFD/Lepton/VortexStability.lean:442:mcmc_validates_degeneracy_breaking :
-QFD/Lepton/VortexStability.lean:485:gradient_dominates_compression (g : HillGeometry)
-QFD/Lepton/VortexStability.lean:535:beta_universality_testable (g : HillGeometry) :
-QFD/Lepton/VortexStability.lean:562:degeneracy_resolution_complete (g : HillGeometry) :
-QFD/Lepton/GeometricAnomaly.lean:121:g_factor_is_anomalous (v : VortexParticle) :
-QFD/Lepton/GeometricAnomaly.lean:147:anomalous_moment_positive (v : VortexParticle) :
-QFD/Lepton/GeometricAnomaly.lean:166:anomaly_scales_with_skirt (v₁ v₂ : VortexParticle)
-QFD/Lepton/GeometricAnomaly.lean:190:point_particle_limit (E_rot : ℝ) (h_pos : 0 < E_rot) (ε : ℝ) (h_ε : 0 < ε) :
-QFD/Lepton/Antimatter.lean:24:antimatter_has_opposite_charge : True := trivial
-QFD/Lepton/VortexStability_v3.lean:76:v22_is_degenerate (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
-QFD/Lepton/VortexStability_v3.lean:95:v22_beta_R_perfectly_correlated (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
-QFD/Lepton/VortexStability_v3.lean:113:energy_derivative_positive (g : HillGeometry) (β ξ R : ℝ)
-QFD/Lepton/VortexStability_v3.lean:126:degeneracy_broken (g : HillGeometry) (β ξ mass : ℝ)
-QFD/Lepton/VortexStability_v3.lean:218:beta_offset_relation (g : HillGeometry) (β_true ξ_true R_true : ℝ)
-QFD/Lepton/VortexStability_v3.lean:232:degeneracy_resolution_complete (g : HillGeometry) :
-QFD/Lepton/AnomalousMoment.lean:113:anomalous_moment_proportional_to_alpha
-QFD/Lepton/AnomalousMoment.lean:145:anomalous_moment_increases_with_radius
-QFD/Lepton/AnomalousMoment.lean:192:muon_electron_g2_different
-QFD/Lepton/AnomalousMoment.lean:252:radius_from_g2_measurement
-QFD/Lepton/AnomalousMoment.lean:357:g2_uses_stability_radius
-QFD/Lepton/AnomalousMoment.lean:400:g2_constrains_vacuum
-QFD/Lepton/PairProduction.lean:22:topology_conserved_in_pair_production : 0 = 1 + (-1 : ℤ) := by ring
-QFD/Lepton/MassFunctional.lean:45:real_energy_density_scale (k : ℝ) (x : Cl33) :
-QFD/Lepton/MassFunctional.lean:74:mass_is_positive
-QFD/Lepton/MassFunctional.lean:98:mass_scaling_law
-QFD/Lepton/MinimumMass.lean:13:stability_mass_gap : True := trivial
-QFD/Lepton/Topology.lean:101:topological_protection
-QFD/Lepton/NeutrinoMassMatrix.lean:14:mass_mixing_non_zero :
-QFD/SpectralGap.lean:77:spectral_gap_theorem
-QFD/Thermodynamics/HolographicPrinciple.lean:15:entropy_scales_with_area (_R : ℝ) : True := trivial
-QFD/Thermodynamics/HorizonBits.lean:21:bekenstein_hawking_match :
-QFD/Thermodynamics/StefanBoltzmann.lean:15:stefan_boltzmann_scaling : True := trivial
-QFD/Neutrino_Production.lean:66:neutrino_remainder_props (E : BetaDecayProps) :
-QFD/Neutrino_Production.lean:96:exists_recoil_state
-QFD/Vacuum/StrongCP.lean:15:vacuum_relaxes_to_zero_dipole (theta_qcd : ℝ) :
-QFD/Vacuum/ZetaPhysics.lean:20:riemann_zeta_from_symmetry :
-QFD/Vacuum/DynamicCasimir.lean:12:mirror_motion_generates_quanta : True := trivial
-QFD/Vacuum/CasimirPressure.lean:17:casimir_attraction_geometric : True := trivial
-QFD/Vacuum/SpinLiquid.lean:21:liquid_ground_state :
-QFD/Vacuum/VacuumParameters.lean:48:mcmcBeta_pos : 0 < mcmcBeta := by norm_num [mcmcBeta]
-QFD/Vacuum/VacuumParameters.lean:76:mcmcXi_pos : 0 < mcmcXi := by norm_num [mcmcXi]
-QFD/Vacuum/VacuumParameters.lean:161:beta_golden_loop_validated :
-QFD/Vacuum/VacuumParameters.lean:166:beta_within_one_sigma :
-QFD/Vacuum/VacuumParameters.lean:171:xi_order_unity_confirmed :
-QFD/Vacuum/VacuumParameters.lean:176:tau_order_unity_confirmed :
-QFD/Vacuum/VacuumParameters.lean:181:balanced_vacuum_stiffnesses :
-QFD/Vacuum/Metastability.lean:13:universe_is_stable :
-QFD/Vacuum/Screening.lean:19:charge_screening_matches_qed : True := trivial
-QFD/StabilityCriterion.lean:79:V_continuous (mu lam kappa beta : ℝ) : Continuous (V mu lam kappa beta) := by
-QFD/StabilityCriterion.lean:96:V_ge_quartic_half_of_ge_Rpos (hbeta : 0 < beta) (mu lam kappa : ℝ) :
-QFD/StabilityCriterion.lean:198:V_ge_quartic_half_of_le_Rneg (hbeta : 0 < beta) (mu lam kappa : ℝ) :
-QFD/StabilityCriterion.lean:322:V_dominated_by_quartic_pos (hbeta : 0 < beta) (mu lam kappa : ℝ) :
-QFD/StabilityCriterion.lean:331:V_dominated_by_quartic_neg (hbeta : 0 < beta) (mu lam kappa : ℝ) :
-QFD/StabilityCriterion.lean:347:V_coercive_atTop (hbeta : 0 < beta) (mu lam kappa : ℝ) :
-QFD/StabilityCriterion.lean:360:V_coercive_atBot (hbeta : 0 < beta) (mu lam kappa : ℝ) :
-QFD/StabilityCriterion.lean:391:exists_global_min (hbeta : 0 < beta) (mu lam kappa : ℝ) :
-QFD/StabilityCriterion.lean:481:V_bounded_below (hbeta : 0 < beta) (mu lam kappa : ℝ) :
-QFD/StabilityCriterion.lean:494:V_min_is_global_min (hbeta : 0 < beta) (mu lam kappa : ℝ) :
-QFD/StabilityCriterion.lean:566:two_le_Rpos_h (h : StabilityHypotheses) : (2 : ℝ) ≤ Rpos_h h := by
-QFD/StabilityCriterion.lean:571:Rneg_h_le_neg_two (h : StabilityHypotheses) : Rneg_h h ≤ (-2 : ℝ) := by
-QFD/StabilityCriterion.lean:577:Vh_zero (h : StabilityHypotheses) : Vh h 0 = 0 := by
-QFD/StabilityCriterion.lean:582:exists_global_min (h : StabilityHypotheses) :
-QFD/StabilityCriterion.lean:601:exists_global_min_in_interval (h : StabilityHypotheses) :
-QFD/StabilityCriterion.lean:711:my_solver_correct :
-QFD/Weak/CabibboAngle.lean:26:cabibbo_is_geometric_projection :
-QFD/Weak/NeutronLifetime.lean:15:decay_width_geometric : True := trivial
-QFD/Weak/CPViolation.lean:16:decay_asymmetry_exists : J_geometric ≠ 0 := by
-QFD/Weak/ShortBaseline.lean:19:harmonic_beat_mimics_sterile :
-QFD/Weak/GeometricBosons.lean:17:w_boson_unstable : True := trivial
-QFD/Weak/DoubleBetaDecay.lean:17:neutrino_self_conjugation_parity : reverse nu_geom = -nu_geom := by
-QFD/Weak/PionGeometry.lean:13:pion_mass_goldstone_origin : True := trivial
-QFD/Weak/ChiralAnomaly.lean:25:axial_divergence_anomaly :
-QFD/Weak/NeutralCurrents.lean:13:electroweak_unification_angle : True := trivial
-QFD/Weak/RunningWeinberg.lean:20:mixing_angle_scale_dependence :
-QFD/Weak/ParityGeometry.lean:14:parity_violation_geometric (v : Vortex)
-QFD/Weak/SeeSawMechanism.lean:16:light_neutrino_eigenvalue : True := trivial
-QFD/Electron/HillVortex.lean:50:stream_function_continuous_at_boundary {ctx : VacuumContext}
-QFD/Electron/HillVortex.lean:98:quantization_limit (ctx : VacuumContext) (hill : HillContext ctx)
-QFD/Electron/HillVortex.lean:126:charge_universality (ctx : VacuumContext) (hill1 hill2 : HillContext ctx)
-QFD/Electron/AxisAlignment.lean:69:axis_alignment_check
-QFD/Computing/VacuumLandauer.lean:10:entropy_of_erasure : True := trivial
-QFD/Computing/RotorLogic.lean:18:rotor_gates_are_universal : True := trivial
-QFD/Computing/TeleportationProtocol.lean:12:teleportation_identity : True := trivial
-QFD/Matter/SpinHall.lean:20:spin_dependent_deflection :
-QFD/Matter/TopologicalInsulator.lean:17:protected_surface_state : True := trivial
-QFD/Matter/IsospinGeometry.lean:13:nucleon_isospin_symmetry : True := trivial
-QFD/Matter/QuantumHall.lean:15:conductivity_is_integer : True := trivial
-QFD/Matter/ProtonTopology.lean:22:hydrogen_atom_is_topologically_null :
-QFD/Matter/Superconductivity.lean:16:zero_resistance_condition : True := trivial
-QFD/Charge/Vacuum.lean:66:polarity_time_effect
-QFD/Charge/Potential.lean:26:deriv_one_over_r (k : ℝ) {r : ℝ} (hr : r ≠ 0) :
-QFD/Charge/Potential.lean:39:deriv_deriv_one_over_r (k : ℝ) {r : ℝ} (hr : r ≠ 0) :
-QFD/Charge/Potential.lean:81:harmonic_decay_3d (k : ℝ) (r : ℝ) (hr : r ≠ 0) :
-QFD/Charge/Quantization.lean:19:amplitude_bounded (ρ_vac : ℝ) (h_vac : 0 < ρ_vac)
-QFD/Charge/Quantization.lean:35:charge_amplitude_locking (ρ_vac : ℝ) (h_vac : 0 < ρ_vac)
-QFD/Charge/Quantization.lean:48:charge_universality (ρ_vac : ℝ) (h_vac : 0 < ρ_vac)
-QFD/Charge/Quantization.lean:67:elementary_charge_is_constant (ρ_vac : ℝ) (h_vac : 0 < ρ_vac)
-QFD/Charge/Coulomb.lean:27:inverse_square_force (ctx : VacuumContext) (sign : PerturbationSign) (k : ℝ) (r : ℝ)
-QFD/Charge/Coulomb.lean:66:interaction_sign_rule (sign1 sign2 : PerturbationSign) :
-QFD/Charge/Coulomb.lean:83:coulomb_force (ctx : VacuumContext) (sign1 sign2 : PerturbationSign) (k : ℝ) (r : ℝ)
-QFD/Topology/Instantons.lean:13:geometric_bridge_exists :
-QFD/Test/TrivialProof.lean:3:hello : 1 + 1 = 2 := rfl
-QFD/Unification/FieldGradient.lean:25:force_unification_asymptotes : True := trivial
-QFD/Neutrino_MinimalRotor.lean:95:qtop_rotor_invariant (r : MinimalRotor) (lam : ℝ) (hlam : lam ≠ 0) :
-QFD/Neutrino_MinimalRotor.lean:117:qfd_like_energy_vanishes (ψ : Ψ_QFD) :
-QFD/Neutrino_MinimalRotor.lean:122:qfd_like_topology_persists (ψ : Ψ_QFD) (lam : ℝ) (hlam : lam ≠ 0) :
-QFD/Neutrino_MinimalRotor.lean:132:minimalRotor_energy_vanishes (r : MinimalRotor) :
-QFD/Neutrino_MinimalRotor.lean:137:minimalRotor_topology_persists (r : MinimalRotor) (lam : ℝ) (hlam : lam ≠ 0) :
-QFD/sketches/AdjointStability.lean:149:kinetic_energy_is_positive_definite (Ψ : Multivector) :
-QFD/sketches/AdjointStability.lean:213:kinetic_energy_zero_iff_zero (Ψ : Multivector) :
-QFD/sketches/AdjointStability.lean:255:l6c_kinetic_term_stable (gradΨ : Multivector) :
-QFD/sketches/BivectorClasses.lean:127:simple_bivector_square_classes (u v : Fin 6 → ℝ)
-QFD/sketches/BivectorClasses.lean:164:spatial_bivectors_are_rotors (i j : Fin 3) (h_neq : i ≠ j) :
-QFD/sketches/BivectorClasses.lean:188:space_momentum_bivectors_are_boosts (i : Fin 3) (j : Fin 3) :
-QFD/sketches/BivectorClasses.lean:217:momentum_bivectors_are_rotors (i j : Fin 3) (h_neq : i ≠ j) :
-QFD/sketches/BivectorClasses.lean:248:qfd_internal_rotor_is_rotor :
-QFD/sketches/BivectorClasses.lean:268:rotor_boost_topological_distinction :
-QFD/sketches/SpacetimeEmergence.lean:129:centralizer_is_minkowski :
-QFD/sketches/SpacetimeEmergence.lean:215:emergent_signature_is_minkowski :
-QFD/sketches/SpacetimeEmergence.lean:262:time_is_momentum_direction :
-QFD/Math/ReciprocalIneq.lean:20:one_div_le_one_div_of_le {a b : ℝ} (ha : 0 < a) (hab : a ≤ b) :
-QFD/Math/ReciprocalIneq.lean:30:one_div_lt_one_div_of_lt {a b : ℝ} (ha : 0 < a) (hab : a < b) :
-QFD/Math/ReciprocalIneq.lean:39:div_nonpos_of_nonpos_of_pos {a b : ℝ} (ha : a ≤ 0) (hb : 0 < b) :
-QFD/Math/ReciprocalIneq.lean:49:one_le_inv_iff {a : ℝ} (ha : 0 < a) : (1 ≤ a⁻¹) ↔ a ≤ 1 := by
-QFD/Math/ReciprocalIneq.lean:65:one_le_inv_of_pos_of_le_one {a : ℝ} (ha : 0 < a) (h1 : a ≤ 1) :
-QFD/Math/ReciprocalIneq.lean:70:one_lt_inv_of_pos_of_lt_one {a : ℝ} (ha : 0 < a) (h1 : a < 1) :
-QFD/Math/ReciprocalIneq.lean:82:mul_nonneg_of_nonpos_of_nonpos {a b : ℝ} (ha : a ≤ 0) (hb : b ≤ 0) :
-QFD/Neutrino_Topology.lean:37:energy_scale_sq_toy (x : Ψtoy) (lam : ℝ) :
-QFD/Neutrino_Topology.lean:43:qtop_invariant_toy (x : Ψtoy) (lam : ℝ) (_hlam : lam ≠ 0) :
-QFD/Neutrino_Topology.lean:60:tendsto_energy_bleach_zero_toy (x : Ψtoy) :
-QFD/Neutrino_Topology.lean:65:qtop_bleach_eq_toy (x : Ψtoy) {lam : ℝ} (hlam : lam ≠ 0) :
-QFD/Soliton/Quantization.lean:117:charge_scaling (A : ℝ) :
-QFD/Soliton/Quantization.lean:139:unique_vortex_charge :
-QFD/Soliton/Quantization.lean:165:continuous_soliton_charge_positive (Q_target : ℝ) (hQ : 0 < Q_target) :
-QFD/Soliton/Quantization.lean:196:elementary_charge_positive : 0 < elementary_charge ctx := by
-QFD/Soliton/Quantization.lean:216:all_critical_vortices_same_charge (A₁ A₂ : ℝ)
-QFD/Soliton/HardWall.lean:78:ricker_shape_at_zero :
-QFD/Soliton/HardWall.lean:121:vortex_limit_at_center (ctx : VacuumContext) (A : ℝ) :
-QFD/Soliton/HardWall.lean:136:critical_vortex_amplitude_necessary (ctx : VacuumContext) (A : ℝ)
-QFD/Soliton/HardWall.lean:152:critical_vortex_amplitude_sufficient (ctx : VacuumContext) (A : ℝ)
-QFD/Soliton/HardWall.lean:165:vortex_admissibility_iff (ctx : VacuumContext) (A : ℝ) (h_neg : A < 0) :
-QFD/Soliton/HardWall.lean:205:critical_vortex_admissible (ctx : VacuumContext) :
-QFD/Soliton/GaussianMoments.lean:47:Gamma_three : Gamma 3 = 2 := by
-QFD/Soliton/GaussianMoments.lean:55:Gamma_four : Gamma 4 = 6 := by
-QFD/Soliton/GaussianMoments.lean:76:gaussian_moment_odd (n : ℕ) (h_odd : Odd n) (h_pos : 0 < n) :
-QFD/Soliton/GaussianMoments.lean:86:gaussian_moment_5 :
-QFD/Soliton/GaussianMoments.lean:100:gaussian_moment_7 :
-QFD/Soliton/GaussianMoments.lean:128:ricker_moment_value : ∃ I : ℝ, I = -40 := by
-QFD/Soliton/GaussianMoments.lean:143:ricker_moment : ∃ I : ℝ, I = -40 := ricker_moment_value
-QFD/Soliton/BreatherModes.lean:23:breathing_mode_exists (R₀ δ β : ℝ) (hβ : 0 < β) :
-QFD/Soliton/RickerAnalysis.lean:33:S_at_zero : S 0 = 1 := by
-QFD/Soliton/RickerAnalysis.lean:37:S_even (x : ℝ) : S (-x) = S x := by
-QFD/Soliton/RickerAnalysis.lean:44:S_le_one (x : ℝ) : S x ≤ 1 := by
-QFD/Soliton/RickerAnalysis.lean:73:ricker_negative_minimum (A : ℝ) (h_neg : A < 0) (x : ℝ) :
-QFD/Soliton/RickerAnalysis.lean:88:S_deriv (x : ℝ) :
-QFD/Soliton/RickerAnalysis.lean:123:S_critical_points (x : ℝ) :
-QFD/Soliton/RickerAnalysis.lean:161:S_at_sqrt3 : S (Real.sqrt 3) = -2 * exp (-3/2) := by
-QFD/Soliton/RickerAnalysis.lean:284:S_sqrt3_le (x : ℝ) : S (Real.sqrt 3) ≤ S x := by
-QFD/Soliton/RickerAnalysis.lean:315:S_lower_bound (x : ℝ) : (-2 * exp (-3/2)) ≤ S x := by
-QFD/Soliton/RickerAnalysis.lean:323:ricker_shape_bounded : ∀ x, S x ≤ 1 := S_le_one
-QFD/Soliton/RickerAnalysis.lean:326:ricker_negative_min (A : ℝ) (h : A < 0) : ∀ R, A ≤ A * S R :=
-QFD/Soliton/RickerAnalysis.lean:330:soliton_always_admissible_aux
-QFD/Classical/Conservation.lean:49:energy_conservation
-QFD/Classical/Conservation.lean:89:turning_point_velocity (V : ℝ → ℝ) (v : ℝ) (r : ℝ) (E : ℝ)
-QFD/Classical/Conservation.lean:118:gravity_escape_velocity
-QFD/Classical/Conservation.lean:135:gravity_bound_state
-QFD/Classical/Conservation.lean:207:nuclear_binding_energy_exact :
-QFD/Classical/Conservation.lean:217:nuclear_binding_energy_positive
-QFD/Classical/Conservation.lean:231:nuclear_confinement
-QFD/EmergentAlgebra.lean:105:generator_square (a : Generator) :
-QFD/EmergentAlgebra.lean:161:spacetime_has_three_space_dims :
-QFD/EmergentAlgebra.lean:169:spacetime_has_one_time_dim :
-QFD/EmergentAlgebra.lean:176:internal_dims_not_spacetime :
-QFD/EmergentAlgebra.lean:183:spacetime_signature :
-QFD/EmergentAlgebra.lean:239:emergent_spacetime_is_minkowski :
-QFD/EmergentAlgebra.lean:281:commutes_with_internal_bivector_iff_distinct :
-QFD/EmergentAlgebra.lean:291:spacetime_sector_characterization :
-QFD/EmergentAlgebra.lean:302:internal_sector_characterization :
-QFD/EmergentAlgebra.lean:313:spacetime_has_four_dimensions :
-QFD/EmergentAlgebra_Heavy.lean:65:Q_basis (i : Fin 6) :
-QFD/EmergentAlgebra_Heavy.lean:78:e_sq (i : Fin 6) :
-QFD/EmergentAlgebra_Heavy.lean:85:basis_orthogonal (i j : Fin 6) (h : i ≠ j) :
-QFD/EmergentAlgebra_Heavy.lean:151:e_anticommute (i j : Fin 6) (h : i ≠ j) :
-QFD/EmergentAlgebra_Heavy.lean:176:spacetime_commutes_with_B (i : Fin 6) (h : i.val < 4) :
-QFD/EmergentAlgebra_Heavy.lean:218:internal_5_anticommutes_with_B :
-QFD/EmergentAlgebra_Heavy.lean:230:internal_4_anticommutes_with_B :
-QFD/EmergentAlgebra_Heavy.lean:248:B_mul_e4 : B * e 4 = e 5 := by
-QFD/EmergentAlgebra_Heavy.lean:265:B_mul_e5 : B * e 5 = -e 4 := by
-QFD/EmergentAlgebra_Heavy.lean:281:centralizer_contains_spacetime :
-QFD/EmergentAlgebra_Heavy.lean:294:e_ne_zero (i : Fin 6) : e i ≠ 0 := by
-QFD/EmergentAlgebra_Heavy.lean:309:internal_not_in_centralizer :
-QFD/BivectorClasses_Complete.lean:54:Q33_on_single (i : Fin 6) :
-QFD/BivectorClasses_Complete.lean:78:simple_bivector_square_classes (u v : Fin 6 → ℝ)
-QFD/BivectorClasses_Complete.lean:117:basis_ortho {i j : Fin 6} (h : i ≠ j) :
-QFD/BivectorClasses_Complete.lean:162:spatial_bivectors_are_rotors (i j : Fin 3) (h_neq : i ≠ j) :
-QFD/BivectorClasses_Complete.lean:195:space_momentum_bivectors_are_boosts (i : Fin 3) (j : Fin 3) :
-QFD/BivectorClasses_Complete.lean:234:momentum_bivectors_are_rotors (i j : Fin 3) (h_neq : i ≠ j) :
-QFD/BivectorClasses_Complete.lean:277:qfd_internal_rotor_is_rotor :
-QFD/BivectorClasses_Complete.lean:285:rotor_boost_topological_distinction :
-QFD/Neutrino.lean:39:F_EM_commutes_B : F_EM * B = B * F_EM := by
-QFD/Neutrino.lean:53:F_EM_commutes_one_add_B : F_EM * (1 + B) = (1 + B) * F_EM := by
-QFD/Neutrino.lean:58:F_EM_commutes_P_Internal : F_EM * P_Internal = P_Internal * F_EM := by
-QFD/Neutrino.lean:80:neutrino_has_zero_coupling : Interaction F_EM Neutrino_State = 0 := by
-QFD/Electrodynamics/VacuumPoling.lean:12:heisenberg_euler_term :
-QFD/Electrodynamics/ConductanceQuantization.lean:20:landauer_steps :
-QFD/Electrodynamics/Birefringence.lean:17:magnetic_birefringence_quadratic : True := trivial
-QFD/Electrodynamics/CerenkovReal.lean:13:radiation_shockwave_geometry : True := trivial
-QFD/Electrodynamics/MaxwellReal.lean:30:maxwell_decomposition (k : Fin 4 → ℝ) (F : Cl33) :
-QFD/Electrodynamics/LambShift.lean:15:lamb_shift_geometric_match : True := trivial
-QFD/Electrodynamics/NoMonopoles.lean:13:monopole_current_is_zero : magnetic_current = 0 := rfl
-QFD/Electrodynamics/LarmorPrecession.lean:15:precession_frequency_match (gamma B : ℝ) :
-QFD/Electrodynamics/ProcaReal.lean:21:internal_spin_is_mass_term : True := trivial
-QFD/Electrodynamics/PoyntingTheorem.lean:44:basis_sq (i : Fin 6) : e i * e i = algebraMap ℝ Cl33 (signature33 i) := by
-QFD/Electrodynamics/PoyntingTheorem.lean:47:basis_anticomm {i j : Fin 6} (h : i ≠ j) : e i * e j = - e j * e i := by
-QFD/Electrodynamics/PoyntingTheorem.lean:125:poynting_is_geometric_product :
-QFD/Electrodynamics/DispersionRelation.lean:13:phase_group_velocity_product : True := trivial
-QFD/Electrodynamics/LymanAlpha.lean:13:rydberg_derivation_real : True := trivial
-QFD/Electrodynamics/ZeemanGeometric.lean:13:spin_field_interaction : True := trivial
-QFD/Electrodynamics/MagneticHelicity.lean:18:helicity_conservation :
-QFD/Electrodynamics/VacuumImpedance.lean:13:light_speed_is_acoustic_velocity : True := trivial
-QFD/Electrodynamics/ComptonScattering.lean:25:compton_formula_geometric : True := trivial
-QFD/Electrodynamics/AharonovBohm.lean:11:vector_potential_rotation : True := trivial
-QFD/Neutrino_Bleaching.lean:49:tendsto_energy_bleach_zero (ψ : Ψ) :
-QFD/Neutrino_Bleaching.lean:66:qtop_bleach_eq (ψ : Ψ) {lam : ℝ} (hlam : lam ≠ 0) :
-QFD/Gravity/MOND_Refraction.lean:16:low_acceleration_limit : True := trivial
-QFD/Gravity/GravitationalWaves.lean:16:ligo_phase_shift_isomorphic : True := trivial
-QFD/Gravity/PerihelionShift.lean:24:perihelion_shift_match (kappa : ℝ)
-QFD/Gravity/TimeRefraction.lean:45:timePotential_eq (ctx : GravityContext) (rho : ℝ → ℝ) (r : ℝ) :
-QFD/Gravity/TimeRefraction.lean:51:g00_eq (ctx : GravityContext) (rho : ℝ → ℝ) (r : ℝ) :
-QFD/Gravity/G_Derivation.lean:50:gravity_unified_constraint
-QFD/Gravity/SnellLensing.lean:23:einstein_angle_refractive_match
-QFD/Gravity/UnruhTemperature.lean:13:acceleration_is_temperature : True := trivial
-QFD/Gravity/GeodesicEquivalence.lean:87:geodesic_is_refractive (n : RefractiveIndex V) (h_phys : is_physical n) :
-QFD/Gravity/FrozenStarRadiation.lean:14:boundary_catalyzes_radiation : True := trivial
-QFD/Gravity/Gravitomagnetism.lean:16:frame_dragging_is_curl : True := trivial
-QFD/Gravity/PhotonSphere.lean:15:orbital_condition_matches_schwarzschild : True := trivial
-QFD/Gravity/PenroseProcess.lean:12:ergosphere_energy_gain :
-QFD/Gravity/TorsionContribution.lean:14:spin_couples_to_geometry : True := trivial
-QFD/Gravity/GeodesicForce.lean:29:radialForce_eq
-QFD/Gravity/GeodesicForce.lean:57:hasDerivAt_rhoPointMass (M : ℝ) {r : ℝ} (hr : r ≠ 0) :
-QFD/Gravity/GeodesicForce.lean:70:inverse_square_force
-QFD/Gravity/InertialInduction.lean:13:acceleration_induces_resistance : True := trivial
-QFD/Gravity/Ringdown.lean:17:ringdown_spectrum_match : True := trivial
-QFD/Gravity/SchwarzschildLink.lean:47:inv_one_add_decomp (x : ℝ) (hx : 1 + x ≠ 0) :
-QFD/Gravity/SchwarzschildLink.lean:57:qfd_g00_point_eq_inv
-QFD/Gravity/SchwarzschildLink.lean:76:qfd_matches_schwarzschild_first_order
-QFD/Empirical/CoreCompression.lean:56:backbone_minimizes_energy
-QFD/Empirical/CoreCompression.lean:69:backbone_unique_minimizer
-QFD/Empirical/CoreCompression.lean:85:beta_decay_favorable
-QFD/Schema/Constraints.lean:139:valid_parameters_exist :
-QFD/Schema/Constraints.lean:259:parameter_space_bounded :
-QFD/Schema/Constraints.lean:282:constraints_satisfiable (params : GrandUnifiedParameters) :
-QFD/Relativity/SagnacEffect.lean:22:rotating_frame_time_gap :
-QFD/Relativity/MassIncrease.lean:12:energy_momentum_mass_relation : True := trivial
-QFD/Relativity/TimeDilationMechanism.lean:15:dilation_factor_geometric : True := trivial
-QFD/Relativity/LorentzRotors.lean:24:rotor_preserves_interval (v : Cl33) (phi : ℝ) :
-QFD/Rift/SpinSorting.lean:99:opposing_rotations_increase_escape
-QFD/Rift/SpinSorting.lean:188:spin_sorting_equilibrium
-QFD/Rift/SpinSorting.lean:211:observable_signature_opposing_spins
-QFD/Rift/SpinSorting.lean:257:rift_evolution_differs_from_accretion
-QFD/Rift/RotationDynamics.lean:127:angular_gradient_cancellation
-QFD/Rift/RotationDynamics.lean:184:opposing_rotations_reduce_barrier
-QFD/Rift/RotationDynamics.lean:212:equatorial_escape_preference
-QFD/Rift/RotationDynamics.lean:233:rotation_causally_bounded (Omega : AngularVelocity) :
-QFD/Rift/ChargeEscape.lean:135:modified_schwarzschild_escape
-QFD/Rift/ChargeEscape.lean:162:thermal_dominance_for_plasma
-QFD/Rift/ChargeEscape.lean:176:electron_thermal_advantage
-QFD/Rift/SequentialEruptions.lean:85:charge_accumulation_monotonic
-QFD/Rift/SequentialEruptions.lean:118:eruption_radius_increases
-QFD/Rift/SequentialEruptions.lean:187:separation_fraction_increases_with_depth
-QFD/Rift/SequentialEruptions.lean:227:electrons_escape_preferentially_in_rifts
-QFD/Neutrino_Oscillation.lean:73:norm_evolve (H : OscillationHypotheses) (t : ℝ) (ψ0 : State) :
-QFD/Neutrino_Oscillation.lean:88:sum_P_eq_norm_sq (H : OscillationHypotheses) (ψ0 : State) (t : ℝ) :
-QFD/Neutrino_Oscillation.lean:99:sum_P_eq_one (H : OscillationHypotheses) (ψ0 : State) (t : ℝ)
-QFD/Neutrino_Oscillation.lean:109:exists_oscillation (H : OscillationHypotheses) :
+QFD/Neutrino_Chirality.lean:91:theorem chirality_invariant_under_bleaching
+QFD/Neutrino_Chirality.lean:111:theorem chirality_gap (L R : Vortex) :
+QFD/QM_Translation/Heisenberg.lean:35:lemma basis_sq (i : Fin 6) : e i * e i = algebraMap ℝ Cl33 (signature33 i) := by
+QFD/QM_Translation/Heisenberg.lean:38:lemma basis_anticomm {i j : Fin 6} (h : i ≠ j) : e i * e j = - e j * e i := by
+QFD/QM_Translation/Heisenberg.lean:108:theorem xp_noncomm : commutator X_op P_op ≠ 0 := by
+QFD/QM_Translation/Heisenberg.lean:134:theorem uncertainty_is_bivector_area :
+QFD/QM_Translation/MeasurementCollapse.lean:41:theorem decoherence_as_rotor_alignment (γ : ℝ) (h : γ > 0) :
+QFD/QM_Translation/MeasurementCollapse.lean:52:theorem classical_state_no_phase (ψ : QuantumState) :
+QFD/QM_Translation/DiracRealization.lean:44:lemma basis_sq (i : Fin 6) : e i * e i = algebraMap ℝ Cl33 (signature33 i) := by
+QFD/QM_Translation/DiracRealization.lean:46:lemma basis_anticomm {i j : Fin 6} (h : i ≠ j) : e i * e j = - e j * e i := by
+QFD/QM_Translation/DiracRealization.lean:109:theorem gamma_square_signature (μ : Fin 4) :
+QFD/QM_Translation/DiracRealization.lean:130:theorem gamma_anticommute (μ ν : Fin 4) (h : μ ≠ ν) :
+QFD/QM_Translation/DiracRealization.lean:145:theorem dirac_algebra (μ ν : Fin 4) :
+QFD/QM_Translation/PauliExclusion.lean:19:theorem rotor_exchange_antisymmetry (ψ₁ ψ₂ : Cl33) :
+QFD/QM_Translation/PauliExclusion.lean:25:theorem exclusion_principle (ψ : Cl33) : ψ ∧ ψ = 0 := by
+QFD/QM_Translation/PauliBridge_Test.lean:16:lemma spatial_sq_one_stub (i : Fin 6) (h : i.val < 3) : e i * e i = 1 := by
+QFD/QM_Translation/RealDiracEquation.lean:89:theorem mass_is_internal_momentum
+QFD/QM_Translation/RealDiracEquation.lean:119:theorem dirac_form_equivalence
+QFD/QM_Translation/PauliBridge.lean:46:lemma spatial_sq_one (i : Fin 6) (h : i < 3) : e i * e i = 1 := by
+QFD/QM_Translation/PauliBridge.lean:64:lemma anticomm_neq {i j : Fin 6} (h : i ≠ j) : e i * e j = -(e j * e i) := by
+QFD/QM_Translation/PauliBridge.lean:94:theorem pauli_squares_to_one : 
+QFD/QM_Translation/PauliBridge.lean:106:theorem pauli_anticommute : sigma_x * sigma_y = -(sigma_y * sigma_x) := by
+QFD/QM_Translation/PauliBridge.lean:115:theorem pseudoscalar_is_imaginary : I_spatial * I_spatial = -1 := by
+QFD/QM_Translation/PauliBridge.lean:160:theorem pauli_product_is_pseudovector :
+QFD/QM_Translation/SchrodingerEvolution.lean:62:lemma B_sq_neg_one : B * B = -1 :=
+QFD/QM_Translation/SchrodingerEvolution.lean:73:theorem phase_group_law (a b : ℝ) :
+QFD/QM_Translation/SchrodingerEvolution.lean:184:theorem phase_unitarity (theta : ℝ) :
+QFD/QM_Translation/SchrodingerEvolution.lean:205:theorem schrodinger_derivative_identity (theta : ℝ) :
+QFD/ProofLedger.lean:946:theorem files using the file paths provided.
+QFD/GA/GradeProjection.lean:30:theorem scalar_product_symmetric (a b : Cl33) :
+QFD/GA/GradeProjection.lean:43:lemma scalar_part_smul (r : ℝ) (x : Cl33) :
+QFD/GA/GradeProjection.lean:51:theorem real_energy_density_nonneg (psi : Cl33) :
+QFD/GA/BasisOperations.lean:26:theorem basis_sq (i : Fin 6) : e i * e i = algebraMap ℝ Cl33 (signature33 i) := by
+QFD/GA/BasisOperations.lean:31:theorem basis_anticomm {i j : Fin 6} (h : i ≠ j) : e i * e j = - e j * e i := by
+QFD/GA/HodgeDual.lean:87:theorem I6_square : I_6 * I_6 = 1 := I6_square_hypothesis
+QFD/GA/BasisProducts.lean:40:lemma e0_e3_e0 : e 0 * e 3 * e 0 = - e 3 := by
+QFD/GA/BasisProducts.lean:52:lemma e0_e2_e0 : e 0 * e 2 * e 0 = - e 2 := by
+QFD/GA/BasisProducts.lean:64:lemma e3_e0_e3 : e 3 * e 0 * e 3 = e 0 := by
+QFD/GA/BasisProducts.lean:77:lemma e2_e3_e2 : e 2 * e 3 * e 2 = - e 3 := by
+QFD/GA/BasisProducts.lean:89:lemma e3_e2_e3 : e 3 * e 2 * e 3 = e 2 := by
+QFD/GA/BasisProducts.lean:106:lemma e0_e3_e0_e2_e3 : e 0 * e 3 * e 0 * e 2 * e 3 = - e 2 := by
+QFD/GA/BasisProducts.lean:116:lemma e0_e2_e0_e2_e3 : e 0 * e 2 * e 0 * e 2 * e 3 = - e 3 := by
+QFD/GA/BasisProducts.lean:133:theorem bivector_left_contract {i j : Fin 6} (h : i ≠ j) :
+QFD/GA/BasisProducts.lean:145:theorem bivector_right_contract {i j : Fin 6} (h : i ≠ j) :
+QFD/GA/BasisProducts.lean:159:lemma e0e3_mul_e0 : (e 0 * e 3) * e 0 = - e 3 := by
+QFD/GA/BasisProducts.lean:164:lemma e0e2_mul_e0 : (e 0 * e 2) * e 0 = - e 2 := by
+QFD/GA/BasisProducts.lean:173:lemma scalar_triple_product (c : ℝ) (i j k : Fin 6) :
+QFD/GA/Conjugation.lean:34:theorem reverse_basis_vector (i : Fin 6) :
+QFD/GA/Conjugation.lean:39:theorem reverse_product (x y : Cl33) :
+QFD/GA/Conjugation.lean:48:theorem reverse_B_phase : reverse B_phase = - B_phase := by
+QFD/GA/BasisReduction.lean:36:lemma basis_swap_sort {i j : Fin 6} (h : i < j) :
+QFD/GA/BasisReduction.lean:45:lemma e_swap {i j : Fin 6} (h : i < j) :
+QFD/GA/BasisReduction.lean:56:lemma basis_sq_simplify (i : Fin 6) :
+QFD/GA/BasisReduction.lean:63:lemma e_sq (i : Fin 6) :
+QFD/GA/BasisReduction.lean:73:lemma sandwich_absorption {i j : Fin 6} (h : i ≠ j) :
+QFD/GA/BasisReduction.lean:108:lemma scalar_basis_commute (c : ℝ) (i : Fin 6) :
+QFD/GA/BasisReduction.lean:114:lemma scalar_assoc (c : ℝ) (x y : Cl33) :
+QFD/GA/BasisReduction.lean:144:theorem poynting_energy : (e 0 * e 3) * e 0 + (e 0 * e 2) * e 0 = - e 3 - e 2 := by
+QFD/GA/Cl33Instances.lean:17:lemma signature33_ne_zero (i : Fin 6) : signature33 i ≠ 0 := by
+QFD/GA/Cl33Instances.lean:29:lemma zero_ne_one_Cl33 : (0 : Cl33) ≠ 1 := zero_ne_one
+QFD/GA/Cl33Instances.lean:43:lemma algebraMap_injective : Function.Injective (algebraMap ℝ Cl33) := by
+QFD/GA/Cl33Instances.lean:56:lemma basis_vector_ne_zero (i : Fin 6) : ι33 (basis_vector i) ≠ 0 := by
+QFD/GA/PhaseCentralizer.lean:38:theorem basis_sq (i : Fin 6) :
+QFD/GA/PhaseCentralizer.lean:43:theorem basis_anticomm {i j : Fin 6} (h : i ≠ j) :
+QFD/GA/PhaseCentralizer.lean:54:lemma basis_neq_neg (i : Fin 6) : e i ≠ - e i := by
+QFD/GA/PhaseCentralizer.lean:115:theorem phase_rotor_is_imaginary : B_phase * B_phase = -1 := by
+QFD/GA/PhaseCentralizer.lean:138:theorem spacetime_vectors_in_centralizer (i : Fin 6) (h : i < 4) :
+QFD/GA/PhaseCentralizer.lean:164:theorem internal_vectors_notin_centralizer (i : Fin 6) (h : 4 ≤ i) :
+QFD/GA/Cl33.lean:119:theorem generator_squares_to_signature (i : Fin 6) :
+QFD/GA/Cl33.lean:152:theorem generators_anticommute (i j : Fin 6) (h_ne : i ≠ j) :
+QFD/GA/Cl33.lean:213:theorem basis_isOrtho (i j : Fin 6) (h_ne : i ≠ j) :
+QFD/GA/Cl33.lean:269:theorem generators_anticommute_alt (i j : Fin 6) (h_ne : i ≠ j) :
+QFD/GA/Cl33.lean:281:theorem signature_values :
+QFD/GA/MultivectorGrade.lean:51:theorem zero_isScalar : isScalar (0 : Cl33) := by
+QFD/GA/MultivectorGrade.lean:56:theorem smul_scalar_isScalar {r : ℝ} {x : Cl33} (h : isScalar x) :
+QFD/GA/MultivectorGrade.lean:63:theorem add_scalar_isScalar {x y : Cl33} (hx : isScalar x) (hy : isScalar y) :
+QFD/GA/MultivectorDefs.lean:82:theorem wedge_antisymm (a b : Cl33) : wedge a b = -(wedge b a) := by
+QFD/GA/MultivectorDefs.lean:89:theorem wedge_basis_eq_mul {i j : Fin 6} (h : i ≠ j) : wedge (e i) (e j) = e i * e j := by
+QFD/GA/MultivectorDefs.lean:112:theorem wedge_basis_anticomm {i j : Fin 6} (h : i ≠ j) :
+QFD/GA/MultivectorDefs.lean:133:theorem triple_wedge_equals_geometric {i j k : Fin 6}
+QFD/GA/MultivectorDefs.lean:140:theorem wedge_triple_antisymm {i j k : Fin 6} (_h1 : i ≠ j) (h2 : j ≠ k) (_h3 : i ≠ k) :
+QFD/GA/MultivectorDefs.lean:157:theorem wedge_mul_left {i j : Fin 6} (h : i ≠ j) :
+QFD/GA/MultivectorDefs.lean:176:theorem wedge_mul_right {i j : Fin 6} (_ : i ≠ j) :
+QFD/AdjointStability_Complete.lean:56:lemma signature_pm1 (i : Fin 6) : signature i = 1 ∨ signature i = -1 := by
+QFD/AdjointStability_Complete.lean:61:lemma swap_sign_pm1 (I : BasisIndex) : swap_sign I = 1 ∨ swap_sign I = -1 := by
+QFD/AdjointStability_Complete.lean:66:lemma prod_signature_pm1 (I : BasisIndex) :
+QFD/AdjointStability_Complete.lean:97:lemma blade_square_pm1 (I : BasisIndex) :
+QFD/AdjointStability_Complete.lean:127:lemma adjoint_cancels_blade (I : BasisIndex) :
+QFD/AdjointStability_Complete.lean:157:theorem energy_is_positive_definite (Ψ : Multivector) :
+QFD/AdjointStability_Complete.lean:173:theorem energy_zero_iff_zero (Ψ : Multivector) :
+QFD/AdjointStability_Complete.lean:219:theorem l6c_kinetic_stable (gradΨ : Multivector) :
+QFD/Neutrino_MassScale.lean:57:theorem neutrino_mass_hierarchy (ctx : MassContext) (h_scale : ctx.R_p < ctx.lambda_e) :
+QFD/SpacetimeEmergence_Complete.lean:66:lemma Q33_on_single (i : Fin 6) :
+QFD/SpacetimeEmergence_Complete.lean:78:lemma basis_sq (i : Fin 6) :
+QFD/SpacetimeEmergence_Complete.lean:86:lemma basis_orthogonal (i j : Fin 6) (hij : i ≠ j) :
+QFD/SpacetimeEmergence_Complete.lean:133:lemma basis_anticomm (i j : Fin 6) (hij : i ≠ j) :
+QFD/SpacetimeEmergence_Complete.lean:146:theorem spatial_commutes_with_B (i : Fin 3) :
+QFD/SpacetimeEmergence_Complete.lean:174:theorem time_commutes_with_B :
+QFD/SpacetimeEmergence_Complete.lean:191:theorem internal_4_anticommutes_with_B :
+QFD/SpacetimeEmergence_Complete.lean:217:theorem internal_5_anticommutes_with_B :
+QFD/SpacetimeEmergence_Complete.lean:245:theorem emergent_signature_is_minkowski :
+QFD/SpacetimeEmergence_Complete.lean:263:theorem time_is_momentum_direction :
+QFD/Cosmology/Polarization.lean:22:theorem cos_sq_decomposition (x : ℝ) :
+QFD/Cosmology/Polarization.lean:112:theorem polarization_fraction_bounded (s : StokesParameters) (h_I : s.I > 0)
+QFD/Cosmology/Polarization.lean:220:theorem polarization_inherits_quadrupole (cos_theta : ℝ) (theta_pol : ℝ)
+QFD/Cosmology/Polarization.lean:346:theorem QFD_predicts_E_dominance :
+QFD/Cosmology/Polarization.lean:399:theorem polarization_extends_axis_of_evil :
+QFD/Cosmology/Polarization.lean:469:theorem AxisSet_polPattern_eq_pm (n : R3) (hn : IsUnit n) (A B : ℝ) (hA : 0 < A) :
+QFD/Cosmology/OctupoleExtraction.lean:34:lemma one_sub_P3_sq_factor (t : ℝ) :
+QFD/Cosmology/OctupoleExtraction.lean:41:lemma quad_pos_left (t : ℝ) : 0 < (5 * t ^ 2 - 5 * t + 2) := by
+QFD/Cosmology/OctupoleExtraction.lean:46:lemma quad_pos_right (t : ℝ) : 0 < (5 * t ^ 2 + 5 * t + 2) := by
+QFD/Cosmology/OctupoleExtraction.lean:52:lemma abs_P3_le_one_of_abs_le_one {t : ℝ} (ht : |t| ≤ 1) : |P3 t| ≤ 1 := by
+QFD/Cosmology/OctupoleExtraction.lean:88:lemma abs_octPattern_le_one_of_unit (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
+QFD/Cosmology/OctupoleExtraction.lean:100:lemma abs_P3_eq_one_iff (t : ℝ) (ht : |t| ≤ 1) :
+QFD/Cosmology/OctupoleExtraction.lean:143:theorem AxisSet_octAxisPattern_eq_pm (n : R3) (hn : IsUnit n) :
+QFD/Cosmology/OctupoleExtraction.lean:214:theorem AxisSet_octTempPattern_eq_pm (n : R3) (hn : IsUnit n) (A B : ℝ) (hA : 0 < A) :
+QFD/Cosmology/RadiativeTransfer.lean:101:theorem survival_decreases (z1 z2 : ℝ) (alpha : Unitless) (beta : Unitless)
+QFD/Cosmology/RadiativeTransfer.lean:142:theorem achromatic_preserves_ratios (nu1 nu2 : ℝ) (z : ℝ) (k : Unitless)
+QFD/Cosmology/RadiativeTransfer.lean:204:theorem firas_constrains_y (nu : ℝ) (T : ℝ) (y_eff : Unitless)
+QFD/Cosmology/RadiativeTransfer.lean:241:theorem energy_conserved (nu : ℝ) (z : ℝ) (p : RadiativeTransferParams)
+QFD/Cosmology/RadiativeTransfer.lean:276:theorem distance_correction_positive (z : ℝ) (p : RadiativeTransferParams)
+QFD/Cosmology/RadiativeTransfer.lean:322:theorem model_is_falsifiable :
+QFD/Cosmology/CoaxialAlignment.lean:35:lemma axis_unique_from_AxisSet {n m : R3} (hn : IsUnit n) (hm : IsUnit m) :
+QFD/Cosmology/CoaxialAlignment.lean:66:theorems. Since there's only one pair of antipodal points that can be the
+QFD/Cosmology/CoaxialAlignment.lean:69:theorem coaxial_quadrupole_octupole
+QFD/Cosmology/CoaxialAlignment.lean:118:theorem coaxial_from_shared_maximizer
+QFD/Cosmology/KernelAxis.lean:30:lemma abs_ip_le_one_of_unit (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
+QFD/Cosmology/KernelAxis.lean:38:lemma abs_ip_nn_eq_one (n : R3) (hn : IsUnit n) : |ip n n| = 1 := by
+QFD/Cosmology/KernelAxis.lean:45:lemma abs_ip_nneg_eq_one (n : R3) (hn : IsUnit n) : |ip n (-n)| = 1 := by
+QFD/Cosmology/KernelAxis.lean:58:theorem AxisSet_absKernelPattern_eq_pm
+QFD/Cosmology/VacuumDensityMatch.lean:34:theorem vacuum_energy_is_finite
+QFD/Cosmology/VacuumDensityMatch.lean:68:theorem constant_density_is_weightless (ρ : ℝ) :
+QFD/Cosmology/HubbleDrift.lean:19:theorem redshift_is_exponential_decay (E : ℝ → ℝ) (H : ℝ)
+QFD/Cosmology/AxisExtraction.lean:44:lemma quadPattern_eq_affine_score (n x : R3) :
+QFD/Cosmology/AxisExtraction.lean:50:lemma score_le_one_of_unit (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
+QFD/Cosmology/AxisExtraction.lean:68:theorem n_mem_AxisSet_quadPattern (n : R3) (hn : IsUnit n) :
+QFD/Cosmology/AxisExtraction.lean:95:lemma score_neg (n x : R3) : score n (-x) = score n x := by
+QFD/Cosmology/AxisExtraction.lean:99:theorem neg_n_mem_AxisSet_quadPattern (n : R3) (hn : IsUnit n) :
+QFD/Cosmology/AxisExtraction.lean:126:lemma AxisSet_affine (f : R3 → ℝ) (a b : ℝ) (ha : 0 < a) :
+QFD/Cosmology/AxisExtraction.lean:153:lemma AxisSet_monotone (f : R3 → ℝ) (g : ℝ → ℝ)
+QFD/Cosmology/AxisExtraction.lean:173:lemma ip_eq_one_iff_eq (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
+QFD/Cosmology/AxisExtraction.lean:179:lemma ip_eq_neg_one_iff_eq_neg (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
+QFD/Cosmology/AxisExtraction.lean:185:lemma quadPattern_le_one_of_unit (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
+QFD/Cosmology/AxisExtraction.lean:205:theorem AxisSet_quadPattern_eq_pm (n : R3) (hn : IsUnit n) :
+QFD/Cosmology/AxisExtraction.lean:289:theorem AxisSet_tempPattern_eq_pm (n : R3) (hn : IsUnit n) (A B : ℝ) (hA : 0 < A) :
+QFD/Cosmology/AxisExtraction.lean:318:lemma quadPattern_at_equator (n x : R3) (_hn : IsUnit n) (hx : x ∈ Equator n) :
+QFD/Cosmology/AxisExtraction.lean:332:lemma quadPattern_ge_at_equator (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
+QFD/Cosmology/AxisExtraction.lean:357:lemma quadPattern_gt_at_non_equator (n x : R3) (_hn : IsUnit n) (_hx : IsUnit x)
+QFD/Cosmology/AxisExtraction.lean:379:theorem equator_nonempty (n : R3) (hn : IsUnit n) : ∃ x, x ∈ Equator n := by
+QFD/Cosmology/AxisExtraction.lean:463:theorem AxisSet_tempPattern_eq_equator (n : R3) (hn : IsUnit n) (A B : ℝ) (hA : A < 0) :
+QFD/Cosmology/VacuumRefraction.lean:139:theorem modulation_bounded (ell : ℝ) (p : VacuumRefractionParams)
+QFD/Cosmology/VacuumRefraction.lean:168:theorem modulation_preserves_positivity (ell : ℝ) (C_ell_base : ℝ)
+QFD/Cosmology/VacuumRefraction.lean:184:theorem modulation_periodic (ell : ℝ) (p : VacuumRefractionParams) (h_p : VacuumRefractionConstraints p) :
+QFD/Cosmology/VacuumRefraction.lean:220:theorem unitarity_implies_physical (p : VacuumRefractionParams) (z_CMB : ℝ)
+QFD/Cosmology/VacuumRefraction.lean:308:theorem vacuum_refraction_is_falsifiable :
+QFD/Cosmology/ScatteringBias.lean:78:theorem survival_fraction_bounded (tau : ℝ) (h_pos : tau ≥ 0) :
+QFD/Cosmology/ScatteringBias.lean:94:theorem scattering_inflates_distance (d_true : ℝ) (S : ℝ)
+QFD/Cosmology/ScatteringBias.lean:124:theorem magnitude_dimming_nonnegative (S : ℝ)
+QFD/Cosmology/ScatteringBias.lean:154:theorem survival_decreases_with_tau (tau1 tau2 : ℝ)
+QFD/Cosmology/ScatteringBias.lean:179:theorem theory_is_falsifiable :
+QFD/Cosmology/ScatteringBias.lean:202:theorem correction_factor_ge_one (tau : ℝ) (h_tau : tau ≥ 0) :
+QFD/Cosmology/RealTimeCosmology.lean:15:theorem realtime_redshift_derivative :
+QFD/Nuclear/QuarticStiffness.lean:71:theorem V4_nuc_is_positive (beta : ℝ) (h_beta : 0 < beta) :
+QFD/Nuclear/QuarticStiffness.lean:77:theorem V4_nuc_increases_with_beta (beta1 beta2 : ℝ)
+QFD/Nuclear/QuarticStiffness.lean:84:theorem V4_nuc_equals_beta (beta : ℝ) :
+QFD/Nuclear/QuarticStiffness.lean:101:theorem quartic_energy_positive (V4_nuc_val rho : ℝ)
+QFD/Nuclear/QuarticStiffness.lean:120:theorem quartic_dominates_at_high_density (V4_nuc_val lambda : ℝ)
+QFD/Nuclear/QuarticStiffness.lean:166:theorem stability_requires_positive_V4_nuc :
+QFD/Nuclear/QuarticStiffness.lean:174:theorem V4_nuc_theoretical_value :
+QFD/Nuclear/QuarticStiffness.lean:180:theorem V4_nuc_approx_three :
+QFD/Nuclear/QuarticStiffness.lean:186:theorem V4_nuc_physically_reasonable :
+QFD/Nuclear/QuarticStiffness.lean:203:theorem V4_nuc_no_correction_factor :
+QFD/Nuclear/QuarticStiffness.lean:248:theorem V4_nuc_from_beta :
+QFD/Nuclear/DeuteronFit.lean:50:theorem deuteron_potential_well_exists
+QFD/Nuclear/IsomerDecay.lean:17:theorem gamma_emission_quantized (n : ℕ) :
+QFD/Nuclear/VacuumStiffness.lean:50:theorem vacuum_stiffness_is_proton_mass :
+QFD/Nuclear/IsobarStability.lean:52:theorem even_mass_is_more_stable
+QFD/Nuclear/AlphaNDerivation.lean:82:theorem geometric_factor_value :
+QFD/Nuclear/AlphaNDerivation.lean:90:theorem alpha_n_validates_3point5 :
+QFD/Nuclear/AlphaNDerivation.lean:96:theorem alpha_n_validates_within_point_two_percent :
+QFD/Nuclear/AlphaNDerivation.lean:103:theorem alpha_n_physically_reasonable :
+QFD/Nuclear/AlphaNDerivation.lean:111:theorem alpha_n_is_positive (beta : ℝ) (h_beta : 0 < beta) :
+QFD/Nuclear/AlphaNDerivation.lean:122:theorem alpha_n_increases_with_beta (beta1 beta2 : ℝ)
+QFD/Nuclear/AlphaNDerivation.lean:131:theorem alpha_n_scales_with_beta (beta : ℝ) :
+QFD/Nuclear/AlphaNDerivation.lean:139:theorem alpha_n_proportional_to_beta :
+QFD/Nuclear/AlphaNDerivation.lean:149:theorem geometric_factor_bounded :
+QFD/Nuclear/AlphaNDerivation.lean:155:theorem alpha_n_close_to_beta :
+QFD/Nuclear/AlphaNDerivation.lean:166:theorem ratio_is_geometric_factor :
+QFD/Nuclear/AlphaNDerivation.lean:178:theorem alpha_n_genesis_compatible :
+QFD/Nuclear/AlphaNDerivation.lean:184:theorem alpha_n_in_empirical_range :
+QFD/Nuclear/AlphaNDerivation.lean:198:theorem alpha_n_from_beta :
+QFD/Nuclear/TimeCliff.lean:56:lemma solitonDensity_pos {A r₀ : ℝ} (hA : 0 < A) (r : ℝ) :
+QFD/Nuclear/TimeCliff.lean:65:lemma solitonDensity_decreasing
+QFD/Nuclear/TimeCliff.lean:86:theorem nuclearPotential_eq
+QFD/Nuclear/TimeCliff.lean:95:theorem wellDepth
+QFD/Nuclear/TimeCliff.lean:104:lemma hasDerivAt_exp_constMul (a r : ℝ) :
+QFD/Nuclear/TimeCliff.lean:120:lemma hasDerivAt_solitonDensity'
+QFD/Nuclear/TimeCliff.lean:140:theorem nuclearPotential_deriv
+QFD/Nuclear/TimeCliff.lean:176:theorem nuclearForce_closed_form
+QFD/Nuclear/TimeCliff.lean:207:theorem bound_state_existence_blueprint : True := by
+QFD/Nuclear/TimeCliff.lean:211:theorem force_unification_blueprint : True := by
+QFD/Nuclear/WellDepth.lean:79:theorem beta_squared_value :
+QFD/Nuclear/WellDepth.lean:87:theorem V4_validates_fifty :
+QFD/Nuclear/WellDepth.lean:93:theorem V4_validates_within_two_percent :
+QFD/Nuclear/WellDepth.lean:99:theorem V4_physically_reasonable :
+QFD/Nuclear/WellDepth.lean:107:theorem V4_is_positive (lam : ℝ) (beta : ℝ) (h_lam : 0 < lam) (h_beta : 0 < beta) :
+QFD/Nuclear/WellDepth.lean:119:theorem V4_decreases_with_beta (lam : ℝ) (beta1 beta2 : ℝ)
+QFD/Nuclear/WellDepth.lean:139:theorem V4_increases_with_lambda (lam1 lam2 : ℝ) (beta : ℝ)
+QFD/Nuclear/WellDepth.lean:154:theorem V4_much_less_than_lambda :
+QFD/Nuclear/WellDepth.lean:163:theorem V4_scales_inverse_beta_squared (lam : ℝ) (beta : ℝ) :
+QFD/Nuclear/WellDepth.lean:177:theorem nuclear_parameters_from_beta :
+QFD/Nuclear/WellDepth.lean:222:theorem V4_light_validates :
+QFD/Nuclear/WellDepth.lean:229:theorem V4_heavy_validates :
+QFD/Nuclear/WellDepth.lean:249:theorem V4_in_empirical_range :
+QFD/Nuclear/WellDepth.lean:265:theorem V4_from_vacuum_stiffness :
+QFD/Nuclear/BetaNGammaEDerivation.lean:109:theorem asymmetry_factor_value :
+QFD/Nuclear/BetaNGammaEDerivation.lean:115:theorem beta_n_validates :
+QFD/Nuclear/BetaNGammaEDerivation.lean:121:theorem beta_n_validates_within_one_percent :
+QFD/Nuclear/BetaNGammaEDerivation.lean:128:theorem beta_n_physically_reasonable :
+QFD/Nuclear/BetaNGammaEDerivation.lean:136:theorem shielding_factor_value :
+QFD/Nuclear/BetaNGammaEDerivation.lean:142:theorem gamma_e_validates :
+QFD/Nuclear/BetaNGammaEDerivation.lean:148:theorem gamma_e_validates_within_point_one_percent :
+QFD/Nuclear/BetaNGammaEDerivation.lean:155:theorem gamma_e_physically_reasonable :
+QFD/Nuclear/BetaNGammaEDerivation.lean:163:theorem beta_n_is_positive (beta : ℝ) (h_beta : 0 < beta) :
+QFD/Nuclear/BetaNGammaEDerivation.lean:171:theorem beta_n_increases_with_beta (beta1 beta2 : ℝ)
+QFD/Nuclear/BetaNGammaEDerivation.lean:180:theorem beta_n_scales_with_beta (beta : ℝ) :
+QFD/Nuclear/BetaNGammaEDerivation.lean:188:theorem gamma_e_is_positive (beta : ℝ) (h_beta : 0 < beta) :
+QFD/Nuclear/BetaNGammaEDerivation.lean:196:theorem gamma_e_increases_with_beta (beta1 beta2 : ℝ)
+QFD/Nuclear/BetaNGammaEDerivation.lean:205:theorem gamma_e_scales_with_beta (beta : ℝ) :
+QFD/Nuclear/BetaNGammaEDerivation.lean:213:theorem gamma_e_beta_n_ratio :
+QFD/Nuclear/BetaNGammaEDerivation.lean:224:theorem gamma_e_beta_n_ratio_validates :
+QFD/Nuclear/BetaNGammaEDerivation.lean:237:theorem beta_n_genesis_compatible :
+QFD/Nuclear/BetaNGammaEDerivation.lean:246:theorem gamma_e_genesis_compatible :
+QFD/Nuclear/BetaNGammaEDerivation.lean:258:theorem beta_n_from_beta :
+QFD/Nuclear/BetaNGammaEDerivation.lean:273:theorem gamma_e_from_beta :
+QFD/Nuclear/BetaNGammaEDerivation.lean:284:theorem nuclear_asymmetry_shielding_from_beta :
+QFD/Nuclear/ProtonSpin.lean:16:theorem spin_sum_matches_observation :
+QFD/Nuclear/BindingMassScale.lean:96:theorem k_c2_equals_lambda :
+QFD/Nuclear/BindingMassScale.lean:102:theorem k_c2_is_proton_mass :
+QFD/Nuclear/BindingMassScale.lean:108:theorem k_c2_numerical_value :
+QFD/Nuclear/BindingMassScale.lean:122:theorem dense_vacuum_strong_binding (lam1 lam2 : ℝ) (h : lam1 > lam2) :
+QFD/Nuclear/BindingMassScale.lean:132:theorem dimensional_consistency :
+QFD/Nuclear/BindingMassScale.lean:160:theorem binding_energy_scale_realistic :
+QFD/Nuclear/BindingMassScale.lean:178:theorem k_c2_from_proton_bridge :
+QFD/Nuclear/BindingMassScale.lean:202:theorem parameter_closure_complete :
+QFD/Nuclear/SymmetryEnergyMinimization.lean:135:theorem symmetry_coeff_is_inverse_beta (β : ℝ) (β_pos : 0 < β) (C : ℝ) :
+QFD/Nuclear/SymmetryEnergyMinimization.lean:147:theorem asymmetry_bounded (Z : ℝ) (A : ℝ) (A_pos : 0 < A)
+QFD/Nuclear/SymmetryEnergyMinimization.lean:173:theorem symmetry_energy_nonneg (β : ℝ) (β_pos : 0 < β) (Z : ℝ) (A : ℝ)
+QFD/Nuclear/SymmetryEnergyMinimization.lean:192:theorem coulomb_energy_nonneg (Z : ℝ) (A : ℝ) (A_pos : 0 < A) (Z_nonneg : 0 ≤ Z) :
+QFD/Nuclear/SymmetryEnergyMinimization.lean:260:theorem c2_validates_within_one_percent :
+QFD/Nuclear/SymmetryEnergyMinimization.lean:272:theorem stiff_vacuum_small_c2 (β₁ β₂ : ℝ) (β₁_pos : 0 < β₁) (β₂_pos : 0 < β₂)
+QFD/Nuclear/SymmetryEnergyMinimization.lean:286:theorem soft_vacuum_large_c2 (β₁ β₂ : ℝ) (β₁_pos : 0 < β₁) (β₂_pos : 0 < β₂)
+QFD/Nuclear/SymmetryEnergyMinimization.lean:303:theorem dimensions_consistent : True := by
+QFD/Nuclear/CoreCompression.lean:75:theorem energy_minimized_at_backbone (c1 c2 k : ℝ) (hk : 0 < k) :
+QFD/Nuclear/CoreCompression.lean:85:theorem energy_nonnegative (Q c1 c2 k : ℝ) (hk : 0 < k) :
+QFD/Nuclear/CoreCompression.lean:95:theorem minimum_unique (Q c1 c2 k : ℝ) (hk : 0 < k)
+QFD/Nuclear/CoreCompression.lean:132:theorem beta_decay_reduces_stress
+QFD/Nuclear/MagicNumbers.lean:16:theorem magic_sequence :
+QFD/Nuclear/BoundaryCondition.lean:29:theorem boundary_stability (profile : WallProfile) :
+QFD/Nuclear/YukawaDerivation.lean:56:theorem soliton_gradient_is_yukawa (A lam : ℝ) (r : ℝ) (h_r : r ≠ 0) :
+QFD/Nuclear/YukawaDerivation.lean:66:theorem parameter_identification (g_sq m k A lam : ℝ) (r : ℝ) (h_r : r ≠ 0) 
+QFD/Nuclear/CoreCompressionLaw.lean:54:theorem ccl_parameter_space_nonempty :
+QFD/Nuclear/CoreCompressionLaw.lean:66:theorem ccl_parameter_space_bounded :
+QFD/Nuclear/CoreCompressionLaw.lean:79:theorem ccl_constraints_consistent :
+QFD/Nuclear/CoreCompressionLaw.lean:106:theorem stability_requires_bounds (p : CCLParams) :
+QFD/Nuclear/CoreCompressionLaw.lean:131:theorem check_ccl_sound (p : CCLParams) :
+QFD/Nuclear/CoreCompressionLaw.lean:165:theorems said it must.
+QFD/Nuclear/CoreCompressionLaw.lean:167:theorem phase1_satisfies_constraints :
+QFD/Nuclear/CoreCompressionLaw.lean:191:theorem theory_is_falsifiable :
+QFD/Nuclear/CoreCompressionLaw.lean:273:theorem empirical_fit_satisfies_constraints :
+QFD/Nuclear/CoreCompressionLaw.lean:295:theorem fits_converge :
+QFD/Nuclear/CoreCompressionLaw.lean:315:theorem both_empirical_fits_valid :
+QFD/Nuclear/CoreCompressionLaw.lean:354:theorem stable_have_lower_stress :
+QFD/Nuclear/CoreCompressionLaw.lean:372:theorem stress_ratio_significant :
+QFD/Nuclear/CoreCompressionLaw.lean:417:theorem fit_quality_excellent :
+QFD/Nuclear/CoreCompressionLaw.lean:433:theorem residuals_bounded :
+QFD/Nuclear/CoreCompressionLaw.lean:452:theorem constraints_are_restrictive :
+QFD/Nuclear/CoreCompressionLaw.lean:465:theorem constraints_allow_solutions :
+QFD/Nuclear/CoreCompressionLaw.lean:480:theorem constraints_non_trivial :
+QFD/Nuclear/CoreCompressionLaw.lean:533:theorem backbone_dimensionally_consistent :
+QFD/Nuclear/CoreCompressionLaw.lean:556:theorem stress_dimensionless :
+QFD/Nuclear/CoreCompressionLaw.lean:700:theorem phase1_constraints_computable :
+QFD/Nuclear/CoreCompressionLaw.lean:910:theorem parameter_reduction_possible :
+QFD/Nuclear/SelectionRules.lean:36:theorem forbidden_transition_zero_overlap (s₁ s₂ : NuclearState) (h : s₁.grade ≠ s₂.grade) :
+QFD/Nuclear/SelectionRules.lean:46:theorem allowed_transition_unit_overlap (s : NuclearState) :
+QFD/Nuclear/SelectionRules.lean:56:theorem overlap_symmetric (s₁ s₂ : NuclearState) :
+QFD/Conservation/NeutrinoID.lean:104:lemma F_EM_commutes_B : F_EM * B = B * F_EM := by
+QFD/Conservation/NeutrinoID.lean:110:lemma F_EM_commutes_one_add_B : F_EM * (1 + B) = (1 + B) * F_EM := by
+QFD/Conservation/NeutrinoID.lean:178:lemma F_EM_commutes_P_Internal : F_EM * P_Internal = P_Internal * F_EM := by
+QFD/Conservation/NeutrinoID.lean:210:theorem neutrino_has_zero_coupling : Interaction F_EM Neutrino_State = 0 := by
+QFD/Conservation/NeutrinoID.lean:240:theorem conservation_requires_remainder :
+QFD/Conservation/Unitarity.lean:64:lemma information_partition (c : Fin 6 → ℝ) :
+QFD/Conservation/NeutrinoID_Automated.lean:33:lemma disjoint_bivectors_commute :
+QFD/Conservation/NeutrinoID_Automated.lean:44:theorem no_EM_interaction : Interaction F_EM Nu = 0 := by
+QFD/Conservation/NeutrinoID_Automated.lean:49:theorem has_nonzero_spin : Nu * Nu ≠ 0 := by
+QFD/Conservation/NeutrinoID_Automated.lean:63:theorem neutrino_is_necessary : Nu ≠ 0 := by
+QFD/Conservation/NeutrinoMixing.lean:24:lemma det_pmnsRotor (θ : ℝ) : (pmnsRotor θ).det = 1 := by
+QFD/Conservation/NeutrinoMixing.lean:31:theorem mixing_matrix_is_geometric_rotor (theta : ℝ) :
+QFD/Conservation/Noether.lean:76:theorem decomposition_identity (coeffs : Fin 6 → ℝ) :
+QFD/Conservation/Noether.lean:111:theorem conservation_requires_balancing
+QFD/Conservation/NeutrinoID_Production.lean:49:lemma disjoint_bivectors_commute :
+QFD/Conservation/NeutrinoID_Production.lean:83:theorem no_EM_interaction : Interaction F_EM Nu = 0 := by
+QFD/Conservation/NeutrinoID_Production.lean:96:theorem has_nonzero_spin : Nu * Nu ≠ 0 := by
+QFD/Conservation/NeutrinoID_Production.lean:133:theorem neutrino_is_necessary : Nu ≠ 0 := by
+QFD/Conservation/NeutrinoID_Fixed.lean:88:theorem no_EM_interaction : Interaction F_EM Nu = 0 := by
+QFD/Conservation/NeutrinoID_Fixed.lean:161:theorem has_nonzero_spin : Nu * Nu ≠ 0 := by
+QFD/Conservation/NeutrinoID_Fixed.lean:203:theorem neutrino_is_necessary : Nu ≠ 0 := by
+QFD/Conservation/NeutrinoID_Simple.lean:42:theorem no_EM_interaction : Interaction F_EM Nu = 0 := by
+QFD/Conservation/NeutrinoID_Simple.lean:66:theorem has_nonzero_spin : Nu * Nu ≠ 0 := by
+QFD/Conservation/NeutrinoID_Simple.lean:94:theorem neutrino_is_necessary : Nu ≠ 0 := by
+QFD/AngularSelection.lean:92:theorem angular_selection_is_cosine
+QFD/Lepton/KoideRelation.lean:84:lemma omega_is_primitive_root : IsPrimitiveRoot omega 3 := by
+QFD/Lepton/KoideRelation.lean:89:lemma sum_third_roots_eq_zero : 1 + omega + omega^2 = 0 := by
+QFD/Lepton/KoideRelation.lean:103:lemma sum_cos_symm (delta : ℝ) :
+QFD/Lepton/KoideRelation.lean:166:lemma sum_cos_sq_symm (δ : ℝ) :
+QFD/Lepton/KoideRelation.lean:219:theorem koide_relation_is_universal (mu delta : ℝ) (h_mu : mu > 0)
+QFD/Lepton/KoideAlgebra.lean:16:lemma sum_cos_sq_symm (δ : ℝ) :
+QFD/Lepton/FineStructure.lean:73:theorem fine_structure_constraint
+QFD/Lepton/FineStructure.lean:91:theorem beta_validated_from_mcmc :
+QFD/Lepton/FineStructure.lean:115:theorem beta_determines_qed_coefficient
+QFD/Lepton/Generations.lean:30:lemma e_sq_one (i : Fin 6) (h : i < 3) : e i * e i = 1 := by
+QFD/Lepton/Generations.lean:33:lemma e_anticomm {i j : Fin 6} (h : i ≠ j) : e i * e j = - (e j * e i) := by
+QFD/Lepton/Generations.lean:38:lemma one_ne_neg_one : (1 : Cl33) ≠ -1 := by
+QFD/Lepton/Generations.lean:46:lemma two_e1_ne_zero : (2 : ℝ) • e 1 ≠ 0 := by
+QFD/Lepton/Generations.lean:56:lemma e01_sq : (e 0 * e 1) * (e 0 * e 1) = -1 := by
+QFD/Lepton/Generations.lean:65:lemma e012_sq : (e 0 * e 1 * e 2) * (e 0 * e 1 * e 2) = -1 := by
+QFD/Lepton/Generations.lean:90:lemma basis_x_ne_xy : IsomerBasis .x ≠ IsomerBasis .xy := by
+QFD/Lepton/Generations.lean:97:lemma basis_x_ne_xyz : IsomerBasis .x ≠ IsomerBasis .xyz := by
+QFD/Lepton/Generations.lean:104:lemma basis_xy_ne_x : IsomerBasis .xy ≠ IsomerBasis .x := fun h => basis_x_ne_xy h.symm
+QFD/Lepton/Generations.lean:105:lemma basis_xyz_ne_x : IsomerBasis .xyz ≠ IsomerBasis .x := fun h => basis_x_ne_xyz h.symm
+QFD/Lepton/Generations.lean:107:lemma basis_xy_ne_xyz : IsomerBasis .xy ≠ IsomerBasis .xyz := by
+QFD/Lepton/Generations.lean:143:lemma basis_xyz_ne_xy : IsomerBasis .xyz ≠ IsomerBasis .xy :=
+QFD/Lepton/Generations.lean:147:theorem generations_are_distinct (g1 g2 : GenerationAxis) :
+QFD/Lepton/Generations.lean:161:theorem existence_of_three_isomers (basis_topology : Cl33) :
+QFD/Lepton/MassSpectrum.lean:63:theorem qfd_potential_is_confining (p : SolitonParams) :
+QFD/Lepton/MassSpectrum.lean:154:theorem geometric_mass_condition (m_e m_mu m_tau : ℝ)
+QFD/Lepton/VortexStability.lean:141:theorem v22_is_degenerate (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
+QFD/Lepton/VortexStability.lean:173:theorem v22_beta_R_perfectly_correlated (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
+QFD/Lepton/VortexStability.lean:227:theorem degeneracy_broken_existence (g : HillGeometry) (β ξ mass : ℝ)
+QFD/Lepton/VortexStability.lean:287:lemma cube_strict_mono (a b : ℝ) (ha : 0 < a) (hb : 0 < b) (h : a < b) :
+QFD/Lepton/VortexStability.lean:300:theorem degeneracy_broken_uniqueness (g : HillGeometry) (β ξ : ℝ)
+QFD/Lepton/VortexStability.lean:341:theorem degeneracy_broken (g : HillGeometry) (β ξ mass : ℝ)
+QFD/Lepton/VortexStability.lean:358:theorem energy_derivative_positive (g : HillGeometry) (β ξ R : ℝ)
+QFD/Lepton/VortexStability.lean:380:theorem beta_xi_uncorrelated (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
+QFD/Lepton/VortexStability.lean:409:lemma beta_offset_relation (g : HillGeometry) (β_true ξ_true R_true : ℝ)
+QFD/Lepton/VortexStability.lean:445:theorem beta_offset_is_three_percent (g : HillGeometry)
+QFD/Lepton/VortexStability.lean:468:theorem mcmc_validates_degeneracy_breaking :
+QFD/Lepton/VortexStability.lean:511:theorem gradient_dominates_compression (g : HillGeometry)
+QFD/Lepton/VortexStability.lean:561:theorem beta_universality_testable (g : HillGeometry) :
+QFD/Lepton/VortexStability.lean:588:theorem degeneracy_resolution_complete (g : HillGeometry) :
+QFD/Lepton/VortexStability.lean:754:theorem spin_half_from_flywheel_geometry (M R : ℝ) (hM : M > 0) (hR : R > 0)
+QFD/Lepton/VortexStability.lean:784:theorem universal_velocity_all_leptons :
+QFD/Lepton/VortexStability.lean:809:theorem flywheel_geometry_confirmed :
+QFD/Lepton/VortexStability.lean:831:theorem spin_constrains_magnetic_moment (R : ℝ) (hR : R > 0) :
+QFD/Lepton/VortexStability.lean:861:theorem spin_constraint_complete :
+QFD/Lepton/GeometricAnomaly.lean:144:theorem g_factor_is_anomalous (v : VortexParticle) :
+QFD/Lepton/GeometricAnomaly.lean:170:theorem anomalous_moment_positive (v : VortexParticle) :
+QFD/Lepton/GeometricAnomaly.lean:189:theorem anomaly_scales_with_skirt (v₁ v₂ : VortexParticle)
+QFD/Lepton/GeometricAnomaly.lean:213:theorem point_particle_limit (E_rot : ℝ) (h_pos : 0 < E_rot) (ε : ℝ) (h_ε : 0 < ε) :
+QFD/Lepton/Antimatter.lean:48:theorem antimatter_flips_charge (ψ : Wavelet) :
+QFD/Lepton/Antimatter.lean:59:theorem antimatter_preserves_mass (ψ : Wavelet) :
+QFD/Lepton/VortexStability_v3.lean:76:theorem v22_is_degenerate (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
+QFD/Lepton/VortexStability_v3.lean:95:theorem v22_beta_R_perfectly_correlated (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
+QFD/Lepton/VortexStability_v3.lean:113:theorem energy_derivative_positive (g : HillGeometry) (β ξ R : ℝ)
+QFD/Lepton/VortexStability_v3.lean:126:theorem degeneracy_broken (g : HillGeometry) (β ξ mass : ℝ)
+QFD/Lepton/VortexStability_v3.lean:218:lemma beta_offset_relation (g : HillGeometry) (β_true ξ_true R_true : ℝ)
+QFD/Lepton/VortexStability_v3.lean:232:theorem degeneracy_resolution_complete (g : HillGeometry) :
+QFD/Lepton/AnomalousMoment.lean:212:theorem V4_matches_C2 : |V4_compression - C2_QED| < 0.002 := by
+QFD/Lepton/AnomalousMoment.lean:223:theorem electron_V4_negative
+QFD/Lepton/AnomalousMoment.lean:240:theorem muon_V4_positive
+QFD/Lepton/AnomalousMoment.lean:257:theorem V4_generation_ordering
+QFD/Lepton/AnomalousMoment.lean:274:theorem V4_monotonic_in_radius (R₁ R₂ : ℝ)
+QFD/Lepton/AnomalousMoment.lean:295:theorem flywheel_validated : I_eff_ratio > 2 := by
+QFD/Lepton/AnomalousMoment.lean:307:theorem circulation_is_relativistic : U_universal > 0.8 := by
+QFD/Lepton/AnomalousMoment.lean:320:theorem compton_condition (m : ℝ) (h_pos : m > 0) :
+QFD/Lepton/AnomalousMoment.lean:332:theorem V4_comp_matches_vacuum_params
+QFD/Lepton/PairProduction.lean:22:theorem topology_conserved_in_pair_production : 0 = 1 + (-1 : ℤ) := by ring
+QFD/Lepton/MassFunctional.lean:45:lemma real_energy_density_scale (k : ℝ) (x : Cl33) :
+QFD/Lepton/MassFunctional.lean:74:theorem mass_is_positive
+QFD/Lepton/MassFunctional.lean:98:theorem mass_scaling_law
+QFD/Lepton/Topology.lean:101:theorem topological_protection
+QFD/SpectralGap.lean:77:theorem spectral_gap_theorem
+QFD/Neutrino_Production.lean:66:theorem neutrino_remainder_props (E : BetaDecayProps) :
+QFD/Neutrino_Production.lean:96:theorem exists_recoil_state
+QFD/Vacuum/StrongCP.lean:15:theorem vacuum_relaxes_to_zero_dipole (theta_qcd : ℝ) :
+QFD/Vacuum/ZetaPhysics.lean:20:theorem riemann_zeta_from_symmetry :
+QFD/Vacuum/VacuumParameters.lean:48:theorem mcmcBeta_pos : 0 < mcmcBeta := by norm_num [mcmcBeta]
+QFD/Vacuum/VacuumParameters.lean:76:theorem mcmcXi_pos : 0 < mcmcXi := by norm_num [mcmcXi]
+QFD/Vacuum/VacuumParameters.lean:161:theorem beta_golden_loop_validated :
+QFD/Vacuum/VacuumParameters.lean:167:theorem beta_within_one_sigma :
+QFD/Vacuum/VacuumParameters.lean:173:theorem xi_order_unity_confirmed :
+QFD/Vacuum/VacuumParameters.lean:179:theorem tau_order_unity_confirmed :
+QFD/Vacuum/VacuumParameters.lean:185:theorem balanced_vacuum_stiffnesses :
+QFD/Vacuum/VacuumParameters.lean:222:theorem alpha_circ_approx_correct :
+QFD/Vacuum/VacuumParameters.lean:263:theorem v4_matches_qed_coefficient :
+QFD/Vacuum/VacuumParameters.lean:275:theorem v4_theoretical_prediction :
+QFD/StabilityCriterion.lean:79:theorem V_continuous (mu lam kappa beta : ℝ) : Continuous (V mu lam kappa beta) := by
+QFD/StabilityCriterion.lean:96:lemma V_ge_quartic_half_of_ge_Rpos (hbeta : 0 < beta) (mu lam kappa : ℝ) :
+QFD/StabilityCriterion.lean:198:lemma V_ge_quartic_half_of_le_Rneg (hbeta : 0 < beta) (mu lam kappa : ℝ) :
+QFD/StabilityCriterion.lean:322:lemma V_dominated_by_quartic_pos (hbeta : 0 < beta) (mu lam kappa : ℝ) :
+QFD/StabilityCriterion.lean:331:lemma V_dominated_by_quartic_neg (hbeta : 0 < beta) (mu lam kappa : ℝ) :
+QFD/StabilityCriterion.lean:347:theorem V_coercive_atTop (hbeta : 0 < beta) (mu lam kappa : ℝ) :
+QFD/StabilityCriterion.lean:360:theorem V_coercive_atBot (hbeta : 0 < beta) (mu lam kappa : ℝ) :
+QFD/StabilityCriterion.lean:391:theorem exists_global_min (hbeta : 0 < beta) (mu lam kappa : ℝ) :
+QFD/StabilityCriterion.lean:481:theorem V_bounded_below (hbeta : 0 < beta) (mu lam kappa : ℝ) :
+QFD/StabilityCriterion.lean:494:theorem V_min_is_global_min (hbeta : 0 < beta) (mu lam kappa : ℝ) :
+QFD/StabilityCriterion.lean:566:lemma two_le_Rpos_h (h : StabilityHypotheses) : (2 : ℝ) ≤ Rpos_h h := by
+QFD/StabilityCriterion.lean:571:lemma Rneg_h_le_neg_two (h : StabilityHypotheses) : Rneg_h h ≤ (-2 : ℝ) := by
+QFD/StabilityCriterion.lean:577:lemma Vh_zero (h : StabilityHypotheses) : Vh h 0 = 0 := by
+QFD/StabilityCriterion.lean:582:theorem exists_global_min (h : StabilityHypotheses) :
+QFD/StabilityCriterion.lean:601:theorem exists_global_min_in_interval (h : StabilityHypotheses) :
+QFD/StabilityCriterion.lean:711:theorem my_solver_correct :
+QFD/Weak/CPViolation.lean:16:theorem decay_asymmetry_exists : J_geometric ≠ 0 := by
+QFD/Weak/DoubleBetaDecay.lean:17:theorem neutrino_self_conjugation_parity : reverse nu_geom = -nu_geom := by
+QFD/Weak/PionGeometry.lean:38:theorem pion_mass_goldstone_origin (f : ℝ) (h : f > 0) :
+QFD/Weak/PionGeometry.lean:48:theorem phase_slip_scales_with_goldstone (f L : ℝ) (h : f > 0) :
+QFD/Weak/ChiralAnomaly.lean:25:theorem axial_divergence_anomaly :
+QFD/Electron/AlphaCirc.lean:15:theorem mean_abs_sin_half_cycle :
+QFD/Electron/HillVortex.lean:50:theorem stream_function_continuous_at_boundary {ctx : VacuumContext}
+QFD/Electron/HillVortex.lean:98:theorem quantization_limit (ctx : VacuumContext) (hill : HillContext ctx)
+QFD/Electron/HillVortex.lean:126:theorem charge_universality (ctx : VacuumContext) (hill1 hill2 : HillContext ctx)
+QFD/Electron/CirculationTopology.lean:52:theorem alpha_circ_eq_euler_div_two_pi :
+QFD/Electron/AxisAlignment.lean:69:theorem axis_alignment_check
+QFD/Matter/ProtonTopology.lean:22:theorem hydrogen_atom_is_topologically_null :
+QFD/Charge/Vacuum.lean:66:theorem polarity_time_effect
+QFD/Charge/Potential.lean:26:lemma deriv_one_over_r (k : ℝ) {r : ℝ} (hr : r ≠ 0) :
+QFD/Charge/Potential.lean:39:lemma deriv_deriv_one_over_r (k : ℝ) {r : ℝ} (hr : r ≠ 0) :
+QFD/Charge/Potential.lean:81:theorem harmonic_decay_3d (k : ℝ) (r : ℝ) (hr : r ≠ 0) :
+QFD/Charge/Quantization.lean:19:theorem amplitude_bounded (ρ_vac : ℝ) (h_vac : 0 < ρ_vac)
+QFD/Charge/Quantization.lean:35:theorem charge_amplitude_locking (ρ_vac : ℝ) (h_vac : 0 < ρ_vac)
+QFD/Charge/Quantization.lean:48:theorem charge_universality (ρ_vac : ℝ) (h_vac : 0 < ρ_vac)
+QFD/Charge/Quantization.lean:67:theorem elementary_charge_is_constant (ρ_vac : ℝ) (h_vac : 0 < ρ_vac)
+QFD/Charge/Coulomb.lean:27:theorem inverse_square_force (ctx : VacuumContext) (sign : PerturbationSign) (k : ℝ) (r : ℝ)
+QFD/Charge/Coulomb.lean:66:theorem interaction_sign_rule (sign1 sign2 : PerturbationSign) :
+QFD/Charge/Coulomb.lean:83:theorem coulomb_force (ctx : VacuumContext) (sign1 sign2 : PerturbationSign) (k : ℝ) (r : ℝ)
+QFD/Test/TrivialProof.lean:3:theorem hello : 1 + 1 = 2 := rfl
+QFD/Neutrino_MinimalRotor.lean:168:theorem qtop_rotor_invariant (r : @MinimalRotor Ψ_QFD _) (lam : ℝ) (hlam : lam ≠ 0) :
+QFD/Neutrino_MinimalRotor.lean:204:theorem qfd_like_energy_vanishes (ψ : Ψ_QFD) :
+QFD/Neutrino_MinimalRotor.lean:218:theorem qfd_like_topology_persists (ψ : Ψ_QFD) (lam : ℝ) (hlam : lam ≠ 0) :
+QFD/Neutrino_MinimalRotor.lean:231:theorem minimalRotor_energy_vanishes (r : @MinimalRotor Ψ_QFD _) :
+QFD/Neutrino_MinimalRotor.lean:239:theorem minimalRotor_topology_persists (r : @MinimalRotor Ψ_QFD _) (lam : ℝ) (hlam : lam ≠ 0) :
+QFD/sketches/AdjointStability.lean:149:theorem kinetic_energy_is_positive_definite (Ψ : Multivector) :
+QFD/sketches/AdjointStability.lean:213:theorem kinetic_energy_zero_iff_zero (Ψ : Multivector) :
+QFD/sketches/AdjointStability.lean:255:theorem l6c_kinetic_term_stable (gradΨ : Multivector) :
+QFD/sketches/BivectorClasses.lean:127:theorem simple_bivector_square_classes (u v : Fin 6 → ℝ)
+QFD/sketches/BivectorClasses.lean:164:theorem spatial_bivectors_are_rotors (i j : Fin 3) (h_neq : i ≠ j) :
+QFD/sketches/BivectorClasses.lean:188:theorem space_momentum_bivectors_are_boosts (i : Fin 3) (j : Fin 3) :
+QFD/sketches/BivectorClasses.lean:217:theorem momentum_bivectors_are_rotors (i j : Fin 3) (h_neq : i ≠ j) :
+QFD/sketches/BivectorClasses.lean:248:theorem qfd_internal_rotor_is_rotor :
+QFD/sketches/BivectorClasses.lean:268:theorem rotor_boost_topological_distinction :
+QFD/sketches/SpacetimeEmergence.lean:129:theorem centralizer_is_minkowski :
+QFD/sketches/SpacetimeEmergence.lean:215:theorem emergent_signature_is_minkowski :
+QFD/sketches/SpacetimeEmergence.lean:262:theorem time_is_momentum_direction :
+QFD/Math/ReciprocalIneq.lean:20:lemma one_div_le_one_div_of_le {a b : ℝ} (ha : 0 < a) (hab : a ≤ b) :
+QFD/Math/ReciprocalIneq.lean:30:lemma one_div_lt_one_div_of_lt {a b : ℝ} (ha : 0 < a) (hab : a < b) :
+QFD/Math/ReciprocalIneq.lean:39:lemma div_nonpos_of_nonpos_of_pos {a b : ℝ} (ha : a ≤ 0) (hb : 0 < b) :
+QFD/Math/ReciprocalIneq.lean:49:lemma one_le_inv_iff {a : ℝ} (ha : 0 < a) : (1 ≤ a⁻¹) ↔ a ≤ 1 := by
+QFD/Math/ReciprocalIneq.lean:65:lemma one_le_inv_of_pos_of_le_one {a : ℝ} (ha : 0 < a) (h1 : a ≤ 1) :
+QFD/Math/ReciprocalIneq.lean:70:lemma one_lt_inv_of_pos_of_lt_one {a : ℝ} (ha : 0 < a) (h1 : a < 1) :
+QFD/Math/ReciprocalIneq.lean:82:lemma mul_nonneg_of_nonpos_of_nonpos {a b : ℝ} (ha : a ≤ 0) (hb : b ≤ 0) :
+QFD/Neutrino_Topology.lean:37:lemma energy_scale_sq_toy (x : Ψtoy) (lam : ℝ) :
+QFD/Neutrino_Topology.lean:43:lemma qtop_invariant_toy (x : Ψtoy) (lam : ℝ) (_hlam : lam ≠ 0) :
+QFD/Neutrino_Topology.lean:60:theorem tendsto_energy_bleach_zero_toy (x : Ψtoy) :
+QFD/Neutrino_Topology.lean:65:theorem qtop_bleach_eq_toy (x : Ψtoy) {lam : ℝ} (hlam : lam ≠ 0) :
+QFD/Soliton/Quantization.lean:123:theorem charge_scaling (A : ℝ) :
+QFD/Soliton/Quantization.lean:145:theorem unique_vortex_charge :
+QFD/Soliton/Quantization.lean:171:theorem continuous_soliton_charge_positive (Q_target : ℝ) (hQ : 0 < Q_target) :
+QFD/Soliton/Quantization.lean:202:theorem elementary_charge_positive : 0 < elementary_charge ctx := by
+QFD/Soliton/Quantization.lean:222:theorem all_critical_vortices_same_charge (A₁ A₂ : ℝ)
+QFD/Soliton/HardWall.lean:78:theorem ricker_shape_at_zero :
+QFD/Soliton/HardWall.lean:121:theorem vortex_limit_at_center (ctx : VacuumContext) (A : ℝ) :
+QFD/Soliton/HardWall.lean:136:theorem critical_vortex_amplitude_necessary (ctx : VacuumContext) (A : ℝ)
+QFD/Soliton/HardWall.lean:152:theorem critical_vortex_amplitude_sufficient (ctx : VacuumContext) (A : ℝ)
+QFD/Soliton/HardWall.lean:165:theorem vortex_admissibility_iff (ctx : VacuumContext) (A : ℝ) (h_neg : A < 0) :
+QFD/Soliton/HardWall.lean:205:theorem critical_vortex_admissible (ctx : VacuumContext) :
+QFD/Soliton/GaussianMoments.lean:47:theorem Gamma_three : Gamma 3 = 2 := by
+QFD/Soliton/GaussianMoments.lean:55:theorem Gamma_four : Gamma 4 = 6 := by
+QFD/Soliton/GaussianMoments.lean:76:theorem gaussian_moment_odd (n : ℕ) (h_odd : Odd n) (h_pos : 0 < n) :
+QFD/Soliton/GaussianMoments.lean:86:theorem gaussian_moment_5 :
+QFD/Soliton/GaussianMoments.lean:100:theorem gaussian_moment_7 :
+QFD/Soliton/GaussianMoments.lean:128:theorem ricker_moment_value : ∃ I : ℝ, I = -40 := by
+QFD/Soliton/GaussianMoments.lean:143:theorem ricker_moment : ∃ I : ℝ, I = -40 := ricker_moment_value
+QFD/Soliton/BreatherModes.lean:23:theorem breathing_mode_exists (R₀ δ β : ℝ) (hβ : 0 < β) :
+QFD/Soliton/RickerAnalysis.lean:33:theorem S_at_zero : S 0 = 1 := by
+QFD/Soliton/RickerAnalysis.lean:37:theorem S_even (x : ℝ) : S (-x) = S x := by
+QFD/Soliton/RickerAnalysis.lean:44:theorem S_le_one (x : ℝ) : S x ≤ 1 := by
+QFD/Soliton/RickerAnalysis.lean:73:theorem ricker_negative_minimum (A : ℝ) (h_neg : A < 0) (x : ℝ) :
+QFD/Soliton/RickerAnalysis.lean:88:theorem S_deriv (x : ℝ) :
+QFD/Soliton/RickerAnalysis.lean:123:theorem S_critical_points (x : ℝ) :
+QFD/Soliton/RickerAnalysis.lean:161:theorem S_at_sqrt3 : S (Real.sqrt 3) = -2 * exp (-3/2) := by
+QFD/Soliton/RickerAnalysis.lean:284:theorem S_sqrt3_le (x : ℝ) : S (Real.sqrt 3) ≤ S x := by
+QFD/Soliton/RickerAnalysis.lean:315:theorem S_lower_bound (x : ℝ) : (-2 * exp (-3/2)) ≤ S x := by
+QFD/Soliton/RickerAnalysis.lean:323:theorem ricker_shape_bounded : ∀ x, S x ≤ 1 := S_le_one
+QFD/Soliton/RickerAnalysis.lean:326:theorem ricker_negative_min (A : ℝ) (h : A < 0) : ∀ R, A ≤ A * S R :=
+QFD/Soliton/RickerAnalysis.lean:330:theorem soliton_always_admissible_aux
+QFD/Classical/Conservation.lean:49:theorem energy_conservation
+QFD/Classical/Conservation.lean:89:theorem turning_point_velocity (V : ℝ → ℝ) (v : ℝ) (r : ℝ) (E : ℝ)
+QFD/Classical/Conservation.lean:118:theorem gravity_escape_velocity
+QFD/Classical/Conservation.lean:135:theorem gravity_bound_state
+QFD/Classical/Conservation.lean:207:theorem nuclear_binding_energy_exact :
+QFD/Classical/Conservation.lean:217:theorem nuclear_binding_energy_positive
+QFD/Classical/Conservation.lean:231:theorem nuclear_confinement
+QFD/EmergentAlgebra.lean:105:theorem generator_square (a : Generator) :
+QFD/EmergentAlgebra.lean:161:theorem spacetime_has_three_space_dims :
+QFD/EmergentAlgebra.lean:169:theorem spacetime_has_one_time_dim :
+QFD/EmergentAlgebra.lean:176:theorem internal_dims_not_spacetime :
+QFD/EmergentAlgebra.lean:183:theorem spacetime_signature :
+QFD/EmergentAlgebra.lean:239:theorem emergent_spacetime_is_minkowski :
+QFD/EmergentAlgebra.lean:281:lemma commutes_with_internal_bivector_iff_distinct :
+QFD/EmergentAlgebra.lean:291:theorem spacetime_sector_characterization :
+QFD/EmergentAlgebra.lean:302:theorem internal_sector_characterization :
+QFD/EmergentAlgebra.lean:313:theorem spacetime_has_four_dimensions :
+QFD/GoldenLoop.lean:230:theorem beta_predicts_c2 :
+QFD/GoldenLoop.lean:237:theorem beta_golden_positive : 0 < beta_golden := by
+QFD/GoldenLoop.lean:245:theorem beta_physically_reasonable :
+QFD/GoldenLoop.lean:274:theorem beta_matches_vacuum_parameters :
+QFD/GoldenLoop.lean:304:theorem golden_loop_complete :
+QFD/EmergentAlgebra_Heavy.lean:65:lemma Q_basis (i : Fin 6) :
+QFD/EmergentAlgebra_Heavy.lean:78:lemma e_sq (i : Fin 6) :
+QFD/EmergentAlgebra_Heavy.lean:85:lemma basis_orthogonal (i j : Fin 6) (h : i ≠ j) :
+QFD/EmergentAlgebra_Heavy.lean:151:lemma e_anticommute (i j : Fin 6) (h : i ≠ j) :
+QFD/EmergentAlgebra_Heavy.lean:176:theorem spacetime_commutes_with_B (i : Fin 6) (h : i.val < 4) :
+QFD/EmergentAlgebra_Heavy.lean:218:theorem internal_5_anticommutes_with_B :
+QFD/EmergentAlgebra_Heavy.lean:230:theorem internal_4_anticommutes_with_B :
+QFD/EmergentAlgebra_Heavy.lean:248:lemma B_mul_e4 : B * e 4 = e 5 := by
+QFD/EmergentAlgebra_Heavy.lean:265:lemma B_mul_e5 : B * e 5 = -e 4 := by
+QFD/EmergentAlgebra_Heavy.lean:281:theorem centralizer_contains_spacetime :
+QFD/EmergentAlgebra_Heavy.lean:294:lemma e_ne_zero (i : Fin 6) : e i ≠ 0 := by
+QFD/EmergentAlgebra_Heavy.lean:309:theorem internal_not_in_centralizer :
+QFD/BivectorClasses_Complete.lean:54:lemma Q33_on_single (i : Fin 6) :
+QFD/BivectorClasses_Complete.lean:78:theorem simple_bivector_square_classes (u v : Fin 6 → ℝ)
+QFD/BivectorClasses_Complete.lean:117:lemma basis_ortho {i j : Fin 6} (h : i ≠ j) :
+QFD/BivectorClasses_Complete.lean:162:theorem spatial_bivectors_are_rotors (i j : Fin 3) (h_neq : i ≠ j) :
+QFD/BivectorClasses_Complete.lean:195:theorem space_momentum_bivectors_are_boosts (i : Fin 3) (j : Fin 3) :
+QFD/BivectorClasses_Complete.lean:234:theorem momentum_bivectors_are_rotors (i j : Fin 3) (h_neq : i ≠ j) :
+QFD/BivectorClasses_Complete.lean:277:theorem qfd_internal_rotor_is_rotor :
+QFD/BivectorClasses_Complete.lean:285:theorem rotor_boost_topological_distinction :
+QFD/Neutrino.lean:39:lemma F_EM_commutes_B : F_EM * B = B * F_EM := by
+QFD/Neutrino.lean:53:lemma F_EM_commutes_one_add_B : F_EM * (1 + B) = (1 + B) * F_EM := by
+QFD/Neutrino.lean:58:lemma F_EM_commutes_P_Internal : F_EM * P_Internal = P_Internal * F_EM := by
+QFD/Neutrino.lean:80:theorem neutrino_has_zero_coupling : Interaction F_EM Neutrino_State = 0 := by
+QFD/Electrodynamics/CerenkovReal.lean:30:theorem radiation_shockwave_geometry (v n : ℝ) (h_v : v > 0) (h_n : n > 0) (h_cerenkov : n * v > 1) :
+QFD/Electrodynamics/MaxwellReal.lean:30:theorem maxwell_decomposition (k : Fin 4 → ℝ) (F : Cl33) :
+QFD/Electrodynamics/NoMonopoles.lean:13:theorem monopole_current_is_zero : magnetic_current = 0 := rfl
+QFD/Electrodynamics/LarmorPrecession.lean:15:theorem precession_frequency_match (gamma B : ℝ) :
+QFD/Electrodynamics/ProcaReal.lean:36:theorem internal_spin_is_mass_term (m : ℝ) :
+QFD/Electrodynamics/PoyntingTheorem.lean:44:lemma basis_sq (i : Fin 6) : e i * e i = algebraMap ℝ Cl33 (signature33 i) := by
+QFD/Electrodynamics/PoyntingTheorem.lean:47:lemma basis_anticomm {i j : Fin 6} (h : i ≠ j) : e i * e j = - e j * e i := by
+QFD/Electrodynamics/PoyntingTheorem.lean:125:theorem poynting_is_geometric_product :
+QFD/Electrodynamics/DispersionRelation.lean:33:theorem phase_group_velocity_product : v_phase * v_group = c * c := by
+QFD/Electrodynamics/MagneticHelicity.lean:39:theorem helicity_conservation (A B : ℝ) :
+QFD/Electrodynamics/MagneticHelicity.lean:50:theorem helicity_symmetric (A B : ℝ) :
+QFD/Electrodynamics/AharonovBohm.lean:34:theorem vector_potential_rotation (Φ : ℝ) (r : ℝ) (h : r > 0) :
+QFD/Electrodynamics/AharonovBohm.lean:44:theorem phase_independent_of_radius (Φ : ℝ) (r₁ r₂ : ℝ) (h₁ : r₁ > 0) (h₂ : r₂ > 0) :
+QFD/Neutrino_Bleaching.lean:49:theorem tendsto_energy_bleach_zero (ψ : Ψ) :
+QFD/Neutrino_Bleaching.lean:66:theorem qtop_bleach_eq (ψ : Ψ) {lam : ℝ} (hlam : lam ≠ 0) :
+QFD/Gravity/PerihelionShift.lean:24:theorem perihelion_shift_match (kappa : ℝ)
+QFD/Gravity/TimeRefraction.lean:45:theorem timePotential_eq (ctx : GravityContext) (rho : ℝ → ℝ) (r : ℝ) :
+QFD/Gravity/TimeRefraction.lean:51:theorem g00_eq (ctx : GravityContext) (rho : ℝ → ℝ) (r : ℝ) :
+QFD/Gravity/SnellLensing.lean:23:theorem einstein_angle_refractive_match
+QFD/Gravity/GeodesicEquivalence.lean:87:theorem geodesic_is_refractive (n : RefractiveIndex V) (h_phys : is_physical n) :
+QFD/Gravity/GeodesicForce.lean:29:theorem radialForce_eq
+QFD/Gravity/GeodesicForce.lean:57:lemma hasDerivAt_rhoPointMass (M : ℝ) {r : ℝ} (hr : r ≠ 0) :
+QFD/Gravity/GeodesicForce.lean:70:theorem inverse_square_force
+QFD/Gravity/SchwarzschildLink.lean:47:lemma inv_one_add_decomp (x : ℝ) (hx : 1 + x ≠ 0) :
+QFD/Gravity/SchwarzschildLink.lean:57:theorem qfd_g00_point_eq_inv
+QFD/Gravity/SchwarzschildLink.lean:76:theorem qfd_matches_schwarzschild_first_order
+QFD/Gravity/GeometricCoupling.lean:67:theorem dimension_decomposition :
+QFD/Gravity/GeometricCoupling.lean:101:theorem reduction_suppression_equiv :
+QFD/Gravity/GeometricCoupling.lean:124:theorem xi_formulations_equivalent :
+QFD/Gravity/GeometricCoupling.lean:136:theorem k_geom_squared_value :
+QFD/Gravity/GeometricCoupling.lean:142:theorem xi_validates_within_one_percent :
+QFD/Gravity/GeometricCoupling.lean:148:theorem xi_theoretical_is_sixteen :
+QFD/Gravity/GeometricCoupling.lean:159:theorem projection_reduces_coupling :
+QFD/Gravity/GeometricCoupling.lean:168:theorem projection_is_positive :
+QFD/Gravity/GeometricCoupling.lean:177:theorem projected_coupling_weaker :
+QFD/Gravity/GeometricCoupling.lean:198:theorem signature_balanced :
+QFD/Gravity/GeometricCoupling.lean:210:theorem dimension_accounting :
+QFD/Gravity/GeometricCoupling.lean:241:theorem dimensional_ratio_hypothesis :
+QFD/Gravity/GeometricCoupling.lean:260:theorem gravity_weaker_than_planck :
+QFD/Gravity/GeometricCoupling.lean:277:theorem xi_from_geometric_projection :
+QFD/Gravity/GeometricCoupling.lean:298:theorem derivation_chain_complete :
+QFD/Empirical/CoreCompression.lean:56:theorem backbone_minimizes_energy
+QFD/Empirical/CoreCompression.lean:69:theorem backbone_unique_minimizer
+QFD/Empirical/CoreCompression.lean:85:theorem beta_decay_favorable
+QFD/Schema/Constraints.lean:139:theorem valid_parameters_exist :
+QFD/Schema/Constraints.lean:259:theorem parameter_space_bounded :
+QFD/Schema/Constraints.lean:282:theorem constraints_satisfiable (params : GrandUnifiedParameters) :
+QFD/Relativity/SagnacEffect.lean:36:theorem rotating_frame_time_gap (Area omega : ℝ) :
+QFD/Relativity/TimeDilationMechanism.lean:34:theorem dilation_factor_geometric (v : ℝ) (h : v^2 < c^2) :
+QFD/Relativity/TimeDilationMechanism.lean:46:theorem gamma_ge_one (v : ℝ) (h : v ^ 2 < c ^ 2) : gamma v h ≥ 1 := by
+QFD/Relativity/LorentzRotors.lean:34:theorem rotor_preserves_interval (v : Cl33) (phi : ℝ) :
+QFD/Rift/SpinSorting.lean:69:theorem opposing_rotations_increase_escape
+QFD/Rift/SpinSorting.lean:139:theorem spin_sorting_equilibrium
+QFD/Rift/SpinSorting.lean:164:theorem observable_signature_opposing_spins
+QFD/Rift/SpinSorting.lean:190:theorem rift_evolution_differs_from_accretion
+QFD/Rift/RotationDynamics.lean:109:theorem angular_gradient_cancellation
+QFD/Rift/RotationDynamics.lean:166:theorem opposing_rotations_reduce_barrier
+QFD/Rift/RotationDynamics.lean:190:theorem equatorial_escape_preference
+QFD/Rift/RotationDynamics.lean:212:theorem rotation_causally_bounded (Omega : AngularVelocity) :
+QFD/Rift/ChargeEscape.lean:135:theorem modified_schwarzschild_escape
+QFD/Rift/ChargeEscape.lean:162:theorem thermal_dominance_for_plasma
+QFD/Rift/ChargeEscape.lean:176:theorem electron_thermal_advantage
+QFD/Rift/SequentialEruptions.lean:85:theorem charge_accumulation_monotonic
+QFD/Rift/SequentialEruptions.lean:127:theorem eruption_radius_increases
+QFD/Rift/SequentialEruptions.lean:181:theorem separation_fraction_increases_with_depth
+QFD/Rift/SequentialEruptions.lean:210:theorem electrons_escape_preferentially_in_rifts
+QFD/Neutrino_Oscillation.lean:73:theorem norm_evolve (H : OscillationHypotheses) (t : ℝ) (ψ0 : State) :
+QFD/Neutrino_Oscillation.lean:88:theorem sum_P_eq_norm_sq (H : OscillationHypotheses) (ψ0 : State) (t : ℝ) :
+QFD/Neutrino_Oscillation.lean:99:theorem sum_P_eq_one (H : OscillationHypotheses) (ψ0 : State) (t : ℝ)
+QFD/Neutrino_Oscillation.lean:109:theorem exists_oscillation (H : OscillationHypotheses) :
+QFD/Nuclear/YukawaDerivation.lean:59:theorem soliton_gradient_is_yukawa (A lam : ℝ) (r : ℝ) (h_r : r ≠ 0) :
+QFD/Nuclear/YukawaDerivation.lean:104:theorem magnitude_match (g_sq m k A lam : ℝ) (r : ℝ) (h_r : r ≠ 0)
+QFD/GA/BasisProducts.lean:183:lemma e01_commutes_e34
+QFD/GA/BasisProducts.lean:214:lemma e01_commutes_e45
+QFD/GA/BasisProducts.lean:241:lemma e012_sq
+QFD/GA/BasisProducts.lean:277:lemma e345_sq
+QFD/GA/BasisProducts.lean:322:lemma e012_e345_anticomm
+QFD/GA/HodgeDual.lean:62:theorem I6_square
