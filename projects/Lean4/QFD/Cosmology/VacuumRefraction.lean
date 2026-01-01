@@ -142,13 +142,22 @@ theorem modulation_bounded (ell : ℝ) (p : VacuumRefractionParams)
     1.0 - p.A_osc.val ≤ modulation_function ell p ∧
     modulation_function ell p ≤ 1.0 + p.A_osc.val := by
   unfold modulation_function
+  let cos_val := cos (2 * π * ell / (characteristic_ell_scale p.r_psi p.D_A) + p.phi)
+  have h_cos_bounds : -1 ≤ cos_val ∧ cos_val ≤ 1 := by
+    constructor
+    · exact neg_one_le_cos _
+    · exact cos_le_one _
+
+  have h_A_pos' : 0 ≤ p.A_osc.val := by linarith
   constructor
   · -- Lower bound: 1 - A_osc
-    sorry
-    -- Proof: cos(x) ≥ -1, so 1 + A × cos(x) ≥ 1 - A
+    have h_mul_ge : p.A_osc.val * cos_val ≥ p.A_osc.val * (-1) := by
+      exact mul_le_mul_of_nonneg_left h_cos_bounds.1 h_A_pos'
+    linarith
   · -- Upper bound: 1 + A_osc
-    sorry
-    -- Proof: cos(x) ≤ 1, so 1 + A × cos(x) ≤ 1 + A
+    have h_mul_le : p.A_osc.val * cos_val ≤ p.A_osc.val * 1 := by
+      exact mul_le_mul_of_nonneg_left h_cos_bounds.2 h_A_pos'
+    linarith
 
 /--
 **Theorem 2: Modulation preserves positivity**
@@ -162,39 +171,46 @@ theorem modulation_preserves_positivity (ell : ℝ) (C_ell_base : ℝ)
     (h_A : p.A_osc.val < 1.0)
     (h_A_pos : p.A_osc.val ≥ 0.0) :
     C_ell_base * modulation_function ell p > 0 := by
-  sorry
-  -- Proof: M(ℓ) ≥ 1 - A_osc > 0, and C_ell_base > 0
-  -- Therefore C_ell_base × M(ℓ) > 0
+  have h_mod_bounds := modulation_bounded ell p h_A h_A_pos
+  have h_mod_pos : modulation_function ell p > 0 := by
+    linarith [h_mod_bounds.1]
+  exact mul_pos h_C_pos h_mod_pos
 
 /--
 **Theorem 3: Oscillation period determined by correlation scale**
 
 The modulation function has period Δℓ = ℓ_scale in multipole space.
 -/
-theorem modulation_periodic (ell : ℝ) (p : VacuumRefractionParams) :
+theorem modulation_periodic (ell : ℝ) (p : VacuumRefractionParams) (h_p : VacuumRefractionConstraints p) :
     let ell_scale := characteristic_ell_scale p.r_psi p.D_A
     modulation_function (ell + ell_scale) p = modulation_function ell p := by
   unfold modulation_function characteristic_ell_scale
-  sorry
-  -- Proof: cos(2π(ℓ + Δℓ)/Δℓ + φ) = cos(2πℓ/Δℓ + 2π + φ) = cos(2πℓ/Δℓ + φ)
-
-/-! ## Connection to Scattering Parameters -/
+  simp only
+  have h_r_psi_pos : 0 < p.r_psi := by linarith [h_p.r_psi_positive]
+  have h_DA_pos : 0 < p.D_A := by linarith [h_p.D_A_positive]
+  have h_r_psi_ne_zero : p.r_psi ≠ 0 := ne_of_gt h_r_psi_pos
+  have h_DA_ne_zero : p.D_A ≠ 0 := ne_of_gt h_DA_pos
+  have h_scale_ne_zero : π * p.D_A / p.r_psi ≠ 0 := by
+    apply div_ne_zero
+    · apply mul_ne_zero pi_ne_zero h_DA_ne_zero
+    · exact h_r_psi_ne_zero
+  -- Simplify: need to show cos(2π(ell + scale)/scale + φ) = cos(2πell/scale + φ)
+  -- This follows from: (ell + scale)/scale = ell/scale + 1, so argument shifts by 2π
+  congr 1
+  have h_algebra : 2 * π * (ell + π * p.D_A / p.r_psi) / (π * p.D_A / p.r_psi) + p.phi =
+                   2 * π * ell / (π * p.D_A / p.r_psi) + p.phi + 2 * π := by
+    field_simp
+    ring
+  rw [h_algebra, cos_add_two_pi]
 
 /--
-Unitarity constraint on oscillation amplitude.
+**Definition: Unitarity bound**
 
-Physical requirement: The total modulation cannot exceed the available
-scattering cross section. If survival fraction S(z) = exp(-τ), then
-the maximum coherent modulation is bounded by scattered fraction (1-S).
-
-For cosmologically relevant redshifts (z ~ 1100 for CMB last scattering),
-this gives:
-  A_osc ≤ (1 - S(z_CMB))
+The oscillation amplitude should not exceed what's physically allowed by
+the survival fraction from scattering.
 -/
-def unitarity_bound (p : VacuumRefractionParams) (z_CMB : ℝ) : Prop :=
-  let tau := p.alpha.val * z_CMB ^ p.beta.val
-  let S := exp (-tau)
-  p.A_osc.val ≤ (1.0 - S)
+def unitarity_bound (p : VacuumRefractionParams) (z : ℝ) : Prop :=
+  p.A_osc.val ≤ 1.0 - exp (-(p.alpha.val * z ^ p.beta.val))
 
 /--
 **Theorem 4: Unitarity bound is physical**
@@ -208,9 +224,14 @@ theorem unitarity_implies_physical (p : VacuumRefractionParams) (z_CMB : ℝ)
     (h_unit : unitarity_bound p z_CMB) :
     p.A_osc.val < 1.0 := by
   unfold unitarity_bound at h_unit
-  sorry
-  -- Proof: S = exp(-τ) with τ > 0 implies S < 1
-  -- Therefore 1 - S < 1, and A_osc ≤ 1 - S implies A_osc < 1
+  have h_tau_pos : p.alpha.val * z_CMB ^ p.beta.val > 0 := by
+    apply mul_pos h_alpha
+    apply rpow_pos_of_pos h_z
+  have h_exp_pos : 0 < exp (-(p.alpha.val * z_CMB ^ p.beta.val)) := exp_pos _
+  have h_exp_lt_one : exp (-(p.alpha.val * z_CMB ^ p.beta.val)) < 1 := by
+    rw [exp_lt_one_iff]
+    linarith
+  linarith [h_exp_pos]
 
 /-! ## CMB Power Spectrum Predictions -/
 

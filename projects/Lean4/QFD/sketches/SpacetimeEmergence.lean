@@ -137,47 +137,77 @@ theorem centralizer_is_minkowski :
     (e 4 * B_internal = - (B_internal * e 4)) ∧
     (e 5 * B_internal = - (B_internal * e 5)) := by
 
+  have h_anticomm : ∀ (i j : Fin 6), i ≠ j → e i * e j = - (e j * e i) := by
+    intro i j hij
+    rw [e, e, CliffordAlgebra.ι_mul_ι_comm]
+    simp [Q33, QuadraticMap.polar, QuadraticMap.weightedSumSquares, Pi.single_apply, hij]
+    rw [Finset.sum_eq_zero]
+    intro k _
+    rw [Pi.single_apply, Pi.single_apply]
+    by_cases hik : i = k
+    · rw [hik, if_pos rfl, if_neg (by simp [hij, hik])]
+      simp
+    · rw [if_neg hik, mul_zero]
+
   constructor
   -- 1. Space vectors e₀, e₁, e₂ commute with e₄ ∧ e₅
   · intro i
     unfold commutes_with_B B_internal
-    -- Space vectors are orthogonal to momentum vectors
-    -- eᵢ (e₄ e₅) = e₄ e₅ eᵢ by double anticommutation:
-    -- eᵢ e₄ e₅ = -e₄ eᵢ e₅ = -e₄ (-e₅ eᵢ) = e₄ e₅ eᵢ
-    sorry -- Clifford algebra manipulation
+    have h_i4 : (⟨i.val, by omega⟩ : Fin 6) ≠ 4 := by simp
+    have h_i5 : (⟨i.val, by omega⟩ : Fin 6) ≠ 5 := by simp
+    rw [h_anticomm (⟨i.val, by omega⟩) 4 h_i4, h_anticomm (⟨i.val, by omega⟩) 5 h_i5]
+    simp only [mul_neg, neg_mul, neg_neg]
+    rw [← mul_assoc, h_anticomm 4 5 (by norm_num)]
+    simp
 
   constructor
   -- 2. e₃ commutes with e₄ ∧ e₅
   · unfold commutes_with_B B_internal
-    -- e₃, e₄, e₅ are mutually orthogonal momentum vectors
-    -- Same logic as above
-    sorry
+    have h_34 : (3 : Fin 6) ≠ 4 := by norm_num
+    have h_35 : (3 : Fin 6) ≠ 5 := by norm_num
+    rw [h_anticomm 3 4 h_34, h_anticomm 3 5 h_35]
+    simp only [mul_neg, neg_mul, neg_neg]
+    rw [← mul_assoc, h_anticomm 4 5 (by norm_num)]
+    simp
 
   constructor
   -- 3. e₃ squares to -1 (momentum signature)
-  · -- e₃ is index 3, which is ≥ 3, so Q33(e₃) = -1
-    have h : (3 : ℕ) ≥ 3 := by norm_num
-    rw [e]
-    simp only [CliffordAlgebra.ι_sq_scalar, Q33]
-    sorry -- Evaluate quadratic form at index 3
+  · rw [e, CliffordAlgebra.ι_sq_scalar, Q33, QuadraticMap.weightedSumSquares_apply]
+    simp only [Pi.single_apply]
+    rw [Finset.sum_eq_single (3 : Fin 6)]
+    · rw [if_pos rfl, one_pow, mul_one]
+      unfold signature33
+      norm_num
+    · intro b _ hb
+      rw [if_neg hb, zero_pow, mul_zero]
+      exact two_ne_zero
+    · simp
 
   constructor
   -- 4a. e₄ anticommutes with B = e₄ e₅
   · unfold B_internal
-    -- e₄ (e₄ e₅) = e₄² e₅ = (-1) e₅ = -e₅
-    -- (e₄ e₅) e₄ = -e₄ (e₅ e₄) = -e₄ (-e₄ e₅) = e₄² e₅ = -e₅
-    -- Wait, these are equal. Let me reconsider...
-    -- e₄ (e₄ e₅) = -1 · e₅
-    -- (e₄ e₅) e₄ = e₄ e₅ e₄ = -e₄ e₄ e₅ = -(-1) e₅ = e₅
-    -- So: e₄ B = -e₅ and B e₄ = +e₅, therefore e₄ B = -B e₄
-    sorry
+    have h45 := h_anticomm 4 5 (by norm_num)
+    have h44 : e 4 * e 4 = algebraMap ℝ Cl33 (-1) := by
+        rw [e, CliffordAlgebra.ι_sq_scalar, Q33, QuadraticMap.weightedSumSquares_apply]
+        simp only [Pi.single_apply]
+        rw [Finset.sum_eq_single (4 : Fin 6)]
+        · rw [if_pos rfl, one_pow, mul_one, signature33]; norm_num
+        · intro b _ hb; rw [if_neg hb, zero_pow, mul_zero]; exact two_ne_zero
+        · simp
+    rw [← mul_assoc, h44]
+    simp
 
   -- 4b. e₅ anticommutes with B = e₄ e₅
   · unfold B_internal
-    -- e₅ (e₄ e₅) = -e₄ (e₅ e₅) = -e₄ (-1) = e₄
-    -- (e₄ e₅) e₅ = e₄ (e₅ e₅) = e₄ (-1) = -e₄
-    -- So: e₅ B = e₄ and B e₅ = -e₄, therefore e₅ B = -B e₅
-    sorry
+    have h55 : e 5 * e 5 = algebraMap ℝ Cl33 (-1) := by
+        rw [e, CliffordAlgebra.ι_sq_scalar, Q33, QuadraticMap.weightedSumSquares_apply]
+        simp only [Pi.single_apply]
+        rw [Finset.sum_eq_single (5 : Fin 6)]
+        · rw [if_pos rfl, one_pow, mul_one, signature33]; norm_num
+        · intro b _ hb; rw [if_neg hb, zero_pow, mul_zero]; exact two_ne_zero
+        · simp
+    rw [h_anticomm 4 5 (by norm_num), mul_assoc, h55]
+    simp
 
 /-! ## 5. Signature Analysis -/
 
@@ -188,18 +218,32 @@ theorem emergent_signature_is_minkowski :
     (e 2 * e 2 = algebraMap ℝ Cl33 1) ∧   -- z² = +1
     (e 3 * e 3 = algebraMap ℝ Cl33 (-1)) := by  -- t² = -1
   constructor
-  · -- e₀² = +1
-    rw [e]
-    simp only [CliffordAlgebra.ι_sq_scalar]
-    sorry
+  · rw [e, CliffordAlgebra.ι_sq_scalar, Q33, QuadraticMap.weightedSumSquares_apply]
+    simp only [Pi.single_apply]
+    rw [Finset.sum_eq_single (0 : Fin 6)]
+    · rw [if_pos rfl, one_pow, mul_one, signature33]; norm_num
+    · intro b _ hb; rw [if_neg hb, zero_pow, mul_zero]; exact two_ne_zero
+    · simp
   constructor
-  · -- e₁² = +1
-    sorry
+  · rw [e, CliffordAlgebra.ι_sq_scalar, Q33, QuadraticMap.weightedSumSquares_apply]
+    simp only [Pi.single_apply]
+    rw [Finset.sum_eq_single (1 : Fin 6)]
+    · rw [if_pos rfl, one_pow, mul_one, signature33]; norm_num
+    · intro b _ hb; rw [if_neg hb, zero_pow, mul_zero]; exact two_ne_zero
+    · simp
   constructor
-  · -- e₂² = +1
-    sorry
-  · -- e₃² = -1
-    sorry
+  · rw [e, CliffordAlgebra.ι_sq_scalar, Q33, QuadraticMap.weightedSumSquares_apply]
+    simp only [Pi.single_apply]
+    rw [Finset.sum_eq_single (2 : Fin 6)]
+    · rw [if_pos rfl, one_pow, mul_one, signature33]; norm_num
+    · intro b _ hb; rw [if_neg hb, zero_pow, mul_zero]; exact two_ne_zero
+    · simp
+  · rw [e, CliffordAlgebra.ι_sq_scalar, Q33, QuadraticMap.weightedSumSquares_apply]
+    simp only [Pi.single_apply]
+    rw [Finset.sum_eq_single (3 : Fin 6)]
+    · rw [if_pos rfl, one_pow, mul_one, signature33]; norm_num
+    · intro b _ hb; rw [if_neg hb, zero_pow, mul_zero]; exact two_ne_zero
+    · simp
 
 /-! ## 6. Physical Consequences -/
 
@@ -217,7 +261,30 @@ selected internal plane.
 -/
 theorem time_is_momentum_direction :
     (e 3 * e 3 = e 4 * e 4) ∧ (e 3 * e 3 = e 5 * e 5) := by
-  constructor <;> sorry
+  have h3 : e 3 * e 3 = algebraMap ℝ Cl33 (-1) := by
+    rw [e, CliffordAlgebra.ι_sq_scalar, Q33, QuadraticMap.weightedSumSquares_apply]
+    simp only [Pi.single_apply]
+    rw [Finset.sum_eq_single (3 : Fin 6)]
+    · rw [if_pos rfl, one_pow, mul_one, signature33]; norm_num
+    · intro b _ hb; rw [if_neg hb, zero_pow, mul_zero]; exact two_ne_zero
+    · simp
+  have h4 : e 4 * e 4 = algebraMap ℝ Cl33 (-1) := by
+    rw [e, CliffordAlgebra.ι_sq_scalar, Q33, QuadraticMap.weightedSumSquares_apply]
+    simp only [Pi.single_apply]
+    rw [Finset.sum_eq_single (4 : Fin 6)]
+    · rw [if_pos rfl, one_pow, mul_one, signature33]; norm_num
+    · intro b _ hb; rw [if_neg hb, zero_pow, mul_zero]; exact two_ne_zero
+    · simp
+  have h5 : e 5 * e 5 = algebraMap ℝ Cl33 (-1) := by
+    rw [e, CliffordAlgebra.ι_sq_scalar, Q33, QuadraticMap.weightedSumSquares_apply]
+    simp only [Pi.single_apply]
+    rw [Finset.sum_eq_single (5 : Fin 6)]
+    · rw [if_pos rfl, one_pow, mul_one, signature33]; norm_num
+    · intro b _ hb; rw [if_neg hb, zero_pow, mul_zero]; exact two_ne_zero
+    · simp
+  constructor
+  · rw [h3, h4]
+  · rw [h3, h5]
 
 /-! ## 7. Comparison with Standard Minkowski Space -/
 

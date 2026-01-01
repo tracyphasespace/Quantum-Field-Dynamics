@@ -123,7 +123,44 @@ theorem quartic_dominates_at_high_density (V4_nuc_val lambda : ℝ)
     ∃ rho_crit : ℝ, rho_crit > 1 ∧
     ∀ r : ℝ, r > rho_crit →
     V4_nuc_val * r^4 > lambda * r^2 := by
-  sorry
+  -- Choose rho_crit = sqrt(lambda / V4_nuc_val) + 1
+  -- For r > rho_crit, we have V4 * r^4 = V4 * r^2 * r^2 > lambda * r^2
+  use Real.sqrt (lambda / V4_nuc_val) + 1
+  constructor
+  · -- Show rho_crit > 1
+    have h_div_pos : 0 < lambda / V4_nuc_val := div_pos h_lambda h_V4
+    have h_sqrt_pos : 0 < Real.sqrt (lambda / V4_nuc_val) := Real.sqrt_pos.mpr h_div_pos
+    linarith
+  · -- Show ∀ r > rho_crit, V4_nuc_val * r^4 > lambda * r^2
+    intro r hr
+    have hr_pos : 0 < r := by
+      have : 0 < Real.sqrt (lambda / V4_nuc_val) + 1 := by
+        have h_sqrt_nonneg : 0 ≤ Real.sqrt (lambda / V4_nuc_val) := Real.sqrt_nonneg _
+        linarith
+      linarith
+    have hr2_pos : 0 < r ^ 2 := by positivity
+    -- Prove V4 * r^4 > lambda * r^2
+    -- Strategy: r^4 = r^2 * r^2, so V4 * r^4 = V4 * r^2 * r^2
+    -- We need V4 * r^2 * r^2 > lambda * r^2
+    -- Which is equivalent to V4 * r^2 > lambda (since r^2 > 0)
+    -- Which follows from r^2 > lambda/V4 (since V4 > 0)
+    have hr_gt_sqrt : r > Real.sqrt (lambda / V4_nuc_val) := by linarith
+    have h_div_pos : 0 < lambda / V4_nuc_val := div_pos h_lambda h_V4
+    have h_sqrt_pos : 0 < Real.sqrt (lambda / V4_nuc_val) := Real.sqrt_pos.mpr h_div_pos
+    have h_sqrt_sq : Real.sqrt (lambda / V4_nuc_val) ^ 2 = lambda / V4_nuc_val :=
+      Real.sq_sqrt (le_of_lt h_div_pos)
+    have h_r2_gt : r ^ 2 > lambda / V4_nuc_val := by
+      have h_sqrt_nonneg : 0 ≤ Real.sqrt (lambda / V4_nuc_val) := le_of_lt h_sqrt_pos
+      calc r ^ 2
+          > Real.sqrt (lambda / V4_nuc_val) ^ 2 := by
+            exact sq_lt_sq' (by linarith [h_sqrt_nonneg]) hr_gt_sqrt
+        _ = lambda / V4_nuc_val := h_sqrt_sq
+    calc V4_nuc_val * r ^ 4
+        = V4_nuc_val * (r ^ 2 * r ^ 2) := by ring
+      _ = (V4_nuc_val * r ^ 2) * r ^ 2 := by ring
+      _ > (V4_nuc_val * (lambda / V4_nuc_val)) * r ^ 2 := by
+          exact mul_lt_mul_of_pos_right (mul_lt_mul_of_pos_left h_r2_gt h_V4) hr2_pos
+      _ = lambda * r ^ 2 := by field_simp
 
 /-- Stability requires positive quartic stiffness -/
 theorem stability_requires_positive_V4_nuc :

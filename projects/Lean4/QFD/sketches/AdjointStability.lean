@@ -153,32 +153,56 @@ theorem kinetic_energy_is_positive_definite (Ψ : Multivector) :
 
   -- Goal: ∑ I, (adjoint_action I * Ψ I) * (Ψ I) * (blade_square I) ≥ 0
 
+  have blade_square_is_pm_one : ∀ (I : BasisIndex), blade_square I = 1 ∨ blade_square I = -1 := by
+    intro I
+    unfold blade_square
+    let metric_product_is_pm_one : I.prod signature = 1 ∨ I.prod signature = -1 := by
+      apply Finset.prod_induction
+      · simp
+      · intro i s his ih
+        rw [Finset.prod_insert his]
+        unfold signature
+        split_ifs
+        · rw [one_mul]
+          exact ih
+        · rw [neg_one_mul]
+          cases ih <;> simp [*]
+    let swap_sign_is_pm_one : (if I.card * (I.card - 1) / 2 % 2 = 0 then (1:ℝ) else -1) = 1 ∨ (if I.card * (I.card - 1) / 2 % 2 = 0 then (1:ℝ) else -1) = -1 := by
+      split_ifs <;> simp
+    cases metric_product_is_pm_one <;> cases swap_sign_is_pm_one <;> simp [*]
+
   apply Finset.sum_nonneg
   intro I _
 
   -- For each basis blade I, show the term is non-negative
   -- Term: (adjoint_action I * Ψ I) * Ψ I * blade_square I
 
-  -- Key lemma: action × square = 1
-  have h_cancel : (adjoint_action I) * (blade_square I) = 1 := by
+  -- Key lemma: action × square is positive
+  have h_cancel : (adjoint_action I) * (blade_square I) > 0 := by
     unfold adjoint_action
-    by_cases h : blade_square I < 0
-    · -- Case: blade_square I = -1 (simplified)
-      simp [if_pos h]
-      -- adjoint_action = -1, blade_square < 0
-      -- Need: -1 × blade_square = 1
-      -- This holds if blade_square = -1 exactly (for normalized blades)
-      sorry -- Full proof requires showing blade_square ∈ {-1, +1}
-    · -- Case: blade_square I ≥ 0 (so = +1)
-      simp [if_neg h]
-      -- adjoint_action = 1, blade_square ≥ 0
-      -- For normalized blades, blade_square = 1
-      sorry -- Requires blade_square normalization lemma
+    by_cases h_neg : blade_square I < 0
+    · have h_sq_eq : blade_square I = -1 := by
+        linarith [(blade_square_is_pm_one I).resolve_left (by linarith)]
+      simp [if_pos h_neg, h_sq_eq]
+    · have h_sq_eq : blade_square I = 1 := by
+        linarith [(blade_square_is_pm_one I).resolve_right h_neg]
+      simp [if_neg h_neg, h_sq_eq]
+
+  -- In our simplified model, we can prove it equals 1
+  have h_eq_one : (adjoint_action I) * (blade_square I) = 1 := by
+    unfold adjoint_action
+    by_cases h_neg : blade_square I < 0
+    · have h_sq_eq : blade_square I = -1 := by
+        linarith [(blade_square_is_pm_one I).resolve_left (by linarith)]
+      simp [if_pos h_neg, h_sq_eq]
+    · have h_sq_eq : blade_square I = 1 := by
+        linarith [(blade_square_is_pm_one I).resolve_right h_neg]
+      simp [if_neg h_neg, h_sq_eq]
 
   -- Rearrange: (a * x) * x * b = (a * b) * (x * x)
   calc (adjoint_action I * Ψ I) * Ψ I * blade_square I
       = (adjoint_action I * blade_square I) * (Ψ I * Ψ I) := by ring
-    _ = 1 * (Ψ I * Ψ I) := by rw [h_cancel]
+    _ = 1 * (Ψ I * Ψ I) := by rw [h_eq_one]
     _ = (Ψ I) ^ 2 := by ring
     _ ≥ 0 := sq_nonneg _
 
@@ -189,9 +213,37 @@ The only multivector with zero kinetic energy is the zero multivector.
 theorem kinetic_energy_zero_iff_zero (Ψ : Multivector) :
   scalar_product (qfd_adjoint Ψ) Ψ = 0 ↔ ∀ I, Ψ I = 0 := by
   constructor
-  · intro h_zero I
-    -- If ⟨Ψ† Ψ⟩₀ = 0, then Σᵢ (Ψ I)² = 0, so all Ψ I = 0
-    sorry -- Sum of squares = 0 → each term = 0
+  · intro h_zero
+    -- We've shown `scalar_product (qfd_adjoint Ψ) Ψ = ∑ I, (Ψ I)^2`
+    -- So if the sum is zero, each term must be zero.
+    have h_sum_sq_eq_zero : (∑ I : BasisIndex, (Ψ I) ^ 2) = 0 := by
+      have h_prod_eq_sum_sq : scalar_product (qfd_adjoint Ψ) Ψ = ∑ I : BasisIndex, (Ψ I) ^ 2 := by
+        unfold scalar_product qfd_adjoint
+        apply Finset.sum_congr rfl
+        intro I _
+        let h_eq_one : (adjoint_action I) * (blade_square I) = 1 := by
+            unfold adjoint_action
+            have blade_square_is_pm_one : blade_square I = 1 ∨ blade_square I = -1 := by
+                unfold blade_square
+                let metric_product_is_pm_one : I.prod signature = 1 ∨ I.prod signature = -1 := by
+                  apply Finset.prod_induction; · simp; · intro i s his ih; rw [Finset.prod_insert his]; unfold signature; split_ifs; · rw [one_mul]; exact ih; · rw [neg_one_mul]; cases ih <;> simp [*]
+                let swap_sign_is_pm_one : (if I.card * (I.card - 1) / 2 % 2 = 0 then (1:ℝ) else -1) = 1 ∨ (if I.card * (I.card - 1) / 2 % 2 = 0 then (1:ℝ) else -1) = -1 := by split_ifs <;> simp
+                cases metric_product_is_pm_one <;> cases swap_sign_is_pm_one <;> simp [*]
+            by_cases h_neg : blade_square I < 0
+            · have h_sq_eq : blade_square I = -1 := by linarith [(blade_square_is_pm_one).resolve_left (by linarith)]
+              simp [if_pos h_neg, h_sq_eq]
+            · have h_sq_eq : blade_square I = 1 := by linarith [(blade_square_is_pm_one).resolve_right h_neg]
+              simp [if_neg h_neg, h_sq_eq]
+        calc (adjoint_action I * Ψ I) * Ψ I * blade_square I
+            = (adjoint_action I * blade_square I) * (Ψ I * Ψ I) := by ring
+          _ = 1 * (Ψ I * Ψ I) := by rw [h_eq_one]
+          _ = (Ψ I) ^ 2 := by ring
+      rw [h_prod_eq_sum_sq] at h_zero
+      exact h_zero
+    rw [Finset.sum_eq_zero_iff_of_nonneg (by intro I _; apply sq_nonneg)] at h_sum_sq_eq_zero
+    intro I
+    have h_sq_eq_zero := h_sum_sq_eq_zero I (Finset.mem_univ I)
+    exact pow_eq_zero h_sq_eq_zero
   · intro h_zero
     -- If Ψ = 0 everywhere, clearly ⟨0† 0⟩₀ = 0
     unfold scalar_product qfd_adjoint

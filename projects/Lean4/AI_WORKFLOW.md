@@ -7,17 +7,55 @@
 
 ## 📚 Related Documentation
 
+- **CRITICAL_CONSTANTS.md** ⚠️ **READ FIRST if touching vacuum parameters!**
 - **MATHLIB_SEARCH_GUIDE.md** - How to find theorems in Mathlib, handle type system issues
 - **COMPLETE_GUIDE.md** - Full system architecture and proof patterns
 - **PROTECTED_FILES.md** - Files that should not be modified
 
 ---
 
-## 🚨 GOLDEN RULE
+## 🚨 GOLDEN RULES
 
-**Write ONE proof → `lake build` → Fix errors → Verify → Next proof**
+1. **Write ONE proof → `lake build` → Fix errors → Verify → Next proof**
+2. **NEVER hardcode constants - always import from VacuumParameters.lean**
+3. **NEVER submit work without successful build verification**
 
-**NEVER submit work without successful build verification.**
+---
+
+## ⚠️ CRITICAL: Constant Validation (READ THIS!)
+
+**If your work involves ANY of these constants:**
+- `alpha_circ` (circulation coupling)
+- `beta` (vacuum compression)
+- `xi` (vacuum gradient)
+- `V4_*` (QED coefficients)
+- Any circulation or g-2 formulas
+
+**STOP and read [`CRITICAL_CONSTANTS.md`](CRITICAL_CONSTANTS.md) IMMEDIATELY!**
+
+### Common Contamination Error
+
+❌ **WRONG** (Standard Model contamination):
+```lean
+def alpha_circ : ℝ := 1 / (2 * Real.pi)  -- ≈ 0.159 - WRONG!
+```
+
+✅ **CORRECT** (QFD validated):
+```lean
+import QFD.Vacuum.VacuumParameters
+noncomputable def alpha_circ : ℝ := QFD.Vacuum.alpha_circ  -- e/(2π) ≈ 0.4326
+```
+
+**This error changes V₄(muon) from +0.836 to +0.10 - completely wrong physics!**
+
+### Validation Protocol
+
+Before committing ANY constant definitions:
+
+1. ✅ Check `CRITICAL_CONSTANTS.md` for correct value
+2. ✅ Import from `QFD.Vacuum.VacuumParameters` (never hardcode)
+3. ✅ Run Python validation script if modifying VacuumParameters.lean
+4. ✅ Verify build succeeds: `lake build QFD.Vacuum.VacuumParameters`
 
 ---
 

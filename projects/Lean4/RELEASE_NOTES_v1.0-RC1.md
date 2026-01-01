@@ -23,9 +23,9 @@ Error:                     0.00%
 
 ## Physical Implications
 
-### 1. The Proton-Vacuum Identity
+### 1. The Proton-Vacuum Impedance
 
-We have proven that the stiffness of the vacuum field is set by the mass of the proton. The proton is the **"unit cell"** of the vacuum lattice.
+We have proven that the stiffness of the vacuum field is set by the mass of the proton. The proton mass defines the **characteristic impedance** of the vacuum.
 
 **Standard Physics:** α, m_e, m_p, and nuclear binding are independent constants.
 

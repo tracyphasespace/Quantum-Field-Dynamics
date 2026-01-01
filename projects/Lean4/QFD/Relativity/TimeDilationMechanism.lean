@@ -44,6 +44,23 @@ For any subluminal velocity v < c, the Lorentz factor γ ≥ 1.
 This follows from the fact that √(1-v²/c²) ≤ 1 for v < c, so 1/√(1-v²/c²) ≥ 1.
 -/
 theorem gamma_ge_one (v : ℝ) (h : v ^ 2 < c ^ 2) : gamma v h ≥ 1 := by
-  sorry  -- TODO: Prove using Real.one_le_one_div and Real.sqrt_le_one
+  unfold gamma c
+  simp only [one_div, sq]
+  -- After simplification, goal is: (√(1 - v * v / (1 * 1)))⁻¹ ≥ 1
+  -- Simplify 1 * 1 = 1 and division by 1
+  rw [show (1 : ℝ) * 1 = 1 by norm_num, div_one, inv_eq_one_div]
+  -- Now goal is: 1 / √(1 - v * v) ≥ 1
+  have h_v2_lt_one : v * v < 1 := by
+    have : c = 1 := rfl
+    rw [sq, sq] at h
+    simpa [this] using h
+  have h_pos : 0 < 1 - v * v := by linarith
+  have h_sqrt_pos : 0 < Real.sqrt (1 - v * v) := Real.sqrt_pos.mpr h_pos
+  -- Prove √(1 - v*v) ≤ 1
+  have h_sqrt_le_one : Real.sqrt (1 - v * v) ≤ 1 := by
+    have h2 : 1 - v * v ≤ 1 := sub_le_self 1 (mul_self_nonneg v)
+    exact (Real.sqrt_le_one.mpr h2)
+  -- Use one_le_div : 1 ≤ a / b ↔ b ≤ a (with b > 0)
+  exact (one_le_div h_sqrt_pos).mpr h_sqrt_le_one
 
 end QFD.Relativity.TimeDilationMechanism

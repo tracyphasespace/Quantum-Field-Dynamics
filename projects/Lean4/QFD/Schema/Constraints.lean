@@ -1,6 +1,9 @@
 import QFD.Schema.Couplings
 import Mathlib.Data.Real.Basic
 import Mathlib.Order.Bounds.Basic
+import Mathlib.Tactic.Linarith
+
+set_option linter.style.commandStart false
 
 noncomputable section
 
@@ -135,7 +138,122 @@ structure CrossDomainConsistency (params : GrandUnifiedParameters) : Prop where
 /-- Theorem: Valid parameter space is non-empty -/
 theorem valid_parameters_exist :
     ∃ (params : GrandUnifiedParameters), ValidParameters params := by
-  sorry  -- Constructive proof: provide example parameter set
+  -- Construct a default parameter set that satisfies all constraints
+  let default_std : StandardConstants := {
+    c := { val := 3e8 },     -- m/s
+    G := { val := 6.67e-11 }, -- m³/kg/s²
+    hbar := { val := 1.055e-34 }, -- J·s
+    e := { val := 1.602e-19 }, -- C
+    k_B := { val := 1.381e-23 }  -- J/K
+  }
+  let default_nuclear_params : NuclearParams := {
+    c1 := { val := 1.0 },
+    c2 := { val := 0.05 },
+    V4 := { val := 1e7 },
+    k_c2 := { val := 1e6 },
+    alpha_n := { val := 3.5 },
+    beta_n := { val := 3.9 },
+    gamma_e := { val := 5.5 }
+  }
+  let default_cosmo_params : CosmoParams := {
+    k_J := { val := 70.0 },
+    eta_prime := { val := 0.05 },
+    A_plasma := { val := 0.5 },
+    rho_vac := { val := 1e-27 },
+    w_dark := { val := -1.0 }
+  }
+  let default_particle_params : ParticleParams := {
+    g_c := { val := 0.95 },
+    V2 := { val := 1e11 },
+    lambda_R := { val := 1.0 },
+    mu_e := { val := 5.11e5 },
+    mu_nu := { val := 0.1 }
+  }
+  let default_params : GrandUnifiedParameters := {
+    std := default_std,
+    nuclear := default_nuclear_params,
+    cosmo := default_cosmo_params,
+    particle := default_particle_params
+  }
+  use default_params
+  have h_nuclear :
+      NuclearConstraints default_nuclear_params := by
+    refine
+      { c1_positive := ?_,
+        c1_range := ?_,
+        c2_positive := ?_,
+        c2_range := ?_,
+        V4_positive := ?_,
+        V4_range := ?_,
+        k_c2_positive := ?_,
+        k_c2_range := ?_,
+        alpha_n_positive := ?_,
+        alpha_n_range := ?_,
+        beta_n_positive := ?_,
+        beta_n_range := ?_,
+        gamma_e_positive := ?_,
+        gamma_e_range := ?_,
+        genesis_compatible := ?_ }
+    · simp [default_nuclear_params]; norm_num
+    · constructor <;> (simp [default_nuclear_params]; norm_num)
+    · simp [default_nuclear_params]; norm_num
+    · constructor <;> (simp [default_nuclear_params]; norm_num)
+    · simp [default_nuclear_params]; norm_num
+    · constructor <;> (simp [default_nuclear_params]; norm_num)
+    · simp [default_nuclear_params]; norm_num
+    · constructor <;> (simp [default_nuclear_params]; norm_num)
+    · simp [default_nuclear_params]; norm_num
+    · constructor <;> (simp [default_nuclear_params]; norm_num)
+    · simp [default_nuclear_params]; norm_num
+    · constructor <;> (simp [default_nuclear_params]; norm_num)
+    · simp [default_nuclear_params]; norm_num
+    · constructor <;> (simp [default_nuclear_params]; norm_num)
+    · constructor <;> (simp [default_nuclear_params]; norm_num)
+  have h_cosmo :
+      CosmoConstraints default_cosmo_params := by
+    refine
+      { k_J_positive := ?_,
+        k_J_range := ?_,
+        eta_prime_nonneg := ?_,
+        eta_prime_range := ?_,
+        A_plasma_nonneg := ?_,
+        A_plasma_range := ?_,
+        rho_vac_nonneg := ?_,
+        rho_vac_range := ?_,
+        w_dark_range := ?_ }
+    · simp [default_cosmo_params]; norm_num
+    · constructor <;> (simp [default_cosmo_params]; norm_num)
+    · simp [default_cosmo_params]; norm_num
+    · constructor <;> (simp [default_cosmo_params]; norm_num)
+    · simp [default_cosmo_params]; norm_num
+    · constructor <;> (simp [default_cosmo_params]; norm_num)
+    · simp [default_cosmo_params]; norm_num
+    · constructor <;> (simp [default_cosmo_params]; norm_num)
+    · constructor <;> (simp [default_cosmo_params]; norm_num)
+  have h_particle :
+      ParticleConstraints default_particle_params := by
+    refine
+      { g_c_normalized := ?_,
+        g_c_physical := ?_,
+        V2_nonneg := ?_,
+        V2_range := ?_,
+        lambda_R_positive := ?_,
+        lambda_R_range := ?_,
+        mu_e_positive := ?_,
+        mu_e_physical := ?_,
+        mu_nu_positive := ?_,
+        mu_nu_range := ?_ }
+    · constructor <;> (simp [default_particle_params]; norm_num)
+    · constructor <;> (simp [default_particle_params]; norm_num)
+    · simp [default_particle_params]; norm_num
+    · constructor <;> (simp [default_particle_params]; norm_num)
+    · simp [default_particle_params]; norm_num
+    · constructor <;> (simp [default_particle_params]; norm_num)
+    · simp [default_particle_params]; norm_num
+    · constructor <;> (simp [default_particle_params]; norm_num)
+    · simp [default_particle_params]; norm_num
+    · constructor <;> (simp [default_particle_params]; norm_num)
+  exact ⟨h_nuclear, h_cosmo, h_particle⟩
 
 /-- Theorem: Valid parameter space is bounded (compact) -/
 theorem parameter_space_bounded :
@@ -145,7 +263,20 @@ theorem parameter_space_bounded :
       (params.nuclear.V4.val < M) ∧
       (params.cosmo.k_J.val < M) ∧
       (params.particle.mu_e.val < M) := by
-  sorry  -- Proof: all ranges are bounded
+  intro params h_valid
+  rcases h_valid with ⟨h_nuclear, h_cosmo, h_particle⟩
+  -- Define M to be larger than all upper bounds
+  use 1e13
+  constructor
+  · norm_num
+  · constructor
+    · have h_V4_range := h_nuclear.V4_range
+      linarith
+    · constructor
+      · have h_kJ_range := h_cosmo.k_J_range
+        linarith
+      · have h_mu_e_range := h_particle.mu_e_physical
+        linarith
 
 /-- Theorem: Parameter constraints are satisfiable -/
 theorem constraints_satisfiable (params : GrandUnifiedParameters) :
@@ -154,7 +285,10 @@ theorem constraints_satisfiable (params : GrandUnifiedParameters) :
     ∃ (solution : GrandUnifiedParameters),
       ValidParameters solution ∧
       CrossDomainConsistency solution := by
-  sorry  -- Proof: consistency doesn't make space empty
+  intro h_valid h_consistent
+  -- We are given a valid and consistent parameter set `params`.
+  -- We can use `params` itself as the witness for the existence.
+  use params
 
 /-! ## Helper Functions for Validation -/
 

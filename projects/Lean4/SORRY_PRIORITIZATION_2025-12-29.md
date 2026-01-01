@@ -1,8 +1,10 @@
 # Remaining Sorry Analysis and Prioritization
 
-**Date**: 2025-12-29
-**Current Sorry Count**: 6 actual sorries (20 mentions including comments)
-**Status**: Post v1.3 release, HodgeDual.lean completed
+**Date**: 2025-12-29 (log preserved for history)
+**Current Sorry Count (updated Dec 31)**: **1 actual sorry** (`Lepton/KoideRelation.lean`)
+**Status**: GA, Nuclear, and Conservation modules are fully verified; only the optional Koide algebra step remains.
+
+> _Historical note_: The sections below capture the original Dec 29 prioritization.
 
 ---
 
@@ -104,23 +106,14 @@ sorry -- TODO: Complete this complex calc chain - result correct by square compu
    - Infrastructure scaffolding complete
    - Build verified successfully
 
-### Phase 2: Physics Derivations (Current Priority)
-**Goal**: Complete nuclear and conservation sectors
+### Phase 2: Physics Derivations ✅ COMPLETE
+Both physics derivation modules are now fully verified.
 
-2. 🎯 **Nuclear/YukawaDerivation.lean** (2 sorries) - NOW TOP PRIORITY
-   - **Why first**: Nuclear sector completion
-   - **Sequential**: Sorry 2 depends on Sorry 1
-   - **Value**: Fundamental force derivation
-   - **Estimated Effort**: 4-6 hours
+2. ✅ **Nuclear/YukawaDerivation.lean** - Completed (no sorries, Dec 31)
+3. ✅ **Conservation/NeutrinoID.lean** - Completed (no sorries, Dec 31)
 
-3. 🎯 **Conservation/NeutrinoID.lean** (4 sorries) - PRIORITY 2
-   - **Why second**: Physics results, tedious but doable
-   - **Parallelizable**: All 4 sorries are independent
-   - **Strategy**: Use clifford_simp + manual calc chains
-   - **Estimated Effort**: 3-5 hours
-
-### Phase 3: Optional Refinement (Future)
-**Goal**: Polish remaining theorems
+### Phase 3: Optional Refinement (Current Focus)
+**Goal**: Polish remaining theorems (low urgency)
 
 4. ⏸️ **Lepton/KoideRelation.lean** (1 algebraic sorry)
    - **Why last**: Non-blocking, well-documented
@@ -219,4 +212,4 @@ If time-constrained, prioritize quick wins:
 
 ---
 
-**Next Action**: ✅ HodgeDual.lean COMPLETE. Now proceed to Nuclear/YukawaDerivation.lean (NEW PRIORITY 1) for nuclear sector completion.
+**Next Action (updated Dec 31)**: Finish `Lepton/KoideRelation.lean` algebraic simplification to reach 0 sorries overall.
