@@ -1,8 +1,17 @@
+/-
+This file was edited by Aristotle.
+
+Lean version: leanprover/lean4:v4.24.0
+Mathlib version: f897ebcf72cd16f89ab4577d0c826cd14afaafc7
+This project request had uuid: dddbb786-71f5-4980-8bc4-8db1f392cbeb
+-/
+
 -- QFD/AdjointStability_Complete.lean
 import Mathlib.LinearAlgebra.QuadraticForm.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Tactic
+
 
 /-!
 # QFD Appendix A: Vacuum Stability Theorem

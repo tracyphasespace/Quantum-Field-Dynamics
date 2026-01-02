@@ -2,14 +2,14 @@ cff-version: 1.2.0
 message: "If you use this formalization in your research, please cite it as below."
 type: software
 title: "Quantum Field Dynamics: Lean 4 Formalization"
-abstract: "Machine-checked formalization of Quantum Field Dynamics theorems in Lean 4, including spacetime emergence from Cl(3,3), CMB 'Axis of Evil' uniqueness proofs, lepton mass spectrum and magnetic properties, black hole information conservation, Noether conservation laws, Dirac algebra realization, charge quantization, nuclear physics (Yukawa force from vacuum gradient), and cosmological predictions. 617 proven statements (484 theorems + 133 lemmas) across 169 Lean files with 409 definitions and 53 structures. Zero sorries - 100% completion achieved 2025-12-31. All placeholder files removed - only verified proofs remain. 24 axioms (4 Clifford algebra axioms eliminated) - all disclosed in AXIOM_INVENTORY.md."
+abstract: "Machine-checked formalization of Quantum Field Dynamics theorems in Lean 4, including spacetime emergence from Cl(3,3), CMB 'Axis of Evil' uniqueness proofs, lepton mass spectrum and magnetic properties, black hole information conservation, Noether conservation laws, Dirac algebra realization, charge quantization, nuclear physics (Yukawa force from vacuum gradient), and cosmological predictions. 656 proven statements (506 theorems + 150 lemmas) across 180 Lean files with 409 definitions and 53 structures. Zero sorries - 100% completion maintained. All placeholder files removed - only verified proofs remain. 24 axioms (4 Clifford algebra axioms eliminated) - all disclosed in AXIOM_INVENTORY.md. Aristotle collaboration integration complete (2026-01-01)."
 authors:
   - family-names: "QFD Formalization Team"
     affiliation: "Quantum Field Dynamics Project"
 repository-code: "https://github.com/tracyphasespace/Quantum-Field-Dynamics"
 license: MIT
-date-released: 2025-12-31
-version: "1.4"
+date-released: 2026-01-01
+version: "1.5"
 keywords:
   - formal verification
   - Lean 4

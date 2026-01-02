@@ -1,8 +1,17 @@
+/-
+This file was edited by Aristotle.
+
+Lean version: leanprover/lean4:v4.24.0
+Mathlib version: f897ebcf72cd16f89ab4577d0c826cd14afaafc7
+This project request had uuid: e12061f2-3ee3-468e-a601-2dead1c10b7b
+-/
+
 -- QFD/SpacetimeEmergence_Complete.lean
 import Mathlib.LinearAlgebra.CliffordAlgebra.Basic
 import Mathlib.LinearAlgebra.QuadraticForm.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic
+
 
 /-!
 # QFD Appendix Z: Spacetime Emergence Theorem

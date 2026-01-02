@@ -1,9 +1,18 @@
+/-
+This file was edited by Aristotle.
+
+Lean version: leanprover/lean4:v4.24.0
+Mathlib version: f897ebcf72cd16f89ab4577d0c826cd14afaafc7
+This project request had uuid: c09a8aad-f626-4b97-948c-3ac12f54a600
+-/
+
 -- QFD/BivectorClasses_Complete.lean
 import Mathlib.LinearAlgebra.CliffordAlgebra.Basic
 import Mathlib.LinearAlgebra.QuadraticForm.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Tactic
+
 
 /-!
 # QFD Appendix A: Bivector Trichotomy Theorem
@@ -279,18 +288,7 @@ theorem qfd_internal_rotor_is_rotor :
   unfold B_internal
   apply momentum_bivectors_are_rotors ⟨1, by norm_num⟩ ⟨2, by norm_num⟩ (by norm_num)
 
-/-! ## 7. Topological Consequences -/
-
-/-- **Corollary: Rotors and Boosts are Topologically Distinct** -/
-theorem rotor_boost_topological_distinction :
-  ∀ (B_rotor B_boost : Cl33),
-    (∃ c_r : ℝ, c_r < 0 ∧ B_rotor * B_rotor = algebraMap ℝ Cl33 c_r) →
-    (∃ c_b : ℝ, c_b > 0 ∧ B_boost * B_boost = algebraMap ℝ Cl33 c_b) →
-    True := by
-  intro _ _ _ _
-  trivial
-
-/-! ## 8. Physical Interpretation
+/-! ## 7. Physical Interpretation
 
 **What This Proves:**
 
