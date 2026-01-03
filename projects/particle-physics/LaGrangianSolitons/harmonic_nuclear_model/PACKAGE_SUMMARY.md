@@ -15,18 +15,21 @@
 - ✓ **.gitignore** - Excludes data/reports (regenerated)
 - ✓ **data/raw/README.md** - NUBASE download instructions
 
-### Core Documentation (4 files in `docs/`)
+### Core Documentation (6 files in `docs/`)
 - ✓ **TACOMA_NARROWS_INTERPRETATION.md** - Resonance → instability theory
 - ✓ **TACOMA_NARROWS_RESULTS.md** - Comprehensive test results (16 KB)
 - ✓ **MASS_CUTOFF_ANALYSIS.md** - A = 161 boundary analysis
 - ✓ **KEY_RESULTS_CARD.md** - Quick reference card
+- ✓ **TWO_CENTER_MODEL_EXTENSION.md** - Theoretical framework for deformed nuclei (16 KB)
+- ✓ **TWO_CENTER_VALIDATION_RESULTS.md** - Dual-core hypothesis validation (13 KB)
 
-### Source Code (9 files in `src/`)
+### Source Code (10 files in `src/`)
 - ✓ **parse_nubase.py** - NUBASE2020 parser
 - ✓ **harmonic_model.py** - Core model implementation
 - ✓ **fit_families.py** - Family parameter fitting
 - ✓ **score_harmonics.py** - Score all nuclides
 - ✓ **null_models.py** - Generate null candidates (464 lines)
+- ✓ **two_center_model.py** - Two-center extension for A > 161 (600 lines)
 - ✓ **experiments/exp1_existence.py** - Existence clustering test (511 lines)
 - ✓ **experiments/tacoma_narrows_test.py** - Half-life correlation test (473 lines)
 - ✓ **__init__.py** files (package structure)
@@ -38,14 +41,17 @@
 - ✓ **03_score_nuclides.sh** - Score all nuclides
 - ✓ **04_run_experiments.sh** - Run statistical tests
 
-### Figures (7 files in `figures/`)
-- ✓ **tacoma_narrows_correlation.png** - Main result
+### Figures (10 files in `figures/`)
+- ✓ **tacoma_narrows_correlation.png** - Main result (light nuclei)
 - ✓ **tacoma_narrows_by_mode.png** - Decay mode analysis
 - ✓ **tacoma_narrows_by_mass.png** - Mass region analysis
 - ✓ **mass_cutoff_scan.png** - A = 161 breakpoint
 - ✓ **dual_core_epsilon_distribution.png** - Single vs dual core
 - ✓ **epsilon_vs_A_heavy.png** - Heavy nuclides
 - ✓ **qfd_prediction_vs_fitting.png** - QFD vs SEMF comparison
+- ✓ **two_center_validation.png** - Two-center comprehensive validation (6 panels)
+- ✓ **two_center_summary.png** - Correlation recovery summary
+- ✓ **two_center_scatterplots.png** - Mass-resolved scatter plots (4 panels)
 
 ---
 
@@ -211,16 +217,22 @@ git push origin main
 
 ## Key Results Summary
 
-### Validated Predictions
-1. **Shape transition** at A = 161 (correlation drops 18×)
-2. **Tacoma Narrows effect**: Higher ε → longer half-life (r = 0.076, p < 0.001)
+### Validated Predictions (Single-Center Model)
+1. **Shape transition** at A = 161 (correlation drops from r = 0.10 to r ≈ 0)
+2. **Tacoma Narrows effect**: Higher ε → longer half-life (r = 0.102, p < 10⁻⁴)
 3. **Integer ladder**: β⁻ decay shows bimodal N_hat (χ² = 873, p ≈ 0)
 4. **Universal dc3**: Only 1.38% variation across families
 
-### Model Status
-- **Valid**: A ≤ 161 (spherical nuclei)
-- **Invalid**: A > 161 (deformed nuclei)
-- **Mechanism**: Resonance predicts instability (not stability)
+### Two-Center Model Extension (✓✓✓ VALIDATED)
+1. **Dual-core hypothesis**: Soliton bifurcates at A ≈ 161 into prolate ellipsoid
+2. **Correlation recovery**: r = 0 → r = +0.34 for heavy nuclei (Δr ≈ +0.35)
+3. **Universal mechanism**: Tacoma Narrows effect works for all geometries
+4. **Deformation parameter**: β ≈ 0.25 for rare earths/actinides
+
+### Model Validity
+- **Single-center**: A ≤ 161 (spherical nuclei) ✓
+- **Two-center**: A > 161 (deformed nuclei) ✓✓✓
+- **Mechanism**: Resonance predicts instability across all mass regions
 
 ---
 
@@ -237,5 +249,6 @@ This package contains all code, data processing, statistical analysis, and figur
 ---
 
 **Package created**: 2026-01-02
-**Status**: Ready for GitHub push
-**Last verified**: 2026-01-02 19:30
+**Two-center extension added**: 2026-01-02 (same day!)
+**Status**: Ready for GitHub push (UPDATED with two-center validation)
+**Last verified**: 2026-01-02 21:00
