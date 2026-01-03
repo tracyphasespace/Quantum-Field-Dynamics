@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Data files (too large for git)
+data/raw/*.txt
+data/raw/*.dat
+data/derived/*.parquet
+data/derived/*.csv
+data/derived/*.json
+
+# Reports (generated, can be recreated)
+reports/*/
+!reports/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keep directory structure but ignore contents
+!data/raw/README.md
+!data/derived/.gitkeep
+!reports/exp1/.gitkeep
+!reports/tacoma_narrows/.gitkeep
+!reports/fits/.gitkeep

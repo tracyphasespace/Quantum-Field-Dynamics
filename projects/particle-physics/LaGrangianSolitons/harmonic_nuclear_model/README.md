@@ -1,0 +1,305 @@
+# Harmonic Nuclear Model: Soliton Topology and Nuclear Stability
+
+**A geometric approach to predicting nuclear structure and decay rates**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+---
+
+## Overview
+
+This repository contains a complete implementation and analysis of the **Harmonic Family Model** for nuclear structure, based on quantum field dynamics (QFD) soliton theory. The model predicts nuclear stability and decay behavior from geometric resonance principles rather than phenomenological parameter fitting.
+
+### Key Results
+
+**✓ Validated Predictions:**
+- **Shape transition detection**: Model correlation drops at A = 161 (spherical → deformed transition)
+- **Decay rate prediction**: ε correlates with half-life in shell model regime (r = 0.13, p < 0.001)
+- **Integer ladder structure**: β⁻ decay parents cluster at integer N values (χ² = 873, p ≈ 0)
+- **Universal vacuum parameter**: dc3 varies by only 1.38% across families
+
+**Regime-Dependent Validity:**
+- **Valid**: A ≤ 161 (spherical nuclei, shell model regime)
+- **Invalid**: A > 161 (deformed nuclei, collective motion regime)
+
+---
+
+## Physical Interpretation
+
+### QFD Soliton Model vs. Semi-Empirical Mass Formula (SEMF)
+
+| Aspect | SEMF (Liquid Drop) | QFD (Soliton Geometry) |
+|--------|-------------------|------------------------|
+| **Approach** | Phenomenological fit | Geometric derivation |
+| **Parameters** | 15-20 tuned coefficients | 16 geometric parameters |
+| **Predictions** | Binding energies | Structure + decay behavior |
+| **Physical basis** | "Bag of marbles" | Standing wave resonance |
+| **Decay rates** | Not predicted | Resonance → instability |
+| **Shape** | Assumed spherical | Detects deformation |
+
+### Core Hypothesis
+
+Nuclear structure arises from **standing wave resonances** in a vacuum field:
+
+1. **Mass (A)**: Volume of the soliton
+2. **Mode (N)**: Integer harmonic index
+3. **Proton number (Z)**: Predicted by resonance condition
+
+**Central Formula** (spherical nuclei, A ≤ 161):
+```
+Z_pred = (c1_0 + N·dc1)·A^(2/3) + (c2_0 + N·dc2)·A + (c3_0 + N·dc3)·A^(4/3)
+```
+
+Where:
+- `c1 ∝ Surface tension` (Laplace pressure)
+- `c2 ∝ Bulk modulus` (incompressibility)
+- `dc3 ∝ Vacuum stiffness β` (universal, from fine structure constant α)
+
+### "Tacoma Narrows" Interpretation
+
+**Key insight**: Low harmonic dissonance (ε ≈ 0) predicts **instability**, not stability.
+
+**Mechanism**:
+- **Perfect resonance** (ε ≈ 0) → Strong coupling to vacuum field → Enhanced decay rate
+- **Off-resonance** (ε > 0.1) → Weak coupling → Damped decay → Stability
+
+**Analogy**: Like the Tacoma Narrows Bridge (1940), perfect resonance leads to catastrophic failure.
+
+---
+
+## Repository Structure
+
+```
+harmonic_nuclear_model/
+├── README.md                    # This file
+├── requirements.txt             # Python dependencies
+├── LICENSE                      # MIT License
+├── data/
+│   ├── raw/                     # NUBASE2020 data (download instructions)
+│   └── derived/                 # Generated data files
+├── src/
+│   ├── nubase_parser.py         # Parse NUBASE2020 format
+│   ├── harmonic_model.py        # Core model implementation
+│   ├── fit_families.py          # Fit 3-family parameters
+│   ├── score_nuclides.py        # Compute ε for all nuclides
+│   ├── null_models.py           # Generate null candidate universe
+│   └── experiments/
+│       ├── exp1_existence.py    # Existence clustering test
+│       └── tacoma_narrows_test.py # Half-life correlation test
+├── scripts/
+│   ├── 01_parse_nubase.sh       # Step 1: Parse NUBASE data
+│   ├── 02_fit_families.sh       # Step 2: Fit model to stable nuclides
+│   ├── 03_score_nuclides.sh     # Step 3: Score all nuclides
+│   ├── 04_run_experiments.sh    # Step 4: Run statistical tests
+│   └── run_all.sh               # Run complete pipeline
+├── reports/
+│   ├── fits/                    # Model fit parameters
+│   ├── exp1/                    # Experiment 1 results
+│   └── tacoma_narrows/          # Tacoma Narrows test results
+├── docs/
+│   ├── THEORY.md                # Theoretical background
+│   ├── TACOMA_NARROWS_INTERPRETATION.md
+│   ├── TACOMA_NARROWS_RESULTS.md
+│   ├── MASS_CUTOFF_ANALYSIS.md
+│   └── KEY_RESULTS_CARD.md
+└── figures/                     # Key publication-quality figures
+```
+
+---
+
+## Quick Start
+
+### Installation
+
+```bash
+# Clone repository
+git clone https://github.com/tracyphasespace/Quantum-Field-Dynamics.git
+cd Quantum-Field-Dynamics/projects/particle-physics/harmonic_nuclear_model
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Download NUBASE2020 data (see data/raw/README.md)
+```
+
+### Run Complete Analysis
+
+```bash
+# Run full pipeline (takes ~5-10 minutes)
+bash scripts/run_all.sh
+
+# Or run step-by-step:
+bash scripts/01_parse_nubase.sh
+bash scripts/02_fit_families.sh
+bash scripts/03_score_nuclides.sh
+bash scripts/04_run_experiments.sh
+```
+
+### Key Outputs
+
+After running, check:
+- `reports/fits/family_params_stable.json` - Model parameters
+- `reports/exp1/exp1_results.json` - Existence clustering test
+- `reports/tacoma_narrows/tacoma_narrows_results.json` - Half-life correlation
+- `figures/` - Publication-ready plots
+
+---
+
+## Key Results
+
+### 1. Mass Cutoff at A = 161 (Shape Transition)
+
+**Finding**: Correlation between ε and half-life exists for A ≤ 161, vanishes for A > 161.
+
+**Interpretation**: Model detects spherical → deformed nuclear shape transition (rare earth region).
+
+**Evidence**:
+- Light/medium (A ≤ 161): r = +0.131, p < 0.001 ✓
+- Heavy (A > 161): r = +0.047, p > 0.001 ✗
+- Transition at A = 161-163 (Dysprosium region)
+
+**Physical basis**: Spherical shell model fails when nuclei become permanently deformed (prolate ellipsoids).
+
+### 2. Tacoma Narrows Effect (Resonance → Instability)
+
+**Finding**: Stable nuclides have **higher** ε than unstable (+0.013, p = 0.026).
+
+**Interpretation**: Stable nuclei are "off-resonance" (anti-Tacoma Narrows).
+
+**Decay rate correlation** (A ≤ 161):
+- ε vs log₁₀(half-life): r = +0.076, p = 9×10⁻⁴
+- Higher ε → longer half-life → more stable
+
+**Mechanism**: Perfect resonance (ε ≈ 0) enhances decay coupling, like Tacoma Narrows Bridge resonance-driven collapse.
+
+### 3. Integer Ladder (Beta Decay Selection Rules)
+
+**Finding**: β⁻ decay parents show **bimodal** N_hat distribution (χ² = 873, p ≈ 0).
+
+**Interpretation**: Nuclei cluster at integer N values, decay by dropping one "rung" (N → N-1).
+
+**Distribution**:
+```
+N_hat fractional part:
+  0.0-0.1: 332 nuclides  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+  0.1-0.9: depleted
+  0.9-1.0: 327 nuclides  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+```
+
+**Prediction**: Decay modes follow topological selection rules (integer steps on harmonic ladder).
+
+### 4. Universal Vacuum Parameter (dc3)
+
+**Finding**: dc3 varies by only **1.38%** across three families.
+
+**Interpretation**: dc3 represents fundamental vacuum stiffness β, not a tuning parameter.
+
+**Connection to fine structure**:
+- dc3 ∝ β (vacuum resistance to density perturbations)
+- β derived from α via "Golden Loop" (π²·exp(β)·(c₂/c₁) = α⁻¹)
+
+---
+
+## Comparison to Standard Models
+
+### Predictive Power
+
+| Observable | SEMF | QFD Harmonic |
+|-----------|------|--------------|
+| **Binding energy** | ✓ Fits well | ✓ Comparable fit |
+| **Valley of stability** | ✓ Describes | ✓ Predicts (integer ladder) |
+| **Decay rates** | ✗ Not predicted | ✓ Resonance model (A ≤ 161) |
+| **Nuclear shape** | ✗ Assumes spherical | ✓ Detects at A = 161 |
+| **Magic numbers** | ⊕ Added as corrections | ? Predicted as anti-resonant |
+| **Beta decay modes** | ⊕ Selection rules | ✓ Integer ladder |
+
+✓ = Predicted, ⊕ = Added phenomenologically, ✗ = Not addressed, ? = Testable prediction
+
+### Parameter Count
+
+- **SEMF**: 15-20 phenomenological parameters
+- **QFD Harmonic**: 16 geometric parameters (3 families × 5 + 1 universal dc3)
+
+**Critical difference**: QFD parameters have **geometric meaning** (surface tension, bulk modulus, vacuum stiffness), not arbitrary coefficients.
+
+---
+
+## Limitations and Future Work
+
+### Known Limitations
+
+1. **Heavy nuclides (A > 161)**: Single-center formula fails for deformed nuclei
+2. **Alpha decay**: No correlation with ε (different mechanism)
+3. **Weak effect**: r ≈ 0.13 (explains only ~1.7% of variance in half-life)
+4. **Magic numbers**: Anti-resonance hypothesis not validated (sample too small)
+
+### Proposed Extensions
+
+1. **Two-center model** for A > 161:
+   - Account for prolate/oblate deformation
+   - Coupled oscillator modes (symmetric + antisymmetric)
+   - May recover correlation in heavy region
+
+2. **Charge radius predictions**:
+   - Test against electron scattering data
+   - Independent validation (not fitted)
+
+3. **Anomalous magnetic moments**:
+   - g-2 predictions from soliton structure
+   - Compare to Fermilab muon g-2
+
+4. **Form factors**:
+   - F(q²) predictions from Fourier transform of soliton density
+   - Test against elastic scattering
+
+---
+
+## Citation
+
+If you use this code or results, please cite:
+
+```bibtex
+@software{harmonic_nuclear_model_2026,
+  author = {McSheery, Tracy},
+  title = {Harmonic Nuclear Model: Soliton Topology and Nuclear Stability},
+  year = {2026},
+  url = {https://github.com/tracyphasespace/Quantum-Field-Dynamics/tree/main/projects/particle-physics/harmonic_nuclear_model},
+  version = {1.0.0}
+}
+```
+
+**Manuscript in preparation**: "Regime-Dependent Correlation Between Harmonic Dissonance and Nuclear Half-Life: Evidence for Valley Curvature Effects in Shell Model Regime"
+
+---
+
+## Data Sources
+
+- **NUBASE2020**: Nuclear binding energies, half-lives, decay modes
+  - Reference: Kondev et al., Chinese Physics C 45, 030001 (2021)
+  - Download: https://www-nds.iaea.org/amdc/
+
+---
+
+## License
+
+MIT License - see LICENSE file
+
+---
+
+## Contact
+
+For questions or collaboration:
+- GitHub Issues: [Create issue](https://github.com/tracyphasespace/Quantum-Field-Dynamics/issues)
+- GitHub: [@tracyphasespace](https://github.com/tracyphasespace)
+
+---
+
+## Acknowledgments
+
+- **Tacoma Narrows insight**: Resonance → instability interpretation
+- **NUBASE collaboration**: Nuclear data compilation
+- **QFD framework**: Vacuum field dynamics theory
+
+---
+
+**Last updated**: 2026-01-02
