@@ -1,0 +1,6 @@
+# QFD Photon Sector: Numerical Calculations
+# Python dependencies for reproducing dimensional analysis
+
+numpy>=1.24.0   # Numerical integration and array operations
+scipy>=1.10.0   # Scientific functions (integrate.dblquad)
+matplotlib>=3.7.0  # Plotting (optional)

@@ -1,0 +1,40 @@
+# Photon sector gitignore
+
+# Results directory (generated data)
+results/*.csv
+results/*.json
+results/*.txt
+results/*.npy
+results/*.npz
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Plots and figures
+*.png
+*.pdf
+*.svg
+!docs/*.png
+!docs/*.pdf
+
+# Lean build artifacts
+.lake/
+build/
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
