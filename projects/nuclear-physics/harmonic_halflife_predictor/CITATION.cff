@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Harmonic Half-Life Predictor: Nuclear Decay Prediction from Geometric Quantization"
+version: 1.0.0
+date-released: 2026-01-03
+authors:
+  - family-names: "McSheery"
+    given-names: "Tracy"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+repository-code: "https://github.com/tracyphasespace/Quantum-Field-Dynamics"
+url: "https://github.com/tracyphasespace/Quantum-Field-Dynamics/tree/main/Quantum-Field-Dynamics/projects/nuclear-physics/harmonic_halflife_predictor"
+abstract: "A nuclear decay half-life prediction framework based on geometric quantization and harmonic resonance. Predicts half-lives for 3,530 nuclei using a 3-family classification model with universal selection rule |ΔN| ≤ 1. Achieves 99.7% accuracy for beta- decay direction and provides complete transparency for scientific verification."
+keywords:
+  - nuclear physics
+  - half-life prediction
+  - geometric quantization
+  - harmonic resonance
+  - nuclear decay
+  - beta decay
+  - alpha decay
+  - nuclear spectroscopy
+license: MIT
