@@ -6,6 +6,20 @@
 
 ---
 
+## ⚡ Quick Start
+
+**Replicate all results with one command:**
+
+```bash
+python run_all_validations.py
+```
+
+**That's it!** The script validates all four decay engines automatically (~30 seconds).
+
+📖 **New user?** See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
+
+---
+
 ## Overview
 
 This repository contains a complete implementation and analysis of the **Harmonic Family Model** for nuclear structure, based on quantum field dynamics (QFD) soliton theory. The model predicts nuclear stability and decay behavior from geometric resonance principles rather than phenomenological parameter fitting.
