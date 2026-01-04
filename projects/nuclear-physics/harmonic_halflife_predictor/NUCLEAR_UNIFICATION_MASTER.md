@@ -268,7 +268,7 @@ Proton emission is **surface evaporation**, unlike cluster decay (magic pearl ej
 
 This contrasts with cluster decay where ΔN = N_cluster (typically 1 or 2).
 
-### 7.3 Validation (Dual-Track)
+### 6.3 Validation (Dual-Track)
 
 **Track 2 (Geometric Mechanics):**
 
@@ -458,7 +458,7 @@ This confirms fission conserves N when parent is in excited state.
 
 **Physical interpretation:** Each MeV of excitation energy promotes the nucleus to the next harmonic mode. Barrier penetration or neutron binding energy creates the excited compound nucleus that subsequently fissions.
 
-### 6.6 "Magic Numbers" Re-interpreted
+### 7.6 "Magic Numbers" Re-interpreted
 
 Traditional view: Shell closures at Z=50, N=82 stabilize Sn-132 → preferred heavy fragment.
 
@@ -606,7 +606,7 @@ Predicts most proton-rich isotopes achievable. Test:
 - Conservation laws = Topological constraints
 - Magic numbers = Geometric resonances
 
-### 9.3 Limitations
+### 10.3 Limitations
 
 1. **Absolute branching ratios not calculated:** Model predicts relative probabilities, not absolute decay rates (requires barrier penetration dynamics)
 
@@ -616,7 +616,7 @@ Predicts most proton-rich isotopes achievable. Test:
 
 4. **Electromagnetic and weak decay:** Framework currently limited to strong-force decay modes
 
-### 9.4 Future Work
+### 10.4 Future Work
 
 **Immediate experimental tests:**
 1. Measure cluster decay BRs: Test Pythagorean vs forbidden suppression
