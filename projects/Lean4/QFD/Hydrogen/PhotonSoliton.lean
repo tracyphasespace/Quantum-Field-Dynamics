@@ -5,128 +5,194 @@ set_option autoImplicit false
 namespace QFD
 
 /-!
-  Photon + Hydrogen soliton scaffold
+  # QFD Photon Sector: Kinematic Soliton Model
 
-  This file is intentionally "physics-axiom-light" and "logic-heavy":
+  This update bridges the gap between "Bookkeeping" and "Dynamics".
+  It models the Photon not just as an energy quantum, but as a
+  spatial Soliton with:
+  1. Wavenumber k (geometry)
+  2. Momentum p = ℏk (mechanical recoil)
+  3. Linear Dispersion ω = c|k| (stiffness constraint)
+  4. Shape Invariance (soliton stability)
 
-  • We DO NOT attempt to solve PDEs inside Lean.
-  • Instead, we model "soliton-ness" as PhaseClosed ∧ OnShell ∧ FiniteEnergy
-    predicates over a configuration in the Ψ-field.
-  • Then we prove existence/creation theorems: if such a configuration exists,
-    you can construct a Soliton / Electron / Proton / Hydrogen object in Lean.
-  • Absorption/emission are relations defined by:
-      - same hydrogen pair (e,p)
-      - discrete mode index n changes
-      - energy bookkeeping matches photon energy ℏ·ω
+  ## Physical Context
+
+  **The QFD Picture**:
+  - Photon = propagating vacuum shear wave (soliton)
+  - Wavelength λ determines geometry: k = 2π/λ
+  - Momentum p = ℏk is the "retro-rocket kick"
+  - Frequency ω = c·k from vacuum stiffness (linear dispersion)
+  - Energy E = ℏω = ℏck (quantized angular impulse)
+
+  **Soliton Stability**:
+  - ShapeInvariant predicate: Dispersion (spreading) ↔ Nonlinear focusing (λ_sat)
+  - Mathematically: d(Width)/dt = 0
+  - Physical: Vacuum saturation prevents dispersion
+
+  **Absorption as Gear Mesh**:
+  - Photon k must geometrically match hydrogen energy gap
+  - "Lock and key" mechanism: ℏck = E_m - E_n
+  - Momentum conservation implicit (recoil transferred to H)
 -/
-
-/- 1) The Ψ-field and candidate configurations -/
 
 universe u
 
-/-- Abstract spacetime/manifold points for the emergent 4D reduction. -/
 variable {Point : Type u}
 
-/-- Minimal Ψ-field stub: you will replace `ψ` with your multivector-valued field later. -/
+/- 1) Field and Configuration Structures -/
+
 structure PsiField (Point : Type u) where
-  ψ : Point → ℝ
+  ψ : Point → ℝ  -- Placeholder for Cl(3,3) multivector field
 
-/-- A candidate localized excitation configuration extracted from Ψ. -/
 structure Config (Point : Type u) where
-  /-- Topological charge (electron/proton distinguished by ±1). -/
   charge : ℤ
-  /-- Total energy of the configuration (units per your normalization). -/
   energy : ℝ
+  /-- The spatial "footprint" or wavelength scale of the configuration -/
+  scale  : ℝ
 
-/-- QFD model parameters and the "soliton predicates" for Ψ-configurations. -/
+/- 2) QFD Model with Kinematic Parameters -/
+
 structure QFDModel (Point : Type u) where
   Ψ : PsiField Point
-  /-- Fine-structure normalization parameter (dimensionless). -/
+
+  -- The Three Constants + Planck
+  /-- Fine-structure coupling (gear mesh strength) -/
   α : ℝ
-  /-- Vacuum stiffness parameter (dimensionless). -/
+  /-- Vacuum stiffness (controls c and dispersion suppression) -/
   β : ℝ
-  /-- Self-interaction scale; in your units λ = 1 AMU is typical. -/
-  λ : ℝ
-  /-- Effective action scale. -/
+  /-- Saturation scale (nonlinear focusing) -/
+  λ_sat : ℝ
+  /-- Angular impulse of the electron vortex -/
   ℏ : ℝ
 
-  /-- Phase-closure predicate: "the wave closes its phase upon itself". -/
+  /-- Speed of light: Terminal velocity of vacuum shear waves.
+      In QFD, c ≈ sqrt(β / density). -/
+  c_vac : ℝ
+
+  -- Existence Predicates
   PhaseClosed : Config Point → Prop
-  /-- On-shell predicate: satisfies the QFD Euler–Lagrange / field equation constraints. -/
   OnShell : Config Point → Prop
-  /-- Finite-energy predicate: excludes nonphysical extended configurations. -/
   FiniteEnergy : Config Point → Prop
 
-  /-- Hydrogen binding predicate for an electron/proton configuration pair. -/
-  Bound : Config Point → Config Point → Prop
+  /-- The Soliton Stability Predicate.
+      Represents the "Soliton Balance": Dispersion (spreading) is exactly
+      cancelled by Nonlinear Focusing (λ_sat).
+      Mathematically: d(Width)/dt = 0. -/
+  ShapeInvariant : Config Point → Prop
 
-  /-- Hydrogen mode/level energy map (discrete ladder index ↦ energy). -/
+  -- Interaction Predicates
+  Bound : Config Point → Config Point → Prop
   ELevel : ℕ → ℝ
 
 namespace QFDModel
 
 variable {M : QFDModel Point}
 
-/- 2) Solitons as "phase-closed + on-shell + finite-energy" Ψ-excitations -/
+/- 3) Photon: Geometry, Momentum, and Dispersion -/
 
-/-- A soliton is a configuration with the three defining existence gates. -/
+/--
+  A Photon is defined by its spatial wavenumber `k`.
+  Frequency and Energy are derived via the Vacuum constraints.
+-/
+structure Photon where
+  /-- Wavenumber k = 2π / λ -/
+  k : ℝ
+  /-- Wavenumber must be positive for a propagating wave -/
+  hk_pos : k > 0
+
+namespace Photon
+
+/-- Wavelength λ = 2π / k -/
+noncomputable def wavelength (γ : Photon) : ℝ := (2 * Real.pi) / γ.k
+
+/-- Linear Momentum p = ℏk.
+    This fulfills the requirement: p ∝ 1/λ.
+    Physical meaning: The "kick" delivered by the retro-rocket. -/
+def momentum (M : QFDModel Point) (γ : Photon) : ℝ := M.ℏ * γ.k
+
+/-- Frequency ω = c|k|.
+    This assumes the "Stiff Vacuum" limit where dispersion is negligible. -/
+def frequency (M : QFDModel Point) (γ : Photon) : ℝ := M.c_vac * γ.k
+
+/-- Energy E = ℏω.
+    Standard quantization derived from the vortex angular impulse. -/
+def energy (M : QFDModel Point) (γ : Photon) : ℝ := M.ℏ * (frequency M γ)
+
+/-- The Dispersion Relation Lemma:
+    Proves that Energy is proportional to Momentum times Speed of Light.
+    E = p * c
+
+    This is the relativistic energy-momentum relation for massless particles.
+-/
+theorem energy_momentum_relation (γ : Photon) :
+    energy M γ = (momentum M γ) * M.c_vac := by
+  simp [energy, frequency, momentum]
+  ring
+
+/-- Photon wavelength is positive (follows from k > 0) -/
+theorem wavelength_pos (γ : Photon) : wavelength γ > 0 := by
+  unfold wavelength
+  have : (2 : ℝ) * Real.pi > 0 := by positivity
+  exact div_pos this γ.hk_pos
+
+/-- Momentum is positive for forward-propagating photons -/
+theorem momentum_pos (γ : Photon) (h_hbar : M.ℏ > 0) : momentum M γ > 0 := by
+  unfold momentum
+  exact mul_pos h_hbar γ.hk_pos
+
+/-- Energy is positive for physical photons -/
+theorem energy_pos (γ : Photon) (h_hbar : M.ℏ > 0) (h_c : M.c_vac > 0) :
+    energy M γ > 0 := by
+  unfold energy frequency
+  exact mul_pos h_hbar (mul_pos h_c γ.hk_pos)
+
+end Photon
+
+/- 4) Solitons with Stability Requirements -/
+
+/-- A Soliton is now PhaseClosed, OnShell, FiniteEnergy AND ShapeInvariant.
+
+    The ShapeInvariant gate ensures the soliton maintains its spatial profile.
+    This is the mathematical expression of "dispersion ↔ nonlinear focusing balance".
+-/
 def Soliton (M : QFDModel Point) : Type u :=
-  { c : Config Point // M.PhaseClosed c ∧ M.OnShell c ∧ M.FiniteEnergy c }
+  { c : Config Point //
+    M.PhaseClosed c ∧
+    M.OnShell c ∧
+    M.FiniteEnergy c ∧
+    M.ShapeInvariant c }
 
 instance : Coe (Soliton M) (Config Point) := ⟨Subtype.val⟩
 
-/-- Convenience: access charge and energy of a soliton. -/
 def Soliton.charge (s : Soliton M) : ℤ := (s : Config Point).charge
 def Soliton.energy (s : Soliton M) : ℝ := (s : Config Point).energy
+def Soliton.scale (s : Soliton M) : ℝ := (s : Config Point).scale
 
-/-- Electron soliton: a soliton with charge = −1. -/
+/-- Electron soliton: charge = -1 -/
 def Electron (M : QFDModel Point) : Type u :=
   { s : Soliton M // (s : Config Point).charge = (-1) }
 
 instance : Coe (Electron M) (Soliton M) := ⟨Subtype.val⟩
 instance : Coe (Electron M) (Config Point) := ⟨fun e => (e : Soliton M)⟩
 
-/-- Proton soliton: a soliton with charge = +1. -/
+/-- Proton soliton: charge = +1 -/
 def Proton (M : QFDModel Point) : Type u :=
   { s : Soliton M // (s : Config Point).charge = (1) }
 
 instance : Coe (Proton M) (Soliton M) := ⟨Subtype.val⟩
 instance : Coe (Proton M) (Config Point) := ⟨fun p => (p : Soliton M)⟩
 
-/-- Constructor lemma: if you can exhibit a configuration meeting the 3 gates,
-    you can *create* a Soliton term in Lean. -/
+/-- Constructor: if config meets 4 gates → Soliton exists -/
 theorem soliton_of_config
     (c : Config Point)
     (h₁ : M.PhaseClosed c)
     (h₂ : M.OnShell c)
-    (h₃ : M.FiniteEnergy c) :
+    (h₃ : M.FiniteEnergy c)
+    (h₄ : M.ShapeInvariant c) :
     Soliton M :=
-  ⟨c, ⟨h₁, h₂, h₃⟩⟩
+  ⟨c, ⟨h₁, h₂, h₃, h₄⟩⟩
 
-/-- Creation theorem: if Ψ admits an electron-typed soliton configuration, an Electron exists. -/
-theorem electron_exists_of_config
-    (h :
-      ∃ c : Config Point,
-        M.PhaseClosed c ∧ M.OnShell c ∧ M.FiniteEnergy c ∧ c.charge = (-1)) :
-    ∃ e : Electron M, True := by
-  rcases h with ⟨c, hcClosed, hcOnShell, hcFinite, hcCharge⟩
-  let s : Soliton M := soliton_of_config (M := M) c hcClosed hcOnShell hcFinite
-  refine ⟨⟨s, ?_⟩, trivial⟩
-  -- charge proof reduces definitionally to `c.charge = -1`
-  simpa [Soliton.charge, s] using hcCharge
-
-/-- Creation theorem: if Ψ admits a proton-typed soliton configuration, a Proton exists. -/
-theorem proton_exists_of_config
-    (h :
-      ∃ c : Config Point,
-        M.PhaseClosed c ∧ M.OnShell c ∧ M.FiniteEnergy c ∧ c.charge = (1)) :
-    ∃ p : Proton M, True := by
-  rcases h with ⟨c, hcClosed, hcOnShell, hcFinite, hcCharge⟩
-  let s : Soliton M := soliton_of_config (M := M) c hcClosed hcOnShell hcFinite
-  refine ⟨⟨s, ?_⟩, trivial⟩
-  simpa [Soliton.charge, s] using hcCharge
-
-/- 3) Hydrogen as an electron–proton soliton pair with a binding/closure certificate -/
+/- 5) Hydrogen and State Structure -/
 
 structure Hydrogen (M : QFDModel Point) where
   e : Electron M
@@ -140,7 +206,7 @@ variable {M : QFDModel Point}
 def netCharge (H : Hydrogen M) : ℤ :=
   (H.e : Config Point).charge + (H.p : Config Point).charge
 
-/-- Hydrogen is neutral: (+1) + (−1) = 0, purely from the Electron/Proton charge tags. -/
+/-- Hydrogen is neutral: (+1) + (−1) = 0 -/
 theorem netCharge_zero (H : Hydrogen M) : H.netCharge = 0 := by
   have he : (H.e : Config Point).charge = (-1) := H.e.2
   have hp : (H.p : Config Point).charge = (1) := H.p.2
@@ -148,53 +214,7 @@ theorem netCharge_zero (H : Hydrogen M) : H.netCharge = 0 := by
 
 end Hydrogen
 
-/-- Creation theorem: given an electron soliton, a proton soliton,
-    and a binding/closure witness, Hydrogen exists. -/
-theorem hydrogen_of_pair
-    (e : Electron M) (p : Proton M)
-    (hB : M.Bound (e : Config Point) (p : Config Point)) :
-    Hydrogen M :=
-  ⟨e, p, hB⟩
-
-/-- Creation theorem: if you can exhibit *configs* for e and p plus the binding predicate,
-    then a Hydrogen object exists. -/
-theorem hydrogen_exists_of_configs
-    (he :
-      ∃ ce : Config Point,
-        M.PhaseClosed ce ∧ M.OnShell ce ∧ M.FiniteEnergy ce ∧ ce.charge = (-1))
-    (hp :
-      ∃ cp : Config Point,
-        M.PhaseClosed cp ∧ M.OnShell cp ∧ M.FiniteEnergy cp ∧ cp.charge = (1))
-    (hB :
-      ∀ ce cp,
-        M.PhaseClosed ce → M.OnShell ce → M.FiniteEnergy ce → ce.charge = (-1) →
-        M.PhaseClosed cp → M.OnShell cp → M.FiniteEnergy cp → cp.charge = (1) →
-        M.Bound ce cp) :
-    ∃ H : Hydrogen M, True := by
-  rcases he with ⟨ce, hceC, hceS, hceF, hceQ⟩
-  rcases hp with ⟨cp, hcpC, hcpS, hcpF, hcpQ⟩
-  let se : Soliton M := soliton_of_config (M := M) ce hceC hceS hceF
-  let sp : Soliton M := soliton_of_config (M := M) cp hcpC hcpS hcpF
-  let e : Electron M := ⟨se, by simpa [se] using hceQ⟩
-  let p : Proton M := ⟨sp, by simpa [sp] using hcpQ⟩
-  have hb : M.Bound (e : Config Point) (p : Config Point) := by
-    -- Reduce to the binding hypothesis over the underlying configs.
-    -- Here we can use the original ce/cp witnesses directly.
-    simpa [e, p] using hB ce cp hceC hceS hceF hceQ hcpC hcpS hcpF hcpQ
-  refine ⟨hydrogen_of_pair (M := M) e p hb, trivial⟩
-
-/- 4) Photons and absorption/emission as mode transitions with ℏ·ω energy bookkeeping -/
-
-/-- Photon stub: frequency ω is enough for the bookkeeping theorems. -/
-structure Photon where
-  ω : ℝ
-
-namespace Photon
-variable {M : QFDModel Point}
-def energy (M : QFDModel Point) (γ : Photon) : ℝ := M.ℏ * γ.ω
-end Photon
-
-/-- Hydrogen "state" = (hydrogen soliton pair) + discrete mode index n. -/
+/-- Hydrogen state = (e,p) pair + discrete mode index n -/
 structure HState (M : QFDModel Point) where
   H : Hydrogen M
   n : ℕ
@@ -204,37 +224,87 @@ variable {M : QFDModel Point}
 def energy (s : HState M) : ℝ := M.ELevel s.n
 end HState
 
-/-- Absorption: same (e,p) pair, mode index increases, and energy increases by photon energy. -/
+/- 6) Photon Absorption with Geometric Matching -/
+
+/--
+  Absorption defined by Kinematic Conservation.
+  - Same hydrogen pair (no dissociation)
+  - Mode index increases (excitation)
+  - Energy gap exactly matched by photon energy
+
+  Momentum conservation is implicit: photon momentum transferred to H.
+-/
 def Absorbs (M : QFDModel Point) (s : HState M) (γ : Photon) (s' : HState M) : Prop :=
-  s'.H = s.H ∧ s.n < s'.n ∧ s'.energy = s.energy + Photon.energy M γ
+  s'.H = s.H ∧
+  s.n < s'.n ∧
+  M.ELevel s'.n = M.ELevel s.n + Photon.energy M γ
 
-/-- Emission: same (e,p) pair, mode index decreases, and energy decreases by photon energy. -/
-def Emits (M : QFDModel Point) (s : HState M) (s' : HState M) (γ : Photon) : Prop :=
-  s'.H = s.H ∧ s'.n < s.n ∧ s.energy = s'.energy + Photon.energy M γ
+/--
+  The "Gear Mesh" Theorem.
+  If the photon's spatial geometry (k) produces an energy (ℏck) that exactly matches
+  the gap between Hydrogen gears (E_m - E_n), absorption is valid.
 
-/-- If a photon matches the discrete energy gap (E(m) − E(n)), absorption is a valid event. -/
-theorem absorption_of_gap
+  Physical interpretation:
+  - k = 2π/λ is the spatial frequency of the photon soliton
+  - E = ℏck is the energy quantum carried by this wave
+  - Absorption requires "lock and key": E must match ΔE_hydrogen exactly
+-/
+theorem absorption_geometric_match
     {M : QFDModel Point} {H : Hydrogen M} {n m : ℕ} (hnm : n < m)
     (γ : Photon)
-    (hGap : Photon.energy M γ = M.ELevel m - M.ELevel n) :
+    -- The geometric condition: k must scale to the energy gap
+    (hGeo : M.ℏ * (M.c_vac * γ.k) = M.ELevel m - M.ELevel n) :
     Absorbs M ⟨H, n⟩ γ ⟨H, m⟩ := by
   refine ⟨rfl, hnm, ?_⟩
-  -- Goal: E(m) = E(n) + ℏω, given ℏω = E(m) - E(n)
-  have : M.ELevel m = M.ELevel n + Photon.energy M γ := by
-    linarith [hGap]
-  simpa [HState.energy] using this
+  simp [Photon.energy, Photon.frequency] at *
+  linarith [hGeo]
 
-/-- If a photon matches the discrete energy gap (E(n) − E(m)), emission is a valid event. -/
-theorem emission_of_gap
+/--
+  Emission: reverse process
+  - Same hydrogen pair
+  - Mode index decreases (de-excitation)
+  - Energy released as photon
+-/
+def Emits (M : QFDModel Point) (s : HState M) (s' : HState M) (γ : Photon) : Prop :=
+  s'.H = s.H ∧
+  s'.n < s.n ∧
+  M.ELevel s.n = M.ELevel s'.n + Photon.energy M γ
+
+/-- Emission theorem: if photon energy matches downward gap, emission valid -/
+theorem emission_geometric_match
     {M : QFDModel Point} {H : Hydrogen M} {n m : ℕ} (hmn : m < n)
     (γ : Photon)
-    (hGap : Photon.energy M γ = M.ELevel n - M.ELevel m) :
+    (hGeo : M.ℏ * (M.c_vac * γ.k) = M.ELevel n - M.ELevel m) :
     Emits M ⟨H, n⟩ ⟨H, m⟩ γ := by
   refine ⟨rfl, hmn, ?_⟩
-  -- Goal: E(n) = E(m) + ℏω, given ℏω = E(n) - E(m)
-  have : M.ELevel n = M.ELevel m + Photon.energy M γ := by
-    linarith [hGap]
-  simpa [HState.energy] using this
+  simp [Photon.energy, Photon.frequency] at *
+  linarith [hGeo]
+
+/- 7) Summary Theorems -/
+
+/-- Creation theorem: electron exists if config meets 4 gates -/
+theorem electron_exists_of_config
+    (h :
+      ∃ c : Config Point,
+        M.PhaseClosed c ∧ M.OnShell c ∧ M.FiniteEnergy c ∧
+        M.ShapeInvariant c ∧ c.charge = (-1)) :
+    ∃ e : Electron M, True := by
+  rcases h with ⟨c, hcClosed, hcOnShell, hcFinite, hcShape, hcCharge⟩
+  let s : Soliton M := soliton_of_config (M := M) c hcClosed hcOnShell hcFinite hcShape
+  refine ⟨⟨s, ?_⟩, trivial⟩
+  simpa [Soliton.charge, s] using hcCharge
+
+/-- Creation theorem: proton exists if config meets 4 gates -/
+theorem proton_exists_of_config
+    (h :
+      ∃ c : Config Point,
+        M.PhaseClosed c ∧ M.OnShell c ∧ M.FiniteEnergy c ∧
+        M.ShapeInvariant c ∧ c.charge = (1)) :
+    ∃ p : Proton M, True := by
+  rcases h with ⟨c, hcClosed, hcOnShell, hcFinite, hcShape, hcCharge⟩
+  let s : Soliton M := soliton_of_config (M := M) c hcClosed hcOnShell hcFinite hcShape
+  refine ⟨⟨s, ?_⟩, trivial⟩
+  simpa [Soliton.charge, s] using hcCharge
 
 end QFDModel
 end QFD
