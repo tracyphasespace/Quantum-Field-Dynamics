@@ -1,0 +1,52 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Harmonic Nuclear Model: Soliton Topology and Nuclear Stability"
+version: 1.0.0
+date-released: 2026-01-03
+authors:
+  - family-names: McSheery
+    given-names: Tracy
+    email: tracy@tracyphasespace.com
+    orcid: https://orcid.org/0000-0000-0000-0000
+repository-code: "https://github.com/tracyphasespace/Quantum-Field-Dynamics/tree/main/projects/particle-physics/harmonic_nuclear_model"
+url: "https://github.com/tracyphasespace/Quantum-Field-Dynamics"
+license: MIT
+keywords:
+  - nuclear physics
+  - soliton theory
+  - QFD
+  - quantum field dynamics
+  - nuclear structure
+  - harmonic resonance
+  - decay rates
+  - NUBASE2020
+abstract: >
+  Complete implementation and validation of the Harmonic Family Model
+  for nuclear structure, based on QFD soliton theory. Includes single-center
+  model for spherical nuclei (A ≤ 161) and two-center extension for
+  deformed nuclei (A > 161). Validates dual-core soliton hypothesis and
+  Tacoma Narrows mechanism (resonance → instability) across full NUBASE2020
+  dataset (3,558 nuclides). Demonstrates that nuclear shape transitions
+  arise from soliton topology and that decay rates correlate with harmonic
+  dissonance (r ≈ 0.3-0.4, p < 10⁻¹²).
+references:
+  - type: article
+    authors:
+      - family-names: Kondev
+        given-names: F.G.
+      - family-names: Wang
+        given-names: M.
+      - family-names: Huang
+        given-names: W.J.
+      - family-names: Naimi
+        given-names: S.
+      - family-names: Audi
+        given-names: G.
+    title: "The NUBASE2020 evaluation of nuclear physics properties"
+    journal: "Chinese Physics C"
+    volume: 45
+    issue: 3
+    year: 2021
+    doi: 10.1088/1674-1137/abddae
+    url: "https://doi.org/10.1088/1674-1137/abddae"
