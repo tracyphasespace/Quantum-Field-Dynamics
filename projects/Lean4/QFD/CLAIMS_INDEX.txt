@@ -285,12 +285,23 @@ QFD/Hydrogen/PhotonSoliton.lean:252:theorem absorption_geometric_match
 QFD/Hydrogen/PhotonSoliton.lean:274:theorem emission_geometric_match
 QFD/Hydrogen/PhotonSoliton.lean:286:theorem electron_exists_of_config
 QFD/Hydrogen/PhotonSoliton.lean:298:theorem proton_exists_of_config
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:156:theorem photon_momentum_inheritance
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:172:theorem photon_energy_inheritance
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:185:theorem emergent_massless_consistency
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:202:theorem vacuum_length_scale_inversion :
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:234:theorem nuclear_scale_prediction
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:256:theorem compton_compression :
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:275:theorem unification_scale_match
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:291:theorem hbar_pos : M.toQFDModel.ℏ > 0 := by
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:313:theorem fermion_boson_scaling
 QFD/Hydrogen/PhotonSolitonStable.lean:116:theorem stableSoliton_persists
 QFD/Hydrogen/PhotonSolitonStable.lean:180:theorem k_eq_twoPi_div_lambda (γ : PhotonWave) :
 QFD/Hydrogen/PhotonSolitonStable.lean:188:theorem momentum_eq_hbar_twoPi_div_lambda (γ : PhotonWave) :
 QFD/Hydrogen/PhotonSolitonStable.lean:201:theorem energy_eq_cVac_mul_momentum
 QFD/Hydrogen/PhotonSolitonStable.lean:253:theorem absorptionP_of_gap
 QFD/Hydrogen/PhotonSolitonStable.lean:99:theorem stableSoliton_of_config
+QFD/Hydrogen/PhotonSoliton_Kinematic.lean:102:theorem energy_momentum_relation (γ : Photon) :
+QFD/Hydrogen/PhotonSoliton_Kinematic.lean:153:theorem absorption_geometric_match
 QFD/Hydrogen/TopologicalCharge.lean:116:theorem photon_stability_theorem (γ : Photon) :
 QFD/Hydrogen/TopologicalCharge.lean:141:theorem charge_quantization (c : Config Point) :
 QFD/Hydrogen/TopologicalCharge.lean:151:theorem spectral_sharpness_preserved
