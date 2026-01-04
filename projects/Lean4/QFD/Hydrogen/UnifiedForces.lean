@@ -80,7 +80,7 @@ variable {gvac : GravitationalVacuum}
   - β: Vacuum stiffness
 -/
 noncomputable def geometricG (gvac : GravitationalVacuum) : ℝ :=
-  (gvac.ℓ_planck^2 * gvac.sonic_velocity^2) / gvac.β
+  (gvac.ℓ_planck^2 * gvac.sonicVelocity^2) / gvac.β
 
 /--
   Theorem: Gravitational Constant from Bulk Modulus.
@@ -93,7 +93,7 @@ noncomputable def geometricG (gvac : GravitationalVacuum) : ℝ :=
 theorem gravity_from_bulk_modulus
     (gvac : GravitationalVacuum)
     (h_match : gvac.G = gvac.geometricG) :
-    gvac.G = (gvac.ℓ_planck^2 * gvac.sonic_velocity^2) / gvac.β := by
+    gvac.G = (gvac.ℓ_planck^2 * gvac.sonicVelocity^2) / gvac.β := by
 
   rw [h_match, geometricG]
 
@@ -108,7 +108,7 @@ theorem gravity_inversely_proportional_beta
     (h_match : gvac.G = gvac.geometricG) :
     ∃ (k : ℝ), gvac.G = k / gvac.β := by
 
-  use (gvac.ℓ_planck^2 * gvac.sonic_velocity^2)
+  use (gvac.ℓ_planck^2 * gvac.sonicVelocity^2)
   rw [gravity_from_bulk_modulus gvac h_match]
 
 /--
@@ -126,8 +126,8 @@ theorem gravity_pos_from_geometry
     · apply sq_pos_of_pos
       exact gvac.h_lp_pos
     · apply sq_pos_of_pos
-      exact gvac.sonic_velocity_pos
-  · exact gvac.h_beta_pos
+      exact VacuumMedium.sonic_velocity_pos gvac.toVacuumMedium
+  · exact gvac.hβ_pos
 
 /--
   Theorem: Substituting c = √(β/ρ) into G.
@@ -146,17 +146,17 @@ theorem gravity_density_form
     gvac.G = gvac.ℓ_planck^2 / gvac.ρ := by
 
   rw [gravity_from_bulk_modulus gvac h_match]
-  unfold sonic_velocity
-  have h_beta_ne : gvac.β ≠ 0 := ne_of_gt gvac.h_beta_pos
-  have h_rho_ne : gvac.ρ ≠ 0 := ne_of_gt gvac.h_rho_pos
+  unfold VacuumMedium.sonicVelocity
+  have h_beta_ne : gvac.β ≠ 0 := ne_of_gt gvac.hβ_pos
+  have h_rho_ne : gvac.ρ ≠ 0 := ne_of_gt gvac.hρ_pos
 
-  -- Expand c² = β/ρ
-  rw [sq_abs, abs_of_nonneg (le_of_lt (sonic_velocity_pos gvac))]
-  rw [Real.sq_sqrt (div_nonneg (le_of_lt gvac.h_beta_pos) (le_of_lt gvac.h_rho_pos))]
+  -- Expand c² = β/ρ using Real.sq_sqrt
+  have h_sqrt_nonneg : 0 ≤ gvac.β / gvac.ρ := div_nonneg (le_of_lt gvac.hβ_pos) (le_of_lt gvac.hρ_pos)
+  simp only [sq]
+  rw [Real.mul_self_sqrt h_sqrt_nonneg]
 
   -- Simplify: (ℓ² · (β/ρ)) / β = ℓ² / ρ
   field_simp [h_beta_ne, h_rho_ne]
-  ring
 
 end GravitationalVacuum
 
@@ -177,7 +177,7 @@ structure UnifiedVacuum (Point : Type u) extends
 
   /-- Consistency: The speed of light is the same. -/
   h_c_match : toEmergentConstants.cVac =
-              toGravitationalVacuum.sonic_velocity
+              toGravitationalVacuum.sonicVelocity
 
 namespace UnifiedVacuum
 
@@ -197,7 +197,7 @@ theorem unified_scaling
     (U : UnifiedVacuum Point)
     (h_G_match : U.G = U.toGravitationalVacuum.geometricG) :
     (∃ (k_c : ℝ), U.cVac = k_c * Real.sqrt U.β) ∧
-    (∃ (k_h : ℝ), U.ℏ = k_h * Real.sqrt U.β) ∧
+    (∃ (k_h : ℝ), U.hbar = k_h * Real.sqrt U.β) ∧
     (∃ (k_G : ℝ), U.G = k_G / U.β) := by
 
   constructor
@@ -206,7 +206,8 @@ theorem unified_scaling
     rcases this with ⟨k, hk⟩
     use k
     calc U.cVac
-        = U.toGravitationalVacuum.sonic_velocity := U.h_c_match.symm
+        = U.toEmergentConstants.cVac := rfl
+      _ = U.toGravitationalVacuum.sonicVelocity := U.h_c_match
       _ = k * Real.sqrt U.toGravitationalVacuum.β := hk
       _ = k * Real.sqrt U.β := by rw [← U.h_beta_match]
 
@@ -217,20 +218,14 @@ theorem unified_scaling
               U.toEmergentConstants
               U.h_c_match
     rcases this with ⟨k, hk⟩
-    use k
-    calc U.ℏ
-        = k * Real.sqrt U.toGravitationalVacuum.β := hk
-      _ = k * Real.sqrt U.β := by rw [← U.h_beta_match]
+    exact ⟨k, hk⟩
 
   · -- G ∝ 1/β
     have := GravitationalVacuum.gravity_inversely_proportional_beta
               U.toGravitationalVacuum
               h_G_match
     rcases this with ⟨k, hk⟩
-    use k
-    calc U.G
-        = k / U.toGravitationalVacuum.β := hk
-      _ = k / U.β := by rw [← U.h_beta_match]
+    exact ⟨k, hk⟩
 
 /--
   Theorem: Opposite Scaling (Quantum vs Gravity).
@@ -249,7 +244,7 @@ theorem quantum_gravity_opposition
     (h_double : β_doubled = 2 * U.β)
     (h_pos : β_doubled > 0) :
     -- New quantum action is √2 times larger
-    (∃ (ℏ_new : ℝ), ℏ_new = Real.sqrt 2 * U.ℏ) ∧
+    (∃ (ℏ_new : ℝ), ℏ_new = Real.sqrt 2 * U.hbar) ∧
     -- New gravity is 1/2 as strong
     (∃ (G_new : ℝ), G_new = U.G / 2) := by
 
@@ -262,13 +257,15 @@ theorem quantum_gravity_opposition
         = k_h * Real.sqrt (2 * U.β) := by rw [h_double]
       _ = k_h * (Real.sqrt 2 * Real.sqrt U.β) := by rw [Real.sqrt_mul (le_of_lt (by norm_num : (0:ℝ) < 2))]
       _ = Real.sqrt 2 * (k_h * Real.sqrt U.β) := by ring
-      _ = Real.sqrt 2 * U.ℏ := by rw [← h_ℏ]
+      _ = Real.sqrt 2 * U.hbar := by rw [← h_ℏ]
 
   · -- G scales as 1/β
     use (k_G / β_doubled)
     calc k_G / β_doubled
         = k_G / (2 * U.β) := by rw [h_double]
-      _ = (k_G / U.β) / 2 := by rw [div_mul_eq_div_div]
+      _ = k_G / U.β / 2 := by
+          rw [div_div]
+          ring
       _ = U.G / 2 := by rw [← h_G]
 
 /--
@@ -284,7 +281,7 @@ theorem fine_structure_from_beta
     (α : ℝ)
     (e : ℝ)  -- electron charge
     (ε₀ : ℝ) -- vacuum permittivity
-    (h_alpha : α = e^2 / (4 * Real.pi * ε₀ * U.ℏ * U.cVac))
+    (h_alpha : α = e^2 / (4 * Real.pi * ε₀ * U.hbar * U.cVac))
     (h_e_pos : e > 0)
     (h_eps_pos : ε₀ > 0)
     (h_G_match : U.G = U.toGravitationalVacuum.geometricG) :
@@ -296,57 +293,50 @@ theorem fine_structure_from_beta
   -- 2. Define the unified constant k
   use (e^2 / (4 * Real.pi * ε₀ * k_h * k_c))
 
-  -- 3. Substitute definitions
+  -- 3. Prove α = k / U.β using substitution
+  have h_kc_ne : k_c ≠ 0 := by
+    intro hk_c
+    have : U.cVac = 0 := by simpa [hk_c, zero_mul] using h_c
+    exact (ne_of_gt U.h_cvac_pos) this
+
+  have h_hbar_pos : 0 < U.hbar := by
+    have h_shape_mass :
+        0 < U.Gamma_vortex * U.lam_mass := mul_pos U.h_shape_pos U.h_mass_pos
+    have h_shape_mass_len :
+        0 < U.Gamma_vortex * U.lam_mass * U.L_zero :=
+      mul_pos h_shape_mass U.h_len_pos
+    have h_prod :
+        0 < U.Gamma_vortex * U.lam_mass * U.L_zero * U.cVac :=
+      mul_pos h_shape_mass_len U.h_cvac_pos
+    simpa [U.h_hbar_match, mul_comm, mul_left_comm, mul_assoc] using h_prod
+
+  have h_kh_ne : k_h ≠ 0 := by
+    intro hk_h
+    have : U.hbar = 0 := by simpa [hk_h, zero_mul] using h_ℏ
+    exact (ne_of_gt h_hbar_pos) this
+
+  have h_eps_ne : ε₀ ≠ 0 := ne_of_gt h_eps_pos
+  have h_beta_pos : 0 < U.β := U.toGravitationalVacuum.hβ_pos
+  have h_beta_ne : U.β ≠ 0 := ne_of_gt h_beta_pos
+
+  have h_denom : 4 * Real.pi * ε₀ * k_h * k_c ≠ 0 := by
+    have h4 : (4 : ℝ) ≠ 0 := by norm_num
+    have h4pi : 4 * Real.pi ≠ 0 := mul_ne_zero h4 Real.pi_ne_zero
+    have h4pi_eps : 4 * Real.pi * ε₀ ≠ 0 := mul_ne_zero h4pi h_eps_ne
+    have h4pi_eps_kh : 4 * Real.pi * ε₀ * k_h ≠ 0 :=
+      mul_ne_zero h4pi_eps h_kh_ne
+    exact mul_ne_zero h4pi_eps_kh h_kc_ne
+
   calc α
-      = e^2 / (4 * Real.pi * ε₀ * U.ℏ * U.cVac) := h_alpha
+      = e^2 / (4 * Real.pi * ε₀ * U.hbar * U.cVac) := h_alpha
     _ = e^2 / (4 * Real.pi * ε₀ * (k_h * Real.sqrt U.β) * (k_c * Real.sqrt U.β)) := by
         rw [h_ℏ, h_c]
-    _ = e^2 / (4 * Real.pi * ε₀ * k_h * k_c * (Real.sqrt U.β * Real.sqrt U.β)) := by
-        ring
+    _ = e^2 / (4 * Real.pi * ε₀ * k_h * k_c * (Real.sqrt U.β * Real.sqrt U.β)) := by ring
     _ = e^2 / (4 * Real.pi * ε₀ * k_h * k_c * U.β) := by
-        rw [Real.mul_self_sqrt (le_of_lt U.h_beta_pos)]
+        rw [Real.mul_self_sqrt (le_of_lt h_beta_pos)]
     _ = (e^2 / (4 * Real.pi * ε₀ * k_h * k_c)) / U.β := by
-        have h_denom : 4 * Real.pi * ε₀ * k_h * k_c ≠ 0 := by
-          apply mul_ne_zero
-          apply mul_ne_zero
-          apply mul_ne_zero
-          · norm_num
-          · exact Real.pi_ne_zero
-          · exact ne_of_gt h_eps_pos
-          · sorry -- Need k_h ≠ 0 and k_c ≠ 0 from scaling laws
-        field_simp [h_denom]
-        ring
+        rw [div_div]
 
 end UnifiedVacuum
-
-/-! ## Physical Interpretation -/
-
-/--
-  Summary: The Three Forces from One Vacuum Parameter β
-
-  **Electromagnetic Force** (α ∝ 1/β):
-  - Surface shear waves (transverse)
-  - Mediated by ℏ and c
-  - α ~ 1/137 in our universe (high β)
-
-  **Gravitational Force** (G ∝ 1/β):
-  - Bulk compression waves (longitudinal)
-  - G ~ 6.67×10⁻¹¹ in SI units
-  - Very weak because β is high
-
-  **Strong Nuclear Force** (E_bind ∝ β):
-  - Gradient pressure confinement
-  - Short-range (~1 fm)
-  - Binding energy ~ MeV scale
-
-  **Why Gravity is Weak**:
-  Our universe has high stiffness β, which:
-  - Makes quantum effects strong (large ℏ)
-  - Makes EM strong (large c, moderate α)
-  - Makes gravity WEAK (small G ∝ 1/β)
-
-  The "hierarchy problem" is solved: It's not that gravity is mysteriously weak,
-  it's that our vacuum is stiff!
--/
-
 end QFD
+

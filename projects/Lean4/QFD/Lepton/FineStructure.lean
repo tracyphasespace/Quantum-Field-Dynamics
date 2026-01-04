@@ -4,21 +4,15 @@ import QFD.Lepton.Generations
 import QFD.Lepton.KoideRelation -- Links to geometric masses
 
 /-!
-# The Fine Structure Constant (Geometry of Coupling)
+# The Fine Structure Constant
 
-**Bounty Target**: Cluster 3 (Mass-as-Geometry)
-**Value**: 6,000 Pts
-**Status**: ✅ Scaffolded for Python Bridge
+## Standard Model vs QFD
 
-## The "Heresy" Being Patched
-Standard Model: $\alpha = e^2 / 4\pi\epsilon_0 \hbar c \approx 1/137.036$ is an arbitrary constant.
-QFD: $\alpha$ is a geometric factor. It is the ratio of the **Topology** (Winding Number surface)
-to the **Geometry** (Rest Energy volume). It measures how "stiff" the vacuum is.
+**Standard Model**: α = e²/(4πε₀ℏc) ≈ 1/137.036 is a measured constant
 
-## The Model
-$\alpha$ emerges from the projection of the 6D Charge Bivector ($B_q = e_4e_5$) onto the
-observable 4D spacetime ($e_0..e_3$).
-The ratio is controlled by the winding topology of the Generation 1 Isomer (.x).
+**QFD**: α emerges from vacuum geometry. The ratio is determined by the projection
+of the 6D charge bivector (B_q = e₄e₅) onto observable 4D spacetime (e₀..e₃),
+controlled by the winding topology of the generation structure.
 -/
 
 namespace QFD.Lepton.FineStructure
@@ -65,11 +59,7 @@ noncomputable def c2_volume : ℝ := 0.316743
 /-- Critical beta limit from Golden Loop (exported for Python bridge) -/
 noncomputable def beta_critical : ℝ := 3.058230856
 
-/--
-**Theorem: Constants Are Not Free**
-Prove that if the Lepton Spectrum is fixed (by KoideRelation),
-then $\alpha$ is constrained. The solver cannot move $\alpha$ freely without breaking masses.
--/
+/-- Fine structure constant is determined by vacuum parameters -/
 theorem fine_structure_constraint
   (lambda : ℝ) (me : ℝ)
   (h_stable : me > 0) :
