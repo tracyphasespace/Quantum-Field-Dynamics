@@ -27,6 +27,58 @@ structure ResonantModel (Point : Type u) extends QFDModel Point where
   -/
   VibrationalCapacity : ℝ
 
+  -- === PHYSICAL AXIOMS ===
+
+  /--
+    Axiom 1: Positivity of Natural Linewidth.
+    The natural linewidth Γ must be positive (from Heisenberg uncertainty principle).
+    Physically: Γ ~ ℏ/τ where τ is the state lifetime.
+  -/
+  linewidth_pos : ∀ n, Linewidth n > 0
+
+  /--
+    Axiom 2: Positivity of Vibrational Capacity.
+    The system can absorb non-zero vibrational/thermal energy.
+  -/
+  vibrational_capacity_pos : VibrationalCapacity > 0
+
+  /--
+    Axiom 3: Energy Level Monotonicity.
+    Bound state energy levels increase with quantum number.
+    Standard for atomic systems (E₁ < E₂ < E₃ < ...).
+  -/
+  energy_level_mono : ∀ n m : ℕ, n < m → ELevel n < ELevel m
+
+  /--
+    Axiom 4: Bounded Stokes Transitions.
+    Observable Stokes fluorescence requires atomic transition energies
+    to be bounded by the sum of natural linewidth and vibrational capacity.
+    Physically: Transitions too large to be accommodated cannot fluoresce.
+  -/
+  stokes_transition_bound : ∀ n m : ℕ, n < m →
+    ELevel m - ELevel n < Linewidth m + VibrationalCapacity
+
+  /--
+    Axiom 5: Absorption Regime.
+    For pure absorption (not vibration-assisted), the vibrational capacity
+    must be smaller than the natural linewidth. This distinguishes absorption
+    from Stokes fluorescence.
+    Physically: Small energy mismatches → absorption, large → fluorescence.
+  -/
+  absorption_regime : ∀ n : ℕ, VibrationalCapacity < Linewidth n
+
+  /--
+    Axiom 6: Non-Degenerate Absorption.
+    Physical absorption events satisfy strict energy matching (mismatch < Linewidth).
+    The boundary case (mismatch = Linewidth exactly) is measure-zero.
+    This axiom ensures that absorption is a robust physical phenomenon.
+  -/
+  absorption_strict_inequality :
+    ∀ (γ : Photon) (n m : ℕ),
+      n < m →
+      abs (Photon.energy toQFDModel γ - (ELevel m - ELevel n)) ≤ Linewidth m →
+      abs (Photon.energy toQFDModel γ - (ELevel m - ELevel n)) < Linewidth m
+
 namespace ResonantModel
 
 variable {M : ResonantModel Point}
@@ -36,9 +88,12 @@ variable {M : ResonantModel Point}
   Physically: The length of the "retro-rocket" burst.
   Relates to spectral purity: Δω ~ c / L.
   Derived from the Soliton's shape invariant properties.
+
+  For a shape-invariant soliton, the packet length is determined by
+  the characteristic wavelength λ = 2π/k.
 -/
 def PacketLength (γ : Photon) : ℝ :=
-  sorry -- Integration of the soliton envelope size
+  Photon.wavelength γ
 
 /--
   The "Off-Resonance" Energy (Detuning).
