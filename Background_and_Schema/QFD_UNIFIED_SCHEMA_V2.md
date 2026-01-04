@@ -549,4 +549,458 @@ Results: `E_model_MeV`, `virial`, `T_N`, `T_e`, `V_coul`
 
 ---
 
+## 13. Spectral Gap / Internal Geometry Domain
+
+**Reference:** Appendix Z.4, Lean 4 formalization in `QFD_SpectralGap/`
+**Status:** Formally verified (2025-12-04)
+
+This section documents the spectral gap mechanism for (3+1)D spacetime emergence
+from 6D QFD. The formalization uses Real Geometric Algebra and proves that
+symmetry-breaking perturbations into extra dimensions cost finite energy.
+
+### 13.1 Internal Sector Parameters
+
+| Canonical Name | Symbol | Type | Unit | Description |
+|---------------|--------|------|------|-------------|
+| `mu_squared` | μ² | `float` | (natural units) | Potential curvature minimum V″(ρ) ≥ μ² |
+| `Delta_E` | ΔE | `float` | (natural units) | Spectral gap on H_orth |
+| `C_barrier` | C_b | `float` | — | Centrifugal barrier strength (= μ² + 1) |
+| `n_max_winding` | n_max | `int` | — | Maximum internal winding number in spectrum |
+
+**Physical Interpretation:**
+- `mu_squared`: Minimum curvature of QFD potential in internal directions
+- `Delta_E`: Energy cost for any nonzero internal winding mode (ΔE = μ² + 1)
+- `C_barrier`: Combined kinetic + potential barrier
+- `n_max_winding`: Cutoff for Fourier mode expansion
+
+### 13.2 Casimir Operator Spectrum
+
+| Canonical Name | Symbol | Type | Description |
+|---------------|--------|------|-------------|
+| `Casimir_eigenvalues` | {n²}ₙ∈ℤ | `array[int]` | Squared winding numbers [0, 1, 4, 9, 16, ...] |
+| `H_sym_dim` | dim(H₀) | `int` | Dimension of symmetric sector (n=0 modes) |
+| `H_orth_dim` | dim(H_⊥) | `int` | Dimension of orthogonal sector (n≠0 modes) |
+
+**Casimir Operator:**
+```
+C = -J² = J† J
+```
+where J is the bivector generator (skew-adjoint, J† = -J).
+
+**Eigenvalue Equation:**
+```
+C |ψₙ⟩ = n² |ψₙ⟩
+```
+
+### 13.3 Spectral Gap Theorem
+
+**Statement:**
+For any perturbation η in the symmetry-breaking sector H_orth,
+```
+⟨η| L |η⟩ ≥ ΔE · ‖η‖²
+```
+where L is the stability operator (Hessian of energy) and ΔE = μ² + 1.
+
+**Proof Structure:**
+1. **Axiom 1 (Casimir lower bound):** ⟨η| C |η⟩ ≥ ‖η‖² on H_orth
+2. **Axiom 3 (Energy dominance):** ⟨η| L |η⟩ ≥ (μ² + 1) ⟨η| C |η⟩
+3. **Conclusion:** ⟨η| L |η⟩ ≥ (μ² + 1) ‖η‖²
+
+**Formal Verification:**
+- Abstract framework: `SpectralGap_RealGeometric_Fixed.lean` ✅ Compiles
+- Concrete toy model: `ToyModel_Internal.lean` ✅ Compiles
+- Axioms → theorems: Bridge proven in toy model
+
+### 13.4 Real Geometric Algebra Structures
+
+| Canonical Name | Type | Description |
+|---------------|------|-------------|
+| `BivectorGenerator` | Operator | J : H → H, skew-adjoint (J† = -J) |
+| `CasimirOperator` | Operator | C = -J² : H → H |
+| `StabilityOperator` | Operator | L : H → H, self-adjoint (L† = L) |
+| `H_sym` | Subspace | ker(C) = {ψ ∈ H : C ψ = 0} |
+| `H_orth` | Subspace | (H_sym)⊥ (orthogonal complement) |
+
+### 13.5 Toy Model (Fourier Mode Representation)
+
+For the internal SO(2) sector, states decompose as:
+```
+ψ(r,θ) = Σₙ∈ℤ ψₙ(r) e^(inθ)
+```
+
+**Operators in Fourier Space:**
+```
+(J ψ)ₙ = n · ψₙ              (angular momentum)
+(C ψ)ₙ = n² · ψₙ             (Casimir)
+(L ψ)ₙ = (n² + μ²) · ψₙ      (stability with potential)
+```
+
+**Sectors:**
+- H_sym: n = 0 mode only (4D effective sector)
+- H_orth: n ≠ 0 modes (extra dimensions)
+
+**Gap Derivation:**
+```
+⟨ψ| L |ψ⟩ = Σₙ (n² + μ²) |ψₙ|²
+         ≥ Σₙ≠₀ (1 + μ²) |ψₙ|²     (since n² ≥ 1 for n ≠ 0)
+         = (μ² + 1) ‖ψ‖²          (for ψ ∈ H_orth)
+```
+
+### 13.6 Python Schema Definition
+
+```python
+@dataclass
+class SpectralGapParams:
+    """Internal sector spectral gap parameters."""
+    mu_squared: float = 1.0        # Potential curvature V″(ρ) ≥ μ²
+    Delta_E: float = 2.0           # Spectral gap (= μ² + 1)
+    C_barrier: float = 2.0         # Barrier strength
+    n_max_winding: int = 10        # Maximum winding number
+
+    def __post_init__(self):
+        """Ensure consistency: ΔE = μ² + 1"""
+        self.Delta_E = self.mu_squared + 1.0
+        self.C_barrier = self.Delta_E
+
+    @property
+    def gap_MeV(self, scale_MeV: float = 938.0) -> float:
+        """Convert gap to MeV using nuclear mass scale."""
+        return self.Delta_E * scale_MeV
+
+    def casimir_eigenvalues(self, n_max: int = None) -> np.ndarray:
+        """Return Casimir eigenvalues up to n_max."""
+        if n_max is None:
+            n_max = self.n_max_winding
+        return np.array([n**2 for n in range(-n_max, n_max + 1)])
+
+@dataclass
+class InternalSectorState:
+    """State in the internal SO(2) sector."""
+    fourier_coeffs: np.ndarray     # {ψₙ}ₙ∈ℤ
+    winding_numbers: np.ndarray    # n values
+
+    @property
+    def is_symmetric(self) -> bool:
+        """Check if state is in H_sym (n=0 only)."""
+        return np.all(self.fourier_coeffs[self.winding_numbers != 0] == 0)
+
+    def casimir_expectation(self) -> float:
+        """Compute ⟨ψ| C |ψ⟩ = Σₙ n² |ψₙ|²"""
+        return np.sum(self.winding_numbers**2 * np.abs(self.fourier_coeffs)**2)
+
+    def stability_expectation(self, mu_sq: float) -> float:
+        """Compute ⟨ψ| L |ψ⟩ = Σₙ (n² + μ²) |ψₙ|²"""
+        return np.sum((self.winding_numbers**2 + mu_sq) *
+                      np.abs(self.fourier_coeffs)**2)
+```
+
+### 13.7 Connection to Fundamental Couplings
+
+The spectral gap parameter μ² connects to the fundamental QFD couplings through:
+
+```
+μ² = V″(ρ₀) = 2V₂ + 12V₄ ρ₀² + 30V₆ ρ₀⁴ + ...
+```
+
+where ρ₀ is the ground state field amplitude.
+
+**Typical Values (Nuclear Scale):**
+- V₄ ~ 11.0 → contributes to μ²
+- For nuclear QFD: μ² ~ O(1) in natural units
+- ΔE = μ² + 1 ~ 2-3 in natural units ~ 2-3 GeV in physical units
+
+### 13.8 Observational Signatures
+
+The spectral gap ΔE has physical consequences:
+
+1. **Nuclear Binding:** Extra-dimensional excitations suppressed by ΔE
+2. **Cosmology:** No low-energy symmetry-breaking modes
+3. **Stability:** Ground state (4D) is energetically favored
+
+**Validation:**
+- Nuclear sector: 4D effective theory works (no extra-dimensional contamination)
+- Cosmology: No anomalous redshift from internal degrees of freedom
+- Formal proof: Gap exists (Lean 4 verification)
+
+---
+
+## 14. Supernova / Cosmology Domain (V21 Analysis)
+
+**Status:** ✅ Analysis Complete (2025-01-18)
+**Reference:** `projects/astrophysics/V21 Supernova Analysis package/`
+
+### 14.1 Overview
+
+The V21 Supernova Analysis implements the QFD cosmological model and tests it against the DES-SN5YR dataset (8,253 Type Ia supernovae). The key result is the **falsification of ΛCDM cosmological time dilation**.
+
+**Core Finding:**
+- **ΛCDM Prediction:** Stretch parameter s = 1 + z (light curves stretched by cosmic expansion)
+- **QFD Prediction:** s ≈ 1.0 (no time dilation in static spacetime)
+- **Observed Data:** s ≈ 1.0 across all redshifts (0 < z < 1.3)
+- **Conclusion:** ΛCDM (1+z) time dilation is **falsified** by supernova data
+
+### 14.2 Global Model Parameters
+
+**V21 Global Parameters** (fit to full dataset):
+
+| Canonical Name | Symbol | Type | Description | Reference Value |
+|---------------|--------|------|-------------|-----------------|
+| `k_J` | kⱼ | `float` | Universal cosmic drag constant | 70.0 km/s/Mpc |
+| `eta_prime` | η' | `float` | FDR interaction strength (plasma density) | ~5.0 |
+| `xi` | ξ | `float` | Thermal/vacuum coupling (Planck/Wien) | ~2.5 |
+| `sigma_alpha` | σ_α | `float` | Intrinsic scatter in dimming parameter | ~0.15 |
+| `nu` | ν | `float` | Student-t DoF (outlier robustness) | ~6.5 |
+
+### 14.3 Physical Model
+
+**Dimming Prediction:**
+
+The QFD model predicts the observed dimming α(z) as:
+
+```
+α_pred(z) = -(k_J · ln(1+z) + η' · z + ξ · z/(1+z))
+```
+
+**Basis Functions:**
+
+```
+Φ(z) = [ln(1+z), z, z/(1+z)]
+```
+
+Physical interpretations:
+- **ln(1+z):** Low-redshift expansion behavior (cosmic drag from J·A interaction)
+- **z:** Linear Hubble flow component
+- **z/(1+z):** Saturation/non-linear effects at high redshift
+
+**Observable (Distance Modulus):**
+
+```
+μ_obs = -2.5 log₁₀(F_obs) + C
+μ_model = 5 log₁₀(D_L) + 25 - 2.5/ln(10) · α
+```
+
+Sign convention:
+- α < 0 → Dimming → μ increases (fainter)
+- α > 0 → Brightening → μ decreases (brighter)
+
+**Residuals:**
+
+```
+Δμ = μ_obs - μ_model
+```
+
+- Δμ > 0: Supernova **fainter** than model (needs more dimming)
+- Δμ < 0: Supernova **brighter** than model (lensed/flashlight effect)
+
+### 14.4 Per-Supernova Parameters
+
+Each supernova has local nuisance parameters:
+
+| Canonical Name | Symbol | Type | Description |
+|---------------|--------|------|-------------|
+| `t0` | t₀ | `float` | Explosion time (MJD) |
+| `ln_A` | ln A | `float` | Log amplitude scaling |
+| `A_plasma` | A_pl | `float` | Plasma opacity amplitude |
+| `beta` | β | `float` | Spectral slope of extinction |
+| `A_lens` | A_lens | `float` | BBH lensing amplitude (if applicable) |
+| `P_orb` | P | `float` | Orbital period (days, for BBH candidates) |
+| `phi_0` | φ₀ | `float` | Orbital phase (rad) |
+
+### 14.5 Statistical Model
+
+**Likelihood Function:**
+
+```
+α_obs ~ StudentT(ν, α_pred, σ_alpha)
+```
+
+The **Student-t distribution** (instead of Gaussian) provides:
+- Heavy tails for robust handling of outliers
+- ν ≈ 6.5 from DES-SN5YR data
+- ~1/6 of supernovae are significant outliers (BBH candidates, strong lensing)
+
+### 14.6 Physical Degeneracy
+
+The three basis functions are **mathematically collinear** (condition number κ ≈ 2×10⁵), but this reflects **physical reality**:
+
+**Entangled Physical Effects:**
+1. Gravitational mass of binary companion (k_J)
+2. Local plasma environment density (η')
+3. FDR interaction strength (ξ)
+
+These effects are **physically coupled** in astrophysical systems. The model uses **QR decomposition** to handle numerical instability while preserving the required physical degeneracy.
+
+### 14.7 Python Schema Definition
+
+```python
+@dataclass
+class SupernovaV21GlobalParams:
+    """QFD Supernova V21 Global Model Parameters."""
+    # Global cosmological parameters
+    k_J: float = 70.0          # Universal cosmic drag (km/s/Mpc)
+    eta_prime: float = 0.0     # FDR strength
+    xi: float = 0.0            # Thermal/vacuum coupling
+
+    # Statistical model
+    sigma_alpha: float = 0.1   # Intrinsic scatter
+    nu: float = 6.5            # Student-t DoF
+
+    # Reference constants
+    C_KM_S: float = 299792.458
+    L_PEAK_ERG_S: float = 1.5e43
+    ABS_MAG: float = -19.3
+
+    def basis_functions(self, z: float) -> List[float]:
+        """Compute [ln(1+z), z, z/(1+z)]"""
+        import math
+        return [math.log(1.0 + z), z, z / (1.0 + z)]
+
+    def predict_dimming(self, z: float) -> float:
+        """Predict α_pred = -(k_J·ln(1+z) + η'·z + ξ·z/(1+z))"""
+        basis = self.basis_functions(z)
+        return -(self.k_J * basis[0] +
+                 self.eta_prime * basis[1] +
+                 self.xi * basis[2])
+
+@dataclass
+class SupernovaV21PerSNParams:
+    """Per-supernova nuisance parameters."""
+    t0: float                  # Explosion time (MJD)
+    ln_A: float = 0.0          # Log amplitude
+    A_plasma: float = 0.0      # Plasma opacity
+    beta: float = 0.0          # Spectral slope
+    A_lens: float = 0.0        # Lensing amplitude
+    P_orb: float = 0.0         # Orbital period (BBH)
+    phi_0: float = 0.0         # Orbital phase (BBH)
+
+@dataclass
+class SupernovaV21Result:
+    """Results for a single supernova."""
+    sn_id: str                 # SN identifier
+    z_obs: float               # Observed redshift
+    stretch: float = 1.0       # Stretch parameter
+    alpha_fit: float = 0.0     # Fitted dimming
+    mu_obs: float = 0.0        # Observed distance modulus
+    mu_pred: float = 0.0       # Predicted distance modulus
+    delta_mu: float = 0.0      # Residual (μ_obs - μ_pred)
+    is_bbh_candidate: bool = False
+    chi_squared: float = 0.0
+```
+
+### 14.8 Connection to Fundamental Couplings
+
+**k_J (Universal J·A Interaction):**
+- Appears in both nuclear physics (Genesis Constants α) and cosmology
+- Nuclear: α = 3.50 includes k_J contribution to binding
+- Cosmology: k_J ≈ 70 km/s/Mpc sets cosmic drag baseline
+- **Same fundamental coupling** across domains
+
+**η' (Photon Self-Interaction):**
+- FDR (Flux-Dependent Redshift) effect
+- Photons traveling through quantum foam experience self-interaction
+- Scattering cross-section scales with local photon density
+- Creates nonlinear dimming that mimics ΛCDM acceleration
+
+**ξ (Thermal Coupling):**
+- Planck/Wien thermal broadening effect
+- Not a physical redshift, but magnitude correction
+- Accounts for spectral energy distribution shifts
+
+### 14.9 Key Observational Results
+
+**1. Time Dilation Falsification:**
+- Stretch parameter: s ≈ 1.0 ± 0.05 (flat across 0 < z < 1.3)
+- ΛCDM prediction: s = 1 + z (rejected at high significance)
+- **Implication:** No cosmological time dilation observed
+
+**2. Distance Modulus Fit:**
+- QFD model fits DES-SN5YR data with χ²/DoF ≈ 1.1
+- Residuals: Δμ ≈ 0 for main population
+- ~1/6 outliers identified as BBH candidates
+
+**3. BBH Candidate Identification:**
+- 202 supernovae flagged as potential binary black hole systems
+- Lomb-Scargle periodogram analysis reveals orbital signatures
+- Mass range: 5-100 M☉ companions
+
+### 14.10 Cross-Domain Consistency
+
+**Nuclear ↔ Cosmology:**
+- k_J appears in both domains with consistent physical interpretation
+- Nuclear α includes k_J contribution
+- Cosmology k_J sets redshift baseline
+
+**Spectral Gap ↔ Cosmology:**
+- Spectral gap ΔE ≈ 2-3 GeV suppresses extra-dimensional modes
+- Confirms low-energy cosmology sees only effective (3+1)D spacetime
+- No anomalous redshift from internal degrees of freedom
+
+**QFD Philosophy:**
+- Static spacetime (no metric expansion)
+- Photon energy loss via quantum foam interaction
+- Time dilation is NOT a universal feature
+- Supernovae are "standardizable" (not "standard") candles
+
+### 14.11 Documentation Reference
+
+**V21 Package Files:**
+- `README.md` - Quick start and reproduction guide
+- `QFD_PHYSICS.md` - Complete physical model documentation
+- `ANALYSIS_SUMMARY.md` - Main results and interpretation
+- `LCDM_VS_QFD_TESTS.md` - Detailed comparison methodology
+- `MANIFEST.md` - Package contents and structure
+
+**Key Plots:**
+- `time_dilation_test.png` - **Main result:** Stretch vs redshift (falsification)
+- `canonical_comparison.png` - Hubble diagram with residuals
+- `population_overview.png` - Stretch and residual distributions
+- `lcdm_comparison.png` - Population-level ΛCDM comparison
+
+**Data Source:**
+- Dark Energy Survey 5-Year Supernova Sample (DES-SN5YR)
+- Zenodo: https://doi.org/10.5281/zenodo.12720778
+- GitHub: https://github.com/des-science/DES-SN5YR
+- 8,253 Type Ia supernovae successfully analyzed (99.7% success rate)
+
+### 14.12 Usage Example
+
+```python
+from qfd_unified_schema import SupernovaV21GlobalParams, SupernovaV21Result
+
+# Global cosmological fit from DES-SN5YR analysis
+v21_params = SupernovaV21GlobalParams(
+    k_J=70.0,
+    eta_prime=5.0,
+    xi=2.5,
+    sigma_alpha=0.15,
+    nu=6.5
+)
+
+# Predict at z=0.5
+z = 0.5
+basis = v21_params.basis_functions(z)
+# basis = [0.4055, 0.5000, 0.3333]
+
+alpha_pred = v21_params.predict_dimming(z)
+# alpha_pred ≈ -31.7 (dimming parameter)
+
+# Example SN result
+sn = SupernovaV21Result(
+    sn_id="DES-SN1234567",
+    z_obs=0.5,
+    stretch=1.02,       # QFD: s ≈ 1.0 (NOT 1+z = 1.5!)
+    delta_mu=0.05,
+    is_bbh_candidate=False
+)
+
+print(f"Stretch: {sn.stretch:.2f}")
+print(f"ΛCDM prediction: {1 + sn.z_obs:.2f}")
+print(f"Discrepancy: {abs(sn.stretch - (1 + sn.z_obs)):.2f}")
+# Output: Discrepancy: 0.48 → ΛCDM falsified
+```
+
+---
+
 **END OF QFD UNIFIED SCHEMA V2.0**
+**Updated:** 2025-12-05 (Section 14: V21 Supernova Analysis)
+**Previous Update:** 2025-12-04 (Section 13: Spectral Gap)
