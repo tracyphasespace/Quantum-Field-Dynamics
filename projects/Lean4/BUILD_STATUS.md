@@ -1,8 +1,8 @@
 # QFD Build Status
 
-**Build Date**: 2026-01-03 (Updated: Hydrogen PhotonSoliton scaffold)
+**Build Date**: 2026-01-03 (Updated: Hydrogen PhotonSoliton kinematic upgrade)
 **Status**: ✅ All modules building successfully
-**Proven Statements**: **716 total** (559 theorems + 157 lemmas)
+**Proven Statements**: **719 total** (562 theorems + 157 lemmas)
 **Total Sorries**: **4** (TopologicalStability.lean: 1 math lemma + 2 type coercion + 1 physics)
 **Total Axioms**: **0** (physics predicates, not axioms)
 **Placeholder Files**: **0** (all removed for scientific integrity)
@@ -12,59 +12,85 @@
 
 ## Recent Progress (Jan 3, 2026)
 
-### Hydrogen/PhotonSoliton Scaffold (Jan 3, 2026)
+### Hydrogen/PhotonSoliton Kinematic Upgrade (Jan 3, 2026)
 
-**Achievement**: Formal bridge from abstract field theory to concrete physics.
+**Achievement**: Photon evolved from "energy bookkeeping" to full kinematic soliton.
 
 **The Approach**: Physics-axiom-light, logic-heavy
-- Model "soliton-ness" as predicates: PhaseClosed ∧ OnShell ∧ FiniteEnergy
+- Model "soliton-ness" as predicates: PhaseClosed ∧ OnShell ∧ FiniteEnergy ∧ **ShapeInvariant**
 - Prove *construction theorems*: predicates → particle existence
-- Define absorption/emission as *relations*: discrete mode transitions + energy bookkeeping
+- Define absorption/emission as *relations*: discrete mode transitions + **geometric matching**
 - **No PDE solving in Lean** - encode physics constraints as predicates
+
+**Kinematic Upgrade**: Photon now has spatial geometry and momentum
+- **Wavenumber**: k = 2π/λ (spatial geometry)
+- **Momentum**: p = ℏk (mechanical recoil)
+- **Dispersion**: ω = c|k| (vacuum stiffness constraint)
+- **Energy**: E = ℏω = ℏck (quantized from angular impulse)
+- **Stability**: ShapeInvariant predicate (dispersion ↔ nonlinear focusing)
 
 **Structures Defined** (6 total):
 1. `PsiField Point` - Abstract Ψ-field (multivector-valued field stub)
-2. `Config Point` - Localized excitation configuration (charge + energy)
-3. `QFDModel Point` - Model parameters (α, β, λ, ℏ) + soliton predicates
+2. `Config Point` - Localized excitation configuration (charge + energy + scale)
+3. `QFDModel Point` - Model parameters (α, β, λ_sat, ℏ, **c_vac**) + soliton predicates
 4. `Hydrogen M` - Electron-proton soliton pair with binding certificate
-5. `Photon` - Frequency ω (energy = ℏ·ω)
+5. `Photon` - Wavenumber k (with λ, p, ω, E derived)
 6. `HState M` - Hydrogen state = (e,p) pair + discrete mode index n
 
-**Key Definitions** (10 total):
-- `Soliton M` - Configuration satisfying 3 gates (PhaseClosed, OnShell, FiniteEnergy)
+**Key Definitions** (12 total):
+- `Soliton M` - Configuration satisfying **4 gates** (PhaseClosed, OnShell, FiniteEnergy, **ShapeInvariant**)
 - `Electron M` - Soliton with charge = -1
 - `Proton M` - Soliton with charge = +1
-- `Absorbs` - Photon absorption relation (n → m with m > n)
-- `Emits` - Photon emission relation (n → m with m < n)
+- `Photon.wavelength` - λ = 2π/k (spatial scale)
+- `Photon.momentum` - p = ℏk (mechanical recoil)
+- `Photon.frequency` - ω = c_vac·k (from vacuum stiffness)
+- `Photon.energy` - E = ℏ·ω (quantized energy)
+- `Absorbs` - Photon absorption with **geometric matching** (ℏck = ΔE)
+- `Emits` - Photon emission with **geometric matching** (ℏck = ΔE)
 
-**Theorems Proven** (8 total, 0 sorries):
+**Theorems Proven** (11 total, 0 sorries):
 
 *Creation Theorems*:
-1. `soliton_of_config` - If config meets 3 gates → Soliton exists
+1. `soliton_of_config` - If config meets 4 gates → Soliton exists
 2. `electron_exists_of_config` - If electron config exists → Electron exists
 3. `proton_exists_of_config` - If proton config exists → Proton exists
-4. `hydrogen_of_pair` - Given (e,p) + binding → Hydrogen exists
-5. `hydrogen_exists_of_configs` - If configs for e,p exist + binding → Hydrogen exists
 
-*Physics Theorems*:
-6. `Hydrogen.netCharge_zero` - Hydrogen neutrality: (+1) + (-1) = 0
-7. `absorption_of_gap` - If photon energy matches gap → absorption valid
-8. `emission_of_gap` - If photon energy matches gap → emission valid
+*Photon Kinematics*:
+4. `Photon.energy_momentum_relation` - E = pc (relativistic massless particle)
+5. `Photon.wavelength_pos` - λ > 0 (positive wavelength)
+6. `Photon.momentum_pos` - p > 0 (forward propagation)
+7. `Photon.energy_pos` - E > 0 (physical photon)
+
+*Hydrogen & Interactions*:
+8. `Hydrogen.netCharge_zero` - Hydrogen neutrality: (+1) + (-1) = 0
+9. `absorption_geometric_match` - Geometric matching: ℏck = ΔE → absorption valid
+10. `emission_geometric_match` - Geometric matching: ℏck = ΔE → emission valid
+
+*Legacy Absorption/Emission* (backward compatibility):
+11. (Alias theorems for old names)
 
 **Physical Interpretation**:
 - **Soliton creation**: Exhibiting a Ψ-configuration → constructing particle term
+- **Soliton stability**: ShapeInvariant = dispersion cancels nonlinear focusing (λ_sat)
+- **Photon as wave**: Spatial geometry k determines all kinematics (p, ω, E)
 - **Charge quantization**: Electron (−1) and Proton (+1) from topology
 - **Hydrogen neutrality**: Proven from charge definitions (pure algebra)
-- **Photon interactions**: Discrete mode transitions with exact energy matching
+- **Absorption mechanism**: "Lock and key" - photon k must geometrically match energy gap
+- **Momentum conservation**: Implicit in H-system recoil (photon p = ℏk transferred)
 
 **Next Steps** (noted in file):
+- Replace c_vac with √(β/ρ) from vacuum dynamics
+- Define ShapeInvariant from soliton balance equation
+- Define λ_sat from vacuum nonlinearity
+- Link k to hydrogen orbital geometry
 - Replace Config with actual multivector profile data
-- Define PhaseClosed, OnShell, FiniteEnergy from L₆C dynamics
+- Define PhaseClosed, OnShell, FiniteEnergy from dynamics
 - Define Bound from closure constraints
 - Define ELevel from QFD mode-energy map
 
-**Impact**: Establishes formal framework for particle physics from field theory.
-Provides rigorous logical structure for "soliton = particle" identification.
+**Impact**: Bridges "bookkeeping" (E = ℏω) to "dynamics" (k, p, ω from geometry).
+Photon now a spatial soliton with shape invariance, not just energy quantum.
+Absorption requires geometric resonance, not just energy conservation.
 
 ## Earlier Progress (Jan 3, 2026)
 
