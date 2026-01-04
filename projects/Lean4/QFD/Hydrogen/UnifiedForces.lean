@@ -286,17 +286,36 @@ theorem fine_structure_from_beta
     (ε₀ : ℝ) -- vacuum permittivity
     (h_alpha : α = e^2 / (4 * Real.pi * ε₀ * U.ℏ * U.cVac))
     (h_e_pos : e > 0)
-    (h_eps_pos : ε₀ > 0) :
+    (h_eps_pos : ε₀ > 0)
+    (h_G_match : U.G = U.toGravitationalVacuum.geometricG) :
     ∃ (k : ℝ), α = k / U.β := by
 
-  -- ℏ ∝ √β and c ∝ √β, so ℏ·c ∝ β
-  -- Therefore α = e²/(4πε₀·ℏc) ∝ 1/β
+  -- 1. Get the scaling constants for ℏ and c
+  have ⟨⟨k_c, h_c⟩, ⟨k_h, h_ℏ⟩, _⟩ := unified_scaling U h_G_match
 
-  have ⟨⟨k_c, h_c⟩, ⟨k_h, h_ℏ⟩, _⟩ := unified_scaling U (by sorry) -- Need G match
-
+  -- 2. Define the unified constant k
   use (e^2 / (4 * Real.pi * ε₀ * k_h * k_c))
 
-  sorry -- Requires algebra: α = e²/(4πε₀·k_h·k_c·β)
+  -- 3. Substitute definitions
+  calc α
+      = e^2 / (4 * Real.pi * ε₀ * U.ℏ * U.cVac) := h_alpha
+    _ = e^2 / (4 * Real.pi * ε₀ * (k_h * Real.sqrt U.β) * (k_c * Real.sqrt U.β)) := by
+        rw [h_ℏ, h_c]
+    _ = e^2 / (4 * Real.pi * ε₀ * k_h * k_c * (Real.sqrt U.β * Real.sqrt U.β)) := by
+        ring
+    _ = e^2 / (4 * Real.pi * ε₀ * k_h * k_c * U.β) := by
+        rw [Real.mul_self_sqrt (le_of_lt U.h_beta_pos)]
+    _ = (e^2 / (4 * Real.pi * ε₀ * k_h * k_c)) / U.β := by
+        have h_denom : 4 * Real.pi * ε₀ * k_h * k_c ≠ 0 := by
+          apply mul_ne_zero
+          apply mul_ne_zero
+          apply mul_ne_zero
+          · norm_num
+          · exact Real.pi_ne_zero
+          · exact ne_of_gt h_eps_pos
+          · sorry -- Need k_h ≠ 0 and k_c ≠ 0 from scaling laws
+        field_simp [h_denom]
+        ring
 
 end UnifiedVacuum
 
