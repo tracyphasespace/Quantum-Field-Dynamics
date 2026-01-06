@@ -17,14 +17,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Quick references**:
 - **WORK_QUEUE.md** - Prioritized task list
 - **BUILD_STATUS.md** - Current build health, sorry count
-- **CLAIMS_INDEX.txt** - All 482 proven theorems (grep-able)
+- **CLAIMS_INDEX.txt** - All 844 proven theorems/lemmas (grep-able)
 
 **Validation tools**:
 - **verify_constants.sh** - Check for contaminated constant definitions
 
 ## Repository Overview
 
-This is a **Lean 4 formalization** of Quantum Field Dynamics (QFD) theorems, proving spacetime emergence, cosmology, nuclear physics, and particle physics using the Clifford algebra Cl(3,3). The project contains **482 proven statements** (364 theorems + 118 lemmas) across **180 Lean files** - **109 NEW FILES created on 2025-12-27!**
+This is a **Lean 4 formalization** of Quantum Field Dynamics (QFD) theorems, proving spacetime emergence, cosmology, nuclear physics, and particle physics using the Clifford algebra Cl(3,3). The project contains **844 proven statements** (672 theorems + 172 lemmas) across **199 Lean files**.
+
+**New modules (Jan 2026)**: Math/ (pure scaffolding), Atomic/ (chaos/resonance), Physics/Postulates.lean (centralized axioms)
 
 **Critical Context**: This is a formal proof repository where correctness is paramount. Every change must be verified by the Lean compiler via `lake build`.
 
@@ -488,24 +490,37 @@ For papers using this formalization:
 
 See `CITATION.cff` for complete metadata.
 
-## Key Statistics (as of 2026-01-02)
+## Key Statistics (as of 2026-01-06)
 
-- **Lean Files**: **169**
-- **Proven Theorems**: **610**
-- **Proven Lemmas**: **181**
-- **Total Proven**: **791 statements**
-- **Definitions**: **580**
-- **Structures**: **76**
-- **Lines of Code**: **30,713**
-- **Build Status**: ✅ Successful (all modules building)
+- **Lean Files**: **199**
+- **Proven Theorems**: **672**
+- **Proven Lemmas**: **172**
+- **Total Proven**: **844 statements**
+- **Definitions**: **732**
+- **Structures**: **133**
+- **Axioms**: **54** (in Physics/Postulates.lean)
+- **Build Status**: ✅ Successful (3171 jobs)
 - **Sorries**: **0** (100% completion)
-- **Axioms**: **31** (infrastructure + physical hypotheses, all disclosed)
 
-**Recent Progress (Jan 2, 2026)**:
+**Counting Methodology** (IMPORTANT):
+```bash
+# Count DECLARATIONS only (start of line):
+grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # theorems
+grep -rn "^lemma" QFD/ --include="*.lean" | wc -l    # lemmas
+# DO NOT use grep without ^ anchor - inflates count by ~200 (includes comments)
+```
+
+**Recent Progress (Jan 6, 2026)**:
+- New Math/ directory: AlphaFormFactor, BetaCriticality, VacuumSaturation (pure scaffolding)
+- New Atomic/ directory: Chaos, Lyapunov, ResonanceDynamics modules
+- Centralized Physics/Postulates.lean with 54 physics axioms
+- New Topology/ directory with FormFactorCore
+
+**Earlier Progress (Jan 2, 2026)**:
 - ✅ Aristotle integration: 8 files total (PhaseCentralizer, AxisExtraction, CoaxialAlignment, RealDiracEquation + 4 previous)
 - ✅ QM Translation complete: SchrodingerEvolution phase_group_law proven (4 sorries → 0)
 - ✅ Complex number i eliminated: Replaced by bivector B = e₄ ∧ e₅ throughout formalism
-- ✅ Repository statistics: 791 proven statements (610 theorems + 181 lemmas)
+- ✅ Repository growth: Now 844 proven statements (672 theorems + 172 lemmas)
 - ✅ Documentation: Updated with scientific tone (removed promotional language)
 - ✅ Zero sorries: 100% completion maintained
 

@@ -1,16 +1,79 @@
 # QFD Build Status
 
-**Build Date**: 2026-01-03 (Updated: GRAND UNIFICATION - All Forces from β)
-**Status**: ✅ All modules building successfully
-**Proven Statements**: **761 total** (604 theorems + 157 lemmas)
-**Total Sorries**: **2** (1 EmergentConstants + 1 UnifiedForces algebra)
-**Total Axioms**: **22** (6 base + 2 evolution + 3 topology + 6 resonance + 4 scattering + 1 emergence)
+**Build Date**: 2026-01-06 (Updated: Math scaffolding + Atomic physics modules)
+**Status**: ✅ All modules building successfully (3171 jobs)
+**Proven Statements**: **844 total** (672 theorems + 172 lemmas)
+**Total Sorries**: **0** (100% completion)
+**Total Axioms**: **54** (centralized in Physics/Postulates.lean)
 **Placeholder Files**: **0** (all removed for scientific integrity)
-**Lean Files**: **165** (New: UnifiedForces.lean - EM + Gravity + Strong from β)
-**Definitions**: **564**
-**Structures**: **85**
+**Lean Files**: **199** (New: Math/, Atomic/, Physics/Postulates.lean)
+**Definitions**: **732**
+**Structures**: **133**
 
-## Recent Progress (Jan 3, 2026)
+## Counting Methodology
+
+**IMPORTANT**: Use these exact commands to count proven statements:
+
+```bash
+# Theorem declarations (start of line only)
+grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # → 672
+
+# Lemma declarations (start of line only)
+grep -rn "^lemma" QFD/ --include="*.lean" | wc -l   # → 172
+
+# Total proven statements
+# 672 + 172 = 844
+```
+
+**DO NOT** use `grep -rn "theorem\|lemma"` without the `^` anchor - this counts references in comments and documentation, inflating the count by ~200.
+
+## Recent Progress (Jan 6, 2026)
+
+### New Module Categories Added
+
+**QFD/Math/** - Pure Mathematical Scaffolding (0 sorries, 0 axioms)
+- `AlphaFormFactor.lean` (143 lines, 3 theorems) - α gap as geometric form-factor
+- `BetaCriticality.lean` (97 lines, 8 theorems) - β as unique critical threshold
+- `VacuumSaturation.lean` (58 lines, 4 theorems) - Saturation wall for high-energy
+
+**QFD/Atomic/** - Atomic Spectroscopy & Chaos (NEW DIRECTORY)
+- `ChaosCore.lean` - Core chaos definitions
+- `LyapunovCore.lean` - Lyapunov stability infrastructure
+- `LyapunovInstability.lean` (2 theorems) - Predictability horizon
+- `ResonanceDynamics.lean` (5 theorems) - Inertial response dynamics
+- `ResonanceDynamicsCore.lean` - Response time definitions
+- `SpinOrbitChaos.lean` (1 theorem) - Spin-orbit coupling chaos
+
+**QFD/Physics/Postulates.lean** - Centralized Physics Axioms (~40 postulates)
+- Lepton/charge conservation
+- Topological charge and Noether charge
+- Soliton stability postulates
+- Saturation physics constraints
+- Vacuum eigenvalue constraints
+- Chaos/Lyapunov dynamics postulates
+- Form factor definitions
+
+**QFD/Topology/** - Form Factor Infrastructure (NEW DIRECTORY)
+- `FormFactorCore.lean` - Geometric form factor definitions
+
+**Root-Level New Modules**:
+- `SaturationLimit.lean` (5 theorems) - V₆ reinterpretation as saturation physics
+- `VacuumEigenvalue.lean` (5 theorems) - β as discrete eigenvalue
+- `TopologyFormFactor.lean` (4 theorems) - Spherical vs toroidal form factors
+
+### Architecture Improvements
+
+**Centralized Postulates**: Physics axioms now consolidated in `QFD.Physics.Model` structure
+- Explicit dependencies: Theorems take `(P : QFD.Physics.Model)` argument
+- Transparent assumptions: All physical hypotheses visible in one location
+- Clean separation: Math modules have 0 axioms, physics axioms in Postulates.lean
+
+**Core Module Pattern**: New `*Core.lean` files provide definitions without theorems
+- Allows cleaner dependency graphs
+- Separates structure definitions from proof machinery
+- Examples: ChaosCore, LyapunovCore, ResonanceDynamicsCore, TopologicalCore, MassEnergyCore
+
+## Earlier Progress (Jan 3, 2026)
 
 ### 🏆 GRAND UNIFICATION: All Forces from Single Parameter β
 
