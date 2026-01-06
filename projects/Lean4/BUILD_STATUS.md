@@ -1,12 +1,12 @@
 # QFD Build Status
 
-**Build Date**: 2026-01-06 (Updated: Math scaffolding + Atomic physics modules)
+**Build Date**: 2026-01-06 (Updated: Photon, Nuclear, Math, Cosmology modules)
 **Status**: ✅ All modules building successfully (3171 jobs)
-**Proven Statements**: **844 total** (672 theorems + 172 lemmas)
-**Total Sorries**: **0** (100% completion)
-**Total Axioms**: **54** (centralized in Physics/Postulates.lean)
+**Proven Statements**: **880 total** (707 theorems + 173 lemmas)
+**Total Sorries**: **2** (in TopologicalStability.lean - pre-existing)
+**Total Axioms**: **47** (distributed across modules)
 **Placeholder Files**: **0** (all removed for scientific integrity)
-**Lean Files**: **199** (New: Math/, Atomic/, Physics/Postulates.lean)
+**Lean Files**: **203** (New: QuantumJump, DecayHalfLife, SpectralGapBounds, LightCurveStretch)
 **Definitions**: **732**
 **Structures**: **133**
 
@@ -16,20 +16,66 @@
 
 ```bash
 # Theorem declarations (start of line only)
-grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # → 672
+grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # → 707
 
 # Lemma declarations (start of line only)
-grep -rn "^lemma" QFD/ --include="*.lean" | wc -l   # → 172
+grep -rn "^lemma" QFD/ --include="*.lean" | wc -l   # → 173
 
 # Total proven statements
-# 672 + 172 = 844
+# 707 + 173 = 880
 ```
 
 **DO NOT** use `grep -rn "theorem\|lemma"` without the `^` anchor - this counts references in comments and documentation, inflating the count by ~200.
 
-## Recent Progress (Jan 6, 2026)
+## Recent Progress (Jan 6, 2026 - Evening Session)
 
-### New Module Categories Added
+### New Modules Created (36 theorems, 0 sorries)
+
+**QFD/Photon/QuantumJump.lean** (243 lines, 10 theorems) - Master Process Module
+- Formalizes emission, transmission, absorption as mechanical events
+- Structures: VortexElectron, FlyingSmokeRing (toroidal photon), VacuumLedger
+- Key theorems:
+  - `emission_shedding_mechanism` - Vortex shedding with angular momentum conservation
+  - `transmission_quantization` - E = ℏω for stable solitons
+  - `absorption_resonance_condition` - Geometric mismatch prevents absorption
+  - `electron_inflation` - Absorption causes vortex expansion (R ~ 1/|E|)
+- Conservation laws: angular momentum (emission/absorption), energy, helicity
+- Status: 0 sorries
+
+**QFD/Nuclear/DecayHalfLife.lean** (219 lines, 10 theorems) - Nuclear Decay
+- Formalizes radioactive decay from vacuum barrier tunneling
+- Structures: PotentialBarrier, DecayingNucleus, VacuumScattering
+- Key theorems:
+  - `tunneling_rate_pos` - λ > 0 from WKB approximation
+  - `half_life_pos` - T₁/₂ = ln(2)/λ always positive
+  - `nuclei_at_half_life` - N(T₁/₂) = N₀/2 exactly
+  - `half_life_barrier_dependence` - Higher κ → longer half-life
+- Vacuum stiffness connection: β → barrier height → decay rate
+- Status: 0 sorries
+
+**QFD/Math/SpectralGapBounds.lean** (196 lines, 9 theorems) - Spectral Gap
+- Formalizes spectral gap Δ bounds from geometric constraints
+- Structures: VacuumGeometry, SpectralGapConstraints
+- Key theorems:
+  - `spectral_gap_positive` - Δ > 0 for valid vacuum parameters
+  - `spectral_gap_increases_with_beta` - Δ increases with stiffness
+  - `suppression_at_gap` - At E = Δ, suppression = e⁻¹
+  - `stronger_suppression_at_low_energy` - E₁ < E₂ → more suppression at E₁
+- Dimensional reduction: E < Δ → 4D physics
+- Status: 0 sorries
+
+**QFD/Cosmology/LightCurveStretch.lean** (219 lines, 7 theorems) - SN Ia Light Curves
+- Formalizes Type Ia supernova stretch factor from vacuum geometry
+- Structures: SNIaLightCurve, StandardCandle, VacuumScattering
+- Key theorems:
+  - `standard_candle_magnitude` - s = 1 gives reference M_B0
+  - `wider_is_brighter` - Phillips relation: larger s → brighter
+  - `qfd_stretch_positive` - QFD stretch s > 0
+  - `stretch_increases_with_distance` - Photon accumulates scattering
+- QFD interpretation: s = 1 + ε(σ × d_c) from vacuum scattering
+- Status: 0 sorries
+
+### Earlier (Jan 6, 2026 - Morning Session)
 
 **QFD/Math/** - Pure Mathematical Scaffolding (0 sorries, 0 axioms)
 - `AlphaFormFactor.lean` (143 lines, 3 theorems) - α gap as geometric form-factor

@@ -111,6 +111,13 @@ QFD/Cosmology/KernelAxis.lean:30:lemma abs_ip_le_one_of_unit (n x : R3) (hn : Is
 QFD/Cosmology/KernelAxis.lean:38:lemma abs_ip_nn_eq_one (n : R3) (hn : IsUnit n) : |ip n n| = 1 := by
 QFD/Cosmology/KernelAxis.lean:45:lemma abs_ip_nneg_eq_one (n : R3) (hn : IsUnit n) : |ip n (-n)| = 1 := by
 QFD/Cosmology/KernelAxis.lean:58:theorem AxisSet_absKernelPattern_eq_pm
+QFD/Cosmology/LightCurveStretch.lean:130:theorem luminosity_distance_pos (mu : ℝ) :
+QFD/Cosmology/LightCurveStretch.lean:149:theorem perfect_hubble_fit (sn : SNIaLightCurve) (std : StandardCandle)
+QFD/Cosmology/LightCurveStretch.lean:186:theorem qfd_stretch_positive (vac : VacuumScattering) (epsilon : ℝ)
+QFD/Cosmology/LightCurveStretch.lean:198:theorem local_stretch_is_unity (vac : VacuumScattering)
+QFD/Cosmology/LightCurveStretch.lean:205:theorem stretch_increases_with_distance
+QFD/Cosmology/LightCurveStretch.lean:87:theorem standard_candle_magnitude (std : StandardCandle) (sn : SNIaLightCurve)
+QFD/Cosmology/LightCurveStretch.lean:95:theorem wider_is_brighter (std : StandardCandle)
 QFD/Cosmology/OctupoleExtraction.lean:100:lemma abs_P3_eq_one_iff (t : ℝ) (ht : |t| ≤ 1) :
 QFD/Cosmology/OctupoleExtraction.lean:143:theorem AxisSet_octAxisPattern_eq_pm (n : R3) (hn : IsUnit n) :
 QFD/Cosmology/OctupoleExtraction.lean:214:theorem AxisSet_octTempPattern_eq_pm (n : R3) (hn : IsUnit n) (A B : ℝ) (hA : 0 < A) :
@@ -449,6 +456,15 @@ QFD/Math/ReciprocalIneq.lean:49:lemma one_le_inv_iff {a : ℝ} (ha : 0 < a) : (1
 QFD/Math/ReciprocalIneq.lean:65:lemma one_le_inv_of_pos_of_le_one {a : ℝ} (ha : 0 < a) (h1 : a ≤ 1) :
 QFD/Math/ReciprocalIneq.lean:70:lemma one_lt_inv_of_pos_of_lt_one {a : ℝ} (ha : 0 < a) (h1 : a < 1) :
 QFD/Math/ReciprocalIneq.lean:82:lemma mul_nonneg_of_nonpos_of_nonpos {a b : ℝ} (ha : a ≤ 0) (hb : b ≤ 0) :
+QFD/Math/SpectralGapBounds.lean:100:theorem suppression_factor_pos (delta E : ℝ) :
+QFD/Math/SpectralGapBounds.lean:106:theorem suppression_at_gap (delta : ℝ) (h_delta : 0 < delta) :
+QFD/Math/SpectralGapBounds.lean:134:theorem gap_in_bounds_positive (delta : ℝ) (c : SpectralGapConstraints)
+QFD/Math/SpectralGapBounds.lean:141:theorem bounds_nonempty (c : SpectralGapConstraints) :
+QFD/Math/SpectralGapBounds.lean:161:theorem four_dimensional_below_gap
+QFD/Math/SpectralGapBounds.lean:176:theorem dimensional_crossover (delta : ℝ) (h_delta : 0 < delta) :
+QFD/Math/SpectralGapBounds.lean:181:theorem stronger_suppression_at_low_energy
+QFD/Math/SpectralGapBounds.lean:66:theorem spectral_gap_positive (vac : VacuumGeometry) (m : ℝ) (h_m : 0 < m) :
+QFD/Math/SpectralGapBounds.lean:74:theorem spectral_gap_increases_with_beta
 QFD/Math/VacuumSaturation.lean:16:lemma V_sat_eq_mul_div (ρ ρ_max : ℝ) (hmax : ρ_max ≠ 0) :
 QFD/Math/VacuumSaturation.lean:21:lemma V_sat_le_two_mul (ρ ρ_max : ℝ) (hmax : ρ_max > 0)
 QFD/Math/VacuumSaturation.lean:30:theorem saturation_wall
@@ -587,6 +603,16 @@ QFD/Nuclear/CoreCompressionLaw.lean:66:theorem ccl_parameter_space_bounded :
 QFD/Nuclear/CoreCompressionLaw.lean:700:theorem phase1_constraints_computable :
 QFD/Nuclear/CoreCompressionLaw.lean:79:theorem ccl_constraints_consistent :
 QFD/Nuclear/CoreCompressionLaw.lean:910:theorem parameter_reduction_possible :
+QFD/Nuclear/DecayHalfLife.lean:119:theorem half_life_pos (decay_rate : ℝ) (h_rate : 0 < decay_rate) :
+QFD/Nuclear/DecayHalfLife.lean:127:theorem half_life_monotone_decreasing
+QFD/Nuclear/DecayHalfLife.lean:135:theorem half_life_barrier_dependence
+QFD/Nuclear/DecayHalfLife.lean:163:theorem nuclei_at_zero (N₀ decay_rate : ℝ) :
+QFD/Nuclear/DecayHalfLife.lean:169:theorem nuclei_remaining_nonneg (N₀ decay_rate t : ℝ)
+QFD/Nuclear/DecayHalfLife.lean:176:theorem nuclei_at_half_life (N₀ decay_rate : ℝ)
+QFD/Nuclear/DecayHalfLife.lean:201:theorem vacuum_stiffness_increases_barrier (β₁ β₂ V₀_base : ℝ)
+QFD/Nuclear/DecayHalfLife.lean:214:theorem half_life_mean_lifetime_relation (decay_rate : ℝ) (h_rate : 0 < decay_rate) :
+QFD/Nuclear/DecayHalfLife.lean:80:theorem tunneling_rate_pos (κ L ν₀ : ℝ) (h_ν₀ : 0 < ν₀) :
+QFD/Nuclear/DecayHalfLife.lean:86:theorem tunneling_rate_decreasing_in_kappa
 QFD/Nuclear/DeuteronFit.lean:50:theorem deuteron_potential_well_exists
 QFD/Nuclear/FissionTopology.lean:114:theorem odd_harmonic_implies_asymmetric_fission
 QFD/Nuclear/FissionTopology.lean:144:theorem even_harmonic_allows_symmetric_fission :
@@ -664,8 +690,18 @@ QFD/Photon/Interaction.lean:157:lemma torque_mismatch_implies_transparency
 QFD/Photon/Interaction.lean:165:lemma absorption_probability_nonneg
 QFD/Photon/Interaction.lean:173:lemma absorption_positive_of_overlap
 QFD/Photon/Interaction.lean:99:theorem orthogonal_polarization_implies_transparency
+QFD/Photon/QuantumJump.lean:109:lemma energy_frequency_ratio_constant
+QFD/Photon/QuantumJump.lean:132:theorem absorption_resonance_condition
+QFD/Photon/QuantumJump.lean:160:theorem electron_inflation
+QFD/Photon/QuantumJump.lean:194:theorem angular_momentum_conservation_emission
+QFD/Photon/QuantumJump.lean:205:theorem angular_momentum_conservation_absorption
+QFD/Photon/QuantumJump.lean:216:theorem energy_conservation_jump
+QFD/Photon/QuantumJump.lean:227:theorem helicity_handedness
+QFD/Photon/QuantumJump.lean:236:theorem selection_rule_integer
+QFD/Photon/QuantumJump.lean:61:theorem emission_shedding_mechanism
+QFD/Photon/QuantumJump.lean:98:theorem transmission_quantization
 QFD/Photon/SolitonQuantization.lean:66:lemma energy_helicity_relation
-QFD/Photon/SolitonQuantization.lean:82:theorem topology_forces_hbar_relation
+QFD/Photon/SolitonQuantization.lean:81:theorem topology_forces_hbar_relation
 QFD/ProofLedger.lean:946:theorem files using the file paths provided.
 QFD/QM_Translation/DiracRealization.lean:109:theorem gamma_square_signature (μ : Fin 4) :
 QFD/QM_Translation/DiracRealization.lean:130:theorem gamma_anticommute (μ ν : Fin 4) (h : μ ≠ ν) :

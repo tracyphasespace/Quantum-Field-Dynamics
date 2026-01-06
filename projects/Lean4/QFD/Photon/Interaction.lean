@@ -1,3 +1,8 @@
+import Mathlib.Data.Real.Basic
+import QFD.GA.Cl33
+import QFD.GA.Conjugation
+import QFD.GA.GradeProjection
+
 /-!
 # QFD: Photon Emission & Absorption as Geometric Resonance
 **Subject**: Formalizing Selection Rules as Topological Locks
@@ -18,11 +23,6 @@
    - `Lock`: Torque match (σ == ΔL).
    - `Key`: Orientation match (cos²θ).
 -/
-
-import Mathlib.Data.Real.Basic
-import QFD.GA.Cl33
-import QFD.GA.Conjugation
-import QFD.GA.GradeProjection
 
 noncomputable section
 
