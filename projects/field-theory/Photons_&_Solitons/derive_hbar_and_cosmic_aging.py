@@ -229,9 +229,14 @@ def main():
 
         ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
         ax2.set_ylabel('Effective Action (h)', color='tab:blue')  # we already handled the x-label with ax1
-        ax2.plot(df['dist_mpc'], df['h_eff'], color='tab:blue', linestyle=':', label='Planck Constant Stability')
+        ax2.plot(df['dist_mpc'], df['h_eff'], color='tab:blue', linestyle=':', label='Planck Constant (h_eff)')
         ax2.set_ylim(mean_h * 0.9, mean_h * 1.1)
         ax2.tick_params(axis='y', labelcolor='tab:blue')
+
+        # Combine legends from both axes
+        lines1, labels1 = ax1.get_legend_handles_labels()
+        lines2, labels2 = ax2.get_legend_handles_labels()
+        ax1.legend(lines1 + lines2, labels1 + labels2, loc='center right')
 
         plt.title('Adiabatic Cosmic Aging: Redshift with Constant Action')
         fig.tight_layout()  # otherwise the right y-label is slightly clipped
