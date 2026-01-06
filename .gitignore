@@ -72,3 +72,6 @@ results/
 !schema/**/*.json
 !projects/**/examples/*.json
 !projects/**/experiments/*.json
+
+# Large backup files
+*.tar.gz

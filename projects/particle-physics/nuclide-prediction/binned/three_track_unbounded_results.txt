@@ -1,0 +1,121 @@
+================================================================================
+Three-Track Core Compression Law
+================================================================================
+
+Loaded 5842 isotopes from NuBase 2020
+Stable: 254, Unstable: 5588
+
+================================================================================
+THRESHOLD TUNING
+================================================================================
+
+Testing threshold = 0.5
+--------------------------------------------------------------------------------
+Classifying nuclei (threshold = 0.50)...
+  charge_rich    :  2515 nuclei (43.05%)
+  charge_nominal :   578 nuclei ( 9.89%)
+  charge_poor    :  2749 nuclei (47.06%)
+
+Fitting separate baselines...
+  charge_rich    : c1= 0.98886, c2= 0.25606, RMSE= 2.001 Z
+  charge_nominal : c1= 0.49884, c2= 0.32321, RMSE= 0.290 Z
+  charge_poor    : c1=-0.01548, c2= 0.39403, RMSE= 1.943 Z
+
+Performance:
+  Hard assignment: RMSE = 1.8732 Z, R² = 0.995052
+  Soft weighting:  RMSE = 2.4982 Z, R² = 0.991199
+
+Testing threshold = 1.0
+--------------------------------------------------------------------------------
+Classifying nuclei (threshold = 1.00)...
+  charge_rich    :  2226 nuclei (38.10%)
+  charge_nominal :  1143 nuclei (19.57%)
+  charge_poor    :  2473 nuclei (42.33%)
+
+Fitting separate baselines...
+  charge_rich    : c1= 1.01199, c2= 0.25392, RMSE= 1.891 Z
+  charge_nominal : c1= 0.50384, c2= 0.32234, RMSE= 0.574 Z
+  charge_poor    : c1=-0.04801, c2= 0.39807, RMSE= 1.821 Z
+
+Performance:
+  Hard assignment: RMSE = 1.6827 Z, R² = 0.996007
+  Soft weighting:  RMSE = 2.3246 Z, R² = 0.992379
+
+Testing threshold = 1.5
+--------------------------------------------------------------------------------
+Classifying nuclei (threshold = 1.50)...
+  charge_rich    :  1963 nuclei (33.60%)
+  charge_nominal :  1666 nuclei (28.52%)
+  charge_poor    :  2213 nuclei (37.88%)
+
+Fitting separate baselines...
+  charge_rich    : c1= 1.03800, c2= 0.25120, RMSE= 1.781 Z
+  charge_nominal : c1= 0.50936, c2= 0.32135, RMSE= 0.848 Z
+  charge_poor    : c1=-0.08153, c2= 0.40238, RMSE= 1.708 Z
+
+Performance:
+  Hard assignment: RMSE = 1.5416 Z, R² = 0.996649
+  Soft weighting:  RMSE = 2.1562 Z, R² = 0.993443
+
+Testing threshold = 2.0
+--------------------------------------------------------------------------------
+Classifying nuclei (threshold = 2.00)...
+  charge_rich    :  1705 nuclei (29.19%)
+  charge_nominal :  2183 nuclei (37.37%)
+  charge_poor    :  1954 nuclei (33.45%)
+
+Fitting separate baselines...
+  charge_rich    : c1= 1.06267, c2= 0.24883, RMSE= 1.668 Z
+  charge_nominal : c1= 0.51816, c2= 0.31971, RMSE= 1.128 Z
+  charge_poor    : c1=-0.11199, c2= 0.40601, RMSE= 1.587 Z
+
+Performance:
+  Hard assignment: RMSE = 1.4594 Z, R² = 0.996996
+  Soft weighting:  RMSE = 1.9835 Z, R² = 0.994452
+
+Testing threshold = 2.5
+--------------------------------------------------------------------------------
+Classifying nuclei (threshold = 2.50)...
+  charge_rich    :  1473 nuclei (25.21%)
+  charge_nominal :  2663 nuclei (45.58%)
+  charge_poor    :  1706 nuclei (29.20%)
+
+Fitting separate baselines...
+  charge_rich    : c1= 1.07474, c2= 0.24883, RMSE= 1.549 Z
+  charge_nominal : c1= 0.52055, c2= 0.31918, RMSE= 1.400 Z
+  charge_poor    : c1=-0.14694, c2= 0.41050, RMSE= 1.469 Z
+
+Performance:
+  Hard assignment: RMSE = 1.4588 Z, R² = 0.996999
+  Soft weighting:  RMSE = 1.8190 Z, R² = 0.995334
+
+================================================================================
+BEST MODEL
+================================================================================
+
+Optimal threshold: 2.5
+RMSE (soft): 1.8190 Z
+R² (soft):   0.995334
+
+Component Parameters:
+  charge_rich    : c1= 1.07474, c2= 0.24883, n= 1473
+  charge_nominal : c1= 0.52055, c2= 0.31918, n= 2663
+  charge_poor    : c1=-0.14694, c2= 0.41050, n= 1706
+
+✓ Saved: three_track_model.json
+================================================================================
+GENERATING VISUALIZATIONS
+================================================================================
+
+✓ Saved: three_track_analysis.png
+
+================================================================================
+COMPARISON WITH TARGETS
+================================================================================
+
+Three-Track Model:  RMSE = 1.8190 Z, R² = 0.995334
+Paper Target:       RMSE ≈ 1.107 Z, R² ≈ 0.9983
+Single Baseline:    RMSE ≈ 3.82 Z, R² ≈ 0.979
+
+✓ GOOD: Substantial improvement over single baseline
+

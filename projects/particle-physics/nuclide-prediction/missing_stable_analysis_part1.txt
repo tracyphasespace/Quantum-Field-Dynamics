@@ -1,0 +1,100 @@
+================================================================================
+ANALYSIS: WHICH STABLE ISOTOPES ARE WE MISSING?
+================================================================================
+
+Total stable isotopes: 253
+Correctly predicted (TP): 79 (31.2%)
+Missed (FN): 174 (68.8%)
+
+================================================================================
+1. MASS DISTRIBUTION OF MISSED STABLE ISOTOPES
+================================================================================
+
+By mass range:
+Range           Total    Found   Missed     Recall
+--------------------------------------------------
+1-20               18        2       16      11.1%
+21-40              22       11       11      50.0%
+41-60              24       14       10      58.3%
+61-100             51       24       27      47.1%
+101-150            68       19       49      27.9%
+151-200            61        9       52      14.8%
+201+                9        0        9       0.0%
+
+================================================================================
+2. REGIME DISTRIBUTION OF MISSED STABLE ISOTOPES
+================================================================================
+
+All stable isotopes by regime:
+current_regime_name
+charge_nominal    238
+charge_poor        13
+charge_rich         2
+Name: Stable, dtype: int64
+
+Correctly predicted (TP) by regime:
+current_regime_name
+charge_nominal    79
+Name: Stable, dtype: int64
+
+Missed (FN) by regime:
+current_regime_name
+charge_nominal    159
+charge_poor        13
+charge_rich         2
+Name: Stable, dtype: int64
+
+Recall by regime:
+  charge_poor         :   0/ 13 = 0.0%
+  charge_nominal      :  79/238 = 33.2%
+  charge_rich         :   0/  2 = 0.0%
+
+================================================================================
+3. CHARGESTRESS DISTRIBUTION
+================================================================================
+
+Found stable isotopes (TP):
+  Mean stress:   0.2443 Z
+  Median stress: 0.2347 Z
+  Min stress:    0.0161 Z
+  Max stress:    0.4971 Z
+  Std dev:       0.1505 Z
+
+Missed stable isotopes (FN):
+  Mean stress:   1.1283 Z
+  Median stress: 1.0382 Z
+  Min stress:    0.0946 Z
+  Max stress:    2.5180 Z
+  Std dev:       0.4769 Z
+
+Stress difference: Missed isotopes have 4.62× higher stress
+
+Stress percentiles:
+Percentile     Found (TP)  Missed (FN)
+----------------------------------------
+ 10%               0.0665       0.6066
+ 25%               0.1046       0.7300
+ 50%               0.2347       1.0382
+ 75%               0.3860       1.4473
+ 90%               0.4417       1.8035
+ 95%               0.4692       2.0327
+
+================================================================================
+4. EVEN-EVEN vs ODD-ODD PATTERN (Nuclear Pairing)
+================================================================================
+
+Stable isotope distribution by parity:
+parity
+even-even    147
+even-odd     102
+odd-odd        4
+Name: Stable, dtype: int64
+
+Recall by parity:
+  even-even   :  41/147 = 27.9%
+  even-odd    :  38/102 = 37.3%
+  odd-odd     :   0/  4 = 0.0%
+
+INSIGHT: Even-even nuclei have pairing energy (~1-2 MeV) not in our model!
+This makes them more stable than ChargeStress alone predicts.
+

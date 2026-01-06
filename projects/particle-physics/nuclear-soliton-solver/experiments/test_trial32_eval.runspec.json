@@ -1,0 +1,143 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "test_trial32_evaluation",
+  "description": "Quick evaluation of Trial 32 parameters on representative isotopes (frozen parameters, no optimization)",
+
+  "model": {
+    "id": "qfd.nuclear.binding.soliton",
+    "variant": "phase9_scf",
+    "$ref": "../models/qfd_nuclear_soliton_phase9.model.json"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c_v2_base",
+      "value": 2.201711,
+      "role": "coupling",
+      "bounds": null,
+      "units": "MeV",
+      "frozen": true,
+      "description": "Trial 32 cohesion baseline"
+    },
+    {
+      "name": "nuclear.c_v2_iso",
+      "value": 0.027035,
+      "role": "coupling",
+      "bounds": null,
+      "units": "MeV",
+      "frozen": true
+    },
+    {
+      "name": "nuclear.c_v2_mass",
+      "value": -0.000205,
+      "role": "coupling",
+      "bounds": null,
+      "units": "1/A",
+      "frozen": true
+    },
+    {
+      "name": "nuclear.c_v4_base",
+      "value": 5.282364,
+      "role": "coupling",
+      "bounds": null,
+      "units": "MeV",
+      "frozen": true
+    },
+    {
+      "name": "nuclear.c_v4_size",
+      "value": 1.237956,
+      "role": "coupling",
+      "bounds": null,
+      "units": "MeV",
+      "frozen": true
+    },
+    {
+      "name": "nuclear.c_v4_iso",
+      "value": 0.005164,
+      "role": "coupling",
+      "bounds": null,
+      "frozen": true
+    },
+    {
+      "name": "nuclear.c_sym",
+      "value": 25.0,
+      "role": "coupling",
+      "bounds": null,
+      "units": "MeV",
+      "frozen": true
+    },
+    {
+      "name": "nuclear.c_coul",
+      "value": 0.801463,
+      "role": "coupling",
+      "bounds": null,
+      "units": "MeV",
+      "frozen": true
+    },
+    {
+      "name": "nuclear.c_surf",
+      "value": 18.5,
+      "role": "coupling",
+      "bounds": null,
+      "units": "MeV",
+      "frozen": true
+    },
+    {
+      "name": "nuclear.c_pair_even",
+      "value": 12.0,
+      "role": "coupling",
+      "bounds": null,
+      "units": "MeV",
+      "frozen": true
+    },
+    {
+      "name": "nuclear.c_pair_odd",
+      "value": -12.0,
+      "role": "coupling",
+      "bounds": null,
+      "units": "MeV",
+      "frozen": true
+    },
+    {
+      "name": "nuclear.c_shell",
+      "value": 0.0,
+      "role": "coupling",
+      "bounds": null,
+      "units": "MeV",
+      "frozen": true
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "ame2020_test_subset",
+      "source": "../data/ame2020_system_energies.csv",
+      "columns": {},
+      "cuts": {
+        "A_range": [1, 250],
+        "stable_only": false
+      },
+      "description": "Full AME2020 dataset for testing"
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "notes": "Not used for evaluation-only run"
+  },
+
+  "solver": {
+    "method": "evaluation",
+    "options": {}
+  },
+
+  "provenance": {
+    "purpose": "Adapter testing",
+    "created": "2025-12-29"
+  },
+
+  "metadata": {
+    "author": "RunSpec Adapter Test",
+    "notes": "Quick validation that adapter correctly loads and evaluates parameters"
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "octet_verification_pure_soliton",
+  "description": "PURE QFD SOLITON TEST: Octet with Standard Model contamination removed. c_sym=0 (no forced neutron mixing). Tests if pure scalar field can form Lead.",
+
+  "model": {
+    "id": "qfd.nuclear.binding.soliton",
+    "variant": "phase9_scf"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c_v2_base",
+      "value": 3.643,
+      "bounds": [3.0, 4.5],
+      "description": "Vacuum stiffness β - allow wider exploration"
+    },
+    {
+      "name": "nuclear.c_v2_iso",
+      "value": 0.0135,
+      "bounds": [0.005, 0.03],
+      "description": "Isospin-dependent cohesion"
+    },
+    {
+      "name": "nuclear.c_v2_mass",
+      "value": -0.0005,
+      "bounds": [-0.005, 0.001],
+      "description": "QFD SATURATION: Negative = vacuum softening for large A (replaces Coulomb frustration)"
+    },
+    {
+      "name": "nuclear.c_v4_base",
+      "value": 9.33,
+      "bounds": [5.0, 15.0],
+      "description": "Quartic repulsion - may need lower values without c_sym crushing"
+    },
+    {
+      "name": "nuclear.c_v4_size",
+      "value": -0.129,
+      "bounds": [-0.20, -0.05],
+      "description": "Size-dependent quartic"
+    },
+    {
+      "name": "nuclear.alpha_e_scale",
+      "value": 1.181,
+      "bounds": [0.8, 1.5],
+      "description": "Electron cohesion - allow expansion"
+    },
+    {
+      "name": "nuclear.beta_e_scale",
+      "value": 0.523,
+      "bounds": [0.3, 0.8],
+      "description": "Electron quartic"
+    },
+    {
+      "name": "nuclear.c_sym",
+      "value": 0.0,
+      "bounds": [0.0, 0.0],
+      "frozen": true,
+      "description": "ABOLISHED: Standard Model neutron mixing contamination. In QFD, asymmetry arises from V4/α conflict, not forced density matching."
+    },
+    {
+      "name": "nuclear.kappa_rho",
+      "value": 0.044,
+      "bounds": [0.02, 0.08],
+      "description": "Density-dependent coupling"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "octet_mass_range",
+      "source": "../data/ame2020_system_energies.csv",
+      "cuts": {
+        "target_isotopes": [
+          {"Z": 1, "A": 1, "name": "H-1 (Proton)"},
+          {"Z": 2, "A": 4, "name": "He-4 (Alpha)"},
+          {"Z": 6, "A": 12, "name": "C-12 (Reference)"},
+          {"Z": 8, "A": 16, "name": "O-16"},
+          {"Z": 20, "A": 40, "name": "Ca-40"},
+          {"Z": 26, "A": 56, "name": "Fe-56"},
+          {"Z": 50, "A": 120, "name": "Sn-120"},
+          {"Z": 82, "A": 208, "name": "Pb-208"}
+        ]
+      },
+      "description": "Full mass range test: Can a single scalar field form Lead without Standard Model neutron physics?"
+    }
+  ],
+
+  "objective": {
+    "type": "physics_based",
+    "loss_function": "energy_error + 0.5 * virial_error",
+    "description": "Pure soliton physics: Energy match + Derrick virial (T + 3V = 0). NO c_sym contamination."
+  },
+
+  "solver": {
+    "method": "scipy.differential_evolution",
+    "options": {
+      "maxiter": 50,
+      "popsize": 15,
+      "workers": 1,
+      "seed": 42
+    },
+    "scf_solver_options": {
+      "grid_points": 32,
+      "iters_outer": 150,
+      "early_stop_vir": 0.18,
+      "device": "cuda"
+    }
+  }
+}

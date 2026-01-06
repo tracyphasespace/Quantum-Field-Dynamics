@@ -1,0 +1,103 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "octet_universality",
+  "description": "OCTET TEST: 8 isotopes spanning entire mass range. Tests if β≈3.64 (from C-12) is universal or if heavy nuclei pull it toward theoretical β≈3.06.",
+
+  "model": {
+    "id": "qfd.nuclear.binding.soliton",
+    "variant": "phase9_scf"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c_v2_base",
+      "value": 3.643,
+      "bounds": [3.2, 4.0],
+      "description": "CRITICAL: Vacuum stiffness β≈3.64 from C-12. Will heavy nuclei pull toward β≈3.06?"
+    },
+    {
+      "name": "nuclear.c_v2_iso",
+      "value": 0.0135,
+      "bounds": [0.01, 0.02]
+    },
+    {
+      "name": "nuclear.c_v2_mass",
+      "value": 0.0005,
+      "bounds": [-0.001, 0.002]
+    },
+    {
+      "name": "nuclear.c_v4_base",
+      "value": 9.33,
+      "bounds": [7.0, 12.0],
+      "description": "Quartic repulsion - balances kinetic pressure"
+    },
+    {
+      "name": "nuclear.c_v4_size",
+      "value": -0.129,
+      "bounds": [-0.15, -0.10]
+    },
+    {
+      "name": "nuclear.alpha_e_scale",
+      "value": 1.181,
+      "bounds": [1.0, 1.3]
+    },
+    {
+      "name": "nuclear.beta_e_scale",
+      "value": 0.523,
+      "bounds": [0.45, 0.60]
+    },
+    {
+      "name": "nuclear.c_sym",
+      "value": 22.3,
+      "bounds": [18.0, 26.0],
+      "description": "Charge asymmetry energy - critical for N≠Z nuclei"
+    },
+    {
+      "name": "nuclear.kappa_rho",
+      "value": 0.044,
+      "bounds": [0.03, 0.06]
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "octet_mass_range",
+      "source": "../data/ame2020_system_energies.csv",
+      "cuts": {
+        "target_isotopes": [
+          {"Z": 1, "A": 1, "name": "H-1 (Proton)"},
+          {"Z": 2, "A": 4, "name": "He-4 (Alpha)"},
+          {"Z": 6, "A": 12, "name": "C-12 (Reference)"},
+          {"Z": 8, "A": 16, "name": "O-16"},
+          {"Z": 20, "A": 40, "name": "Ca-40"},
+          {"Z": 26, "A": 56, "name": "Fe-56"},
+          {"Z": 50, "A": 120, "name": "Sn-120"},
+          {"Z": 82, "A": 208, "name": "Pb-208"}
+        ]
+      },
+      "description": "Complete mass range: light magic (H-1, He-4, C-12, O-16), mid-range (Ca-40, Fe-56), heavy (Sn-120, Pb-208)"
+    }
+  ],
+
+  "objective": {
+    "type": "physics_based",
+    "loss_function": "energy_error + 0.5 * virial_error",
+    "description": "Pure physics: Energy match + Derrick virial convergence (T + 3V = 0)"
+  },
+
+  "solver": {
+    "method": "scipy.differential_evolution",
+    "options": {
+      "maxiter": 50,
+      "popsize": 15,
+      "workers": 1,
+      "seed": 42
+    },
+    "scf_solver_options": {
+      "grid_points": 32,
+      "iters_outer": 150,
+      "early_stop_vir": 0.18,
+      "device": "cuda"
+    }
+  }
+}

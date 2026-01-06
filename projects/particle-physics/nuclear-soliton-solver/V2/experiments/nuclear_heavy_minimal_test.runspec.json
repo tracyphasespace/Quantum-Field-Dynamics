@@ -1,0 +1,222 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "exp_2025_nuclear_heavy_MINIMAL_TEST",
+  "description": "MINIMAL TEST: 8 representative heavy isotopes only. Fast iteration for debugging optimization.",
+
+  "model": {
+    "id": "qfd.nuclear.binding.soliton",
+    "variant": "phase9_scf",
+    "$ref": "../models/qfd_nuclear_soliton_phase9.model.json"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c_v2_base",
+      "value": 2.201711,
+      "role": "coupling",
+      "bounds": [2.312, 2.642],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Baseline cohesion strength"
+    },
+    {
+      "name": "nuclear.c_v2_iso",
+      "value": 0.027035,
+      "role": "coupling",
+      "bounds": [0.02163, 0.03244],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Isospin-dependent cohesion"
+    },
+    {
+      "name": "nuclear.c_v2_mass",
+      "value": -0.000205,
+      "role": "coupling",
+      "bounds": [-0.00041, 0.0],
+      "units": "1/A",
+      "frozen": false,
+      "description": "Mass-dependent compounding"
+    },
+    {
+      "name": "nuclear.c_v4_base",
+      "value": 5.282364,
+      "role": "coupling",
+      "bounds": [4.490, 5.282],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Baseline quartic repulsion"
+    },
+    {
+      "name": "nuclear.c_v4_size",
+      "value": -0.085018,
+      "role": "coupling",
+      "bounds": [-0.102, -0.068],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Size-dependent quartic"
+    },
+    {
+      "name": "nuclear.alpha_e_scale",
+      "value": 1.007419,
+      "role": "coupling",
+      "bounds": [0.957, 1.058],
+      "units": "dimensionless",
+      "frozen": false,
+      "description": "Electron cohesion scale factor"
+    },
+    {
+      "name": "nuclear.beta_e_scale",
+      "value": 0.504312,
+      "role": "coupling",
+      "bounds": [0.454, 0.555],
+      "units": "dimensionless",
+      "frozen": false,
+      "description": "Electron quartic scale factor"
+    },
+    {
+      "name": "nuclear.c_sym",
+      "value": 25.0,
+      "role": "coupling",
+      "bounds": [22.5, 27.5],
+      "units": "MeV",
+      "frozen": false,
+      "description": "QFD charge asymmetry coefficient"
+    },
+    {
+      "name": "nuclear.kappa_rho",
+      "value": 0.029816,
+      "role": "coupling",
+      "bounds": [0.02385, 0.03578],
+      "units": "dimensionless",
+      "frozen": false,
+      "description": "Density-dependent coupling"
+    },
+    {
+      "name": "solver.lambda_R2",
+      "value": 0.0003,
+      "role": "nuisance",
+      "bounds": null,
+      "units": "dimensionless",
+      "frozen": true,
+      "description": "Rotor kinetic energy (FROZEN)"
+    },
+    {
+      "name": "solver.lambda_R3",
+      "value": 0.001,
+      "role": "nuisance",
+      "bounds": null,
+      "units": "dimensionless",
+      "frozen": true,
+      "description": "Rotor constraint (FROZEN)"
+    },
+    {
+      "name": "solver.B_target",
+      "value": 0.01,
+      "role": "nuisance",
+      "bounds": null,
+      "units": "dimensionless",
+      "frozen": true,
+      "description": "Rotor field target (FROZEN)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "ame2020_heavy_minimal",
+      "source": "../data/ame2020_system_energies.csv",
+      "columns": {
+        "A": "A",
+        "Z": "Z",
+        "target": "E_exp_MeV",
+        "sigma": "E_uncertainty_MeV"
+      },
+      "cuts": {
+        "target_isotopes": [
+          {"Z": 50, "A": 120, "name": "Sn-120"},
+          {"Z": 79, "A": 197, "name": "Au-197"},
+          {"Z": 80, "A": 200, "name": "Hg-200"},
+          {"Z": 82, "A": 206, "name": "Pb-206"},
+          {"Z": 82, "A": 207, "name": "Pb-207"},
+          {"Z": 82, "A": 208, "name": "Pb-208"},
+          {"Z": 92, "A": 235, "name": "U-235"},
+          {"Z": 92, "A": 238, "name": "U-238"}
+        ]
+      },
+      "description": "MINIMAL TEST: 8 specific heavy isotopes only. Representative of stability valley + actinides."
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "ame2020_heavy_minimal",
+        "observable_adapter": "qfd.adapters.nuclear.predict_total_energy_soliton",
+        "weight": 1.0,
+        "active": true,
+        "description": "Primary: match experimental total energies"
+      }
+    ],
+    "regularization": [
+      {
+        "type": "virial_hinge",
+        "threshold": 0.18,
+        "weight": 4.0,
+        "description": "Virial constraint: enforce physical field configurations"
+      }
+    ],
+    "loss_function": "L = Σ(E_QFD - E_exp)²/E_exp² + ρ_V × max(0, |virial| - 0.18)²",
+    "notes": "Minimal test configuration for fast iteration."
+  },
+
+  "solver": {
+    "method": "scipy.differential_evolution",
+    "options": {
+      "maxiter": 1,
+      "popsize": 8,
+      "workers": 1,
+      "seed": 42,
+      "atol": 0.01,
+      "tol": 0.01,
+      "disp": true,
+      "init": "latinhypercube",
+      "strategy": "best1bin",
+      "mutation": [0.5, 1.0],
+      "recombination": 0.7
+    },
+    "scf_solver_options": {
+      "grid_points": 48,
+      "iters_outer": 360,
+      "lr_psi": 0.01,
+      "lr_B": 0.01,
+      "early_stop_vir": 0.18,
+      "device": "cuda",
+      "backend": "torch"
+    },
+    "fast_mode_search": {
+      "enabled": true,
+      "grid_points": 32,
+      "iters_outer": 150,
+      "description": "Use reduced resolution during optimization search for speed"
+    },
+    "final_validation": {
+      "grid_points": 48,
+      "iters_outer": 360,
+      "description": "Full resolution verification of best parameters"
+    }
+  },
+
+  "provenance": {
+    "baseline_parameters": "trial32_universal",
+    "calibration_date": "2025-12-30",
+    "author": "Tracy McPherson",
+    "repository": "QFD_SpectralGap",
+    "notes": "MINIMAL TEST CONFIG: 8 isotopes only for fast debugging and iteration."
+  },
+
+  "metadata": {
+    "created": "2025-12-30T17:40:00Z",
+    "version": "1.0-minimal-test",
+    "tags": ["minimal_test", "debugging", "fast_iteration"]
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "exp_2025_nuclear_OCTET_CLEAN",
+  "description": "Clean Octet Run: Validating universality with c_sym=0 (pure soliton physics) and enabling vacuum saturation (c_v2_mass).",
+
+  "model": {
+    "id": "qfd.nuclear.binding.soliton",
+    "variant": "phase9_scf",
+    "$ref": "../models/qfd_nuclear_soliton_phase9.model.json"
+  },
+
+  "parameters": [
+    { "name": "nuclear.c_v2_base", "value": 3.1139, "bounds": [3.05, 3.25], "frozen": false },
+    { "name": "nuclear.c_v2_iso", "value": 0.0298, "bounds": [0.02, 0.04], "frozen": false },
+    { "name": "nuclear.c_v2_mass", "value": 0.0, "bounds": [-0.001, 0.0], "frozen": false, "description": "QFD Saturation term (vacuum stretching)" },
+    { "name": "nuclear.c_v4_base", "value": 11.959, "bounds": [10.0, 14.0], "frozen": false },
+    { "name": "nuclear.c_v4_size", "value": -0.091, "bounds": [-0.15, -0.05], "frozen": false },
+    { "name": "nuclear.c_sym", "value": 0.0, "frozen": true, "description": "Abolished. Asymmetry is emergent." },
+    { "name": "nuclear.kappa_rho", "value": 0.027, "bounds": [0.02, 0.04], "frozen": false },
+    { "name": "nuclear.alpha_e_scale", "value": 0.99, "frozen": true },
+    { "name": "nuclear.beta_e_scale", "value": 0.49, "frozen": true }
+  ],
+
+  "datasets": [
+    {
+      "id": "ame2020_octet_clean",
+      "source": "../data/ame2020_system_energies.csv",
+      "columns": {
+        "A": "A",
+        "Z": "Z",
+        "target": "E_exp_MeV",
+        "sigma": "E_uncertainty_MeV"
+      },
+      "cuts": {
+        "target_isotopes": [
+            {"Z": 1, "A": 1, "name": "H-1"},
+            {"Z": 2, "A": 4, "name": "He-4"},
+            {"Z": 6, "A": 12, "name": "C-12"},
+            {"Z": 8, "A": 16, "name": "O-16"},
+            {"Z": 20, "A": 40, "name": "Ca-40"},
+            {"Z": 26, "A": 56, "name": "Fe-56"},
+            {"Z": 50, "A": 120, "name": "Sn-120"},
+            {"Z": 82, "A": 208, "name": "Pb-208"}
+        ]
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared_dynamic_virial",
+    "loss_function": "L = Σ(E_QFD - E_exp)²/E_exp² + 0.5 * (virial/E_model)²"
+  },
+
+  "solver": {
+    "method": "scipy.differential_evolution",
+    "options": {
+      "maxiter": 50,
+      "popsize": 15,
+      "workers": 1,
+      "seed": 42,
+      "atol": 0.01,
+      "tol": 0.01,
+      "disp": true
+    }
+  },
+
+  "provenance": {
+    "baseline_parameters": "golden_probe_c12_optimized",
+    "calibration_date": "2025-12-31",
+    "author": "Tracy McPherson (assisted by Gemini)",
+    "repository": "QFD_SpectralGap",
+    "notes": "Clean Octet run to test for universality with c_sym=0."
+  },
+
+  "metadata": {
+    "created": "2025-12-31T22:00:00Z",
+    "version": "1.4-octet-clean",
+    "tags": ["octet_test", "universality", "clean_physics", "no_csym"]
+  }
+}

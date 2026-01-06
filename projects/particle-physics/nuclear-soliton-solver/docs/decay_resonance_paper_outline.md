@@ -1,0 +1,3 @@
+# Paper Outline – Asymmetric Resonance of Beta Decay Products
+
+...

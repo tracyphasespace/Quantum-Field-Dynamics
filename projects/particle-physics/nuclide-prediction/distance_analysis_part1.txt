@@ -1,0 +1,21 @@
+================================================================================
+DISTANCE TO ALL THREE CURVES ANALYSIS
+================================================================================
+
+Current predictions use assigned regime (based on minimum stress).
+Let us check which curve each isotope is actually closest to:
+
+Regime assignment comparison:
+closest_curve        charge_nominal  charge_poor  charge_rich   All
+current_regime_name                                                
+charge_nominal                 1129            0            0  1129
+charge_poor                       0         1343            0  1343
+charge_rich                       0            0         1085  1085
+All                            1129         1343         1085  3557
+
+================================================================================
+DECAY DIRECTION vs CURVE POSITION
+================================================================================
+
+If we use CLOSEST CURVE to predict decay direction:
+

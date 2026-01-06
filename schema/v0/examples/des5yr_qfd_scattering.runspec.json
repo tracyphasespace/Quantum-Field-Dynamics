@@ -1,0 +1,274 @@
+{
+  "$schema": "../RunSpec.schema.json",
+  "schema_version": "0.1.0",
+  "run_id": "des5yr_qfd_scattering_001",
+  "description": "QFD photon-photon scattering fit to DES5YR SNe (dark energy alternative hypothesis)",
+
+  "model": {
+    "model_id": "qfd.cosmology.distance_modulus.scattering",
+    "variant": "matter_only_plus_scattering",
+    "equations": [
+      {
+        "term": "luminosity_distance_matter",
+        "implementation": "qfd.adapters.cosmology.distance_modulus.luminosity_distance_matter",
+        "active": true,
+        "weight": 1.0
+      },
+      {
+        "term": "optical_depth_scattering",
+        "implementation": "qfd.adapters.cosmology.distance_modulus.optical_depth_QFD",
+        "active": true,
+        "weight": 1.0
+      }
+    ],
+    "backend": {
+      "framework": "numpy",
+      "device": "cpu",
+      "precision": "float64",
+      "deterministic": true
+    },
+    "documentation": {
+      "paper_reference": "QFD Appendix J (Time Refraction), Lean4: QFD/Cosmology/ScatteringBias.lean",
+      "equation_refs": ["J.12: Survival fraction S(z) = exp(-τ)", "J.15: d_apparent = d_true / sqrt(S)"],
+      "notes": "Tests if photon scattering can explain SNe dimming WITHOUT dark energy (Ω_Λ = 0)"
+    }
+  },
+
+  "parameters": [
+    {
+      "name": "H0",
+      "symbol": "H_0",
+      "type": "positive_real",
+      "init": 70.0,
+      "bounds": {
+        "min": 50.0,
+        "max": 100.0
+      },
+      "prior": {
+        "type": "uniform",
+        "params": {
+          "min": 60.0,
+          "max": 80.0
+        }
+      },
+      "units": "km/s/Mpc",
+      "role": "coupling",
+      "identifiability": "global",
+      "frozen": false,
+      "sensitivity": "high",
+      "domains": ["cosmology"],
+      "description": "Hubble constant (expansion rate of the universe today)",
+      "references": ["QFD prediction: H0 resolves to higher value without Ω_Λ"]
+    },
+    {
+      "name": "alpha_QFD",
+      "symbol": "α_{QFD}",
+      "type": "positive_real",
+      "init": 0.8,
+      "bounds": {
+        "min": 0.0,
+        "max": 2.0
+      },
+      "prior": {
+        "type": "uniform",
+        "params": {
+          "min": 0.0,
+          "max": 2.0
+        }
+      },
+      "units": "dimensionless",
+      "role": "coupling",
+      "identifiability": "global",
+      "frozen": false,
+      "sensitivity": "high",
+      "domains": ["cosmology", "particle"],
+      "description": "QFD scattering coupling strength (τ = α × z^β), constrained by Lean proof: 0 < α < 2",
+      "references": ["QFD/Cosmology/ScatteringBias.lean: alpha_bounded", "CMB blackbody constraint"]
+    },
+    {
+      "name": "beta",
+      "symbol": "β",
+      "type": "bounded_real",
+      "init": 0.6,
+      "bounds": {
+        "min": 0.4,
+        "max": 1.0
+      },
+      "prior": {
+        "type": "uniform",
+        "params": {
+          "min": 0.4,
+          "max": 1.0
+        }
+      },
+      "units": "dimensionless",
+      "role": "coupling",
+      "identifiability": "global",
+      "frozen": false,
+      "sensitivity": "medium",
+      "domains": ["cosmology"],
+      "description": "Redshift power law exponent (sub-linear to linear), constrained by Lean proof",
+      "references": ["QFD/Cosmology/ScatteringBias.lean: beta_range"]
+    },
+    {
+      "name": "Omega_M",
+      "symbol": "Ω_M",
+      "type": "positive_real",
+      "init": 1.0,
+      "bounds": {
+        "min": 1.0,
+        "max": 1.0
+      },
+      "prior": {
+        "type": "delta",
+        "params": {
+          "value": 1.0
+        }
+      },
+      "units": "dimensionless",
+      "role": "coupling",
+      "identifiability": "global",
+      "frozen": true,
+      "sensitivity": "high",
+      "domains": ["cosmology"],
+      "description": "Matter density parameter - FROZEN at 1.0 (matter-only universe, no dark energy)",
+      "references": ["QFD hypothesis: Ω_Λ = 0, scattering explains dimming"]
+    },
+    {
+      "name": "Omega_Lambda",
+      "symbol": "Ω_Λ",
+      "type": "bounded_real",
+      "init": 0.0,
+      "bounds": {
+        "min": 0.0,
+        "max": 0.0
+      },
+      "prior": {
+        "type": "delta",
+        "params": {
+          "value": 0.0
+        }
+      },
+      "units": "dimensionless",
+      "role": "coupling",
+      "identifiability": "global",
+      "frozen": true,
+      "sensitivity": "high",
+      "domains": ["cosmology"],
+      "description": "Dark energy density - FROZEN at 0.0 (no cosmological constant needed)",
+      "references": ["QFD hypothesis: Dark energy is observation bias from photon loss"]
+    },
+    {
+      "name": "eta_prime",
+      "symbol": "η'",
+      "type": "positive_real",
+      "init": 7.75e-06,
+      "bounds": {
+        "min": 7.75e-06,
+        "max": 7.75e-06
+      },
+      "units": "dimensionless",
+      "role": "derived",
+      "identifiability": "global",
+      "frozen": true,
+      "sensitivity": "medium",
+      "domains": ["cosmology"],
+      "description": "Flux-dependent scattering coefficient fixed by Tolman/FIRAS bridge (eta_prime_tolman_solver.py + Lean radiative transfer).",
+      "references": [
+        "projects/Lean4/projects/solvers/eta_prime_tolman_solver.py",
+        "QFD/Cosmology/ScatteringBias.lean",
+        "QFD/Cosmology/RadiativeTransfer.lean"
+      ]
+    }
+  ],
+
+  "datasets": [
+    {
+      "dataset_id": "des5yr.full.no_cuts",
+      "observable": "distance_modulus",
+      "source": {
+        "type": "file",
+        "path": "data/raw/des5yr_full.csv",
+        "format": "csv",
+        "columns": {
+          "redshift": "redshift",
+          "distance_modulus": "distance_modulus",
+          "sigma_mu": "sigma_mu"
+        }
+      },
+      "selection": {
+        "criteria": [],
+        "description": "All 1829 DES5YR SNe - NO traditional cuts applied (tests whether 'contamination' is scattering)"
+      },
+      "transforms": [],
+      "likelihood": {
+        "type": "gaussian",
+        "error_model": "independent",
+        "uncertainty_column": "sigma_mu",
+        "outlier_rejection": {
+          "method": "none"
+        }
+      },
+      "metadata": {
+        "experiment": "DES5YR",
+        "publication": "Dark Energy Survey 5-Year Photometrically Classified Type Ia Supernovae",
+        "doi": "10.3847/1538-4357/ac8b7a",
+        "year": 2022,
+        "n_points": 1829,
+        "notes": "Full dataset - if QFD fits 'contaminated' events, validates scattering hypothesis"
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "des5yr.full.no_cuts",
+        "observable_adapter": "qfd.adapters.cosmology.predict_distance_modulus",
+        "adapter_config": {
+          "use_ΛCDM": false
+        },
+        "weight": 1.0,
+        "active": true
+      }
+    ],
+    "regularization": [],
+    "normalization": "per_datapoint"
+  },
+
+  "solver": {
+    "method": "scipy_minimize",
+    "config": {
+      "max_iter": 1000,
+      "tolerance": 1e-8
+    },
+    "seed": 42,
+    "parallel": {
+      "n_processes": 1,
+      "backend": "sequential"
+    }
+  },
+
+  "compute": {
+    "backend": "numpy",
+    "device": "cpu",
+    "precision": "float64",
+    "memory_limit_gb": 4.0
+  },
+
+  "outputs": {
+    "directory": "results/des5yr_qfd_scattering_001",
+    "save_trace": true,
+    "save_diagnostics": true,
+    "save_checkpoints": false,
+    "formats": ["json"]
+  },
+
+  "metadata": {
+    "author": "QFD Research Team",
+    "created": "2025-12-20T00:00:00Z",
+    "tags": ["cosmology", "qfd_scattering", "dark_energy_alternative", "des5yr", "v0"],
+    "notes": "Critical test: Can QFD scattering (Ω_Λ=0) achieve χ² comparable to ΛCDM (Ω_Λ≈0.7)? If yes, dark energy is unnecessary."
+  }
+}

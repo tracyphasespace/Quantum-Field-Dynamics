@@ -1,0 +1,198 @@
+{
+  "$schema": "../RunSpec.schema.json",
+  "schema_version": "0.1.0",
+  "run_id": "des5yr_lcdm_control_001",
+  "description": "Standard ΛCDM cosmology fit to DES5YR Type Ia SNe (baseline for dark energy hypothesis)",
+
+  "model": {
+    "model_id": "qfd.cosmology.distance_modulus.lcdm",
+    "variant": "standard",
+    "equations": [
+      {
+        "term": "luminosity_distance",
+        "implementation": "qfd.adapters.cosmology.distance_modulus.luminosity_distance_ΛCDM",
+        "active": true,
+        "weight": 1.0
+      }
+    ],
+    "backend": {
+      "framework": "numpy",
+      "device": "cpu",
+      "precision": "float64",
+      "deterministic": true
+    },
+    "documentation": {
+      "paper_reference": "Planck 2018 Cosmological Parameters (arXiv:1807.06209)",
+      "equation_refs": ["Standard ΛCDM", "Friedmann equations"],
+      "notes": "Control experiment: Standard cosmology with dark energy (Ω_Λ ≈ 0.7)"
+    }
+  },
+
+  "parameters": [
+    {
+      "name": "H0",
+      "symbol": "H_0",
+      "type": "positive_real",
+      "init": 70.0,
+      "bounds": {
+        "min": 50.0,
+        "max": 100.0
+      },
+      "prior": {
+        "type": "uniform",
+        "params": {
+          "min": 60.0,
+          "max": 80.0
+        }
+      },
+      "units": "km/s/Mpc",
+      "role": "coupling",
+      "identifiability": "global",
+      "frozen": false,
+      "sensitivity": "high",
+      "domains": ["cosmology"],
+      "description": "Hubble constant (expansion rate of the universe today)",
+      "references": ["Planck 2018: H0 = 67.4 ± 0.5", "SH0ES 2021: H0 = 73.04 ± 1.04"]
+    },
+    {
+      "name": "Omega_M",
+      "symbol": "Ω_M",
+      "type": "bounded_real",
+      "init": 0.3,
+      "bounds": {
+        "min": 0.2,
+        "max": 0.4
+      },
+      "prior": {
+        "type": "uniform",
+        "params": {
+          "min": 0.25,
+          "max": 0.35
+        }
+      },
+      "units": "dimensionless",
+      "role": "coupling",
+      "identifiability": "global",
+      "frozen": false,
+      "sensitivity": "high",
+      "domains": ["cosmology"],
+      "description": "Matter density parameter (Ω_M = ρ_matter / ρ_critical)",
+      "references": ["Planck 2018: Ω_M = 0.315 ± 0.007"]
+    },
+    {
+      "name": "Omega_Lambda",
+      "symbol": "Ω_Λ",
+      "type": "bounded_real",
+      "init": 0.7,
+      "bounds": {
+        "min": 0.6,
+        "max": 0.8
+      },
+      "prior": {
+        "type": "uniform",
+        "params": {
+          "min": 0.65,
+          "max": 0.75
+        }
+      },
+      "units": "dimensionless",
+      "role": "coupling",
+      "identifiability": "global",
+      "frozen": false,
+      "sensitivity": "high",
+      "domains": ["cosmology"],
+      "description": "Dark energy density parameter (cosmological constant)",
+      "references": ["Planck 2018: Ω_Λ = 0.685 ± 0.007"]
+    }
+  ],
+
+  "datasets": [
+    {
+      "dataset_id": "des5yr.full.no_cuts",
+      "observable": "distance_modulus",
+      "source": {
+        "type": "file",
+        "path": "data/raw/des5yr_full.csv",
+        "format": "csv",
+        "columns": {
+          "redshift": "redshift",
+          "distance_modulus": "distance_modulus",
+          "sigma_mu": "sigma_mu"
+        }
+      },
+      "selection": {
+        "criteria": [],
+        "description": "All 1829 DES5YR SNe - NO traditional cuts applied (tests whether 'contamination' is real)"
+      },
+      "transforms": [],
+      "likelihood": {
+        "type": "gaussian",
+        "error_model": "independent",
+        "uncertainty_column": "sigma_mu",
+        "outlier_rejection": {
+          "method": "none"
+        }
+      },
+      "metadata": {
+        "experiment": "DES5YR",
+        "publication": "Dark Energy Survey 5-Year Photometrically Classified Type Ia Supernovae",
+        "doi": "10.3847/1538-4357/ac8b7a",
+        "year": 2022,
+        "n_points": 1829,
+        "notes": "Full dataset without TYPE==0 or PROBCC cuts - questions traditional cherry-picking"
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "des5yr.full.no_cuts",
+        "observable_adapter": "qfd.adapters.cosmology.predict_distance_modulus",
+        "adapter_config": {
+          "use_ΛCDM": true
+        },
+        "weight": 1.0,
+        "active": true
+      }
+    ],
+    "regularization": [],
+    "normalization": "per_datapoint"
+  },
+
+  "solver": {
+    "method": "scipy_minimize",
+    "config": {
+      "max_iter": 1000,
+      "tolerance": 1e-8
+    },
+    "seed": 42,
+    "parallel": {
+      "n_processes": 1,
+      "backend": "sequential"
+    }
+  },
+
+  "compute": {
+    "backend": "numpy",
+    "device": "cpu",
+    "precision": "float64",
+    "memory_limit_gb": 4.0
+  },
+
+  "outputs": {
+    "directory": "results/des5yr_lcdm_control_001",
+    "save_trace": true,
+    "save_diagnostics": true,
+    "save_checkpoints": false,
+    "formats": ["json"]
+  },
+
+  "metadata": {
+    "author": "QFD Research Team",
+    "created": "2025-12-20T00:00:00Z",
+    "tags": ["cosmology", "dark_energy", "ΛCDM", "control", "des5yr", "v0"],
+    "notes": "Control experiment: Standard ΛCDM to establish baseline χ² for comparison with QFD scattering hypothesis"
+  }
+}

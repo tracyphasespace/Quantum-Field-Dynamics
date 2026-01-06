@@ -1,0 +1,399 @@
+{
+  "schema_version": "v0.3",
+  "experiment_id": "exp_2025_blackhole_rift_dynamics",
+  "description": "BLACK HOLE RIFT ERUPTIONS: Charge-mediated plasma ejection from binary black hole systems with spin-sorting mechanism. Models: (1) Modified Schwarzschild surface escape via charge repulsion + thermal energy + gravitational assist, (2) Opposing rotation selection from angular gradient cancellation in QFD scalar field φ(r,θ,φ). Tests if rifts stabilize counter-rotating binary configurations.",
+
+  "model": {
+    "id": "qfd.astrophysics.blackhole_rift",
+    "variant": "charge_rotation_coupling"
+  },
+
+  "parameters": [
+    {
+      "name": "alpha_1",
+      "value": 1.0,
+      "role": "coupling",
+      "bounds": [0.1, 10.0],
+      "units": "dimensionless",
+      "description": "Gradient energy coefficient for scalar field kinetic term. Controls field stiffness ∝ (∇φ)².",
+      "prior": {"type": "uniform", "args": {"min": 0.1, "max": 10.0}},
+      "lean_reference": "QFD.Gravity.TimeRefraction.gradient_energy_bound"
+    },
+    {
+      "name": "alpha_2",
+      "value": 0.1,
+      "role": "coupling",
+      "bounds": [0.01, 1.0],
+      "units": "dimensionless",
+      "description": "Potential energy coefficient for double-well V(φ) = (α₂/2)(φ² - φ_vac²)². Controls core radius R_core ~ √(α₁/α₂).",
+      "prior": {"type": "uniform", "args": {"min": 0.01, "max": 1.0}},
+      "lean_reference": "QFD.Gravity.TimeRefraction.potential_energy_bound"
+    },
+    {
+      "name": "phi_vac",
+      "value": 1.0,
+      "role": "coupling",
+      "bounds": [0.5, 2.0],
+      "units": "dimensionless",
+      "description": "Vacuum expectation value of scalar field at r → ∞. Sets baseline for field oscillations.",
+      "prior": {"type": "uniform", "args": {"min": 0.5, "max": 2.0}},
+      "lean_reference": "QFD.Gravity.TimeRefraction.vacuum_field_value"
+    },
+    {
+      "name": "phi_0",
+      "value": 3.0,
+      "role": "coupling",
+      "bounds": [1.5, 10.0],
+      "units": "dimensionless",
+      "description": "Central field value φ(r=0). Controls black hole mass M ∝ ∫ ρ(φ) d³r. Larger φ₀ → larger mass.",
+      "prior": {"type": "uniform", "args": {"min": 1.5, "max": 10.0}}
+    },
+    {
+      "name": "kappa_refraction",
+      "value": 1.0e-26,
+      "role": "coupling",
+      "bounds": [1.0e-27, 1.0e-25],
+      "units": "m³ kg⁻¹ s⁻²",
+      "description": "QFD time refraction coupling constant. Relates energy density to gravitational potential: Φ = -(c²/2)κρ. Fundamental QFD constant, no GR equivalent.",
+      "prior": {"type": "log_uniform", "args": {"min": 1.0e-27, "max": 1.0e-25}},
+      "lean_reference": "QFD.Gravity.TimeRefraction.timePotential_eq"
+    },
+
+    {
+      "name": "q_electron",
+      "value": -1.602176634e-19,
+      "role": "coupling",
+      "frozen": true,
+      "units": "C",
+      "description": "Elementary charge (electron). Fixed by CODATA 2018. Negative sign for electron.",
+      "lean_reference": "QFD.Soliton.Quantization.unique_vortex_charge"
+    },
+    {
+      "name": "m_electron",
+      "value": 9.1093837015e-31,
+      "role": "coupling",
+      "frozen": true,
+      "units": "kg",
+      "description": "Electron rest mass. Fixed by CODATA 2018. Critical for charge separation dynamics (m_e ≪ m_ion).",
+      "lean_reference": "QFD.Leptons.Electron.mass_bounds"
+    },
+    {
+      "name": "q_proton",
+      "value": 1.602176634e-19,
+      "role": "coupling",
+      "frozen": true,
+      "units": "C",
+      "description": "Proton charge. Fixed by CODATA 2018. Positive sign for proton/ion.",
+      "lean_reference": "QFD.Soliton.Quantization.unique_vortex_charge"
+    },
+    {
+      "name": "m_proton",
+      "value": 1.67262192369e-27,
+      "role": "coupling",
+      "frozen": true,
+      "units": "kg",
+      "description": "Proton rest mass. Fixed by CODATA 2018. Ratio m_p/m_e ≈ 1836 drives electron-first escape.",
+      "lean_reference": "QFD.Nuclear.Proton.mass_bounds"
+    },
+    {
+      "name": "k_coulomb",
+      "value": 8.9875517923e9,
+      "role": "coupling",
+      "frozen": true,
+      "units": "N m² C⁻²",
+      "description": "Coulomb constant k_e = 1/(4πε₀). Fixed from ε₀. Governs electrostatic force F = k q₁q₂/r².",
+      "lean_reference": "QFD.EM.Coulomb.force_law"
+    },
+
+    {
+      "name": "T_plasma_core",
+      "value": 1.0e9,
+      "role": "coupling",
+      "bounds": [1.0e8, 1.0e11],
+      "units": "K",
+      "description": "Plasma temperature at modified Schwarzschild surface. Thermal energy kT must overcome binding. Superheated by compression + previous rift heating.",
+      "prior": {"type": "log_uniform", "args": {"min": 1.0e8, "max": 1.0e11}},
+      "lean_reference": "QFD.Rift.ChargeEscape.thermal_energy_contribution"
+    },
+    {
+      "name": "n_density_surface",
+      "value": 1.0e30,
+      "role": "coupling",
+      "bounds": [1.0e28, 1.0e32],
+      "units": "m⁻³",
+      "description": "Number density of charged particles at BH surface. Sets pressure P = nkT and Coulomb interaction strength. Extremely high for compact objects.",
+      "prior": {"type": "log_uniform", "args": {"min": 1.0e28, "max": 1.0e32}},
+      "lean_reference": "QFD.Rift.ChargeEscape.plasma_density_bound"
+    },
+    {
+      "name": "charge_separation_fraction",
+      "value": 0.1,
+      "role": "coupling",
+      "bounds": [0.01, 0.5],
+      "units": "dimensionless",
+      "description": "Fraction of ions left behind by previous rift events. Creates net positive charge → repels new ions, accelerates electrons. Sequential rift buildup mechanism.",
+      "prior": {"type": "uniform", "args": {"min": 0.01, "max": 0.5}},
+      "lean_reference": "QFD.Rift.SequentialEruptions.charge_accumulation"
+    },
+    {
+      "name": "rift_history_depth",
+      "value": 10,
+      "role": "nuisance",
+      "bounds": [1, 100],
+      "units": "dimensionless",
+      "description": "Number of previous rift events to track. Each rift deposits charge closer to BH. Deeper history → stronger repulsion.",
+      "prior": {"type": "uniform", "args": {"min": 1, "max": 100}}
+    },
+
+    {
+      "name": "Omega_BH1_magnitude",
+      "value": 0.5,
+      "role": "coupling",
+      "bounds": [0.0, 0.998],
+      "units": "c/r_g",
+      "description": "Angular velocity magnitude of BH #1 in units of c/r_g (geometric units). Maximum at extremal Kerr a=1 is Ω=0.5. Sub-extremal: a < 1 → Ω < 0.5.",
+      "prior": {"type": "uniform", "args": {"min": 0.0, "max": 0.998}},
+      "lean_reference": "QFD.Rift.RotationDynamics.angular_velocity_bound"
+    },
+    {
+      "name": "Omega_BH2_magnitude",
+      "value": 0.5,
+      "role": "coupling",
+      "bounds": [0.0, 0.998],
+      "units": "c/r_g",
+      "description": "Angular velocity magnitude of BH #2. For opposing rotations, expect Ω₁ ≈ Ω₂ in magnitude but opposite direction.",
+      "prior": {"type": "uniform", "args": {"min": 0.0, "max": 0.998}},
+      "lean_reference": "QFD.Rift.RotationDynamics.angular_velocity_bound"
+    },
+    {
+      "name": "rotation_alignment",
+      "value": -1.0,
+      "role": "coupling",
+      "bounds": [-1.0, 1.0],
+      "units": "dimensionless",
+      "description": "Ω₁·Ω₂/(|Ω₁||Ω₂|) - cosine of angle between rotation axes. -1 = opposing (stable for rifts), +1 = aligned (suppresses rifts), 0 = perpendicular.",
+      "prior": {"type": "uniform", "args": {"min": -1.0, "max": 1.0}},
+      "lean_reference": "QFD.Rift.SpinSorting.opposing_rotations_stable"
+    },
+    {
+      "name": "I_moment_BH1",
+      "value": 1.0e45,
+      "role": "coupling",
+      "bounds": [1.0e40, 1.0e50],
+      "units": "kg m²",
+      "description": "Moment of inertia of BH #1. For point mass: I=0 (degenerate). For extended object/ring: I ~ MR². Needed for L = IΩ.",
+      "prior": {"type": "log_uniform", "args": {"min": 1.0e40, "max": 1.0e50}}
+    },
+    {
+      "name": "I_moment_BH2",
+      "value": 1.0e45,
+      "role": "coupling",
+      "bounds": [1.0e40, 1.0e50],
+      "units": "kg m²",
+      "description": "Moment of inertia of BH #2. Should scale with mass ratio for equilibrium.",
+      "prior": {"type": "log_uniform", "args": {"min": 1.0e40, "max": 1.0e50}}
+    },
+
+    {
+      "name": "theta_resolution",
+      "value": 64,
+      "role": "nuisance",
+      "frozen": true,
+      "units": "dimensionless",
+      "description": "Number of θ grid points for angular-dependent scalar field φ(r,θ). θ ∈ [0,π]. Higher resolution captures equatorial gradients better."
+    },
+    {
+      "name": "phi_angular_resolution",
+      "value": 128,
+      "role": "nuisance",
+      "frozen": true,
+      "units": "dimensionless",
+      "description": "Number of φ_angle grid points for azimuthal structure. φ_angle ∈ [0,2π]. For axisymmetric rotation, can reduce to φ_angle-independent."
+    },
+    {
+      "name": "angular_modes_max",
+      "value": 20,
+      "role": "nuisance",
+      "bounds": [1, 50],
+      "units": "dimensionless",
+      "description": "Maximum spherical harmonic mode ℓ_max for φ(r,θ,φ) expansion. Higher modes → finer angular structure. Rotating field couples to ℓ=1,2,...",
+      "prior": {"type": "uniform", "args": {"min": 1, "max": 50}}
+    },
+
+    {
+      "name": "M_BH1",
+      "value": 10.0,
+      "role": "coupling",
+      "bounds": [1.0, 100.0],
+      "units": "M_sun",
+      "description": "Mass of black hole #1 in solar masses. For stellar-mass BH binaries: 5-50 M_☉. For supermassive: 10⁶-10⁹ M_☉.",
+      "prior": {"type": "log_uniform", "args": {"min": 1.0, "max": 100.0}}
+    },
+    {
+      "name": "M_BH2",
+      "value": 10.0,
+      "role": "coupling",
+      "bounds": [1.0, 100.0],
+      "units": "M_sun",
+      "description": "Mass of black hole #2. Equal masses (q=M₂/M₁=1) maximize symmetric rifts. Unequal masses break symmetry.",
+      "prior": {"type": "log_uniform", "args": {"min": 1.0, "max": 100.0}}
+    },
+    {
+      "name": "separation_D",
+      "value": 100.0,
+      "role": "coupling",
+      "bounds": [10.0, 1000.0],
+      "units": "r_g",
+      "description": "Binary separation in units of gravitational radius r_g = GM/c². Closer → stronger tidal assist. Wider → isolated BHs. For LIGO events: D ~ 10-100 r_g at merger.",
+      "prior": {"type": "log_uniform", "args": {"min": 10.0, "max": 1000.0}}
+    },
+
+    {
+      "name": "r_core_BH1",
+      "value": 3.16,
+      "role": "derived",
+      "units": "length_units",
+      "description": "Core radius of BH #1: R_core ~ √(α₁/α₂)/φ_vac. Derived from scalar field solution, not input parameter.",
+      "formula": "sqrt(alpha_1 / alpha_2) / phi_vac"
+    },
+    {
+      "name": "r_surface_modified",
+      "value": 10.0,
+      "role": "derived",
+      "units": "r_g",
+      "description": "Modified Schwarzschild surface radius where escape becomes possible. Angle-dependent: R_esc(θ). Derived from Φ_binding(r,θ) = E_thermal + E_coulomb.",
+      "formula": "solve: E_thermal(T_plasma_core) + E_coulomb(q, n_density_surface) = Phi_binding(r, theta)",
+      "lean_reference": "QFD.Rift.ChargeEscape.modified_schwarzschild_surface"
+    },
+    {
+      "name": "escape_fraction",
+      "value": 0.5,
+      "role": "derived",
+      "units": "dimensionless",
+      "description": "Fraction of ejecta that escapes vs recaptured. Depends on rotation_alignment: opposing (≈0.7), aligned (≈0.1). Observable signature.",
+      "formula": "integrate: escape_probability(theta, Omega_1, Omega_2) * flux(theta) dtheta",
+      "lean_reference": "QFD.Rift.SpinSorting.escape_fraction_vs_alignment"
+    },
+    {
+      "name": "torque_net",
+      "value": 0.0,
+      "role": "derived",
+      "units": "N m",
+      "description": "Net torque on BH from rifts: τ = ∫ L_recaptured dm - ∫ L_escaped dm. Drives evolution toward Ω₁ = -Ω₂.",
+      "formula": "integral(L_ejecta * (1 - escape_probability)) - integral(L_ejecta * escape_probability)",
+      "lean_reference": "QFD.Rift.SpinSorting.net_torque_evolution"
+    },
+    {
+      "name": "dOmega_dt",
+      "value": 0.0,
+      "role": "derived",
+      "units": "rad s⁻²",
+      "description": "Rate of change of angular velocity due to rift torques. dΩ/dt = τ_net / I. Equilibrium when dΩ/dt → 0 at Ω₁ = -Ω₂.",
+      "formula": "torque_net / I_moment_BH1",
+      "lean_reference": "QFD.Rift.SpinSorting.spin_sorting_equilibrium"
+    }
+  ],
+
+  "constraints": [
+    {
+      "type": "inequality",
+      "expression": "rotation_alignment < 0",
+      "description": "CRITICAL: Opposing rotations required for stable rifts. Ω₁·Ω₂ < 0 ensures angular gradient cancellation.",
+      "lean_reference": "QFD.Rift.SpinSorting.opposing_rotations_stable"
+    },
+    {
+      "type": "inequality",
+      "expression": "T_plasma_core * k_boltzmann > abs(q_electron * k_coulomb * q_proton * n_density_surface^(1/3))",
+      "description": "Thermal energy must overcome Coulomb binding at density scale. kT > k_e q² n^(1/3) for plasma to form.",
+      "lean_reference": "QFD.Rift.ChargeEscape.thermal_dominance"
+    },
+    {
+      "type": "inequality",
+      "expression": "Omega_BH1_magnitude < 0.998",
+      "description": "Sub-extremal rotation: a < 1 (avoid naked singularity). In QFD: field rotation must be causally bounded.",
+      "lean_reference": "QFD.Rift.RotationDynamics.causal_rotation_bound"
+    },
+    {
+      "type": "equality",
+      "expression": "abs(Omega_BH1_magnitude - Omega_BH2_magnitude) < 0.1 * Omega_BH1_magnitude",
+      "description": "Near-equal rotation magnitudes at equilibrium. Spin-sorting drives |Ω₁| → |Ω₂| while maintaining opposite directions.",
+      "soft": true
+    },
+    {
+      "type": "relation",
+      "expression": "r_surface_modified > r_core_BH1",
+      "description": "Modified Schwarzschild surface must be outside core radius. Ensures rifts originate from well-defined φ(r,θ) region.",
+      "lean_reference": "QFD.Rift.ChargeEscape.surface_outside_core"
+    },
+    {
+      "type": "inequality",
+      "expression": "separation_D > 2 * r_surface_modified",
+      "description": "Binary separation must exceed sum of modified Schwarzschild radii. Avoids surface contact/merger.",
+      "soft": true
+    }
+  ],
+
+  "lean_theorem_dependencies": [
+    "QFD.Gravity.TimeRefraction.timePotential_eq",
+    "QFD.Soliton.Quantization.unique_vortex_charge",
+    "QFD.Rift.ChargeEscape.modified_schwarzschild_escape",
+    "QFD.Rift.RotationDynamics.angular_gradient_cancellation",
+    "QFD.Rift.SpinSorting.opposing_rotations_stable",
+    "QFD.Rift.SpinSorting.spin_sorting_equilibrium",
+    "QFD.Rift.SequentialEruptions.charge_accumulation"
+  ],
+
+  "observables": [
+    {
+      "name": "jet_luminosity",
+      "units": "erg s⁻¹",
+      "description": "Total electromagnetic luminosity from rift-ejected plasma. Observable in X-ray/gamma-ray.",
+      "formula": "escape_fraction * n_density_surface * T_plasma_core * k_boltzmann * c * Area(r_surface_modified)"
+    },
+    {
+      "name": "spin_precession_period",
+      "units": "s",
+      "description": "Timescale for BH spins to align toward opposing configuration. Observable via QPO modulation.",
+      "formula": "2*pi / abs(dOmega_dt)"
+    },
+    {
+      "name": "charge_to_mass_ratio",
+      "units": "C kg⁻¹",
+      "description": "Net charge-to-mass ratio of ejected material. Electrons escape first → negative Q/M.",
+      "formula": "(m_electron * q_electron - m_proton * q_proton * (1 - charge_separation_fraction)) / (m_electron + m_proton)"
+    }
+  ],
+
+  "datasets": [],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": []
+  },
+
+  "solver": {
+    "method": "scipy.integrate.solve_ivp",
+    "options": {
+      "integrator": "DOP853",
+      "rtol": 1.0e-8,
+      "atol": 1.0e-10,
+      "max_step": 0.1
+    }
+  },
+
+  "notes": [
+    "This schema defines parameters for QFD black hole rift dynamics with:",
+    "1. Charge physics: Coulomb repulsion, thermal pressure, electron-first escape",
+    "2. Rotation physics: φ(r,θ,φ) scalar field with angular gradients (NO spacetime dragging)",
+    "3. Spin-sorting: Opposing rotations Ω₁=-Ω₂ stabilized by differential escape rates",
+    "4. Sequential rifts: Charge accumulation from previous events drives new eruptions",
+    "",
+    "Key predictions:",
+    "- Binary BHs with rifts should have counter-rotating spins (observable via GW chirp)",
+    "- Escape fraction ~70% for opposing, ~10% for aligned (testable via jet luminosity)",
+    "- Electrons escape first → negatively charged jets (testable via EM spectrum)",
+    "",
+    "All physics references Lean 4 theorems in QFD/Rift/ module (to be implemented).",
+    "Pure QFD field dynamics - no GR frame-dragging or spacetime curvature."
+  ]
+}

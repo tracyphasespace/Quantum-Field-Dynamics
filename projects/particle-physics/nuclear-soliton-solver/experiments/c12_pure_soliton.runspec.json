@@ -1,0 +1,95 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "c12_pure_soliton_no_csym",
+  "description": "C-12 PURE SOLITON: Re-optimize with c_sym=0 (no Standard Model contamination). Find clean QFD parameter regime.",
+
+  "model": {
+    "id": "qfd.nuclear.binding.soliton",
+    "variant": "phase9_scf"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c_v2_base",
+      "value": 4.0,
+      "bounds": [2.5, 5.0],
+      "description": "Vacuum stiffness β - wider search without c_sym crushing"
+    },
+    {
+      "name": "nuclear.c_v2_iso",
+      "value": 0.02,
+      "bounds": [0.005, 0.04]
+    },
+    {
+      "name": "nuclear.c_v2_mass",
+      "value": 0.0,
+      "bounds": [-0.003, 0.003]
+    },
+    {
+      "name": "nuclear.c_v4_base",
+      "value": 8.0,
+      "bounds": [4.0, 15.0],
+      "description": "May need LOWER values without c_sym artificial pressure"
+    },
+    {
+      "name": "nuclear.c_v4_size",
+      "value": -0.10,
+      "bounds": [-0.20, -0.03]
+    },
+    {
+      "name": "nuclear.alpha_e_scale",
+      "value": 1.0,
+      "bounds": [0.7, 1.5]
+    },
+    {
+      "name": "nuclear.beta_e_scale",
+      "value": 0.5,
+      "bounds": [0.2, 0.9]
+    },
+    {
+      "name": "nuclear.c_sym",
+      "value": 0.0,
+      "bounds": [0.0, 0.0],
+      "frozen": true,
+      "description": "FROZEN AT ZERO: Pure soliton physics, no neutron mixing"
+    },
+    {
+      "name": "nuclear.kappa_rho",
+      "value": 0.03,
+      "bounds": [0.01, 0.08]
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "c12_only",
+      "source": "../data/ame2020_system_energies.csv",
+      "cuts": {
+        "target_isotopes": [
+          {"Z": 6, "A": 12, "name": "C-12"}
+        ]
+      }
+    }
+  ],
+
+  "objective": {
+    "type": "physics_based",
+    "loss_function": "energy_error + 0.5 * virial_error"
+  },
+
+  "solver": {
+    "method": "scipy.differential_evolution",
+    "options": {
+      "maxiter": 30,
+      "popsize": 12,
+      "workers": 1,
+      "seed": 42
+    },
+    "scf_solver_options": {
+      "grid_points": 32,
+      "iters_outer": 150,
+      "early_stop_vir": 0.18,
+      "device": "cuda"
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "exp_2025_nuclear_GOLDEN_PROBE_C12",
+  "description": "GOLDEN PROBE: C-12 ONLY. Test fundamental Hamiltonian configuration with corrected loss function and wider soliton parameter space.",
+
+  "model": {
+    "id": "qfd.nuclear.binding.soliton",
+    "variant": "phase9_scf",
+    "$ref": "../models/qfd_nuclear_soliton_phase9.model.json"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c_v2_base",
+      "value": 4.5,
+      "role": "coupling",
+      "bounds": [3.0, 6.0],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Baseline cohesion strength (Soliton Range)"
+    },
+    {
+      "name": "nuclear.c_v2_iso",
+      "value": 0.027035,
+      "role": "coupling",
+      "bounds": [0.02163, 0.03244],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Isospin-dependent cohesion"
+    },
+    {
+      "name": "nuclear.c_v2_mass",
+      "value": -0.000205,
+      "role": "coupling",
+      "bounds": [-0.00041, 0.0],
+      "units": "1/A",
+      "frozen": false,
+      "description": "Mass-dependent compounding"
+    },
+    {
+      "name": "nuclear.c_v4_base",
+      "value": 12.5,
+      "role": "coupling",
+      "bounds": [5.0, 20.0],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Baseline quartic repulsion (Soliton Range)"
+    },
+    {
+      "name": "nuclear.c_v4_size",
+      "value": -0.085018,
+      "role": "coupling",
+      "bounds": [-0.102, -0.068],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Size-dependent quartic"
+    },
+    {
+      "name": "nuclear.alpha_e_scale",
+      "value": 1.007419,
+      "role": "coupling",
+      "bounds": [0.957, 1.058],
+      "units": "dimensionless",
+      "frozen": false,
+      "description": "Electron cohesion scale factor"
+    },
+    {
+      "name": "nuclear.beta_e_scale",
+      "value": 0.504312,
+      "role": "coupling",
+      "bounds": [0.454, 0.555],
+      "units": "dimensionless",
+      "frozen": false,
+      "description": "Electron quartic scale factor"
+    },
+    {
+      "name": "nuclear.c_sym",
+      "value": 25.0,
+      "role": "coupling",
+      "bounds": [22.5, 27.5],
+      "units": "MeV",
+      "frozen": false,
+      "description": "QFD charge asymmetry coefficient"
+    },
+    {
+      "name": "nuclear.kappa_rho",
+      "value": 0.029816,
+      "role": "coupling",
+      "bounds": [0.02385, 0.03578],
+      "units": "dimensionless",
+      "frozen": false,
+      "description": "Density-dependent coupling"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "ame2020_golden_probe",
+      "source": "../data/ame2020_system_energies.csv",
+      "columns": {
+        "A": "A",
+        "Z": "Z",
+        "target": "E_exp_MeV",
+        "sigma": "E_uncertainty_MeV"
+      },
+      "cuts": {
+        "target_isotopes": [
+          {"Z": 6, "A": 12, "name": "C-12"}
+        ]
+      },
+      "description": "GOLDEN PROBE: C-12 only. If this doesn't converge, the Hamiltonian is wrong."
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared_dynamic_virial",
+    "loss_function": "L = Σ(E_QFD - E_exp)²/E_exp² + 0.5 * (virial/E_model)²"
+  },
+
+  "solver": {
+    "method": "scipy.differential_evolution",
+    "options": {
+      "maxiter": 100,
+      "popsize": 15,
+      "workers": 1,
+      "seed": 42,
+      "atol": 0.01,
+      "tol": 0.01,
+      "disp": true
+    }
+  },
+
+  "provenance": {
+    "baseline_parameters": "trial32_universal",
+    "calibration_date": "2025-12-31",
+    "author": "Tracy McPherson (assisted by Gemini)",
+    "repository": "QFD_SpectralGap",
+    "notes": "GOLDEN PROBE run to validate the fundamental physics of the Hamiltonian on C-12."
+  },
+
+  "metadata": {
+    "created": "2025-12-31T20:00:00Z",
+    "version": "1.1-golden-probe",
+    "tags": ["golden_probe", "C-12", "hamiltonian_validation"]
+  }
+}

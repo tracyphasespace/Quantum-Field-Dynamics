@@ -1,0 +1,15 @@
+✓ Saved: three_regime_backbones.png
+
+================================================================================
+BACKBONE VISUALIZATION SUMMARY
+================================================================================
+
+Regime Parameters:
+  charge_poor         : c₁=-0.150, c₂=+0.413
+  charge_nominal      : c₁=+0.557, c₂=+0.312
+  charge_rich         : c₁=+1.159, c₂=+0.229
+
+Physical Interpretation:
+  charge_poor (blue):    c₁ < 0  → Inverted surface tension (neutron-rich)
+  charge_nominal (green): c₁ ≈ 0.5 → Standard configuration (stability valley)
+  charge_rich (red):     c₁ > 1  → Enhanced curvature (proton-rich)

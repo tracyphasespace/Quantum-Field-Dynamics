@@ -1,0 +1,188 @@
+======================================================================
+TRIAL 32 VALIDATION - FULL SOLVER RESOLUTION
+======================================================================
+
+Settings: 48 grid points, 360 iterations
+Acceptance: |error| < 10%, virial < 0.18
+Loaded 3558 isotopes from AME2020
+
+======================================================================
+LIGHT REGION
+======================================================================
+
+  He-4 (Z=2, A=4):
+    E_exp = 3728.40 MeV
+    E_QFD = 3732.73 MeV
+    Error = +0.12%
+    Virial = 0.024 ✓
+    Status: ✓
+
+  C-12 (Z=6, A=12):
+    E_exp = 11177.93 MeV
+    E_QFD = 11197.09 MeV
+    Error = +0.17%
+    Virial = 0.135 ✓
+    Status: ✓
+
+  O-16 (Z=8, A=16):
+    E_exp = 14899.17 MeV
+    E_QFD = 14968.14 MeV
+    Error = +0.46%
+    Virial = 0.114 ✓
+    Status: ✓
+
+  Si-28 (Z=14, A=28):
+    E_exp = 26060.34 MeV
+    E_QFD = 26100.99 MeV
+    Error = +0.16%
+    Virial = 0.057 ✓
+    Status: ✓
+
+  Ca-40 (Z=20, A=40):
+    E_exp = 37224.92 MeV
+    E_QFD = 36898.01 MeV
+    Error = -0.88%
+    Virial = 0.133 ✓
+    Status: ✓
+
+  Ca-48 (Z=20, A=48):
+    E_exp = 44667.49 MeV
+    E_QFD = 43741.24 MeV
+    Error = -2.07%
+    Virial = 0.031 ✓
+    Status: ✓
+
+  Fe-56 (Z=26, A=56):
+    E_exp = 52103.06 MeV
+    E_QFD = 50688.23 MeV
+    Error = -2.72%
+    Virial = 0.083 ✓
+    Status: ✓
+
+  LIGHT SUMMARY:
+    Converged: 7/7
+    Mean error: -0.68%
+    RMS error: 1.35%
+    Max |error|: 2.72%
+    Mean virial: 0.082
+    Max virial: 0.135
+
+======================================================================
+MEDIUM REGION
+======================================================================
+
+  Ni-62 (Z=28, A=62):
+    E_exp = 57685.89 MeV
+    E_QFD = 55541.11 MeV
+    Error = -3.72%
+    Virial = 0.135 ✓
+    Status: ✓
+
+  Cu-63 (Z=29, A=63):
+    E_exp = 58618.55 MeV
+    E_QFD = 56354.26 MeV
+    Error = -3.86%
+    Virial = 0.077 ✓
+    Status: ✓
+
+  Zn-64 (Z=30, A=64):
+    E_exp = 59549.62 MeV
+    E_QFD = 57165.49 MeV
+    Error = -4.00%
+    Virial = 0.057 ✓
+    Status: ✓
+
+  Ag-107 (Z=47, A=107):
+    E_exp = 99581.46 MeV
+    E_QFD = 91057.90 MeV
+    Error = -8.56%
+    Virial = 0.084 ✓
+    Status: ✓
+
+  Sn-120 (Z=50, A=120):
+    E_exp = 111688.19 MeV
+    E_QFD = 102052.99 MeV
+    Error = -8.63%
+    Virial = 0.101 ✓
+    Status: ✓
+
+  MEDIUM SUMMARY:
+    Converged: 5/5
+    Mean error: -5.75%
+    RMS error: 6.20%
+    Max |error|: 8.63%
+    Mean virial: 0.091
+    Max virial: 0.135
+
+======================================================================
+HEAVY REGION
+======================================================================
+
+  Au-197 (Z=79, A=197):
+    E_exp = 183473.20 MeV
+    E_QFD = 167426.43 MeV
+    Error = -8.75%
+    Virial = 0.064 ✓
+    Status: ✓
+
+  Hg-200 (Z=80, A=200):
+    E_exp = 186269.32 MeV
+    E_QFD = 170110.72 MeV
+    Error = -8.67%
+    Virial = 0.057 ✓
+    Status: ✓
+
+  Pb-206 (Z=82, A=206):
+    E_exp = 191864.00 MeV
+    E_QFD = 175511.57 MeV
+    Error = -8.52%
+    Virial = 0.021 ✓
+    Status: ✓
+
+  Pb-207 (Z=82, A=207):
+    E_exp = 192796.83 MeV
+    E_QFD = 176493.20 MeV
+    Error = -8.46%
+    Virial = 0.014 ✓
+    Status: ✓
+
+  Pb-208 (Z=82, A=208):
+    E_exp = 193729.02 MeV
+    E_QFD = 177466.56 MeV
+    Error = -8.39%
+    Virial = 0.098 ✓
+    Status: ✓
+
+  U-238 (Z=92, A=238):
+    E_exp = 221742.90 MeV
+    E_QFD = 204642.99 MeV
+    Error = -7.71%
+    Virial = 0.014 ✓
+    Status: ✓
+
+  HEAVY SUMMARY:
+    Converged: 6/6
+    Mean error: -8.42%
+    RMS error: 8.42%
+    Max |error|: 8.75%
+    Mean virial: 0.045
+    Max virial: 0.098
+
+======================================================================
+OVERALL SUMMARY
+======================================================================
+
+LIGHT (7/7 converged):
+  Mean error: -0.68%
+  Error range: -2.72% to +0.46%
+
+MEDIUM (5/5 converged):
+  Mean error: -5.75%
+  Error range: -8.63% to -3.72%
+
+HEAVY (6/6 converged):
+  Mean error: -8.42%
+  Error range: -8.75% to -7.71%
+
+
+Results saved to: validation_trial32_full.json

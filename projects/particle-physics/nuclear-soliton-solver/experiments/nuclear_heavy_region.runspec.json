@@ -1,0 +1,247 @@
+{
+  "schema_version": "v0.1",
+  "experiment_id": "exp_2025_nuclear_heavy_region_v1",
+  "description": "Regional calibration for heavy isotopes (A ≥ 120). Target: reduce systematic -8.4% underbinding to -2.0% by optimizing cohesion/repulsion balance.",
+
+  "model": {
+    "id": "qfd.nuclear.binding.soliton",
+    "variant": "phase9_scf",
+    "$ref": "../models/qfd_nuclear_soliton_phase9.model.json"
+  },
+
+  "parameters": [
+    {
+      "name": "nuclear.c_v2_base",
+      "value": 2.201711,
+      "role": "coupling",
+      "bounds": [2.312, 2.642],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Baseline cohesion strength (INCREASED +5% to +20% for heavy nuclei)"
+    },
+    {
+      "name": "nuclear.c_v2_iso",
+      "value": 0.027035,
+      "role": "coupling",
+      "bounds": [0.02163, 0.03244],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Isospin-dependent cohesion"
+    },
+    {
+      "name": "nuclear.c_v2_mass",
+      "value": -0.000205,
+      "role": "coupling",
+      "bounds": [-0.00041, 0.0],
+      "units": "1/A",
+      "frozen": false,
+      "description": "Mass-dependent compounding (Trial 32: ≈0 optimal)"
+    },
+    {
+      "name": "nuclear.c_v4_base",
+      "value": 5.282364,
+      "role": "coupling",
+      "bounds": [4.490, 5.282],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Baseline quartic repulsion (DECREASED -15% to 0% for heavy nuclei)"
+    },
+    {
+      "name": "nuclear.c_v4_size",
+      "value": -0.085018,
+      "role": "coupling",
+      "bounds": [-0.102, -0.068],
+      "units": "MeV",
+      "frozen": false,
+      "description": "Size-dependent quartic"
+    },
+    {
+      "name": "nuclear.alpha_e_scale",
+      "value": 1.007419,
+      "role": "coupling",
+      "bounds": [0.957, 1.058],
+      "units": "dimensionless",
+      "frozen": false,
+      "description": "Electron cohesion scale factor"
+    },
+    {
+      "name": "nuclear.beta_e_scale",
+      "value": 0.504312,
+      "role": "coupling",
+      "bounds": [0.454, 0.555],
+      "units": "dimensionless",
+      "frozen": false,
+      "description": "Electron quartic scale factor"
+    },
+    {
+      "name": "nuclear.c_sym",
+      "value": 25.0,
+      "role": "coupling",
+      "bounds": [22.5, 27.5],
+      "units": "MeV",
+      "frozen": false,
+      "description": "QFD charge asymmetry coefficient"
+    },
+    {
+      "name": "nuclear.kappa_rho",
+      "value": 0.029816,
+      "role": "coupling",
+      "bounds": [0.02385, 0.03578],
+      "units": "dimensionless",
+      "frozen": false,
+      "description": "Density-dependent coupling"
+    },
+    {
+      "name": "solver.lambda_R2",
+      "value": 0.0003,
+      "role": "nuisance",
+      "bounds": null,
+      "units": "dimensionless",
+      "frozen": true,
+      "description": "Rotor kinetic energy (FROZEN)"
+    },
+    {
+      "name": "solver.lambda_R3",
+      "value": 0.001,
+      "role": "nuisance",
+      "bounds": null,
+      "units": "dimensionless",
+      "frozen": true,
+      "description": "Rotor constraint (FROZEN)"
+    },
+    {
+      "name": "solver.B_target",
+      "value": 0.01,
+      "role": "nuisance",
+      "bounds": null,
+      "units": "dimensionless",
+      "frozen": true,
+      "description": "Rotor field target (FROZEN)"
+    }
+  ],
+
+  "datasets": [
+    {
+      "id": "ame2020_heavy",
+      "source": "../data/ame2020_system_energies.csv",
+      "columns": {
+        "A": "A",
+        "Z": "Z",
+        "target": "E_exp_MeV",
+        "sigma": "E_uncertainty_MeV"
+      },
+      "cuts": {
+        "A_min": 120,
+        "A_max": 250,
+        "magic_numbers_priority": true,
+        "target_isotopes": [
+          {"Z": 50, "A": 120, "name": "Sn-120"},
+          {"Z": 79, "A": 197, "name": "Au-197"},
+          {"Z": 80, "A": 200, "name": "Hg-200"},
+          {"Z": 82, "A": 206, "name": "Pb-206"},
+          {"Z": 82, "A": 207, "name": "Pb-207"},
+          {"Z": 82, "A": 208, "name": "Pb-208"},
+          {"Z": 92, "A": 235, "name": "U-235"},
+          {"Z": 92, "A": 238, "name": "U-238"}
+        ]
+      },
+      "description": "Heavy isotopes from AME2020. Focus on Z=50,82,92 magic numbers and stability valley representatives."
+    }
+  ],
+
+  "objective": {
+    "type": "chi_squared",
+    "components": [
+      {
+        "dataset_id": "ame2020_heavy",
+        "observable_adapter": "qfd.adapters.nuclear.predict_total_energy_soliton",
+        "weight": 1.0,
+        "active": true,
+        "description": "Primary: match experimental total energies"
+      }
+    ],
+    "regularization": [
+      {
+        "type": "virial_hinge",
+        "threshold": 0.18,
+        "weight": 4.0,
+        "description": "Virial constraint: enforce physical field configurations (2T + V ≈ 0)"
+      }
+    ],
+    "loss_function": "L = Σ(E_QFD - E_exp)²/E_exp² + ρ_V × max(0, |virial| - 0.18)²",
+    "notes": "Virial hinge prevents 'good numbers / bad physics' by requiring proper field convergence."
+  },
+
+  "solver": {
+    "method": "scipy.differential_evolution",
+    "options": {
+      "maxiter": 1,
+      "popsize": 8,
+      "workers": 1,
+      "seed": 42,
+      "atol": 0.01,
+      "tol": 0.01,
+      "disp": true,
+      "init": "latinhypercube",
+      "strategy": "best1bin",
+      "mutation": [0.5, 1.0],
+      "recombination": 0.7
+    },
+    "scf_solver_options": {
+      "grid_points": 48,
+      "iters_outer": 360,
+      "lr_psi": 0.01,
+      "lr_B": 0.01,
+      "early_stop_vir": 0.18,
+      "device": "cuda",
+      "backend": "torch"
+    },
+    "fast_mode_search": {
+      "enabled": true,
+      "grid_points": 32,
+      "iters_outer": 150,
+      "description": "Use reduced resolution during optimization search for speed"
+    },
+    "final_validation": {
+      "grid_points": 48,
+      "iters_outer": 360,
+      "description": "Full resolution verification of best parameters"
+    }
+  },
+
+  "provenance": {
+    "baseline_parameters": "trial32_universal (qfd_research_suite/NuclideModel October 2025)",
+    "calibration_date": "2025-12-29",
+    "author": "Tracy McPherson",
+    "repository": "QFD_SpectralGap",
+    "branch": "main",
+    "working_directory": "projects/particle-physics/nuclear-soliton-solver",
+    "git": {
+      "commit": null,
+      "dirty": null
+    },
+    "notes": "First RunSpec-compliant regional calibration run. Migrated from ad-hoc Python scripts to schema v0 system."
+  },
+
+  "expected_outcome": {
+    "target_error_reduction": "From -8.42% (Trial 32) to -2.0% (optimized)",
+    "predicted_parameter_changes": {
+      "c_v2_base": "+10% to +15% (stronger cohesion)",
+      "c_v4_base": "-5% to -10% (weaker repulsion)",
+      "c_sym": "±5% (fine-tuning)",
+      "others": "small adjustments"
+    },
+    "validation_plan": "Test on isotopes NOT in calibration set (e.g., Pb-204, Au-196, U-236) to verify generalization"
+  },
+
+  "metadata": {
+    "created": "2025-12-29T00:00:00Z",
+    "version": "1.0",
+    "tags": ["regional_calibration", "heavy_isotopes", "phase9", "schema_v0"],
+    "references": [
+      "Trial 32 analysis: docs/FINDINGS.md",
+      "Physics model: docs/PHYSICS_MODEL.md",
+      "AME2020: M. Wang et al., Chinese Physics C 45 (2021)"
+    ]
+  }
+}
