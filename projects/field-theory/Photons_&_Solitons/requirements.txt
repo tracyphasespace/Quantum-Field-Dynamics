@@ -4,3 +4,4 @@
 numpy>=1.24.0   # Numerical integration and array operations
 scipy>=1.10.0   # Scientific functions (integrate.dblquad)
 matplotlib>=3.7.0  # Plotting (optional)
+pandas>=2.0.0      # Data manipulation and analysis
