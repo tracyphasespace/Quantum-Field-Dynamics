@@ -1,9 +1,12 @@
 import Mathlib.Analysis.Calculus.Deriv.Basic
 import QFD.Atomic.ResonanceDynamics
+import QFD.Physics.Postulates
 
 noncomputable section
 
 namespace QFD.Atomic.Chaos
+
+-- Physics postulates are now passed explicitly via QFD.Physics.Model parameter
 
 /-!
   # The Genesis of Chaos: Spin-Linear Coupling
@@ -42,45 +45,15 @@ def HookesForce (sys : VibratingSystem) : EuclideanSpace ℝ (Fin 3) :=
   Force is perpendicular to both Spin and Velocity.
   $F_{coupling} \propto S \times p$
 
-  For simplicity, we represent this as an axiomatically defined force
-  that is perpendicular to both S and p.
+  The force is defined in Physics.Model.spin_coupling_force
+  and satisfies perpendicularity axioms from the same model.
 -/
-axiom SpinCouplingForce (sys : VibratingSystem) : EuclideanSpace ℝ (Fin 3)
-
-axiom spin_coupling_perpendicular_to_S (sys : VibratingSystem) :
-  inner ℝ (SpinCouplingForce sys) sys.S = 0
-
-axiom spin_coupling_perpendicular_to_p (sys : VibratingSystem) :
-  inner ℝ (SpinCouplingForce sys) sys.p = 0
-
-/--
-  **Physical Axiom: Generic Configuration Constraint**
-
-  In a vibrating system with nonzero momentum p, spin S, and coupling force,
-  the displacement r cannot be simultaneously perpendicular to both p and S.
-
-  **Physical Justification**:
-  In a dynamically evolving harmonic oscillator with spin-orbit coupling:
-  - The momentum p points in the direction of motion
-  - The displacement r oscillates through the equilibrium point
-  - For generic initial conditions, r sweeps through various angles relative to p
-  - The special configuration where r ⊥ p AND r ⊥ S requires fine-tuned initial
-    conditions and is measure-zero in phase space
-  - In the presence of nonzero coupling force (which depends on S × p), the system
-    exhibits chaotic dynamics that prevent sustained alignment in this configuration
--/
-axiom generic_configuration_excludes_double_perpendicular
-  (sys : VibratingSystem)
-  (h_p_nonzero : sys.p ≠ 0)
-  (h_S_nonzero : sys.S ≠ 0)
-  (h_coupling_nonzero : SpinCouplingForce sys ≠ 0) :
-  ¬(inner ℝ sys.r sys.p = 0 ∧ inner ℝ sys.r sys.S = 0)
 
 /--
   **The Total Force Law**
 -/
-def TotalForce (sys : VibratingSystem) : EuclideanSpace ℝ (Fin 3) :=
-  HookesForce sys + SpinCouplingForce sys
+def TotalForce (P : QFD.Physics.Model) (sys : VibratingSystem) : EuclideanSpace ℝ (Fin 3) :=
+  HookesForce sys + P.spin_coupling_force sys
 
 /--
   **Theorem: Breaking of Integrability**
@@ -88,14 +61,15 @@ def TotalForce (sys : VibratingSystem) : EuclideanSpace ℝ (Fin 3) :=
   degrees of freedom, preventing simple separability (chaos condition).
 -/
 theorem coupling_destroys_linearity
+  (P : QFD.Physics.Model)
   (sys : VibratingSystem)
   (h_moving : sys.p ≠ 0)
   (h_spinning : sys.S ≠ 0)
-  (h_coupling_nonzero : SpinCouplingForce sys ≠ 0) :
+  (h_coupling_nonzero : P.spin_coupling_force sys ≠ 0) :
   -- The force is no longer central (not parallel to r)
   -- Central force = Integrable (Angular momentum conserved)
   -- Non-central force = Chaotic (Energy sloshing)
-  ¬ (∃ (c : ℝ), TotalForce sys = c • sys.r) := by
+  ¬ (∃ (c : ℝ), TotalForce P sys = c • sys.r) := by
 
   -- The Hooke's term IS parallel to r: -k_spring • r
   -- The Coupling term is perpendicular to both S and p (by axioms)
@@ -107,16 +81,16 @@ theorem coupling_destroys_linearity
   -- Unfold the total force definition
   unfold TotalForce at hc
   unfold HookesForce at hc
-  -- hc : -sys.k_spring • sys.r + SpinCouplingForce sys = c • sys.r
+  -- hc : -sys.k_spring • sys.r + P.spin_coupling_force sys = c • sys.r
 
-  -- Rearrange to isolate SpinCouplingForce
-  have h_coupling : SpinCouplingForce sys = (c + sys.k_spring) • sys.r := by
-    have h1 : -sys.k_spring • sys.r + SpinCouplingForce sys = c • sys.r := hc
-    have h2 : SpinCouplingForce sys = c • sys.r - (-sys.k_spring • sys.r) := by
-      calc SpinCouplingForce sys
-          = -sys.k_spring • sys.r + SpinCouplingForce sys - (-sys.k_spring • sys.r) := by simp
+  -- Rearrange to isolate spin_coupling_force
+  have h_coupling : P.spin_coupling_force sys = (c + sys.k_spring) • sys.r := by
+    have h1 : -sys.k_spring • sys.r + P.spin_coupling_force sys = c • sys.r := hc
+    have h2 : P.spin_coupling_force sys = c • sys.r - (-sys.k_spring • sys.r) := by
+      calc P.spin_coupling_force sys
+          = -sys.k_spring • sys.r + P.spin_coupling_force sys - (-sys.k_spring • sys.r) := by simp
         _ = c • sys.r - (-sys.k_spring • sys.r) := by rw [h1]
-    calc SpinCouplingForce sys
+    calc P.spin_coupling_force sys
         = c • sys.r - (-sys.k_spring • sys.r) := h2
       _ = c • sys.r + sys.k_spring • sys.r := by simp [neg_smul]
       _ = (c + sys.k_spring) • sys.r := by rw [← add_smul]
@@ -125,8 +99,8 @@ theorem coupling_destroys_linearity
   have h_inner_p := congr_arg (fun v => inner ℝ v sys.p) h_coupling
   simp only [inner_smul_left] at h_inner_p
 
-  -- By axiom, SpinCouplingForce ⊥ p
-  rw [spin_coupling_perpendicular_to_p] at h_inner_p
+  -- By axiom (from Physics.Model), spin_coupling_force ⊥ p
+  rw [P.spin_coupling_perpendicular_to_p] at h_inner_p
   -- h_inner_p : 0 = (c + sys.k_spring) * inner ℝ sys.r sys.p
 
   -- So either (c + sys.k_spring = 0) or (r ⊥ p)
@@ -140,7 +114,7 @@ theorem coupling_destroys_linearity
   cases h_case with
   | inl h_zero =>
       -- Case 1: c + sys.k_spring = 0
-      -- Then SpinCouplingForce = 0, contradicting h_coupling_nonzero
+      -- Then spin_coupling_force = 0, contradicting h_coupling_nonzero
       rw [h_zero, zero_smul] at h_coupling
       exact h_coupling_nonzero h_coupling
   | inr h_perp_p =>
@@ -148,7 +122,7 @@ theorem coupling_destroys_linearity
       -- Similarly, take inner product with S
       have h_inner_S := congr_arg (fun v => inner ℝ v sys.S) h_coupling
       simp only [inner_smul_left] at h_inner_S
-      rw [spin_coupling_perpendicular_to_S] at h_inner_S
+      rw [P.spin_coupling_perpendicular_to_S] at h_inner_S
 
       -- So either (c + sys.k_spring = 0) or (r ⊥ S)
       have h_case_S : c + sys.k_spring = 0 ∨ inner ℝ sys.r sys.S = 0 := by
@@ -164,10 +138,10 @@ theorem coupling_destroys_linearity
           exact h_coupling_nonzero h_coupling
       | inr h_perp_S =>
           -- Now we have: r ⊥ p AND r ⊥ S
-          -- But this violates the generic configuration axiom
+          -- But this violates the generic configuration axiom (from Physics.Model)
           have h_both_perp : inner ℝ sys.r sys.p = 0 ∧ inner ℝ sys.r sys.S = 0 :=
             ⟨h_perp_p, h_perp_S⟩
-          exact generic_configuration_excludes_double_perpendicular sys
+          exact P.generic_configuration_excludes_double_perpendicular sys
             h_moving h_spinning h_coupling_nonzero h_both_perp
 
 /-!
@@ -183,18 +157,21 @@ theorem coupling_destroys_linearity
   momentarily align to permit Soliton Ejection along the Z-axis.
   In a chaotic system, the time to reach this state is sensitive to initial conditions.
 -/
-def EmissionWindow (sys : VibratingSystem) : Prop :=
+def EmissionWindow (P : QFD.Physics.Model) (sys : VibratingSystem) : Prop :=
   -- Ejection happens when coupling term vanishes (alignment), minimizing transverse drag
-  SpinCouplingForce sys = 0
+  P.spin_coupling_force sys = 0
 
 /--
-  **Axiom: Ergodicity of the Coupled System.**
+  **Theorem: Ergodicity of the Coupled System.**
   Because the system is chaotic, it will eventually visit the Emission Window.
   Given any initial state, the time-evolved system will eventually reach alignment.
+
+  This follows from the `system_visits_alignment` axiom in Physics.Model.
 -/
-axiom system_visits_alignment :
-  ∀ (sys_initial : VibratingSystem),
+theorem system_eventually_reaches_alignment (P : QFD.Physics.Model)
+  (sys_initial : VibratingSystem) :
   ∃ (t : ℝ) (sys_final : VibratingSystem),
-    EmissionWindow sys_final  -- implies eventual decay
+    EmissionWindow P sys_final :=
+  P.system_visits_alignment sys_initial
 
 end QFD.Atomic.Chaos

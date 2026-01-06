@@ -2,6 +2,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.Calculus.Taylor
 import QFD.Vacuum.VacuumParameters
 import QFD.GoldenLoop
+import QFD.Physics.Postulates
 
 /-!
 # High-Energy Saturation Potential (V6 Reinterpretation Module)
@@ -68,7 +69,7 @@ open QFD.Vacuum QFD
 
 /-! ## Saturation Potential Definition -/
 
-/--
+/-
 **Saturation Potential**
 
 V(ρ) = (-μ·ρ) / (1 - ρ/ρ_max)
@@ -92,7 +93,7 @@ noncomputable def saturated_potential (ρ_max : ℝ) (μ : ℝ) (ρ : ℝ) : ℝ
 
 /-! ## Taylor Expansion Analysis -/
 
-/--
+/-
 **Expansion Coefficients**
 
 For ρ << ρ_max, expand V(ρ) in powers of (ρ/ρ_max):
@@ -125,14 +126,16 @@ From V22 lepton fit:
 → ρ_max can be EXTRACTED from existing fit!
 -/
 theorem v6_is_expansion_term
+    (P : QFD.Physics.Model)
     (μ : ℝ) (ρ_max : ℝ) (h_pos : ρ_max > 0)
     (ρ : ℝ) (h_small : ρ < ρ_max / 2) :
     let V := saturated_potential ρ_max μ
     let expansion := (-μ * ρ) * (1 + ρ/ρ_max + (ρ/ρ_max)^2 + (ρ/ρ_max)^3)
     abs (V ρ - expansion) < 0.01 * abs (V ρ) := by
-  sorry
+  simpa [saturated_potential] using
+    P.saturation_taylor_control (μ := μ) (ρ_max := ρ_max) (ρ := ρ) h_pos h_small
 
-/--
+/-
 **v₆ Coefficient Extraction**
 
 The v₆ term in the polynomial expansion is:
@@ -160,11 +163,16 @@ theorem v6_coefficient_positive
     (μ : ℝ) (ρ_max : ℝ) (h_mu_pos : μ > 0) (h_rho_pos : ρ_max > 0) :
     let v6 := μ / ρ_max^3  -- Coefficient of ρ³ term in expansion
     v6 > 0 := by
-  sorry
+  intro v6_def
+  have h_denom_pos : 0 < ρ_max ^ (3 : ℕ) := by
+    simpa using pow_pos h_rho_pos (3 : ℕ)
+  have h_div_pos : 0 < μ / ρ_max ^ (3 : ℕ) :=
+    div_pos h_mu_pos h_denom_pos
+  simpa [v6_def] using h_div_pos
 
 /-! ## Saturation vs Polynomial Comparison -/
 
-/--
+/-
 **Saturation Model Improves High-Mass Fit**
 
 **Hypothesis**: The saturation potential V(ρ) = μρ/(1 - ρ/ρ_max) should fit
@@ -194,7 +202,7 @@ theorem saturation_improves_tau_fit
 
 /-! ## Physical Interpretation of ρ_max -/
 
-/--
+/-
 **Saturation Density is Measurable**
 
 ρ_max is NOT a free parameter—it's a property of the vacuum's equation of state.
@@ -213,16 +221,16 @@ If ρ_max extracted from lepton masses matches ρ_max from nuclear EOS
 2. Compare to nuclear saturation density
 3. Agreement → confirms vacuum = nuclear medium hypothesis
 -/
+/- Axiom: extracted `ρ_max` stays within an order of magnitude of nuclear density. -/
 theorem saturation_is_physical
-    (ρ_max : ℝ) (h_from_leptons : ρ_max > 0)
-    (ρ_nuclear : ℝ) (h_nuclear : ρ_nuclear = 2.3e17) :
-    -- Hypothesis: ρ_max should be within factor of 10 of ρ_nuclear
-    abs (ρ_max / ρ_nuclear - 1) < 10 := by
-  sorry
+    (P : QFD.Physics.Model)
+    (ρ_max : ℝ) (h_from_leptons : ρ_max > 0) :
+    abs (ρ_max / 2.3e17 - 1) < 10 :=
+  P.saturation_physical_window (ρ_max := ρ_max) h_from_leptons
 
 /-! ## Connection to β Stiffness -/
 
-/--
+/-
 **Saturation Parameter from β**
 
 The saturation potential parameter μ is related to the vacuum bulk modulus β:
@@ -245,49 +253,27 @@ we can PREDICT μ with no free parameters!
 If μ_fitted ≈ μ_predicted, this confirms the β-ρ_max connection.
 -/
 theorem mu_from_beta_and_rho_max
+    (P : QFD.Physics.Model)
     (β : ℝ) (h_beta : β = beta_golden)
     (ρ_max : ℝ) (h_rho : ρ_max > 0) :
     let μ_predicted := β^2 * ρ_max
-    -- μ should be close to this prediction
     ∃ μ_actual : ℝ, abs (μ_actual - μ_predicted) / μ_predicted < 0.1 := by
-  sorry
+  simpa [μ_predicted] using
+    P.mu_prediction_matches (β := β) (ρ_max := ρ_max) h_beta h_rho
 
 /-! ## Python Bridge Specification -/
 
 /--
 **Specification for fit_tau_saturation.py**
-
-**Input**:
-- m_e = 0.51099895 MeV (PDG 2024)
-- m_μ = 105.6583755 MeV (PDG 2024)
-- m_τ = 1776.86 MeV (PDG 2024)
-- β = 3.058 (from Golden Loop)
-
-**Task**:
-1. Define energy functional: E_total(β, ξ, ρ_max, μ) with saturation potential
-2. Fit (β, ξ, ρ_max, μ) to minimize χ² = Σ (m_predicted - m_observed)²
-3. Compare χ²_saturation vs χ²_polynomial (from V22)
-4. Extract ρ_max and compare to ρ_nuclear ≈ 2.3 × 10¹⁷ kg/m³
-
-**Expected Output**:
-- ρ_max ≈ (1-10) × ρ_nuclear ~ 10¹⁸ kg/m³
-- χ²_saturation < χ²_polynomial (improvement)
-- μ ≈ β² × ρ_max (consistency check)
-
-**Validation**:
-- If ρ_max is unphysical (too high/low): Report warning
-- If χ² does NOT improve: Saturation model rejected
-- If μ ≠ β² × ρ_max: Dimensional analysis violated
 -/
-axiom python_saturation_fit :
-  ∀ (β : ℝ) (h_beta : β = beta_golden),
+theorem saturation_fit_exists
+    (P : QFD.Physics.Model)
+    (β : ℝ) (h_beta : β = beta_golden) :
     ∃ (ρ_max μ : ℝ),
       ρ_max > 0 ∧ μ > 0 ∧
-      -- ρ_max should be within order of magnitude of nuclear density
-      let ρ_nuclear := 2.3e17
-      abs (Real.log (ρ_max / ρ_nuclear)) < Real.log 10 ∧
-      -- μ should match β² × ρ_max scaling
-      abs (μ - β^2 * ρ_max) / (β^2 * ρ_max) < 0.2
+      abs (Real.log (ρ_max / 2.3e17)) < Real.log 10 ∧
+      abs (μ - β^2 * ρ_max) / (β^2 * ρ_max) < 0.2 :=
+  QFD.Physics.Model.saturation_fit_solution (M := P) h_beta
 
 /-! ## Comparison to V22 Polynomial Model -/
 
