@@ -188,7 +188,7 @@ def golden_loop_verify(beta: float = BETA_VACUUM) -> dict:
         'K_actual': K,
         'K_expected': K_expected,
         'K_error_pct': abs(K - K_expected) / K_expected * 100,
-        'valid': abs(lhs - rhs) < 0.01,
+        'valid': abs(lhs - rhs) / lhs < 0.001,  # 0.1% tolerance
     }
 
 
