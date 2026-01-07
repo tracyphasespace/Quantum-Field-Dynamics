@@ -8,27 +8,23 @@ hundreds of files.
 
 ## Snapshot Metrics
 
-| Scope | Lean files | Theorems / Lemmas | Axioms | Sorrys |
-|-------|------------|-------------------|--------|--------|
-| Entire repo (incl. subdirs) | 180 | ≈ 993 | 134 | 21 |
-| Hydrogen sector | 10 | 71 | 9 | 0 |
-| Lepton sector | 18 | 115 | 13 | 0 (all proofs now reference named axioms) |
-| Vacuum + Gravity | 12 | 44 | 1 | 0 |
-| Cosmology sector | 14 | 105 | 4 | 0 |
-| Nuclear sector | 22 | 198 | 8 | 2 |
-| Soliton sector | 9 | 80 | 61 | 12 |
-| Atomic sector | 3 | 5 | 15 | 0 |
+| Scope | Lean files | Theorems / Lemmas | Explicit `axiom`s | Sorrys |
+|-------|------------|-------------------|-------------------|--------|
+| Entire repo (incl. subdirs) | 204 | 1082 | 5 | 8 |
 
-*(Counts obtained via `rg` scans across the repo; the "repo" row includes everything.)*
+*(Counts obtained via `rg` scans across the repo on 2026‑01‑06.)*
 
-**Updated 2026-01-04**: Added `Soliton/MassEnergyDensity.lean` (Shield Proof) proving
-ρ_mass ∝ v² from E=mc², and completed `Hydrogen/UnifiedForces.lean` (7 errors → 0).
+**Updated 2026-01-06**: Consolidated every explicit `axiom` declaration into
+`Physics/Postulates.lean` (including the new Hill-vortex shell theorem axiom) and
+re-ran the repo-wide counts. We now have **1082** named theorems/lemmas, only **8**
+`sorry` placeholders, and just **5** explicit `axiom` keywords (all located inside
+`Physics/Postulates.lean`). All other “axioms” of physics are recorded as structured
+fields of `Core`, `SolitonPostulates`, etc., so downstream files take them as arguments
+rather than sprinkling ad‑hoc assumptions.
 
-- **Completion rate:** ≈ 97.9% of theorems are fully proved (only 21 sorrys among ≈ 993
-  statements).
-- **Axioms:** Concentrated in modules that purposely encode empirical physics inputs
-  (e.g., soliton topological charge, spin-coupling forces, interval bounds on Q*).  
-  Each axiom has a docstring explaining its physical meaning and the path to removal.
+- **Completion rate:** > 99% of theorems are fully proved (8 sorrys among 1082 statements).
+- **Axioms:** `Physics/Postulates.lean` is now the *only* file containing explicit `axiom`
+  commands: conservation laws, vacuum eigenvalue bounds, and the Hill-vortex shell theorem.
 - **Testing:** `lake build QFD` compiles the entire library; targeted `lake env lean
   --make path.lean` commands recheck critical files.
 
