@@ -15,12 +15,16 @@ import numpy as np
 from scipy.optimize import minimize_scalar
 
 # ============================================================================
-# FUNDAMENTAL CONSTANTS (Locked by Golden Loop)
+# FUNDAMENTAL CONSTANTS (α-Derived via Golden Loop, 2026-01-07)
 # ============================================================================
-alpha_fine   = 1.0 / 137.036
-beta_vacuum  = 1.0 / 3.058
+alpha_fine   = 1.0 / 137.035999206  # CODATA 2018
+beta_vacuum  = 1.0 / 3.04309        # Derived from α via Golden Loop
 lambda_time  = 0.42
 M_proton     = 938.272  # MeV
+
+# Note: β changed from 3.058 (fitted) to 3.04309 (α-derived)
+# c₁ = ½(1-α) = 0.496351 (surface tension)
+# c₂ = 1/β = 0.328615 (bulk modulus)
 
 # ============================================================================
 # DERIVED PARAMETERS (No Fitting)
