@@ -1,29 +1,25 @@
-import Physics.Core
-import QFD.VacuumEigenvalue
-import QFD.Hydrogen.PhotonResonance
-import QFD.Soliton.TopologicalCore
-import QFD.Soliton.MassEnergyCore
-import QFD.Atomic.ChaosCore
-import QFD.Atomic.ResonanceDynamicsCore
-import QFD.Atomic.LyapunovCore
-import QFD.Topology.FormFactorCore
-import QFD.Lepton.FormFactorCore
+import Mathlib.Analysis.Convex.SpecificFunctions.Pow
+import Mathlib.Data.Real.Basic
 import QFD.Lepton.IsomerCore
 import QFD.Electron.HillVortex
 
 /-!
 # Centralized QFD Postulates
 
-This file gathers the foundational physics axioms into a single structure so that
-every theorem that depends on the experimental hypotheses makes those
-dependencies explicit.  Proofs should take a `PhysicsModel` argument (or extend it)
-instead of re‑declaring axioms locally.
+We group the assumptions into layers:
+
+* `Core` – global conservation/positivity laws.
+* `SolitonPostulates` – topological and stability hypotheses.
+* `AtomicChaosPostulates` – spin-coupling, Lyapunov, and resonance assumptions.
+* `CalibrationPostulates` – numerical facts tied to experimental constants.
+
+The final `Model` extends the top layer so theorems can explicitly depend on the
+subset they require.
 -/
 
 namespace QFD.Physics
 
-/-- The trusted base of physical assumptions used across the project. -/
-structure Model where
+structure Core where
   /-- Lepton number is conserved between inputs and outputs. -/
   lepton_conservation :
     ∀ {sys : PhysicalSystem},
@@ -32,17 +28,16 @@ structure Model where
   mass_winding_rule :
     ∀ ⦃ℓ : Lepton⦄, winding_number ℓ > 0 → mass ℓ > base_mass
 
-  /-- Topological charge (π₃(S³) ≅ ℤ) for each soliton field configuration. -/
+structure SolitonPostulates extends Core where
   topological_charge :
     QFD.Soliton.FieldConfig → ℤ
-
-  /-- Noether charge (U(1) particle number) for a soliton configuration. -/
   noether_charge :
     QFD.Soliton.FieldConfig → ℝ
 
   /-- Topological charge is conserved for any continuous time evolution. -/
   topological_conservation :
     ∀ evolution : ℝ → QFD.Soliton.FieldConfig,
+      (∀ t, ContinuousAt evolution t) →
       ∀ t1 t2 : ℝ,
         topological_charge (evolution t1) =
           topological_charge (evolution t2)
@@ -51,8 +46,8 @@ structure Model where
   zero_pressure_gradient :
     ∀ ϕ : QFD.Soliton.FieldConfig,
       QFD.Soliton.is_saturated ϕ →
-        ∃ R : ℝ, ∀ r < R,
-          deriv (fun r => QFD.Soliton.EnergyDensity ϕ r) r = 0
+        ∃ R : ℝ, ∀ r, r < R →
+          HasDerivAt (fun r => QFD.Soliton.EnergyDensity ϕ r) 0 r
 
   /--
   Infinite-lifetime soliton postulate: admissible potentials plus density
@@ -81,7 +76,7 @@ structure Model where
       ∀ T : ℝ, T > 0 →
       ∀ δq : ℝ, δq > 0 →
         ∃ ϕ_minus ϕ_vacuum : QFD.Soliton.FieldConfig,
-          noether_charge ϕ_minus = noether_charge ϕ - δq →
+          noether_charge ϕ_minus = noether_charge ϕ - δq ∧
           QFD.Soliton.FreeEnergy ϕ_minus T +
               QFD.Soliton.FreeEnergy ϕ_vacuum T >
             QFD.Soliton.FreeEnergy ϕ T
@@ -98,18 +93,242 @@ structure Model where
   momentum_flux_continuity :
     ∀ {sys : Interface}, momentum_flux sys.left = momentum_flux sys.right
 
-  /--
-  Numerical bound connecting measured constants (ℏ, Γ, λ, c) to the nuclear core size.
-  Encodes the verified computation L₀ = ℏ/(Γ λ c) ≈ 1.25 × 10⁻¹⁶ m.
-  -/
-  numerical_nuclear_scale_bound :
-    ∀ {lam_val hbar_val gamma_val c_val : ℝ},
-      lam_val = 1.66053906660e-27 →
-      hbar_val = 1.054571817e-34 →
-      gamma_val = 1.6919 →
-      c_val = 2.99792458e8 →
-      abs (hbar_val / (gamma_val * lam_val * c_val) - 1.25e-16) < 1e-16
+  /-- Vacuum expectation value of the superfluid background. -/
+  vacuum_expectation :
+    QFD.Soliton.TargetSpace
 
+  /-- External computation of gradient/bulk energy components. -/
+  compute_energy :
+    QFD.Field → QFD.EnergyComponents
+
+  /-- Spherical vs. toroidal form factors must differ. -/
+  sphere_torus_form_factor_ne :
+    ∀ {ψ_sphere ψ_torus : QFD.Field},
+      QFD.is_spherical ψ_sphere →
+      QFD.is_toroidal ψ_torus →
+        QFD.form_factor (compute_energy ψ_sphere) ≠
+          QFD.form_factor (compute_energy ψ_torus)
+
+  /-- Spherical ground-state geometry for soliton form factors. -/
+  spherical_ground_state :
+    QFD.SolitonGeometry
+
+  /-- Toroidal vortex geometry for leptonic solitons. -/
+  toroidal_vortex :
+    QFD.SolitonGeometry
+
+  /-- Spherical geometry maximizes the shape factor. -/
+  isoperimetric_field_inequality :
+    ∀ g : QFD.SolitonGeometry,
+      QFD.shape_factor g ≤ QFD.shape_factor spherical_ground_state
+
+  /-- Toroidal and spherical form factors differ strictly. -/
+  toroidal_vs_spherical_strict :
+    QFD.shape_factor toroidal_vortex ≠
+      QFD.shape_factor spherical_ground_state
+
+  /- TEMPORARILY DISABLED: These axioms require LeptonModel from IsomerCore,
+     which pulls in ALL of Mathlib via PhotonSolitonEmergentConstants.
+     To re-enable: fix the import chain to use specific Mathlib modules.
+
+  /-- Higher lepton generations have larger winding Q*. -/
+  generation_qstar_order :
+    ∀ {Point : Type} {M : QFD.LeptonModel Point}
+      {c₁ c₂ : Config Point}
+      [Decidable (QFD.IsElectron M c₁)]
+      [Decidable (QFD.IsMuon M c₁)]
+      [Decidable (QFD.IsTau M c₁)]
+      [Decidable (QFD.IsElectron M c₂)]
+      [Decidable (QFD.IsMuon M c₂)]
+      [Decidable (QFD.IsTau M c₂)],
+      QFD.GenerationNumber M c₁ < QFD.GenerationNumber M c₂ →
+      (0 < QFD.GenerationNumber M c₁ ∧
+        0 < QFD.GenerationNumber M c₂) →
+      M.Q_star c₁ < M.Q_star c₂
+
+  /-- Geometric mass formula linking Q*, β, and the mass scale. -/
+  mass_formula :
+    ∀ {Point : Type} {M : QFD.LeptonModel Point} (c : Config Point),
+      c.energy =
+        (M.toQFDModelStable.toQFDModel.β * (M.Q_star c) ^ 2) * M.lam_mass
+  -/
+
+  /-- Local virial equilibrium for symmetric solitons: potential matches kinetic density. -/
+  local_virial_equilibrium :
+    ∀ {T : QFD.Soliton.StressEnergyTensor} (r : ℝ),
+      T.T_potential r = T.T_kinetic r
+
+  /-- Pointwise mass-energy equivalence for stress-energy tensors. -/
+  mass_energy_equivalence_pointwise :
+    ∀ {T : QFD.Soliton.StressEnergyTensor} {c : ℝ},
+      0 < c →
+      ∀ r, ∃ ρ_mass : ℝ → ℝ, ρ_mass r = T.T00 r / c ^ 2
+    := by
+      intro T c hc r
+      refine ⟨fun _ => T.T00 r / c ^ 2, rfl⟩
+
+  /-- Virial equilibrium between kinetic and potential energy. -/
+  virial_theorem_soliton :
+    ∀ {T : QFD.Soliton.StressEnergyTensor},
+      (∫ r, T.T_kinetic r) = (∫ r, T.T_potential r)
+
+  /-- Hill-vortex flywheel enhancement: its inertia exceeds the solid-sphere bound. -/
+  hill_inertia_enhancement :
+    ∀ {ctx : QFD.Vacuum.VacuumContext} (hill : QFD.Electron.HillContext ctx)
+      (T : QFD.Soliton.StressEnergyTensor) (v : ℝ → ℝ) (c : ℝ),
+      c > 0 →
+      (∀ r, ∃ k : ℝ, T.T00 r / c ^ 2 = k * (v r) ^ 2) →
+      (∀ r, r < hill.R → v r = (2 * r / hill.R - r ^ 2 / hill.R ^ 2)) →
+      ∃ (I_eff : ℝ) (M : ℝ) (R : ℝ),
+        I_eff = ∫ r in (0)..R, (T.T00 r / c ^ 2) * r ^ 2 ∧
+        I_eff > 0.4 * M * R ^ 2
+
+  /-- Gauge freedom: shift the vacuum expectation to the origin. -/
+  vacuum_is_normalization :
+    ∀ (vacuum : QFD.Soliton.TargetSpace),
+      ∀ (ε : ℝ), 0 < ε →
+        ∀ (R : ℝ) (x : EuclideanSpace ℝ (Fin 3)),
+          ‖x‖ > R →
+          ∀ (ϕ_val : QFD.Soliton.TargetSpace),
+            ‖ϕ_val‖ < ε →
+              ‖ϕ_val - vacuum‖ < ε
+
+  /-- Phase extraction on the SU(2)/quaternionic target space. -/
+  phase :
+    QFD.Soliton.TargetSpace → ℝ
+
+  /-- Topological protection forbids collapse below a finite radius. -/
+  topological_prevents_collapse :
+    ∀ ϕ : QFD.Soliton.FieldConfig,
+      topological_charge ϕ ≠ 0 →
+        ∃ R_min > 0, ∀ ϕ',
+          topological_charge ϕ' = topological_charge ϕ →
+          ∀ R, (∀ x, R < ‖x‖ → ϕ'.val x = 0) →
+            R ≥ R_min
+
+  /-- Density matching ensures a local energy minimum. -/
+  density_matching_prevents_explosion :
+    ∀ ϕ : QFD.Soliton.FieldConfig,
+      QFD.Soliton.is_saturated ϕ →
+      QFD.Soliton.density_matched (noether_charge ϕ) 1 →
+        ∃ R_eq > 0, QFD.Soliton.is_local_minimum QFD.Soliton.Energy ϕ
+
+  /-- Global minimum with fixed charges implies conserved evolution. -/
+  energy_minimum_implies_stability :
+    ∀ ϕ : QFD.Soliton.FieldConfig,
+      ∀ prob : QFD.Soliton.SolitonStabilityProblem,
+        QFD.Soliton.is_stable_soliton noether_charge topological_charge ϕ prob →
+        (∀ ϕ', noether_charge ϕ' = prob.Q →
+                topological_charge ϕ' = prob.B →
+                QFD.Soliton.Energy ϕ' ≥ QFD.Soliton.Energy ϕ) →
+        ∀ t : ℝ, ∃ ϕ_t : QFD.Soliton.FieldConfig,
+          noether_charge ϕ_t = prob.Q ∧
+          topological_charge ϕ_t = prob.B ∧
+          QFD.Soliton.Energy ϕ_t = QFD.Soliton.Energy ϕ
+
+structure AtomicChaosPostulates extends SolitonPostulates where
+  /--
+  Coherence constraint for photon/atom resonance: a photon packet longer than the
+  natural linewidth implies strict detuning bounds.  This replaces the legacy
+  axiom in `Hydrogen/PhotonResonance.lean`.
+  -/
+  coherence_constraints_resonance :
+    ∀ {Point : Type} {M : QFD.ResonantModel Point}
+      (γ : QFD.Photon) (n m : ℕ),
+      QFD.ResonantModel.PacketLength (M := M) γ > 1 / M.Linewidth m →
+      (QFD.ResonantModel.Detuning (M := M) γ n m < M.Linewidth m → True)
+
+  /-- Spin–orbit coupling force acting on vibrating systems. -/
+  spin_coupling_force :
+    QFD.Atomic.Chaos.VibratingSystem → EuclideanSpace ℝ (Fin 3)
+
+  /-- Coupling force is perpendicular to the spin vector. -/
+  spin_coupling_perpendicular_to_S :
+    ∀ sys, inner ℝ (spin_coupling_force sys) sys.S = 0
+
+  /-- Coupling force is perpendicular to the linear momentum. -/
+  spin_coupling_perpendicular_to_p :
+    ∀ sys, inner ℝ (spin_coupling_force sys) sys.p = 0
+
+  /-- Generic configurations cannot have the displacement simultaneously ⟂ p and ⟂ S. -/
+  generic_configuration_excludes_double_perpendicular :
+    ∀ sys,
+      sys.p ≠ 0 → sys.S ≠ 0 → spin_coupling_force sys ≠ 0 →
+        ¬(inner ℝ sys.r sys.p = 0 ∧ inner ℝ sys.r sys.S = 0)
+
+  /-- Time-evolution flow for Lyapunov analysis. -/
+  time_evolution :
+    ℝ → QFD.Atomic.Lyapunov.PhaseState →
+      QFD.Atomic.Lyapunov.PhaseState
+
+  /-- Chaotic dynamics eventually visit the emission window. -/
+  system_visits_alignment :
+    ∀ sys_initial : QFD.Atomic.Chaos.VibratingSystem,
+      ∃ t : ℝ,
+        spin_coupling_force
+          (QFD.Atomic.Chaos.evolve (time_evolution t) sys_initial) = 0
+
+  /-- Inertial response time scales linearly with mass. -/
+  response_scaling :
+    ∀ c : QFD.Atomic.ResonanceDynamics.InertialComponent,
+      ∃ k : ℝ, k > 0 ∧ c.response_time = k * c.mass
+
+  /-- Electron and proton share the same response constant within a coupled atom. -/
+  universal_response_constant :
+    ∀ atom : QFD.Atomic.ResonanceDynamics.CoupledAtom,
+      ∃ k : ℝ, k > 0 ∧
+        atom.e.response_time = k * atom.e.mass ∧
+        atom.p.response_time = k * atom.p.mass
+
+  /-- Larmor precession: frequency proportional to field magnitude. -/
+  larmor_coupling :
+    ∃ γ : ℝ, γ > 0 ∧
+      ∀ B : EuclideanSpace ℝ (Fin 3),
+        let ω_L := γ * Real.sqrt (inner ℝ B B)
+        ω_L ≥ 0
+    := by
+      refine ⟨(1 : ℝ), by norm_num, ?_⟩
+      intro B
+      dsimp
+      have hs : (0 : ℝ) ≤ Real.sqrt (inner ℝ B B) := Real.sqrt_nonneg _
+      simpa using hs
+
+  /-- Decoupled oscillator stability bound. -/
+  decoupled_oscillator_is_stable :
+    ∀ (Z_init : QFD.Atomic.Lyapunov.PhaseState),
+      Z_init.S = 0 →
+        ∃ C : ℝ, ∀ t : ℝ,
+          ∀ δ : QFD.Atomic.Lyapunov.PhaseState,
+            let Z_perturbed :=
+              { r := Z_init.r + δ.r,
+                p := Z_init.p + δ.p,
+                S := 0 }
+            QFD.Atomic.Lyapunov.PhaseDistance
+              (time_evolution t Z_init)
+              (time_evolution t Z_perturbed) ≤
+              C * QFD.Atomic.Lyapunov.PhaseDistance Z_init Z_perturbed
+
+  /-- Coupled oscillator develops a positive Lyapunov exponent. -/
+  coupled_oscillator_is_chaotic :
+    ∀ (Z_init : QFD.Atomic.Lyapunov.PhaseState),
+      Z_init.S ≠ 0 →
+      Z_init.p ≠ 0 →
+      spin_coupling_force (QFD.Atomic.Lyapunov.toVibratingSystem Z_init) ≠ 0 →
+        QFD.Atomic.Lyapunov.HasPositiveLyapunovExponent
+          time_evolution
+
+  predictability_horizon :
+    ∀ (lam : ℝ), lam > 0 →
+    ∀ (eps : ℝ), eps > 0 →
+      ∃ t_h : ℝ, t_h > 0 ∧
+        ∀ t : ℝ, t > t_h →
+          ∀ Z₁ Z₂ : QFD.Atomic.Lyapunov.PhaseState,
+            QFD.Atomic.Lyapunov.PhaseDistance Z₁ Z₂ = eps →
+              QFD.Atomic.Lyapunov.PhaseDistance
+                (time_evolution t Z₁)
+                (time_evolution t Z₂) > eps * Real.exp (lam * t)
+
+structure CalibrationPostulates extends AtomicChaosPostulates where
   /--
   Taylor-control inequality for the saturation potential: the cubic expansion
   approximates the exact potential within 1% when ρ < ρ_max / 2.
@@ -152,17 +371,6 @@ structure Model where
         abs (Real.log (ρ_max / 2.3e17)) < Real.log 10 ∧
         abs (μ - β ^ 2 * ρ_max) / (β ^ 2 * ρ_max) < 0.2
 
-  /-- The fundamental stiffness `sInf` is positive (non-degenerate vacuum). -/
-  fundamental_stiffness_positive :
-    QFD.VacuumEigenvalue.fundamental_stiffness > 0
-
-  /-- Monotonicity of `β ↦ e^β/β` on (1, ∞). -/
-  transcendental_monotone :
-    ∀ {β₁ β₂ : ℝ},
-      1 < β₁ → β₁ < β₂ →
-      QFD.VacuumEigenvalue.transcendental_equation β₁ <
-        QFD.VacuumEigenvalue.transcendental_equation β₂
-
   /-- There is a unique β in (2,4) matching the measured target. -/
   beta_uniqueness_in_range :
     ∃! β : ℝ,
@@ -178,239 +386,76 @@ structure Model where
           QFD.VacuumEigenvalue.K_target ∧
         abs (β - beta_golden) < 0.01
 
-  /-- Verified measurement for the target constant K. -/
-  golden_loop_target_verified :
-    abs (QFD.VacuumEigenvalue.K_target - 6.891) < 0.01
-
-  /-- Verified numerical solution for the transcendental equation at β = β_golden. -/
-  beta_transcendental_validation :
-    abs (QFD.VacuumEigenvalue.transcendental_equation beta_golden -
-      QFD.VacuumEigenvalue.K_target) < 0.1
-
-  /--
-  Coherence constraint for photon/atom resonance: a photon packet longer than the
-  natural linewidth implies strict detuning bounds.  This replaces the legacy
-  axiom in `Hydrogen/PhotonResonance.lean`.
-  -/
-  coherence_constraints_resonance :
-    ∀ {Point : Type} {M : QFD.ResonantModel Point}
-      (γ : QFD.Photon) (n m : ℕ),
-      QFD.ResonantModel.PacketLength (M := M) γ > 1 / M.Linewidth m →
-      (QFD.ResonantModel.Detuning (M := M) γ n m < M.Linewidth m → True)
-
-  /-- Vacuum expectation value of the superfluid background. -/
-  vacuum_expectation :
-    QFD.Soliton.TargetSpace
-
-  /-- Spin–orbit coupling force acting on vibrating systems. -/
-  spin_coupling_force :
-    QFD.Atomic.Chaos.VibratingSystem → EuclideanSpace ℝ (Fin 3)
-
-  /-- Coupling force is perpendicular to the spin vector. -/
-  spin_coupling_perpendicular_to_S :
-    ∀ sys, inner ℝ (spin_coupling_force sys) sys.S = 0
-
-  /-- Coupling force is perpendicular to the linear momentum. -/
-  spin_coupling_perpendicular_to_p :
-    ∀ sys, inner ℝ (spin_coupling_force sys) sys.p = 0
-
-  /-- Generic configurations cannot have the displacement simultaneously ⟂ p and ⟂ S. -/
-  generic_configuration_excludes_double_perpendicular :
-    ∀ sys,
-      sys.p ≠ 0 → sys.S ≠ 0 → spin_coupling_force sys ≠ 0 →
-        ¬(inner ℝ sys.r sys.p = 0 ∧ inner ℝ sys.r sys.S = 0)
-
-  /-- Chaotic dynamics eventually visit the emission window. -/
-  system_visits_alignment :
-    ∀ sys_initial : QFD.Atomic.Chaos.VibratingSystem,
-      ∃ t : ℝ, ∃ sys_final : QFD.Atomic.Chaos.VibratingSystem,
-        spin_coupling_force sys_final = 0
-
-  /-- Inertial response time scales linearly with mass. -/
-  response_scaling :
-    ∀ c : QFD.Atomic.ResonanceDynamics.InertialComponent,
-      ∃ k : ℝ, k > 0 ∧ c.response_time = k * c.mass
-
-  /-- Electron and proton share the same response constant within a coupled atom. -/
-  universal_response_constant :
-    ∀ atom : QFD.Atomic.ResonanceDynamics.CoupledAtom,
-      ∃ k : ℝ, k > 0 ∧
-        atom.e.response_time = k * atom.e.mass ∧
-        atom.p.response_time = k * atom.p.mass
-
-  /-- Larmor precession: frequency proportional to field magnitude. -/
-  larmor_coupling :
-    ∃ γ : ℝ, γ > 0 ∧
-      ∀ B : EuclideanSpace ℝ (Fin 3),
-        let ω_L := γ * Real.sqrt (inner ℝ B B)
-        ω_L ≥ 0
-
-  /-- Time-evolution flow for Lyapunov analysis. -/
-  time_evolution :
-    ℝ → QFD.Atomic.Lyapunov.PhaseState →
-      QFD.Atomic.Lyapunov.PhaseState
-
-  /-- Decoupled oscillator stability bound. -/
-  decoupled_oscillator_is_stable :
-    ∀ (Z_init : QFD.Atomic.Lyapunov.PhaseState),
-      Z_init.S = 0 →
-        ∃ C : ℝ, ∀ t : ℝ,
-          ∀ δ : QFD.Atomic.Lyapunov.PhaseState,
-            let Z_perturbed :=
-              { r := Z_init.r + δ.r,
-                p := Z_init.p + δ.p,
-                S := 0 }
-            QFD.Atomic.Lyapunov.PhaseDistance
-              (time_evolution t Z_init)
-              (time_evolution t Z_perturbed) ≤
-              C * QFD.Atomic.Lyapunov.PhaseDistance Z_init Z_perturbed
-
-  /-- Coupled oscillator develops a positive Lyapunov exponent. -/
-  coupled_oscillator_is_chaotic :
-    ∀ (Z_init : QFD.Atomic.Lyapunov.PhaseState),
-      Z_init.S ≠ 0 →
-      Z_init.p ≠ 0 →
-      spin_coupling_force (QFD.Atomic.Lyapunov.toVibratingSystem Z_init) ≠ 0 →
-        QFD.Atomic.Lyapunov.HasPositiveLyapunovExponent
-          time_evolution
-
-  /-- Predictability horizon for positive Lyapunov exponent. -/
-  predictability_horizon :
-    ∀ (lam : ℝ), lam > 0 →
-    ∀ (eps : ℝ), eps > 0 →
-      ∃ t_h : ℝ, t_h > 0 ∧
-        ∀ t : ℝ, t > t_h →
-          ∃ uncertainty : ℝ,
-            uncertainty > eps * Real.exp (lam * t)
-
-  /-- External computation of gradient/bulk energy components. -/
-  compute_energy :
-    QFD.Field → QFD.EnergyComponents
-
-  /-- Spherical vs. toroidal form factors must differ. -/
-  sphere_torus_form_factor_ne :
-    ∀ {ψ_sphere ψ_torus : QFD.Field},
-      QFD.is_spherical ψ_sphere →
-      QFD.is_toroidal ψ_torus →
-        QFD.form_factor (compute_energy ψ_sphere) ≠
-          QFD.form_factor (compute_energy ψ_torus)
-
-  /-- Spherical ground-state geometry for soliton form factors. -/
-  spherical_ground_state :
-    QFD.SolitonGeometry
-
-  /-- Toroidal vortex geometry for leptonic solitons. -/
-  toroidal_vortex :
-    QFD.SolitonGeometry
-
-  /-- Spherical geometry maximizes the shape factor. -/
-  isoperimetric_field_inequality :
-    ∀ g : QFD.SolitonGeometry,
-      QFD.shape_factor g ≤ QFD.shape_factor spherical_ground_state
-
-  /-- Toroidal and spherical form factors differ strictly. -/
-  toroidal_vs_spherical_strict :
-    QFD.shape_factor toroidal_vortex ≠
-      QFD.shape_factor spherical_ground_state
-
-  /-- Higher lepton generations have larger winding Q*. -/
-  generation_qstar_order :
-    ∀ {Point : Type} {M : QFD.LeptonModel Point}
-      {c₁ c₂ : Config Point}
-      [Decidable (QFD.IsElectron M c₁)]
-      [Decidable (QFD.IsMuon M c₁)]
-      [Decidable (QFD.IsTau M c₁)]
-      [Decidable (QFD.IsElectron M c₂)]
-      [Decidable (QFD.IsMuon M c₂)]
-      [Decidable (QFD.IsTau M c₂)],
-      QFD.GenerationNumber M c₁ < QFD.GenerationNumber M c₂ →
-      (0 < QFD.GenerationNumber M c₁ ∧
-        0 < QFD.GenerationNumber M c₂) →
-      M.Q_star c₁ < M.Q_star c₂
-
-  /-- Geometric mass formula linking Q*, β, and the mass scale. -/
-  mass_formula :
-    ∀ {Point : Type} {M : QFD.LeptonModel Point} (c : Config Point),
-      c.energy =
-        (M.toQFDModelStable.toQFDModel.β * (M.Q_star c) ^ 2) * M.lam_mass
-
-  /-- Local virial equilibrium for symmetric solitons: potential matches kinetic density. -/
-  local_virial_equilibrium :
-    ∀ {T : QFD.Soliton.StressEnergyTensor} (r : ℝ),
-      T.T_potential r = T.T_kinetic r
-
-  /-- Pointwise mass-energy equivalence for stress-energy tensors. -/
-  mass_energy_equivalence_pointwise :
-    ∀ {T : QFD.Soliton.StressEnergyTensor} {c : ℝ},
-      0 < c →
-      ∀ r, ∃ ρ_mass : ℝ → ℝ, ρ_mass r = T.T00 r / c ^ 2
-
-  /-- Virial equilibrium between kinetic and potential energy. -/
-  virial_theorem_soliton :
-    ∀ {T : QFD.Soliton.StressEnergyTensor},
-      (∫ r, T.T_kinetic r) = (∫ r, T.T_potential r)
-
-  /-- Hill-vortex flywheel enhancement: its inertia exceeds the solid-sphere bound. -/
-  hill_inertia_enhancement :
-    ∀ {ctx : QFD.Vacuum.VacuumContext} (hill : QFD.Electron.HillContext ctx)
-      (T : QFD.Soliton.StressEnergyTensor) (v : ℝ → ℝ) (c : ℝ),
-      c > 0 →
-      (∀ r, ∃ k : ℝ, T.T00 r / c ^ 2 = k * (v r) ^ 2) →
-      (∀ r, r < hill.R → v r = (2 * r / hill.R - r ^ 2 / hill.R ^ 2)) →
-      ∃ (I_eff : ℝ) (M : ℝ) (R : ℝ),
-        I_eff = ∫ r in (0)..R, (T.T00 r / c ^ 2) * r ^ 2 ∧
-        I_eff > 0.4 * M * R ^ 2
-
-  /-- Gauge freedom: shift the vacuum expectation to the origin. -/
-  vacuum_is_normalization :
-    ∀ (vacuum : QFD.Soliton.TargetSpace),
-      ∀ (ε : ℝ), 0 < ε →
-        ∀ (R : ℝ) (x : EuclideanSpace ℝ (Fin 3)),
-          ‖x‖ > R →
-          ∀ (ϕ_val : QFD.Soliton.TargetSpace),
-            ‖ϕ_val‖ < ε →
-              ‖ϕ_val - vacuum‖ < ε
-
-  /-- Phase extraction on the SU(2)/quaternionic target space. -/
-  phase :
-    QFD.Soliton.TargetSpace → ℝ
-
-  /-- Topological protection forbids collapse below a finite radius. -/
-  topological_prevents_collapse :
-    ∀ ϕ : QFD.Soliton.FieldConfig,
-      topological_charge ϕ ≠ 0 →
-        ∃ R_min > 0, ∀ ϕ',
-          topological_charge ϕ' = topological_charge ϕ →
-          (∃ R, ∀ x, R < ‖x‖ → ϕ'.val x = 0) →
-          R ≥ R_min
-
-  /-- Density matching ensures a local energy minimum. -/
-  density_matching_prevents_explosion :
-    ∀ ϕ : QFD.Soliton.FieldConfig,
-      QFD.Soliton.is_saturated ϕ →
-      QFD.Soliton.density_matched (noether_charge ϕ) 1 →
-        ∃ R_eq > 0, QFD.Soliton.is_local_minimum QFD.Soliton.Energy ϕ
-
-  /-- Global minimum with fixed charges implies conserved evolution. -/
-  energy_minimum_implies_stability :
-    ∀ ϕ : QFD.Soliton.FieldConfig,
-      ∀ prob : QFD.Soliton.SolitonStabilityProblem,
-        QFD.Soliton.is_stable_soliton noether_charge topological_charge ϕ prob →
-        (∀ ϕ', noether_charge ϕ' = prob.Q →
-                topological_charge ϕ' = prob.B →
-                QFD.Soliton.Energy ϕ' ≥ QFD.Soliton.Energy ϕ) →
-        ∀ t : ℝ, ∃ ϕ_t : QFD.Soliton.FieldConfig,
-          noether_charge ϕ_t = prob.Q ∧
-          topological_charge ϕ_t = prob.B ∧
-          QFD.Soliton.Energy ϕ_t = QFD.Soliton.Energy ϕ
-
-  /-- Strict concavity of fractional powers yields `(a+b)^p < a^p + b^p`. -/
-  rpow_strict_subadd :
-    ∀ (a b p : ℝ), 0 < a → 0 < b → 0 < p → p < 1 →
-      (a + b) ^ p < a ^ p + b ^ p
+structure Model extends CalibrationPostulates
 
 
   -- TODO: add the remaining postulates here as they are formalized.
+
+lemma rpow_strict_subadd
+    (a b p : ℝ) (ha : 0 < a) (hb : 0 < b) (hp_pos : 0 < p) (hp_lt_one : p < 1) :
+    (a + b) ^ p < a ^ p + b ^ p := by
+  have hsum_pos : 0 < a + b := add_pos ha hb
+  set λ := a / (a + b) with hλ_def
+  set μ := b / (a + b) with hμ_def
+  have hλ_pos : 0 < λ := by simpa [hλ_def] using div_pos ha hsum_pos
+  have hμ_pos : 0 < μ := by simpa [hμ_def] using div_pos hb hsum_pos
+  have hλμ_sum : λ + μ = 1 := by
+    have hne : (a + b) ≠ 0 := ne_of_gt hsum_pos
+    simp [hλ_def, hμ_def, hne, add_comm, add_left_comm, add_assoc]
+  have hμλ_sum : μ + λ = 1 := by simpa [add_comm] using hλμ_sum
+  have hx_mem : a + b ∈ Set.Ici (0 : ℝ) := hsum_pos.le
+  have hy_mem : (0 : ℝ) ∈ Set.Ici (0 : ℝ) := le_rfl
+  have hxy : (a + b) ≠ (0 : ℝ) := ne_of_gt hsum_pos
+  have hf := Real.strictConcaveOn_rpow hp_pos hp_lt_one
+  have h_zero_pow : (0 : ℝ) ^ p = 0 := Real.zero_rpow (ne_of_gt hp_pos)
+  have h1 :
+      λ * (a + b) ^ p + μ * (0 : ℝ) ^ p <
+        (λ * (a + b) + μ * 0) ^ p := by
+    simpa using hf.2 hx_mem hy_mem hxy hλ_pos hμ_pos hλμ_sum
+  have h2 :
+      μ * (a + b) ^ p + λ * (0 : ℝ) ^ p <
+        (μ * (a + b) + λ * 0) ^ p := by
+    simpa using hf.2 hx_mem hy_mem hxy hμ_pos hλ_pos hμλ_sum
+  have hλ_bound :
+      λ * (a + b) ^ p < a ^ p := by
+    simpa [hλ_def, hμ_def, h_zero_pow, hsum_pos.ne', add_comm, add_left_comm, add_assoc,
+      mul_add, add_mul, mul_comm, mul_left_comm, mul_assoc] using h1
+  have hμ_bound :
+      μ * (a + b) ^ p < b ^ p := by
+    simpa [hλ_def, hμ_def, h_zero_pow, hsum_pos.ne', add_comm, add_left_comm, add_assoc,
+      mul_add, add_mul, mul_comm, mul_left_comm, mul_assoc] using h2
+  have hsum := add_lt_add hλ_bound hμ_bound
+  have hcomb :
+      (λ + μ) * (a + b) ^ p < a ^ p + b ^ p := by
+    simpa [add_mul, add_comm, add_left_comm, add_assoc, mul_comm, mul_left_comm, mul_assoc]
+      using hsum
+  have : (a + b) ^ p < a ^ p + b ^ p := by simpa [hλμ_sum] using hcomb
+  exact this
+
+/--
+Numerical bound connecting measured constants (ℏ, Γ, λ, c) to the nuclear core size.
+Encodes the verified computation L₀ = ℏ/(Γ λ c) ≈ 1.25 × 10⁻¹⁶ m.
+-/
+lemma numerical_nuclear_scale_bound
+    {lam_val hbar_val gamma_val c_val : ℝ}
+    (h_lam : lam_val = 1.66053906660e-27)
+    (h_hbar : hbar_val = 1.054571817e-34)
+    (h_gamma : gamma_val = 1.6919)
+    (h_c : c_val = 2.99792458e8) :
+    abs (hbar_val / (gamma_val * lam_val * c_val) - 1.25e-16) < 1e-16 := by
+  subst h_lam
+  subst h_hbar
+  subst h_gamma
+  subst h_c
+  have h_nonneg :
+      0 ≤ 1.054571817e-34 /
+          (1.6919 * 1.66053906660e-27 * 2.99792458e8) - 1.25e-16 := by
+    norm_num
+  have h_lt :
+      1.054571817e-34 /
+          (1.6919 * 1.66053906660e-27 * 2.99792458e8) - 1.25e-16 < 1e-16 := by
+    norm_num
+  simpa [abs_of_nonneg h_nonneg] using h_lt
 
 end QFD.Physics
 

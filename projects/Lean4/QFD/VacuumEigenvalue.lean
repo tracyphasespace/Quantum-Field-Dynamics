@@ -358,7 +358,7 @@ axiom python_root_finding_beta :
     ∃ (β : ℝ),
       2 < β ∧ β < 4 ∧
       abs (Real.exp β / β - K) < 1e-10 ∧
-      abs (β - 3.043070) < 1e-6  -- Updated 2026-01-06: derived from α
+      abs (β - 3.043) < 0.015  -- Precision limited by c₁ (~1%)
 
 /-! ## Comparison to Standard Model -/
 

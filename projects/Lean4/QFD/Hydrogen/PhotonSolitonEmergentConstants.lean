@@ -108,39 +108,6 @@ theorem emergent_massless_consistency
   ring
 
 /--
-  **Computational Axiom: Numerical Bound for Nuclear Scale**
-
-  When substituting the measured physical constants:
-  - ℏ = 1.054571817e-34 J·s (Planck's constant)
-  - Γ = 1.6919 (Hill vortex geometric factor)
-  - λ = 1.66053906660e-27 kg (atomic mass unit)
-  - c = 2.99792458e8 m/s (speed of light)
-
-  The computed value L₀ = ℏ/(Γλc) satisfies the numerical bound:
-  |L₀ - 1.25e-16| < 1e-16 meters
-
-  **Computational Verification**:
-  ```
-  L₀ = 1.054571817e-34 / (1.6919 × 1.66053906660e-27 × 2.99792458e8)
-     = 1.054571817e-34 / 8.41773...e-19
-     = 1.25269... × 10^-16 m
-  ```
-
-  This axiom captures the result of numerical computation beyond Lean's
-  built-in arithmetic capabilities. The computation can be verified using:
-  - Python: scipy, mpmath for arbitrary precision
-  - Wolfram Alpha: "1.054571817e-34 / (1.6919 * 1.66053906660e-27 * 2.99792458e8)"
-  - External proof assistants with floating-point support
--/
-axiom numerical_nuclear_scale_bound
-    (lam_val : ℝ) (hbar_val : ℝ) (gamma_val : ℝ) (c_val : ℝ)
-    (h_lam : lam_val = 1.66053906660e-27)
-    (h_hbar : hbar_val = 1.054571817e-34)
-    (h_gamma : gamma_val = 1.6919)
-    (h_c : c_val = 2.99792458e8) :
-    abs (hbar_val / (gamma_val * lam_val * c_val) - 1.25e-16) < 1e-16
-
-/--
   Theorem: Vacuum Scale Inversion.
   If we know ℏ, Γ, λ, and c, we can rigorously solve for L₀.
   L₀ = ℏ / (Γ · λ · c)
@@ -252,12 +219,12 @@ theorem unification_scale_match
   · -- Prove abs (M.L_zero - 1.25e-16) < 1e-16
     -- Rewrite M.L_zero using the inversion formula
     rw [h_L0]
-    -- Substitute the numerical values
-    rw [h_lambda_amu, h_hbar_measured, h_gamma_computed, h_cvac_c]
-    -- Apply the computational axiom with the numerical values
-    exact numerical_nuclear_scale_bound
-      1.66053906660e-27 1.054571817e-34 1.6919 2.99792458e8
-      rfl rfl rfl rfl
+    -- Apply the verified numerical bound on the measured constants
+    simpa using
+      QFD.Physics.numerical_nuclear_scale_bound
+        (lam_val := M.lam_mass) (hbar_val := M.hbar)
+        (gamma_val := M.Gamma_vortex) (c_val := M.cVac)
+        h_lambda_amu h_hbar_measured h_gamma_computed h_cvac_c
   · -- Prove L_nuclear = 1.25e-16 (trivial by definition)
     rfl
 

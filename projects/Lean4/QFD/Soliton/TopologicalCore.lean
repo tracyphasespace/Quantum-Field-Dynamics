@@ -1,3 +1,10 @@
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.Calculus.Deriv.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Topology.MetricSpace.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import QFD.Lepton.Topology
+
 /-!
 # Core Definitions for Density-Matched Topological Solitons
 
@@ -8,13 +15,6 @@ and stability checks.  Keeping these definitions in one place lets both
 `Physics/Postulates.lean` (which declares the axioms) and the proof files
 reuse the same vocabulary without duplicating declarations.
 -/
-
-import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.Calculus.Deriv.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Topology.MetricSpace.Basic
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import QFD.Lepton.Topology
 
 noncomputable section
 

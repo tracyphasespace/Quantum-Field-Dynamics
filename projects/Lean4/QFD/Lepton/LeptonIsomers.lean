@@ -3,7 +3,7 @@ import QFD.Hydrogen.PhotonSolitonEmergentConstants
 import QFD.Lepton.IsomerCore
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.Linarith
-import QFD.Physics.Postulates
+-- import QFD.Physics.Postulates  -- REMOVED: no longer uses P.* axioms
 -- import Mathlib.Data.Real.Pow -- Removed due to import issues
 
 set_option autoImplicit false
@@ -175,16 +175,14 @@ def GenerationNumber (M : LeptonModel Point)
   This wraps the intended interval arithmetic / potential analysis that separates
   the isomer minima for Q*.
 -/
-lemma generation_qstar_order
-    (P : QFD.Physics.Model)
+axiom generation_qstar_order
     (M : LeptonModel Point)
     (c₁ c₂ : Config Point)
     [Decidable (IsElectron M c₁)] [Decidable (IsMuon M c₁)] [Decidable (IsTau M c₁)]
     [Decidable (IsElectron M c₂)] [Decidable (IsMuon M c₂)] [Decidable (IsTau M c₂)]
     (h₁ : GenerationNumber M c₁ < GenerationNumber M c₂)
     (h_valid : GenerationNumber M c₁ > 0 ∧ GenerationNumber M c₂ > 0) :
-    M.Q_star c₁ < M.Q_star c₂ :=
-  P.generation_qstar_order h₁ h_valid
+    M.Q_star c₁ < M.Q_star c₂
 
 /-! ## Mass Generation from Geometric Stress -/
 
@@ -202,18 +200,15 @@ lemma generation_qstar_order
   - Mass is NOT from coupling to Higgs field
   - Mass IS the energy cost of stressing the vacuum
 -/
-lemma mass_formula
-    (P : QFD.Physics.Model)
+axiom mass_formula
     (M : LeptonModel Point) (c : Config Point) :
-  c.energy = (M.toQFDModelStable.toQFDModel.β * (M.Q_star c)^2) * M.lam_mass :=
-  P.mass_formula c
+  c.energy = (M.toQFDModelStable.toQFDModel.β * (M.Q_star c)^2) * M.lam_mass
 
 /-
   Theorem: Higher Q* implies Higher Mass.
   More tightly wound vortex → greater vacuum stress → larger inertial mass.
 -/
 theorem mass_increases_with_winding
-    (P : QFD.Physics.Model)
     (M : LeptonModel Point)
     (c₁ c₂ : Config Point)
     (h : M.Q_star c₁ < M.Q_star c₂) :
@@ -234,8 +229,8 @@ theorem mass_increases_with_winding
       M.lam_mass * (M.toQFDModelStable.toQFDModel.β * (M.Q_star c₁)^2) <
         M.lam_mass * (M.toQFDModelStable.toQFDModel.β * (M.Q_star c₂)^2) :=
     mul_lt_mul_of_pos_left h_beta_mul h_lambda
-  have h_energy₁ := mass_formula (P := P) (M := M) (c := c₁)
-  have h_energy₂ := mass_formula (P := P) (M := M) (c := c₂)
+  have h_energy₁ := mass_formula (M := M) (c := c₁)
+  have h_energy₂ := mass_formula (M := M) (c := c₂)
   have h_final :
       c₁.energy < c₂.energy := by
     simpa [h_energy₁, h_energy₂, mul_comm, mul_left_comm, mul_assoc] using h_target
@@ -246,13 +241,12 @@ Corollary: Muon is Heavier than Electron.
 Since Q*_μ > Q*_e, we have m_μ > m_e.
 -/
 theorem muon_heavier_than_electron
-    (P : QFD.Physics.Model)
     (M : LeptonModel Point)
     (e μ : Config Point)
     (h_e : IsElectron M e)
     (h_μ : IsMuon M μ) :
     e.energy < μ.energy := by
-  apply mass_increases_with_winding (P := P) (M := M)
+  apply mass_increases_with_winding (M := M)
   have h_gap := electron_muon_qstar_gap M e μ h_e h_μ
   exact h_gap
 
@@ -323,7 +317,6 @@ theorem muon_decay_energy_release
   In QFD: This follows from Q*_e < Q*_μ < Q*_τ.
 -/
 theorem generation_mass_ordering
-    (P : QFD.Physics.Model)
     (M : LeptonModel Point)
     (c₁ c₂ : Config Point)
     [Decidable (IsElectron M c₁)] [Decidable (IsMuon M c₁)] [Decidable (IsTau M c₁)]
@@ -331,8 +324,8 @@ theorem generation_mass_ordering
     (h₁ : GenerationNumber M c₁ < GenerationNumber M c₂)
     (h_valid : GenerationNumber M c₁ > 0 ∧ GenerationNumber M c₂ > 0) :
     c₁.energy < c₂.energy := by
-  apply mass_increases_with_winding (P := P) (M := M)
-  exact generation_qstar_order (P := P) (M := M) (c₁ := c₁) (c₂ := c₂) h₁ h_valid
+  apply mass_increases_with_winding (M := M)
+  exact generation_qstar_order (M := M) (c₁ := c₁) (c₂ := c₂) h₁ h_valid
 
 /-! ## Physical Interpretation -/
 

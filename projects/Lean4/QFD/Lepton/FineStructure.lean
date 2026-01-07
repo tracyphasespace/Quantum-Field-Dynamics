@@ -39,7 +39,7 @@ noncomputable def geometricAlpha (stiffness_lam : ℝ) (mass_e : ℝ) : ℝ :=
 
   -- 2. Critical Beta Limit (The Golden Loop)
   --    Source: Derived from α via e^β/β = K (2026-01-06)
-  let beta_crit  : ℝ := 3.043070
+  let beta_crit  : ℝ := 3.043  -- Precision limited by c₁
 
   -- 3. Geometric Factor (Nuclear-Electronic Bridge)
   --    The topology of the electron (1D winding) vs nucleus (3D soliton)
@@ -60,7 +60,7 @@ noncomputable def c2_volume : ℝ := 0.316743
 
 **2026-01-06 Update**: Changed from 3.058 (fitted) to 3.043 (DERIVED from α).
 -/
-noncomputable def beta_critical : ℝ := 3.043070
+noncomputable def beta_critical : ℝ := 3.043  -- Precision limited by c₁ (~1%)
 
 /-- Fine structure constant is determined by vacuum parameters -/
 theorem fine_structure_constraint

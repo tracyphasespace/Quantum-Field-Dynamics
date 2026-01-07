@@ -41,7 +41,7 @@ structure VacuumBulkModulus where
 β = 3.043070 is the exact root of e^β/β = (α⁻¹ × c₁)/π².
 We don't round π to 3.14 for convenience; we don't fit β to match c₂.
 -/
-def goldenLoopBeta : ℝ := 3.043070
+def goldenLoopBeta : ℝ := 3.043  -- Precision limited by c₁ (~1%)
 
 /-- MCMC empirical result for β (Stage 3b, Compton scale) -/
 def mcmcBeta : ℝ := 3.0627

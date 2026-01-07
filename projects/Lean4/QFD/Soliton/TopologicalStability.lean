@@ -284,7 +284,7 @@ theorem stability_against_fission
   -- Sub-additivity of fractional powers: (a+b)^p < a^p + b^p for 0 < p < 1
   -- This follows from strict concavity of x^p for p ∈ (0,1)
   have h_surface : (Q - q + q) ^ p < (Q - q) ^ p + q ^ p := by
-    exact P.rpow_strict_subadd (Q - q) q p h_Qq_pos h_q_pos hp_pos hp_lt_one
+    exact QFD.Physics.rpow_strict_subadd (Q - q) q p h_Qq_pos h_q_pos hp_pos hp_lt_one
   have h_surface : Q ^ p < (Q - q) ^ p + q ^ p := by
     simpa [sub_add_cancel] using h_surface
   -- Type coercion: h_scaling uses (2/3 : ℝ) but we need to work with p = 2/3

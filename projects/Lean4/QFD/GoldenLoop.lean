@@ -170,7 +170,7 @@ Heavy short-lived nuclei (Cf, Fm, etc.) dominate c₂ uncertainty.
 
 **Audit trail**: β depends ONLY on α (CODATA) and c₁ (NuBase surface).
 -/
-def beta_golden : ℝ := 3.043070
+def beta_golden : ℝ := 3.043  -- Precision limited by c₁ (~1%)
 
 /-- The consistency predicate: Beta from transcendental equation predicts c₂.
 
