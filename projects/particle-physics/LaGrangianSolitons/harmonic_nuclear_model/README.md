@@ -86,6 +86,20 @@ Where:
 - `c2 ∝ Bulk modulus` (incompressibility)
 - `dc3 ∝ Vacuum stiffness β` (universal, from fine structure constant α)
 
+### α-Derived Constants (2026-01-06 Update)
+
+As of the paradigm shift on 2026-01-06, all nuclear coefficients derive from α via the **Golden Loop** transcendental equation:
+
+```
+1/α = 2π² × (e^β / β) + 1  →  β = 3.04309
+```
+
+The baseline (N=0) coefficients are:
+- **c₁ = ½(1 - α) = 0.496351** (surface tension minus EM drag)
+- **c₂ = 1/β = 0.328615** (bulk modulus)
+
+See `../QFD_ALPHA_DERIVED_CONSTANTS.py` for the complete derivation.
+
 ### "Tacoma Narrows" Interpretation
 
 **Key insight**: Low harmonic dissonance (ε ≈ 0) predicts **instability**, not stability.
