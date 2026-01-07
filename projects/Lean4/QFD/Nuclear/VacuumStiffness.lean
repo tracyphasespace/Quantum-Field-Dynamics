@@ -27,7 +27,7 @@ def mass_proton_exp_kg : ℝ := 1.6726219e-27
 -- These constants describe the surface-vs-volume stress of the ψ field.
 def c1_surface : ℝ := 0.529251
 def c2_volume  : ℝ := 0.316743
-def beta_crit  : ℝ := 3.058230856 -- The Bulk Modulus of the vacuum (The Golden Loop)
+def beta_crit  : ℝ := 3.043070 -- The Bulk Modulus of the vacuum (DERIVED from α, 2026-01-06)
 
 -- 3. THE GEOMETRIC INTEGRATION FACTOR
 -- Represents the volume integration of the 6D->4D projection.

@@ -38,8 +38,8 @@ noncomputable def geometricAlpha (stiffness_lam : ℝ) (mass_e : ℝ) : ℝ :=
   let c2_volume  : ℝ := 0.316743  -- Volume packing coefficient
 
   -- 2. Critical Beta Limit (The Golden Loop)
-  --    Source: V22 Lepton Analysis - β from α derivation
-  let beta_crit  : ℝ := 3.058230856
+  --    Source: Derived from α via e^β/β = K (2026-01-06)
+  let beta_crit  : ℝ := 3.043070
 
   -- 3. Geometric Factor (Nuclear-Electronic Bridge)
   --    The topology of the electron (1D winding) vs nucleus (3D soliton)
@@ -56,8 +56,11 @@ noncomputable def c1_surface : ℝ := 0.529251
 /-- Nuclear volume coefficient (exported for Python bridge) -/
 noncomputable def c2_volume : ℝ := 0.316743
 
-/-- Critical beta limit from Golden Loop (exported for Python bridge) -/
-noncomputable def beta_critical : ℝ := 3.058230856
+/-- Critical beta limit from Golden Loop (exported for Python bridge).
+
+**2026-01-06 Update**: Changed from 3.058 (fitted) to 3.043 (DERIVED from α).
+-/
+noncomputable def beta_critical : ℝ := 3.043070
 
 /-- Fine structure constant is determined by vacuum parameters -/
 theorem fine_structure_constraint

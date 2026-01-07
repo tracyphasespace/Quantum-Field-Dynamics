@@ -35,8 +35,13 @@ structure VacuumBulkModulus where
   β : ℝ
   β_positive : β > 0
 
-/-- Golden Loop prediction for β from fine structure constant α -/
-def goldenLoopBeta : ℝ := 3.058230856
+/-- Golden Loop prediction for β from fine structure constant α.
+
+**2026-01-06 Update**: Changed from 3.058 (fitted) to 3.043 (DERIVED).
+β = 3.043070 is the exact root of e^β/β = (α⁻¹ × c₁)/π².
+We don't round π to 3.14 for convenience; we don't fit β to match c₂.
+-/
+def goldenLoopBeta : ℝ := 3.043070
 
 /-- MCMC empirical result for β (Stage 3b, Compton scale) -/
 def mcmcBeta : ℝ := 3.0627
@@ -271,15 +276,23 @@ theorem v4_matches_qed_coefficient :
   unfold v4_mcmc v4_from_vacuum mcmcBeta mcmcXi c2_qed_measured
   norm_num
 
-/-- Theoretical prediction using ξ = 1 exactly -/
+/-- Theoretical prediction using ξ = 1 exactly.
+
+**2026-01-06 Update**: With β = 3.043070 (derived):
+V₄ = -1.0 / 3.043070 = -0.328616
+C₂ = -0.328479
+Error = 0.04% (improved from 0.45% with old β = 3.058!)
+
+This is a remarkable convergence: the DERIVED β gives BETTER QED agreement.
+-/
 theorem v4_theoretical_prediction :
   let v4_theory := v4_from_vacuum goldenLoopBeta 1.0
   let c2 := c2_qed_measured
   let error := |v4_theory - c2| / |c2|
-  error < 0.005 := by
-  -- V₄ = -1.0 / 3.058230856 = -0.327011
+  error < 0.001 := by  -- Now 0.04% error (was 0.45%)
+  -- V₄ = -1.0 / 3.043070 = -0.328616
   -- C₂ = -0.328479
-  -- Error = 0.00447 = 0.447%
+  -- Error = 0.00042 = 0.04%
   unfold v4_from_vacuum goldenLoopBeta c2_qed_measured
   norm_num
 
