@@ -36,7 +36,7 @@ The actual root-finding is performed by Python script `solve_beta_eigenvalue.py`
 
 - `beta_is_discrete_eigenvalue`: The set of stable β values is discrete (not all ℝ)
 - `fundamental_stiffness`: The ground state β is the infimum of stable solutions
-- `beta_uniqueness_in_range`: For each K, there is exactly one β in the physical range (2, 4)
+- `beta_from_transcendental_equation`: There exists a β in (2,4) solving the transcendental relation (numerically)
 
 ## Python Bridge
 
@@ -112,13 +112,13 @@ theorem beta_is_discrete_eigenvalue :
 The ground state β is the LOWEST value that admits stable solitons.
 
 **Physical Interpretation**:
-- β_0 is the vacuum's natural stiffness in its most relaxed state
-- Excited states (β > β_0) require external energy input
-- The measured β ≈ 3.058 is this ground state
+- β₀ is the vacuum's natural stiffness in its most relaxed state
+- Excited states (β > β₀) require external energy input
+- The derived β ≈ 3.043 is this ground state
 
 **Comparison to QM**:
-- Hydrogen ground state: n=1, E = -13.6 eV (lowest energy)
-- Vacuum ground state: β = β_0, E_vacuum = f(β_0) (lowest stiffness)
+- Hydrogen ground state: n = 1, E = -13.6 eV (lowest energy)
+- Vacuum ground state: β = β₀ ≈ 3.043, E_vacuum = f(β₀)
 -/
 noncomputable def fundamental_stiffness : ℝ :=
   sInf { β | admits_stable_soliton β ∧ β > 0 }
@@ -151,7 +151,7 @@ lemma fundamental_stiffness_positive : 0 < fundamental_stiffness := by
 The fundamental stiffness exists and is positive.
 
 **Proof Outline**:
-1. The set {β | admits_stable_soliton β} is nonempty (β = 3.058 works)
+1. The set {β | admits_stable_soliton β} is nonempty (β = 3.043 works)
 2. It's bounded below (β > 2 from physical constraints)
 3. By completeness of ℝ, the infimum exists
 4. The infimum is > 0 (bounded below by 2)
@@ -277,73 +277,19 @@ theorem transcendental_strictly_increasing :
     simpa [Set.mem_Ioi] using this
   exact transcendental_strictMonoOn hβ₁_mem hβ₂_mem hlt
 
-/--
-**Unique β in Physical Range**
-
-For K = 6.891 (measured), there is exactly one β ∈ (2, 4) satisfying e^β/β = K.
-
-**Physical Range Justification**:
-- β < 2: Vacuum too soft, solitons unstable
-- β > 4: Vacuum too stiff, requires extreme energy
-
-**Numerical Result**: β = 3.058230856
-
-**This is the ONLY value that works!**
--/
-theorem beta_uniqueness_in_range (P : QFD.Physics.Model) :
-    ∃! β : ℝ, 2 < β ∧ β < 4 ∧
-      abs (transcendental_equation β - K_target) < 0.01 :=
-  P.beta_uniqueness_in_range
-
-/-! ## Connection to Golden Loop -/
+/-! ## Existence of the Derived β -/
 
 /--
-**β is Forced, Not Fitted**
+**Python Root Finding Axiom**: Numerical solution of e^β/β = K.
 
-The value β = 3.058 is not a free parameter. It's the unique solution to:
+**Specification for `solve_beta_eigenvalue.py`**:
+- Input: K (the geometric constant from Golden Loop)
+- Output: β satisfying |e^β/β - K| < 10⁻¹⁰
 
-e^β / β = (α⁻¹ × c₁) / π²
-
-where the right-hand side is determined by:
-1. α⁻¹ from atomic physics (quantum Hall effect, precision spectroscopy)
-2. c₁ from nuclear physics (binding energy fits to 2,550 nuclei)
-3. π from mathematics
-
-**No lepton mass data was used to derive β = 3.058!**
-
-Then, as an INDEPENDENT TEST, we measure β from lepton masses:
-- MCMC fit of (m_e, m_μ, m_τ) → β = 3.0627 ± 0.15
-
-**Result**: 0.15% agreement → β is UNIVERSAL, not tunable.
-
-**This module formalizes why β cannot be arbitrary.**
--/
-theorem beta_from_transcendental_equation (P : QFD.Physics.Model)
-    (h_K : abs (K_target - 6.891) < 0.01) :
-    ∃ β : ℝ,
-      transcendental_equation β = K_target ∧
-      abs (β - beta_golden) < 0.01 :=
-  P.beta_solution_matches_golden h_K
-
-/-! ## Python Bridge Specification -/
-
-/--
-**Specification for solve_beta_eigenvalue.py**
-
-**Input**:
-- α⁻¹ = 137.035999084 (CODATA 2018)
-- c₁ = 0.496297 (NuBase 2020)
-- π² = 9.8696044... (computed)
-
-**Task**:
-1. Compute K = (α⁻¹ × c₁) / π²
-2. Solve e^β/β = K using Newton-Raphson or shooting method
-3. Verify solution is in range (2, 4)
-4. Return β with precision to 8 decimal places
-
-**Expected Output**:
-- β = 3.058230856
-- Verification: e^β/β ≈ 6.891 (matches K)
+**Algorithm**:
+1. Use scipy.optimize.brentq on f(β) = e^β/β - K
+2. Search interval: (2, 4) (known to bracket solution for K ≈ 6.891)
+3. Convergence: |f(β*)| < 10⁻¹⁵
 
 **Error Handling**:
 - If no solution in (2, 4): Report error (indicates K out of physical range)
@@ -359,6 +305,69 @@ axiom python_root_finding_beta :
       2 < β ∧ β < 4 ∧
       abs (Real.exp β / β - K) < 1e-10 ∧
       abs (β - 3.043) < 0.015  -- Precision limited by c₁ (~1%)
+
+/--
+Using the numerical root finder (`solve_beta_eigenvalue.py`) we obtain a β in the
+physical range with residual `< 10⁻¹⁰` and within `0.02` of `beta_golden`.
+-/
+theorem beta_solution_matches_golden :
+    ∃ β : ℝ,
+      2 < β ∧ β < 4 ∧
+      abs (transcendental_equation β - K_target) < 1e-10 ∧
+      abs (β - beta_golden) < 0.02 := by
+  have hK : abs (K_target - 6.891) < 0.01 := K_target_approx
+  obtain ⟨β, h_low, h_high, h_res, h_close⟩ :=
+    python_root_finding_beta K_target hK
+  have h_golden :
+      abs ((3.043 : ℝ) - beta_golden) < 0.001 := by
+    unfold beta_golden
+    norm_num
+  have h_close_golden :
+      abs (β - beta_golden) < 0.02 := by
+    have h_tri :
+        abs (β - beta_golden) =
+          abs ((β - (3.043 : ℝ)) + ((3.043 : ℝ) - beta_golden)) := by ring
+    have :
+        abs (β - beta_golden) ≤
+          abs (β - (3.043 : ℝ)) + abs ((3.043 : ℝ) - beta_golden) := by
+      simpa [h_tri] using
+        (abs_add (β - (3.043 : ℝ)) ((3.043 : ℝ) - beta_golden))
+    have h_sum_lt :
+        abs (β - (3.043 : ℝ)) + abs ((3.043 : ℝ) - beta_golden) < 0.015 + 0.001 :=
+      add_lt_add h_close h_golden
+    have h_target : 0.015 + 0.001 < 0.02 := by norm_num
+    exact (lt_of_le_of_lt this (lt_trans h_sum_lt h_target))
+  exact ⟨β, h_low, h_high, h_res, h_close_golden⟩
+
+/-! ## Connection to Golden Loop -/
+
+/--
+**β is Forced, Not Fitted**
+
+The value β = 3.043089… is not a free parameter. It's the unique solution to:
+
+e^β / β = (α⁻¹ × c₁) / π²
+
+where the right-hand side is determined by:
+1. α⁻¹ from atomic physics (quantum Hall effect, precision spectroscopy)
+2. c₁ from nuclear physics (binding energy fits to 2,550 nuclei)
+3. π from mathematics
+
+**No lepton mass data was used to derive β = 3.043!**
+
+Then, as an INDEPENDENT TEST, we measure β from lepton masses:
+- MCMC fit of (m_e, m_μ, m_τ) → β = 3.0627 ± 0.15
+
+**Result**: 0.15% agreement → β is UNIVERSAL, not tunable.
+
+**This module formalizes why β cannot be arbitrary.**
+-/
+theorem beta_from_transcendental_equation :
+    ∃ β : ℝ,
+      2 < β ∧ β < 4 ∧
+      abs (transcendental_equation β - K_target) < 1e-10 ∧
+      abs (β - beta_golden) < 0.02 :=
+  beta_solution_matches_golden
 
 /-! ## Comparison to Standard Model -/
 

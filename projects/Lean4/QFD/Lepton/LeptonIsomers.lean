@@ -22,7 +22,7 @@ variable {Point : Type u}
   ## The Isomer Hypothesis
 
   1. The Hill Vortex has internal structure defined by RMS charge density Q*.
-  2. Only specific Q* values are stable in a β=3.058 vacuum.
+  2. Only specific Q* values are stable in a β≈3.043 vacuum.
   3. These stable Q* values correspond to the Lepton Generations.
 
   ## The Three Lepton Isomers
@@ -334,10 +334,10 @@ Summary: Why Three Generations?
 
 **Standard Model**: Unexplained. Empirical fact that leptons come in 3 families.
 
-**QFD Answer**: Three local minima of V(Q*) in β=3.058 vacuum.
+**QFD Answer**: Three local minima of V(Q*) in β≈3.043 vacuum.
 
 **Why These Specific Q* Values?**:
-- Q* ≈ 2.2, 2.3: Related to golden ratio φ ≈ 1.618 and β ≈ 3.058
+- Q* ≈ 2.2, 2.3: Related to golden ratio φ ≈ 1.618 and β ≈ 3.043
 - Geometric resonance: Certain winding patterns are self-reinforcing
 - Topological constraint: Integer winding numbers + stress balance
 
@@ -349,7 +349,7 @@ Summary: Why Three Generations?
 **Testable Prediction**:
 - If β were different, number of generations could change
 - Different universe → different particle zoo
-- β = 3.058 is "tuned" to give exactly 3 stable leptons
+- β ≈ 3.043 (derived from α) gives exactly 3 stable leptons
 -/
 end LeptonModel
 end QFD

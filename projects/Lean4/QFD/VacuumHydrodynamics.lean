@@ -23,7 +23,7 @@ namespace QFD
   Defined strictly by mechanical fluid properties, not relativistic axioms.
 -/
 structure VacuumMedium where
-  beta : ℝ  -- Bulk Modulus (Stiffness), β ≈ 3.058
+  beta : ℝ  -- Bulk Modulus (Stiffness), β ≈ 3.043
   rho  : ℝ  -- Mass Density (Inertia), λ ≈ Proton Mass
   beta_pos : 0 < beta
   rho_pos  : 0 < rho

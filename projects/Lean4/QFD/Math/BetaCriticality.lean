@@ -8,7 +8,7 @@ namespace QFD
 # BetaCriticality
 
 This module formalizes "β is a critical locking threshold" without pretending that
-Lean has already computed the numeric value 3.058.
+Lean has already computed the numeric value (~3.043).
 
 The purpose is to make the *shape of the reasoning* airtight:
 

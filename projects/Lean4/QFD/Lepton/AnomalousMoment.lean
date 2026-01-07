@@ -33,7 +33,7 @@ This concentrates mass at r ≈ R (Compton radius), creating a
 
 where:
   ξ = 1.0 (gradient stiffness)
-  β = 3.058 (compression stiffness, from α)
+  β ≈ 3.043 (compression stiffness, from α)
   α_circ = e/(2π) ≈ 0.433 (geometric constant)
   I_circ ≈ 9.4 (dimensionless Hill vortex integral)
   R_ref = 1 fm (QCD vacuum scale)
@@ -69,7 +69,7 @@ def alpha : ℝ := 1 / 137.035999177
 def hbar_c : ℝ := 197.3269804
 
 /-- Vacuum compression stiffness (from Golden Loop) -/
-def beta : ℝ := QFD.Vacuum.goldenLoopBeta  -- 3.058
+def beta : ℝ := QFD.Vacuum.goldenLoopBeta  -- ≈ 3.043
 
 /-- Vacuum gradient stiffness (fundamental) -/
 def xi : ℝ := 1.0
@@ -134,7 +134,7 @@ def C2_QED : ℝ := QFD.Vacuum.c2_qed_measured  -- -0.328479
 /--
 **V₄ Compression Term**: The base correction from vacuum stiffness.
 
-V₄_comp = -ξ/β = -1/3.058 = -0.327
+V₄_comp = -ξ/β = -1/3.043 ≈ -0.329
 
 This matches C₂(QED) = -0.328 to 0.45% accuracy.
 Physical meaning: Vacuum compression reduces magnetic moment.
@@ -333,7 +333,7 @@ theorem V4_comp_matches_vacuum_params
     -- Numerical assumption: Vacuum parameter consistency
     -- This is approximate equality within MCMC uncertainties:
     -- ξ = 1.0 ≈ mcmcXi = 0.9655 (within 4%)
-    -- β = 3.058 ≈ mcmcBeta = 3.0627 (within 0.15%)
+    -- β ≈ 3.043 from Golden Loop; mcmcBeta = 3.0627 (within 0.7%)
     -- This shows consistency between Golden Loop and MCMC approaches
     (h_approx_equal : V4_compression = -QFD.Vacuum.mcmcXi / QFD.Vacuum.mcmcBeta) :
     V4_compression = -QFD.Vacuum.mcmcXi / QFD.Vacuum.mcmcBeta := by

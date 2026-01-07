@@ -3,9 +3,13 @@
 Derive speed of light from vacuum stiffness parameter β.
 
 In QFD, the vacuum is a dynamic medium with:
-- Stiffness parameter: β ≈ 3.058
+- Stiffness parameter: β ≈ 3.04309 (derived from α via Golden Loop)
 - Geometric algebra: Cl(3,3)
 - Metric signature: (3,3)
+
+2026-01-06 UPDATE: β is now DERIVED from α via the Golden Loop equation:
+  e^β/β = K = (α⁻¹ × c₁)/π²
+This means c = √(β/ρ_vac) is not a free parameter but emerges from α!
 
 Goal: Derive c ≈ 299,792,458 m/s from β and geometric factors.
 
@@ -24,8 +28,8 @@ hbar = 1.054571817e-34  # J⋅s
 epsilon_0 = 8.854187817e-12  # F/m
 mu_0 = 1.25663706212e-6  # H/m
 
-# QFD parameter
-beta = 3.058  # Vacuum stiffness (dimensionless)
+# QFD parameter (2026-01-06: derived from α via Golden Loop, not fitted)
+beta = 3.04309  # Vacuum stiffness (derived from α: e^β/β = (α⁻¹ × c₁)/π²)
 
 def derive_speed_of_light():
     """

@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 import math
 
 # --- 1. QFD Vacuum Constants (The Medium) ---
-# Derived from Golden Loop (beta = 3.058...)
-BETA = 3.05823
+# 2026-01-06: β derived from α via Golden Loop (not fitted)
+BETA = 3.04309  # Vacuum stiffness (derived from α)
 # Speed of light c = sqrt(beta/rho), setting rho_vac ~ m_proton scale -> 1.0 (natural units)
 # For the purpose of scaling ratios, c_vac is scale-invariant.
 C_VAC = np.sqrt(BETA)

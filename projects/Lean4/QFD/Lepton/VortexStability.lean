@@ -6,7 +6,7 @@ Authors: Tracy
 # Vortex Stability: β-ξ Degeneracy Resolution
 
 This module formalizes the mathematical breakthrough that resolved the β-parameter
-offset between V22 (β ≈ 3.15) and Golden Loop (β = 3.058).
+offset between V22 (β ≈ 3.15) and Golden Loop (β ≈ 3.043, derived from α).
 
 ## CRITICAL: Two Uses of "Density" (Dec 29, 2025 Clarification)
 
@@ -50,8 +50,8 @@ This explains the 3% offset as the "Geometric Signature of Gradient Energy."
 ## Physical Interpretation
 
 The gradient term ξ|∇ρ|² contributes ~64% of total energy for Hill vortex.
-V22 model (ξ=0) compensated by inflating β from 3.058 to 3.15.
-Including ξ breaks the (β, R) degeneracy and validates β = 3.058 from α.
+V22 model (ξ=0) compensated by inflating β from 3.043 to 3.15.
+Including ξ breaks the (β, R) degeneracy and validates β ≈ 3.043 from α.
 
 ## References
 - Source: complete_energy_functional/D_FLOW_ELECTRON_FINAL_SYNTHESIS.md
@@ -108,7 +108,7 @@ Physical interpretation:
 - Compression term: β·C_comp·R³ (scales as volume)
 - Gradient term: ξ·C_grad·R (scales as surface)
 
-For Hill vortex with β=ξ=3.058, R=1:
+For Hill vortex with β=ξ≈3.043, R=1:
   E_comp ≈ 1.42 (36%)
   E_grad ≈ 2.55 (64%)
   E_total ≈ 3.97
@@ -132,7 +132,7 @@ Physical interpretation: Without the gradient term, there's no constraint
 linking β and R independently. You can make the vortex any size and compensate
 by adjusting β = mass/(C_comp·R³).
 
-This is why V22 couldn't validate β = 3.058 from the Golden Loop - the model
+This is why V22 couldn't validate β ≈ 3.043 from the Golden Loop - the model
 had a free parameter (R) that absorbed all uncertainty.
 
 Proof strategy: For any two radii R₁, R₂, construct β₁, β₂ such that
@@ -431,8 +431,8 @@ lemma beta_offset_relation (g : HillGeometry) (β_true ξ_true R_true : ℝ)
 /-- Numerical validation: β_fit/β_true ≈ 1.03 for V22 parameters.
 
 V22 result: β_empirical ≈ 3.15
-Golden Loop: β_theoretical = 3.058
-Ratio: 3.15/3.058 ≈ 1.030 (3% offset)
+Golden Loop: β_theoretical ≈ 3.043 (derived from α)
+Ratio: 3.15/3.043 ≈ 1.035 (3.5% offset)
 
 From lemma:
   β_fit/β_true = 1 + (ξ·C_grad)/(β·C_comp·R²)
@@ -458,7 +458,7 @@ theorem beta_offset_is_three_percent (g : HillGeometry)
 /-- MCMC Stage 3b validates degeneracy breaking.
 
 Empirical results (Compton scale, R = 386 fm):
-  β = 3.0627 ± 0.1491  (Golden Loop: 3.058)
+  β = 3.0627 ± 0.1491  (Golden Loop: 3.043)
   ξ = 0.9655 ± 0.5494  (Expected: 1.0)
 
   correlation(β, ξ) = 0.008 ≈ 0  ← DEGENERACY BROKEN!
@@ -552,8 +552,8 @@ theorem gradient_dominates_compression (g : HillGeometry)
 Falsifiability: Measure electron, muon, tau masses → extract (β, ξ) →
 compare β to Golden Loop prediction.
 
-Result: β_MCMC = 3.0627 ± 0.1491 vs β_Golden = 3.058
-Offset: 0.15% (within 1σ) ✓ VALIDATED!
+Result: β_MCMC = 3.0627 ± 0.1491 vs β_Golden = 3.043
+Offset: 0.65% (within 1σ) ✓ VALIDATED!
 
 NOTE: This theorem shows existence of parameters fitting all three masses.
 Uniqueness would require fixing the radii (via topological constraints from generation theory).
@@ -583,7 +583,7 @@ Comparison:
   V22 (ξ=0): Infinite (β, R) pairs fit data → DEGENERATE
   Full (β, ξ): Unique R for each mass → NON-DEGENERATE
 
-This is the mathematical reason V22 couldn't validate β = 3.058.
+This is the mathematical reason V22 couldn't validate β ≈ 3.043.
 -/
 theorem degeneracy_resolution_complete (g : HillGeometry) :
     -- V22 is degenerate

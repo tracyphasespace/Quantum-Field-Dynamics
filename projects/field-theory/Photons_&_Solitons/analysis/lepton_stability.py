@@ -7,7 +7,8 @@ def lepton_stability_analysis():
     print("Goal: Find stable isomers (roots) of the Hill Vortex in Beta-Vacuum")
 
     # 1. CONSTANTS (The only inputs)
-    BETA = 3.058  # Vacuum Stiffness
+    # 2026-01-06: Updated from 3.058 (fitted) to 3.04309 (derived from α)
+    BETA = 3.04309  # Vacuum Stiffness (derived from Golden Loop)
 
     print(f"Input: β = {BETA}")
 
@@ -92,7 +93,7 @@ def lepton_stability_analysis():
 
     plt.xlabel("Winding Number Q*")
     plt.ylabel("Stability Force")
-    plt.title(f"Lepton Isomers: Stability Roots in β={BETA} Vacuum")
+    plt.title(f"Lepton Isomers: Stability Roots in β={BETA:.4f} Vacuum")
     plt.grid(True)
     plt.savefig('lepton_stability_roots.png')
     print("\nPlot saved to lepton_stability_roots.png")

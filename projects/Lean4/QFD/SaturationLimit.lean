@@ -244,10 +244,10 @@ The saturation potential parameter μ is related to the vacuum bulk modulus β:
 - Relation: μ ~ β² × ρ_max (stress-strain law)
 
 **Prediction**:
-Given β = 3.058 from Golden Loop and ρ_max from saturation fit,
+Given β = 3.043089… from Golden Loop and ρ_max from saturation fit,
 we can PREDICT μ with no free parameters!
 
-μ_predicted = β² × ρ_max ≈ (3.058)² × ρ_max ≈ 9.35 × ρ_max
+μ_predicted = β² × ρ_max ≈ (3.043)^2 × ρ_max ≈ 9.26 × ρ_max
 
 **Verification**:
 If μ_fitted ≈ μ_predicted, this confirms the β-ρ_max connection.

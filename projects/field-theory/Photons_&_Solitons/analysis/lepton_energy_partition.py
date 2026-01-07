@@ -5,8 +5,8 @@ def analyze_energy_partition():
     print("=== LEPTON ENERGY PARTITION ANALYSIS ===")
     print("Goal: Visualize the transition from Surface-dominated to Bulk-dominated mass.\n")
 
-    # 1. FITTED PARAMETERS (The "Golden Loop")
-    BETA = 3.063   # Bulk Stiffness
+    # 1. GOLDEN LOOP PARAMETERS (2026-01-06: β derived from α)
+    BETA = 3.04309  # Bulk Stiffness (derived from Golden Loop)
     XI   = 0.998   # Surface Tension (Gradient)
     TAU  = 1.010   # Inertia (Time)
 

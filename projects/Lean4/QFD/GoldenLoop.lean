@@ -40,9 +40,9 @@ If β is the correct root, it must predict the nuclear volume coefficient:
     c₂ = 1/β
 
 **Empirical value**: c₂ = 0.32704 (from 2,550 nuclei in NuBase)
-**Predicted value**: c₂ = 1/3.058231 = 0.32698
+**Predicted value**: c₂ = 1/3.043089491989851 = 0.328613
 
-**Error**: 0.02% (six significant figures)
+**Error**: 0.48% (dominated by NuBase heavy-nucleus uncertainty)
 
 This is not a fit - it is a prediction. The value of β comes from solving
 the transcendental equation, and c₂ emerges as 1/β automatically.
@@ -62,6 +62,7 @@ This shifts the Golden Loop from a "consistency check" to a "structural definiti
 -/
 
 import Mathlib.Algebra.Order.Ring.Abs
+import Mathlib.Algebra.Order.Field.Basic
 import Mathlib.Analysis.Real.Pi.Bounds
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Exp
@@ -156,21 +157,22 @@ vacuum can only achieve stability at discrete stiffness values.
 4. Solve e^β/β = K exactly → β = 3.043070
 
 **Verification**:
-- e^3.043070 / 3.043070 = 6.890910 ✓ (exact match to K)
+- e^3.043089491989851 / 3.043089491989851 ≈ 6.8909099568 ✓ (agrees with K)
 
-**Prediction**: c₂ = 1/β = 0.328616
+**Prediction**: c₂ = 1/β = 0.328613
 - NuBase measures c₂ = 0.32704
 - Discrepancy: 0.48% (within NuBase uncertainty ~1%)
 
-**Why 3.043 not 3.058**: We don't round π to 3.14 for convenience.
-The value 3.058 was previously used to fit c₂, but this is circular.
-The correct approach: derive β from α (10⁻¹⁰ precision), predict c₂.
-The 0.48% discrepancy is NuBase measurement error, not theory error.
-Heavy short-lived nuclei (Cf, Fm, etc.) dominate c₂ uncertainty.
+**Interpretation**: The constant 3.058 was previously used because it
+fits c₂ directly, but that is circular.  The vacuum eigenvalue should be
+derived from the high-precision EM input (α), then used to predict c₂.
+The 0.48% tension is attributed to experimental uncertainty in the NuBase
+surface coefficient (dominated by short-lived heavy nuclei).
 
 **Audit trail**: β depends ONLY on α (CODATA) and c₁ (NuBase surface).
 -/
-def beta_golden : ℝ := 3.043  -- Precision limited by c₁ (~1%)
+def beta_golden : ℝ :=
+  (3043089491989851 : ℝ) / 1000000000000000
 
 /-- The consistency predicate: Beta from transcendental equation predicts c₂.
 
@@ -182,7 +184,7 @@ to within NuBase measurement uncertainty (~1%).
 The prediction c₂ = 1/β is then compared to NuBase measurements.
 
 **Prediction test** (2026-01-06):
-- Theoretical: c₂ = 1/β = 1/3.043070 = 0.328616
+- Theoretical: c₂ = 1/β = 1/3.043089491989851 = 0.328613
 - Empirical: c₂ = 0.32704 (NuBase 2020)
 - Error: |0.328616 - 0.32704| / 0.32704 = 0.0048 = 0.48%
 
@@ -226,15 +228,16 @@ theorem K_target_approx :
     simpa using (sq_lt_sq.mpr habs)
   have inv_upper_lt_inv_pi :
       (1 : ℝ) / (3.141593 : ℝ) ^ 2 < 1 / Real.pi ^ 2 := by
-    have hpos : 0 < Real.pi ^ 2 := by
-      have : 0 < Real.pi := Real.pi_pos
-      exact pow_pos this _
-    exact inv_lt_inv_of_lt hpos pi_sq_lt_upper_sq
+    have hpos_pi : 0 < Real.pi ^ 2 := pow_pos Real.pi_pos _
+    have hpos_upper : 0 < (3.141593 : ℝ) ^ 2 := pow_pos upper_pos _
+    have h := one_div_lt_one_div_of_lt hpos_pi pi_sq_lt_upper_sq
+    convert h using 1 <;> simp [one_div]
   have inv_pi_lt_inv_lower :
       1 / Real.pi ^ 2 < 1 / (3.141592 : ℝ) ^ 2 := by
-    have hpos : 0 < (3.141592 : ℝ) ^ 2 := by
-      exact pow_pos lower_pos _
-    exact inv_lt_inv_of_lt hpos lower_sq_lt_pi_sq
+    have hpos_pi : 0 < Real.pi ^ 2 := pow_pos Real.pi_pos _
+    have hpos_lower : 0 < (3.141592 : ℝ) ^ 2 := pow_pos lower_pos _
+    have h := one_div_lt_one_div_of_lt hpos_lower lower_sq_lt_pi_sq
+    convert h using 1 <;> simp [one_div]
   have h_lower :
       alpha_inv_meas * c1_surface / (3.141593 : ℝ) ^ 2 <
         K_target := by
@@ -265,11 +268,15 @@ theorem K_target_approx :
     lt_trans h_upper h_upper_bound
   have h₁ : -0.01 < K_target - 6.891 := by
     have : 6.881 - 6.891 < K_target - 6.891 := sub_lt_sub_right h_lb _
-    simpa using this
+    have h_num : (6.881 : ℝ) - 6.891 = -0.01 := by norm_num
+    rw [h_num] at this
+    exact this
   have h₂ : K_target - 6.891 < 0.01 := by
     have : K_target - 6.891 < 6.901 - 6.891 :=
       sub_lt_sub_right h_ub _
-    simpa using this
+    have h_num : (6.901 : ℝ) - 6.891 = 0.01 := by norm_num
+    rw [h_num] at this
+    exact this
   exact abs_lt.mpr ⟨h₁, h₂⟩
 
 /-- Beta satisfies transcendental equation EXACTLY.
@@ -277,24 +284,24 @@ theorem K_target_approx :
 e^β / β = K for β = 3.043070
 
 **Verification Status**: ✓ VERIFIED (external computation)
-- Computed: e^3.043070 / 3.043070 = 6.890910
-- Target: K_target = 6.890910
+- Computed: e^β / β with β = 3.043089491989851
+- Target: K_target = 6.8909099568…
 - Error: < 10⁻⁶ (essentially zero)
 - Script: derive_beta_from_alpha.py
 
-**2026-01-06 Update**: Changed from β = 3.058 (fitted) to β = 3.043 (derived).
-The new value is the EXACT root of the transcendental equation, derived from
+**2026-01-06 Update**: Changed from β = 3.058 (fitted) to β = 3.043089… (derived).
+The new value is the unique root of the transcendental equation, derived from
 α⁻¹ = 137.035999084 (CODATA 2018, 10⁻¹⁰ precision).
 
 **Why this is an axiom**: `norm_num` cannot evaluate `Real.exp` for arbitrary β.
 Requires exponential approximation tactics (future Mathlib development).
 -/
 axiom beta_satisfies_transcendental :
-    abs (transcendental_equation beta_golden - K_target) < 0.001  -- Now essentially exact
+    abs (transcendental_equation beta_golden - K_target) < 0.001  -- essentially exact
 
 /-- Beta PREDICTS c₂ from 1/β (within NuBase uncertainty).
 
-c₂ = 1/β = 1/3.043070 = 0.328616
+c₂ = 1/β = 1/3.043089491989851 = 0.328613
 vs empirical c₂ = 0.32704 (NuBase 2020)
 
 Error = 0.48% (within ~1% NuBase uncertainty for heavy nuclei)
@@ -331,8 +338,8 @@ theorem beta_physically_reasonable :
 **Statement**: If β satisfies the transcendental equation e^β/β = (α⁻¹ × c₁)/π²,
 then it predicts the nuclear volume coefficient c₂ = 1/β.
 
-**Verification Status**: ✓ VERIFIED for β = 3.043070 (2026-01-06)
-- Predicted: c₂ = 1/β = 0.328616
+**Verification Status**: ✓ VERIFIED for β = 3.043089… (2026-01-06)
+- Predicted: c₂ = 1/β = 0.328613
 - Empirical: c₂ = 0.32704 (NuBase 2020)
 - Error: 0.48% (within NuBase uncertainty)
 
@@ -356,11 +363,10 @@ axiom golden_loop_identity :
 
 /-- Beta from Golden Loop matches VacuumParameters definition.
 
-This ensures consistency across the codebase.
-**2026-01-06**: Updated to derived value 3.043070.
+This ensures consistency across the codebase (derived eigenvalue).
 -/
 theorem beta_matches_vacuum_parameters :
-    beta_golden = 3.043070 := by
+    beta_golden = (3043089491989851 : ℝ) / 1000000000000000 := by
   unfold beta_golden
   rfl
 
@@ -373,7 +379,7 @@ theorem beta_matches_vacuum_parameters :
 **Predict**: c₂ = 1/β
 **Result**: c₂ predicted within NuBase measurement uncertainty (0.48%)
 
-**2026-01-06 Update**: β = 3.043070 (DERIVED from α, not fitted to c₂)
+**2026-01-06 Update**: β = 3.043089491989851 (derived from α, not fitted to c₂)
 
 **Physical meaning**: The vacuum bulk modulus is not a free parameter.
 It is an **eigenvalue of the vacuum** - the unique root of a geometric
@@ -381,7 +387,7 @@ equation that unifies electromagnetic, nuclear, and topological structure.
 
 **Eigenvalue interpretation**: Just as a vibrating string can only exist
 at certain frequencies (eigenvalues), the vacuum can only achieve stability
-at specific stiffness values. The value β = 3.043070 is THE eigenvalue that
+at specific stiffness values. The value β = 3.043089… is the eigenvalue that
 permits a self-consistent vacuum geometry.
 
 **Falsifiability**: If the root of e^β/β = K did NOT yield c₂ = 1/β within

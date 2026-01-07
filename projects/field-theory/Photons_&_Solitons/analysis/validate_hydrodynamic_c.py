@@ -15,9 +15,9 @@ def validate_hydrodynamic_c():
     print("HYDRODYNAMIC DERIVATION: c = √(β/ρ)")
     print("="*70)
     
-    # 1. PARAMETERS
+    # 1. PARAMETERS (2026-01-06: β now derived from α via Golden Loop)
     print("\n[1] VACUUM PARAMETERS")
-    beta = 3.058  # Vacuum stiffness (dimensionless in natural units)
+    beta = 3.04309  # Vacuum stiffness (derived from α: e^β/β = (α⁻¹ × c₁)/π²)
     rho_vac = 1.0  # Vacuum density (normalized to 1 in natural units)
     
     print(f"    β (stiffness) = {beta}")
@@ -55,7 +55,7 @@ def validate_hydrodynamic_c():
     
     # 5. SCALING LAW
     print("\n[5] SCALING LAW: c ∝ √β")
-    beta_values = np.array([1.0, 2.0, 3.058, 4.0, 5.0])
+    beta_values = np.array([1.0, 2.0, 3.04309, 4.0, 5.0])  # α-derived β
     c_values = np.sqrt(beta_values / rho_vac)
     
     print("    β       c = √(β/ρ)")

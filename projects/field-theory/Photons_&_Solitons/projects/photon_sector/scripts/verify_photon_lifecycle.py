@@ -17,8 +17,8 @@ import os
 
 # --- QFD Vacuum Parameters ---
 # The stiffness of the vacuum field. High beta = Stiff = High c.
-# Derived from Golden Loop (beta ~ 3.058).
-BETA = 3.058 
+# 2026-01-06: β derived from α via Golden Loop, not fitted
+BETA = 3.04309  # Vacuum stiffness (derived from α)
 VACUUM_DENSITY = 1.0  
 C_VAC = np.sqrt(BETA / VACUUM_DENSITY)  # Emergent speed of light
 

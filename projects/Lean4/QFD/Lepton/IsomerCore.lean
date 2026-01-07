@@ -1,4 +1,5 @@
 import Mathlib.Data.Real.Basic
+import Mathlib.Topology.Order.LocalExtr
 import QFD.Hydrogen.PhotonSolitonEmergentConstants
 
 noncomputable section

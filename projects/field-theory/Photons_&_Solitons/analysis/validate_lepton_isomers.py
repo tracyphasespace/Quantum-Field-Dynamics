@@ -23,7 +23,8 @@ def validate_lepton_isomers():
     
     # 1. CONSTANTS
     print("\n[1] CONSTANTS")
-    beta = 3.058  # Vacuum stiffness
+    # 2026-01-06: β derived from α (Golden Loop), not fitted
+    beta = 3.04309  # Vacuum stiffness (derived from Golden Loop)
     lambda_mass = 1.66053906660e-27  # 1 AMU in kg
     
     # Convert to MeV/c² for particle physics
