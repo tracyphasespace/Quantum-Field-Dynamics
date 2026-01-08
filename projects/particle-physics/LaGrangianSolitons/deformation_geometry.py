@@ -32,9 +32,11 @@ Strategy:
 import numpy as np
 from collections import Counter, defaultdict
 
-# QFD Constants
-alpha_fine = 1.0 / 137.036
-beta_vacuum = 1.0 / 3.058231
+# QFD Constants (α-derived, 2026-01-07)
+# β = 3.04309 derived from Golden Loop: 1/α = 2π²(e^β/β) + 1
+alpha_fine = 1.0 / 137.035999206  # CODATA 2018
+BETA_VACUUM_STIFFNESS = 3.04309   # Vacuum stiffness (derived from α)
+beta_vacuum = 1.0 / BETA_VACUUM_STIFFNESS  # c₂ = 1/β = 0.328615
 M_proton = 938.272
 KAPPA_E = 0.0001
 SHIELD_FACTOR = 0.52

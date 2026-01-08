@@ -8,23 +8,26 @@ hundreds of files.
 
 ## Snapshot Metrics
 
-| Scope | Lean files | Theorems / Lemmas | Explicit `axiom`s | Sorrys |
-|-------|------------|-------------------|-------------------|--------|
-| Entire repo (incl. subdirs) | 204 | 1082 | 5 | 8 |
+| Scope | Lean files | Theorems | Lemmas | Explicit `axiom`s | Sorrys |
+|-------|------------|----------|--------|-------------------|--------|
+| Entire repo (incl. subdirs) | 204 | 706 | 177 | 36 | 8 |
 
-*(Counts obtained via `rg` scans across the repo on 2026‑01‑06.)*
+*(Counts obtained via a Python script that ignores comments/docstrings;
+see below for the snippet used on 2026‑01‑06.)*
 
 **Updated 2026-01-06**: Consolidated every explicit `axiom` declaration into
 `Physics/Postulates.lean` (including the new Hill-vortex shell theorem axiom) and
-re-ran the repo-wide counts. We now have **1082** named theorems/lemmas, only **8**
-`sorry` placeholders, and just **5** explicit `axiom` keywords (all located inside
-`Physics/Postulates.lean`). All other “axioms” of physics are recorded as structured
-fields of `Core`, `SolitonPostulates`, etc., so downstream files take them as arguments
-rather than sprinkling ad‑hoc assumptions.
+re-ran the repo-wide counts using a parser-friendly script. We now have **706**
+`theorem` declarations, **177** `lemma` declarations, only **8**
+`sorry` placeholders, and **36** explicit `axiom` keywords (all located inside
+`Physics/Postulates.lean`). All other “axioms” are expressed as fields of the
+postulate structures (`Core`, `SolitonPostulates`, etc.), so downstream files
+take them as hypotheses rather than sprinkling ad hoc assumptions.
 
-- **Completion rate:** > 99% of theorems are fully proved (8 sorrys among 1082 statements).
+- **Completion rate:** > 98% of statements are fully proved (8 sorrys among 883 declarations).
 - **Axioms:** `Physics/Postulates.lean` is now the *only* file containing explicit `axiom`
-  commands: conservation laws, vacuum eigenvalue bounds, and the Hill-vortex shell theorem.
+  commands; conservation laws, vacuum eigenvalue bounds, and the Hill-vortex shell theorem
+  live there as bundled fields.
 - **Testing:** `lake build QFD` compiles the entire library; targeted `lake env lean
   --make path.lean` commands recheck critical files.
 
