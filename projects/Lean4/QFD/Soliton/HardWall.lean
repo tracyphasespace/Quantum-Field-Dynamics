@@ -84,24 +84,60 @@ theorem ricker_shape_at_zero :
 **Lemma**: The shape function is bounded above by 1.
 For all x, S(x) ≤ 1.
 
-**Sketch**: The derivative dS/dx = 0 occurs at x=0 and x=√3.
-At x=0: S = 1
-At x=√3: S = -2 exp(-3/2) ≈ -0.446
-As x→∞: S → 0
-Therefore max(S) = 1.
+**Proof** (no calculus needed):
+- `0 < exp(-x²/2) ≤ 1` for all x
+- `(1 - x²) ≤ 1` for all x
+- Case |x| ≤ 1: both factors ≤ 1 and non-negative, so product ≤ 1
+- Case |x| > 1: (1-x²) < 0 and exp > 0, so product < 0 < 1
 -/
-axiom ricker_shape_bounded : ∀ x, ricker_shape x ≤ 1
+theorem ricker_shape_bounded : ∀ x, ricker_shape x ≤ 1 := by
+  intro x
+  unfold ricker_shape
+  have hsq : 0 ≤ x^2 := sq_nonneg x
+  have hexp_pos : 0 < exp (-x^2 / 2) := exp_pos _
+  have hexp_le : exp (-x^2 / 2) ≤ 1 := by
+    rw [exp_le_one_iff]
+    linarith
+  by_cases h : x^2 ≤ 1
+  · -- Case |x| ≤ 1: (1 - x²) ∈ [0, 1]
+    have h4 : 0 ≤ 1 - x^2 := by linarith
+    have h1 : 1 - x^2 ≤ 1 := by linarith [hsq]
+    calc (1 - x^2) * exp (-x^2 / 2)
+        ≤ (1 - x^2) * 1 := by nlinarith
+      _ ≤ 1 := by linarith
+  · -- Case |x| > 1: (1 - x²) < 0, so product < 0 < 1
+    push_neg at h
+    have h1 : 1 - x^2 < 0 := by linarith
+    have h3 : (1 - x^2) * exp (-x^2 / 2) < 0 := by nlinarith
+    linarith
 
 /--
 **Lemma**: For negative amplitudes, the global minimum is at the origin.
 If A < 0, then ψ(R) ≥ ψ(0) = A for all R.
 
-**Sketch**: Since S(x) ≤ 1 and A < 0, we have:
+**Proof**: Since S(x) ≤ 1 and A < 0, multiplying A by S flips the inequality:
   A · S(x) ≥ A · 1 = A
 -/
-axiom ricker_negative_minimum :
+theorem ricker_negative_minimum :
     ∀ (ctx : VacuumContext) (A : ℝ), A < 0 →
-    ∀ R, 0 ≤ R → ricker_wavelet ctx A R ≥ A
+    ∀ R, 0 ≤ R → ricker_wavelet ctx A R ≥ A := by
+  intro ctx A hA R _hR
+  unfold ricker_wavelet
+  -- ricker_wavelet = A * ricker_shape(R/σ)
+  -- We need: A * S ≥ A where S = ricker_shape(R/σ)
+  let x := R / ctx.σ
+  have hS : ricker_shape x ≤ 1 := ricker_shape_bounded x
+  -- For A < 0 and S ≤ 1: A * S ≥ A * 1 = A
+  have h : A * ricker_shape x ≥ A * 1 := by
+    have : A * 1 ≤ A * ricker_shape x := by
+      apply mul_le_mul_of_nonpos_left hS
+      linarith
+    linarith
+  simp only [mul_one] at h
+  -- ricker_wavelet = A * (1 - x²) * exp(...) = A * ricker_shape x
+  unfold ricker_shape at h
+  convert h using 1
+  ring
 
 /-! ## 2. The Cavitation Constraint -/
 
