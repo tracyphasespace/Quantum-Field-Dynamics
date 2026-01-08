@@ -31,7 +31,7 @@ where β = 3.043089491989851 (vacuum bulk modulus from Golden Loop)
 ## References
 - Analytical test: BETA_N_GAMMA_E_TEST.md
 - Vacuum parameters: QFD/Vacuum/VacuumParameters.lean
-- Beta from Golden Loop: goldenLoopBeta = 3.058231
+- Beta from Golden Loop: goldenLoopBeta ≈ 3.043
 -/
 
 import QFD.Vacuum.VacuumParameters

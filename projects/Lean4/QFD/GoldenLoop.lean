@@ -125,7 +125,7 @@ noncomputable def K_target : ℝ := (alpha_inv_meas * c1_surface) / pi_sq_topo
 vacuum field circulation. The equation f(β) = K has a unique positive root.
 
 **Solution method**: Numerical root-finding (Newton-Raphson or similar)
-determines β = 3.058231 as the unique solution.
+determines β ≈ 3.043089 as the unique solution (derived from α).
 -/
 noncomputable def transcendental_equation (beta : ℝ) : ℝ :=
   (Real.exp beta) / beta

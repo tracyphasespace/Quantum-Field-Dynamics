@@ -1141,11 +1141,11 @@ variable {Ψ_QFD : Type} [QFDFieldSpec Ψ_QFD]
 **New Module**: `QFD.GoldenLoop` (320 lines)
 - Formalizes Appendix Z.17.6 analytic derivation
 - Defines transcendental equation: e^β/β = K where K = (α⁻¹ × c₁)/π²
-- Proves β = 3.058231 is the root that predicts c₂ = 1/β
+- Proves β ≈ 3.043 is the root that predicts c₂ = 1/β
 - Theorems: 4 proven, 2 axioms (numerical verifications requiring Real.exp/pi evaluation)
 
 **Paradigm Shift**:
-- Before: β = 3.058 (empirical fit parameter)
+- Before: β ≈ 3.043 (empirical fit parameter)
 - After: β is THE ROOT of transcendental equation unifying EM (α), nuclear (c₁, c₂), and topology (π²)
 
 **Key Theorems**:
@@ -1219,7 +1219,7 @@ Single parameter (β) connects electromagnetic, nuclear, and gravitational secto
 - α_n = (8/7)×β = 3.495 (0.14% error)
 - β_n = (9/7)×β = 3.932 (0.82% error)
 - γ_e = (9/5)×β = 5.505 (0.09% error)
-- V₄_nuc = β = 3.058 (direct property)
+- V₄_nuc = β ≈ 3.043 (direct property)
 
 **From λ (vacuum density)**:
 - k_c2 = λ = 938.272 MeV (0% error)
@@ -1228,7 +1228,7 @@ Single parameter (β) connects electromagnetic, nuclear, and gravitational secto
 - ξ_QFD = k_geom²×(5/6) = 16.0 (< 0.6% error)
 
 **Previously locked**:
-- β = 3.058 (Golden Loop from α)
+- β ≈ 3.043 (Golden Loop from α)
 - λ ≈ m_p (Proton Bridge)
 - ξ, τ ≈ 1 (order unity)
 - α_circ = e/(2π) (topology)

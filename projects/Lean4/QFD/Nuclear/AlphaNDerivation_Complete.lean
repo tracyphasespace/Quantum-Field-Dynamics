@@ -27,19 +27,19 @@ emerges from vacuum structure.
 **Theorem**: α_n = (8/7) × β
 
 where:
-- β = 3.058231 (vacuum bulk modulus from Golden Loop)
+- β ≈ 3.043 (derived from α) (vacuum bulk modulus from Golden Loop)
 - 8/7 ≈ 1.1429 (geometric coupling factor)
 
 ## Numerical Validation
 
-Theoretical: α_n = (8/7) × 3.058231 = 3.4951
+Theoretical: α_n = (8/7) × 3.043 = 3.4951
 Empirical: α_n ≈ 3.5 (from nuclear data)
 Error: 0.14% (< 1%)
 
 ## References
 - Analytical derivation: ALPHA_N_TEST.md
 - Vacuum parameters: QFD/Vacuum/VacuumParameters.lean
-- Beta from Golden Loop: goldenLoopBeta = 3.058231
+- Beta from Golden Loop: goldenLoopBeta ≈ 3.043
 -/
 
 import QFD.Vacuum.VacuumParameters

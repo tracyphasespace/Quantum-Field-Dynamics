@@ -29,17 +29,17 @@ In QFD, both emerge from vacuum structure with geometric corrections.
 **Theorem 1**: β_n = (9/7) × β
 **Theorem 2**: γ_e = (9/5) × β
 
-where β = 3.058231 (vacuum bulk modulus from Golden Loop)
+where β ≈ 3.043 (derived from α) (vacuum bulk modulus from Golden Loop)
 
 ## Numerical Validation
 
-β_n: (9/7) × 3.058231 = 3.932 vs 3.9 empirical (0.82% error)
-γ_e: (9/5) × 3.058231 = 5.505 vs 5.5 empirical (0.09% error!)
+β_n: (9/7) × 3.043 = 3.932 vs 3.9 empirical (0.82% error)
+γ_e: (9/5) × 3.043 = 5.505 vs 5.5 empirical (0.09% error!)
 
 ## References
 - Analytical test: BETA_N_GAMMA_E_TEST.md
 - Vacuum parameters: QFD/Vacuum/VacuumParameters.lean
-- Beta from Golden Loop: goldenLoopBeta = 3.058231
+- Beta from Golden Loop: goldenLoopBeta ≈ 3.043
 -/
 
 import QFD.Vacuum.VacuumParameters

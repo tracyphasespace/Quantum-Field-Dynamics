@@ -45,7 +45,7 @@ noncomputable def alpha_circ : ℝ := Real.exp 1 / (2 * Real.pi)  -- Duplication
 
 | Constant | Value | Validation | Source |
 |----------|-------|------------|--------|
-| `beta` (compression) | 3.058 | Golden Loop + MCMC | VacuumParameters.lean:39 |
+| `beta` (compression) | 3.043 | Derived from α (Golden Loop) | VacuumParameters.lean:46 |
 | `xi` (gradient) | 1.0 | MCMC fitted | VacuumParameters.lean:70 |
 | `tau` (temporal) | 1.0 | MCMC fitted | VacuumParameters.lean:98 |
 

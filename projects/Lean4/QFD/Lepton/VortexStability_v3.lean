@@ -6,7 +6,7 @@ Authors: Tracy
 # Vortex Stability: β-ξ Degeneracy Resolution
 
 This module formalizes the mathematical breakthrough that resolved the β-parameter
-offset between V22 (β ≈ 3.15) and Golden Loop (β = 3.058).
+offset between V22 (β ≈ 3.15) and Golden Loop (β ≈ 3.043, derived from α).
 
 ## Key Results
 
@@ -24,8 +24,8 @@ This explains the 3% offset as the "Geometric Signature of Gradient Energy."
 ## Physical Interpretation
 
 The gradient term ξ|∇ρ|² contributes ~64% of total energy for Hill vortex.
-V22 model (ξ=0) compensated by inflating β from 3.058 to 3.15.
-Including ξ breaks the (β, R) degeneracy and validates β = 3.058 from α.
+V22 model (ξ=0) compensated by inflating β from ~3.043 to 3.15.
+Including ξ breaks the (β, R) degeneracy and validates β ≈ 3.043 from α.
 
 ## References
 - Source: complete_energy_functional/D_FLOW_ELECTRON_FINAL_SYNTHESIS.md
