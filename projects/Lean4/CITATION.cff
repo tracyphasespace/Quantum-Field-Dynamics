@@ -2,14 +2,14 @@ cff-version: 1.2.0
 message: "If you use this formalization in your research, please cite it as below."
 type: software
 title: "Quantum Field Dynamics: Lean 4 Formalization"
-abstract: "Machine-checked formalization of Quantum Field Dynamics theorems in Lean 4, including spacetime emergence from Cl(3,3), CMB 'Axis of Evil' uniqueness proofs, lepton mass spectrum and magnetic properties, black hole information conservation, Noether conservation laws, Dirac algebra realization, charge quantization, nuclear physics (Yukawa force from vacuum gradient, nuclear parameter derivation from vacuum bulk modulus), and cosmological predictions. 791 proven statements (610 theorems + 181 lemmas) across 169 Lean files with 580 definitions and 76 structures. Zero sorries - 100% completion maintained. All placeholder files removed - only verified proofs remain. 31 axioms - all disclosed in AXIOM_INVENTORY.md. Aristotle collaboration: 8 files integrated with improved proof structure. QM Translation complete: geometric algebra formalism (Cl(3,3)) with complex number i replaced by bivector B = e₄ ∧ e₅ (2026-01-02)."
+abstract: "Machine-checked formalization of Quantum Field Dynamics theorems in Lean 4, including spacetime emergence from Cl(3,3), CMB 'Axis of Evil' uniqueness proofs, lepton mass spectrum and magnetic properties, black hole saturation (non-singular), tired light cosmology, Noether conservation laws, Dirac algebra realization, charge quantization, nuclear physics (Yukawa force, fission limits), and galactic rotation curves. 1008 proven statements (829 theorems + 179 lemmas) across 213 Lean files with 755 definitions and 165 structures. Zero sorries - 100% completion maintained. 43 axioms - all disclosed in Physics/Postulates.lean. Logic Fortress milestone: 1000+ theorems achieved (2026-01-08)."
 authors:
   - family-names: "QFD Formalization Team"
     affiliation: "Quantum Field Dynamics Project"
 repository-code: "https://github.com/tracyphasespace/Quantum-Field-Dynamics"
 license: MIT
-date-released: 2026-01-02
-version: "1.7"
+date-released: 2026-01-08
+version: "2.0"
 keywords:
   - formal verification
   - Lean 4

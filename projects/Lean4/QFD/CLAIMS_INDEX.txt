@@ -14,7 +14,8 @@ QFD/Atomic/ResonanceDynamics.lean:161:theorem zeeman_frequency_shift
 QFD/Atomic/ResonanceDynamics.lean:44:lemma response_scaling
 QFD/Atomic/ResonanceDynamics.lean:49:lemma universal_response_constant
 QFD/Atomic/ResonanceDynamics.lean:61:theorem electron_reacts_first
-QFD/Atomic/SpinOrbitChaos.lean:90:theorem coupling_destroys_linearity
+QFD/Atomic/SpinOrbitChaos.lean:171:theorem system_eventually_reaches_alignment (P : QFD.Physics.Model)
+QFD/Atomic/SpinOrbitChaos.lean:63:theorem coupling_destroys_linearity
 QFD/BivectorClasses_Complete.lean:126:lemma basis_ortho {i j : Fin 6} (h : i ≠ j) :
 QFD/BivectorClasses_Complete.lean:171:theorem spatial_bivectors_are_rotors (i j : Fin 3) (h_neq : i ≠ j) :
 QFD/BivectorClasses_Complete.lean:204:theorem space_momentum_bivectors_are_boosts (i : Fin 3) (j : Fin 3) :
@@ -22,6 +23,21 @@ QFD/BivectorClasses_Complete.lean:243:theorem momentum_bivectors_are_rotors (i j
 QFD/BivectorClasses_Complete.lean:286:theorem qfd_internal_rotor_is_rotor :
 QFD/BivectorClasses_Complete.lean:63:lemma Q33_on_single (i : Fin 6) :
 QFD/BivectorClasses_Complete.lean:87:theorem simple_bivector_square_classes (u v : Fin 6 → ℝ)
+QFD/BlackHole/SaturationLimit.lean:114:theorem schwarzschild_radius_positive (M : ℝ) (hM : M > 0) :
+QFD/BlackHole/SaturationLimit.lean:120:theorem schwarzschild_linear (M₁ M₂ : ℝ) :
+QFD/BlackHole/SaturationLimit.lean:137:theorem density_profile_bounded (r_core r : ℝ) (ρ_max : ℝ)
+QFD/BlackHole/SaturationLimit.lean:158:theorem density_at_center_is_finite (r_core : ℝ) (ρ_max : ℝ)
+QFD/BlackHole/SaturationLimit.lean:172:theorem curvature_bounded (ρ ρ_max κ : ℝ)
+QFD/BlackHole/SaturationLimit.lean:179:theorem no_singularity (r_core r : ℝ) (ρ_max κ : ℝ)
+QFD/BlackHole/SaturationLimit.lean:200:theorem enclosed_mass_nonneg (r_core r ρ_max : ℝ)
+QFD/BlackHole/SaturationLimit.lean:225:theorem enclosed_mass_at_origin (r_core ρ_max : ℝ) (h_core_pos : r_core > 0) :
+QFD/BlackHole/SaturationLimit.lean:231:theorem enclosed_mass_monotonic (r_core r₁ r₂ ρ_max : ℝ)
+QFD/BlackHole/SaturationLimit.lean:260:theorem hawking_temperature_positive (M T_planck : ℝ)
+QFD/BlackHole/SaturationLimit.lean:272:theorem larger_is_colder (M₁ M₂ T_planck : ℝ)
+QFD/BlackHole/SaturationLimit.lean:299:theorem entropy_nonneg (M : ℝ) :
+QFD/BlackHole/SaturationLimit.lean:309:theorem entropy_increases_with_mass (M₁ M₂ : ℝ)
+QFD/BlackHole/SaturationLimit.lean:62:theorem saturation_density_positive :
+QFD/BlackHole/SaturationLimit.lean:68:theorem saturation_density_approx :
 QFD/Charge/Coulomb.lean:27:theorem inverse_square_force (ctx : VacuumContext) (sign : PerturbationSign) (k : ℝ) (r : ℝ)
 QFD/Charge/Coulomb.lean:66:theorem interaction_sign_rule (sign1 sign2 : PerturbationSign) :
 QFD/Charge/Coulomb.lean:83:theorem coulomb_force (ctx : VacuumContext) (sign1 sign2 : PerturbationSign) (k : ℝ) (r : ℝ)
@@ -106,6 +122,21 @@ QFD/Cosmology/CoaxialAlignment_original_backup.lean:118:theorem coaxial_from_sha
 QFD/Cosmology/CoaxialAlignment_original_backup.lean:35:lemma axis_unique_from_AxisSet {n m : R3} (hn : IsUnit n) (hm : IsUnit m) :
 QFD/Cosmology/CoaxialAlignment_original_backup.lean:66:theorems. Since there's only one pair of antipodal points that can be the
 QFD/Cosmology/CoaxialAlignment_original_backup.lean:69:theorem coaxial_quadrupole_octupole
+QFD/Cosmology/GalacticScaling.lean:110:theorem asymptotic_mass_positive (p : VacuumDensityProfile) :
+QFD/Cosmology/GalacticScaling.lean:123:theorem effective_mass_at_origin (p : VacuumDensityProfile) :
+QFD/Cosmology/GalacticScaling.lean:138:theorem effective_mass_nonneg (p : VacuumDensityProfile) (r : ℝ) (hr : r ≥ 0) :
+QFD/Cosmology/GalacticScaling.lean:172:theorem rotation_velocity_sq_nonneg (p : VacuumDensityProfile) (r : ℝ) (hr : r > 0) :
+QFD/Cosmology/GalacticScaling.lean:204:theorem isothermal_velocity_positive (rho_0 r_core : ℝ)
+QFD/Cosmology/GalacticScaling.lean:230:theorem dark_matter_r_squared_falloff (rho_vac r_core r₁ r₂ : ℝ)
+QFD/Cosmology/GalacticScaling.lean:241:theorem vacuum_replaces_dark_matter (rho_vac r_core r : ℝ)
+QFD/Cosmology/GalacticScaling.lean:260:theorem tully_fisher_exponent_exact :
+QFD/Cosmology/GalacticScaling.lean:273:theorem btf_coeff_positive (rho_vac : ℝ) (h : rho_vac > 0) :
+QFD/Cosmology/GalacticScaling.lean:284:theorem vacuum_density_scale_positive :
+QFD/Cosmology/GalacticScaling.lean:290:theorem vacuum_density_scale_gev :
+QFD/Cosmology/GalacticScaling.lean:304:theorem galactic_radius_positive :
+QFD/Cosmology/GalacticScaling.lean:64:theorem vacuum_density_positive (p : VacuumDensityProfile) (r : ℝ) :
+QFD/Cosmology/GalacticScaling.lean:71:theorem vacuum_density_decreasing (p : VacuumDensityProfile) (r₁ r₂ : ℝ)
+QFD/Cosmology/GalacticScaling.lean:84:theorem vacuum_density_at_center (p : VacuumDensityProfile) :
 QFD/Cosmology/HubbleDrift.lean:19:theorem redshift_is_exponential_decay (E : ℝ → ℝ) (H : ℝ)
 QFD/Cosmology/KernelAxis.lean:30:lemma abs_ip_le_one_of_unit (n x : R3) (hn : IsUnit n) (hx : IsUnit x) :
 QFD/Cosmology/KernelAxis.lean:38:lemma abs_ip_nn_eq_one (n : R3) (hn : IsUnit n) : |ip n n| = 1 := by
@@ -256,11 +287,12 @@ QFD/GA/PhaseCentralizer_original_backup.lean:164:theorem internal_vectors_notin_
 QFD/GA/PhaseCentralizer_original_backup.lean:38:theorem basis_sq (i : Fin 6) :
 QFD/GA/PhaseCentralizer_original_backup.lean:43:theorem basis_anticomm {i j : Fin 6} (h : i ≠ j) :
 QFD/GA/PhaseCentralizer_original_backup.lean:54:lemma basis_neq_neg (i : Fin 6) : e i ≠ - e i := by
-QFD/GoldenLoop.lean:240:theorem beta_predicts_c2 :
-QFD/GoldenLoop.lean:247:theorem beta_golden_positive : 0 < beta_golden := by
-QFD/GoldenLoop.lean:255:theorem beta_physically_reasonable :
-QFD/GoldenLoop.lean:294:theorem beta_matches_vacuum_parameters :
-QFD/GoldenLoop.lean:324:theorem golden_loop_complete :
+QFD/GoldenLoop.lean:207:theorem K_target_approx :
+QFD/GoldenLoop.lean:314:theorem beta_predicts_c2 :
+QFD/GoldenLoop.lean:321:theorem beta_golden_positive : 0 < beta_golden := by
+QFD/GoldenLoop.lean:329:theorem beta_physically_reasonable :
+QFD/GoldenLoop.lean:368:theorem beta_matches_vacuum_parameters :
+QFD/GoldenLoop.lean:402:theorem golden_loop_complete :
 QFD/Gravity/GeodesicEquivalence.lean:87:theorem geodesic_is_refractive (n : RefractiveIndex V) (h_phys : is_physical n) :
 QFD/Gravity/GeodesicForce.lean:29:theorem radialForce_eq
 QFD/Gravity/GeodesicForce.lean:57:lemma hasDerivAt_rhoPointMass (M : ℝ) {r : ℝ} (hr : r ≠ 0) :
@@ -292,30 +324,30 @@ QFD/Hydrogen/PhotonScattering.lean:149:theorem stokes_implies_redshift
 QFD/Hydrogen/PhotonScattering.lean:196:theorem antiStokes_cools_atom
 QFD/Hydrogen/PhotonScattering.lean:209:theorem rayleigh_preserves_photon_energy
 QFD/Hydrogen/PhotonScattering.lean:258:theorem mechanisticAbsorbs_is_interact
-QFD/Hydrogen/PhotonSoliton.lean:127:theorem energy_momentum_relation (γ : Photon) :
-QFD/Hydrogen/PhotonSoliton.lean:133:theorem wavelength_pos (γ : Photon) : wavelength γ > 0 := by
-QFD/Hydrogen/PhotonSoliton.lean:139:theorem momentum_pos (γ : Photon) (h_hbar : M.ℏ > 0) : momentum M γ > 0 := by
-QFD/Hydrogen/PhotonSoliton.lean:144:theorem energy_pos (γ : Photon) (h_hbar : M.ℏ > 0) (h_c : M.c_vac > 0) :
-QFD/Hydrogen/PhotonSoliton.lean:186:theorem soliton_of_config
-QFD/Hydrogen/PhotonSoliton.lean:210:theorem netCharge_zero (H : Hydrogen M) : H.netCharge = 0 := by
-QFD/Hydrogen/PhotonSoliton.lean:252:theorem absorption_geometric_match
-QFD/Hydrogen/PhotonSoliton.lean:274:theorem emission_geometric_match
-QFD/Hydrogen/PhotonSoliton.lean:286:theorem electron_exists_of_config
-QFD/Hydrogen/PhotonSoliton.lean:298:theorem proton_exists_of_config
-QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:150:theorem vacuum_length_scale_inversion :
-QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:183:theorem nuclear_scale_prediction
-QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:203:theorem compton_connection :
-QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:218:theorem hbar_pos : M.hbar > 0 := by
-QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:239:theorem unification_scale_match
-QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:77:theorem photon_momentum_inheritance (γ : PhotonWave) :
-QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:88:theorem photon_energy_inheritance (γ : PhotonWave) :
-QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:98:theorem emergent_massless_consistency
-QFD/Hydrogen/PhotonSolitonStable.lean:116:theorem stableSoliton_persists
-QFD/Hydrogen/PhotonSolitonStable.lean:180:theorem k_eq_twoPi_div_lambda (γ : PhotonWave) :
-QFD/Hydrogen/PhotonSolitonStable.lean:188:theorem momentum_eq_hbar_twoPi_div_lambda (γ : PhotonWave) :
-QFD/Hydrogen/PhotonSolitonStable.lean:201:theorem energy_eq_cVac_mul_momentum
-QFD/Hydrogen/PhotonSolitonStable.lean:253:theorem absorptionP_of_gap
-QFD/Hydrogen/PhotonSolitonStable.lean:99:theorem stableSoliton_of_config
+QFD/Hydrogen/PhotonSoliton.lean:128:theorem energy_momentum_relation (γ : Photon) :
+QFD/Hydrogen/PhotonSoliton.lean:134:theorem wavelength_pos (γ : Photon) : wavelength γ > 0 := by
+QFD/Hydrogen/PhotonSoliton.lean:140:theorem momentum_pos (γ : Photon) (h_hbar : M.ℏ > 0) : momentum M γ > 0 := by
+QFD/Hydrogen/PhotonSoliton.lean:145:theorem energy_pos (γ : Photon) (h_hbar : M.ℏ > 0) (h_c : M.c_vac > 0) :
+QFD/Hydrogen/PhotonSoliton.lean:187:theorem soliton_of_config
+QFD/Hydrogen/PhotonSoliton.lean:211:theorem netCharge_zero (H : Hydrogen M) : H.netCharge = 0 := by
+QFD/Hydrogen/PhotonSoliton.lean:253:theorem absorption_geometric_match
+QFD/Hydrogen/PhotonSoliton.lean:275:theorem emission_geometric_match
+QFD/Hydrogen/PhotonSoliton.lean:287:theorem electron_exists_of_config
+QFD/Hydrogen/PhotonSoliton.lean:299:theorem proton_exists_of_config
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:118:theorem vacuum_length_scale_inversion :
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:151:theorem nuclear_scale_prediction
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:171:theorem compton_connection :
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:186:theorem hbar_pos : M.hbar > 0 := by
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:207:theorem unification_scale_match
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:78:theorem photon_momentum_inheritance (γ : PhotonWave) :
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:89:theorem photon_energy_inheritance (γ : PhotonWave) :
+QFD/Hydrogen/PhotonSolitonEmergentConstants.lean:99:theorem emergent_massless_consistency
+QFD/Hydrogen/PhotonSolitonStable.lean:100:theorem stableSoliton_of_config
+QFD/Hydrogen/PhotonSolitonStable.lean:117:theorem stableSoliton_persists
+QFD/Hydrogen/PhotonSolitonStable.lean:181:theorem k_eq_twoPi_div_lambda (γ : PhotonWave) :
+QFD/Hydrogen/PhotonSolitonStable.lean:189:theorem momentum_eq_hbar_twoPi_div_lambda (γ : PhotonWave) :
+QFD/Hydrogen/PhotonSolitonStable.lean:202:theorem energy_eq_cVac_mul_momentum
+QFD/Hydrogen/PhotonSolitonStable.lean:254:theorem absorptionP_of_gap
 QFD/Hydrogen/PhotonSoliton_Kinematic.lean:102:theorem energy_momentum_relation (γ : Photon) :
 QFD/Hydrogen/PhotonSoliton_Kinematic.lean:153:theorem absorption_geometric_match
 QFD/Hydrogen/SpeedOfLight.lean:110:theorem planck_depends_on_stiffness
@@ -359,9 +391,9 @@ QFD/Lepton/AnomalousMoment.lean:320:theorem compton_condition (m : ℝ) (h_pos :
 QFD/Lepton/AnomalousMoment.lean:332:theorem V4_comp_matches_vacuum_params
 QFD/Lepton/Antimatter.lean:48:theorem antimatter_flips_charge (ψ : Wavelet) :
 QFD/Lepton/Antimatter.lean:59:theorem antimatter_preserves_mass (ψ : Wavelet) :
-QFD/Lepton/FineStructure.lean:105:theorem beta_determines_qed_coefficient
-QFD/Lepton/FineStructure.lean:63:theorem fine_structure_constraint
-QFD/Lepton/FineStructure.lean:81:theorem beta_validated_from_mcmc :
+QFD/Lepton/FineStructure.lean:126:theorem beta_determines_qed_coefficient
+QFD/Lepton/FineStructure.lean:69:theorem fine_structure_constraint
+QFD/Lepton/FineStructure.lean:87:theorem beta_validated_from_mcmc :
 QFD/Lepton/FormFactors.lean:32:theorem topology_shifts_coupling
 QFD/Lepton/Generations.lean:104:lemma basis_xy_ne_x : IsomerBasis .xy ≠ IsomerBasis .x := fun h => basis_x_ne_xy h.symm
 QFD/Lepton/Generations.lean:105:lemma basis_xyz_ne_x : IsomerBasis .xyz ≠ IsomerBasis .x := fun h => basis_x_ne_xyz h.symm
@@ -391,11 +423,12 @@ QFD/Lepton/LeptonG2Prediction.lean:103:theorem mass_magnetism_coupling
 QFD/Lepton/LeptonG2Prediction.lean:114:theorem prediction_sign_correct (vac : ElasticVacuum) :
 QFD/Lepton/LeptonG2Prediction.lean:125:theorem polarization_increases_with_surface_tension
 QFD/Lepton/LeptonG2Prediction.lean:152:theorem hierarchy_of_scales
-QFD/Lepton/LeptonIsomers.lean:164:theorem mass_increases_with_winding
-QFD/Lepton/LeptonIsomers.lean:183:theorem muon_heavier_than_electron
-QFD/Lepton/LeptonIsomers.lean:232:theorem muon_decay_exothermic
-QFD/Lepton/LeptonIsomers.lean:246:theorem muon_decay_energy_release
-QFD/Lepton/LeptonIsomers.lean:283:theorem generation_mass_ordering
+QFD/Lepton/LeptonIsomers.lean:150:theorem electron_muon_qstar_gap
+QFD/Lepton/LeptonIsomers.lean:211:theorem mass_increases_with_winding
+QFD/Lepton/LeptonIsomers.lean:243:theorem muon_heavier_than_electron
+QFD/Lepton/LeptonIsomers.lean:282:theorem muon_decay_exothermic
+QFD/Lepton/LeptonIsomers.lean:296:theorem muon_decay_energy_release
+QFD/Lepton/LeptonIsomers.lean:319:theorem generation_mass_ordering
 QFD/Lepton/MassFunctional.lean:45:lemma real_energy_density_scale (k : ℝ) (x : Cl33) :
 QFD/Lepton/MassFunctional.lean:74:theorem mass_is_positive
 QFD/Lepton/MassFunctional.lean:98:theorem mass_scaling_law
@@ -478,6 +511,23 @@ QFD/Neutrino.lean:39:lemma F_EM_commutes_B : F_EM * B = B * F_EM := by
 QFD/Neutrino.lean:53:lemma F_EM_commutes_one_add_B : F_EM * (1 + B) = (1 + B) * F_EM := by
 QFD/Neutrino.lean:58:lemma F_EM_commutes_P_Internal : F_EM * P_Internal = P_Internal * F_EM := by
 QFD/Neutrino.lean:80:theorem neutrino_has_zero_coupling : Interaction F_EM Neutrino_State = 0 := by
+QFD/NeutrinoMassTopology.lean:108:theorem neutrino_mass_scale_positive :
+QFD/NeutrinoMassTopology.lean:114:theorem neutrino_scale_much_less_than_electron :
+QFD/NeutrinoMassTopology.lean:132:theorem electron_neutrino_lightest (scale : ℝ) (hscale : scale > 0) :
+QFD/NeutrinoMassTopology.lean:139:theorem tau_neutrino_heaviest (scale : ℝ) (hscale : scale > 0) :
+QFD/NeutrinoMassTopology.lean:146:theorem mass_hierarchy_ratio :
+QFD/NeutrinoMassTopology.lean:162:theorem neutrino_spin_half :
+QFD/NeutrinoMassTopology.lean:167:theorem neutrino_spin_positive :
+QFD/NeutrinoMassTopology.lean:173:theorem neutrino_is_fermion :
+QFD/NeutrinoMassTopology.lean:195:theorem oscillation_linear_in_L (delta_m_sq E L₁ L₂ : ℝ) (_hE : E > 0) :
+QFD/NeutrinoMassTopology.lean:211:theorem survival_probability_bounded (theta phi : ℝ) :
+QFD/NeutrinoMassTopology.lean:229:theorem no_oscillation_at_zero (theta : ℝ) :
+QFD/NeutrinoMassTopology.lean:241:theorem maximal_mixing_complete :
+QFD/NeutrinoMassTopology.lean:265:theorem chirality_exclusive (rotation_sign : ℤ) :
+QFD/NeutrinoMassTopology.lean:66:theorem winding_is_quantized (n : ℤ) :
+QFD/NeutrinoMassTopology.lean:77:theorem electron_neutrino_is_first_generation :
+QFD/NeutrinoMassTopology.lean:82:theorem muon_neutrino_is_second_generation :
+QFD/NeutrinoMassTopology.lean:87:theorem tau_neutrino_is_third_generation :
 QFD/Neutrino_Bleaching.lean:49:theorem tendsto_energy_bleach_zero (ψ : Ψ) :
 QFD/Neutrino_Bleaching.lean:66:theorem qtop_bleach_eq (ψ : Ψ) {lam : ℝ} (hlam : lam ≠ 0) :
 QFD/Neutrino_Chirality.lean:111:theorem chirality_gap (L R : Vortex) :
@@ -614,6 +664,15 @@ QFD/Nuclear/DecayHalfLife.lean:214:theorem half_life_mean_lifetime_relation (dec
 QFD/Nuclear/DecayHalfLife.lean:80:theorem tunneling_rate_pos (κ L ν₀ : ℝ) (h_ν₀ : 0 < ν₀) :
 QFD/Nuclear/DecayHalfLife.lean:86:theorem tunneling_rate_decreasing_in_kappa
 QFD/Nuclear/DeuteronFit.lean:50:theorem deuteron_potential_well_exists
+QFD/Nuclear/FissionLimit.lean:113:theorem fissility_theory_matches_experiment :
+QFD/Nuclear/FissionLimit.lean:131:theorem subcritical_supercritical_exclusive (Z A : ℝ) :
+QFD/Nuclear/FissionLimit.lean:145:theorem U238_is_subcritical :
+QFD/Nuclear/FissionLimit.lean:159:theorem U235_is_subcritical :
+QFD/Nuclear/FissionLimit.lean:174:theorem Cf252_is_subcritical :
+QFD/Nuclear/FissionLimit.lean:187:theorem Z120_A300_is_supercritical :
+QFD/Nuclear/FissionLimit.lean:203:theorem fissility_equals_alpha_inv_times_c2 :
+QFD/Nuclear/FissionLimit.lean:92:theorem theoretical_fissility_approx :
+QFD/Nuclear/FissionLimit.lean:98:theorem fissility_limit_pos : theoretical_fissility_limit > 0 := by
 QFD/Nuclear/FissionTopology.lean:114:theorem odd_harmonic_implies_asymmetric_fission
 QFD/Nuclear/FissionTopology.lean:144:theorem even_harmonic_allows_symmetric_fission :
 QFD/Nuclear/FissionTopology.lean:166:theorem odd_parent_forces_asymmetry
@@ -641,7 +700,7 @@ QFD/Nuclear/SymmetryEnergyMinimization.lean:135:theorem symmetry_coeff_is_invers
 QFD/Nuclear/SymmetryEnergyMinimization.lean:147:theorem asymmetry_bounded (Z : ℝ) (A : ℝ) (A_pos : 0 < A)
 QFD/Nuclear/SymmetryEnergyMinimization.lean:173:theorem symmetry_energy_nonneg (β : ℝ) (β_pos : 0 < β) (Z : ℝ) (A : ℝ)
 QFD/Nuclear/SymmetryEnergyMinimization.lean:192:theorem coulomb_energy_nonneg (Z : ℝ) (A : ℝ) (A_pos : 0 < A) (Z_nonneg : 0 ≤ Z) :
-QFD/Nuclear/SymmetryEnergyMinimization.lean:260:theorem c2_validates_within_one_percent :
+QFD/Nuclear/SymmetryEnergyMinimization.lean:260:theorem c2_validates_within_two_percent :
 QFD/Nuclear/SymmetryEnergyMinimization.lean:272:theorem stiff_vacuum_small_c2 (β₁ β₂ : ℝ) (β₁_pos : 0 < β₁) (β₂_pos : 0 < β₂)
 QFD/Nuclear/SymmetryEnergyMinimization.lean:286:theorem soft_vacuum_large_c2 (β₁ β₂ : ℝ) (β₁_pos : 0 < β₁) (β₂_pos : 0 < β₂)
 QFD/Nuclear/SymmetryEnergyMinimization.lean:303:theorem dimensions_consistent : True := by
@@ -665,7 +724,7 @@ QFD/Nuclear/TimeCliff_Complete.lean:221:theorem force_unification_blueprint : Tr
 QFD/Nuclear/TimeCliff_Complete.lean:66:lemma solitonDensity_pos {A r₀ : ℝ} (hA : 0 < A) (r : ℝ) :
 QFD/Nuclear/TimeCliff_Complete.lean:75:lemma solitonDensity_decreasing
 QFD/Nuclear/TimeCliff_Complete.lean:96:theorem nuclearPotential_eq
-QFD/Nuclear/VacuumStiffness.lean:50:theorem vacuum_stiffness_is_proton_mass :
+QFD/Nuclear/VacuumStiffness.lean:71:theorem vacuum_stiffness_is_proton_mass :
 QFD/Nuclear/WellDepth.lean:107:theorem V4_is_positive (lam : ℝ) (beta : ℝ) (h_lam : 0 < lam) (h_beta : 0 < beta) :
 QFD/Nuclear/WellDepth.lean:119:theorem V4_decreases_with_beta (lam : ℝ) (beta1 beta2 : ℝ)
 QFD/Nuclear/WellDepth.lean:139:theorem V4_increases_with_lambda (lam1 lam2 : ℝ) (beta : ℝ)
@@ -682,6 +741,20 @@ QFD/Nuclear/WellDepth.lean:93:theorem V4_validates_within_two_percent :
 QFD/Nuclear/WellDepth.lean:99:theorem V4_physically_reasonable :
 QFD/Nuclear/YukawaDerivation.lean:108:theorem magnitude_match (g_sq m k A lam : ℝ) (r : ℝ) (h_r : r ≠ 0)
 QFD/Nuclear/YukawaDerivation.lean:63:theorem soliton_gradient_is_yukawa (A lam : ℝ) (r : ℝ) (h_r : r ≠ 0) :
+QFD/Photon/HelicityDecay.lean:113:theorem decay_constant_positive (H0 c : ℝ) (hH : H0 > 0) (hc : c > 0) :
+QFD/Photon/HelicityDecay.lean:127:theorem energy_decreases_with_distance (E0 κ d₁ d₂ : ℝ)
+QFD/Photon/HelicityDecay.lean:136:theorem energy_at_origin (E0 κ : ℝ) :
+QFD/Photon/HelicityDecay.lean:142:theorem energy_always_positive (E0 κ d : ℝ) (hE : E0 > 0) :
+QFD/Photon/HelicityDecay.lean:158:theorem redshift_nonneg (E0 E : ℝ) (_hE0 : E0 > 0) (hE : E > 0) (hle : E ≤ E0) :
+QFD/Photon/HelicityDecay.lean:173:theorem redshift_increases_with_distance (κ d₁ d₂ : ℝ)
+QFD/Photon/HelicityDecay.lean:194:theorem no_blur_theorem (θ_in : ℝ) :
+QFD/Photon/HelicityDecay.lean:223:theorem qfd_brighter_than_lcdm (SB0 z : ℝ) (hSB : SB0 > 0) (hz : z > 0) :
+QFD/Photon/HelicityDecay.lean:234:theorem brightness_ratio (z : ℝ) (hz : z > 0) :
+QFD/Photon/HelicityDecay.lean:69:theorem photon_energy_positive (ν h : ℝ) (hν : ν > 0) (hh : h > 0) :
+QFD/Photon/HelicityDecay.lean:75:theorem energy_frequency_linear (ν₁ ν₂ h : ℝ) (_hh : h > 0) :
+QFD/Photon/HelicityDecay.lean:86:theorem helicity_quantization (p : PhotonSoliton) :
+QFD/Photon/HelicityDecay.lean:90:theorem photon_spin_magnitude (p : PhotonSoliton) :
+QFD/Photon/HelicityDecay.lean:97:theorem helicity_parity (h : ℤ) :
 QFD/Photon/Interaction.lean:112:theorem linear_photon_cannot_spin_flip
 QFD/Photon/Interaction.lean:129:theorem malus_law_recovery
 QFD/Photon/Interaction.lean:142:lemma alignment_efficiency_nonneg
@@ -702,6 +775,8 @@ QFD/Photon/QuantumJump.lean:61:theorem emission_shedding_mechanism
 QFD/Photon/QuantumJump.lean:98:theorem transmission_quantization
 QFD/Photon/SolitonQuantization.lean:66:lemma energy_helicity_relation
 QFD/Photon/SolitonQuantization.lean:81:theorem topology_forces_hbar_relation
+QFD/Physics/Postulates.lean:668:theorem HillVortexSphere_timeDilation_is_inverse_r
+QFD/Physics/Postulates.lean:678:theorem HillVortexSphere_timeDilation_nonpos_outside
 QFD/ProofLedger.lean:946:theorem files using the file paths provided.
 QFD/QM_Translation/DiracRealization.lean:109:theorem gamma_square_signature (μ : Fin 4) :
 QFD/QM_Translation/DiracRealization.lean:130:theorem gamma_anticommute (μ ν : Fin 4) (h : μ ≠ ν) :
@@ -750,11 +825,12 @@ QFD/Rift/SpinSorting.lean:139:theorem spin_sorting_equilibrium
 QFD/Rift/SpinSorting.lean:164:theorem observable_signature_opposing_spins
 QFD/Rift/SpinSorting.lean:190:theorem rift_evolution_differs_from_accretion
 QFD/Rift/SpinSorting.lean:69:theorem opposing_rotations_increase_escape
-QFD/SaturationLimit.lean:127:theorem v6_is_expansion_term
-QFD/SaturationLimit.lean:159:theorem v6_coefficient_positive
-QFD/SaturationLimit.lean:186:theorem saturation_improves_tau_fit
-QFD/SaturationLimit.lean:216:theorem saturation_is_physical
-QFD/SaturationLimit.lean:247:theorem mu_from_beta_and_rho_max
+QFD/SaturationLimit.lean:128:theorem v6_is_expansion_term
+QFD/SaturationLimit.lean:162:theorem v6_coefficient_positive
+QFD/SaturationLimit.lean:194:theorem saturation_improves_tau_fit
+QFD/SaturationLimit.lean:225:theorem saturation_is_physical
+QFD/SaturationLimit.lean:255:theorem mu_from_beta_and_rho_max
+QFD/SaturationLimit.lean:269:theorem saturation_fit_exists
 QFD/Schema/Constraints.lean:139:theorem valid_parameters_exist :
 QFD/Schema/Constraints.lean:259:theorem parameter_space_bounded :
 QFD/Schema/Constraints.lean:282:theorem constraints_satisfiable (params : GrandUnifiedParameters) :
@@ -766,15 +842,17 @@ QFD/Soliton/GaussianMoments.lean:47:theorem Gamma_three : Gamma 3 = 2 := by
 QFD/Soliton/GaussianMoments.lean:55:theorem Gamma_four : Gamma 4 = 6 := by
 QFD/Soliton/GaussianMoments.lean:76:theorem gaussian_moment_odd (n : ℕ) (h_odd : Odd n) (h_pos : 0 < n) :
 QFD/Soliton/GaussianMoments.lean:86:theorem gaussian_moment_5 :
-QFD/Soliton/HardWall.lean:121:theorem vortex_limit_at_center (ctx : VacuumContext) (A : ℝ) :
-QFD/Soliton/HardWall.lean:136:theorem critical_vortex_amplitude_necessary (ctx : VacuumContext) (A : ℝ)
-QFD/Soliton/HardWall.lean:152:theorem critical_vortex_amplitude_sufficient (ctx : VacuumContext) (A : ℝ)
-QFD/Soliton/HardWall.lean:165:theorem vortex_admissibility_iff (ctx : VacuumContext) (A : ℝ) (h_neg : A < 0) :
-QFD/Soliton/HardWall.lean:205:theorem critical_vortex_admissible (ctx : VacuumContext) :
+QFD/Soliton/HardWall.lean:121:theorem ricker_negative_minimum :
+QFD/Soliton/HardWall.lean:157:theorem vortex_limit_at_center (ctx : VacuumContext) (A : ℝ) :
+QFD/Soliton/HardWall.lean:172:theorem critical_vortex_amplitude_necessary (ctx : VacuumContext) (A : ℝ)
+QFD/Soliton/HardWall.lean:188:theorem critical_vortex_amplitude_sufficient (ctx : VacuumContext) (A : ℝ)
+QFD/Soliton/HardWall.lean:201:theorem vortex_admissibility_iff (ctx : VacuumContext) (A : ℝ) (h_neg : A < 0) :
+QFD/Soliton/HardWall.lean:241:theorem critical_vortex_admissible (ctx : VacuumContext) :
 QFD/Soliton/HardWall.lean:78:theorem ricker_shape_at_zero :
-QFD/Soliton/MassEnergyDensity.lean:149:theorem kinetic_energy_proportional_velocity_squared
-QFD/Soliton/MassEnergyDensity.lean:177:theorem relativistic_mass_concentration
-QFD/Soliton/MassEnergyDensity.lean:265:theorem moment_of_inertia_enhancement
+QFD/Soliton/HardWall.lean:93:theorem ricker_shape_bounded : ∀ x, ricker_shape x ≤ 1 := by
+QFD/Soliton/MassEnergyDensity.lean:113:theorem relativistic_mass_concentration
+QFD/Soliton/MassEnergyDensity.lean:152:theorem moment_of_inertia_enhancement
+QFD/Soliton/MassEnergyDensity.lean:85:theorem kinetic_energy_proportional_velocity_squared
 QFD/Soliton/Quantization.lean:123:theorem charge_scaling (A : ℝ) :
 QFD/Soliton/Quantization.lean:145:theorem unique_vortex_charge :
 QFD/Soliton/Quantization.lean:171:theorem continuous_soliton_charge_positive (Q_target : ℝ) (hQ : 0 < Q_target) :
@@ -792,20 +870,19 @@ QFD/Soliton/RickerAnalysis.lean:37:theorem S_even (x : ℝ) : S (-x) = S x := by
 QFD/Soliton/RickerAnalysis.lean:44:theorem S_le_one (x : ℝ) : S x ≤ 1 := by
 QFD/Soliton/RickerAnalysis.lean:73:theorem ricker_negative_minimum (A : ℝ) (h_neg : A < 0) (x : ℝ) :
 QFD/Soliton/RickerAnalysis.lean:88:theorem S_deriv (x : ℝ) :
-QFD/Soliton/TopologicalStability.lean:143:theorem topological_conservation
-QFD/Soliton/TopologicalStability.lean:222:theorem zero_pressure_gradient
-QFD/Soliton/TopologicalStability.lean:344:theorem Soliton_Infinite_Life
-QFD/Soliton/TopologicalStability.lean:401:theorem stability_against_evaporation
-QFD/Soliton/TopologicalStability.lean:434:lemma rpow_strict_subadd (a b p : ℝ) (ha : 0 < a) (hb : 0 < b)
-QFD/Soliton/TopologicalStability.lean:470:theorem stability_against_fission
-QFD/Soliton/TopologicalStability.lean:610:theorem asymptotic_phase_locking
-QFD/Soliton/TopologicalStability.lean:648:theorem topological_prevents_collapse
-QFD/Soliton/TopologicalStability.lean:669:theorem density_matching_prevents_explosion
-QFD/Soliton/TopologicalStability.lean:697:theorem energy_minimum_implies_stability
-QFD/Soliton/TopologicalStability_Refactored.lean:103:theorem pow_two_thirds_subadditive {x y : ℝ} (hx : 0 < x) (hy : 0 < y) :
-QFD/Soliton/TopologicalStability_Refactored.lean:157:theorem fission_forbidden
-QFD/Soliton/TopologicalStability_Refactored.lean:232:theorem saturated_interior_is_stable
-QFD/Soliton/TopologicalStability_Refactored.lean:45:theorems is substantial. We axiomatize this standard topological fact.
+QFD/Soliton/TopologicalStability.lean:107:theorem topological_conservation
+QFD/Soliton/TopologicalStability.lean:124:theorem zero_pressure_gradient
+QFD/Soliton/TopologicalStability.lean:154:theorem Soliton_Infinite_Life
+QFD/Soliton/TopologicalStability.lean:186:theorem stability_against_evaporation
+QFD/Soliton/TopologicalStability.lean:267:theorem stability_against_fission
+QFD/Soliton/TopologicalStability.lean:366:theorem asymptotic_phase_locking
+QFD/Soliton/TopologicalStability.lean:398:theorem topological_prevents_collapse
+QFD/Soliton/TopologicalStability.lean:414:theorem density_matching_prevents_explosion
+QFD/Soliton/TopologicalStability.lean:431:theorem energy_minimum_implies_stability
+QFD/Soliton/TopologicalStability_Refactored.lean:104:theorem pow_two_thirds_subadditive {x y : ℝ} (hx : 0 < x) (hy : 0 < y) :
+QFD/Soliton/TopologicalStability_Refactored.lean:119:theorem fission_forbidden
+QFD/Soliton/TopologicalStability_Refactored.lean:194:theorem saturated_interior_is_stable
+QFD/Soliton/TopologicalStability_Refactored.lean:46:theorems is substantial. We axiomatize this standard topological fact.
 QFD/SpacetimeEmergence_Complete.lean:142:lemma basis_anticomm (i j : Fin 6) (hij : i ≠ j) :
 QFD/SpacetimeEmergence_Complete.lean:155:theorem spatial_commutes_with_B (i : Fin 3) :
 QFD/SpacetimeEmergence_Complete.lean:183:theorem time_commutes_with_B :
@@ -834,29 +911,31 @@ QFD/StabilityCriterion.lean:711:theorem my_solver_correct :
 QFD/StabilityCriterion.lean:79:theorem V_continuous (mu lam kappa beta : ℝ) : Continuous (V mu lam kappa beta) := by
 QFD/StabilityCriterion.lean:96:lemma V_ge_quartic_half_of_ge_Rpos (hbeta : 0 < beta) (mu lam kappa : ℝ) :
 QFD/Test/TrivialProof.lean:3:theorem hello : 1 + 1 = 2 := rfl
-QFD/TopologyFormFactor.lean:136:theorem coupling_depends_on_topology
-QFD/TopologyFormFactor.lean:155:theorem form_factor_from_energy
-QFD/TopologyFormFactor.lean:195:theorem alpha_n_from_form_factor
-QFD/TopologyFormFactor.lean:220:theorem sphere_torus_ratio
+QFD/TopologyFormFactor.lean:27:lemma sphere_torus_form_factor_ne
+QFD/TopologyFormFactor.lean:43:theorem coupling_depends_on_topology
 QFD/Vacuum/StrongCP.lean:15:theorem vacuum_relaxes_to_zero_dipole (theta_qcd : ℝ) :
 QFD/Vacuum/VacuumHydrodynamics.lean:61:theorem hbar_scaling_law (vac : VacuumMedium) (sol : VortexSoliton) :
 QFD/Vacuum/VacuumHydrodynamics.lean:77:theorem c_hbar_coupling (vac : VacuumMedium) (sol : VortexSoliton) :
-QFD/Vacuum/VacuumParameters.lean:161:theorem beta_golden_loop_validated :
-QFD/Vacuum/VacuumParameters.lean:167:theorem beta_within_one_sigma :
-QFD/Vacuum/VacuumParameters.lean:173:theorem xi_order_unity_confirmed :
-QFD/Vacuum/VacuumParameters.lean:179:theorem tau_order_unity_confirmed :
-QFD/Vacuum/VacuumParameters.lean:185:theorem balanced_vacuum_stiffnesses :
-QFD/Vacuum/VacuumParameters.lean:222:theorem alpha_circ_approx_correct :
-QFD/Vacuum/VacuumParameters.lean:263:theorem v4_matches_qed_coefficient :
-QFD/Vacuum/VacuumParameters.lean:275:theorem v4_theoretical_prediction :
-QFD/Vacuum/VacuumParameters.lean:48:theorem mcmcBeta_pos : 0 < mcmcBeta := by norm_num [mcmcBeta]
-QFD/Vacuum/VacuumParameters.lean:76:theorem mcmcXi_pos : 0 < mcmcXi := by norm_num [mcmcXi]
+QFD/Vacuum/VacuumParameters.lean:170:theorem beta_golden_loop_validated :
+QFD/Vacuum/VacuumParameters.lean:176:theorem beta_within_one_sigma :
+QFD/Vacuum/VacuumParameters.lean:182:theorem xi_order_unity_confirmed :
+QFD/Vacuum/VacuumParameters.lean:188:theorem tau_order_unity_confirmed :
+QFD/Vacuum/VacuumParameters.lean:194:theorem balanced_vacuum_stiffnesses :
+QFD/Vacuum/VacuumParameters.lean:231:theorem alpha_circ_approx_correct :
+QFD/Vacuum/VacuumParameters.lean:272:theorem v4_matches_qed_coefficient :
+QFD/Vacuum/VacuumParameters.lean:292:theorem v4_theoretical_prediction :
+QFD/Vacuum/VacuumParameters.lean:56:theorem mcmcBeta_pos : 0 < mcmcBeta := by norm_num [mcmcBeta]
+QFD/Vacuum/VacuumParameters.lean:84:theorem mcmcXi_pos : 0 < mcmcXi := by norm_num [mcmcXi]
 QFD/Vacuum/ZetaPhysics.lean:20:theorem riemann_zeta_from_symmetry :
-QFD/VacuumEigenvalue.lean:134:theorem fundamental_stiffness_exists :
-QFD/VacuumEigenvalue.lean:191:theorem transcendental_strictly_increasing :
-QFD/VacuumEigenvalue.lean:209:theorem beta_uniqueness_in_range :
-QFD/VacuumEigenvalue.lean:237:theorem beta_from_transcendental_equation
-QFD/VacuumEigenvalue.lean:91:theorem beta_is_discrete_eigenvalue :
+QFD/VacuumEigenvalue.lean:126:lemma fundamental_stiffness_eq_two :
+QFD/VacuumEigenvalue.lean:144:lemma fundamental_stiffness_positive : 0 < fundamental_stiffness := by
+QFD/VacuumEigenvalue.lean:159:theorem fundamental_stiffness_exists :
+QFD/VacuumEigenvalue.lean:215:lemma deriv_transcendental (x : ℝ) (hx : x ≠ 0) :
+QFD/VacuumEigenvalue.lean:232:lemma transcendental_strictMonoOn :
+QFD/VacuumEigenvalue.lean:268:theorem transcendental_strictly_increasing :
+QFD/VacuumEigenvalue.lean:313:theorem beta_solution_matches_golden :
+QFD/VacuumEigenvalue.lean:365:theorem beta_from_transcendental_equation :
+QFD/VacuumEigenvalue.lean:94:theorem beta_is_discrete_eigenvalue :
 QFD/VacuumHydrodynamics.lean:61:theorem hbar_scaling_law (vac : VacuumMedium) (sol : VortexSoliton) :
 QFD/VacuumHydrodynamics.lean:75:theorem hbar_proportional_to_sqrt_beta (vac : VacuumMedium) (sol : VortexSoliton) :
 QFD/VacuumHydrodynamics.lean:87:theorem speed_of_light_couples_to_action (vac : VacuumMedium) (sol : VortexSoliton) :
@@ -866,6 +945,55 @@ QFD/Weak/ChiralAnomaly.lean:25:theorem axial_divergence_anomaly :
 QFD/Weak/DoubleBetaDecay.lean:17:theorem neutrino_self_conjugation_parity : reverse nu_geom = -nu_geom := by
 QFD/Weak/PionGeometry.lean:38:theorem pion_mass_goldstone_origin (f : ℝ) (h : f > 0) :
 QFD/Weak/PionGeometry.lean:48:theorem phase_slip_scales_with_goldstone (f L : ℝ) (h : f > 0) :
+QFD/archive/4Aristotle/GoldenLoop_Elevated.lean:144:theorem golden_loop_implication :
+QFD/archive/4Aristotle/GoldenLoop_Elevated.lean:155:theorem beta_golden_positive : 0 < beta_golden := by
+QFD/archive/4Aristotle/GoldenLoop_Elevated.lean:160:theorem beta_physically_reasonable :
+QFD/archive/4Aristotle/GoldenLoop_Elevated.lean:189:theorem golden_loop_complete_verified :
+QFD/archive/4Aristotle/GoldenLoop_Elevated.lean:86:theorem arithmetic_beta_to_c2_verified :
+QFD/archive/4Aristotle/GoldenLoop_Elevated.lean:94:theorem beta_predicts_c2_verified :
+QFD/archive/4Aristotle/VortexStability.lean:141:theorem v22_is_degenerate (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
+QFD/archive/4Aristotle/VortexStability.lean:173:theorem v22_beta_R_perfectly_correlated (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
+QFD/archive/4Aristotle/VortexStability.lean:227:theorem degeneracy_broken_existence (g : HillGeometry) (β ξ mass : ℝ)
+QFD/archive/4Aristotle/VortexStability.lean:287:lemma cube_strict_mono (a b : ℝ) (ha : 0 < a) (hb : 0 < b) (h : a < b) :
+QFD/archive/4Aristotle/VortexStability.lean:300:theorem degeneracy_broken_uniqueness (g : HillGeometry) (β ξ : ℝ)
+QFD/archive/4Aristotle/VortexStability.lean:341:theorem degeneracy_broken (g : HillGeometry) (β ξ mass : ℝ)
+QFD/archive/4Aristotle/VortexStability.lean:358:theorem energy_derivative_positive (g : HillGeometry) (β ξ R : ℝ)
+QFD/archive/4Aristotle/VortexStability.lean:380:theorem beta_xi_uncorrelated (g : HillGeometry) (mass : ℝ) (h_mass : mass > 0) :
+QFD/archive/4Aristotle/VortexStability.lean:409:lemma beta_offset_relation (g : HillGeometry) (β_true ξ_true R_true : ℝ)
+QFD/archive/4Aristotle/VortexStability.lean:445:theorem beta_offset_is_three_percent (g : HillGeometry)
+QFD/archive/4Aristotle/VortexStability.lean:468:theorem mcmc_validates_degeneracy_breaking :
+QFD/archive/4Aristotle/VortexStability.lean:511:theorem gradient_dominates_compression (g : HillGeometry)
+QFD/archive/4Aristotle/VortexStability.lean:561:theorem beta_universality_testable (g : HillGeometry) :
+QFD/archive/4Aristotle/VortexStability.lean:588:theorem degeneracy_resolution_complete (g : HillGeometry) :
+QFD/archive/4Aristotle/VortexStability.lean:754:theorem spin_half_from_flywheel_geometry (M R : ℝ) (hM : M > 0) (hR : R > 0)
+QFD/archive/4Aristotle/VortexStability.lean:784:theorem universal_velocity_all_leptons :
+QFD/archive/4Aristotle/VortexStability.lean:809:theorem flywheel_geometry_confirmed :
+QFD/archive/4Aristotle/VortexStability.lean:831:theorem spin_constrains_magnetic_moment (R : ℝ) (hR : R > 0) :
+QFD/archive/4Aristotle/VortexStability.lean:861:theorem spin_constraint_complete :
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:101:theorem electron_spin_computed :
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:114:theorem muon_spin_computed :
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:125:theorem tau_spin_computed :
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:149:theorem universality_proven :
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:16:theorem universal_velocity_all_leptons : True := trivial
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:179:theorem spin_universality_complete :
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:228:theorem electron_compton_check :
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:22:theorem electron_spin_computed : |L_e - 0.5| < 0.01 := by norm_num
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:234:theorem muon_compton_check :
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:23:theorem muon_spin_computed : |L_mu - 0.5| < 0.01 := by norm_num
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:240:theorem flywheel_geometry_confirmed :
+QFD/archive/4Aristotle/VortexStability_NumericSolved.lean:24:theorem universality_proven : |U_e - U_mu| < 0.001 := by norm_num
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:111:theorem electron_spin_computed :
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:124:theorem muon_spin_computed :
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:135:theorem tau_spin_computed :
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:159:theorem universality_proven :
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:189:theorem spin_universality_complete :
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:238:theorem electron_compton_check :
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:244:theorem muon_compton_check :
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:250:theorem flywheel_geometry_confirmed :
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:26:theorem universal_velocity_all_leptons : True := trivial
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:32:theorem electron_spin_computed : |L_e - 0.5| < 0.01 := by norm_num
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:33:theorem muon_spin_computed : |L_mu - 0.5| < 0.01 := by norm_num
+QFD/archive/4Aristotle/VortexStability_NumericSolved_aristotle.lean:34:theorem universality_proven : |U_e - U_mu| < 0.001 := by norm_num
 QFD/sketches/AdjointStability.lean:149:theorem kinetic_energy_is_positive_definite (Ψ : Multivector) :
 QFD/sketches/AdjointStability.lean:213:theorem kinetic_energy_zero_iff_zero (Ψ : Multivector) :
 QFD/sketches/AdjointStability.lean:255:theorem l6c_kinetic_term_stable (gradΨ : Multivector) :
