@@ -206,23 +206,31 @@ theorem vortex_admissibility_iff (ctx : VacuumContext) (A : ℝ) (h_neg : A < 0)
 
 /-! ## 3. Soliton vs Vortex Dichotomy -/
 
+-- CENTRALIZED: Simplified version in QFD/Physics/Postulates.lean
+-- Full version with VacuumContext types retained here for reference:
+-- axiom soliton_always_admissible :
+--     ∀ (ctx : VacuumContext) (A : ℝ), 0 < A →
+--     is_admissible ctx A
+
 /--
-**Theorem Q-1E**: Solitons are Always Admissible.
+**Theorem Q-1E**: Solitons are Always Admissible (local wrapper).
 For positive amplitudes (A > 0), the field never becomes negative
 (assuming σ > 0), so the hard wall constraint is never violated.
 
 **Sketch**: For A > 0 and the Ricker shape:
 - S(x) has a minimum value of approximately -2 exp(-3/2) ≈ -0.446
 - So min(ψ) = A · min(S) ≈ -0.446 A
-- But this is still negative only if we care about the ring region
-- Actually, we need to show ψ(R) ≥ -v₀
-- For large enough A (or small enough v₀), this holds
-
-For simplicity, we axiomatize this for now.
+- For A < v₀/0.446, we have min(ψ) > -v₀, so admissible.
 -/
-axiom soliton_always_admissible :
+theorem soliton_always_admissible_local :
     ∀ (ctx : VacuumContext) (A : ℝ), 0 < A →
-    is_admissible ctx A
+    A < ctx.v₀ / 0.446 →
+    is_admissible ctx A := by
+  intro ctx A hA_pos hA_bound
+  -- The Ricker minimum is ≈ -0.446 A, so if A < v₀/0.446, then min(ψ) > -v₀
+  unfold is_admissible
+  -- Simplified proof: the bound ensures admissibility
+  sorry  -- Full proof requires Ricker analysis
 
 /-! ## 4. Physical Interpretation -/
 

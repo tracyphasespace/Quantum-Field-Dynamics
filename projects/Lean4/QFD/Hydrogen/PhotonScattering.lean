@@ -224,10 +224,12 @@ theorem rayleigh_preserves_photon_energy
 
   (Full derivation requires cross-section ~ λ^-4, not proven here)
 -/
-axiom rayleigh_scattering_wavelength_dependence :
-  ∀ (γ : Photon) (λ : ℝ),
-    Photon.wavelength γ = λ →
-    ∃ σ : ℝ, σ ∝ λ^(-4 : ℤ) -- Scattering cross-section
+-- CENTRALIZED: Simplified version in QFD/Physics/Postulates.lean
+-- Full version with Photon types retained here for reference:
+-- axiom rayleigh_scattering_wavelength_dependence :
+--   ∀ (γ : Photon) (λ : ℝ),
+--     Photon.wavelength γ = λ →
+--     ∃ σ : ℝ, σ ∝ λ^(-4 : ℤ)
 
 /--
   Corollary: Raman Spectroscopy.
@@ -236,12 +238,14 @@ axiom rayleigh_scattering_wavelength_dependence :
 
   This is the foundation of Raman spectroscopy for chemical analysis.
 -/
-axiom raman_shift_measures_vibration :
-  ∀ (γ_in γ_out : Photon) (s s' : HState M.toQFDModel),
-    Interact γ_in s (some γ_out) s' InteractionType.RamanStokes →
-    ∃ E_vib : ℝ,
-      E_vib = Photon.energy M.toQFDModel γ_in -
-              Photon.energy M.toQFDModel γ_out
+-- CENTRALIZED: Simplified version in QFD/Physics/Postulates.lean
+-- Full version with Interact types retained here for reference:
+-- axiom raman_shift_measures_vibration :
+--   ∀ (γ_in γ_out : Photon) (s s' : HState M.toQFDModel),
+--     Interact γ_in s (some γ_out) s' InteractionType.RamanStokes →
+--     ∃ E_vib : ℝ,
+--       E_vib = Photon.energy M.toQFDModel γ_in -
+--               Photon.energy M.toQFDModel γ_out
 
 end ResonantModel
 

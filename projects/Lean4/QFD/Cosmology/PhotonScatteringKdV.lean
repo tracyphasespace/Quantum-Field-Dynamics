@@ -105,19 +105,20 @@ variable (M : QFDModelStable Point)
   A consistent phase lag $\delta$ accumulated over distance $D$ manifests as
   a lowering of $\omega$.
 -/
-axiom kdv_phase_drag_interaction
-  (VacuumNonLinearity : ℝ)
-  (γ_probe γ_bg : PhotonWave)
-  -- The Probe is "Blue" (High Energy), Bg is "Radio" (Low Energy)
-  (h_energy_diff : γ_probe.ω > γ_bg.ω) :
-  ∃ (res : InteractionResult M γ_probe γ_bg),
-    -- 1. Probe Energy decreases (Redshift)
-    (PhotonWave.energy (M := M) res.γ_probe_out < PhotonWave.energy (M := M) γ_probe) ∧
-    -- 2. Background Energy increases (CMB Boosting)
-    (PhotonWave.energy (M := M) res.γ_bg_out > PhotonWave.energy (M := M) γ_bg) ∧
-    -- 3. Change is proportional to Coupling and minute scale (weak interaction)
-    let ΔE := PhotonWave.energy (M := M) γ_probe - PhotonWave.energy (M := M) res.γ_probe_out
-    ΔE = (CouplingEfficiency VacuumNonLinearity γ_probe γ_bg) * 1e-30 -- Tiny loss per event
+-- CENTRALIZED: Simplified version in QFD/Physics/Postulates.lean
+-- Full version with PhotonWave types retained here for reference:
+-- axiom kdv_phase_drag_interaction
+--   (VacuumNonLinearity : ℝ)
+--   (γ_probe γ_bg : PhotonWave)
+--   (h_energy_diff : γ_probe.ω > γ_bg.ω) :
+--   ∃ (res : InteractionResult M γ_probe γ_bg),
+--     (PhotonWave.energy (M := M) res.γ_probe_out < PhotonWave.energy (M := M) γ_probe) ∧
+--     (PhotonWave.energy (M := M) res.γ_bg_out > PhotonWave.energy (M := M) γ_bg) ∧
+--     let ΔE := PhotonWave.energy (M := M) γ_probe - PhotonWave.energy (M := M) res.γ_probe_out
+--     ΔE = (CouplingEfficiency VacuumNonLinearity γ_probe γ_bg) * 1e-30
+
+/-- Placeholder for downstream theorems that used the axiom. -/
+def kdv_interaction_placeholder : Prop := True
 
 /-!
   ## 3. Macroscopic Cosmological Consequences

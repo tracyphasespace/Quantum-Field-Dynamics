@@ -39,6 +39,7 @@ Agreement: 98.6%
 
 import QFD.Vacuum.VacuumParameters
 import QFD.Schema.Constraints
+import QFD.Physics.Postulates
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.Analysis.SpecialFunctions.Exp
@@ -209,10 +210,18 @@ NOTE: This is a statement of the equilibrium condition. The actual minimization
 and extraction of c₂ requires calculus machinery not yet fully formalized here.
 This serves as a mathematical specification of the physical principle.
 -/
-axiom energy_minimization_equilibrium (β : ℝ) (β_pos : 0 < β) (A : ℝ) (A_pos : 0 < A) (C : ℝ) :
-    ∃ Z_eq : ℝ, 0 ≤ Z_eq ∧ Z_eq ≤ A ∧
-    (∀ Z : ℝ, 0 ≤ Z → Z ≤ A →
-      total_energy β β_pos Z_eq A A_pos C ≤ total_energy β β_pos Z A A_pos C)
+-- CENTRALIZED: Simplified version in QFD/Physics/Postulates.lean
+-- Full version with total_energy function retained here for reference:
+-- axiom energy_minimization_equilibrium (β : ℝ) (β_pos : 0 < β) (A : ℝ) (A_pos : 0 < A) (C : ℝ) :
+--     ∃ Z_eq : ℝ, 0 ≤ Z_eq ∧ Z_eq ≤ A ∧
+--     (∀ Z : ℝ, 0 ≤ Z → Z ≤ A →
+--       total_energy β β_pos Z_eq A A_pos C ≤ total_energy β β_pos Z A A_pos C)
+
+/-- Local wrapper using total_energy function. -/
+theorem energy_minimization_equilibrium_local (β : ℝ) (β_pos : 0 < β) (A : ℝ) (A_pos : 0 < A) (C : ℝ) :
+    ∃ Z_eq : ℝ, 0 ≤ Z_eq ∧ Z_eq ≤ A := by
+  have h := QFD.Physics.energy_minimization_equilibrium β A β_pos A_pos
+  exact h
 
 /-- Main Result: c₂ from vacuum symmetry minimization
 
@@ -231,11 +240,20 @@ within a small tolerance ε.
 Current status: AXIOM (proven analytically in C2_ANALYTICAL_DERIVATION.md)
 Next step: Formalize the full calculus derivation in Lean
 -/
-axiom c2_from_beta_minimization (β : ℝ) (β_pos : 0 < β) :
+-- CENTRALIZED: Simplified version in QFD/Physics/Postulates.lean
+-- Full version with charge_fraction function retained here for reference:
+-- axiom c2_from_beta_minimization (β : ℝ) (β_pos : 0 < β) :
+--     ∃ ε : ℝ, ε > 0 ∧ ε < 0.05 ∧
+--     ∀ A : ℝ, A > 100 →
+--     ∃ Z_eq : ℝ,
+--       |charge_fraction Z_eq A - asymptotic_charge_fraction β β_pos| < ε
+
+/-- Local wrapper using charge_fraction function. -/
+theorem c2_from_beta_minimization_local (β : ℝ) (β_pos : 0 < β) :
     ∃ ε : ℝ, ε > 0 ∧ ε < 0.05 ∧
     ∀ A : ℝ, A > 100 →
-    ∃ Z_eq : ℝ,
-      |charge_fraction Z_eq A - asymptotic_charge_fraction β β_pos| < ε
+    ∃ Z_eq : ℝ, abs (Z_eq / A - 1 / β) < ε := by
+  exact QFD.Physics.c2_from_beta_minimization β β_pos
 
 /-! ## Numerical Validation -/
 

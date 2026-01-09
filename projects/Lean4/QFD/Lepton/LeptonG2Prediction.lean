@@ -1,5 +1,6 @@
 import Mathlib
 import QFD.Hydrogen.SpeedOfLight
+import QFD.Physics.Postulates
 
 set_option autoImplicit false
 
@@ -86,11 +87,24 @@ noncomputable def standard_model_A2 : ℝ := -0.328478965
   **Falsifiability**: If future QED calculations change A₂ OR if better mass
   spectroscopy changes (β, ξ) such that |-ξ/β - A₂| > 0.01, this claim fails.
 -/
-axiom golden_loop_prediction_accuracy
+-- CENTRALIZED: Simplified version in QFD/Physics/Postulates.lean
+-- Full version with ElasticVacuum types retained here for reference:
+-- axiom golden_loop_prediction_accuracy
+--     (vac : ElasticVacuum)
+--     (h_golden_beta : abs (vac.β - 3.063) < 0.001)
+--     (h_golden_xi   : abs (vac.ξ - 0.998) < 0.001) :
+--     abs (vac.predicted_vacuum_polarization - standard_model_A2) < 0.005
+
+/-- Local wrapper using ElasticVacuum types. -/
+theorem golden_loop_prediction_accuracy_local
     (vac : ElasticVacuum)
     (h_golden_beta : abs (vac.β - 3.063) < 0.001)
     (h_golden_xi   : abs (vac.ξ - 0.998) < 0.001) :
-    abs (vac.predicted_vacuum_polarization - standard_model_A2) < 0.005
+    abs (vac.predicted_vacuum_polarization - standard_model_A2) < 0.005 := by
+  -- Use the centralized axiom
+  have h := QFD.Physics.golden_loop_prediction_accuracy vac.β vac.ξ h_golden_beta h_golden_xi
+  simp only [predicted_vacuum_polarization, standard_model_A2] at *
+  exact h
 
 /--
   **The Unification Theorem**
