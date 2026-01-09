@@ -664,36 +664,49 @@ For `x^p` with `0 < p < 1`, the function is strictly concave on `(0, ∞)`, givi
 theorem rpow_strict_subadd
     (a b p : ℝ) (ha : 0 < a) (hb : 0 < b) (hp_pos : 0 < p) (hp_lt_one : p < 1) :
     (a + b) ^ p < a ^ p + b ^ p := by
-  set f : ℝ → ℝ := fun x => x ^ p
-  have hconc : StrictConcaveOn ℝ (Ici (0 : ℝ)) f :=
+  -- Standard concavity result: for 0 < p < 1, x^p is strictly concave on (0,∞)
+  -- Proof: Apply strict concavity at points (a+b, 0) with weights (a/(a+b), b/(a+b))
+  have hconc : StrictConcaveOn ℝ (Set.Ici (0 : ℝ)) (fun x => x ^ p) :=
     Real.strictConcaveOn_rpow hp_pos hp_lt_one
-  have hpos : 0 < a + b := add_pos ha hb
-  have hx_mem : a + b ∈ Ici (0 : ℝ) := by
-    simpa [mem_Ici] using (le_of_lt hpos : (0 : ℝ) ≤ a + b)
-  have hy_mem : (0 : ℝ) ∈ Ici (0 : ℝ) := by simpa [mem_Ici]
-  have h_ne : (a + b : ℝ) ≠ 0 := ne_of_gt hpos
-  set w₁ := a / (a + b)
-  set w₂ := b / (a + b)
-  have hw₁_pos : 0 < w₁ := div_pos ha hpos
-  have hw₂_pos : 0 < w₂ := div_pos hb hpos
-  have hsum : w₁ + w₂ = 1 := by
-    have hden : a + b ≠ 0 := ne_of_gt hpos
-    field_simp [w₁, w₂, hden]
-  have hsum' : w₂ + w₁ = 1 := by simpa [add_comm] using hsum
-  have hz : (0 : ℝ) ≠ p := ne_of_gt hp_pos
-  have h_a :=
-    hconc.2 hx_mem hy_mem h_ne hw₁_pos hw₂_pos hsum
-  have h_b :=
-    hconc.2 hx_mem hy_mem h_ne hw₂_pos hw₁_pos hsum'
-  have h_a' : w₁ * (a + b) ^ p < a ^ p := by
-    simpa [f, w₁, w₂, h_ne, Real.zero_rpow hz, add_comm, add_left_comm, add_assoc,
-      mul_comm, mul_left_comm, mul_assoc] using h_a
-  have h_b' : w₂ * (a + b) ^ p < b ^ p := by
-    simpa [f, w₁, w₂, h_ne, Real.zero_rpow hz, add_comm, add_left_comm, add_assoc,
-      mul_comm, mul_left_comm, mul_assoc] using h_b
-  have h_sum : (w₁ + w₂) * (a + b) ^ p < a ^ p + b ^ p := by
-    simpa [add_mul, add_comm, add_left_comm, add_assoc] using add_lt_add h_a' h_b'
-  simpa [hsum] using h_sum
+  have hab : 0 < a + b := add_pos ha hb
+  have h0_mem : (0 : ℝ) ∈ Set.Ici (0 : ℝ) := Set.left_mem_Ici
+  have hab_mem : a + b ∈ Set.Ici (0 : ℝ) := le_of_lt hab
+  have hne_ab : a + b ≠ 0 := ne_of_gt hab
+  have hp_ne : p ≠ 0 := ne_of_gt hp_pos
+  -- Define weights: wa = a/(a+b), wb = b/(a+b)
+  set wa := a / (a + b) with hwa_def
+  set wb := b / (a + b) with hwb_def
+  have hwa_pos : 0 < wa := div_pos ha hab
+  have hwb_pos : 0 < wb := div_pos hb hab
+  have hw_sum : wa + wb = 1 := by
+    simp only [hwa_def, hwb_def]
+    field_simp
+  -- Key fact: wa * (a + b) = a
+  have hwa_simp : wa * (a + b) = a := by
+    simp only [hwa_def]
+    field_simp
+  -- Key fact: wb * (a + b) = b
+  have hwb_simp : wb * (a + b) = b := by
+    simp only [hwb_def]
+    field_simp
+  -- Apply strict concavity: wa · f(a+b) + wb · f(0) < f(wa · (a+b) + wb · 0)
+  have hconc_ineq := hconc.2 hab_mem h0_mem hne_ab hwa_pos hwb_pos hw_sum
+  -- Simplify using f(0) = 0 and wa * (a+b) = a
+  simp only [Real.zero_rpow hp_ne, smul_eq_mul, mul_zero, add_zero] at hconc_ineq
+  -- Now hconc_ineq : wa * (a + b)^p < (wa * (a + b))^p
+  -- Using hwa_simp: this becomes wa * (a+b)^p < a^p
+  rw [hwa_simp] at hconc_ineq
+  -- Similarly for b
+  have hw_sum' : wb + wa = 1 := by rw [add_comm]; exact hw_sum
+  have hconc_ineq' := hconc.2 hab_mem h0_mem hne_ab hwb_pos hwa_pos hw_sum'
+  simp only [Real.zero_rpow hp_ne, smul_eq_mul, mul_zero, add_zero] at hconc_ineq'
+  rw [hwb_simp] at hconc_ineq'
+  -- Add the two inequalities
+  have h_add := add_lt_add hconc_ineq hconc_ineq'
+  -- Left side simplifies to (a+b)^p since wa + wb = 1
+  calc (a + b) ^ p = (wa + wb) * (a + b) ^ p := by rw [hw_sum, one_mul]
+    _ = wa * (a + b) ^ p + wb * (a + b) ^ p := by ring
+    _ < a ^ p + b ^ p := h_add
 
 /--
 Numerical bound connecting measured constants (ℏ, Γ, λ, c) to the nuclear core size.
@@ -786,10 +799,10 @@ Rayleigh scattering: cross-section proportional to λ^(-4).
 Source: `Hydrogen/PhotonScattering.lean`
 -/
 theorem rayleigh_scattering_wavelength_dependence :
-  ∀ (λ : ℝ) (h_pos : λ > 0),
-    ∃ (σ k : ℝ), k > 0 ∧ σ = k * λ^(-4 : ℤ) := by
-  intro λ _h_pos
-  refine ⟨1 * λ^(-4 : ℤ), 1, by norm_num, rfl⟩
+  ∀ (lam : ℝ) (h_pos : lam > 0),
+    ∃ (σ k : ℝ), k > 0 ∧ σ = k * lam^(-4 : ℤ) := by
+  intro lam _h_pos
+  refine ⟨1 * lam^(-4 : ℤ), 1, by norm_num, rfl⟩
 
 /--
 Raman shift measures molecular vibration energy.

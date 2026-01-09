@@ -41,4 +41,18 @@ def IsTau (M : LeptonModel Point) (c : Config) : Prop :=
   M.Q_star c > 1000 ∧
   c.charge = -1
 
+/--
+Generation number assignment based on Q* ordering:
+- Generation 1 (electron): Q* ≈ 2.2
+- Generation 2 (muon): Q* ≈ 2.3
+- Generation 3 (tau): Q* >> 1
+- Generation 0: Invalid/composite state
+-/
+def GenerationNumber (M : LeptonModel Point) (c : Config)
+    [Decidable (IsElectron M c)] [Decidable (IsMuon M c)] [Decidable (IsTau M c)] : ℕ :=
+  if IsElectron M c then 1
+  else if IsMuon M c then 2
+  else if IsTau M c then 3
+  else 0
+
 end QFD
