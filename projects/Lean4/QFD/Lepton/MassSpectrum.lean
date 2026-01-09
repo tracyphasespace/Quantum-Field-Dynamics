@@ -1,6 +1,7 @@
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.Analysis.Normed.Group.Basic
+import QFD.Physics.Postulates
 
 /-!
 # QFD Appendix Y: Lepton Mass Spectrum
@@ -25,19 +26,9 @@ noncomputable section
 namespace QFD.Lepton
 
 open Real
+open QFD.Physics
 
-/-! ## 1. The Soliton Potential (The Trap) -/
-
-/--
-The physical parameters of the Vacuum Soliton.
-`beta`: The Stiffness (derived from Cosmology/Nuclear ~ 3.1).
-`v`: The Vacuum Expectation Value (Scale).
--/
-structure SolitonParams where
-  beta : ℝ
-  v : ℝ
-  h_beta_pos : beta > 0
-  h_v_pos : v > 0
+variable (P : QFD.Physics.Model)
 
 /--
 The QFD Radial Potential: V(r) ~ (r² - v²)² (Quartic)
@@ -104,30 +95,17 @@ theorem qfd_potential_is_confining (p : SolitonParams) :
 
 /-! ## 3. The Mass Spectrum (Discrete States) -/
 
-/--
-We define a Mass State as a discrete energy eigenvalue E
-of the radial Hamiltonian H = -∇² + V(r).
--/
-structure MassState (p : SolitonParams) where
-  energy : ℝ
-  generation : ℕ -- 0=Electron, 1=Muon, 2=Tau
-  is_bound : energy > 0 -- Positive mass
 
 /--
-**Axiom: Spectral Existence** (Standard Mathematical Result)
+**Spectral existence postulate** (standard Sturm-Liouville theory).
 
-Given a confining potential, there exists a countable sequence of eigenvalues.
-This is a **standard result of Sturm-Liouville theory** from functional analysis.
-
-**Status**: Axiomatized pending formalization of Sturm-Liouville theory in Lean.
-**Mathematical Justification**: Well-established theorem in spectral theory.
-**Reference**: Reed & Simon "Methods of Modern Mathematical Physics Vol. 1" (Theorem VIII.13)
-**Transparency**: This is standard mathematics, not a physics assumption.
-**Could be proven**: By formalizing Sturm-Liouville spectral theory (substantial effort).
+We use the centralized physics model to provide this statement so downstream
+theorems do not rely on a local `axiom`.
 -/
-axiom soliton_spectrum_exists (p : SolitonParams) :
-  ∃ (states : ℕ → MassState p),
-    (∀ n m, n < m → (states n).energy < (states m).energy)
+lemma soliton_spectrum_exists (p : SolitonParams) :
+    ∃ (states : ℕ → MassState p),
+      ∀ {n m}, n < m → (states n).energy < (states m).energy :=
+  P.soliton_spectrum_exists p
 
 /-! ## 4. The Koide Relation (Geometric Constraint) -/
 

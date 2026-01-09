@@ -36,16 +36,12 @@ namespace QFD
   - Momentum conservation implicit (recoil transferred to H)
 -/
 
-universe u
-
-variable {Point : Type u}
-
 /- 1) Field and Configuration Structures -/
 
-structure PsiField (Point : Type u) where
+structure PsiField (Point : Type*) where
   ψ : Point → ℝ  -- Placeholder for Cl(3,3) multivector field
 
-structure Config (Point : Type u) where
+structure Config where
   charge : ℤ
   energy : ℝ
   /-- The spatial "footprint" or wavelength scale of the configuration -/
@@ -53,7 +49,9 @@ structure Config (Point : Type u) where
 
 /- 2) QFD Model with Kinematic Parameters -/
 
-structure QFDModel (Point : Type u) where
+variable {Point : Type*}
+
+structure QFDModel (Point : Type*) where
   Ψ : PsiField Point
 
   -- The Three Constants + Planck
@@ -62,7 +60,7 @@ structure QFDModel (Point : Type u) where
   /-- Vacuum stiffness (controls c and dispersion suppression) -/
   β : ℝ
   /-- Saturation scale (nonlinear focusing) -/
-  λ_sat : ℝ
+  lambda_sat : ℝ
   /-- Angular impulse of the electron vortex -/
   ℏ : ℝ
 
@@ -71,18 +69,18 @@ structure QFDModel (Point : Type u) where
   c_vac : ℝ
 
   -- Existence Predicates
-  PhaseClosed : Config Point → Prop
-  OnShell : Config Point → Prop
-  FiniteEnergy : Config Point → Prop
+  PhaseClosed : Config → Prop
+  OnShell : Config → Prop
+  FiniteEnergy : Config → Prop
 
   /-- The Soliton Stability Predicate.
       Represents the "Soliton Balance": Dispersion (spreading) is exactly
-      cancelled by Nonlinear Focusing (λ_sat).
+      cancelled by Nonlinear Focusing (lambda_sat).
       Mathematically: d(Width)/dt = 0. -/
-  ShapeInvariant : Config Point → Prop
+  ShapeInvariant : Config → Prop
 
   -- Interaction Predicates
-  Bound : Config Point → Config Point → Prop
+  Bound : Config → Config → Prop
   ELevel : ℕ → ℝ
 
 namespace QFDModel
@@ -156,36 +154,35 @@ end Photon
     The ShapeInvariant gate ensures the soliton maintains its spatial profile.
     This is the mathematical expression of "dispersion ↔ nonlinear focusing balance".
 -/
-def Soliton (M : QFDModel Point) : Type u :=
-  { c : Config Point //
+def Soliton (M : QFDModel Point) : Type :=
+  { c : Config //
     M.PhaseClosed c ∧
     M.OnShell c ∧
     M.FiniteEnergy c ∧
     M.ShapeInvariant c }
 
-instance : Coe (Soliton M) (Config Point) := ⟨Subtype.val⟩
-
-def Soliton.charge (s : Soliton M) : ℤ := (s : Config Point).charge
-def Soliton.energy (s : Soliton M) : ℝ := (s : Config Point).energy
-def Soliton.scale (s : Soliton M) : ℝ := (s : Config Point).scale
+def Soliton.toConfig (s : Soliton M) : Config := s.val
+def Soliton.charge (s : Soliton M) : ℤ := s.val.charge
+def Soliton.energy (s : Soliton M) : ℝ := s.val.energy
+def Soliton.scale (s : Soliton M) : ℝ := s.val.scale
 
 /-- Electron soliton: charge = -1 -/
-def Electron (M : QFDModel Point) : Type u :=
-  { s : Soliton M // (s : Config Point).charge = (-1) }
+def Electron (M : QFDModel Point) : Type :=
+  { s : Soliton M // s.val.charge = (-1) }
 
-instance : Coe (Electron M) (Soliton M) := ⟨Subtype.val⟩
-instance : Coe (Electron M) (Config Point) := ⟨fun e => (e : Soliton M)⟩
+def Electron.toSoliton (e : Electron M) : Soliton M := e.val
+def Electron.toConfig (e : Electron M) : Config := e.val.val
 
 /-- Proton soliton: charge = +1 -/
-def Proton (M : QFDModel Point) : Type u :=
-  { s : Soliton M // (s : Config Point).charge = (1) }
+def Proton (M : QFDModel Point) : Type :=
+  { s : Soliton M // s.val.charge = (1) }
 
-instance : Coe (Proton M) (Soliton M) := ⟨Subtype.val⟩
-instance : Coe (Proton M) (Config Point) := ⟨fun p => (p : Soliton M)⟩
+def Proton.toSoliton (p : Proton M) : Soliton M := p.val
+def Proton.toConfig (p : Proton M) : Config := p.val.val
 
 /-- Constructor: if config meets 4 gates → Soliton exists -/
-theorem soliton_of_config
-    (c : Config Point)
+def soliton_of_config
+    (c : Config)
     (h₁ : M.PhaseClosed c)
     (h₂ : M.OnShell c)
     (h₃ : M.FiniteEnergy c)
@@ -198,20 +195,21 @@ theorem soliton_of_config
 structure Hydrogen (M : QFDModel Point) where
   e : Electron M
   p : Proton M
-  bound : M.Bound (e : Config Point) (p : Config Point)
+  bound : M.Bound e.toConfig p.toConfig
 
 namespace Hydrogen
 
 variable {M : QFDModel Point}
 
 def netCharge (H : Hydrogen M) : ℤ :=
-  (H.e : Config Point).charge + (H.p : Config Point).charge
+  H.e.toConfig.charge + H.p.toConfig.charge
 
 /-- Hydrogen is neutral: (+1) + (−1) = 0 -/
 theorem netCharge_zero (H : Hydrogen M) : H.netCharge = 0 := by
-  have he : (H.e : Config Point).charge = (-1) := H.e.2
-  have hp : (H.p : Config Point).charge = (1) := H.p.2
-  simp [Hydrogen.netCharge, he, hp]
+  have he : H.e.val.val.charge = (-1) := H.e.property
+  have hp : H.p.val.val.charge = (1) := H.p.property
+  simp only [Hydrogen.netCharge, Electron.toConfig, Proton.toConfig, he, hp]
+  ring
 
 end Hydrogen
 
@@ -286,10 +284,10 @@ theorem emission_geometric_match
 /-- Creation theorem: electron exists if config meets 4 gates -/
 theorem electron_exists_of_config
     (h :
-      ∃ c : Config Point,
+      ∃ c : Config,
         M.PhaseClosed c ∧ M.OnShell c ∧ M.FiniteEnergy c ∧
         M.ShapeInvariant c ∧ c.charge = (-1)) :
-    ∃ e : Electron M, True := by
+    ∃ _ : Electron M, True := by
   rcases h with ⟨c, hcClosed, hcOnShell, hcFinite, hcShape, hcCharge⟩
   let s : Soliton M := soliton_of_config (M := M) c hcClosed hcOnShell hcFinite hcShape
   refine ⟨⟨s, ?_⟩, trivial⟩
@@ -298,10 +296,10 @@ theorem electron_exists_of_config
 /-- Creation theorem: proton exists if config meets 4 gates -/
 theorem proton_exists_of_config
     (h :
-      ∃ c : Config Point,
+      ∃ c : Config,
         M.PhaseClosed c ∧ M.OnShell c ∧ M.FiniteEnergy c ∧
         M.ShapeInvariant c ∧ c.charge = (1)) :
-    ∃ p : Proton M, True := by
+    ∃ _ : Proton M, True := by
   rcases h with ⟨c, hcClosed, hcOnShell, hcFinite, hcShape, hcCharge⟩
   let s : Soliton M := soliton_of_config (M := M) c hcClosed hcOnShell hcFinite hcShape
   refine ⟨⟨s, ?_⟩, trivial⟩
