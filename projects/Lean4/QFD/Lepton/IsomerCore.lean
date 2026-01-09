@@ -14,29 +14,29 @@ Lepton model extends the emergent constants with the winding profile `Q_star`
 and the stability potential.
 -/
 structure LeptonModel (Point : Type u) extends EmergentConstants Point where
-  Q_star : Config Point → ℝ
+  Q_star : Config → ℝ
   StabilityPotential : ℝ → ℝ
   h_Qstar_nonneg : ∀ c, Q_star c ≥ 0
   h_V_bounded : ∃ V_min : ℝ, ∀ Q, StabilityPotential Q ≥ V_min
 
 /-- Stable isomer configurations sit at local minima of the stability potential. -/
-def IsStableIsomer (M : LeptonModel Point) (c : Config Point) : Prop :=
+def IsStableIsomer (M : LeptonModel Point) (c : Config) : Prop :=
   IsLocalMin M.StabilityPotential (M.Q_star c)
 
 /--
 The electron, muon, and tau predicates (placeholders awaiting refined intervals).
 -/
-def IsElectron (M : LeptonModel Point) (c : Config Point) : Prop :=
+def IsElectron (M : LeptonModel Point) (c : Config) : Prop :=
   IsStableIsomer M c ∧
   M.Q_star c > 2.1 ∧ M.Q_star c < 2.25 ∧
   c.charge = -1
 
-def IsMuon (M : LeptonModel Point) (c : Config Point) : Prop :=
+def IsMuon (M : LeptonModel Point) (c : Config) : Prop :=
   IsStableIsomer M c ∧
   M.Q_star c ≥ 2.25 ∧ M.Q_star c < 2.4 ∧
   c.charge = -1
 
-def IsTau (M : LeptonModel Point) (c : Config Point) : Prop :=
+def IsTau (M : LeptonModel Point) (c : Config) : Prop :=
   IsStableIsomer M c ∧
   M.Q_star c > 1000 ∧
   c.charge = -1

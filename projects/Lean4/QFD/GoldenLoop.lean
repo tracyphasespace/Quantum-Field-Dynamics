@@ -307,18 +307,6 @@ Both are semantically equivalent.
 -- axiom beta_satisfies_transcendental :
 --     abs (transcendental_equation beta_golden - K_target) < 0.001
 
-/-- Local wrapper using transcendental_equation definitions. -/
-theorem beta_satisfies_transcendental_local :
-    abs (transcendental_equation beta_golden - K_target) < 0.001 := by
-  -- K_target ≈ 6.891 (from α⁻¹ * c₁ / π²)
-  -- transcendental_equation beta_golden = exp(β)/β where β ≈ 3.043
-  -- This follows from QFD.Physics.beta_satisfies_transcendental
-  have h := QFD.Physics.beta_satisfies_transcendental
-  -- The centralized axiom states: abs (exp(β)/β - 6.891) < 0.001
-  -- Our K_target computes to the same value
-  simp only [transcendental_equation, beta_golden, K_target] at *
-  sorry  -- Requires showing K_target ≈ 6.891
-
 /-- Beta PREDICTS c₂ from 1/β (within NuBase uncertainty).
 
 c₂ = 1/β = 1/3.043089491989851 = 0.328613

@@ -368,7 +368,7 @@ structure SolitonPostulates extends Core where
   /-- Higher lepton generations have larger winding Q*. -/
   generation_qstar_order :
     ∀ {Point : Type} {M : QFD.LeptonModel Point}
-      {c₁ c₂ : Config Point}
+      {c₁ c₂ : Config}
       [Decidable (QFD.IsElectron M c₁)]
       [Decidable (QFD.IsMuon M c₁)]
       [Decidable (QFD.IsTau M c₁)]
@@ -382,7 +382,7 @@ structure SolitonPostulates extends Core where
 
   /-- Geometric mass formula linking Q*, β, and the mass scale. -/
   mass_formula :
-    ∀ {Point : Type} {M : QFD.LeptonModel Point} (c : Config Point),
+    ∀ {Point : Type} {M : QFD.LeptonModel Point} (c : Config),
       c.energy =
         (M.toQFDModelStable.toQFDModel.β * (M.Q_star c) ^ 2) * M.lam_mass
   -/
@@ -626,7 +626,7 @@ structure SolitonBoundaryPostulates extends TopologyPostulates where
   -/
   generation_qstar_order :
     ∀ {Point : Type} {M : QFD.LeptonModel Point}
-      {c₁ c₂ : Config Point}
+      {c₁ c₂ : Config}
       [Decidable (QFD.IsElectron M c₁)]
       [Decidable (QFD.IsMuon M c₁)]
       [Decidable (QFD.IsTau M c₁)]
@@ -640,7 +640,7 @@ structure SolitonBoundaryPostulates extends TopologyPostulates where
 
   /-- Geometric mass formula linking Q\*, β, and the mass scale. -/
   mass_formula :
-    ∀ {Point : Type} {M : QFD.LeptonModel Point} (c : Config Point),
+    ∀ {Point : Type} {M : QFD.LeptonModel Point} (c : Config),
       c.energy =
         (M.toQFDModelStable.toQFDModel.β * (M.Q_star c) ^ 2) * M.lam_mass
 

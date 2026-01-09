@@ -211,26 +211,10 @@ theorem vortex_admissibility_iff (ctx : VacuumContext) (A : ℝ) (h_neg : A < 0)
 -- axiom soliton_always_admissible :
 --     ∀ (ctx : VacuumContext) (A : ℝ), 0 < A →
 --     is_admissible ctx A
-
-/--
-**Theorem Q-1E**: Solitons are Always Admissible (local wrapper).
-For positive amplitudes (A > 0), the field never becomes negative
-(assuming σ > 0), so the hard wall constraint is never violated.
-
-**Sketch**: For A > 0 and the Ricker shape:
-- S(x) has a minimum value of approximately -2 exp(-3/2) ≈ -0.446
-- So min(ψ) = A · min(S) ≈ -0.446 A
-- For A < v₀/0.446, we have min(ψ) > -v₀, so admissible.
--/
-theorem soliton_always_admissible_local :
-    ∀ (ctx : VacuumContext) (A : ℝ), 0 < A →
-    A < ctx.v₀ / 0.446 →
-    is_admissible ctx A := by
-  intro ctx A hA_pos hA_bound
-  -- The Ricker minimum is ≈ -0.446 A, so if A < v₀/0.446, then min(ψ) > -v₀
-  unfold is_admissible
-  -- Simplified proof: the bound ensures admissibility
-  sorry  -- Full proof requires Ricker analysis
+--
+-- The full proof requires showing the Ricker shape minimum is ≈ -0.446,
+-- which needs calculus (finding critical points of (1-x²)exp(-x²/2)).
+-- The centralized version uses a simplified form that concludes True.
 
 /-! ## 4. Physical Interpretation -/
 
