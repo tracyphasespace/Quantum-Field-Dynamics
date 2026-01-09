@@ -1,5 +1,8 @@
--- TODO: Replace with specific imports
-import Mathlib
+-- Specific imports instead of full Mathlib
+import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.Real.Pi.Bounds
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
 import QFD.Hydrogen.PhotonSoliton
 
 set_option autoImplicit false
@@ -18,10 +21,10 @@ namespace QFD
   • a time evolution operator `Evolve`
   • a "shape preserved" witness: evolution is (translation ∘ internal phase rotation)
 
-  Separately we define a photon record with (ω, k, λw) and prove:
+  Separately we define a photon record with (ω, k, lam_w) and prove:
 
   • p = ℏ k
-  • k λw = 2π  ⇒  p ∝ 1/λw
+  • k lam_w = 2π  ⇒  p ∝ 1/lam_w
   • ω = cVac k  ⇒  E = cVac p
 
   None of this solves PDEs in Lean. The point is to provide a *clean interface* between
@@ -39,20 +42,20 @@ structure QFDModelStable (Point : Type u) extends QFDModel Point where
 
   /-- Momentum functional of a localized configuration.
       (You can later refine this to a multivector/4-vector.) -/
-  Momentum : Config Point → ℝ
+  Momentum : Config → ℝ
 
   /-- Stability gate: e.g. Lyapunov stability / local minimum of an energy functional
       at fixed topological invariants. -/
-  Stable : Config Point → Prop
+  Stable : Config → Prop
 
   /-- Time evolution of configurations under the Ψ-field dynamics. -/
-  Evolve : ℝ → Config Point → Config Point
+  Evolve : ℝ → Config → Config
 
   /-- Spatial translation along the propagation axis (1D for now). -/
-  Shift : ℝ → Config Point → Config Point
+  Shift : ℝ → Config → Config
 
   /-- Internal phase/rotor evolution (abstracted as a group action). -/
-  PhaseRotate : ℝ → Config Point → Config Point
+  PhaseRotate : ℝ → Config → Config
 
   /- Invariance axioms (minimal set for proofs below). -/
 
@@ -87,18 +90,19 @@ namespace QFDModelStable
 variable {M : QFDModelStable Point}
 
 /-- "Stable soliton" = the three existence gates plus stability plus non-dispersive propagation. -/
-def StableSoliton (M : QFDModelStable Point) : Type u :=
-  { c : Config Point //
+def StableSoliton (M : QFDModelStable Point) : Type :=
+  { c : Config //
       M.PhaseClosed c ∧ M.OnShell c ∧ M.FiniteEnergy c ∧
       M.Stable c ∧
       (∀ t, ∃ x θ, M.Evolve t c = M.PhaseRotate θ (M.Shift x c)) }
 
-instance : Coe (StableSoliton M) (Config Point) := ⟨Subtype.val⟩
+/-- Coerce a StableSoliton to its underlying Config. -/
+def StableSoliton.toConfig (s : StableSoliton M) : Config := s.val
 
 /-- Constructor: if you can exhibit a configuration meeting all gates, you can build a
     `StableSoliton` term in Lean. -/
-theorem stableSoliton_of_config
-    (c : Config Point)
+def stableSoliton_of_config
+    (c : Config)
     (hC : M.PhaseClosed c)
     (hS : M.OnShell c)
     (hF : M.FiniteEnergy c)
@@ -117,13 +121,12 @@ theorem stableSoliton_of_config
 theorem stableSoliton_persists
     (s : StableSoliton M) (t : ℝ) :
     ∃ s' : StableSoliton M,
-      (s' : Config Point) = M.Evolve t (s : Config Point) := by
+      s'.toConfig = M.Evolve t s.toConfig := by
   classical
   rcases s with ⟨c, hC, hS, hF, hStab, hND⟩
   -- Use the nondispersive witness to express the evolved state as shift+phase.
   rcases hND t with ⟨x, θ, hE⟩
-  let c' : Config Point := M.PhaseRotate θ (M.Shift x c)
-
+  let c' : Config := M.PhaseRotate θ (M.Shift x c)
   -- Gates and stability are invariant under shift+phase.
   have hG' :
       M.PhaseClosed c' ∧ M.OnShell c' ∧ M.FiniteEnergy c' := by
@@ -131,19 +134,18 @@ theorem stableSoliton_persists
     simpa [c'] using M.gates_invariant_under_shift_phase c x θ ⟨hC, hS, hF⟩
   have hStab' : M.Stable c' := by
     simpa [c'] using M.stable_invariant_under_shift_phase c x θ hStab
-
   -- Non-dispersive orbit from the new state follows from stability + gates.
   have hND' : ∀ τ, ∃ x' θ', M.Evolve τ c' = M.PhaseRotate θ' (M.Shift x' c') := by
     intro τ
     exact M.evolve_is_shift_phase_of_stable c' hG'.1 hG'.2.1 hG'.2.2 hStab' τ
-
   -- Package everything as a StableSoliton.
   refine ⟨⟨c', ?_⟩, ?_⟩
   · exact ⟨hG'.1, hG'.2.1, hG'.2.2, hStab', hND'⟩
   · -- Identify the stored configuration with the actual evolution at time t.
     -- From hE: Evolve t c = PhaseRotate θ (Shift x c) = c'
     -- and `c` is the underlying config of `s`.
-    simpa [c', hE]
+    simp only [StableSoliton.toConfig, c']
+    exact hE.symm
 
 /-!
   ## Photon with wavelength/wavenumber/momentum bookkeeping
@@ -152,20 +154,20 @@ theorem stableSoliton_persists
 
   Here we only formalize:
 
-  • wavelength relation: k · λw = 2π
+  • wavelength relation: k · lam_w = 2π
   • momentum: p = ℏ k
   • dispersion (massless): ω = cVac · k
   • therefore: E = ℏ ω = cVac · p
 -/
 
-/-- Photon with angular frequency ω, wavenumber k, and wavelength λw.
-    We postulate the exact geometric identity k·λw = 2π (no dispersion in vacuum). -/
+/-- Photon with angular frequency ω, wavenumber k, and wavelength lam_w.
+    We postulate the exact geometric identity k·lam_w = 2π (no dispersion in vacuum). -/
 structure PhotonWave where
   ω : ℝ
   k : ℝ
-  λw : ℝ
-  hλ : λw ≠ 0
-  hkλ : k * λw = 2 * Real.pi
+  lam_w : ℝ
+  h_lam : lam_w ≠ 0
+  hk_lam : k * lam_w = 2 * Real.pi
 
 namespace PhotonWave
 
@@ -179,17 +181,19 @@ def momentum (γ : PhotonWave) : ℝ := M.ℏ * γ.k
 
 /-- From k·λ = 2π and λ ≠ 0, derive k = 2π/λ. -/
 theorem k_eq_twoPi_div_lambda (γ : PhotonWave) :
-    γ.k = (2 * Real.pi) / γ.λw := by
-  have h := congrArg (fun x => x / γ.λw) γ.hkλ
-  -- h : (γ.k * γ.λw) / γ.λw = (2π) / γ.λw
+    γ.k = (2 * Real.pi) / γ.lam_w := by
+  have h := congrArg (fun x => x / γ.lam_w) γ.hk_lam
+  -- h : (γ.k * γ.lam_w) / γ.lam_w = (2π) / γ.lam_w
   -- simplify LHS using λ ≠ 0
-  simpa [mul_div_cancel' γ.k γ.hλ, mul_assoc] using h
+  simpa [mul_div_cancel_right₀ γ.k γ.h_lam, mul_assoc] using h
 
 /-- Momentum is inversely proportional to wavelength: p = ℏ·(2π/λ). -/
 theorem momentum_eq_hbar_twoPi_div_lambda (γ : PhotonWave) :
-    momentum M γ = (M.ℏ * (2 * Real.pi)) / γ.λw := by
+    momentum M γ = (M.ℏ * (2 * Real.pi)) / γ.lam_w := by
   -- momentum = ℏ k, and k = 2π/λ
-  simp [momentum, k_eq_twoPi_div_lambda (M := M) γ, mul_div_assoc]
+  simp only [momentum]
+  rw [k_eq_twoPi_div_lambda γ]
+  ring
 
 /-- Massless dispersion in the quiescent vacuum: ω = cVac · k.
 
@@ -201,11 +205,13 @@ def MasslessDispersion (γ : PhotonWave) : Prop :=
 /-- If ω = cVac·k, then E = cVac·p (the hallmark of massless propagation). -/
 theorem energy_eq_cVac_mul_momentum
     (γ : PhotonWave)
-    (hDisp : MasslessDispersion (M := M) γ) :
+    (hDisp : MasslessDispersion M γ) :
     energy M γ = M.cVac * momentum M γ := by
   -- E = ℏ ω = ℏ (c k) = c (ℏ k) = c p
-  simp [energy, momentum, MasslessDispersion] at *
-  -- after simp, goal reduces to ℏ * (cVac * k) = cVac * (ℏ * k)
+  simp only [energy, momentum]
+  -- Use the dispersion relation: ω = cVac * k
+  rw [hDisp]
+  -- Now goal is: ℏ * (cVac * k) = cVac * (ℏ * k)
   ring
 
 end PhotonWave
@@ -234,32 +240,32 @@ def momentum (s : HStateP M) : ℝ := s.P
 
 end HStateP
 
-/-- Absorption with recoil bookkeeping: same H-pair, level increases, energy and momentum conserved. -/
+/-- Absorption with recoil: same H-pair, level increases, energy/momentum conserved. -/
 def AbsorbsP (M : QFDModelStable Point)
     (s : HStateP M) (γ : PhotonWave) (s' : HStateP M) : Prop :=
   s'.H = s.H ∧
   s.n < s'.n ∧
-  s'.energy = s.energy + (PhotonWave.energy (M := M) γ) ∧
-  s'.momentum = s.momentum + (PhotonWave.momentum (M := M) γ)
+  s'.energy = s.energy + PhotonWave.energy M γ ∧
+  s'.momentum = s.momentum + PhotonWave.momentum M γ
 
-/-- Emission with recoil bookkeeping: same H-pair, level decreases, energy and momentum conserved. -/
+/-- Emission with recoil: same H-pair, level decreases, energy/momentum conserved. -/
 def EmitsP (M : QFDModelStable Point)
     (s : HStateP M) (s' : HStateP M) (γ : PhotonWave) : Prop :=
   s'.H = s.H ∧
   s'.n < s.n ∧
-  s.energy = s'.energy + (PhotonWave.energy (M := M) γ) ∧
-  s.momentum = s'.momentum + (PhotonWave.momentum (M := M) γ)
+  s.energy = s'.energy + PhotonWave.energy M γ ∧
+  s.momentum = s'.momentum + PhotonWave.momentum M γ
 
-/-- Absorption is valid if photon matches the discrete energy gap and we choose recoil consistently. -/
+/-- Absorption is valid if photon matches discrete energy gap, with recoil. -/
 theorem absorptionP_of_gap
     {M : QFDModelStable Point} {H : QFDModel.Hydrogen (M.toQFDModel)}
     {n m : ℕ} (hnm : n < m)
     (P : ℝ) (γ : PhotonWave)
-    (hGap : PhotonWave.energy (M := M) γ = M.ELevel m - M.ELevel n) :
-    AbsorbsP M ⟨H, n, P⟩ γ ⟨H, m, P + PhotonWave.momentum (M := M) γ⟩ := by
+    (hGap : PhotonWave.energy M γ = M.ELevel m - M.ELevel n) :
+    AbsorbsP M ⟨H, n, P⟩ γ ⟨H, m, P + PhotonWave.momentum M γ⟩ := by
   refine ⟨rfl, hnm, ?_, ?_⟩
   · -- energy bookkeeping
-    have : M.ELevel m = M.ELevel n + PhotonWave.energy (M := M) γ := by
+    have : M.ELevel m = M.ELevel n + PhotonWave.energy M γ := by
       linarith [hGap]
     simpa [HStateP.energy] using this
   · -- momentum bookkeeping is definitional with the chosen recoil tag
