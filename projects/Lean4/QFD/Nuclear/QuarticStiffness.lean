@@ -221,12 +221,14 @@ Both derive from β but describe different physics.
 
 This is documented as a remark rather than proven inequality.
 -/
-axiom V4_well_vs_V4_nuc_distinction :
-    ∀ (beta lambda : ℝ),
-    0 < beta → 0 < lambda →
+theorem V4_well_vs_V4_nuc_distinction :
+    let beta := goldenLoopBeta
+    let lambda := protonMass
     let V4_well := lambda / (2 * beta^2)
     let V4_nuc_val := beta
-    V4_well ≠ V4_nuc_val
+    V4_well ≠ V4_nuc_val := by
+  simp only [goldenLoopBeta, protonMass]
+  norm_num
 
 /-! ## Main Result -/
 

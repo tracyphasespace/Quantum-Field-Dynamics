@@ -16,6 +16,7 @@ import Mathlib.Analysis.Convex.SpecificFunctions.Pow
 import Mathlib.Analysis.Convex.Slope
 import Mathlib.Topology.ContinuousMap.Basic
 import Mathlib.Topology.Connected.Basic
+import Mathlib.Topology.Connected.TotallyDisconnected
 import Mathlib.Analysis.Calculus.Deriv.Basic
 import QFD.Physics.Postulates
 
@@ -45,14 +46,18 @@ connected spaces to discrete spaces are locally constant. While provable in
 Mathlib, the infrastructure for discrete topology on ℤ and connectedness
 theorems is substantial. We axiomatize this standard topological fact.
 
-**Elimination path**: Can be proven using Mathlib's `isPreconnected_iff_constant`
-once proper discrete topology infrastructure is imported.
+**Elimination path**: Proven using Mathlib's `IsPreconnected.constant`.
 -/
-axiom topological_conservation
+theorem topological_conservation
   (time_domain : Set ℝ)
   (is_connected : IsConnected time_domain)
   (state_evolution : C(time_domain, ℤ)) :
-  ∀ t1 t2 : time_domain, state_evolution t1 = state_evolution t2
+  ∀ t1 t2 : time_domain, state_evolution t1 = state_evolution t2 := by
+  intro t1 t2
+  -- The subtype of a connected set is a connected space
+  haveI : ConnectedSpace time_domain := Subtype.connectedSpace is_connected
+  -- ℤ has DiscreteTopology, so continuous maps from connected spaces are constant
+  exact PreconnectedSpace.constant (ConnectedSpace.toPreconnectedSpace) state_evolution.continuous
 
 -- ==============================================================================
 -- PART 2: THE ENERGY LANDSCAPE (The Physics)

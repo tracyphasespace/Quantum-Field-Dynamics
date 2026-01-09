@@ -1,6 +1,7 @@
 import Mathlib.Topology.Homotopy.Basic
 import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
+import Physics.Postulates
 import QFD.GA.Cl33
 
 /-!
@@ -31,20 +32,12 @@ See AXIOM_INVENTORY.md for elimination strategy (Mathlib singular homology).
 
 namespace QFD.Lepton.Topology
 
-open ContinuousMap
+open ContinuousMap QFD.Physics
 
-/-!
-## Type Definitions
+abbrev Sphere3 : Type := QFD.Physics.Sphere3
+abbrev RotorGroup : Type := QFD.Physics.RotorGroup
 
-We use ℝ⁴ unit spheres from Mathlib as the standard model for S³.
-Physical space (compactified) and the rotor group are both homeomorphic to S³.
--/
-
-/-- The 3-sphere: unit sphere in ℝ⁴ (physical space via 1-point compactification) -/
-abbrev Sphere3 : Type := Metric.sphere (0 : EuclideanSpace ℝ (Fin 4)) 1
-
-/-- The rotor group manifold (unit quaternions, topologically S³) -/
-abbrev RotorGroup : Type := Metric.sphere (0 : EuclideanSpace ℝ (Fin 4)) 1
+variable (P : QFD.Physics.Model)
 
 /-!
 ## Algebraic Topology Axioms
@@ -66,12 +59,14 @@ these axioms can be replaced with `import Mathlib.AlgebraicTopology.DegreeTheory
 
 /-- The degree (winding number) of a map S³ → S³ is an integer.
     Standard result: This is the induced homomorphism on π₃(S³) ≅ ℤ. -/
-axiom winding_number : C(Sphere3, RotorGroup) → ℤ
+def winding_number : C(Sphere3, RotorGroup) → ℤ :=
+  P.winding_number
 
 /-- Homotopic maps have equal degree (fundamental homotopy invariance).
     Standard result: Degree factors through homotopy classes [S³, S³] ≅ ℤ. -/
-axiom degree_homotopy_invariant {f g : C(Sphere3, RotorGroup)} :
-  ContinuousMap.Homotopic f g → winding_number f = winding_number g
+theorem degree_homotopy_invariant {f g : C(Sphere3, RotorGroup)} :
+    ContinuousMap.Homotopic f g → winding_number P f = winding_number P g :=
+  P.degree_homotopy_invariant
 
 -----------------------------------------------------------
 -- Physical Definitions
@@ -92,41 +87,49 @@ A state is stable if its winding number is non-zero.
 (It is distinct from the vacuum, which has winding 0).
 -/
 def IsStableParticle (psi : C(Sphere3, RotorGroup)) : Prop :=
-  winding_number psi ≠ 0
+  winding_number P psi ≠ 0
 
 /-- The trivial vacuum state has winding number 0.
     Standard result: Constant maps have degree 0 by definition. -/
-axiom vacuum_winding : ∃ (vac : C(Sphere3, RotorGroup)), winding_number vac = 0
+theorem vacuum_winding :
+    ∃ (vac : C(Sphere3, RotorGroup)), winding_number P vac = 0 :=
+  P.vacuum_winding
 
 -----------------------------------------------------------
 -- The Theorem
 -----------------------------------------------------------
 
 /--
-**Theorem: Topological Stability**
-An Electron (Winding=1) cannot decay into Vacuum (Winding=0) via continuous evolution.
-
-Physics Translation: To destroy an electron, you must perform a discontinuous operation
-(interaction vertex/measurement/annihilation) that breaks the homotopy.
-It cannot just "fade away."
+Topological protection:
+any configuration with nonzero winding number cannot continuously evolve into
+the vacuum map supplied by the postulates. This is the Lean formalization of
+the physical "matter cannot unwind" statement.
 -/
 theorem topological_protection
-  (electron : C(Sphere3, RotorGroup))
-  (vacuum : C(Sphere3, RotorGroup))
-  (h_electron : winding_number electron = 1)
-  (h_vacuum : winding_number vacuum = 0) :
-  ¬ ContinuousEvolution electron vacuum := by
-  -- Logic:
-  -- 1. Assume there is a continuous evolution (homotopy) from e to v.
-  intro h_evolve
-  -- 2. Homotopy Invariance implies their winding numbers must be equal.
-  have h_equal_winding : winding_number electron = winding_number vacuum :=
-    degree_homotopy_invariant h_evolve
-  -- 3. Substitute the known winding numbers (1 and 0).
-  rw [h_electron, h_vacuum] at h_equal_winding
-  -- 4. Contradiction: 1 ≠ 0.
-  -- This proves that no such continuous evolution exists.
-  exact one_ne_zero h_equal_winding
+    {ψ vac : C(Sphere3, RotorGroup)}
+    (h_stable : IsStableParticle P ψ)
+    (h_vacuum : winding_number P vac = 0)
+    (h_evolution : ContinuousEvolution ψ vac) :
+    False := by
+  have h_equal :
+      winding_number P ψ = winding_number P vac :=
+    degree_homotopy_invariant (P := P)
+      (by simpa [ContinuousEvolution] using h_evolution)
+  have hψ_zero : winding_number P ψ = 0 := h_equal.trans h_vacuum
+  exact h_stable hψ_zero
+
+/--
+Convenient corollary: exhibit the canonical vacuum witness from the postulates
+and record that no stable particle can homotope into it.
+-/
+theorem no_decay_into_vacuum
+    {ψ : C(Sphere3, RotorGroup)}
+    (h_stable : IsStableParticle P ψ) :
+    ∀ {vac : C(Sphere3, RotorGroup)},
+      winding_number P vac = 0 →
+      ¬ ContinuousEvolution ψ vac := by
+  intro vac hvac hpath
+  exact topological_protection (P := P) h_stable hvac hpath
 
 -----------------------------------------------------------
 -- Significance Discussion

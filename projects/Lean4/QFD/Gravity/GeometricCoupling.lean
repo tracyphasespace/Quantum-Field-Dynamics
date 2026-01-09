@@ -220,10 +220,19 @@ The factor 6/5 arises from partial freezing of internal dimensions.
 If 20% of energy resides in frozen dimensions, the effective coupling
 is suppressed by 1/(1 + 0.2) = 1/1.2 = 5/6.
 -/
-axiom energy_suppression_hypothesis :
+theorem energy_suppression_hypothesis :
     ∃ ε : ℝ, 0 < ε ∧ ε < 0.25 ∧
     projection_reduction = 1 / (1 + ε) ∧
-    abs (ε - 0.2) < 0.05
+    abs (ε - 0.2) < 0.05 := by
+  use 0.2
+  constructor
+  · norm_num
+  constructor
+  · norm_num
+  constructor
+  · unfold projection_reduction
+    norm_num
+  · norm_num
 
 /-- Hypothesis B: Dimensional Ratio
 

@@ -127,9 +127,16 @@ theorem effective_mass_at_origin (p : VacuumDensityProfile) :
 
 /-- Taylor bound: (1 + x + x²/2) exp(-x) ≤ 1 for x ≥ 0.
 
-This is a standard calculus result following from exp(x) ≥ 1 + x + x²/2.
+Proof: From Mathlib's `quadratic_le_exp_of_nonneg`: 1 + x + x²/2 ≤ exp(x).
+Dividing by exp(x) > 0 gives the result.
 -/
-axiom taylor_exp_bound (x : ℝ) (hx : x ≥ 0) : (1 + x + x^2/2) * exp (-x) ≤ 1
+theorem taylor_exp_bound (x : ℝ) (hx : x ≥ 0) : (1 + x + x^2/2) * exp (-x) ≤ 1 := by
+  have h_quad : 1 + x + x^2/2 ≤ exp x := quadratic_le_exp_of_nonneg hx
+  have h_exp_pos : exp x > 0 := exp_pos x
+  have h_exp_neg : exp (-x) = 1 / exp x := by rw [exp_neg, inv_eq_one_div]
+  rw [h_exp_neg]
+  rw [mul_one_div]
+  exact (div_le_one h_exp_pos).mpr h_quad
 
 /-- **Theorem 6**: Effective mass is non-negative for r ≥ 0.
 

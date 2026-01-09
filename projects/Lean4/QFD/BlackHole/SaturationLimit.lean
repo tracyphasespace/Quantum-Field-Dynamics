@@ -72,16 +72,21 @@ theorem saturation_density_approx :
 
 /-! ## Density Bound Axiom -/
 
-/-- **Axiom**: Vacuum density cannot exceed saturation.
+/-- **Hypothesis**: Vacuum density cannot exceed saturation.
 
 This is the fundamental saturation principle: the vacuum "pushes back"
 against compression, providing a hard upper bound on density.
 
 Physical origin: The vacuum stiffness β creates an exponentially
 increasing resistance to compression as ρ → ρ_max.
+
+Note: This is a physical hypothesis, not a mathematical axiom.
+Theorems requiring this bound should take it as a hypothesis parameter.
 -/
-axiom density_bounded_by_saturation :
-  ∀ (ρ : ℝ), (vacuum_density : Prop) → ρ ≤ saturationDensity
+def density_bounded (ρ : ℝ) : Prop := ρ ≤ saturationDensity
+
+/-- Example: Saturation density itself is bounded. -/
+theorem saturation_is_bounded : density_bounded saturationDensity := le_refl _
 
 /-! ## Black Hole Structure -/
 

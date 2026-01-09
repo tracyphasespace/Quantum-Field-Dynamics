@@ -68,6 +68,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import QFD.Physics.Postulates
 
 noncomputable section
 
@@ -295,6 +296,11 @@ The new value is the unique root of the transcendental equation, derived from
 
 **Why this is an axiom**: `norm_num` cannot evaluate `Real.exp` for arbitrary β.
 Requires exponential approximation tactics (future Mathlib development).
+
+**Note**: This axiom uses local definitions (transcendental_equation, K_target).
+A simplified version exists in QFD.Physics.Postulates.beta_satisfies_transcendental
+that uses literal values (6.891) instead of computed K_target.
+Both are semantically equivalent; this version is retained for use with local definitions.
 -/
 axiom beta_satisfies_transcendental :
     abs (transcendental_equation beta_golden - K_target) < 0.001  -- essentially exact
@@ -353,11 +359,12 @@ short-lived nuclei where mass measurements are less precise.
 2. Numerical verification that specific β satisfies both conditions - requires Real.exp
 
 The implication could be proven once Mathlib has transcendental function bounds.
+
+CENTRALIZED: Axiom moved to QFD/Physics/Postulates.lean
+Use: QFD.Physics.golden_loop_identity (imported via QFD.Physics.Postulates)
 -/
-axiom golden_loop_identity :
-  ∀ (alpha_inv c1 pi_sq beta : ℝ),
-  (Real.exp beta) / beta = (alpha_inv * c1) / pi_sq →
-  abs ((1 / beta) - 0.32704) < 0.002  -- 0.5% tolerance (NuBase uncertainty)
+-- axiom golden_loop_identity removed - now imported from QFD.Physics.Postulates
+-- Access via: QFD.Physics.golden_loop_identity
 
 /-! ## 7. Comparison with VacuumParameters -/
 

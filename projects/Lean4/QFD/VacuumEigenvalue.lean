@@ -48,7 +48,7 @@ The Python script uses shooting method or Newton-Raphson to find β satisfying e
 
 namespace QFD.VacuumEigenvalue
 
-open QFD.Vacuum QFD Set
+open QFD.Vacuum QFD QFD.Physics Set
 
 /-! ## Stability Condition -/
 
@@ -298,13 +298,11 @@ theorem transcendental_strictly_increasing :
 **Validation**:
 - Compare to beta_golden from GoldenLoop.lean
 - Should match to machine precision
+
+CENTRALIZED: Axiom moved to QFD/Physics/Postulates.lean
+Use: QFD.Physics.python_root_finding_beta (imported via QFD.Physics.Postulates)
 -/
-axiom python_root_finding_beta :
-  ∀ (K : ℝ) (h_K : abs (K - 6.891) < 0.01),
-    ∃ (β : ℝ),
-      2 < β ∧ β < 4 ∧
-      abs (Real.exp β / β - K) < 1e-10 ∧
-      abs (β - 3.043) < 0.015  -- Precision limited by c₁ (~1%)
+-- axiom python_root_finding_beta removed - now imported from QFD.Physics.Postulates
 
 /--
 Using the numerical root finder (`solve_beta_eigenvalue.py`) we obtain a β in the

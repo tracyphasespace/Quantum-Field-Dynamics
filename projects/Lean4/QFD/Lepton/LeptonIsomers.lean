@@ -1,4 +1,5 @@
 import Mathlib
+import Physics.Postulates
 import QFD.Hydrogen.PhotonSolitonEmergentConstants
 import QFD.Lepton.IsomerCore
 import Mathlib.Data.Real.Basic
@@ -171,44 +172,45 @@ def GenerationNumber (M : LeptonModel Point)
   else 0  -- Invalid/composite state
 
 /-
-  **Axiom (Generation ordering placeholder):** Higher generation ⇒ larger winding.
-  This wraps the intended interval arithmetic / potential analysis that separates
-  the isomer minima for Q*.
+  **Generation ordering postulate**:
+  Higher lepton generation numbers imply strictly larger winding Q\*.
+  This lemma simply exposes the centralized physics postulate so that the
+  computational content of this file does not depend on local axioms.
 -/
-axiom generation_qstar_order
+lemma generation_qstar_order
+    (P : QFD.Physics.Model)
     (M : LeptonModel Point)
     (c₁ c₂ : Config Point)
     [Decidable (IsElectron M c₁)] [Decidable (IsMuon M c₁)] [Decidable (IsTau M c₁)]
     [Decidable (IsElectron M c₂)] [Decidable (IsMuon M c₂)] [Decidable (IsTau M c₂)]
     (h₁ : GenerationNumber M c₁ < GenerationNumber M c₂)
     (h_valid : GenerationNumber M c₁ > 0 ∧ GenerationNumber M c₂ > 0) :
-    M.Q_star c₁ < M.Q_star c₂
+    M.Q_star c₁ < M.Q_star c₂ :=
+  P.generation_qstar_order h₁ h_valid
 
 /-! ## Mass Generation from Geometric Stress -/
 
 /-
-  Axiom: Mass Formula (Replaces Higgs Mechanism).
+  Mass Formula (replacing the Higgs mechanism):
 
-  The mass of a vortex configuration is proportional to:
-  - Vacuum stiffness β (higher stiffness → more stress)
-  - Winding squared Q*² (tighter knot → higher stress energy)
-  - Mass scale lam_mass (unit conversion)
+  m = β · Q*² · λ_mass.
 
-  m = β · Q*² · lam_mass
-
-  This is the CORE of QFD mass generation:
-  - Mass is NOT from coupling to Higgs field
-  - Mass IS the energy cost of stressing the vacuum
+  We import this as a lemma from the centralized physics model so that the
+  downstream analysis can reference it without a local `axiom`.
 -/
-axiom mass_formula
+lemma mass_formula
+    (P : QFD.Physics.Model)
     (M : LeptonModel Point) (c : Config Point) :
-  c.energy = (M.toQFDModelStable.toQFDModel.β * (M.Q_star c)^2) * M.lam_mass
+    c.energy =
+      (M.toQFDModelStable.toQFDModel.β * (M.Q_star c)^2) * M.lam_mass :=
+  P.mass_formula (Point := Point) (M := M) (c := c)
 
 /-
   Theorem: Higher Q* implies Higher Mass.
   More tightly wound vortex → greater vacuum stress → larger inertial mass.
 -/
 theorem mass_increases_with_winding
+    (P : QFD.Physics.Model)
     (M : LeptonModel Point)
     (c₁ c₂ : Config Point)
     (h : M.Q_star c₁ < M.Q_star c₂) :
@@ -229,8 +231,8 @@ theorem mass_increases_with_winding
       M.lam_mass * (M.toQFDModelStable.toQFDModel.β * (M.Q_star c₁)^2) <
         M.lam_mass * (M.toQFDModelStable.toQFDModel.β * (M.Q_star c₂)^2) :=
     mul_lt_mul_of_pos_left h_beta_mul h_lambda
-  have h_energy₁ := mass_formula (M := M) (c := c₁)
-  have h_energy₂ := mass_formula (M := M) (c := c₂)
+  have h_energy₁ := mass_formula (P := P) (M := M) (c := c₁)
+  have h_energy₂ := mass_formula (P := P) (M := M) (c := c₂)
   have h_final :
       c₁.energy < c₂.energy := by
     simpa [h_energy₁, h_energy₂, mul_comm, mul_left_comm, mul_assoc] using h_target
@@ -241,12 +243,13 @@ Corollary: Muon is Heavier than Electron.
 Since Q*_μ > Q*_e, we have m_μ > m_e.
 -/
 theorem muon_heavier_than_electron
+    (P : QFD.Physics.Model)
     (M : LeptonModel Point)
     (e μ : Config Point)
     (h_e : IsElectron M e)
     (h_μ : IsMuon M μ) :
     e.energy < μ.energy := by
-  apply mass_increases_with_winding (M := M)
+  apply mass_increases_with_winding (P := P) (M := M)
   have h_gap := electron_muon_qstar_gap M e μ h_e h_μ
   exact h_gap
 
@@ -317,6 +320,7 @@ theorem muon_decay_energy_release
   In QFD: This follows from Q*_e < Q*_μ < Q*_τ.
 -/
 theorem generation_mass_ordering
+    (P : QFD.Physics.Model)
     (M : LeptonModel Point)
     (c₁ c₂ : Config Point)
     [Decidable (IsElectron M c₁)] [Decidable (IsMuon M c₁)] [Decidable (IsTau M c₁)]
@@ -324,8 +328,8 @@ theorem generation_mass_ordering
     (h₁ : GenerationNumber M c₁ < GenerationNumber M c₂)
     (h_valid : GenerationNumber M c₁ > 0 ∧ GenerationNumber M c₂ > 0) :
     c₁.energy < c₂.energy := by
-  apply mass_increases_with_winding (M := M)
-  exact generation_qstar_order (M := M) (c₁ := c₁) (c₂ := c₂) h₁ h_valid
+  apply mass_increases_with_winding (P := P) (M := M)
+  exact generation_qstar_order (P := P) (M := M) (c₁ := c₁) (c₂ := c₂) h₁ h_valid
 
 /-! ## Physical Interpretation -/
 

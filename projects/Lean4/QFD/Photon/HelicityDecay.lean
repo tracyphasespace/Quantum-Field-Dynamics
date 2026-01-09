@@ -185,10 +185,12 @@ theorem redshift_increases_with_distance (κ d₁ d₂ : ℝ)
 In QFD, photon-vacuum scattering is coherent (forward only).
 This prevents image blurring that would occur with random scattering.
 -/
-axiom forward_scattering_coherent :
-  ∀ (incident_direction : ℝ × ℝ × ℝ) (_vacuum_density : ℝ),
-  ∃ (scattered_direction : ℝ × ℝ × ℝ),
-  scattered_direction = incident_direction
+theorem forward_scattering_coherent :
+    ∀ (incident_direction : ℝ × ℝ × ℝ) (_vacuum_density : ℝ),
+    ∃ (scattered_direction : ℝ × ℝ × ℝ),
+    scattered_direction = incident_direction := by
+  intro d _
+  exact ⟨d, rfl⟩
 
 /-- **Theorem 12**: No image blurring (direction preserved). -/
 theorem no_blur_theorem (θ_in : ℝ) :
@@ -213,8 +215,11 @@ def surfaceBrightnessLCDM (SB0 z : ℝ) : ℝ := SB0 / (1 + z)^4
 QFD predicts (1+z)³ times brighter than ΛCDM at same redshift.
 This is because QFD uses (1+z)⁻¹ scaling while ΛCDM uses (1+z)⁻⁴.
 -/
-axiom qfd_brighter_factor (z : ℝ) (hz : z > 0) :
-  surfaceBrightnessQFD 1 z / surfaceBrightnessLCDM 1 z = (1 + z)^3
+theorem qfd_brighter_factor (z : ℝ) (_hz : z > 0) :
+    surfaceBrightnessQFD 1 z / surfaceBrightnessLCDM 1 z = (1 + z)^3 := by
+  unfold surfaceBrightnessQFD surfaceBrightnessLCDM
+  -- Goal: (1/(1+z)) / (1/(1+z)^4) = (1+z)^3
+  field_simp
 
 /-- **Theorem 13**: QFD predicts brighter galaxies at high z.
 

@@ -73,10 +73,12 @@ For dimensional consistency:
 
 The mass scale that makes this dimensionally correct is λ itself.
 -/
-axiom binding_from_vacuum_compression :
+theorem binding_from_vacuum_compression :
     ∀ (volume density_var : ℝ),
     ∃ (E_binding : ℝ),
-    E_binding = lambda_vacuum * volume * density_var^2
+    E_binding = lambda_vacuum * volume * density_var^2 := by
+  intro volume density_var
+  use lambda_vacuum * volume * density_var^2
 
 /-! ## Main Theorem -/
 
@@ -189,7 +191,7 @@ After: k_c2 = λ = m_p (derived from Proton Bridge)
 
 This reduces the free parameter count by 1.
 -/
-axiom k_c2_was_free_parameter : True
+theorem k_c2_was_free_parameter : True := trivial
 
 /-- Parameter closure summary
 

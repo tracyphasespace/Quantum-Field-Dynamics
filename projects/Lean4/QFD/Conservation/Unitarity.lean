@@ -93,33 +93,43 @@ noncomputable def FallingState (theta : ℝ) (initial_mag : ℝ) : Fin 6 → ℝ
     else if i = 4 then initial_mag * Real.sin theta -- e4 Internal component grows
     else 0 -- Simplify other dims
 
-/-- **Computational Fact (Awaiting Tactic)**: Black hole unitarity is preserved.
+/-- **Theorem**: Black hole unitarity is preserved.
 
     This follows from the definition of FallingState and InformationContent by
     direct computation: (mag * cos θ)² + (mag * sin θ)² = mag².
 
-    **Status**: Axiomatized pending computational reflection tactic.
-    **Verification**: Can be verified numerically or symbolically.
-    **Transparency**: This is cos²θ + sin²θ = 1 (Pythagorean identity).
+    **Proof**: Uses cos²θ + sin²θ = 1 (Pythagorean identity).
 -/
-axiom black_hole_unitarity_preserved (mag : ℝ) (theta : ℝ) :
-  let state := FallingState theta mag
-  InformationContent state = mag^2
+theorem black_hole_unitarity_preserved (mag : ℝ) (theta : ℝ) :
+    let state := FallingState theta mag
+    InformationContent state = mag^2 := by
+  -- Expand definitions
+  unfold InformationContent FallingState
+  -- The sum has only two non-zero terms: i=3 (cos) and i=4 (sin)
+  simp only [Fin.sum_univ_succ]
+  simp only [Fin.ext_iff]
+  norm_num
+  -- Goal: (mag * cos θ)² + (mag * sin θ)² = mag²
+  -- Expand (a*b)² = a²*b²
+  rw [mul_pow, mul_pow]
+  -- Now: mag² * cos²θ + mag² * sin²θ = mag²
+  rw [← mul_add, Real.cos_sq_add_sin_sq, mul_one]
 
 /--
 **Theorem: Apparent Loss (The Paradox)**
 To a standard observer seeing only Visible Information, does it look like
 information is destroyed at the Horizon ($\theta = \pi/2$)? Yes.
 
-**Computational Fact (Awaiting Tactic)**: At θ = π/2, cos(π/2) = 0.
-
-**Status**: Axiomatized pending computational reflection tactic.
-**Verification**: Can be verified numerically.
-**Transparency**: This is cos(π/2) = 0 from trigonometry.
+**Proof**: At θ = π/2, cos(π/2) = 0, so the e₃ component vanishes.
 -/
-axiom horizon_looks_black (mag : ℝ) :
-  let horizon_state := FallingState (Real.pi / 2) mag
-  VisibleInformation horizon_state = 0
+theorem horizon_looks_black (mag : ℝ) :
+    let horizon_state := FallingState (Real.pi / 2) mag
+    VisibleInformation horizon_state = 0 := by
+  -- Expand definitions
+  unfold VisibleInformation FallingState
+  -- Expand the finite sum and simplify
+  simp only [Fin.sum_univ_succ, Fin.ext_iff]
+  norm_num [Real.cos_pi_div_two]
 
 -----------------------------------------------------------
 -- Significance Discussion

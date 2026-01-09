@@ -759,11 +759,8 @@ Where:
 - VacuumParameters.lean: β, λ definitions
 - TimeCliff.lean: (TODO) Geometric boundary conditions
 -/
-axiom v4_from_vacuum_hypothesis :
-    ∃ (k : ℝ) (k_pos : k > 0),
-    ∀ (beta lambda : ℝ) (beta_pos : beta > 0) (lambda_pos : lambda > 0),
-    let V4 := k * beta * lambda^2
-    V4 > 0  -- Well depth must be positive
+-- CENTRALIZED: Axiom moved to QFD/Physics/Postulates.lean
+-- Import QFD.Physics.Postulates to use: QFD.Physics.v4_from_vacuum_hypothesis
 
 /-! ### Nuclear Fine Structure α_n from QCD -/
 
@@ -814,11 +811,8 @@ Where:
 - QCDLattice.lean: (TODO) Running coupling formalization
 - Confinement.lean: (EXISTS) Asymptotic freedom in Cl(3,3)
 -/
-axiom alpha_n_from_qcd_hypothesis :
-    ∃ (f : ℝ → ℝ → ℝ) (Q_squared : ℝ),
-    ∀ (alpha_s beta : ℝ) (as_pos : 0 < alpha_s ∧ alpha_s < 1) (beta_pos : beta > 0),
-    let alpha_n := f alpha_s beta
-    0 < alpha_n ∧ alpha_n < 1  -- Fine structure must be in (0,1)
+-- CENTRALIZED: Axiom moved to QFD/Physics/Postulates.lean
+-- Import QFD.Physics.Postulates to use: QFD.Physics.alpha_n_from_qcd_hypothesis
 
 /-! ### Volume Term c2 from Packing Geometry -/
 
@@ -866,10 +860,8 @@ Where:
 - Shell model confirms spherical shell structure
 - Surface term c1 already geometric (~ 4πr²)
 -/
-axiom c2_from_packing_hypothesis :
-    ∃ (packing_fraction coordination_number : ℝ),
-    let c2 := packing_fraction / Real.pi
-    0.2 ≤ c2 ∧ c2 ≤ 0.5  -- Must satisfy CCL constraints
+-- CENTRALIZED: Axiom moved to QFD/Physics/Postulates.lean
+-- Import QFD.Physics.Postulates to use: QFD.Physics.c2_from_packing_hypothesis
 
 /-! ### Parameter Reduction Roadmap -/
 
