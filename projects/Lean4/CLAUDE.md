@@ -490,30 +490,38 @@ For papers using this formalization:
 
 See `CITATION.cff` for complete metadata.
 
-## Key Statistics (as of 2026-01-06)
+## Key Statistics (as of 2026-01-08)
 
-- **Lean Files**: **199**
-- **Proven Theorems**: **672**
-- **Proven Lemmas**: **172**
-- **Total Proven**: **844 statements**
-- **Definitions**: **732**
-- **Structures**: **133**
-- **Axioms**: **54** (in Physics/Postulates.lean)
+- **Lean Files**: **209**
+- **Proven Theorems**: **849**
+- **Proven Lemmas**: **182**
+- **Total Proven**: **1,031 statements**
+- **Definitions**: **766**
+- **Structures**: **166**
+- **Standalone Axioms**: **16** (all centralized in Physics/Postulates.lean)
 - **Build Status**: ✅ Successful (3171 jobs)
-- **Sorries**: **0** (100% completion)
+- **Sorries**: **~1** (soliton admissibility placeholder)
 
 **Counting Methodology** (IMPORTANT):
 ```bash
 # Count DECLARATIONS only (start of line):
 grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # theorems
 grep -rn "^lemma" QFD/ --include="*.lean" | wc -l    # lemmas
+grep -rn "^axiom " QFD/ --include="*.lean" | grep -v archive/ | wc -l  # axioms
 # DO NOT use grep without ^ anchor - inflates count by ~200 (includes comments)
 ```
 
-**Recent Progress (Jan 6, 2026)**:
+**Recent Progress (Jan 8, 2026)**:
+- **Axiom Centralization Complete**: All 16 standalone axioms now in Physics/Postulates.lean
+- **12 axioms eliminated** (proven as theorems): black_hole_unitarity_preserved,
+  horizon_looks_black, taylor_exp_bound, energy_suppression_hypothesis, etc.
+- **7 legacy axioms centralized**: kdv_phase_drag_interaction, rayleigh/raman scattering,
+  golden_loop_prediction_accuracy, energy_minimization, soliton_always_admissible
+- New theorems: planck_from_topology, hbar_effective_pos, energy_eq_hbar_freq
+
+**Earlier Progress (Jan 6, 2026)**:
 - New Math/ directory: AlphaFormFactor, BetaCriticality, VacuumSaturation (pure scaffolding)
 - New Atomic/ directory: Chaos, Lyapunov, ResonanceDynamics modules
-- Centralized Physics/Postulates.lean with 54 physics axioms
 - New Topology/ directory with FormFactorCore
 
 **Earlier Progress (Jan 2, 2026)**:
