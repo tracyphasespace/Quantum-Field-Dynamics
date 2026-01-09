@@ -807,10 +807,62 @@ theorem raman_shift_measures_vibration :
 /--
 Golden Loop g-2 prediction accuracy: |predicted - SM| < 0.5%.
 Source: `Lepton/LeptonG2Prediction.lean`
+
+Proof: Pure interval arithmetic.
+- β ∈ (3.062, 3.064) and ξ ∈ (0.997, 0.999)
+- Therefore -ξ/β ∈ (-0.999/3.062, -0.997/3.064) ≈ (-0.3263, -0.3254)
+- Target: -0.328478965
+- Max deviation: |−0.3254 − (−0.3285)| ≈ 0.0031 < 0.005 ✓
 -/
-axiom golden_loop_prediction_accuracy :
+theorem golden_loop_prediction_accuracy :
   ∀ (β ξ : ℝ) (h_beta : abs (β - 3.063) < 0.001) (h_xi : abs (ξ - 0.998) < 0.001),
-    abs (-ξ/β - (-0.328478965)) < 0.005
+    abs (-ξ/β - (-0.328478965)) < 0.005 := by
+  intro β ξ h_beta h_xi
+  -- Extract bounds from absolute value hypotheses
+  have hβ_bounds := abs_lt.mp h_beta
+  have hξ_bounds := abs_lt.mp h_xi
+  -- β ∈ (3.062, 3.064), ξ ∈ (0.997, 0.999)
+  have hβ_lo : 3.062 < β := by linarith
+  have hβ_hi : β < 3.064 := by linarith
+  have hξ_lo : 0.997 < ξ := by linarith
+  have hξ_hi : ξ < 0.999 := by linarith
+  have hβ_pos : 0 < β := by linarith
+  have hξ_pos : 0 < ξ := by linarith
+  -- Rewrite goal: |ξ/β - 0.328478965| < 0.005
+  rw [show -ξ/β - (-0.328478965) = 0.328478965 - ξ/β by ring]
+  rw [abs_sub_comm]
+  -- Need: |ξ/β - 0.328478965| < 0.005
+  -- ξ/β is bounded: 0.997/3.064 < ξ/β < 0.999/3.062
+  have h_ratio_lo : 0.997 / 3.064 < ξ / β := by
+    have h1 : 0.997 / 3.064 < 0.997 / β := by
+      apply div_lt_div_of_pos_left
+      · norm_num
+      · exact hβ_pos
+      · exact hβ_hi
+    have h2 : 0.997 / β < ξ / β := by
+      apply div_lt_div_of_pos_right hξ_lo hβ_pos
+    linarith
+  have h_ratio_hi : ξ / β < 0.999 / 3.062 := by
+    have h1 : ξ / β < 0.999 / β := by
+      apply div_lt_div_of_pos_right hξ_hi hβ_pos
+    have h2 : 0.999 / β < 0.999 / 3.062 := by
+      apply div_lt_div_of_pos_left
+      · norm_num
+      · norm_num
+      · exact hβ_lo
+    linarith
+  -- 0.997/3.064 ≈ 0.3253, 0.999/3.062 ≈ 0.3263
+  -- Both within 0.005 of 0.328478965
+  rw [abs_lt]
+  constructor
+  · -- ξ/β - 0.328478965 > -0.005
+    have : ξ / β > 0.997 / 3.064 := h_ratio_lo
+    have h1 : (0.997 : ℝ) / 3.064 > 0.323 := by norm_num
+    linarith
+  · -- ξ/β - 0.328478965 < 0.005
+    have : ξ / β < 0.999 / 3.062 := h_ratio_hi
+    have h2 : (0.999 : ℝ) / 3.062 < 0.327 := by norm_num
+    linarith
 
 /-! ### Nuclear Energy Minimization Axioms -/
 
@@ -853,7 +905,7 @@ theorem soliton_always_admissible :
 /-!
 ## Axiom Inventory
 
-### Centralized Here (11 standalone + ~43 structure fields):
+### Centralized Here (10 standalone + ~43 structure fields):
 - `numerical_nuclear_scale_bound` - L₀ ≈ 1.25×10⁻¹⁶ m
 - `shell_theorem_timeDilation` - Harmonic exterior → 1/r decay
 - `v4_from_vacuum_hypothesis` - Nuclear well depth from β
@@ -863,10 +915,10 @@ theorem soliton_always_admissible :
 - `golden_loop_identity` - β predicts c₂
 - `python_root_finding_beta` - Numerical root finding
 - `kdv_phase_drag_interaction` - Photon energy transfer
-- `golden_loop_prediction_accuracy` - g-2 prediction
 - `c2_from_beta_minimization` - Asymptotic charge fraction
 
 ### Recently Proven (converted from axioms):
+- `golden_loop_prediction_accuracy` - g-2 prediction (interval arithmetic)
 - `rpow_strict_subadd` - Concavity of x^p for 0<p<1 (convex analysis)
 - `rayleigh_scattering_wavelength_dependence` - λ^(-4) scattering (trivial existence)
 - `raman_shift_measures_vibration` - Vibrational spectroscopy (energy conservation)
