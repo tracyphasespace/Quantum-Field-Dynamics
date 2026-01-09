@@ -9,6 +9,7 @@ import Mathlib.Topology.Compactness.Compact
 import Mathlib.Order.Filter.Defs
 import Mathlib.Order.Filter.Cofinite
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
+import Mathlib.Tactic.FieldSimp
 import QFD.Lepton.IsomerCore
 import QFD.Electron.HillVortex
 
@@ -233,6 +234,7 @@ structure MassState (p : SolitonParams) where
   is_bound : energy > 0
 
 open ContinuousMap
+open Set
 
 /-- The compactified spatial 3-sphere (physical space). -/
 abbrev Sphere3 : Type := Metric.sphere (0 : EuclideanSpace ℝ (Fin 4)) 1
@@ -659,9 +661,39 @@ convex analysis: for concave functions f, f(a+b) > f(a) + f(b) when scaled appro
 For `x^p` with `0 < p < 1`, the function is strictly concave on `(0, ∞)`, giving
 `(a + b)^p < a^p + b^p` for positive a, b.
 -/
-axiom rpow_strict_subadd
+theorem rpow_strict_subadd
     (a b p : ℝ) (ha : 0 < a) (hb : 0 < b) (hp_pos : 0 < p) (hp_lt_one : p < 1) :
-    (a + b) ^ p < a ^ p + b ^ p
+    (a + b) ^ p < a ^ p + b ^ p := by
+  set f : ℝ → ℝ := fun x => x ^ p
+  have hconc : StrictConcaveOn ℝ (Ici (0 : ℝ)) f :=
+    Real.strictConcaveOn_rpow hp_pos hp_lt_one
+  have hpos : 0 < a + b := add_pos ha hb
+  have hx_mem : a + b ∈ Ici (0 : ℝ) := by
+    simpa [mem_Ici] using (le_of_lt hpos : (0 : ℝ) ≤ a + b)
+  have hy_mem : (0 : ℝ) ∈ Ici (0 : ℝ) := by simpa [mem_Ici]
+  have h_ne : (a + b : ℝ) ≠ 0 := ne_of_gt hpos
+  set w₁ := a / (a + b)
+  set w₂ := b / (a + b)
+  have hw₁_pos : 0 < w₁ := div_pos ha hpos
+  have hw₂_pos : 0 < w₂ := div_pos hb hpos
+  have hsum : w₁ + w₂ = 1 := by
+    have hden : a + b ≠ 0 := ne_of_gt hpos
+    field_simp [w₁, w₂, hden]
+  have hsum' : w₂ + w₁ = 1 := by simpa [add_comm] using hsum
+  have hz : (0 : ℝ) ≠ p := ne_of_gt hp_pos
+  have h_a :=
+    hconc.2 hx_mem hy_mem h_ne hw₁_pos hw₂_pos hsum
+  have h_b :=
+    hconc.2 hx_mem hy_mem h_ne hw₂_pos hw₁_pos hsum'
+  have h_a' : w₁ * (a + b) ^ p < a ^ p := by
+    simpa [f, w₁, w₂, h_ne, Real.zero_rpow hz, add_comm, add_left_comm, add_assoc,
+      mul_comm, mul_left_comm, mul_assoc] using h_a
+  have h_b' : w₂ * (a + b) ^ p < b ^ p := by
+    simpa [f, w₁, w₂, h_ne, Real.zero_rpow hz, add_comm, add_left_comm, add_assoc,
+      mul_comm, mul_left_comm, mul_assoc] using h_b
+  have h_sum : (w₁ + w₂) * (a + b) ^ p < a ^ p + b ^ p := by
+    simpa [add_mul, add_comm, add_left_comm, add_assoc] using add_lt_add h_a' h_b'
+  simpa [hsum] using h_sum
 
 /--
 Numerical bound connecting measured constants (ℏ, Γ, λ, c) to the nuclear core size.
@@ -753,17 +785,22 @@ axiom kdv_phase_drag_interaction :
 Rayleigh scattering: cross-section proportional to λ^(-4).
 Source: `Hydrogen/PhotonScattering.lean`
 -/
-axiom rayleigh_scattering_wavelength_dependence :
+theorem rayleigh_scattering_wavelength_dependence :
   ∀ (λ : ℝ) (h_pos : λ > 0),
-    ∃ (σ k : ℝ), k > 0 ∧ σ = k * λ^(-4 : ℤ)
+    ∃ (σ k : ℝ), k > 0 ∧ σ = k * λ^(-4 : ℤ) := by
+  intro λ _h_pos
+  refine ⟨1 * λ^(-4 : ℤ), 1, by norm_num, rfl⟩
 
 /--
 Raman shift measures molecular vibration energy.
 Source: `Hydrogen/PhotonScattering.lean`
 -/
-axiom raman_shift_measures_vibration :
+theorem raman_shift_measures_vibration :
   ∀ (E_in E_out : ℝ) (h_stokes : E_in > E_out),
-    ∃ (E_vib : ℝ), E_vib = E_in - E_out ∧ E_vib > 0
+    ∃ (E_vib : ℝ), E_vib = E_in - E_out ∧ E_vib > 0 := by
+  intro E_in E_out h_stokes
+  refine ⟨E_in - E_out, rfl, ?_⟩
+  linarith
 
 /-! ### Lepton Prediction Axioms -/
 
@@ -781,9 +818,14 @@ axiom golden_loop_prediction_accuracy :
 Energy minimization equilibrium: ∂E/∂Z = 0 determines equilibrium charge.
 Source: `Nuclear/SymmetryEnergyMinimization.lean`
 -/
-axiom energy_minimization_equilibrium :
-  ∀ (β A : ℝ) (h_beta : β > 0) (h_A : A > 0),
-    ∃ (Z_eq : ℝ), 0 ≤ Z_eq ∧ Z_eq ≤ A
+theorem energy_minimization_equilibrium :
+  ∀ (β A : ℝ) (_h_beta : β > 0) (h_A : A > 0),
+    ∃ (Z_eq : ℝ), 0 ≤ Z_eq ∧ Z_eq ≤ A := by
+  intro β A _h_beta h_A
+  -- Choose Z_eq = A/2, which satisfies 0 ≤ A/2 ≤ A when A > 0
+  refine ⟨A / 2, ?_, ?_⟩
+  · linarith
+  · linarith
 
 /--
 c₂ from β minimization: asymptotic charge fraction approaches 1/β.
@@ -801,16 +843,17 @@ axiom c2_from_beta_minimization :
 Soliton admissibility: Ricker wavelet amplitude stays within vacuum bounds.
 Source: `Soliton/HardWall.lean`
 -/
-axiom soliton_always_admissible :
-  ∀ (v₀ A : ℝ) (h_v₀ : v₀ > 0) (h_A : A > 0),
+theorem soliton_always_admissible :
+  ∀ (v₀ A : ℝ) (_h_v₀ : v₀ > 0) (_h_A : A > 0),
     -- Ricker minimum ≈ -0.446 A, so need A < v₀ / 0.446 for admissibility
-    A < v₀ / 0.446 → True  -- Simplified: full version in HardWall.lean
+    A < v₀ / 0.446 → True := by  -- Simplified: full version in HardWall.lean
+  intro _ _ _ _ _
+  trivial
 
 /-!
 ## Axiom Inventory
 
-### Centralized Here (16 standalone + ~43 structure fields):
-- `rpow_strict_subadd` - Concavity of x^p for 0<p<1
+### Centralized Here (11 standalone + ~43 structure fields):
 - `numerical_nuclear_scale_bound` - L₀ ≈ 1.25×10⁻¹⁶ m
 - `shell_theorem_timeDilation` - Harmonic exterior → 1/r decay
 - `v4_from_vacuum_hypothesis` - Nuclear well depth from β
@@ -820,12 +863,15 @@ axiom soliton_always_admissible :
 - `golden_loop_identity` - β predicts c₂
 - `python_root_finding_beta` - Numerical root finding
 - `kdv_phase_drag_interaction` - Photon energy transfer
-- `rayleigh_scattering_wavelength_dependence` - λ^(-4) scattering
-- `raman_shift_measures_vibration` - Vibrational spectroscopy
 - `golden_loop_prediction_accuracy` - g-2 prediction
-- `energy_minimization_equilibrium` - Nuclear equilibrium
 - `c2_from_beta_minimization` - Asymptotic charge fraction
-- `soliton_always_admissible` - Ricker admissibility
+
+### Recently Proven (converted from axioms):
+- `rpow_strict_subadd` - Concavity of x^p for 0<p<1 (convex analysis)
+- `rayleigh_scattering_wavelength_dependence` - λ^(-4) scattering (trivial existence)
+- `raman_shift_measures_vibration` - Vibrational spectroscopy (energy conservation)
+- `energy_minimization_equilibrium` - Nuclear equilibrium (trivial Z_eq = A/2)
+- `soliton_always_admissible` - Ricker admissibility (concludes True)
 
 ### In Model Structure (via extends chain):
 - TopologyPostulates: winding_number, degree_homotopy_invariant, vacuum_winding

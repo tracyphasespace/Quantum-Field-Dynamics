@@ -239,27 +239,27 @@ def AbsorbsP (M : QFDModelStable Point)
     (s : HStateP M) (γ : PhotonWave) (s' : HStateP M) : Prop :=
   s'.H = s.H ∧
   s.n < s'.n ∧
-  s'.energy = s.energy + (PhotonWave.energy (M := M) γ) ∧
-  s'.momentum = s.momentum + (PhotonWave.momentum (M := M) γ)
+  s'.energy = s.energy + (PhotonWave.energy M γ) ∧
+  s'.momentum = s.momentum + (PhotonWave.momentum M γ)
 
 /-- Emission with recoil bookkeeping: same H-pair, level decreases, energy and momentum conserved. -/
 def EmitsP (M : QFDModelStable Point)
     (s : HStateP M) (s' : HStateP M) (γ : PhotonWave) : Prop :=
   s'.H = s.H ∧
   s'.n < s.n ∧
-  s.energy = s'.energy + (PhotonWave.energy (M := M) γ) ∧
-  s.momentum = s'.momentum + (PhotonWave.momentum (M := M) γ)
+  s.energy = s'.energy + (PhotonWave.energy M γ) ∧
+  s.momentum = s'.momentum + (PhotonWave.momentum M γ)
 
 /-- Absorption is valid if photon matches the discrete energy gap and we choose recoil consistently. -/
 theorem absorptionP_of_gap
     {M : QFDModelStable Point} {H : QFDModel.Hydrogen (M.toQFDModel)}
     {n m : ℕ} (hnm : n < m)
     (P : ℝ) (γ : PhotonWave)
-    (hGap : PhotonWave.energy (M := M) γ = M.ELevel m - M.ELevel n) :
-    AbsorbsP M ⟨H, n, P⟩ γ ⟨H, m, P + PhotonWave.momentum (M := M) γ⟩ := by
+    (hGap : PhotonWave.energy M γ = M.ELevel m - M.ELevel n) :
+    AbsorbsP M ⟨H, n, P⟩ γ ⟨H, m, P + PhotonWave.momentum M γ⟩ := by
   refine ⟨rfl, hnm, ?_, ?_⟩
   · -- energy bookkeeping
-    have : M.ELevel m = M.ELevel n + PhotonWave.energy (M := M) γ := by
+    have : M.ELevel m = M.ELevel n + PhotonWave.energy M γ := by
       linarith [hGap]
     simpa [HStateP.energy] using this
   · -- momentum bookkeeping is definitional with the chosen recoil tag
