@@ -43,7 +43,7 @@ The actual root-finding is performed by Python script `solve_beta_eigenvalue.py`
 The theorem `beta_from_transcendental_equation` provides the formal specification.
 The Python script uses shooting method or Newton-Raphson to find β satisfying e^β/β = K.
 
-**Expected Result**: β = 3.043070 for K = 6.891 (DERIVED from α, 2026-01-06)
+**Expected Result**: β = 3.0432330 for K = 6.891 (DERIVED from α, 2026-01-06)
 -/
 
 namespace QFD.VacuumEigenvalue
@@ -342,7 +342,7 @@ theorem beta_solution_matches_golden :
 /--
 **β is Forced, Not Fitted**
 
-The value β = 3.043089… is not a free parameter. It's the unique solution to:
+The value β = 3.043233… is not a free parameter. It's the unique solution to:
 
 e^β / β = (α⁻¹ × c₁) / π²
 
@@ -404,7 +404,7 @@ only exist at this ONE stiffness value."
 **Python Integration**:
 - Formal specification: `python_root_finding_beta`
 - Script name: `solve_beta_eigenvalue.py`
-- Verification: β = 3.043070 (DERIVED from α, 2026-01-06)
+- Verification: β = 3.0432330 (DERIVED from α, 2026-01-06)
 
 **Status**: Framework complete, numerical solving pending
 

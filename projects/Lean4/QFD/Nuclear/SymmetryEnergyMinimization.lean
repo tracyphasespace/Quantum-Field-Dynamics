@@ -28,7 +28,7 @@ gives Z/A → c₂ = 1/β (vacuum compliance).
 
 ## Empirical Validation
 
-Theoretical: c₂ = 1/β = 1/3.043089491989851 ≈ 0.3286
+Theoretical: c₂ = 1/β = 1/3.043233053 ≈ 0.3286
 Empirical: c₂ = 0.324 (fitted to 2,550 nuclei)
 Agreement: 98.6%
 
@@ -271,7 +271,7 @@ def c2_agreement : ℝ := abs (c2_theoretical - c2_empirical) / c2_empirical
 
 /-- Validation: c₂ theory matches empirical within 2%
 
-Theoretical: c₂ = 1/β = 1/3.043089… ≈ 0.3286
+Theoretical: c₂ = 1/β = 1/3.043233… ≈ 0.3286
 Empirical: c₂ = 0.324 (fitted to 2,550 nuclei)
 Agreement: 98.6% (1.4% error)
 -/

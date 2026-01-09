@@ -36,11 +36,11 @@ noncomputable def geometricAlpha (stiffness_lam : ℝ) (mass_e : ℝ) : ℝ :=
   --    Source: Golden Loop transcendental equation e^β/β = K
   --    These PREDICT heavy nuclei better than the old empirical fit.
   let c1_surface : ℝ := 0.496297  -- Surface tension (was 0.529 fitted)
-  let c2_volume  : ℝ := 0.328615  -- = 1/β (was 0.317 fitted)
+  let c2_volume  : ℝ := 0.328598  -- = 1/β (was 0.317 fitted)
 
   -- 2. Critical Beta Limit (The Golden Loop)
   --    β = root of e^β/β = (α⁻¹ × c₁) / π²
-  let beta_crit  : ℝ := 3.04307  -- Derived from α
+  let beta_crit  : ℝ := 3.043233  -- Derived from α
 
   -- 3. Geometric Factor (Nuclear-Electronic Bridge)
   --    k = 7π/5 is a GEOMETRIC constant (not fitted!)
@@ -55,13 +55,13 @@ noncomputable def geometricAlpha (stiffness_lam : ℝ) (mass_e : ℝ) : ℝ :=
 noncomputable def c1_surface : ℝ := 0.496297
 
 /-- Nuclear volume coefficient (= 1/β, the bulk modulus)
-    c₂ = 1/3.04307 = 0.328615
+    c₂ = 1/3.043233 = 0.328598
     This is the vacuum's resistance to compression -/
-noncomputable def c2_volume : ℝ := 0.328615
+noncomputable def c2_volume : ℝ := 0.328598
 
 /-- Critical beta limit from Golden Loop (exported for Python bridge).
 
-**2026-01-06 Update**: Changed from 3.058 (fitted) to 3.043089… (derived from α).
+**2026-01-06 Update**: Changed from 3.058 (fitted) to 3.043233… (derived from α).
 -/
 noncomputable def beta_critical : ℝ := QFD.Vacuum.goldenLoopBeta
 
@@ -126,7 +126,7 @@ Source: VacuumParameters.lean, v4_theoretical_prediction theorem
 theorem beta_determines_qed_coefficient
     -- Numerical assumption: QED coefficient approximation error bound
     -- This follows from: beta_critical = QFD.Vacuum.goldenLoopBeta, ξ = 1.0
-    -- V4 = -1 / 3.043089491989851 ≈ -0.3286
+    -- V4 = -1 / 3.043233053 ≈ -0.3286
     -- C2_QED ≈ -0.328479 (from QED calculation)
     -- error ≈ 0.00013 / 0.328479 < 0.001
     (h_error_bound :

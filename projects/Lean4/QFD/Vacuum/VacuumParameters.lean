@@ -40,7 +40,7 @@ structure VacuumBulkModulus where
 /-- Golden Loop prediction for β from fine structure constant α.
 
 **2026-01-06 Update**: Changed from 3.058 (fitted) to
-`β = 3.043089491989851` (derived as the root of `e^β/β = K`).
+`β = 3.043233053` (derived as the root of `e^β/β = K`).
 This value is limited by the precision of the NuBase surface coefficient (~1%).
 -/
 def goldenLoopBeta : ℝ :=
@@ -282,8 +282,8 @@ theorem v4_matches_qed_coefficient :
 
 /-- Theoretical prediction using ξ = 1 exactly.
 
-**2026-01-06 Update**: With β = 3.043089… (derived):
-V₄ = -1.0 / 3.043089… = -0.328613
+**2026-01-06 Update**: With β = 3.043233… (derived):
+V₄ = -1.0 / 3.043233… = -0.328598
 C₂ = -0.328479
 Error = 0.04% (previous fitted β = 3.058 gave ~0.45%)
 
@@ -294,7 +294,7 @@ theorem v4_theoretical_prediction :
   let c2 := c2_qed_measured
   let error := |v4_theory - c2| / |c2|
   error < 0.001 := by  -- Now 0.04% error (was 0.45%)
-  -- V₄ = -1.0 / 3.043070 = -0.328616
+  -- V₄ = -1.0 / 3.0432330 = -0.328598
   -- C₂ = -0.328479
   -- Error = 0.00042 = 0.04%
   unfold v4_from_vacuum goldenLoopBeta c2_qed_measured

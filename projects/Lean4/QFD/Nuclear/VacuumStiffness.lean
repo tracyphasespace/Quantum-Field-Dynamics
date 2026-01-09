@@ -47,8 +47,8 @@ def mass_proton_exp_kg : ℝ := 1.6726219e-27
 -- Match with Golden Loop: 0.011% — This is GEOMETRY, not curve-fitting!
 
 def c1_surface : ℝ := 0.5 * (1 - alpha_exp)  -- = ½(1-α) ≈ 0.496351
-def c2_volume  : ℝ := 1.0 / 3.04307          -- = 1/β ≈ 0.328615
-def beta_crit  : ℝ := 3.04307                -- Derived from α via Golden Loop
+def c2_volume  : ℝ := 1.0 / 3.043233          -- = 1/β ≈ 0.328598
+def beta_crit  : ℝ := 3.043233                -- Derived from α via Golden Loop
 
 -- 3. THE GEOMETRIC INTEGRATION FACTOR
 -- k = 7π/5 is a GEOMETRIC constant (not fitted!)

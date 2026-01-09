@@ -186,8 +186,8 @@ end Atomic
 end QFD
 
 /-- Golden Loop β constant (derived from α via e^β/β = K).
-**2026-01-06**: Updated from fitted 3.058 to derived 3.043089... -/
-def beta_golden : ℝ := 3.043089491989851
+**2026-01-06**: Updated from fitted 3.058 to derived 3.043233... -/
+def beta_golden : ℝ := 3.043233053
 
 namespace QFD.Physics
 

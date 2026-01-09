@@ -87,7 +87,7 @@ def empirical_fissility_limit : ℝ := 50.0
 
 /-- **Theorem**: The theoretical fissility limit is approximately 45.
 
-Calculation: α⁻¹ / β = 137.036 / 3.043089... ≈ 45.04
+Calculation: α⁻¹ / β = 137.036 / 3.043233... ≈ 45.04
 -/
 theorem theoretical_fissility_approx :
     abs (theoretical_fissility_limit - 45.0) < 0.1 := by
