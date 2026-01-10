@@ -202,10 +202,10 @@ def validate_g2_corrected():
     # 3. EXPERIMENTAL g-2 VALUES
     # =========================================================================
     print("\n[3] EXPERIMENTAL g-2 VALUES")
-    print("    Source: PDG 2024, Fermilab 2021")
+    print("    Source: Harvard 2008 (electron), Fermilab Final 2025 (muon)")
 
-    A_E_EXP = 0.00115965218128   # Electron (Harvard 2008)
-    A_MU_EXP = 0.00116592059     # Muon (Fermilab 2021 + BNL)
+    A_E_EXP = 0.00115965218128   # Electron (Harvard 2008, Fan et al.)
+    A_MU_EXP = 0.001165920705    # Muon (Fermilab FINAL June 2025)
 
     print(f"    a_e (experiment)  = {A_E_EXP:.14f}")
     print(f"    a_mu (experiment) = {A_MU_EXP:.14f}")

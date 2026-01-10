@@ -201,9 +201,10 @@ def run_validation():
     # 3. EXPERIMENTAL VALUES
     # =========================================================================
     print("\n[3] EXPERIMENTAL g-2 VALUES")
+    print("    Sources: Harvard 2008 (electron), Fermilab Final June 2025 (muon)")
 
-    A_E_EXP = 0.00115965218128   # Electron (Harvard 2008)
-    A_MU_EXP = 0.00116592059     # Muon (Fermilab 2021 + BNL)
+    A_E_EXP = 0.00115965218128   # Electron (Harvard 2008, Fan et al.)
+    A_MU_EXP = 0.001165920705    # Muon (Fermilab FINAL June 2025, arXiv:2506.01689)
 
     print(f"    a_e (experiment)  = {A_E_EXP:.14f}")
     print(f"    a_mu (experiment) = {A_MU_EXP:.14f}")
