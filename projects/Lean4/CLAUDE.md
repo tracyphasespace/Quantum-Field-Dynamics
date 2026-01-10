@@ -490,33 +490,36 @@ For papers using this formalization:
 
 See `CITATION.cff` for complete metadata.
 
-## Key Statistics (as of 2026-01-08)
+## Key Statistics (as of 2026-01-10)
 
-- **Lean Files**: **209**
+- **Lean Files**: **232**
 - **Proven Theorems**: **849**
-- **Proven Lemmas**: **182**
-- **Total Proven**: **1,031 statements**
-- **Definitions**: **766**
-- **Structures**: **166**
-- **Standalone Axioms**: **16** (all centralized in Physics/Postulates.lean)
+- **Proven Lemmas**: **215**
+- **Total Proven**: **1,064 statements**
+- **Definitions**: **742**
+- **Structures**: **173**
+- **Standalone Axioms**: **11** (centralized in Physics/Postulates.lean)
 - **Build Status**: ✅ Successful (3171 jobs)
-- **Sorries**: **~1** (soliton admissibility placeholder)
+- **Sorries**: **0**
 
 **Counting Methodology** (IMPORTANT):
 ```bash
 # Count DECLARATIONS only (start of line):
 grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # theorems
 grep -rn "^lemma" QFD/ --include="*.lean" | wc -l    # lemmas
-grep -rn "^axiom " QFD/ --include="*.lean" | grep -v archive/ | wc -l  # axioms
+grep -rn "^axiom " QFD/ --include="*.lean" | wc -l   # axioms
 # DO NOT use grep without ^ anchor - inflates count by ~200 (includes comments)
 ```
 
-**Recent Progress (Jan 8, 2026)**:
-- **Axiom Centralization Complete**: All 16 standalone axioms now in Physics/Postulates.lean
-- **12 axioms eliminated** (proven as theorems): black_hole_unitarity_preserved,
-  horizon_looks_black, taylor_exp_bound, energy_suppression_hypothesis, etc.
-- **7 legacy axioms centralized**: kdv_phase_drag_interaction, rayleigh/raman scattering,
-  golden_loop_prediction_accuracy, energy_minimization, soliton_always_admissible
+**Recent Progress (Jan 10, 2026)**:
+- **Archive cleanup**: Removed deprecated backup/test files (49 files, 17k lines)
+- **Sync infrastructure**: Added PUBLISH_MANIFEST.txt + sync_to_universe.sh
+- **Shell Theorem**: Proved harmonic decay (last sorry) + electrostatic version
+- **Zero sorries achieved**: All proofs complete
+
+**Earlier Progress (Jan 8, 2026)**:
+- **Axiom Centralization**: All standalone axioms now in Physics/Postulates.lean
+- **12 axioms eliminated** (proven as theorems)
 - New theorems: planck_from_topology, hbar_effective_pos, energy_eq_hbar_freq
 
 **Earlier Progress (Jan 6, 2026)**:
