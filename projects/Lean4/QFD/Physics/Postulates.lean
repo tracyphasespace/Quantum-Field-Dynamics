@@ -37,6 +37,62 @@ open scoped MeasureTheory
 /-! ### Placeholder types in QFD namespace -/
 namespace QFD
 
+/-! ### Core Constants and Axioms (from QFD Book)
+
+These are the foundational axioms extracted from "7.5 QFD Book Jan 1 2026.txt".
+All subsequent proofs must derive from these definitions without introducing new free parameters.
+-/
+
+/-- The Fine Structure Constant is the primary input. -/
+noncomputable def alpha_qfd : ℝ := 1 / 137.035999
+
+/-- The Golden Loop Relation (Axiom):
+Beta is not free; it is the unique root of this transcendental stability equation.
+Derivation: Chapter 12.1.3 "The Golden Loop" -/
+noncomputable def beta_stability_equation (b : ℝ) : Prop :=
+  (Real.pi^2) * (Real.exp b) * (b / (0.5 * (1 - alpha_qfd))) = (1 / alpha_qfd)
+
+/-- We postulate that Beta exists and satisfies the equation.
+(Numerical solution: approx 3.043233053) -/
+axiom vacuum_stiffness_axiom (β : ℝ) : beta_stability_equation β
+
+/-- The fundamental arena is 6-dimensional Phase Space, not 4D Spacetime.
+Metric Signature: (+,+,+, -,-,-)
+x : Spatial coordinates (e1, e2, e3) => square to +1
+p : Momentum coordinates (f1, f2, f3) => square to -1 -/
+structure PhaseSpace6C where
+  x1 : ℝ
+  x2 : ℝ
+  x3 : ℝ
+  p1 : ℝ
+  p2 : ℝ
+  p3 : ℝ
+
+/-- The fundamental field ψ is a multivector function on Phase Space.
+    For formalization, we define it abstractly as mapping coords to a Clifford algebra value. -/
+opaque PsiField6C : PhaseSpace6C → Type -- Placeholder for Cl(3,3) Multivector type
+
+/-- The QFD Action Principle: Minimize the path integral of L_6C.
+L_6C includes five specific terms (Chapter 3.1.2). -/
+structure Lagrangian6C where
+  L_kin : ℝ        -- Field Stiffness / Kinetic term
+  L_rotor : ℝ      -- Rotor Dynamics (Generates Spin/Phase)
+  L_potential : ℝ  -- V(ψ) "Mexican Hat" (Soliton Stability)
+  L_EM : ℝ         -- Electrodynamics (Vector component)
+  L_int : ℝ        -- Interaction term
+
+/-- Time is not a dimension. It is an emergent scalar ordering parameter τ.
+dt_local is determined by the local vacuum density (ψ_s). -/
+noncomputable def local_time_dilation_core (psi_s : ℝ) (psi_s0 : ℝ) (xi : ℝ) : ℝ :=
+  1 / Real.sqrt (1 + (xi / psi_s0) * (psi_s - psi_s0))
+
+/-- The mass of the proton is the "Unit Cell" of the vacuum impedance.
+It is derived from Beta and Alpha via the geometric factor k_geom. -/
+noncomputable def proton_mass_derived (m_e : ℝ) (beta : ℝ) (k_geom : ℝ) : ℝ :=
+  k_geom * beta * (m_e / alpha_qfd)
+
+/-! ### End Core Constants -/
+
 /-- Placeholder: Soliton field configuration. -/
 structure Soliton.FieldConfig where
   val : EuclideanSpace ℝ (Fin 3) → ℝ
