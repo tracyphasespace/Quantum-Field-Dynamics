@@ -1,0 +1,312 @@
+% Example LaTeX template showing integration of Lean formalization
+% into QFD cosmology paper for MNRAS submission
+%
+% This is a TEMPLATE - replace [YOUR CONTENT] placeholders with actual text
+
+\documentclass[fleqn,usenatbib]{mnras}
+\usepackage{newtxtext,newtxmath}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\title[QFD CMB Anomalies]{Quantum Field Dynamics Explanation of CMB ``Axis of Evil'':
+Geometric Inference Layer with Formal Verification}
+
+\author[QFD Team]{
+[Author List]\\
+$^{1}$[Institution]\\
+}
+
+\date{Accepted XXX. Received YYY; in original form ZZZ}
+
+\pubyear{2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+[YOUR ABSTRACT - Include this sentence:]
+
+The geometric inference layer (axis uniqueness, co-axiality, and falsifiability)
+is machine-checked in Lean~4, establishing a referee-verifiable foundation for
+the cosmological predictions.
+
+[REST OF YOUR ABSTRACT]
+\end{abstract}
+
+\begin{keywords}
+cosmic microwave background -- cosmology: observations -- methods: analytical --
+formal verification
+\end{keywords}
+
+% ============================================================================
+\section{Introduction}
+% ============================================================================
+
+[YOUR INTRODUCTION]
+
+\paragraph{Scope of formal verification.}
+Lean~4 proves the \emph{inference geometry}: given axisymmetric CMB patterns of specified
+forms, the extracted axes are unique and co-aligned. The \emph{microphysical magnitude}
+of the modulation (why the pattern has the observed amplitude) remains an empirical question
+tied to the QFD vacuum kernel, which is not formalized.
+
+[CONTINUE YOUR INTRODUCTION]
+
+% ============================================================================
+\section{QFD Vacuum Kernel and Cosmological Predictions}
+% ============================================================================
+
+\subsection{Kernel Physics}
+
+[YOUR KERNEL PHYSICS CONTENT]
+
+\subsection{Predicted CMB Patterns}
+
+\subsubsection{Quadrupole pattern}
+
+The QFD vacuum kernel predicts a CMB temperature quadrupole of the form
+\begin{equation}
+T(\mathbf{x}) = A \cdot P_2(\langle \mathbf{n}, \mathbf{x} \rangle) + B,
+\label{eq:quadrupole}
+\end{equation}
+where $P_2(t) = (3t^2 - 1)/2$ is the second Legendre polynomial,
+$\mathbf{n}$ is the observer's velocity (CMB dipole direction),
+$A$ is the modulation amplitude, and $B$ is the monopole offset.
+
+[YOUR PHYSICAL DERIVATION / MOTIVATION]
+
+\subsubsection{Octupole pattern}
+
+Similarly, the octupole ($\ell=3$) follows
+\begin{equation}
+O(\mathbf{x}) = A \cdot |P_3(\langle \mathbf{n}, \mathbf{x} \rangle)| + B,
+\label{eq:octupole}
+\end{equation}
+with $P_3(t) = (5t^3 - 3t)/2$. The absolute value is taken to match
+CMB conventions for axis extraction without sign ambiguity.
+
+The octupole pattern follows the same geometric structure, with maximizers at
+$\pm\mathbf{n}$ when fitted to equation~(\ref{eq:octupole}) with $A > 0$.
+The co-axiality of quadrupole and octupole is not an observational coincidence:
+theorem \texttt{coaxial\_quadrupole\_octupole} proves that if both multipoles fit
+axisymmetric forms with positive amplitudes sharing the same $\mathbf{n}$, their extracted
+axes are \emph{constrained} to coincide (see Inference Theorem~4 below).
+
+% ============================================================================
+\subsection{Inference Theorems (machine-checked)}
+% ============================================================================
+
+The geometric layer of the QFD prediction is formally verified in Lean~4.
+Four core inference theorems establish the axis-extraction logic:
+
+\begin{enumerate}
+\item \textbf{IT.1 (Quadrupole uniqueness):} For positive amplitude $A > 0$,
+the argmax set of $T(\mathbf{x})$ on the unit sphere is exactly $\{\pm \mathbf{n}\}$
+\citep[AxisExtraction.lean:260]{qfd_formalization}.
+
+\item \textbf{IT.2 (Octupole uniqueness):} For positive amplitude $A > 0$,
+the argmax set of $O(\mathbf{x})$ is exactly $\{\pm \mathbf{n}\}$
+\citep[OctupoleExtraction.lean:214]{qfd_formalization}.
+
+\item \textbf{IT.3 (Monotone invariance):} Strictly monotone transformations
+of the scoring function preserve the argmax set
+\citep[AxisExtraction.lean:152]{qfd_formalization}.
+
+\item \textbf{IT.4 (Coaxial alignment):} If quadrupole and octupole both fit
+the forms in equations~(\ref{eq:quadrupole}) and~(\ref{eq:octupole}) with the same
+$\mathbf{n}$ and $A > 0$, their axes are \emph{provably} co-axial
+\citep[CoaxialAlignment.lean:68]{qfd_formalization}.
+\end{enumerate}
+
+The co-axiality is not an interpretive statement: it follows as a theorem
+from the shared maximizer structure of the fit-ready templates.\footnote{%
+All axis-extraction and bridge theorems are machine-checked in Lean~4;
+one auxiliary lemma asserting non-emptiness of the equator set is currently
+axiomatized (a standard fact in $\mathbb{R}^3$) and is isolated to the
+negative-amplitude falsifier. See Appendix~\ref{app:verification} for details.}
+
+% ============================================================================
+\subsection{Falsifiability}
+% ============================================================================
+
+The sign of the fitted quadrupole amplitude is \emph{not a convention}:
+changing its sign changes the predicted maximizer set from the poles
+($\pm\mathbf{n}$) to the equator (unit vectors orthogonal to $\mathbf{n}$).
+This is proven as theorem \texttt{AxisSet\_tempPattern\_eq\_equator} in the
+formalization \citep[AxisExtraction.lean:384]{qfd_formalization}.
+
+If observational fits require $A < 0$ for the quadrupole, or if the extracted
+axis deviates from the dipole direction, the QFD prediction is falsified.
+
+[YOUR ADDITIONAL FALSIFIABILITY DISCUSSION]
+
+% ============================================================================
+\section{Observational Constraints}
+% ============================================================================
+
+[YOUR OBSERVATIONAL CONSTRAINTS SECTION]
+
+% ============================================================================
+\section{Discussion}
+% ============================================================================
+
+[YOUR DISCUSSION]
+
+% ============================================================================
+\section{Conclusions}
+% ============================================================================
+
+[YOUR CONCLUSIONS]
+
+% ============================================================================
+\section*{Acknowledgements}
+% ============================================================================
+
+[YOUR ACKNOWLEDGEMENTS]
+
+% ============================================================================
+\section*{Data Availability}
+% ============================================================================
+
+The formal verification code is available at
+\url{https://github.com/tracyphasespace/Quantum-Field-Dynamics}
+under the MIT license. See \texttt{QFD/ProofLedger.lean} for claim-to-theorem mapping
+and \texttt{QFD/Cosmology/README\_FORMALIZATION\_STATUS.md} for complete documentation.
+
+% ============================================================================
+% REFERENCES
+% ============================================================================
+
+\bibliographystyle{mnras}
+\bibliography{references}
+
+% Add this entry to your references.bib:
+%
+% @misc{qfd_formalization,
+%   author = {{QFD Formalization Team}},
+%   title = {{Quantum Field Dynamics: Lean 4 Formalization}},
+%   year = {2025},
+%   howpublished = {\url{https://github.com/tracyphasespace/Quantum-Field-Dynamics}},
+%   note = {Accessed: 2025-12-25. See \texttt{QFD/ProofLedger.lean} for claim mapping.}
+% }
+
+% ============================================================================
+% APPENDIX - VERIFICATION DETAILS
+% ============================================================================
+
+\appendix
+
+\section{Formal Verification Details}
+\label{app:verification}
+
+\subsection{What is proven}
+
+The following statements are machine-checked in Lean~4 with zero \texttt{sorry}
+(unproven goals) in the critical path:
+
+\begin{enumerate}
+\item \textbf{Quadrupole axis uniqueness} (Phase 1+2):
+For $T(\mathbf{x}) = A \cdot P_2(\langle \mathbf{n}, \mathbf{x} \rangle) + B$ with $A > 0$,
+the argmax set on the unit sphere is exactly $\{\mathbf{n}, -\mathbf{n}\}$.
+\begin{itemize}
+\item Files: \texttt{AxisExtraction.lean:66-264}
+\item Theorems: \texttt{n\_mem\_AxisSet\_quadPattern}, \texttt{AxisSet\_quadPattern\_eq\_pm},
+\texttt{AxisSet\_tempPattern\_eq\_pm}
+\end{itemize}
+
+\item \textbf{Octupole axis uniqueness} (Phase 1+2):
+For $O(\mathbf{x}) = A \cdot |P_3(\langle \mathbf{n}, \mathbf{x} \rangle)| + B$ with $A > 0$,
+the argmax set is exactly $\{\mathbf{n}, -\mathbf{n}\}$.
+\begin{itemize}
+\item Files: \texttt{OctupoleExtraction.lean:158-220}
+\item Theorems: \texttt{AxisSet\_octAxisPattern\_eq\_pm}, \texttt{AxisSet\_octTempPattern\_eq\_pm}
+\end{itemize}
+
+\item \textbf{Sign-flip falsifier}:
+For $A < 0$, maximizers move from poles ($\pm\mathbf{n}$) to equator
+(unit vectors orthogonal to $\mathbf{n}$), which are geometrically distinct.
+\begin{itemize}
+\item Files: \texttt{AxisExtraction.lean:282-470}
+\item Theorem: \texttt{AxisSet\_tempPattern\_eq\_equator}
+\item Uses: 1 axiom (equator non-emptiness, see below)
+\end{itemize}
+
+\item \textbf{Coaxial alignment}:
+If both quadrupole and octupole fit the above forms with the same $\mathbf{n}$ and $A > 0$,
+their axes provably coincide.
+\begin{itemize}
+\item Files: \texttt{CoaxialAlignment.lean:35-175}
+\item Theorems: \texttt{coaxial\_quadrupole\_octupole}, \texttt{coaxial\_from\_shared\_maximizer}
+\end{itemize}
+
+\item \textbf{Monotone invariance}:
+Strictly increasing transformations of the scoring function preserve the argmax set.
+\begin{itemize}
+\item Files: \texttt{AxisExtraction.lean:152-167}
+\item Theorem: \texttt{AxisSet\_monotone}
+\end{itemize}
+\end{enumerate}
+
+\subsection{What is hypothesized}
+
+The following are \emph{physical modeling assumptions}, not formally proven:
+
+\begin{itemize}
+\item The CMB temperature anisotropy actually fits the forms in equations~(\ref{eq:quadrupole})
+and~(\ref{eq:octupole}) (observational model).
+
+\item The vector $\mathbf{n}$ is the observer's velocity (CMB dipole direction).
+
+\item The amplitude $A$ is positive and arises from the QFD vacuum kernel convolution
+(microphysical derivation not formalized).
+\end{itemize}
+
+\subsection{File list and build instructions}
+
+The formalization is publicly available at\\
+\url{https://github.com/tracyphasespace/Quantum-Field-Dynamics}.
+
+\paragraph{Core files:}
+\begin{itemize}
+\item \texttt{QFD/Cosmology/AxisExtraction.lean} (quadrupole, 470 lines)
+\item \texttt{QFD/Cosmology/OctupoleExtraction.lean} (octupole, 220 lines)
+\item \texttt{QFD/Cosmology/CoaxialAlignment.lean} (coaxial theorem, 178 lines)
+\item \texttt{QFD/Cosmology/Polarization.lean} (E-mode bridge, 477 lines)
+\end{itemize}
+
+\paragraph{Index files (for traceability):}
+\begin{itemize}
+\item \texttt{QFD/ProofLedger.lean} (claim $\to$ theorem mapping, start here)
+\item \texttt{QFD/CLAIMS\_INDEX.txt} (grep-able theorem list)
+\item \texttt{QFD/THEOREM\_STATEMENTS.txt} (complete theorem signatures)
+\end{itemize}
+
+\paragraph{Build command:}
+\begin{verbatim}
+cd projects/Lean4
+lake build QFD.Cosmology.AxisExtraction
+           QFD.Cosmology.CoaxialAlignment
+\end{verbatim}
+
+\paragraph{Dependencies:}
+Lean 4.27.0-rc1, Mathlib 4 (commit hash: [SEE lakefile.toml in repository]).
+
+\subsection{Axiom disclosure}
+
+One axiom is used: \texttt{equator\_nonempty}, asserting that for any unit vector in $\mathbb{R}^3$,
+there exists a unit vector orthogonal to it. This is a standard fact from linear algebra,
+stated as an axiom to avoid navigating type constructor technicalities (\texttt{PiLp})
+across mathlib versions. It appears only in the negative-amplitude companion theorem
+(sign-flip falsifier), not in the core quadrupole/octupole uniqueness results (theorems 1, 2, 4, 5 above).
+
+A constructive proof exists: for unit vector $\mathbf{n} = (n_0, n_1, n_2)$ with $\|\mathbf{n}\| = 1$,
+\begin{itemize}
+\item If $n_0 \neq 0$ or $n_1 \neq 0$: take $\mathbf{v} = (-n_1, n_0, 0)$, then $\langle \mathbf{n}, \mathbf{v} \rangle = 0$
+\item If $n_0 = n_1 = 0$: then $\mathbf{n} = (0, 0, \pm 1)$, take $\mathbf{v} = (1, 0, 0)$
+\end{itemize}
+Then normalize $\mathbf{v}$ to obtain a unit equator point. The proof is deferred to avoid
+version-sensitive type-level manipulations in the \texttt{PiLp 2} structure.
+
+\end{document}

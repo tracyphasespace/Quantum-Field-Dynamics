@@ -1,0 +1,82 @@
+# QFD Universe Publish Manifest (rsync filter format)
+# ====================================================
+# This file controls which files sync to the public QFD-Universe repo.
+# Format: rsync filter rules (+ include, - exclude, H hide)
+#
+# Usage: ./sync_to_universe.sh          (dry run)
+#        ./sync_to_universe.sh --push   (sync and push)
+#
+# Last updated: 2026-01-10
+
+# =============================================================================
+# EXCLUDE FIRST - Development-only files that NEVER sync
+# =============================================================================
+
+# Archive, sketches, test directories
+- /archive/
+- /sketches/
+- /Test/
+- /BookContent/
+
+# Backup and temp files (anywhere)
+- *_backup*
+- *_original_backup*
+- *.tmp
+- *.rec
+- *.bak
+- *_old.*
+- *_copy.*
+- *Test*.lean
+
+# Dated session/status files
+- *_2026_*.md
+- *SESSION*.md
+- *STATUS*.md
+- *CLEANUP*.md
+- *CONTINUED*.md
+
+# Development-only docs
+- AGENTS.md
+- AXIOM_AUDIT.md
+- Instructions.md
+- DFLOW_QUICKSTART.md
+- *ARCHITECTURE*.md
+- *CROSSREF*.md
+- *SHIELD*.md
+- *OVERDETERMINATION*.md
+
+# HTML artifacts
+- *.html
+
+# =============================================================================
+# INCLUDE - Files that DO sync
+# =============================================================================
+
+# All .lean files in subdirectories
++ /*/
++ /*/*.lean
++ /*/*/*.lean
+
+# Root .lean files
++ /*.lean
+
+# Essential documentation
++ /CLAIMS_INDEX.txt
++ /COMPLETE_GUIDE.md
++ /CONCERN_CATEGORIES.md
++ /PROOF_INDEX.md
++ /README.md
++ /THEOREM_STATEMENTS.txt
++ /Proof_Summary.md
+
+# Paper materials
++ /Cosmology/CMB_AxisOfEvil_COMPLETE_v1.1.tex
++ /Cosmology/PAPER_INTEGRATION_GUIDE.md
+
+# Status docs that ARE useful for public
++ /Rift/README.md
+
+# =============================================================================
+# FINAL RULE - Exclude everything else
+# =============================================================================
+- *

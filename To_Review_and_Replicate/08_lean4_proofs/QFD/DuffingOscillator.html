@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QFD Duffing Oscillator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<style>
+  body{margin:0;background:#000;color:#eee;font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;overflow:hidden}
+  #ui{position:absolute;top:20px;left:20px;background:rgba(0,0,0,.8);padding:16px;border-radius:8px;border:1px solid #333;max-width:320px;z-index:2}
+  h1{margin:0 0 8px 0;font-size:1.1rem;color:#4facfe}
+  button{width:100%;padding:10px;margin-bottom:6px;background:#111;color:#fff;border:1px solid #444;border-radius:4px;text-align:left;cursor:pointer}
+  button.active{background:linear-gradient(90deg,#4facfe,#00f2fe);color:#000;border:none;font-weight:600}
+  #status{margin-top:12px;font-family:"Courier New",monospace;color:#00f2fe}
+</style>
+</head>
+<body>
+<div id="ui">
+  <h1>Driven Duffing Oscillator</h1>
+  <p>ρ(r) ∝ r (visualized as a cloud on the x-axis). Modes control the forcing.</p>
+  <button id="mode0" class="active">1. Ground (γ = 0)</button>
+  <button id="mode1">2. Driven Chaos</button>
+  <button id="mode2">3. Photon Emission</button>
+  <div id="status">State: Ground</div>
+</div>
+
+<script>
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(55,innerWidth/innerHeight,0.1,5000);
+camera.position.set(0,120,350);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+document.body.appendChild(renderer.domElement);
+const controls = new THREE.OrbitControls(camera,renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xffffff,0.45));
+const light = new THREE.PointLight(0xffffff,1.2);
+light.position.set(0,200,200);
+scene.add(light);
+
+const proton = new THREE.Mesh(
+  new THREE.SphereGeometry(4,32,32),
+  new THREE.MeshStandardMaterial({color:0xff3333,emissive:0xff1111,roughness:0.3})
+);
+scene.add(proton);
+
+const electronCloud = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(1,2),
+  new THREE.MeshPhongMaterial({color:0x00ffff,wireframe:true,transparent:true,opacity:0.3})
+);
+const ELECTRON_RADIUS = 30;
+electronCloud.scale.set(ELECTRON_RADIUS,ELECTRON_RADIUS,ELECTRON_RADIUS);
+scene.add(electronCloud);
+
+const photon = new THREE.Mesh(
+  new THREE.TorusGeometry(20,3,24,64),
+  new THREE.MeshBasicMaterial({color:0xffd700})
+);
+photon.visible = false;
+scene.add(photon);
+
+const Duffing = {
+  alpha:-1.0,
+  beta: 1.5,
+  delta:0.01,    // lighter damping for chaotic motion
+  gamma:0.0,
+  omega:1.2,
+  gammaGround:0.0,
+  gammaDriven:0.9
+};
+
+let state = {
+  x:10,
+  v:0,
+  t:0,
+  mode:0,
+  photonActive:false,
+  photonPos:new THREE.Vector3(),
+  photonVel:new THREE.Vector3()
+};
+
+const trailPts=6000;
+const trailGeo=new THREE.BufferGeometry();
+trailGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(trailPts*3),3));
+const trailLine=new THREE.Line(trailGeo,new THREE.LineBasicMaterial({color:0x00ff00,transparent:true,opacity:0.35}));
+scene.add(trailLine);
+let trailIndex=0;
+
+const clock=new THREE.Clock();
+let accumulator=0;
+const FIXED_DT=0.01;
+
+function accel(x,v,t){
+  return -Duffing.delta*v - Duffing.alpha*x - Duffing.beta*x*x*x + Duffing.gamma*Math.cos(Duffing.omega*t);
+}
+
+function step(dt){
+  const {x,v,t}=state;
+  const a1=accel(x,v,t);      const dx1=v;
+  const a2=accel(x+0.5*dx1*dt, v+0.5*a1*dt, t+0.5*dt); const dx2=v+0.5*a1*dt;
+  const a3=accel(x+0.5*dx2*dt, v+0.5*a2*dt, t+0.5*dt); const dx3=v+0.5*a2*dt;
+  const a4=accel(x+dx3*dt, v+a3*dt, t+dt);           const dx4=v+a3*dt;
+  state.x += (dt/6)*(dx1 + 2*dx2 + 2*dx3 + dx4);
+  state.v += (dt/6)*(a1 + 2*a2 + 2*a3 + a4);
+  state.t += dt;
+}
+
+function resetTrail(){
+  trailIndex=0;
+  trailGeo.attributes.position.array.fill(0);
+  trailGeo.attributes.position.needsUpdate=true;
+}
+
+function emitPhoton(){
+  if(state.photonActive) return;
+  state.photonActive=true;
+  photon.visible=true;
+  state.photonPos.set(state.x,0,0);
+  photon.position.copy(state.photonPos);
+  state.photonVel.set(3,0,0);
+  // reset oscillator to low energy
+  state.x = 5;
+  state.v = 0;
+  Duffing.gamma = Duffing.gammaGround;
+  document.getElementById('status').innerText = "Photon emitted → oscillator returning to ground";
+  setMode(0);
+}
+
+function updatePhysics(){
+  const frameDt=Math.min(clock.getDelta(),0.05);
+  accumulator+=frameDt;
+
+  while(accumulator>=FIXED_DT && !state.photonActive){
+    step(FIXED_DT);
+    accumulator-=FIXED_DT;
+    if(state.mode===1 && Math.abs(state.x)>ELECTRON_RADIUS*2.5){
+      emitPhoton();
+      break;
+    }
+  }
+
+  if(state.photonActive){
+    state.photonPos.add(state.photonVel);
+    photon.position.copy(state.photonPos);
+    photon.lookAt(state.photonPos.clone().add(state.photonVel));
+    if(state.photonPos.length()>900){
+      state.photonActive=false;
+      photon.visible=false;
+      document.getElementById('status').innerText="Photon escaped. Ground state restored.";
+    }
+  }
+}
+
+function updateVisuals(){
+  electronCloud.position.set(state.x,0,0);
+  proton.scale.set(state.mode===1?1+0.003*Math.abs(state.x):1,1,1);
+  // add trail point in both modes
+  const arr=trailGeo.attributes.position.array;
+  arr[trailIndex*3]=state.x;
+  arr[trailIndex*3+1]=0;
+  arr[trailIndex*3+2]=0;
+  trailIndex=(trailIndex+1)%trailPts;
+  trailGeo.attributes.position.needsUpdate=true;
+}
+
+function animate(){
+  requestAnimationFrame(animate);
+  updatePhysics();
+  updateVisuals();
+  controls.update();
+  renderer.render(scene,camera);
+}
+animate();
+
+function setMode(mode){
+  state.mode=mode;
+  document.getElementById('mode0').classList.toggle('active',mode===0);
+  document.getElementById('mode1').classList.toggle('active',mode===1);
+  document.getElementById('mode2').classList.toggle('active',mode===2);
+
+  const status=document.getElementById('status');
+  if(mode===0){
+    Duffing.gamma=Duffing.gammaGround;
+    Duffing.delta=0.04;
+    status.innerText="State: Ground (γ = 0)";
+  }else if(mode===1){
+    Duffing.gamma=Duffing.gammaDriven;
+    Duffing.delta=0.01;
+    status.innerText="State: Driven Chaos (γ ≈ 0.9)";
+  }else{
+    Duffing.gamma=0;
+    status.innerText="Aligning for photon emission…";
+    emitPhoton();
+  }
+}
+
+document.getElementById('mode0').onclick=()=>{resetTrail();setMode(0);};
+document.getElementById('mode1').onclick=()=>{resetTrail();setMode(1);};
+document.getElementById('mode2').onclick=()=>setMode(2);
+
+window.addEventListener('resize',()=>{
+  camera.aspect=innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+});
+</script>
+</body>
+</html>

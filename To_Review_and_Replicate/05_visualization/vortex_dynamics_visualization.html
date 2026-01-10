@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QFD: Vortex Soliton Dynamics - Photon Absorption & Emission</title>
+    <!-- Three.js Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- OrbitControls for Mouse Interaction -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        #ui-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #444;
+            max-width: 340px;
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
+            pointer-events: auto;
+        }
+        h1 { margin: 0 0 10px 0; font-size: 1.2rem; color: #4facfe; text-shadow: 0 0 10px rgba(79, 172, 254, 0.5); }
+        .subtitle { font-size: 0.85rem; color: #888; margin-bottom: 8px; }
+        p { font-size: 0.9rem; color: #ddd; margin-bottom: 15px; line-height: 1.4; }
+        .instructions { font-size: 0.8rem; color: #aaa; font-style: italic; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;}
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        button:hover { background: #333; border-color: #666; transform: translateX(2px); }
+        button.active {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            color: #000;
+            border: none;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+        }
+        #status {
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #00f2fe;
+            font-weight: bold;
+        }
+        .legend { display: flex; align-items: center; margin-top: 8px; font-size: 0.85rem; color: #eee; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 10px; }
+        .physics-note {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(79, 172, 254, 0.1);
+            border-left: 3px solid #4facfe;
+            font-size: 0.75rem;
+            color: #aaa;
+            line-height: 1.4;
+        }
+        .physics-note strong { color: #4facfe; }
+        #energy-display {
+            margin-top: 10px;
+            padding: 8px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+        }
+        .energy-bar {
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+        .energy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            transition: width 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div id="ui-container">
+    <h1>QFD Vortex Dynamics</h1>
+    <div class="subtitle">Quantum Field Dynamics Soliton Model</div>
+    <p>Photon Absorption & Emission Cycles<br>Driven Nonlinear Oscillator</p>
+    <div class="instructions">
+        Controls: Left Click (Rotate) | Right Click (Pan) | Scroll (Zoom)
+    </div>
+
+    <button id="btn-low" class="active" onclick="setMode(0)">1. Ground State (n=1)</button>
+    <button id="btn-chaos" onclick="setMode(1)">2. Absorb Photon (n=1 → n=2)</button>
+    <button id="btn-eject" onclick="setMode(2)">3. Spontaneous Emission (2s)</button>
+
+    <div id="status">State: Ground State (n=1)</div>
+
+    <div id="energy-display">
+        <span id="energy-label">Energy: E₁ (Ground)</span>
+        <div class="energy-bar"><div class="energy-fill" id="energy-fill" style="width: 25%"></div></div>
+    </div>
+
+    <div style="margin-top: 15px; border-top: 1px solid #444; padding-top: 10px;">
+        <div class="legend"><div class="dot" style="background: rgba(0, 255, 255, 0.8); box-shadow: 0 0 5px cyan;"></div> Electron Vortex (R=20)</div>
+        <div class="legend"><div class="dot" style="background: #ff3333"></div> Proton Core</div>
+        <div class="legend"><div class="dot" style="background: gold"></div> Photon (Toroidal Soliton)</div>
+    </div>
+
+    <div class="physics-note">
+        <strong>QFD Note:</strong> This is a simplified visualization. In QFD, the electron
+        is an <em>extended vortex soliton</em> (standing wave in the vacuum field), not a
+        point particle. The photon is a toroidal "smoke ring" with quantized helicity
+        H = ∫A·B dV. Energy levels correspond to harmonic modes (N).
+    </div>
+</div>
+
+<script>
+    // ==========================================================================
+    // QFD PHYSICS PARAMETERS
+    // ==========================================================================
+    // Based on Quantum Field Dynamics soliton model
+    // β = 3.04309 (derived from α via Golden Loop)
+    // The electron is modeled as a Hill vortex with characteristic radius R
+
+    const PHYS = {
+        // Electron vortex parameters
+        R: 20.0,              // Characteristic radius (Compton-scale proxy)
+        p: 1.0,               // Density profile exponent
+
+        // Central potential (Coulomb-like with soft core)
+        k: 3000.0,            // Force constant (tuned for stable orbits)
+
+        // Ground state parameters
+        E0_ground: 0.0,       // No external drive in ground state
+        gamma_ground: 0.001,  // Very light damping for stability
+
+        // Excited state parameters (n=2)
+        E0_excited: 4.0,      // External field strength (photon energy injection)
+        B0_excited: 0.12,     // Magnetic precession (spin-orbit coupling proxy)
+        k_excited: 0.25,      // Reduced binding (larger orbit)
+        gamma_excited: 0.003, // Slightly more damping
+
+        // Drive frequency (resonant with n=1 → n=2 transition)
+        Omega: 0.75,
+
+        // Boundary (visualization limit)
+        R_limit: 120.0,
+
+        // Current state
+        currentE0: 0.0,
+        currentB: 0.0,
+        currentGamma: 0.001
+    };
+
+    // ==========================================================================
+    // THREE.JS SCENE SETUP
+    // ==========================================================================
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x030308, 0.00015);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 20000);
+    camera.position.set(0, 120, 350);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    document.body.appendChild(renderer.domElement);
+
+    // Controls
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.minDistance = 50;
+    controls.maxDistance = 2000;
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight(0xffffff, 1.0, 600);
+    pointLight.position.set(50, 100, 50);
+    scene.add(pointLight);
+
+    const flashLight = new THREE.PointLight(0xffffaa, 0, 2000);
+    scene.add(flashLight);
+
+    // ==========================================================================
+    // ELECTRON VORTEX (Extended soliton representation)
+    // ==========================================================================
+
+    // Outer shell (probability density boundary)
+    const electronGeo = new THREE.IcosahedronGeometry(1, 3);
+    const electronMat = new THREE.MeshPhongMaterial({
+        color: 0x00ffff,
+        transparent: true,
+        opacity: 0.15,
+        wireframe: true,
+        side: THREE.DoubleSide,
+        emissive: 0x0066aa,
+        emissiveIntensity: 0.3
+    });
+    const electronCloud = new THREE.Mesh(electronGeo, electronMat);
+    electronCloud.scale.setScalar(PHYS.R);
+    scene.add(electronCloud);
+
+    // Inner glow
+    const glowGeo = new THREE.SphereGeometry(0.7, 32, 32);
+    const glowMat = new THREE.MeshBasicMaterial({
+        color: 0x0088ff,
+        transparent: true,
+        opacity: 0.08,
+        blending: THREE.AdditiveBlending,
+        side: THREE.BackSide
+    });
+    const innerGlow = new THREE.Mesh(glowGeo, glowMat);
+    electronCloud.add(innerGlow);
+
+    // ==========================================================================
+    // PROTON (Central vortex core)
+    // ==========================================================================
+    const protonGeo = new THREE.SphereGeometry(3, 32, 32);
+    const protonMat = new THREE.MeshStandardMaterial({
+        color: 0xff2222,
+        emissive: 0xff0000,
+        emissiveIntensity: 0.6,
+        roughness: 0.3
+    });
+    const proton = new THREE.Mesh(protonGeo, protonMat);
+    scene.add(proton);
+
+    // Proton glow
+    const protonGlowGeo = new THREE.SphereGeometry(5, 16, 16);
+    const protonGlowMat = new THREE.MeshBasicMaterial({
+        color: 0xff4400,
+        transparent: true,
+        opacity: 0.1,
+        blending: THREE.AdditiveBlending
+    });
+    const protonGlow = new THREE.Mesh(protonGlowGeo, protonGlowMat);
+    proton.add(protonGlow);
+
+    // ==========================================================================
+    // PHOTONS (Toroidal solitons with helicity)
+    // ==========================================================================
+
+    // Incoming photon (absorption)
+    const inPhotonGeo = new THREE.TorusGeometry(12, 3, 16, 48);
+    const inPhotonMat = new THREE.MeshBasicMaterial({
+        color: 0x00ffff,
+        transparent: true,
+        opacity: 0.85
+    });
+    const inPhoton = new THREE.Mesh(inPhotonGeo, inPhotonMat);
+    inPhoton.visible = false;
+    scene.add(inPhoton);
+
+    // Outgoing photon (emission)
+    const photonGeo = new THREE.TorusGeometry(14, 3.5, 24, 64);
+    const photonMat = new THREE.MeshBasicMaterial({
+        color: 0xffd700,
+        transparent: true,
+        opacity: 0.9
+    });
+    const photon = new THREE.Mesh(photonGeo, photonMat);
+    photon.visible = false;
+    scene.add(photon);
+
+    // Photon helicity indicator (inner ring)
+    const helicityGeo = new THREE.TorusGeometry(8, 1, 8, 32);
+    const helicityMat = new THREE.MeshBasicMaterial({
+        color: 0xffaa00,
+        transparent: true,
+        opacity: 0.5
+    });
+    const helicityRing = new THREE.Mesh(helicityGeo, helicityMat);
+    photon.add(helicityRing);
+
+    // ==========================================================================
+    // ORBITAL TRAIL
+    // ==========================================================================
+    const MAX_TRAIL_POINTS = 6000;
+    const trailGeo = new THREE.BufferGeometry();
+    const trailPositions = new Float32Array(MAX_TRAIL_POINTS * 3);
+    trailGeo.setAttribute('position', new THREE.BufferAttribute(trailPositions, 3));
+    const trailMat = new THREE.LineBasicMaterial({
+        color: 0x00ff88,
+        transparent: true,
+        opacity: 0.5,
+    });
+    const trail = new THREE.Line(trailGeo, trailMat);
+    scene.add(trail);
+
+    // ==========================================================================
+    // STATE MANAGEMENT
+    // ==========================================================================
+    let state = {
+        mode: 0,  // 0=ground, 1=absorbing, 2=ejecting
+
+        // Electron dynamics
+        pos: new THREE.Vector3(PHYS.R * 0.75, 0, 0),
+        vel: new THREE.Vector3(0, 0, 0),
+        time: 0,
+
+        // Absorption animation
+        absorptionActive: false,
+        absorbProgress: 0.0,
+
+        // Emission state
+        photonPos: new THREE.Vector3(),
+        photonVel: new THREE.Vector3(),
+        photonActive: false,
+        photonSpin: 0,
+        ejectionTimer: null,
+
+        // Energy tracking (for display)
+        energyLevel: 1
+    };
+
+    // Initialize with stable circular orbit
+    function initGroundState() {
+        const r0 = PHYS.R * 0.75;
+        state.pos.set(r0, 0, 0);
+        // Circular orbit velocity: v = sqrt(k/r) for inverse-square-ish potential
+        const v0 = Math.sqrt(PHYS.k / (r0 * r0)) * 0.8;
+        state.vel.set(0, v0, 0);
+        state.time = 0;
+    }
+
+    // ==========================================================================
+    // MODE SWITCHING
+    // ==========================================================================
+    function setMode(mode) {
+        state.mode = mode;
+        if (state.ejectionTimer) clearTimeout(state.ejectionTimer);
+
+        document.querySelectorAll('button').forEach((b, i) => {
+            b.classList.toggle('active', i === mode);
+        });
+
+        const statusDiv = document.getElementById('status');
+        const energyLabel = document.getElementById('energy-label');
+        const energyFill = document.getElementById('energy-fill');
+
+        if (mode === 0) {
+            // GROUND STATE
+            statusDiv.innerText = "State: Ground State (n=1)";
+            statusDiv.style.color = "#4facfe";
+            energyLabel.innerText = "Energy: E₁ (Ground)";
+            energyFill.style.width = "25%";
+            state.energyLevel = 1;
+
+            PHYS.currentE0 = PHYS.E0_ground;
+            PHYS.currentB = 0;
+            PHYS.currentGamma = PHYS.gamma_ground;
+
+            clearTrail();
+            moveCameraTo(350, 120);
+            initGroundState();
+
+            photon.visible = false;
+            inPhoton.visible = false;
+
+        } else if (mode === 1) {
+            // ABSORPTION (n=1 → n=2 transition)
+            statusDiv.innerText = "State: Photon Incoming...";
+            statusDiv.style.color = "#00ffff";
+            energyLabel.innerText = "Energy: E₁ + ℏω → E₂";
+            energyFill.style.width = "25%";
+
+            state.absorptionActive = true;
+            state.absorbProgress = 0.0;
+
+            // Photon approaches from upper-left
+            inPhoton.position.set(-250, 200, 100);
+            inPhoton.scale.setScalar(3.0);
+            inPhoton.visible = true;
+            inPhoton.lookAt(0, 0, 0);
+
+            moveCameraTo(600, 200);
+
+        } else if (mode === 2) {
+            // SPONTANEOUS EMISSION TIMER
+            statusDiv.innerText = "State: Metastable... Emission in 2s";
+            statusDiv.style.color = "#ffd700";
+            energyLabel.innerText = "Energy: E₂ (Excited, Unstable)";
+
+            state.ejectionTimer = setTimeout(emitPhoton, 2000);
+        }
+    }
+
+    function clearTrail() {
+        const positions = trail.geometry.attributes.position.array;
+        for (let i = 0; i < positions.length; i++) positions[i] = 0;
+        trail.geometry.attributes.position.needsUpdate = true;
+        trailIdx = 0;
+    }
+
+    function moveCameraTo(zDist, yDist) {
+        const startZ = camera.position.z;
+        const startY = camera.position.y;
+        const startTime = Date.now();
+        const duration = 800;
+
+        function animateCam() {
+            const progress = Math.min((Date.now() - startTime) / duration, 1.0);
+            const ease = 1 - Math.pow(1 - progress, 3);
+
+            camera.position.z = startZ + (zDist - startZ) * ease;
+            camera.position.y = startY + (yDist - startY) * ease;
+            camera.lookAt(0, 0, 0);
+
+            if (progress < 1.0) requestAnimationFrame(animateCam);
+        }
+        animateCam();
+    }
+
+    // ==========================================================================
+    // PHYSICS: ACCELERATION FUNCTION
+    // ==========================================================================
+    function accelAt(pos, vel, t) {
+        const r = pos.length();
+        let a = new THREE.Vector3();
+
+        if (r < 1e-9) return a;
+
+        // CENTRAL FORCE
+        if (state.mode === 0 || !state.absorptionActive) {
+            if (r < PHYS.R) {
+                // Inside: Harmonic-like (soft core)
+                const mag = PHYS.k * Math.pow(r, PHYS.p) / Math.pow(PHYS.R, PHYS.p + 2.0);
+                const factor = (state.energyLevel === 2) ? 0.4 : 1.0;
+                a.copy(pos).multiplyScalar(-mag * factor);
+            } else {
+                // Outside: Modified Coulomb
+                if (state.energyLevel === 1) {
+                    // Ground state: standard central force
+                    const mag = PHYS.k / (r * r * r);
+                    a.copy(pos).multiplyScalar(-mag);
+                } else {
+                    // Excited state: weaker binding, larger orbit
+                    const mag = PHYS.k_excited;
+                    a.copy(pos).multiplyScalar(-mag);
+                }
+            }
+        }
+
+        // EXTERNAL DRIVE (photon field coupling)
+        if (PHYS.currentE0 > 0) {
+            a.x += PHYS.currentE0 * Math.cos(PHYS.Omega * t);
+            a.y += PHYS.currentE0 * 0.3 * Math.sin(PHYS.Omega * t * 1.1);
+        }
+
+        // MAGNETIC PRECESSION (spin-orbit proxy)
+        if (PHYS.currentB > 0) {
+            a.x += vel.y * PHYS.currentB;
+            a.y -= vel.x * PHYS.currentB;
+            a.z += vel.x * PHYS.currentB * 0.2;
+        }
+
+        // DAMPING (radiative losses)
+        a.addScaledVector(vel, -PHYS.currentGamma);
+
+        // SOFT BOUNDARY
+        if (r > PHYS.R_limit) {
+            const pen = r - PHYS.R_limit;
+            a.addScaledVector(pos.clone().normalize(), -8.0 * pen);
+        }
+
+        return a;
+    }
+
+    // ==========================================================================
+    // PHYSICS: RK4 INTEGRATOR
+    // ==========================================================================
+    function stepRK4(dt) {
+        const r0 = state.pos.clone();
+        const v0 = state.vel.clone();
+        const t0 = state.time;
+
+        const a0 = accelAt(r0, v0, t0);
+        const r1 = r0.clone().addScaledVector(v0, 0.5 * dt);
+        const v1 = v0.clone().addScaledVector(a0, 0.5 * dt);
+
+        const a1 = accelAt(r1, v1, t0 + 0.5 * dt);
+        const r2 = r0.clone().addScaledVector(v1, 0.5 * dt);
+        const v2 = v0.clone().addScaledVector(a1, 0.5 * dt);
+
+        const a2 = accelAt(r2, v2, t0 + 0.5 * dt);
+        const r3 = r0.clone().addScaledVector(v2, dt);
+        const v3 = v0.clone().addScaledVector(a2, dt);
+
+        const a3 = accelAt(r3, v3, t0 + dt);
+
+        const dr = v0.clone()
+            .add(v1.clone().multiplyScalar(2))
+            .add(v2.clone().multiplyScalar(2))
+            .add(v3)
+            .multiplyScalar(dt / 6);
+
+        const dv = a0.clone()
+            .add(a1.clone().multiplyScalar(2))
+            .add(a2.clone().multiplyScalar(2))
+            .add(a3)
+            .multiplyScalar(dt / 6);
+
+        state.pos.add(dr);
+        state.vel.add(dv);
+        state.time += dt;
+    }
+
+    // ==========================================================================
+    // PHYSICS UPDATE
+    // ==========================================================================
+    function updatePhysics() {
+        const subSteps = 16;
+        const dt = 0.025;
+        const stepDt = dt / subSteps;
+
+        // Handle absorption animation
+        if (state.absorptionActive) {
+            state.absorbProgress += 0.015;
+
+            const startPos = new THREE.Vector3(-250, 200, 100);
+            const endPos = state.pos.clone();
+            inPhoton.position.lerpVectors(startPos, endPos, state.absorbProgress);
+
+            // Shrink and spin as it approaches
+            const scale = 3.0 * (1.0 - state.absorbProgress * 0.7);
+            inPhoton.scale.setScalar(Math.max(scale, 0.5));
+            inPhoton.rotation.z += 0.1;
+
+            // Update energy bar
+            const energyFill = document.getElementById('energy-fill');
+            energyFill.style.width = (25 + state.absorbProgress * 50) + "%";
+
+            if (state.absorbProgress >= 1.0) {
+                // ABSORPTION COMPLETE
+                state.absorptionActive = false;
+                inPhoton.visible = false;
+                state.energyLevel = 2;
+
+                // Activate excited state physics
+                PHYS.currentE0 = PHYS.E0_excited;
+                PHYS.currentB = PHYS.B0_excited;
+                PHYS.currentGamma = PHYS.gamma_excited;
+
+                // Energy kick (photon momentum transfer)
+                const kick = state.vel.clone().normalize().multiplyScalar(25);
+                state.vel.add(kick);
+
+                // Flash effect
+                flashLight.intensity = 5;
+                flashLight.position.copy(state.pos);
+
+                const statusDiv = document.getElementById('status');
+                statusDiv.innerText = "State: Excited (n=2)";
+                statusDiv.style.color = "#ff66cc";
+
+                const energyLabel = document.getElementById('energy-label');
+                energyLabel.innerText = "Energy: E₂ (Excited)";
+                energyFill.style.width = "75%";
+            }
+        }
+
+        // Integrate electron motion
+        if (!state.photonActive || state.mode !== 2) {
+            for (let s = 0; s < subSteps; s++) {
+                stepRK4(stepDt);
+            }
+        }
+
+        // Animate emitted photon
+        if (state.photonActive) {
+            state.photonPos.add(state.photonVel);
+            photon.position.copy(state.photonPos);
+
+            // Photon spins as it travels (helicity visualization)
+            state.photonSpin += 0.15;
+            photon.rotation.z = state.photonSpin;
+            helicityRing.rotation.z = -state.photonSpin * 2;
+
+            // Point in direction of travel
+            const lookTarget = state.photonPos.clone().add(state.photonVel);
+            photon.lookAt(lookTarget);
+
+            // Slight expansion as it propagates
+            const expansionFactor = 1 + state.photonPos.length() * 0.0003;
+            photon.scale.setScalar(expansionFactor);
+
+            if (state.photonPos.length() > 2500) {
+                state.photonActive = false;
+                photon.visible = false;
+            }
+        }
+    }
+
+    // ==========================================================================
+    // PHOTON EMISSION
+    // ==========================================================================
+    function emitPhoton() {
+        state.photonActive = true;
+        photon.visible = true;
+        state.photonSpin = 0;
+
+        // Emit from current electron position
+        state.photonPos.copy(state.pos);
+
+        // Fire in direction of electron motion (momentum conservation)
+        const fireDir = state.vel.clone().normalize();
+        state.photonVel = fireDir.multiplyScalar(5.0);
+
+        // Flash effect
+        flashLight.intensity = 10;
+        flashLight.position.copy(state.pos);
+
+        // QUANTUM JUMP: Instant transition to ground state
+        state.mode = 0;
+        state.energyLevel = 1;
+        PHYS.currentE0 = PHYS.E0_ground;
+        PHYS.currentB = 0;
+        PHYS.currentGamma = PHYS.gamma_ground;
+
+        // Reset to ground state orbit (random phase)
+        const resetAngle = Math.random() * Math.PI * 2;
+        const r0 = PHYS.R * 0.75;
+        state.pos.set(Math.cos(resetAngle) * r0, Math.sin(resetAngle) * r0, 0);
+
+        const v0 = Math.sqrt(PHYS.k / (r0 * r0)) * 0.8;
+        state.vel.set(-Math.sin(resetAngle) * v0, Math.cos(resetAngle) * v0, 0);
+
+        // Update UI
+        document.querySelectorAll('button').forEach((b, i) => {
+            b.classList.toggle('active', i === 0);
+        });
+
+        const statusDiv = document.getElementById('status');
+        statusDiv.innerText = "PHOTON EMITTED! → Ground State";
+        statusDiv.style.color = "#ffd700";
+
+        const energyLabel = document.getElementById('energy-label');
+        energyLabel.innerText = "Energy: E₂ → E₁ + ℏω";
+
+        const energyFill = document.getElementById('energy-fill');
+        energyFill.style.width = "25%";
+
+        // Zoom back to ground state view
+        moveCameraTo(350, 120);
+
+        // Reset status after delay
+        setTimeout(() => {
+            if (state.mode === 0) {
+                statusDiv.innerText = "State: Ground State (n=1)";
+                statusDiv.style.color = "#4facfe";
+                const energyLabel = document.getElementById('energy-label');
+                energyLabel.innerText = "Energy: E₁ (Ground)";
+            }
+        }, 2000);
+    }
+
+    // ==========================================================================
+    // RENDER LOOP
+    // ==========================================================================
+    let trailIdx = 0;
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        controls.update();
+        updatePhysics();
+
+        // Decay flash
+        if (flashLight.intensity > 0) {
+            flashLight.intensity *= 0.9;
+        }
+
+        // Update electron position
+        electronCloud.position.copy(state.pos);
+
+        // Electron visual effects
+        const time = Date.now() * 0.001;
+        electronCloud.rotation.y = time * 0.1;
+        electronCloud.rotation.x = Math.sin(time * 0.3) * 0.1;
+
+        // Scale electron based on energy level
+        const targetScale = (state.energyLevel === 2) ? PHYS.R * 1.3 : PHYS.R;
+        electronCloud.scale.lerp(
+            new THREE.Vector3(targetScale, targetScale, targetScale),
+            0.05
+        );
+
+        // Opacity based on state
+        electronMat.opacity = (state.energyLevel === 2) ? 0.25 : 0.15;
+        electronMat.emissiveIntensity = (state.energyLevel === 2) ? 0.5 : 0.3;
+
+        // Update trail
+        if (!state.photonActive) {
+            const positions = trail.geometry.attributes.position.array;
+            positions[trailIdx * 3] = state.pos.x;
+            positions[trailIdx * 3 + 1] = state.pos.y;
+            positions[trailIdx * 3 + 2] = state.pos.z;
+            trailIdx = (trailIdx + 1) % MAX_TRAIL_POINTS;
+            trail.geometry.attributes.position.needsUpdate = true;
+        }
+
+        // Trail color based on state
+        trailMat.color.setHex((state.energyLevel === 2) ? 0xff6688 : 0x00ff88);
+
+        renderer.render(scene, camera);
+    }
+
+    // ==========================================================================
+    // INITIALIZATION
+    // ==========================================================================
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    initGroundState();
+    setMode(0);
+    animate();
+
+</script>
+</body>
+</html>

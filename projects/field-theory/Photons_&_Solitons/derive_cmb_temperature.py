@@ -1,29 +1,70 @@
 #!/usr/bin/env python3
 """
-QFD CMB Temperature Derivation from Photon Decay Physics
+QFD CMB Temperature Derivation from First Principles
+=====================================================
 
-GOAL: Derive T_CMB = 2.725 K from first principles using the
-helicity-locked photon soliton decay model.
+Copyright (c) 2026 Tracy McSheery
+Licensed under the MIT License
 
-PHYSICS:
-- Photons lose energy as they propagate: E(D) = E₀ × exp(-κD)
-- The decay constant κ = H₀/c is derived from vacuum physics
-- This energy doesn't disappear - it thermalizes into the CMB
-- The equilibrium temperature depends on:
-  1. The photon decay rate (κ)
-  2. The cosmic photon number density
-  3. The horizon scale (how far photons have traveled)
+PURPOSE:
+--------
+Derive the Cosmic Microwave Background temperature T_CMB = 2.725 K
+from first principles using QFD helicity-locked photon decay physics.
 
-APPROACH:
-1. Calculate energy lost by cosmic photon background
-2. Relate to CMB energy density via Stefan-Boltzmann
-3. Derive T_CMB and compare to observed 2.725 K
+THE KEY INSIGHT:
+----------------
+In QFD, photon redshift comes from soliton energy decay, not space expansion:
+  - Standard cosmology: Space expands → wavelength stretches → z
+  - QFD: Photon soliton loses energy via helicity lock → E decays → z
+
+BOTH models predict the SAME observable relationship:
+  T_CMB = T_recombination / (1 + z_recombination)
+        = 3000 K / 1101
+        = 2.725 K
+
+THE PHYSICS:
+------------
+1. Hydrogen recombination at T_recomb ≈ 3000 K
+2. Photons decouple from matter and propagate freely
+3. Energy decays: E(D) = E₀ × exp(-κD) where κ = H₀/c
+4. Redshift: z = exp(κD) - 1
+5. Temperature follows: T(z) = T₀ / (1 + z)
+
+DERIVED PARAMETERS (from α):
+----------------------------
+All QFD parameters trace back to the fine structure constant:
+  - β = 3.043233 (Golden Loop: 1/α = 2π²(e^β/β) + 1)
+  - κ = H₀/c (photon decay constant)
+  - c_vac = √β (vacuum wave speed in natural units)
 
 References:
-- SolitonQuantization.lean: E = ℏω from helicity lock
-- GoldenLoop.lean: β derivation
-- derive_hbar_and_cosmic_aging.py: κ decay constant
+  - projects/Lean4/QFD/Photon/Photon_Soliton_Stability.lean
+  - projects/Lean4/QFD/Physics/GoldenLoop_Existence.lean
+  - qfd/shared_constants.py (single source of truth)
 """
+
+import sys
+from pathlib import Path
+
+# Add project root to path for qfd imports
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+# Try to import derived constants from shared_constants
+try:
+    from qfd.shared_constants import (
+        BETA, BETA_STANDARDIZED,
+        C_SI, H0_KM_S_MPC, MPC_TO_M, KAPPA_MPC
+    )
+    USING_SHARED_CONSTANTS = True
+    BETA_GOLDEN = BETA  # Use the derived value
+except ImportError:
+    USING_SHARED_CONSTANTS = False
+    BETA_GOLDEN = 3.043233053  # Fallback to standardized value
+    C_SI = 299792458.0
+    H0_KM_S_MPC = 70.0
+    MPC_TO_M = 3.086e22
+    KAPPA_MPC = H0_KM_S_MPC / (C_SI / 1000)
 
 import numpy as np
 from scipy.constants import c, h, k, sigma, pi
@@ -241,17 +282,20 @@ def derive_T_from_thermalization():
     3. Age of the universe
 
     The key insight from Lean4 proofs:
-    - β = 3.058 (Golden Loop eigenvalue)
+    - β = 3.043233 (Golden Loop eigenvalue, DERIVED from α)
     - λ = m_proton (Proton Bridge)
     - c = √β in natural units
 
     The vacuum has a characteristic energy scale set by these parameters.
+
+    NOTE: β = 3.043233 is derived from α via the Golden Loop equation:
+          1/α = 2π² × (e^β/β) + 1
     """
     print("APPROACH 4: QFD Thermalization Scale")
     print("-" * 60)
 
-    # From GoldenLoop.lean
-    BETA_GOLDEN = 3.058230856
+    # β is now imported from shared_constants (derived from α)
+    # BETA_GOLDEN is defined at module level
 
     # Proton mass sets the vacuum density scale
     M_PROTON_MEV = 938.272
@@ -260,8 +304,8 @@ def derive_T_from_thermalization():
     # Vacuum energy scale
     c_vac_natural = np.sqrt(BETA_GOLDEN)
 
-    print("QFD Vacuum Parameters:")
-    print(f"  β = {BETA_GOLDEN:.6f} (Golden Loop eigenvalue)")
+    print("QFD Vacuum Parameters (derived from α via Golden Loop):")
+    print(f"  β = {BETA_GOLDEN:.6f} (from 1/α = 2π²(e^β/β) + 1)")
     print(f"  λ = {M_PROTON_MEV:.3f} MeV (Proton Bridge)")
     print(f"  c_vac = √β = {c_vac_natural:.6f} (natural units)")
     print()
@@ -362,7 +406,15 @@ def main():
     print("QFD CMB TEMPERATURE DERIVATION")
     print("="*70)
     print()
+
+    if USING_SHARED_CONSTANTS:
+        print("Using constants from qfd/shared_constants.py")
+    else:
+        print("Using inline constants (shared_constants not available)")
+    print()
+
     print(f"Target: T_CMB = {T_CMB_OBS} K (Planck 2018)")
+    print(f"β = {BETA_GOLDEN:.6f} (derived from α via Golden Loop)")
     print(f"QFD decay constant: κ = {KAPPA_MPC:.6e} Mpc⁻¹")
     print(f"Hubble constant: H₀ = {H0_KM_S_MPC} km/s/Mpc")
     print()
