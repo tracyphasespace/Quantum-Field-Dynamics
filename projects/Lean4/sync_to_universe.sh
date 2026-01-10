@@ -93,6 +93,22 @@ else
     cp "$SCRIPT_DIR/lean-toolchain" "$UNIVERSE_ROOT/"
     [ -f "$SCRIPT_DIR/lake-manifest.json" ] && cp "$SCRIPT_DIR/lake-manifest.json" "$UNIVERSE_ROOT/"
 
+    # Sync validation scripts to simulation/scripts/
+    SCRIPTS_SOURCE="$SCRIPT_DIR/scripts"
+    SCRIPTS_DEST="/home/tracy/development/QFD-Universe/simulation/scripts"
+    if [ -d "$SCRIPTS_SOURCE" ]; then
+        echo ""
+        echo "Syncing validation scripts..."
+        mkdir -p "$SCRIPTS_DEST"
+        # Sync only verify_*.py scripts (validation scripts)
+        for script in "$SCRIPTS_SOURCE"/verify_*.py; do
+            if [ -f "$script" ]; then
+                cp "$script" "$SCRIPTS_DEST/"
+                echo "  $(basename "$script")"
+            fi
+        done
+    fi
+
     echo ""
     echo -e "${GREEN}Sync complete!${NC}"
 
