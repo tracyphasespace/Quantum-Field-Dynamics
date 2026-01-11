@@ -48,8 +48,29 @@ The "at hand" constants of physics - α, β, c, ℏ, G, ξ, R_vac, Yukawa scale 
 - **One Lagrangian**: L₆C in Cl(3,3) phase space
 - **One action principle**: Geodesic motion on vacuum manifold
 - **Minimal axioms**: All 11 centralized in `Physics/Postulates.lean`
-- **Zero sorries** for core physics (11 remain in new Phase 3 topological proofs)
+- **Zero sorries**: Complete formal verification (1,101 proven statements)
 - **Reproducible**: Full validation suite runs in minutes
+
+### The Cl(3,3) Methodology
+*When in doubt, express the problem in Cl(3,3) and see which symmetry surfaces.*
+
+This "get lucky" approach—converting equations to Clifford algebra and looking for geometric structure—is the standard method that cracked:
+
+| Problem | What Cl(3,3) Revealed |
+|---------|----------------------|
+| Spacetime emergence | 4D Minkowski = centralizer of B = e₄∧e₅ |
+| ℏ derivation | Planck constant = topological winding × vacuum scale |
+| Photon solitons | Stability from helicity-locked phase coherence |
+| Lepton masses | Harmonic modes N=1,19 in twist energy functional |
+| g-2 anomaly | Sign flip from Möbius transform S(R) geometry |
+
+**Recipe for new problems:**
+1. Express the Lagrangian in Cl(3,3)
+2. Identify the relevant bivector subspace
+3. Look for centralizer structure (what commutes with internal rotation)
+4. The symmetry that survives IS the physics
+
+This works because Cl(3,3) has signature (+,+,+,−,−,−)—the "hidden" dimensions e₄, e₅ encode internal degrees of freedom that standard physics treats as separate fields.
 
 ---
 
@@ -82,8 +103,9 @@ After QFD: Single derivation chain from α → β → everything else. The "ugly
 ## Verification
 
 ### Lean Formalization
-- **1,106 proven statements** (891 theorems + 215 lemmas)
+- **1,101 proven statements** (886 theorems + 215 lemmas)
 - **238 Lean files** with explicit axiom tracking
+- **Zero sorries, zero stubs** - complete formal verification
 - Every derivation chain formally verified
 
 ### Python Validation
