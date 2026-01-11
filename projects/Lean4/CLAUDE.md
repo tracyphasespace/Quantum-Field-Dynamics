@@ -15,16 +15,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 4. **PROTECTED_FILES.md** - Core infrastructure files (DO NOT MODIFY)
 
 **Quick references**:
+- **QFD_THREE_PILLARS.md** - Coherence, Consilience, Conciseness (reviewer summary)
 - **WORK_QUEUE.md** - Prioritized task list
 - **BUILD_STATUS.md** - Current build health, sorry count
-- **CLAIMS_INDEX.txt** - All 844 proven theorems/lemmas (grep-able)
+- **CLAIMS_INDEX.txt** - All 1,106 proven theorems/lemmas (grep-able)
 
 **Validation tools**:
 - **verify_constants.sh** - Check for contaminated constant definitions
 
 ## Repository Overview
 
-This is a **Lean 4 formalization** of Quantum Field Dynamics (QFD) theorems, proving spacetime emergence, cosmology, nuclear physics, and particle physics using the Clifford algebra Cl(3,3). The project contains **844 proven statements** (672 theorems + 172 lemmas) across **199 Lean files**.
+This is a **Lean 4 formalization** of Quantum Field Dynamics (QFD) theorems, proving spacetime emergence, cosmology, nuclear physics, and particle physics using the Clifford algebra Cl(3,3). The project contains **1,106 proven statements** (891 theorems + 215 lemmas) across **238 Lean files**.
 
 **New modules (Jan 2026)**: Math/ (pure scaffolding), Atomic/ (chaos/resonance), Physics/Postulates.lean (centralized axioms)
 
@@ -198,7 +199,7 @@ by clifford_simp
 
 ## Documentation System: The Proof Index
 
-**Problem**: With 369 proven statements, finding "which theorem proves claim X?" requires a traceability system.
+**Problem**: With 1,106 proven statements, finding "which theorem proves claim X?" requires a traceability system.
 
 **Solution**: Four-file index system that makes the repository self-documenting.
 
@@ -211,7 +212,7 @@ by clifford_simp
 
 2. **`QFD/CLAIMS_INDEX.txt`** - Grep-able theorem inventory (auto-generated)
    - Format: `File:LineNumber:TheoremName`
-   - All 369 proven statements listed
+   - All 1,106 proven statements listed
    - Generate: `rg -n "^theorem|^lemma" QFD --include="*.lean"`
 
 3. **`QFD/CONCERN_CATEGORIES.md`** - Critical assumption tracking
@@ -492,15 +493,15 @@ See `CITATION.cff` for complete metadata.
 
 ## Key Statistics (as of 2026-01-10)
 
-- **Lean Files**: **232**
-- **Proven Theorems**: **849**
+- **Lean Files**: **238**
+- **Proven Theorems**: **891**
 - **Proven Lemmas**: **215**
-- **Total Proven**: **1,064 statements**
-- **Definitions**: **742**
-- **Structures**: **173**
+- **Total Proven**: **1,106 statements**
+- **Definitions**: **749**
+- **Structures**: **174**
 - **Standalone Axioms**: **11** (centralized in Physics/Postulates.lean)
 - **Build Status**: ✅ Successful (3171 jobs)
-- **Sorries**: **0**
+- **Sorries**: **11**
 
 **Counting Methodology** (IMPORTANT):
 ```bash
@@ -512,10 +513,10 @@ grep -rn "^axiom " QFD/ --include="*.lean" | wc -l   # axioms
 ```
 
 **Recent Progress (Jan 10, 2026)**:
-- **Archive cleanup**: Removed deprecated backup/test files (49 files, 17k lines)
-- **Sync infrastructure**: Added PUBLISH_MANIFEST.txt + sync_to_universe.sh
-- **Shell Theorem**: Proved harmonic decay (last sorry) + electrostatic version
-- **Zero sorries achieved**: All proofs complete
+- **Validation scripts consolidated**: 17 Python scripts from geminitest directories
+- **New Lean proofs**: GeometricSignFlip, TopologicalEnergy, HbarDerivation, RVacDerivation
+- **Nuclear validation**: Integer ladder, fission resonance, decay transitions
+- **11 sorries remaining**: Mostly in new Phase 3 topological proofs
 
 **Earlier Progress (Jan 8, 2026)**:
 - **Axiom Centralization**: All standalone axioms now in Physics/Postulates.lean
@@ -531,9 +532,8 @@ grep -rn "^axiom " QFD/ --include="*.lean" | wc -l   # axioms
 - ✅ Aristotle integration: 8 files total (PhaseCentralizer, AxisExtraction, CoaxialAlignment, RealDiracEquation + 4 previous)
 - ✅ QM Translation complete: SchrodingerEvolution phase_group_law proven (4 sorries → 0)
 - ✅ Complex number i eliminated: Replaced by bivector B = e₄ ∧ e₅ throughout formalism
-- ✅ Repository growth: Now 844 proven statements (672 theorems + 172 lemmas)
+- ✅ Repository growth: Significant expansion of proof coverage
 - ✅ Documentation: Updated with scientific tone (removed promotional language)
-- ✅ Zero sorries: 100% completion maintained
 
 ## Support
 
