@@ -202,23 +202,10 @@ theorem nuclearForce_closed_form
   rw [QFD.Gravity.radialForce, ← hVeq, hderiv, hdV_eq]
   ring
 
-/-
-## Blueprint section (conceptual physics that is not yet kernel-checked)
+/-!
+## Future Work: Bound State Formalization
 
-These are intentionally marked as `True` placeholders (not `sorry`) so the file:
-1) builds cleanly across environments, and
-2) does not pretend to be proved when it isn't.
-
-When you decide to formalize bound states / normalizability, we can replace each
-with a real proposition and a proof.
+See TimeCliff.lean for blueprint structures documenting future formalization needs.
 -/
-
-/-- Blueprint: existence of bound states in the nuclear well. -/
-theorem bound_state_existence_blueprint : True := by
-  trivial
-
-/-- Blueprint: "unification" narrative hook (same equations, different parameter regime). -/
-theorem force_unification_blueprint : True := by
-  trivial
 
 end QFD.Nuclear

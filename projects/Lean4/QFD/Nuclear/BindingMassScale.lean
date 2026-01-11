@@ -185,13 +185,15 @@ theorem k_c2_from_proton_bridge :
 
 /-! ## Parameter Closure Impact -/
 
-/-- Before: k_c2 was a free empirical parameter
+/-- Historical note: k_c2 parameter derivation.
 
-After: k_c2 = λ = m_p (derived from Proton Bridge)
+Before QFD: k_c2 was a free empirical parameter in the semi-empirical mass formula.
+After QFD: k_c2 = λ = m_p (derived from Proton Bridge geometry).
 
-This reduces the free parameter count by 1.
+This represents a reduction from fitted parameter to derived constant.
 -/
-theorem k_c2_was_free_parameter : True := trivial
+def k_c2_derivation_note : String :=
+  "k_c2 = proton_mass = 938.272 MeV, derived from Proton Bridge"
 
 /-- Parameter closure summary
 

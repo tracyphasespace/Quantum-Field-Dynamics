@@ -62,10 +62,15 @@ theorem mass_hierarchy (Re Rm : ℝ) (gamma : ℝ)
   simp only [zero_mul, zero_add, Nat.cast_one, one_pow, Nat.cast_ofNat]
   convert h using 2 <;> ring
 
-/-- Physical Implication:
-    The 1/R scaling of topological twist energy explains why the Muon
-    (with higher winding number and smaller radius) is ~206× heavier
-    than the Electron, despite both being leptons. -/
-theorem muon_electron_mass_ratio_explained : True := trivial
+/-- Physical interpretation: Muon/electron mass ratio from topology.
+
+The 1/R scaling of topological twist energy explains why the muon
+(N=19 harmonic mode, smaller radius) is ~206× heavier than the
+electron (N=1 mode, larger radius), despite both being leptons.
+
+See TopologicalEnergy.lean for the formal proof of energy hierarchy.
+-/
+def muon_electron_ratio_interpretation : String :=
+  "m_μ/m_e ≈ 206 from harmonic mode ratio: E ∝ N² at stability"
 
 end QFD_Upgrades

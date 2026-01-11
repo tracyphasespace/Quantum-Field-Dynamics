@@ -47,9 +47,12 @@ theorem energy_decay_is_proportional (E0 k_J : ℝ) (_h_pos : k_J > 0) :
   ring
 
 /--
-  Conclusion:
-  Hubble Constant H0 is re-identified as the Vacuum Drag Coefficient k_J * c.
+Physical interpretation: The Hubble constant H₀ emerges as vacuum drag.
+
+In QFD, H₀ = k_J · c where k_J is the photon drag coefficient.
+This reinterprets cosmic expansion as photon energy loss to vacuum friction.
 -/
-theorem hubble_is_material_viscosity : True := by trivial
+def hubble_vacuum_drag_interpretation : String :=
+  "H₀ = k_J · c: Hubble constant as vacuum drag coefficient"
 
 end QFD_Upgrades

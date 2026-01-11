@@ -49,11 +49,16 @@ theorem sign_flip_at_critical_radius (R R_vac : ℝ) (h_vac : R_vac > 0) :
     exact div_pos h_num h_den
 
 /--
-  Physical Implication:
-  Electron (R ~ 386 fm) >> Proton Scale (R_vac ~ 1 fm) => V4 < 0
-  Muon (R ~ 1.8 fm) >? Proton Scale.
-  Note: The sign flip likely occurs at the 'Unit Cell' scale of the vacuum.
+Physical interpretation: Electron vs muon g-2 sign difference.
+
+The scale factor S(R) = (R_vac - R)/(R_vac + R) determines V₄ sign:
+- Electron (R ~ 386 fm >> R_vac): S < 0, so V₄ < 0 (agrees with experiment)
+- Muon (R ~ 1.8 fm ~ R_vac): S ≈ 0, transition regime
+
+The sign flip occurs near the vacuum unit cell scale.
+See GeometricG2.lean for the formal proof.
 -/
-theorem electron_muon_discrepancy_resolved : True := by trivial
+def electron_muon_scale_interpretation : String :=
+  "V₄ sign from S(R) = (R_vac - R)/(R_vac + R): electron negative, muon near zero"
 
 end QFD_Upgrades

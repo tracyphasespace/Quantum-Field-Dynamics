@@ -46,11 +46,16 @@ theorem charge_fraction_limit (beta : ℝ) (h_beta : beta > 0) :
   · exact sq_nonneg _
 
 /--
-  Physical Conclusion:
-  The observed Z/A ratio of heavy nuclei (~0.33) is not a coincidence;
-  it is the energy-minimizing state of a fluid with vacuum stiffness beta.
+Physical interpretation: Heavy nucleus Z/A ratio.
+
+The observed Z/A ≈ 0.33 for heavy nuclei is the energy-minimizing
+charge fraction for a fluid with vacuum stiffness β ≈ 3.04.
+
+This connects c₂ = 1/β (nuclear volume coefficient) to the
+asymptotic charge ratio, explaining why heavy nuclei have
+Z/A → 1/3 rather than Z/A = 1/2.
 -/
-theorem heavy_nucleus_ratio_converges :
-  True := by trivial
+def heavy_nucleus_ratio_interpretation : String :=
+  "Z/A → 1/β ≈ 0.33 for heavy nuclei: energy minimization in stiff vacuum"
 
 end QFD_Proofs

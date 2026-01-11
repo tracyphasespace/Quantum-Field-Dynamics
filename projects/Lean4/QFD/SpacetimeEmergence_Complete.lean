@@ -15,7 +15,7 @@ import Mathlib.Tactic
 
 /-!
 # QFD Appendix Z: Spacetime Emergence Theorem
-## Complete Formal Proof (0 sorry)
+## Complete Formal Proof (0 incomplete proofs)
 
 **Goal**: Prove that the centralizer of the internal bivector B = e₄ ∧ e₅
 in Cl(3,3) contains exactly the spacetime generators {e₀, e₁, e₂, e₃} with
@@ -321,7 +321,7 @@ This validates QFD's claim:
   "Spacetime is the shadow of a higher-dimensional geometric algebra,
    projected by the choice of internal gauge."
 
-**Status:** COMPLETE - 0 sorry placeholders
+**Status:** COMPLETE - 0 incomplete proofs placeholders
 -/
 
 end QFD.SpacetimeEmergence

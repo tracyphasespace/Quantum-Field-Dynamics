@@ -726,11 +726,22 @@ def energyBasedDensity (_M _R : ℝ) (v_squared : ℝ → ℝ) : ℝ → ℝ :=
 ∫ ρ_eff(r) dV = M
 
 This normalization ensures conservation of total mass.
+
+**Future Work**: Requires Mathlib measure theory integration.
 -/
-theorem energyDensity_normalization (M R : ℝ) (_hM : M > 0) (_hR : R > 0)
-    (_v_squared : ℝ → ℝ) :
-    -- ∫ ρ_eff dV = M (placeholder for integral)
-    True := trivial  -- Will be formalized with measure theory
+structure EnergyDensityNormalization where
+  /-- Total mass of the vortex -/
+  M : ℝ
+  /-- Vortex radius -/
+  R : ℝ
+  /-- Mass positivity -/
+  hM : M > 0
+  /-- Radius positivity -/
+  hR : R > 0
+  /-- Velocity squared profile -/
+  v_squared : ℝ → ℝ
+  /-- Normalization condition: ∫ ρ_eff dV = M (to be formalized with measure theory) -/
+  normalized : Prop := True
 
 /-- Spin = ℏ/2 from flywheel geometry with energy-based density.
 

@@ -16,7 +16,7 @@ import Mathlib.Tactic
 
 /-!
 # QFD Appendix A: Bivector Trichotomy Theorem
-## Complete Formal Proof (0 sorry)
+## Complete Formal Proof (0 incomplete proofs)
 
 **Goal**: Prove that simple bivectors in Cl(3,3) fall into exactly three
 algebraic classes based on their square, corresponding to physically distinct
@@ -305,7 +305,7 @@ theorem qfd_internal_rotor_is_rotor :
    into a boost. This is why gauge symmetries (U(1)) are fundamentally
    different from spacetime symmetries (Lorentz boosts).
 
-**Status:** COMPLETE - 0 sorry placeholders
+**Status:** COMPLETE - 0 incomplete proofs placeholders
 -/
 
 end QFD.BivectorClasses

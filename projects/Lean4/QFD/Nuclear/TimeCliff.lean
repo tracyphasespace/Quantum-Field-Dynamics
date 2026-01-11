@@ -192,23 +192,29 @@ theorem nuclearForce_closed_form
   rw [QFD.Gravity.radialForce, ← hVeq, hderiv, hdV_eq]
   ring
 
-/-
-## Blueprint section (conceptual physics that is not yet kernel-checked)
+/-!
+## Future Work: Bound State Formalization
 
-These are intentionally marked as `True` placeholders (not `sorry`) so the file:
-1) builds cleanly across environments, and
-2) does not pretend to be proved when it isn't.
-
-When you decide to formalize bound states / normalizability, we can replace each
-with a real proposition and a proof.
+The following structures document physics that requires additional Mathlib
+infrastructure (spectral theory, Sturm-Liouville) to formalize completely.
 -/
 
-/-- Blueprint: existence of bound states in the nuclear well. -/
-theorem bound_state_existence_blueprint : True := by
-  trivial
+/-- Blueprint: Bound state existence requires proving the nuclear potential
+    well admits normalizable solutions. This needs spectral theory. -/
+structure BoundStateBlueprint where
+  /-- The potential well depth from vacuum stiffness -/
+  well_depth : ℝ
+  /-- Condition: well must be deep enough for bound states -/
+  depth_sufficient : well_depth > 0
 
-/-- Blueprint: "unification" narrative hook (same equations, different parameter regime). -/
-theorem force_unification_blueprint : True := by
-  trivial
+/-- Blueprint: Force unification means EM and strong forces emerge from
+    the same vacuum equations in different parameter regimes. -/
+structure ForceUnificationBlueprint where
+  /-- EM regime: low density, long range -/
+  em_regime : ℝ → Prop
+  /-- Strong regime: high density, short range -/
+  strong_regime : ℝ → Prop
+  /-- Same underlying equation governs both -/
+  unified_equation : ℝ → ℝ
 
 end QFD.Nuclear

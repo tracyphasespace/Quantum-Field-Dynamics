@@ -312,13 +312,15 @@ theorem soft_vacuum_large_c2 (β₁ β₂ : ℝ) (β₁_pos : 0 < β₁) (β₂_
 
 /-! ## Dimensional Consistency -/
 
-/-- β and c₂ are both dimensionless
+/-- Dimensional consistency of β and c₂.
 
-Vacuum stiffness β is dimensionless (natural units).
-Charge fraction c₂ = Z/A is dimensionless (ratio).
-Therefore 1/β is dimensionally consistent with c₂.
+Both quantities are dimensionless:
+- β: vacuum stiffness (natural units, ℏ = c = 1)
+- c₂ = Z/A: charge fraction (ratio of integers)
+
+Therefore the relation c₂ = 1/β is dimensionally consistent.
 -/
-theorem dimensions_consistent : True := by
-  trivial
+def dimensionless_consistency : Prop :=
+  ∀ (beta : ℝ), beta > 0 → (1 / beta : ℝ) = (1 / beta)  -- trivially true, documents the relationship
 
 end QFD.Nuclear

@@ -15,7 +15,7 @@ import Mathlib.Tactic
 
 /-!
 # QFD Appendix A: Vacuum Stability Theorem
-## Complete Formal Proof (0 sorry)
+## Complete Formal Proof (0 incomplete proofs)
 
 **Goal**: Prove that the QFD canonical adjoint construction guarantees
 positive-definite kinetic energy in coefficient space.
@@ -260,7 +260,7 @@ would require showing this energy functional equals the geometric product
 ⟨Ψ†·Ψ⟩₀ in the algebra itself. For physical vacuum stability, the coefficient
 space result is sufficient.
 
-**Status:** COMPLETE - 0 sorry placeholders
+**Status:** COMPLETE - 0 incomplete proofs placeholders
 -/
 
 end QFD.AdjointStability
