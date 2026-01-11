@@ -6,7 +6,7 @@
 https://tracyphasespace.github.io/QFD-Universe/llms.txt
 ```
 
-This contains all 361 files. To read any file, prepend:
+This contains all 363 files. To read any file, prepend:
 
 ```
 https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/

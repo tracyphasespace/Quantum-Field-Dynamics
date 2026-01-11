@@ -37,7 +37,7 @@ GitHub's JavaScript UI doesn't work for all tools. Use these direct URLs:
 
 **Base URL pattern**: `https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/{path}`
 
-**Full file index**: Fetch https://tracyphasespace.github.io/QFD-Universe/llms.txt for all 362 files
+**Full file index**: Fetch https://tracyphasespace.github.io/QFD-Universe/llms.txt for all 363 files
 
 [![Lean4](https://img.shields.io/badge/Lean4-886_Theorems-green)](formalization/)
 [![Validation](https://img.shields.io/badge/Tests-17%2F17_Passed-brightgreen)](analysis/scripts/)
@@ -162,46 +162,9 @@ python qfd_proof.py                              # Zero-dependency proof
 
 ### For AI Assistants
 
-**Step 1**: Fetch the file index:
-```
-https://tracyphasespace.github.io/QFD-Universe/llms.txt
-```
-
-**Step 2**: Prepend this base URL to any path:
-```
-https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/
-```
-
-**Quick links**:
-- [llms.txt](https://tracyphasespace.github.io/QFD-Universe/llms.txt) - File index (362 files)
+See [LLM_CONTEXT.md](LLM_CONTEXT.md) for full instructions. Quick access:
+- [llms.txt](https://tracyphasespace.github.io/QFD-Universe/llms.txt) - File index
 - [files.json](https://tracyphasespace.github.io/QFD-Universe/files.json) - Machine-readable JSON
-- [LLM_CONTEXT.md](LLM_CONTEXT.md) - Full context
-- [CL33_METHODOLOGY.md](CL33_METHODOLOGY.md) - Why Cl(3,3) and how constants emerge
-
----
-
-## Overview
-
-**Step 1**: Fetch the file index:
-```
-https://tracyphasespace.github.io/QFD-Universe/llms.txt
-```
-
-**Step 2**: To read any file, prepend this base URL to paths from llms.txt:
-```
-https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/
-```
-
-**Example**: Reading the theory document:
-```
-https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/THEORY.md
-```
-
-**Quick links**:
-- [llms.txt](https://tracyphasespace.github.io/QFD-Universe/llms.txt) - File index (362 files)
-- [files.json](https://tracyphasespace.github.io/QFD-Universe/files.json) - Machine-readable JSON
-- [LLM_CONTEXT.md](https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/LLM_CONTEXT.md) - Full context
-- [CL33_METHODOLOGY.md](CL33_METHODOLOGY.md) - Why Cl(3,3) and how constants emerge
 
 ---
 
@@ -274,6 +237,73 @@ python analysis/scripts/run_all_validations.py
 | | `validate_proton_engine.py` | ✅ PASS | Drip line asymmetry confirmed |
 | **Photon** | `verify_photon_soliton.py` | ✅ PASS | Soliton: energy, shape, propagation |
 | | `verify_lepton_g2.py` | ✅ PASS | Parameter-free g-2 derivation |
+
+---
+
+## Reproduce from Scratch
+
+**Fresh machine recipe** - copy-paste ready:
+
+### 1. Clone and Setup
+
+```bash
+git clone https://github.com/tracyphasespace/QFD-Universe.git
+cd QFD-Universe
+
+# Create Python environment
+python3 -m venv venv
+source venv/bin/activate  # Linux/Mac
+# or: venv\Scripts\activate  # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 2. Run Python Validation Suite
+
+```bash
+# Master validation (17/17 tests, ~15 seconds)
+python analysis/scripts/run_all_validations.py
+
+# Zero-dependency proof (no external packages needed)
+python qfd_proof.py
+```
+
+**Expected output:**
+```
+=== QFD Master Validation Suite ===
+...
+OVERALL RESULT: 17/17 tests passed
+```
+
+### 3. Verify Lean Proofs (Optional)
+
+Requires [Lean 4](https://lean-lang.org/lean4/doc/setup.html) and [Lake](https://github.com/leanprover/lake).
+
+```bash
+cd formalization
+lake build QFD  # First build: 10-30 min (fetches Mathlib)
+                # Subsequent: seconds
+
+# Count sorries (incomplete proofs) - should be 0
+grep -r "sorry" QFD/ --include="*.lean" | wc -l
+```
+
+### 4. Verify Key Claims Individually
+
+```bash
+# Golden Loop (β derivation)
+python simulation/scripts/verify_golden_loop.py
+
+# g-2 predictions
+python analysis/scripts/validate_g2_corrected.py
+
+# Nuclear conservation law
+python analysis/scripts/validate_conservation_law.py
+
+# CMB temperature
+python analysis/scripts/derive_cmb_temperature.py
+```
 
 ---
 

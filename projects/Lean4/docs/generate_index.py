@@ -118,7 +118,13 @@ def generate_files_json(files: list, output_path: str):
         json.dump(index, f, indent=2)
 
 def generate_llms_txt(files: list, output_path: str):
-    """Generate llms.txt for AI-specific metadata."""
+    """Generate llms.txt for AI-specific metadata.
+
+    Format optimized for line-oriented parsers:
+    - One item per line
+    - Clear section headers
+    - No wrapped lines
+    """
     lean_files = [f for f in files if f["category"] == "Lean Proofs"]
     py_files = [f for f in files if f["category"] == "Python Code"]
     md_files = [f for f in files if f["category"] == "Core Documentation"]
@@ -126,46 +132,35 @@ def generate_llms_txt(files: list, output_path: str):
     content = f"""# QFD-Universe LLM Context
 # Quantum Field Dynamics - Formal Proofs & Validation
 
-## About This Repository
-QFD-Universe is a public mirror of the Quantum Field Dynamics formalization project.
-It contains Lean 4 formal proofs and Python validation scripts.
+# STATISTICS
+total_files: {len(files)}
+lean_proofs: {len(lean_files)}
+python_scripts: {len(py_files)}
+documentation: {len(md_files)}
+proven_theorems: 886
+proven_lemmas: 215
+sorries: 0
 
-## Key Statistics
-- Total Files: {len(files)}
-- Lean Proofs: {len(lean_files)}
-- Python Scripts: {len(py_files)}
-- Documentation: {len(md_files)}
-- Proven Theorems: 886
-- Proven Lemmas: 215
-- Total Proven Statements: 1,101
-- Sorries (incomplete proofs): 0
-
-## Repository Structure
-- /formalization/QFD/ - Lean 4 proofs (Cl(3,3) geometric algebra)
-- /analysis/ - Python validation scripts
-- /simulation/ - Numerical experiments
-- /qfd/ - Core Python library
-- /visualizations/ - Figures and plots
-
-## Key Entry Points
-1. README.md - Project overview
-2. THEORY.md - Physics framework description
-3. LLM_CONTEXT.md - AI assistant briefing
-4. formalization/QFD/ProofLedger.lean - Master claim-to-proof mapping
-5. formalization/QFD/Physics/Postulates.lean - All 11 axioms
-
-## Core Physics Claims
-- Spacetime emerges from Cl(3,3) centralizer structure
-- Mass arises from internal momentum in extra dimensions
-- Fundamental constants (alpha, beta, c, hbar, G) are geometrically related
-- Planck constant derived from topology: hbar = Gamma * lambda * L0 * c
-
-## Raw URL Base
+# RAW URL BASE
+# Prepend this to any path below to get raw file content:
 {RAW_URL}/
 
-## File Index
-# Prepend base URL above to get raw file content
-# Format: path
+# KEY ENTRY POINTS
+README.md
+THEORY.md
+LLM_CONTEXT.md
+CL33_METHODOLOGY.md
+qfd_proof.py
+formalization/QFD/ProofLedger.lean
+formalization/QFD/Physics/Postulates.lean
+formalization/QFD/GoldenLoop.lean
+analysis/scripts/run_all_validations.py
+
+# STRUCTURE
+# /formalization/QFD/ - Lean 4 proofs
+# /analysis/ - Python validation scripts
+# /simulation/ - Numerical experiments
+# /qfd/ - Core Python library
 
 """
 
@@ -179,7 +174,7 @@ It contains Lean 4 formal proofs and Python validation scripts.
 
     for cat in ["Core Documentation", "Lean Proofs", "Python Code", "LaTeX Manuscripts", "Other"]:
         if cat in by_cat:
-            content += f"\n### {cat}\n"
+            content += f"\n# {cat.upper()} ({len(by_cat[cat])} files)\n"
             for path in by_cat[cat]:
                 content += f"{path}\n"
 
@@ -392,6 +387,30 @@ Sitemap: {PAGES_URL}/sitemap.xml
     with open(output_path, "w") as f:
         f.write(content)
 
+def update_file_counts(repo_root: Path, file_count: int):
+    """Update file counts in README.md and LLM_CONTEXT.md for consistency."""
+    import re
+
+    # Update README.md - find patterns like "for all 362 files" or "(362 files)"
+    readme_path = repo_root / "README.md"
+    if readme_path.exists():
+        content = readme_path.read_text()
+        # Replace patterns like "all 362 files" or "(362 files)" with actual count
+        content = re.sub(r'all \d+ files', f'all {file_count} files', content)
+        content = re.sub(r'\(\d+ files\)', f'({file_count} files)', content)
+        readme_path.write_text(content)
+        print(f"Updated README.md with file count: {file_count}")
+
+    # Update LLM_CONTEXT.md
+    llm_context_path = repo_root / "LLM_CONTEXT.md"
+    if llm_context_path.exists():
+        content = llm_context_path.read_text()
+        content = re.sub(r'all \d+ files', f'all {file_count} files', content)
+        content = re.sub(r'contains all \d+ files', f'contains all {file_count} files', content)
+        llm_context_path.write_text(content)
+        print(f"Updated LLM_CONTEXT.md with file count: {file_count}")
+
+
 def main():
     # Get repository root (parent of docs/)
     script_dir = Path(__file__).parent
@@ -416,6 +435,9 @@ def main():
 
     print("Generating robots.txt...")
     generate_robots_txt(docs_dir / "robots.txt")
+
+    print("Updating file counts in documentation...")
+    update_file_counts(repo_root, len(files))
 
     print("Done! GitHub Pages files generated in docs/")
 
