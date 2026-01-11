@@ -46,6 +46,12 @@ All subsequent proofs must derive from these definitions without introducing new
 /-- The Fine Structure Constant is the primary input. -/
 noncomputable def alpha_qfd : ℝ := 1 / 137.035999
 
+/-- The Golden Ratio φ = (1 + √5)/2 -/
+noncomputable def phi_qfd : ℝ := (1 + Real.sqrt 5) / 2
+
+/-- Surface tension coupling ξ = φ² = φ + 1 -/
+noncomputable def xi_qfd : ℝ := phi_qfd ^ 2
+
 /-- The Golden Loop Relation (Axiom):
 Beta is not free; it is the unique root of this transcendental stability equation.
 Derivation: Chapter 12.1.3 "The Golden Loop" -/
@@ -256,6 +262,14 @@ structure PhysicalSystem where
 
 /-- Placeholder: total lepton number of a state. -/
 def total_lepton_num : ℕ → ℤ := fun n => (n : ℤ)
+
+/-- Vacuum correlation length R_vac = 1/√5 (in units of electron radius). -/
+noncomputable def R_vac_qfd : ℝ := 1 / Real.sqrt 5
+
+/-- Scale-dependent Hessian V₄(R) = ((R_vac - R)/(R_vac + R)) × (ξ/β).
+This Möbius transform naturally produces the sign flip between electron and muon. -/
+noncomputable def V4_geometric (R : ℝ) (beta : ℝ) : ℝ :=
+  ((R_vac_qfd - R) / (R_vac_qfd + R)) * (QFD.xi_qfd / beta)
 
 /-- Placeholder for lepton type. -/
 structure Lepton where
