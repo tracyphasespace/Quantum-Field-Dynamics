@@ -18,6 +18,27 @@ https://tracyphasespace.github.io/QFD-Universe/files.json
 
 **Quantum Field Dynamics: A Parameter-Free Framework for Fundamental Physics**
 
+## Raw File URLs (For AI/Browser Tools)
+
+GitHub's JavaScript UI doesn't work for all tools. Use these direct URLs:
+
+| File | Direct Raw URL |
+|------|----------------|
+| **File Index** | https://tracyphasespace.github.io/QFD-Universe/llms.txt |
+| **This README** | https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/README.md |
+| **Theory Doc** | https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/THEORY.md |
+| **Methodology** | https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/CL33_METHODOLOGY.md |
+| **LLM Context** | https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/LLM_CONTEXT.md |
+| **Zero-Dep Proof** | https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/qfd_proof.py |
+| **Validation Suite** | https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/run_all_validations.py |
+| **Golden Loop** | https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GoldenLoop.lean |
+| **g-2 Proof** | https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/GeometricG2.lean |
+| **All 11 Axioms** | https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Physics/Postulates.lean |
+
+**Base URL pattern**: `https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/{path}`
+
+**Full file index**: Fetch https://tracyphasespace.github.io/QFD-Universe/llms.txt for all 362 files
+
 [![Lean4](https://img.shields.io/badge/Lean4-886_Theorems-green)](formalization/)
 [![Validation](https://img.shields.io/badge/Tests-17%2F17_Passed-brightgreen)](analysis/scripts/)
 [![Python](https://img.shields.io/badge/Python-3.9+-blue)](simulation/)
