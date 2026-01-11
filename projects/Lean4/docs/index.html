@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QFD-Universe - AI-Browsable Index</title>
+    <meta name="description" content="Quantum Field Dynamics formal proofs and validation. 361 files, 1,101 proven statements.">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --fg: #c9d1d9;
+            --accent: #58a6ff;
+            --border: #30363d;
+            --card-bg: #161b22;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2, h3 { color: #fff; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        .category {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 20px 0;
+            padding: 20px;
+        }
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px;
+        }
+        .file {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 0.9em;
+        }
+        .file-path {
+            word-break: break-all;
+        }
+        .file-meta {
+            color: #8b949e;
+            font-size: 0.8em;
+        }
+        .ai-note {
+            background: #1f6feb20;
+            border: 1px solid #1f6feb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        code {
+            background: var(--card-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+        }
+        .search {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--fg);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>QFD-Universe</h1>
+    <p>Quantum Field Dynamics - Formal Proofs & Validation</p>
+
+    <div class="ai-note">
+        <strong>For AI Crawlers:</strong> This index is optimized for AI browsing.
+        All files are accessible via raw GitHub URLs. See
+        <a href="llms.txt">llms.txt</a> for AI-specific metadata or
+        <a href="files.json">files.json</a> for machine-readable index.
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value">361</div>
+            <div>Total Files</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">242</div>
+            <div>Lean Proofs</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">1,101</div>
+            <div>Proven Statements</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">0</div>
+            <div>Incomplete (sorries)</div>
+        </div>
+    </div>
+
+    <h2>Quick Access</h2>
+    <ul>
+        <li><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/README.md">README.md</a> - Project overview</li>
+        <li><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/THEORY.md">THEORY.md</a> - Physics framework</li>
+        <li><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/LLM_CONTEXT.md">LLM_CONTEXT.md</a> - AI briefing</li>
+        <li><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/ProofLedger.lean">ProofLedger.lean</a> - Claim-to-proof mapping</li>
+        <li><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Physics/Postulates.lean">Postulates.lean</a> - All 11 axioms</li>
+    </ul>
+
+    <input type="text" class="search" id="search" placeholder="Search files..." onkeyup="filterFiles()">
+
+    <div class="category">
+        <h2>Core Documentation (72 files)</h2>
+        <div class="file-list">
+            <div class="file" data-path="llm_context.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/LLM_CONTEXT.md">LLM_CONTEXT.md</a></div>
+                <div class="file-meta">13.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/LLM_CONTEXT.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="readme.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/README.md">README.md</a></div>
+                <div class="file-meta">15.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/README.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="theory.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/THEORY.md">THEORY.md</a></div>
+                <div class="file-meta">15.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/THEORY.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/nuclear/readme.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/nuclear/README.md">analysis/nuclear/README.md</a></div>
+                <div class="file-meta">2.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/nuclear/README.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/reports/final_validation_report.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/reports/FINAL_VALIDATION_REPORT.md">analysis/reports/FINAL_VALIDATION_REPORT.md</a></div>
+                <div class="file-meta">3.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/reports/FINAL_VALIDATION_REPORT.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/agents.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/AGENTS.md">formalization/QFD/AGENTS.md</a></div>
+                <div class="file-meta">2.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/AGENTS.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/axiom_audit.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/AXIOM_AUDIT.md">formalization/QFD/AXIOM_AUDIT.md</a></div>
+                <div class="file-meta">10.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/AXIOM_AUDIT.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/atomic/atomic_spectroscopy_complete.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Atomic/ATOMIC_SPECTROSCOPY_COMPLETE.md">formalization/QFD/Atomic/ATOMIC_SPECTROSCOPY_COMPLETE.md</a></div>
+                <div class="file-meta">23.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Atomic/ATOMIC_SPECTROSCOPY_COMPLETE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/atomic/resonance_dynamics_integration.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Atomic/RESONANCE_DYNAMICS_INTEGRATION.md">formalization/QFD/Atomic/RESONANCE_DYNAMICS_INTEGRATION.md</a></div>
+                <div class="file-meta">13.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Atomic/RESONANCE_DYNAMICS_INTEGRATION.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/build_status_2026_01_04.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/BUILD_STATUS_2026_01_04.md">formalization/QFD/BUILD_STATUS_2026_01_04.md</a></div>
+                <div class="file-meta">6.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/BUILD_STATUS_2026_01_04.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/build_status_2026_01_04_continued.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/BUILD_STATUS_2026_01_04_CONTINUED.md">formalization/QFD/BUILD_STATUS_2026_01_04_CONTINUED.md</a></div>
+                <div class="file-meta">7.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/BUILD_STATUS_2026_01_04_CONTINUED.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/complete_guide.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/COMPLETE_GUIDE.md">formalization/QFD/COMPLETE_GUIDE.md</a></div>
+                <div class="file-meta">23.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/COMPLETE_GUIDE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/complete_status_2026_01_04.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/COMPLETE_STATUS_2026_01_04.md">formalization/QFD/COMPLETE_STATUS_2026_01_04.md</a></div>
+                <div class="file-meta">21.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/COMPLETE_STATUS_2026_01_04.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/concern_categories.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/CONCERN_CATEGORIES.md">formalization/QFD/CONCERN_CATEGORIES.md</a></div>
+                <div class="file-meta">14.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/CONCERN_CATEGORIES.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/conservation/neutrinoid_patch.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Conservation/NeutrinoID_Patch.md">formalization/QFD/Conservation/NeutrinoID_Patch.md</a></div>
+                <div class="file-meta">2.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Conservation/NeutrinoID_Patch.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/completion_summary.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/COMPLETION_SUMMARY.md">formalization/QFD/Cosmology/COMPLETION_SUMMARY.md</a></div>
+                <div class="file-meta">8.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/COMPLETION_SUMMARY.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/deliverables_summary.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/DELIVERABLES_SUMMARY.md">formalization/QFD/Cosmology/DELIVERABLES_SUMMARY.md</a></div>
+                <div class="file-meta">10.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/DELIVERABLES_SUMMARY.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/kdv_scattering_integration.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/KDV_SCATTERING_INTEGRATION.md">formalization/QFD/Cosmology/KDV_SCATTERING_INTEGRATION.md</a></div>
+                <div class="file-meta">13.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/KDV_SCATTERING_INTEGRATION.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/manuscript_update_notes.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/MANUSCRIPT_UPDATE_NOTES.md">formalization/QFD/Cosmology/MANUSCRIPT_UPDATE_NOTES.md</a></div>
+                <div class="file-meta">10.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/MANUSCRIPT_UPDATE_NOTES.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/paper_integration_guide.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/PAPER_INTEGRATION_GUIDE.md">formalization/QFD/Cosmology/PAPER_INTEGRATION_GUIDE.md</a></div>
+                <div class="file-meta">14.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/PAPER_INTEGRATION_GUIDE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/pre_submission_test.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/PRE_SUBMISSION_TEST.md">formalization/QFD/Cosmology/PRE_SUBMISSION_TEST.md</a></div>
+                <div class="file-meta">5.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/PRE_SUBMISSION_TEST.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/readme_formalization_status.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/README_FORMALIZATION_STATUS.md">formalization/QFD/Cosmology/README_FORMALIZATION_STATUS.md</a></div>
+                <div class="file-meta">56.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/README_FORMALIZATION_STATUS.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/definition_index.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/DEFINITION_INDEX.md">formalization/QFD/DEFINITION_INDEX.md</a></div>
+                <div class="file-meta">32.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/DEFINITION_INDEX.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/dflow_quickstart.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/DFLOW_QUICKSTART.md">formalization/QFD/DFLOW_QUICKSTART.md</a></div>
+                <div class="file-meta">7.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/DFLOW_QUICKSTART.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/documentation_cleanup_2026_01_04.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/DOCUMENTATION_CLEANUP_2026_01_04.md">formalization/QFD/DOCUMENTATION_CLEANUP_2026_01_04.md</a></div>
+                <div class="file-meta">4.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/DOCUMENTATION_CLEANUP_2026_01_04.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/final_leg_modules_2026_01_04.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/FINAL_LEG_MODULES_2026_01_04.md">formalization/QFD/FINAL_LEG_MODULES_2026_01_04.md</a></div>
+                <div class="file-meta">16.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/FINAL_LEG_MODULES_2026_01_04.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/formalization_completion_report.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/FORMALIZATION_COMPLETION_REPORT.md">formalization/QFD/FORMALIZATION_COMPLETION_REPORT.md</a></div>
+                <div class="file-meta">33.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/FORMALIZATION_COMPLETION_REPORT.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/hodge_dual_completion.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/HODGE_DUAL_COMPLETION.md">formalization/QFD/GA/HODGE_DUAL_COMPLETION.md</a></div>
+                <div class="file-meta">4.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/HODGE_DUAL_COMPLETION.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/phase_centralizer_complete.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/PHASE_CENTRALIZER_COMPLETE.md">formalization/QFD/GA/PHASE_CENTRALIZER_COMPLETE.md</a></div>
+                <div class="file-meta">10.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/PHASE_CENTRALIZER_COMPLETE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/phase_centralizer_integration.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/PHASE_CENTRALIZER_INTEGRATION.md">formalization/QFD/GA/PHASE_CENTRALIZER_INTEGRATION.md</a></div>
+                <div class="file-meta">8.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/PHASE_CENTRALIZER_INTEGRATION.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/golden_loop_overdetermination.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GOLDEN_LOOP_OVERDETERMINATION.md">formalization/QFD/GOLDEN_LOOP_OVERDETERMINATION.md</a></div>
+                <div class="file-meta">4.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GOLDEN_LOOP_OVERDETERMINATION.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/grand_solver_architecture.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GRAND_SOLVER_ARCHITECTURE.md">formalization/QFD/GRAND_SOLVER_ARCHITECTURE.md</a></div>
+                <div class="file-meta">14.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GRAND_SOLVER_ARCHITECTURE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/geodesic_equivalence_complete.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/GEODESIC_EQUIVALENCE_COMPLETE.md">formalization/QFD/Gravity/GEODESIC_EQUIVALENCE_COMPLETE.md</a></div>
+                <div class="file-meta">8.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/GEODESIC_EQUIVALENCE_COMPLETE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/hydrogen/soliton_mechanism.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Hydrogen/SOLITON_MECHANISM.md">formalization/QFD/Hydrogen/SOLITON_MECHANISM.md</a></div>
+                <div class="file-meta">13.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Hydrogen/SOLITON_MECHANISM.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/instructions.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Instructions.md">formalization/QFD/Instructions.md</a></div>
+                <div class="file-meta">2.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Instructions.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lean_python_crossref.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/LEAN_PYTHON_CROSSREF.md">formalization/QFD/LEAN_PYTHON_CROSSREF.md</a></div>
+                <div class="file-meta">17.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/LEAN_PYTHON_CROSSREF.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/anomalous_moment_complete.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/ANOMALOUS_MOMENT_COMPLETE.md">formalization/QFD/Lepton/ANOMALOUS_MOMENT_COMPLETE.md</a></div>
+                <div class="file-meta">8.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/ANOMALOUS_MOMENT_COMPLETE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/anomalous_moment_status.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/ANOMALOUS_MOMENT_STATUS.md">formalization/QFD/Lepton/ANOMALOUS_MOMENT_STATUS.md</a></div>
+                <div class="file-meta">8.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/ANOMALOUS_MOMENT_STATUS.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/completion_report_dec28.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/COMPLETION_REPORT_DEC28.md">formalization/QFD/Lepton/COMPLETION_REPORT_DEC28.md</a></div>
+                <div class="file-meta">11.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/COMPLETION_REPORT_DEC28.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/guardrail_modules_summary.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/GUARDRAIL_MODULES_SUMMARY.md">formalization/QFD/Lepton/GUARDRAIL_MODULES_SUMMARY.md</a></div>
+                <div class="file-meta">5.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/GUARDRAIL_MODULES_SUMMARY.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/koide_proof_scope.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/KOIDE_PROOF_SCOPE.md">formalization/QFD/Lepton/KOIDE_PROOF_SCOPE.md</a></div>
+                <div class="file-meta">6.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/KOIDE_PROOF_SCOPE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/koide_summary.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/KOIDE_SUMMARY.md">formalization/QFD/Lepton/KOIDE_SUMMARY.md</a></div>
+                <div class="file-meta">6.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/KOIDE_SUMMARY.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/session_summary_dec28.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/SESSION_SUMMARY_DEC28.md">formalization/QFD/Lepton/SESSION_SUMMARY_DEC28.md</a></div>
+                <div class="file-meta">7.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/SESSION_SUMMARY_DEC28.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/transparency.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/TRANSPARENCY.md">formalization/QFD/Lepton/TRANSPARENCY.md</a></div>
+                <div class="file-meta">5.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/TRANSPARENCY.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/vortex_stability_complete.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/VORTEX_STABILITY_COMPLETE.md">formalization/QFD/Lepton/VORTEX_STABILITY_COMPLETE.md</a></div>
+                <div class="file-meta">6.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/VORTEX_STABILITY_COMPLETE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/vortex_stability_status.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/VORTEX_STABILITY_STATUS.md">formalization/QFD/Lepton/VORTEX_STABILITY_STATUS.md</a></div>
+                <div class="file-meta">10.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/VORTEX_STABILITY_STATUS.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/mass_energy_density_shield.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/MASS_ENERGY_DENSITY_SHIELD.md">formalization/QFD/MASS_ENERGY_DENSITY_SHIELD.md</a></div>
+                <div class="file-meta">10.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/MASS_ENERGY_DENSITY_SHIELD.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/chapter14_proof_architecture.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/CHAPTER14_PROOF_ARCHITECTURE.md">formalization/QFD/Nuclear/CHAPTER14_PROOF_ARCHITECTURE.md</a></div>
+                <div class="file-meta">20.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/CHAPTER14_PROOF_ARCHITECTURE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/corecompressionlaw_complete.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/CORECOMPRESSIONLAW_COMPLETE.md">formalization/QFD/Nuclear/CORECOMPRESSIONLAW_COMPLETE.md</a></div>
+                <div class="file-meta">12.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/CORECOMPRESSIONLAW_COMPLETE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/corecompressionlaw_enhancements.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/CORECOMPRESSIONLAW_ENHANCEMENTS.md">formalization/QFD/Nuclear/CORECOMPRESSIONLAW_ENHANCEMENTS.md</a></div>
+                <div class="file-meta">12.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/CORECOMPRESSIONLAW_ENHANCEMENTS.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/corecompressionlaw_phase2_complete.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/CORECOMPRESSIONLAW_PHASE2_COMPLETE.md">formalization/QFD/Nuclear/CORECOMPRESSIONLAW_PHASE2_COMPLETE.md</a></div>
+                <div class="file-meta">6.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/CORECOMPRESSIONLAW_PHASE2_COMPLETE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/corecompression_status.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/CORECOMPRESSION_STATUS.md">formalization/QFD/Nuclear/CORECOMPRESSION_STATUS.md</a></div>
+                <div class="file-meta">4.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/CORECOMPRESSION_STATUS.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/test_verification.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/TEST_VERIFICATION.md">formalization/QFD/Nuclear/TEST_VERIFICATION.md</a></div>
+                <div class="file-meta">6.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/TEST_VERIFICATION.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/proof_index.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/PROOF_INDEX.md">formalization/QFD/PROOF_INDEX.md</a></div>
+                <div class="file-meta">17.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/PROOF_INDEX.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/proof_summary_update_2026_01_04.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/PROOF_SUMMARY_UPDATE_2026_01_04.md">formalization/QFD/PROOF_SUMMARY_UPDATE_2026_01_04.md</a></div>
+                <div class="file-meta">10.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/PROOF_SUMMARY_UPDATE_2026_01_04.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/proof_summary.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Proof_Summary.md">formalization/QFD/Proof_Summary.md</a></div>
+                <div class="file-meta">16.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Proof_Summary.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/quick_wins_complete.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QUICK_WINS_COMPLETE.md">formalization/QFD/QUICK_WINS_COMPLETE.md</a></div>
+                <div class="file-meta">9.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QUICK_WINS_COMPLETE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/readme.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/README.md">formalization/QFD/README.md</a></div>
+                <div class="file-meta">6.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/README.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/reorganization_summary.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/REORGANIZATION_SUMMARY.md">formalization/QFD/REORGANIZATION_SUMMARY.md</a></div>
+                <div class="file-meta">10.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/REORGANIZATION_SUMMARY.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/rift/readme.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Rift/README.md">formalization/QFD/Rift/README.md</a></div>
+                <div class="file-meta">10.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Rift/README.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/session_summary_2026_01_04_c.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/SESSION_SUMMARY_2026_01_04_C.md">formalization/QFD/SESSION_SUMMARY_2026_01_04_C.md</a></div>
+                <div class="file-meta">11.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/SESSION_SUMMARY_2026_01_04_C.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/session_summary_2026_01_04_d.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/SESSION_SUMMARY_2026_01_04_D.md">formalization/QFD/SESSION_SUMMARY_2026_01_04_D.md</a></div>
+                <div class="file-meta">21.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/SESSION_SUMMARY_2026_01_04_D.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/sorry_elimination_plan.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/SORRY_ELIMINATION_PLAN.md">formalization/QFD/SORRY_ELIMINATION_PLAN.md</a></div>
+                <div class="file-meta">19.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/SORRY_ELIMINATION_PLAN.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/refactored_approach.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/REFACTORED_APPROACH.md">formalization/QFD/Soliton/REFACTORED_APPROACH.md</a></div>
+                <div class="file-meta">8.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/REFACTORED_APPROACH.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/sorry_audit.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/SORRY_AUDIT.md">formalization/QFD/Soliton/SORRY_AUDIT.md</a></div>
+                <div class="file-meta">8.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/SORRY_AUDIT.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/topological_stability_status.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/TOPOLOGICAL_STABILITY_STATUS.md">formalization/QFD/Soliton/TOPOLOGICAL_STABILITY_STATUS.md</a></div>
+                <div class="file-meta">8.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/TOPOLOGICAL_STABILITY_STATUS.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/transcendental_verification.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/TRANSCENDENTAL_VERIFICATION.md">formalization/QFD/TRANSCENDENTAL_VERIFICATION.md</a></div>
+                <div class="file-meta">6.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/TRANSCENDENTAL_VERIFICATION.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/transparency_summary.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/TRANSPARENCY_SUMMARY.md">formalization/QFD/TRANSPARENCY_SUMMARY.md</a></div>
+                <div class="file-meta">2.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/TRANSPARENCY_SUMMARY.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/unifiedforces_complete.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/UNIFIEDFORCES_COMPLETE.md">formalization/QFD/UNIFIEDFORCES_COMPLETE.md</a></div>
+                <div class="file-meta">9.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/UNIFIEDFORCES_COMPLETE.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/unifiedforces_status.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/UNIFIEDFORCES_STATUS.md">formalization/QFD/UNIFIEDFORCES_STATUS.md</a></div>
+                <div class="file-meta">5.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/UNIFIEDFORCES_STATUS.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/vacuum/vacuum_hydrodynamics_integration.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Vacuum/VACUUM_HYDRODYNAMICS_INTEGRATION.md">formalization/QFD/Vacuum/VACUUM_HYDRODYNAMICS_INTEGRATION.md</a></div>
+                <div class="file-meta">14.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Vacuum/VACUUM_HYDRODYNAMICS_INTEGRATION.md">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="visualizations/readme.md">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/visualizations/README.md">visualizations/README.md</a></div>
+                <div class="file-meta">10.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/visualizations/README.md">View on GitHub</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <h2>LaTeX Manuscripts (2 files)</h2>
+        <div class="file-list">
+            <div class="file" data-path="formalization/qfd/cosmology/cmb_axisofevil_complete_v1.1.tex">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/CMB_AxisOfEvil_COMPLETE_v1.1.tex">formalization/QFD/Cosmology/CMB_AxisOfEvil_COMPLETE_v1.1.tex</a></div>
+                <div class="file-meta">24.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/CMB_AxisOfEvil_COMPLETE_v1.1.tex">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/paper_template_with_formalization.tex">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/PAPER_TEMPLATE_WITH_FORMALIZATION.tex">formalization/QFD/Cosmology/PAPER_TEMPLATE_WITH_FORMALIZATION.tex</a></div>
+                <div class="file-meta">12.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/PAPER_TEMPLATE_WITH_FORMALIZATION.tex">View on GitHub</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <h2>Lean Proofs (242 files)</h2>
+        <div class="file-list">
+            <div class="file" data-path="formalization/qfd.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD.lean">formalization/QFD.lean</a></div>
+                <div class="file-meta">4.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/adjointstability_complete.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/AdjointStability_Complete.lean">formalization/QFD/AdjointStability_Complete.lean</a></div>
+                <div class="file-meta">8.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/AdjointStability_Complete.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/angularselection.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/AngularSelection.lean">formalization/QFD/AngularSelection.lean</a></div>
+                <div class="file-meta">4.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/AngularSelection.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/atomic/chaoscore.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Atomic/ChaosCore.lean">formalization/QFD/Atomic/ChaosCore.lean</a></div>
+                <div class="file-meta">0.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Atomic/ChaosCore.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/atomic/lyapunovcore.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Atomic/LyapunovCore.lean">formalization/QFD/Atomic/LyapunovCore.lean</a></div>
+                <div class="file-meta">0.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Atomic/LyapunovCore.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/atomic/lyapunovinstability.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Atomic/LyapunovInstability.lean">formalization/QFD/Atomic/LyapunovInstability.lean</a></div>
+                <div class="file-meta">4.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Atomic/LyapunovInstability.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/atomic/resonancedynamics.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Atomic/ResonanceDynamics.lean">formalization/QFD/Atomic/ResonanceDynamics.lean</a></div>
+                <div class="file-meta">6.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Atomic/ResonanceDynamics.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/atomic/resonancedynamicscore.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Atomic/ResonanceDynamicsCore.lean">formalization/QFD/Atomic/ResonanceDynamicsCore.lean</a></div>
+                <div class="file-meta">0.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Atomic/ResonanceDynamicsCore.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/atomic/spinorbitchaos.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Atomic/SpinOrbitChaos.lean">formalization/QFD/Atomic/SpinOrbitChaos.lean</a></div>
+                <div class="file-meta">6.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Atomic/SpinOrbitChaos.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/bivectorclasses_complete.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/BivectorClasses_Complete.lean">formalization/QFD/BivectorClasses_Complete.lean</a></div>
+                <div class="file-meta">11.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/BivectorClasses_Complete.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/blackhole/blackhole_saturation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/BlackHole/BlackHole_Saturation.lean">formalization/QFD/BlackHole/BlackHole_Saturation.lean</a></div>
+                <div class="file-meta">3.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/BlackHole/BlackHole_Saturation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/blackhole/saturationlimit.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/BlackHole/SaturationLimit.lean">formalization/QFD/BlackHole/SaturationLimit.lean</a></div>
+                <div class="file-meta">11.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/BlackHole/SaturationLimit.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/charge/asymptotic_charge_fraction.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Charge/Asymptotic_Charge_Fraction.lean">formalization/QFD/Charge/Asymptotic_Charge_Fraction.lean</a></div>
+                <div class="file-meta">1.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Charge/Asymptotic_Charge_Fraction.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/charge/coulomb.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Charge/Coulomb.lean">formalization/QFD/Charge/Coulomb.lean</a></div>
+                <div class="file-meta">3.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Charge/Coulomb.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/charge/potential.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Charge/Potential.lean">formalization/QFD/Charge/Potential.lean</a></div>
+                <div class="file-meta">3.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Charge/Potential.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/charge/quantization.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Charge/Quantization.lean">formalization/QFD/Charge/Quantization.lean</a></div>
+                <div class="file-meta">3.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Charge/Quantization.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/charge/shelltheorem.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Charge/ShellTheorem.lean">formalization/QFD/Charge/ShellTheorem.lean</a></div>
+                <div class="file-meta">4.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Charge/ShellTheorem.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/charge/vacuum.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Charge/Vacuum.lean">formalization/QFD/Charge/Vacuum.lean</a></div>
+                <div class="file-meta">2.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Charge/Vacuum.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cl33importtest.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cl33ImportTest.lean">formalization/QFD/Cl33ImportTest.lean</a></div>
+                <div class="file-meta">0.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cl33ImportTest.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/classical/conservation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Classical/Conservation.lean">formalization/QFD/Classical/Conservation.lean</a></div>
+                <div class="file-meta">7.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Classical/Conservation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/conservation/neutrinoid.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Conservation/NeutrinoID.lean">formalization/QFD/Conservation/NeutrinoID.lean</a></div>
+                <div class="file-meta">13.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Conservation/NeutrinoID.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/conservation/neutrinoid_automated.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Conservation/NeutrinoID_Automated.lean">formalization/QFD/Conservation/NeutrinoID_Automated.lean</a></div>
+                <div class="file-meta">1.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Conservation/NeutrinoID_Automated.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/conservation/neutrinoid_fixed.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Conservation/NeutrinoID_Fixed.lean">formalization/QFD/Conservation/NeutrinoID_Fixed.lean</a></div>
+                <div class="file-meta">9.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Conservation/NeutrinoID_Fixed.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/conservation/neutrinoid_production.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Conservation/NeutrinoID_Production.lean">formalization/QFD/Conservation/NeutrinoID_Production.lean</a></div>
+                <div class="file-meta">5.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Conservation/NeutrinoID_Production.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/conservation/neutrinoid_simple.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Conservation/NeutrinoID_Simple.lean">formalization/QFD/Conservation/NeutrinoID_Simple.lean</a></div>
+                <div class="file-meta">3.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Conservation/NeutrinoID_Simple.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/conservation/neutrinomixing.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Conservation/NeutrinoMixing.lean">formalization/QFD/Conservation/NeutrinoMixing.lean</a></div>
+                <div class="file-meta">1.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Conservation/NeutrinoMixing.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/conservation/noether.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Conservation/Noether.lean">formalization/QFD/Conservation/Noether.lean</a></div>
+                <div class="file-meta">6.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Conservation/Noether.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/conservation/unitarity.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Conservation/Unitarity.lean">formalization/QFD/Conservation/Unitarity.lean</a></div>
+                <div class="file-meta">5.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Conservation/Unitarity.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/axisextraction.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/AxisExtraction.lean">formalization/QFD/Cosmology/AxisExtraction.lean</a></div>
+                <div class="file-meta">18.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/AxisExtraction.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/axisextraction_original_backup.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/AxisExtraction_original_backup.lean">formalization/QFD/Cosmology/AxisExtraction_original_backup.lean</a></div>
+                <div class="file-meta">18.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/AxisExtraction_original_backup.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/coaxialalignment.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/CoaxialAlignment.lean">formalization/QFD/Cosmology/CoaxialAlignment.lean</a></div>
+                <div class="file-meta">6.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/CoaxialAlignment.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/coaxialalignment_original_backup.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/CoaxialAlignment_original_backup.lean">formalization/QFD/Cosmology/CoaxialAlignment_original_backup.lean</a></div>
+                <div class="file-meta">6.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/CoaxialAlignment_original_backup.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/galacticscaling.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/GalacticScaling.lean">formalization/QFD/Cosmology/GalacticScaling.lean</a></div>
+                <div class="file-meta">10.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/GalacticScaling.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/hubbledrift.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/HubbleDrift.lean">formalization/QFD/Cosmology/HubbleDrift.lean</a></div>
+                <div class="file-meta">0.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/HubbleDrift.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/kernelaxis.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/KernelAxis.lean">formalization/QFD/Cosmology/KernelAxis.lean</a></div>
+                <div class="file-meta">4.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/KernelAxis.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/lightcurvestretch.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/LightCurveStretch.lean">formalization/QFD/Cosmology/LightCurveStretch.lean</a></div>
+                <div class="file-meta">7.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/LightCurveStretch.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/octupoleextraction.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/OctupoleExtraction.lean">formalization/QFD/Cosmology/OctupoleExtraction.lean</a></div>
+                <div class="file-meta">8.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/OctupoleExtraction.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/photonscatteringkdv.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/PhotonScatteringKdV.lean">formalization/QFD/Cosmology/PhotonScatteringKdV.lean</a></div>
+                <div class="file-meta">9.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/PhotonScatteringKdV.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/polarization.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/Polarization.lean">formalization/QFD/Cosmology/Polarization.lean</a></div>
+                <div class="file-meta">16.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/Polarization.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/radiativetransfer.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/RadiativeTransfer.lean">formalization/QFD/Cosmology/RadiativeTransfer.lean</a></div>
+                <div class="file-meta">10.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/RadiativeTransfer.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/realtimecosmology.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/RealTimeCosmology.lean">formalization/QFD/Cosmology/RealTimeCosmology.lean</a></div>
+                <div class="file-meta">0.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/RealTimeCosmology.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/scatteringbias.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/ScatteringBias.lean">formalization/QFD/Cosmology/ScatteringBias.lean</a></div>
+                <div class="file-meta">8.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/ScatteringBias.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/vacuumdensitymatch.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/VacuumDensityMatch.lean">formalization/QFD/Cosmology/VacuumDensityMatch.lean</a></div>
+                <div class="file-meta">10.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/VacuumDensityMatch.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/cosmology/vacuumrefraction.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Cosmology/VacuumRefraction.lean">formalization/QFD/Cosmology/VacuumRefraction.lean</a></div>
+                <div class="file-meta">12.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Cosmology/VacuumRefraction.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electrodynamics/aharonovbohm.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electrodynamics/AharonovBohm.lean">formalization/QFD/Electrodynamics/AharonovBohm.lean</a></div>
+                <div class="file-meta">1.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electrodynamics/AharonovBohm.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electrodynamics/cerenkovreal.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electrodynamics/CerenkovReal.lean">formalization/QFD/Electrodynamics/CerenkovReal.lean</a></div>
+                <div class="file-meta">1.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electrodynamics/CerenkovReal.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electrodynamics/dispersionrelation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electrodynamics/DispersionRelation.lean">formalization/QFD/Electrodynamics/DispersionRelation.lean</a></div>
+                <div class="file-meta">1.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electrodynamics/DispersionRelation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electrodynamics/larmorprecession.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electrodynamics/LarmorPrecession.lean">formalization/QFD/Electrodynamics/LarmorPrecession.lean</a></div>
+                <div class="file-meta">0.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electrodynamics/LarmorPrecession.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electrodynamics/magnetichelicity.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electrodynamics/MagneticHelicity.lean">formalization/QFD/Electrodynamics/MagneticHelicity.lean</a></div>
+                <div class="file-meta">1.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electrodynamics/MagneticHelicity.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electrodynamics/maxwellreal.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electrodynamics/MaxwellReal.lean">formalization/QFD/Electrodynamics/MaxwellReal.lean</a></div>
+                <div class="file-meta">1.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electrodynamics/MaxwellReal.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electrodynamics/nomonopoles.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electrodynamics/NoMonopoles.lean">formalization/QFD/Electrodynamics/NoMonopoles.lean</a></div>
+                <div class="file-meta">0.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electrodynamics/NoMonopoles.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electrodynamics/poyntingtheorem.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electrodynamics/PoyntingTheorem.lean">formalization/QFD/Electrodynamics/PoyntingTheorem.lean</a></div>
+                <div class="file-meta">11.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electrodynamics/PoyntingTheorem.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electrodynamics/procareal.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electrodynamics/ProcaReal.lean">formalization/QFD/Electrodynamics/ProcaReal.lean</a></div>
+                <div class="file-meta">1.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electrodynamics/ProcaReal.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electron/alphacirc.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electron/AlphaCirc.lean">formalization/QFD/Electron/AlphaCirc.lean</a></div>
+                <div class="file-meta">0.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electron/AlphaCirc.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electron/axisalignment.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electron/AxisAlignment.lean">formalization/QFD/Electron/AxisAlignment.lean</a></div>
+                <div class="file-meta">3.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electron/AxisAlignment.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electron/circulationtopology.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electron/CirculationTopology.lean">formalization/QFD/Electron/CirculationTopology.lean</a></div>
+                <div class="file-meta">2.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electron/CirculationTopology.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/electron/hillvortex.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Electron/HillVortex.lean">formalization/QFD/Electron/HillVortex.lean</a></div>
+                <div class="file-meta">4.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Electron/HillVortex.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/emergentalgebra.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/EmergentAlgebra.lean">formalization/QFD/EmergentAlgebra.lean</a></div>
+                <div class="file-meta">11.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/EmergentAlgebra.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/emergentalgebra_heavy.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/EmergentAlgebra_Heavy.lean">formalization/QFD/EmergentAlgebra_Heavy.lean</a></div>
+                <div class="file-meta">13.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/EmergentAlgebra_Heavy.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/empirical/corecompression.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Empirical/CoreCompression.lean">formalization/QFD/Empirical/CoreCompression.lean</a></div>
+                <div class="file-meta">3.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Empirical/CoreCompression.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/basisoperations.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/BasisOperations.lean">formalization/QFD/GA/BasisOperations.lean</a></div>
+                <div class="file-meta">1.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/BasisOperations.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/basisproducts.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/BasisProducts.lean">formalization/QFD/GA/BasisProducts.lean</a></div>
+                <div class="file-meta">16.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/BasisProducts.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/basisreduction.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/BasisReduction.lean">formalization/QFD/GA/BasisReduction.lean</a></div>
+                <div class="file-meta">7.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/BasisReduction.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/cl33.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/Cl33.lean">formalization/QFD/GA/Cl33.lean</a></div>
+                <div class="file-meta">12.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/Cl33.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/cl33instances.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/Cl33Instances.lean">formalization/QFD/GA/Cl33Instances.lean</a></div>
+                <div class="file-meta">2.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/Cl33Instances.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/cl33_minimal.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/Cl33_Minimal.lean">formalization/QFD/GA/Cl33_Minimal.lean</a></div>
+                <div class="file-meta">0.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/Cl33_Minimal.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/conjugation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/Conjugation.lean">formalization/QFD/GA/Conjugation.lean</a></div>
+                <div class="file-meta">2.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/Conjugation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/gradeprojection.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/GradeProjection.lean">formalization/QFD/GA/GradeProjection.lean</a></div>
+                <div class="file-meta">1.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/GradeProjection.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/hodgedual.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/HodgeDual.lean">formalization/QFD/GA/HodgeDual.lean</a></div>
+                <div class="file-meta">3.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/HodgeDual.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/multivectorgrade.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/MultivectorGrade.lean">formalization/QFD/GA/MultivectorGrade.lean</a></div>
+                <div class="file-meta">2.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/MultivectorGrade.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/phasecentralizer.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/PhaseCentralizer.lean">formalization/QFD/GA/PhaseCentralizer.lean</a></div>
+                <div class="file-meta">7.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/PhaseCentralizer.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/phasecentralizer_original_backup.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/PhaseCentralizer_original_backup.lean">formalization/QFD/GA/PhaseCentralizer_original_backup.lean</a></div>
+                <div class="file-meta">7.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/PhaseCentralizer_original_backup.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/ga/tactics.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GA/Tactics.lean">formalization/QFD/GA/Tactics.lean</a></div>
+                <div class="file-meta">1.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GA/Tactics.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/goldenloop.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/GoldenLoop.lean">formalization/QFD/GoldenLoop.lean</a></div>
+                <div class="file-meta">17.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/GoldenLoop.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/g_derivation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/G_Derivation.lean">formalization/QFD/Gravity/G_Derivation.lean</a></div>
+                <div class="file-meta">0.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/G_Derivation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/geodesicequivalence.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/GeodesicEquivalence.lean">formalization/QFD/Gravity/GeodesicEquivalence.lean</a></div>
+                <div class="file-meta">4.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/GeodesicEquivalence.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/geodesicforce.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/GeodesicForce.lean">formalization/QFD/Gravity/GeodesicForce.lean</a></div>
+                <div class="file-meta">3.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/GeodesicForce.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/geometriccoupling.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/GeometricCoupling.lean">formalization/QFD/Gravity/GeometricCoupling.lean</a></div>
+                <div class="file-meta">8.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/GeometricCoupling.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/geometricprojection_integration.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/GeometricProjection_Integration.lean">formalization/QFD/Gravity/GeometricProjection_Integration.lean</a></div>
+                <div class="file-meta">2.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/GeometricProjection_Integration.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/gravity_projection.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/Gravity_Projection.lean">formalization/QFD/Gravity/Gravity_Projection.lean</a></div>
+                <div class="file-meta">1.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/Gravity_Projection.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/perihelionshift.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/PerihelionShift.lean">formalization/QFD/Gravity/PerihelionShift.lean</a></div>
+                <div class="file-meta">1.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/PerihelionShift.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/schwarzschildlink.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/SchwarzschildLink.lean">formalization/QFD/Gravity/SchwarzschildLink.lean</a></div>
+                <div class="file-meta">3.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/SchwarzschildLink.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/shell_theorem_harmonic.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/Shell_Theorem_Harmonic.lean">formalization/QFD/Gravity/Shell_Theorem_Harmonic.lean</a></div>
+                <div class="file-meta">4.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/Shell_Theorem_Harmonic.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/snelllensing.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/SnellLensing.lean">formalization/QFD/Gravity/SnellLensing.lean</a></div>
+                <div class="file-meta">1.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/SnellLensing.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/gravity/timerefraction.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Gravity/TimeRefraction.lean">formalization/QFD/Gravity/TimeRefraction.lean</a></div>
+                <div class="file-meta">1.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Gravity/TimeRefraction.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/hydrogen/photonresonance.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Hydrogen/PhotonResonance.lean">formalization/QFD/Hydrogen/PhotonResonance.lean</a></div>
+                <div class="file-meta">4.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Hydrogen/PhotonResonance.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/hydrogen/photonscattering.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Hydrogen/PhotonScattering.lean">formalization/QFD/Hydrogen/PhotonScattering.lean</a></div>
+                <div class="file-meta">10.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Hydrogen/PhotonScattering.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/hydrogen/photonsoliton.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Hydrogen/PhotonSoliton.lean">formalization/QFD/Hydrogen/PhotonSoliton.lean</a></div>
+                <div class="file-meta">9.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Hydrogen/PhotonSoliton.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/hydrogen/photonsolitonemergentconstants.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Hydrogen/PhotonSolitonEmergentConstants.lean">formalization/QFD/Hydrogen/PhotonSolitonEmergentConstants.lean</a></div>
+                <div class="file-meta">7.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Hydrogen/PhotonSolitonEmergentConstants.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/hydrogen/photonsolitonstable.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Hydrogen/PhotonSolitonStable.lean">formalization/QFD/Hydrogen/PhotonSolitonStable.lean</a></div>
+                <div class="file-meta">9.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Hydrogen/PhotonSolitonStable.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/hydrogen/photonsoliton_kinematic.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Hydrogen/PhotonSoliton_Kinematic.lean">formalization/QFD/Hydrogen/PhotonSoliton_Kinematic.lean</a></div>
+                <div class="file-meta">4.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Hydrogen/PhotonSoliton_Kinematic.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/hydrogen/speedoflight.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Hydrogen/SpeedOfLight.lean">formalization/QFD/Hydrogen/SpeedOfLight.lean</a></div>
+                <div class="file-meta">7.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Hydrogen/SpeedOfLight.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/hydrogen/topologicalcharge.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Hydrogen/TopologicalCharge.lean">formalization/QFD/Hydrogen/TopologicalCharge.lean</a></div>
+                <div class="file-meta">4.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Hydrogen/TopologicalCharge.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/hydrogen/unifiedforces.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Hydrogen/UnifiedForces.lean">formalization/QFD/Hydrogen/UnifiedForces.lean</a></div>
+                <div class="file-meta">10.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Hydrogen/UnifiedForces.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/hydrogen/unifiedforces_v2.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Hydrogen/UnifiedForces_v2.lean">formalization/QFD/Hydrogen/UnifiedForces_v2.lean</a></div>
+                <div class="file-meta">7.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Hydrogen/UnifiedForces_v2.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/anomalousmoment.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/AnomalousMoment.lean">formalization/QFD/Lepton/AnomalousMoment.lean</a></div>
+                <div class="file-meta">11.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/AnomalousMoment.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/antimatter.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/Antimatter.lean">formalization/QFD/Lepton/Antimatter.lean</a></div>
+                <div class="file-meta">2.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/Antimatter.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/finestructure.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/FineStructure.lean">formalization/QFD/Lepton/FineStructure.lean</a></div>
+                <div class="file-meta">5.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/FineStructure.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/formfactorcore.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/FormFactorCore.lean">formalization/QFD/Lepton/FormFactorCore.lean</a></div>
+                <div class="file-meta">0.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/FormFactorCore.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/formfactors.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/FormFactors.lean">formalization/QFD/Lepton/FormFactors.lean</a></div>
+                <div class="file-meta">1.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/FormFactors.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/generations.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/Generations.lean">formalization/QFD/Lepton/Generations.lean</a></div>
+                <div class="file-meta">6.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/Generations.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/geometricanomaly.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/GeometricAnomaly.lean">formalization/QFD/Lepton/GeometricAnomaly.lean</a></div>
+                <div class="file-meta">9.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/GeometricAnomaly.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/geometricg2.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/GeometricG2.lean">formalization/QFD/Lepton/GeometricG2.lean</a></div>
+                <div class="file-meta">8.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/GeometricG2.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/geometricsignflip.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/GeometricSignFlip.lean">formalization/QFD/Lepton/GeometricSignFlip.lean</a></div>
+                <div class="file-meta">3.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/GeometricSignFlip.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/isomercore.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/IsomerCore.lean">formalization/QFD/Lepton/IsomerCore.lean</a></div>
+                <div class="file-meta">1.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/IsomerCore.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/koidealgebra.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/KoideAlgebra.lean">formalization/QFD/Lepton/KoideAlgebra.lean</a></div>
+                <div class="file-meta">1.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/KoideAlgebra.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/koiderelation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/KoideRelation.lean">formalization/QFD/Lepton/KoideRelation.lean</a></div>
+                <div class="file-meta">12.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/KoideRelation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/leptong2prediction.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/LeptonG2Prediction.lean">formalization/QFD/Lepton/LeptonG2Prediction.lean</a></div>
+                <div class="file-meta">6.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/LeptonG2Prediction.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/leptonisomers.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/LeptonIsomers.lean">formalization/QFD/Lepton/LeptonIsomers.lean</a></div>
+                <div class="file-meta">3.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/LeptonIsomers.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/massfunctional.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/MassFunctional.lean">formalization/QFD/Lepton/MassFunctional.lean</a></div>
+                <div class="file-meta">4.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/MassFunctional.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/massspectrum.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/MassSpectrum.lean">formalization/QFD/Lepton/MassSpectrum.lean</a></div>
+                <div class="file-meta">6.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/MassSpectrum.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/pairproduction.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/PairProduction.lean">formalization/QFD/Lepton/PairProduction.lean</a></div>
+                <div class="file-meta">0.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/PairProduction.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/physics/postulates.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/Physics/Postulates.lean">formalization/QFD/Lepton/Physics/Postulates.lean</a></div>
+                <div class="file-meta">1.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/Physics/Postulates.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/qballstructure.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/QBallStructure.lean">formalization/QFD/Lepton/QBallStructure.lean</a></div>
+                <div class="file-meta">8.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/QBallStructure.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/rvacderivation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/RVacDerivation.lean">formalization/QFD/Lepton/RVacDerivation.lean</a></div>
+                <div class="file-meta">6.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/RVacDerivation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/stabilityguards.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/StabilityGuards.lean">formalization/QFD/Lepton/StabilityGuards.lean</a></div>
+                <div class="file-meta">2.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/StabilityGuards.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/topologicalenergy.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/TopologicalEnergy.lean">formalization/QFD/Lepton/TopologicalEnergy.lean</a></div>
+                <div class="file-meta">3.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/TopologicalEnergy.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/topology.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/Topology.lean">formalization/QFD/Lepton/Topology.lean</a></div>
+                <div class="file-meta">5.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/Topology.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/vortexelectron.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/VortexElectron.lean">formalization/QFD/Lepton/VortexElectron.lean</a></div>
+                <div class="file-meta">1.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/VortexElectron.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/vortexstability.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/VortexStability.lean">formalization/QFD/Lepton/VortexStability.lean</a></div>
+                <div class="file-meta">32.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/VortexStability.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/lepton/vortexstability_v3.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Lepton/VortexStability_v3.lean">formalization/QFD/Lepton/VortexStability_v3.lean</a></div>
+                <div class="file-meta">9.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Lepton/VortexStability_v3.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/math/alphaformfactor.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Math/AlphaFormFactor.lean">formalization/QFD/Math/AlphaFormFactor.lean</a></div>
+                <div class="file-meta">4.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Math/AlphaFormFactor.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/math/betacriticality.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Math/BetaCriticality.lean">formalization/QFD/Math/BetaCriticality.lean</a></div>
+                <div class="file-meta">3.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Math/BetaCriticality.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/math/exp_bounds_analysis.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Math/Exp_Bounds_Analysis.lean">formalization/QFD/Math/Exp_Bounds_Analysis.lean</a></div>
+                <div class="file-meta">6.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Math/Exp_Bounds_Analysis.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/math/function_monotonicity.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Math/Function_Monotonicity.lean">formalization/QFD/Math/Function_Monotonicity.lean</a></div>
+                <div class="file-meta">1.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Math/Function_Monotonicity.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/math/reciprocalineq.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Math/ReciprocalIneq.lean">formalization/QFD/Math/ReciprocalIneq.lean</a></div>
+                <div class="file-meta">3.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Math/ReciprocalIneq.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/math/sin_phase_closure.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Math/Sin_Phase_Closure.lean">formalization/QFD/Math/Sin_Phase_Closure.lean</a></div>
+                <div class="file-meta">1.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Math/Sin_Phase_Closure.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/math/spectralgapbounds.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Math/SpectralGapBounds.lean">formalization/QFD/Math/SpectralGapBounds.lean</a></div>
+                <div class="file-meta">7.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Math/SpectralGapBounds.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/math/vacuumsaturation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Math/VacuumSaturation.lean">formalization/QFD/Math/VacuumSaturation.lean</a></div>
+                <div class="file-meta">1.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Math/VacuumSaturation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/math/vacuumsaturation_aristotle.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Math/VacuumSaturation_aristotle.lean">formalization/QFD/Math/VacuumSaturation_aristotle.lean</a></div>
+                <div class="file-meta">6.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Math/VacuumSaturation_aristotle.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/matter/protontopology.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Matter/ProtonTopology.lean">formalization/QFD/Matter/ProtonTopology.lean</a></div>
+                <div class="file-meta">0.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Matter/ProtonTopology.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/neutrino.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Neutrino.lean">formalization/QFD/Neutrino.lean</a></div>
+                <div class="file-meta">3.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Neutrino.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/neutrinomasstopology.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/NeutrinoMassTopology.lean">formalization/QFD/NeutrinoMassTopology.lean</a></div>
+                <div class="file-meta">9.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/NeutrinoMassTopology.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/neutrino_bleaching.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Neutrino_Bleaching.lean">formalization/QFD/Neutrino_Bleaching.lean</a></div>
+                <div class="file-meta">2.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Neutrino_Bleaching.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/neutrino_chirality.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Neutrino_Chirality.lean">formalization/QFD/Neutrino_Chirality.lean</a></div>
+                <div class="file-meta">5.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Neutrino_Chirality.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/neutrino_massscale.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Neutrino_MassScale.lean">formalization/QFD/Neutrino_MassScale.lean</a></div>
+                <div class="file-meta">3.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Neutrino_MassScale.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/neutrino_minimalrotor.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Neutrino_MinimalRotor.lean">formalization/QFD/Neutrino_MinimalRotor.lean</a></div>
+                <div class="file-meta">7.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Neutrino_MinimalRotor.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/neutrino_oscillation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Neutrino_Oscillation.lean">formalization/QFD/Neutrino_Oscillation.lean</a></div>
+                <div class="file-meta">4.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Neutrino_Oscillation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/neutrino_production.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Neutrino_Production.lean">formalization/QFD/Neutrino_Production.lean</a></div>
+                <div class="file-meta">3.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Neutrino_Production.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/neutrino_topology.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Neutrino_Topology.lean">formalization/QFD/Neutrino_Topology.lean</a></div>
+                <div class="file-meta">2.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Neutrino_Topology.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/alphanderivation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/AlphaNDerivation.lean">formalization/QFD/Nuclear/AlphaNDerivation.lean</a></div>
+                <div class="file-meta">6.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/AlphaNDerivation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/alphanderivation_complete.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/AlphaNDerivation_Complete.lean">formalization/QFD/Nuclear/AlphaNDerivation_Complete.lean</a></div>
+                <div class="file-meta">6.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/AlphaNDerivation_Complete.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/betangammaederivation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/BetaNGammaEDerivation.lean">formalization/QFD/Nuclear/BetaNGammaEDerivation.lean</a></div>
+                <div class="file-meta">9.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/BetaNGammaEDerivation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/betangammaederivation_complete.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/BetaNGammaEDerivation_Complete.lean">formalization/QFD/Nuclear/BetaNGammaEDerivation_Complete.lean</a></div>
+                <div class="file-meta">9.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/BetaNGammaEDerivation_Complete.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/bindingmassscale.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/BindingMassScale.lean">formalization/QFD/Nuclear/BindingMassScale.lean</a></div>
+                <div class="file-meta">5.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/BindingMassScale.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/boundarycondition.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/BoundaryCondition.lean">formalization/QFD/Nuclear/BoundaryCondition.lean</a></div>
+                <div class="file-meta">1.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/BoundaryCondition.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/corecompression.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/CoreCompression.lean">formalization/QFD/Nuclear/CoreCompression.lean</a></div>
+                <div class="file-meta">5.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/CoreCompression.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/corecompressionlaw.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/CoreCompressionLaw.lean">formalization/QFD/Nuclear/CoreCompressionLaw.lean</a></div>
+                <div class="file-meta">28.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/CoreCompressionLaw.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/decayhalflife.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/DecayHalfLife.lean">formalization/QFD/Nuclear/DecayHalfLife.lean</a></div>
+                <div class="file-meta">8.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/DecayHalfLife.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/deuteronfit.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/DeuteronFit.lean">formalization/QFD/Nuclear/DeuteronFit.lean</a></div>
+                <div class="file-meta">2.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/DeuteronFit.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/fissionlimit.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/FissionLimit.lean">formalization/QFD/Nuclear/FissionLimit.lean</a></div>
+                <div class="file-meta">7.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/FissionLimit.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/fissiontopology.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/FissionTopology.lean">formalization/QFD/Nuclear/FissionTopology.lean</a></div>
+                <div class="file-meta">8.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/FissionTopology.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/fission_asymmetry.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/Fission_Asymmetry.lean">formalization/QFD/Nuclear/Fission_Asymmetry.lean</a></div>
+                <div class="file-meta">1.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/Fission_Asymmetry.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/isobarstability.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/IsobarStability.lean">formalization/QFD/Nuclear/IsobarStability.lean</a></div>
+                <div class="file-meta">3.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/IsobarStability.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/isomerdecay.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/IsomerDecay.lean">formalization/QFD/Nuclear/IsomerDecay.lean</a></div>
+                <div class="file-meta">1.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/IsomerDecay.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/magicnumbers.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/MagicNumbers.lean">formalization/QFD/Nuclear/MagicNumbers.lean</a></div>
+                <div class="file-meta">0.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/MagicNumbers.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/nuclearscale_bound.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/NuclearScale_Bound.lean">formalization/QFD/Nuclear/NuclearScale_Bound.lean</a></div>
+                <div class="file-meta">3.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/NuclearScale_Bound.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/nuclear_coefficients_derivation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/Nuclear_Coefficients_Derivation.lean">formalization/QFD/Nuclear/Nuclear_Coefficients_Derivation.lean</a></div>
+                <div class="file-meta">2.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/Nuclear_Coefficients_Derivation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/protonbridge_derivation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/ProtonBridge_Derivation.lean">formalization/QFD/Nuclear/ProtonBridge_Derivation.lean</a></div>
+                <div class="file-meta">1.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/ProtonBridge_Derivation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/protonbridge_geometry.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/ProtonBridge_Geometry.lean">formalization/QFD/Nuclear/ProtonBridge_Geometry.lean</a></div>
+                <div class="file-meta">2.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/ProtonBridge_Geometry.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/protonspin.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/ProtonSpin.lean">formalization/QFD/Nuclear/ProtonSpin.lean</a></div>
+                <div class="file-meta">0.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/ProtonSpin.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/quarticstiffness.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/QuarticStiffness.lean">formalization/QFD/Nuclear/QuarticStiffness.lean</a></div>
+                <div class="file-meta">8.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/QuarticStiffness.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/selectionrules.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/SelectionRules.lean">formalization/QFD/Nuclear/SelectionRules.lean</a></div>
+                <div class="file-meta">1.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/SelectionRules.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/symmetryenergyminimization.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/SymmetryEnergyMinimization.lean">formalization/QFD/Nuclear/SymmetryEnergyMinimization.lean</a></div>
+                <div class="file-meta">10.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/SymmetryEnergyMinimization.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/timecliff.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/TimeCliff.lean">formalization/QFD/Nuclear/TimeCliff.lean</a></div>
+                <div class="file-meta">8.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/TimeCliff.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/timecliff_complete.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/TimeCliff_Complete.lean">formalization/QFD/Nuclear/TimeCliff_Complete.lean</a></div>
+                <div class="file-meta">8.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/TimeCliff_Complete.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/vacuumstiffness.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/VacuumStiffness.lean">formalization/QFD/Nuclear/VacuumStiffness.lean</a></div>
+                <div class="file-meta">3.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/VacuumStiffness.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/welldepth.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/WellDepth.lean">formalization/QFD/Nuclear/WellDepth.lean</a></div>
+                <div class="file-meta">7.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/WellDepth.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/nuclear/yukawaderivation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Nuclear/YukawaDerivation.lean">formalization/QFD/Nuclear/YukawaDerivation.lean</a></div>
+                <div class="file-meta">3.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Nuclear/YukawaDerivation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/photon/casimir_mode_restriction.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Photon/Casimir_Mode_Restriction.lean">formalization/QFD/Photon/Casimir_Mode_Restriction.lean</a></div>
+                <div class="file-meta">2.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Photon/Casimir_Mode_Restriction.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/photon/cliffordbeltrami.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Photon/CliffordBeltrami.lean">formalization/QFD/Photon/CliffordBeltrami.lean</a></div>
+                <div class="file-meta">7.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Photon/CliffordBeltrami.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/photon/helicitydecay.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Photon/HelicityDecay.lean">formalization/QFD/Photon/HelicityDecay.lean</a></div>
+                <div class="file-meta">8.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Photon/HelicityDecay.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/photon/interaction.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Photon/Interaction.lean">formalization/QFD/Photon/Interaction.lean</a></div>
+                <div class="file-meta">6.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Photon/Interaction.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/photon/photon_kdv_interaction.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Photon/Photon_KdV_Interaction.lean">formalization/QFD/Photon/Photon_KdV_Interaction.lean</a></div>
+                <div class="file-meta">1.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Photon/Photon_KdV_Interaction.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/photon/photon_soliton_stability.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Photon/Photon_Soliton_Stability.lean">formalization/QFD/Photon/Photon_Soliton_Stability.lean</a></div>
+                <div class="file-meta">1.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Photon/Photon_Soliton_Stability.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/photon/quantumjump.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Photon/QuantumJump.lean">formalization/QFD/Photon/QuantumJump.lean</a></div>
+                <div class="file-meta">8.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Photon/QuantumJump.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/photon/solitonquantization.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Photon/SolitonQuantization.lean">formalization/QFD/Photon/SolitonQuantization.lean</a></div>
+                <div class="file-meta">6.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Photon/SolitonQuantization.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/physics/goldenloop_existence.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Physics/GoldenLoop_Existence.lean">formalization/QFD/Physics/GoldenLoop_Existence.lean</a></div>
+                <div class="file-meta">4.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Physics/GoldenLoop_Existence.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/physics/goldenloop_solver.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Physics/GoldenLoop_Solver.lean">formalization/QFD/Physics/GoldenLoop_Solver.lean</a></div>
+                <div class="file-meta">2.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Physics/GoldenLoop_Solver.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/physics/integerladder_quantization.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Physics/IntegerLadder_Quantization.lean">formalization/QFD/Physics/IntegerLadder_Quantization.lean</a></div>
+                <div class="file-meta">3.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Physics/IntegerLadder_Quantization.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/physics/photon_drag_derivation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Physics/Photon_Drag_Derivation.lean">formalization/QFD/Physics/Photon_Drag_Derivation.lean</a></div>
+                <div class="file-meta">1.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Physics/Photon_Drag_Derivation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/physics/postulates.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Physics/Postulates.lean">formalization/QFD/Physics/Postulates.lean</a></div>
+                <div class="file-meta">38.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Physics/Postulates.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/physics/postulates_layered.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Physics/Postulates_layered.lean">formalization/QFD/Physics/Postulates_layered.lean</a></div>
+                <div class="file-meta">0.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Physics/Postulates_layered.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/physics/scale_dependent_hessian.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Physics/Scale_Dependent_Hessian.lean">formalization/QFD/Physics/Scale_Dependent_Hessian.lean</a></div>
+                <div class="file-meta">1.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Physics/Scale_Dependent_Hessian.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/physics/topological_mass_generation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Physics/Topological_Mass_Generation.lean">formalization/QFD/Physics/Topological_Mass_Generation.lean</a></div>
+                <div class="file-meta">2.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Physics/Topological_Mass_Generation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/proofledger.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/ProofLedger.lean">formalization/QFD/ProofLedger.lean</a></div>
+                <div class="file-meta">31.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/ProofLedger.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/qm_translation/diracrealization.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QM_Translation/DiracRealization.lean">formalization/QFD/QM_Translation/DiracRealization.lean</a></div>
+                <div class="file-meta">6.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QM_Translation/DiracRealization.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/qm_translation/heisenberg.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QM_Translation/Heisenberg.lean">formalization/QFD/QM_Translation/Heisenberg.lean</a></div>
+                <div class="file-meta">5.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QM_Translation/Heisenberg.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/qm_translation/measurementcollapse.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QM_Translation/MeasurementCollapse.lean">formalization/QFD/QM_Translation/MeasurementCollapse.lean</a></div>
+                <div class="file-meta">1.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QM_Translation/MeasurementCollapse.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/qm_translation/paulibridge.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QM_Translation/PauliBridge.lean">formalization/QFD/QM_Translation/PauliBridge.lean</a></div>
+                <div class="file-meta">6.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QM_Translation/PauliBridge.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/qm_translation/paulibridge_test.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QM_Translation/PauliBridge_Test.lean">formalization/QFD/QM_Translation/PauliBridge_Test.lean</a></div>
+                <div class="file-meta">0.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QM_Translation/PauliBridge_Test.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/qm_translation/paulibridge_test2.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QM_Translation/PauliBridge_Test2.lean">formalization/QFD/QM_Translation/PauliBridge_Test2.lean</a></div>
+                <div class="file-meta">0.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QM_Translation/PauliBridge_Test2.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/qm_translation/paulibridge_test3.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QM_Translation/PauliBridge_Test3.lean">formalization/QFD/QM_Translation/PauliBridge_Test3.lean</a></div>
+                <div class="file-meta">0.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QM_Translation/PauliBridge_Test3.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/qm_translation/pauliexclusion.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QM_Translation/PauliExclusion.lean">formalization/QFD/QM_Translation/PauliExclusion.lean</a></div>
+                <div class="file-meta">0.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QM_Translation/PauliExclusion.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/qm_translation/realdiracequation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QM_Translation/RealDiracEquation.lean">formalization/QFD/QM_Translation/RealDiracEquation.lean</a></div>
+                <div class="file-meta">6.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QM_Translation/RealDiracEquation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/qm_translation/realdiracequation_original_backup.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QM_Translation/RealDiracEquation_original_backup.lean">formalization/QFD/QM_Translation/RealDiracEquation_original_backup.lean</a></div>
+                <div class="file-meta">6.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QM_Translation/RealDiracEquation_original_backup.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/qm_translation/schrodingerevolution.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/QM_Translation/SchrodingerEvolution.lean">formalization/QFD/QM_Translation/SchrodingerEvolution.lean</a></div>
+                <div class="file-meta">10.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/QM_Translation/SchrodingerEvolution.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/relativity/lorentzrotors.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Relativity/LorentzRotors.lean">formalization/QFD/Relativity/LorentzRotors.lean</a></div>
+                <div class="file-meta">1.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Relativity/LorentzRotors.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/relativity/sagnaceffect.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Relativity/SagnacEffect.lean">formalization/QFD/Relativity/SagnacEffect.lean</a></div>
+                <div class="file-meta">1.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Relativity/SagnacEffect.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/relativity/timedilationmechanism.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Relativity/TimeDilationMechanism.lean">formalization/QFD/Relativity/TimeDilationMechanism.lean</a></div>
+                <div class="file-meta">2.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Relativity/TimeDilationMechanism.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/rift/chargeescape.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Rift/ChargeEscape.lean">formalization/QFD/Rift/ChargeEscape.lean</a></div>
+                <div class="file-meta">6.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Rift/ChargeEscape.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/rift/rotationdynamics.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Rift/RotationDynamics.lean">formalization/QFD/Rift/RotationDynamics.lean</a></div>
+                <div class="file-meta">8.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Rift/RotationDynamics.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/rift/sequentialeruptions.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Rift/SequentialEruptions.lean">formalization/QFD/Rift/SequentialEruptions.lean</a></div>
+                <div class="file-meta">9.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Rift/SequentialEruptions.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/rift/spinsorting.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Rift/SpinSorting.lean">formalization/QFD/Rift/SpinSorting.lean</a></div>
+                <div class="file-meta">8.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Rift/SpinSorting.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/saturationlimit.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/SaturationLimit.lean">formalization/QFD/SaturationLimit.lean</a></div>
+                <div class="file-meta">10.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/SaturationLimit.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/schema/constraints.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Schema/Constraints.lean">formalization/QFD/Schema/Constraints.lean</a></div>
+                <div class="file-meta">12.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Schema/Constraints.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/schema/couplings.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Schema/Couplings.lean">formalization/QFD/Schema/Couplings.lean</a></div>
+                <div class="file-meta">2.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Schema/Couplings.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/schema/dimensionalanalysis.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Schema/DimensionalAnalysis.lean">formalization/QFD/Schema/DimensionalAnalysis.lean</a></div>
+                <div class="file-meta">2.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Schema/DimensionalAnalysis.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/breathermodes.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/BreatherModes.lean">formalization/QFD/Soliton/BreatherModes.lean</a></div>
+                <div class="file-meta">1.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/BreatherModes.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/gaussianmoments.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/GaussianMoments.lean">formalization/QFD/Soliton/GaussianMoments.lean</a></div>
+                <div class="file-meta">5.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/GaussianMoments.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/hardwall.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/HardWall.lean">formalization/QFD/Soliton/HardWall.lean</a></div>
+                <div class="file-meta">7.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/HardWall.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/massenergycore.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/MassEnergyCore.lean">formalization/QFD/Soliton/MassEnergyCore.lean</a></div>
+                <div class="file-meta">0.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/MassEnergyCore.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/massenergydensity.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/MassEnergyDensity.lean">formalization/QFD/Soliton/MassEnergyDensity.lean</a></div>
+                <div class="file-meta">6.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/MassEnergyDensity.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/quantization.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/Quantization.lean">formalization/QFD/Soliton/Quantization.lean</a></div>
+                <div class="file-meta">8.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/Quantization.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/rickeranalysis.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/RickerAnalysis.lean">formalization/QFD/Soliton/RickerAnalysis.lean</a></div>
+                <div class="file-meta">13.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/RickerAnalysis.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/soliton_packing_geometry.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/Soliton_Packing_Geometry.lean">formalization/QFD/Soliton/Soliton_Packing_Geometry.lean</a></div>
+                <div class="file-meta">1.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/Soliton_Packing_Geometry.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/topologicalcore.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/TopologicalCore.lean">formalization/QFD/Soliton/TopologicalCore.lean</a></div>
+                <div class="file-meta">4.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/TopologicalCore.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/topologicalstability.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/TopologicalStability.lean">formalization/QFD/Soliton/TopologicalStability.lean</a></div>
+                <div class="file-meta">18.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/TopologicalStability.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/soliton/topologicalstability_refactored.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Soliton/TopologicalStability_Refactored.lean">formalization/QFD/Soliton/TopologicalStability_Refactored.lean</a></div>
+                <div class="file-meta">9.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Soliton/TopologicalStability_Refactored.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/spacetimeemergence_complete.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/SpacetimeEmergence_Complete.lean">formalization/QFD/SpacetimeEmergence_Complete.lean</a></div>
+                <div class="file-meta">11.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/SpacetimeEmergence_Complete.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/spectralgap.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/SpectralGap.lean">formalization/QFD/SpectralGap.lean</a></div>
+                <div class="file-meta">3.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/SpectralGap.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/stabilitycriterion.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/StabilityCriterion.lean">formalization/QFD/StabilityCriterion.lean</a></div>
+                <div class="file-meta">27.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/StabilityCriterion.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/topology/formfactorcore.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Topology/FormFactorCore.lean">formalization/QFD/Topology/FormFactorCore.lean</a></div>
+                <div class="file-meta">1.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Topology/FormFactorCore.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/topologyformfactor.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/TopologyFormFactor.lean">formalization/QFD/TopologyFormFactor.lean</a></div>
+                <div class="file-meta">1.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/TopologyFormFactor.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/toymodel.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/ToyModel.lean">formalization/QFD/ToyModel.lean</a></div>
+                <div class="file-meta">5.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/ToyModel.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/vacuum/strongcp.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Vacuum/StrongCP.lean">formalization/QFD/Vacuum/StrongCP.lean</a></div>
+                <div class="file-meta">0.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Vacuum/StrongCP.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/vacuum/vacuumhydrodynamics.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Vacuum/VacuumHydrodynamics.lean">formalization/QFD/Vacuum/VacuumHydrodynamics.lean</a></div>
+                <div class="file-meta">3.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Vacuum/VacuumHydrodynamics.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/vacuum/vacuumparameters.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Vacuum/VacuumParameters.lean">formalization/QFD/Vacuum/VacuumParameters.lean</a></div>
+                <div class="file-meta">9.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Vacuum/VacuumParameters.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/vacuum/zetaphysics.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Vacuum/ZetaPhysics.lean">formalization/QFD/Vacuum/ZetaPhysics.lean</a></div>
+                <div class="file-meta">0.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Vacuum/ZetaPhysics.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/vacuumeigenvalue.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/VacuumEigenvalue.lean">formalization/QFD/VacuumEigenvalue.lean</a></div>
+                <div class="file-meta">13.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/VacuumEigenvalue.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/vacuumhydrodynamics.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/VacuumHydrodynamics.lean">formalization/QFD/VacuumHydrodynamics.lean</a></div>
+                <div class="file-meta">3.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/VacuumHydrodynamics.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/validation/backbonepredictionbridge.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Validation/BackbonePredictionBridge.lean">formalization/QFD/Validation/BackbonePredictionBridge.lean</a></div>
+                <div class="file-meta">1.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Validation/BackbonePredictionBridge.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/validation/derivedconstantconsistency.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Validation/DerivedConstantConsistency.lean">formalization/QFD/Validation/DerivedConstantConsistency.lean</a></div>
+                <div class="file-meta">1.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Validation/DerivedConstantConsistency.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/validation/integerladderconstraint.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Validation/IntegerLadderConstraint.lean">formalization/QFD/Validation/IntegerLadderConstraint.lean</a></div>
+                <div class="file-meta">1.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Validation/IntegerLadderConstraint.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/validation/kdvredshiftbridge.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Validation/KdVRedshiftBridge.lean">formalization/QFD/Validation/KdVRedshiftBridge.lean</a></div>
+                <div class="file-meta">2.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Validation/KdVRedshiftBridge.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/validation/shellgravitybridge.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Validation/ShellGravityBridge.lean">formalization/QFD/Validation/ShellGravityBridge.lean</a></div>
+                <div class="file-meta">1.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Validation/ShellGravityBridge.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/validation/solitonbackbonefrommodel.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Validation/SolitonBackboneFromModel.lean">formalization/QFD/Validation/SolitonBackboneFromModel.lean</a></div>
+                <div class="file-meta">1.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Validation/SolitonBackboneFromModel.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/validation/validationlockstep.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Validation/ValidationLockstep.lean">formalization/QFD/Validation/ValidationLockstep.lean</a></div>
+                <div class="file-meta">1.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Validation/ValidationLockstep.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/weak/cpviolation.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Weak/CPViolation.lean">formalization/QFD/Weak/CPViolation.lean</a></div>
+                <div class="file-meta">0.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Weak/CPViolation.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/weak/chiralanomaly.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Weak/ChiralAnomaly.lean">formalization/QFD/Weak/ChiralAnomaly.lean</a></div>
+                <div class="file-meta">0.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Weak/ChiralAnomaly.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/weak/doublebetadecay.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Weak/DoubleBetaDecay.lean">formalization/QFD/Weak/DoubleBetaDecay.lean</a></div>
+                <div class="file-meta">0.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Weak/DoubleBetaDecay.lean">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/weak/piongeometry.lean">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/Weak/PionGeometry.lean">formalization/QFD/Weak/PionGeometry.lean</a></div>
+                <div class="file-meta">1.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/Weak/PionGeometry.lean">View on GitHub</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <h2>Other (6 files)</h2>
+        <div class="file-list">
+            <div class="file" data-path="docs/llms.txt">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/docs/llms.txt">docs/llms.txt</a></div>
+                <div class="file-meta">17.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/docs/llms.txt">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="docs/robots.txt">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/docs/robots.txt">docs/robots.txt</a></div>
+                <div class="file-meta">0.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/docs/robots.txt">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/claims_index.txt">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/CLAIMS_INDEX.txt">formalization/QFD/CLAIMS_INDEX.txt</a></div>
+                <div class="file-meta">87.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/CLAIMS_INDEX.txt">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="formalization/qfd/theorem_statements.txt">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/formalization/QFD/THEOREM_STATEMENTS.txt">formalization/QFD/THEOREM_STATEMENTS.txt</a></div>
+                <div class="file-meta">43.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/formalization/QFD/THEOREM_STATEMENTS.txt">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="project_map.txt">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/project_map.txt">project_map.txt</a></div>
+                <div class="file-meta">5.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/project_map.txt">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="requirements.txt">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/requirements.txt">requirements.txt</a></div>
+                <div class="file-meta">0.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/requirements.txt">View on GitHub</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category">
+        <h2>Python Code (39 files)</h2>
+        <div class="file-list">
+            <div class="file" data-path="analysis/nuclear/scripts/analyze_all_decay_transitions.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/nuclear/scripts/analyze_all_decay_transitions.py">analysis/nuclear/scripts/analyze_all_decay_transitions.py</a></div>
+                <div class="file-meta">16.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/nuclear/scripts/analyze_all_decay_transitions.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/nuclear/scripts/integer_ladder_test.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/nuclear/scripts/integer_ladder_test.py">analysis/nuclear/scripts/integer_ladder_test.py</a></div>
+                <div class="file-meta">14.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/nuclear/scripts/integer_ladder_test.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/nuclear/scripts/nucleus_classifier.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/nuclear/scripts/nucleus_classifier.py">analysis/nuclear/scripts/nucleus_classifier.py</a></div>
+                <div class="file-meta">11.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/nuclear/scripts/nucleus_classifier.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/nuclear/scripts/validate_fission_pythagorean.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/nuclear/scripts/validate_fission_pythagorean.py">analysis/nuclear/scripts/validate_fission_pythagorean.py</a></div>
+                <div class="file-meta">11.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/nuclear/scripts/validate_fission_pythagorean.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/nuclear/src/harmonic_model.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/nuclear/src/harmonic_model.py">analysis/nuclear/src/harmonic_model.py</a></div>
+                <div class="file-meta">10.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/nuclear/src/harmonic_model.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/compare_models.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/compare_models.py">analysis/scripts/compare_models.py</a></div>
+                <div class="file-meta">11.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/compare_models.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/create_publication_figures.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/create_publication_figures.py">analysis/scripts/create_publication_figures.py</a></div>
+                <div class="file-meta">23.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/create_publication_figures.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/deformation_geometry.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/deformation_geometry.py">analysis/scripts/deformation_geometry.py</a></div>
+                <div class="file-meta">15.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/deformation_geometry.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/derive_cmb_temperature.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/derive_cmb_temperature.py">analysis/scripts/derive_cmb_temperature.py</a></div>
+                <div class="file-meta">13.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/derive_cmb_temperature.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/hubble_validation_lean4.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/hubble_validation_lean4.py">analysis/scripts/hubble_validation_lean4.py</a></div>
+                <div class="file-meta">13.8 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/hubble_validation_lean4.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/isomer_resonance_final.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/isomer_resonance_final.py">analysis/scripts/isomer_resonance_final.py</a></div>
+                <div class="file-meta">9.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/isomer_resonance_final.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/lepton_stability.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/lepton_stability.py">analysis/scripts/lepton_stability.py</a></div>
+                <div class="file-meta">4.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/lepton_stability.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/nucleus_classifier.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/nucleus_classifier.py">analysis/scripts/nucleus_classifier.py</a></div>
+                <div class="file-meta">11.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/nucleus_classifier.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/run_all_validations.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/run_all_validations.py">analysis/scripts/run_all_validations.py</a></div>
+                <div class="file-meta">9.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/run_all_validations.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/validate_conservation_law.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/validate_conservation_law.py">analysis/scripts/validate_conservation_law.py</a></div>
+                <div class="file-meta">9.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/validate_conservation_law.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/validate_g2_corrected.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/validate_g2_corrected.py">analysis/scripts/validate_g2_corrected.py</a></div>
+                <div class="file-meta">12.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/validate_g2_corrected.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/validate_lepton_isomers.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/validate_lepton_isomers.py">analysis/scripts/validate_lepton_isomers.py</a></div>
+                <div class="file-meta">6.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/validate_lepton_isomers.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/scripts/validate_proton_engine.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/scripts/validate_proton_engine.py">analysis/scripts/validate_proton_engine.py</a></div>
+                <div class="file-meta">16.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/scripts/validate_proton_engine.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/src/__init__.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/src/__init__.py">analysis/src/__init__.py</a></div>
+                <div class="file-meta">0.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/src/__init__.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/src/harmonic_model.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/src/harmonic_model.py">analysis/src/harmonic_model.py</a></div>
+                <div class="file-meta">10.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/src/harmonic_model.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/src/parse_nubase.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/src/parse_nubase.py">analysis/src/parse_nubase.py</a></div>
+                <div class="file-meta">11.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/src/parse_nubase.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="analysis/src/two_center_model.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/analysis/src/two_center_model.py">analysis/src/two_center_model.py</a></div>
+                <div class="file-meta">18.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/analysis/src/two_center_model.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="docs/generate_index.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/docs/generate_index.py">docs/generate_index.py</a></div>
+                <div class="file-meta">13.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/docs/generate_index.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="qfd/cl33.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/qfd/Cl33.py">qfd/Cl33.py</a></div>
+                <div class="file-meta">11.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/qfd/Cl33.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="qfd/__init__.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/qfd/__init__.py">qfd/__init__.py</a></div>
+                <div class="file-meta">0.1 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/qfd/__init__.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="qfd/shared_constants.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/qfd/shared_constants.py">qfd/shared_constants.py</a></div>
+                <div class="file-meta">7.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/qfd/shared_constants.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="qfd_proof.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/qfd_proof.py">qfd_proof.py</a></div>
+                <div class="file-meta">12.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/qfd_proof.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/scripts/qfd_alpha_derived_constants.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/scripts/QFD_ALPHA_DERIVED_CONSTANTS.py">simulation/scripts/QFD_ALPHA_DERIVED_CONSTANTS.py</a></div>
+                <div class="file-meta">10.6 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/scripts/QFD_ALPHA_DERIVED_CONSTANTS.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/scripts/derive_beta_from_alpha.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/scripts/derive_beta_from_alpha.py">simulation/scripts/derive_beta_from_alpha.py</a></div>
+                <div class="file-meta">12.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/scripts/derive_beta_from_alpha.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/scripts/derive_hbar_clifford.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/scripts/derive_hbar_clifford.py">simulation/scripts/derive_hbar_clifford.py</a></div>
+                <div class="file-meta">16.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/scripts/derive_hbar_clifford.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/scripts/derive_hbar_from_topology.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/scripts/derive_hbar_from_topology.py">simulation/scripts/derive_hbar_from_topology.py</a></div>
+                <div class="file-meta">35.0 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/scripts/derive_hbar_from_topology.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/scripts/derive_hbar_from_topology_gpu.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/scripts/derive_hbar_from_topology_gpu.py">simulation/scripts/derive_hbar_from_topology_gpu.py</a></div>
+                <div class="file-meta">11.7 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/scripts/derive_hbar_from_topology_gpu.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/scripts/derive_hbar_from_topology_parallel.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/scripts/derive_hbar_from_topology_parallel.py">simulation/scripts/derive_hbar_from_topology_parallel.py</a></div>
+                <div class="file-meta">13.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/scripts/derive_hbar_from_topology_parallel.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/scripts/derive_hbar_parallel.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/scripts/derive_hbar_parallel.py">simulation/scripts/derive_hbar_parallel.py</a></div>
+                <div class="file-meta">8.4 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/scripts/derive_hbar_parallel.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/scripts/explore_beta_tension.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/scripts/explore_beta_tension.py">simulation/scripts/explore_beta_tension.py</a></div>
+                <div class="file-meta">13.5 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/scripts/explore_beta_tension.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/scripts/verify_golden_loop.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/scripts/verify_golden_loop.py">simulation/scripts/verify_golden_loop.py</a></div>
+                <div class="file-meta">7.2 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/scripts/verify_golden_loop.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/scripts/verify_lepton_g2.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/scripts/verify_lepton_g2.py">simulation/scripts/verify_lepton_g2.py</a></div>
+                <div class="file-meta">10.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/scripts/verify_lepton_g2.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/scripts/verify_photon_soliton.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/scripts/verify_photon_soliton.py">simulation/scripts/verify_photon_soliton.py</a></div>
+                <div class="file-meta">12.9 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/scripts/verify_photon_soliton.py">View on GitHub</a></div>
+            </div>
+            <div class="file" data-path="simulation/src/shared_constants.py">
+                <div class="file-path"><a href="https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/simulation/src/shared_constants.py">simulation/src/shared_constants.py</a></div>
+                <div class="file-meta">6.3 KB | <a href="https://github.com/tracyphasespace/QFD-Universe/blob/main/simulation/src/shared_constants.py">View on GitHub</a></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filterFiles() {
+            const query = document.getElementById('search').value.toLowerCase();
+            document.querySelectorAll('.file').forEach(el => {
+                const path = el.getAttribute('data-path');
+                el.style.display = path.includes(query) ? 'block' : 'none';
+            });
+        }
+    </script>
+
+    <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); color: #8b949e;">
+        <p>Generated: 2026-01-11 15:43:23 UTC</p>
+        <p><a href="{REPO_URL}">GitHub Repository</a> | <a href="sitemap.xml">Sitemap</a> | <a href="files.json">JSON Index</a> | <a href="llms.txt">LLM Metadata</a></p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,44 @@
+name: Update AI-Browsable Index
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'  # Don't trigger on docs changes to avoid loops
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate index files
+        run: |
+          cd docs
+          python3 generate_index.py
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --quiet docs/ || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/
+          git commit -m "chore: Auto-update AI-browsable index [skip ci]"
+          git push

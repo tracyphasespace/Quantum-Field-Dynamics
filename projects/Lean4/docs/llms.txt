@@ -1,0 +1,415 @@
+# QFD-Universe LLM Context
+# Quantum Field Dynamics - Formal Proofs & Validation
+
+## About This Repository
+QFD-Universe is a public mirror of the Quantum Field Dynamics formalization project.
+It contains Lean 4 formal proofs and Python validation scripts.
+
+## Key Statistics
+- Total Files: 361
+- Lean Proofs: 242
+- Python Scripts: 39
+- Documentation: 72
+- Proven Theorems: 886
+- Proven Lemmas: 215
+- Total Proven Statements: 1,101
+- Sorries (incomplete proofs): 0
+
+## Repository Structure
+- /formalization/QFD/ - Lean 4 proofs (Cl(3,3) geometric algebra)
+- /analysis/ - Python validation scripts
+- /simulation/ - Numerical experiments
+- /qfd/ - Core Python library
+- /visualizations/ - Figures and plots
+
+## Key Entry Points
+1. README.md - Project overview
+2. THEORY.md - Physics framework description
+3. LLM_CONTEXT.md - AI assistant briefing
+4. formalization/QFD/ProofLedger.lean - Master claim-to-proof mapping
+5. formalization/QFD/Physics/Postulates.lean - All 11 axioms
+
+## Core Physics Claims
+- Spacetime emerges from Cl(3,3) centralizer structure
+- Mass arises from internal momentum in extra dimensions
+- Fundamental constants (alpha, beta, c, hbar, G) are geometrically related
+- Planck constant derived from topology: hbar = Gamma * lambda * L0 * c
+
+## Raw URL Base
+https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/
+
+## File Index
+# Prepend base URL above to get raw file content
+# Format: path
+
+
+### Core Documentation
+LLM_CONTEXT.md
+README.md
+THEORY.md
+analysis/nuclear/README.md
+analysis/reports/FINAL_VALIDATION_REPORT.md
+formalization/QFD/AGENTS.md
+formalization/QFD/AXIOM_AUDIT.md
+formalization/QFD/Atomic/ATOMIC_SPECTROSCOPY_COMPLETE.md
+formalization/QFD/Atomic/RESONANCE_DYNAMICS_INTEGRATION.md
+formalization/QFD/BUILD_STATUS_2026_01_04.md
+formalization/QFD/BUILD_STATUS_2026_01_04_CONTINUED.md
+formalization/QFD/COMPLETE_GUIDE.md
+formalization/QFD/COMPLETE_STATUS_2026_01_04.md
+formalization/QFD/CONCERN_CATEGORIES.md
+formalization/QFD/Conservation/NeutrinoID_Patch.md
+formalization/QFD/Cosmology/COMPLETION_SUMMARY.md
+formalization/QFD/Cosmology/DELIVERABLES_SUMMARY.md
+formalization/QFD/Cosmology/KDV_SCATTERING_INTEGRATION.md
+formalization/QFD/Cosmology/MANUSCRIPT_UPDATE_NOTES.md
+formalization/QFD/Cosmology/PAPER_INTEGRATION_GUIDE.md
+formalization/QFD/Cosmology/PRE_SUBMISSION_TEST.md
+formalization/QFD/Cosmology/README_FORMALIZATION_STATUS.md
+formalization/QFD/DEFINITION_INDEX.md
+formalization/QFD/DFLOW_QUICKSTART.md
+formalization/QFD/DOCUMENTATION_CLEANUP_2026_01_04.md
+formalization/QFD/FINAL_LEG_MODULES_2026_01_04.md
+formalization/QFD/FORMALIZATION_COMPLETION_REPORT.md
+formalization/QFD/GA/HODGE_DUAL_COMPLETION.md
+formalization/QFD/GA/PHASE_CENTRALIZER_COMPLETE.md
+formalization/QFD/GA/PHASE_CENTRALIZER_INTEGRATION.md
+formalization/QFD/GOLDEN_LOOP_OVERDETERMINATION.md
+formalization/QFD/GRAND_SOLVER_ARCHITECTURE.md
+formalization/QFD/Gravity/GEODESIC_EQUIVALENCE_COMPLETE.md
+formalization/QFD/Hydrogen/SOLITON_MECHANISM.md
+formalization/QFD/Instructions.md
+formalization/QFD/LEAN_PYTHON_CROSSREF.md
+formalization/QFD/Lepton/ANOMALOUS_MOMENT_COMPLETE.md
+formalization/QFD/Lepton/ANOMALOUS_MOMENT_STATUS.md
+formalization/QFD/Lepton/COMPLETION_REPORT_DEC28.md
+formalization/QFD/Lepton/GUARDRAIL_MODULES_SUMMARY.md
+formalization/QFD/Lepton/KOIDE_PROOF_SCOPE.md
+formalization/QFD/Lepton/KOIDE_SUMMARY.md
+formalization/QFD/Lepton/SESSION_SUMMARY_DEC28.md
+formalization/QFD/Lepton/TRANSPARENCY.md
+formalization/QFD/Lepton/VORTEX_STABILITY_COMPLETE.md
+formalization/QFD/Lepton/VORTEX_STABILITY_STATUS.md
+formalization/QFD/MASS_ENERGY_DENSITY_SHIELD.md
+formalization/QFD/Nuclear/CHAPTER14_PROOF_ARCHITECTURE.md
+formalization/QFD/Nuclear/CORECOMPRESSIONLAW_COMPLETE.md
+formalization/QFD/Nuclear/CORECOMPRESSIONLAW_ENHANCEMENTS.md
+formalization/QFD/Nuclear/CORECOMPRESSIONLAW_PHASE2_COMPLETE.md
+formalization/QFD/Nuclear/CORECOMPRESSION_STATUS.md
+formalization/QFD/Nuclear/TEST_VERIFICATION.md
+formalization/QFD/PROOF_INDEX.md
+formalization/QFD/PROOF_SUMMARY_UPDATE_2026_01_04.md
+formalization/QFD/Proof_Summary.md
+formalization/QFD/QUICK_WINS_COMPLETE.md
+formalization/QFD/README.md
+formalization/QFD/REORGANIZATION_SUMMARY.md
+formalization/QFD/Rift/README.md
+formalization/QFD/SESSION_SUMMARY_2026_01_04_C.md
+formalization/QFD/SESSION_SUMMARY_2026_01_04_D.md
+formalization/QFD/SORRY_ELIMINATION_PLAN.md
+formalization/QFD/Soliton/REFACTORED_APPROACH.md
+formalization/QFD/Soliton/SORRY_AUDIT.md
+formalization/QFD/Soliton/TOPOLOGICAL_STABILITY_STATUS.md
+formalization/QFD/TRANSCENDENTAL_VERIFICATION.md
+formalization/QFD/TRANSPARENCY_SUMMARY.md
+formalization/QFD/UNIFIEDFORCES_COMPLETE.md
+formalization/QFD/UNIFIEDFORCES_STATUS.md
+formalization/QFD/Vacuum/VACUUM_HYDRODYNAMICS_INTEGRATION.md
+visualizations/README.md
+
+### Lean Proofs
+formalization/QFD.lean
+formalization/QFD/AdjointStability_Complete.lean
+formalization/QFD/AngularSelection.lean
+formalization/QFD/Atomic/ChaosCore.lean
+formalization/QFD/Atomic/LyapunovCore.lean
+formalization/QFD/Atomic/LyapunovInstability.lean
+formalization/QFD/Atomic/ResonanceDynamics.lean
+formalization/QFD/Atomic/ResonanceDynamicsCore.lean
+formalization/QFD/Atomic/SpinOrbitChaos.lean
+formalization/QFD/BivectorClasses_Complete.lean
+formalization/QFD/BlackHole/BlackHole_Saturation.lean
+formalization/QFD/BlackHole/SaturationLimit.lean
+formalization/QFD/Charge/Asymptotic_Charge_Fraction.lean
+formalization/QFD/Charge/Coulomb.lean
+formalization/QFD/Charge/Potential.lean
+formalization/QFD/Charge/Quantization.lean
+formalization/QFD/Charge/ShellTheorem.lean
+formalization/QFD/Charge/Vacuum.lean
+formalization/QFD/Cl33ImportTest.lean
+formalization/QFD/Classical/Conservation.lean
+formalization/QFD/Conservation/NeutrinoID.lean
+formalization/QFD/Conservation/NeutrinoID_Automated.lean
+formalization/QFD/Conservation/NeutrinoID_Fixed.lean
+formalization/QFD/Conservation/NeutrinoID_Production.lean
+formalization/QFD/Conservation/NeutrinoID_Simple.lean
+formalization/QFD/Conservation/NeutrinoMixing.lean
+formalization/QFD/Conservation/Noether.lean
+formalization/QFD/Conservation/Unitarity.lean
+formalization/QFD/Cosmology/AxisExtraction.lean
+formalization/QFD/Cosmology/AxisExtraction_original_backup.lean
+formalization/QFD/Cosmology/CoaxialAlignment.lean
+formalization/QFD/Cosmology/CoaxialAlignment_original_backup.lean
+formalization/QFD/Cosmology/GalacticScaling.lean
+formalization/QFD/Cosmology/HubbleDrift.lean
+formalization/QFD/Cosmology/KernelAxis.lean
+formalization/QFD/Cosmology/LightCurveStretch.lean
+formalization/QFD/Cosmology/OctupoleExtraction.lean
+formalization/QFD/Cosmology/PhotonScatteringKdV.lean
+formalization/QFD/Cosmology/Polarization.lean
+formalization/QFD/Cosmology/RadiativeTransfer.lean
+formalization/QFD/Cosmology/RealTimeCosmology.lean
+formalization/QFD/Cosmology/ScatteringBias.lean
+formalization/QFD/Cosmology/VacuumDensityMatch.lean
+formalization/QFD/Cosmology/VacuumRefraction.lean
+formalization/QFD/Electrodynamics/AharonovBohm.lean
+formalization/QFD/Electrodynamics/CerenkovReal.lean
+formalization/QFD/Electrodynamics/DispersionRelation.lean
+formalization/QFD/Electrodynamics/LarmorPrecession.lean
+formalization/QFD/Electrodynamics/MagneticHelicity.lean
+formalization/QFD/Electrodynamics/MaxwellReal.lean
+formalization/QFD/Electrodynamics/NoMonopoles.lean
+formalization/QFD/Electrodynamics/PoyntingTheorem.lean
+formalization/QFD/Electrodynamics/ProcaReal.lean
+formalization/QFD/Electron/AlphaCirc.lean
+formalization/QFD/Electron/AxisAlignment.lean
+formalization/QFD/Electron/CirculationTopology.lean
+formalization/QFD/Electron/HillVortex.lean
+formalization/QFD/EmergentAlgebra.lean
+formalization/QFD/EmergentAlgebra_Heavy.lean
+formalization/QFD/Empirical/CoreCompression.lean
+formalization/QFD/GA/BasisOperations.lean
+formalization/QFD/GA/BasisProducts.lean
+formalization/QFD/GA/BasisReduction.lean
+formalization/QFD/GA/Cl33.lean
+formalization/QFD/GA/Cl33Instances.lean
+formalization/QFD/GA/Cl33_Minimal.lean
+formalization/QFD/GA/Conjugation.lean
+formalization/QFD/GA/GradeProjection.lean
+formalization/QFD/GA/HodgeDual.lean
+formalization/QFD/GA/MultivectorGrade.lean
+formalization/QFD/GA/PhaseCentralizer.lean
+formalization/QFD/GA/PhaseCentralizer_original_backup.lean
+formalization/QFD/GA/Tactics.lean
+formalization/QFD/GoldenLoop.lean
+formalization/QFD/Gravity/G_Derivation.lean
+formalization/QFD/Gravity/GeodesicEquivalence.lean
+formalization/QFD/Gravity/GeodesicForce.lean
+formalization/QFD/Gravity/GeometricCoupling.lean
+formalization/QFD/Gravity/GeometricProjection_Integration.lean
+formalization/QFD/Gravity/Gravity_Projection.lean
+formalization/QFD/Gravity/PerihelionShift.lean
+formalization/QFD/Gravity/SchwarzschildLink.lean
+formalization/QFD/Gravity/Shell_Theorem_Harmonic.lean
+formalization/QFD/Gravity/SnellLensing.lean
+formalization/QFD/Gravity/TimeRefraction.lean
+formalization/QFD/Hydrogen/PhotonResonance.lean
+formalization/QFD/Hydrogen/PhotonScattering.lean
+formalization/QFD/Hydrogen/PhotonSoliton.lean
+formalization/QFD/Hydrogen/PhotonSolitonEmergentConstants.lean
+formalization/QFD/Hydrogen/PhotonSolitonStable.lean
+formalization/QFD/Hydrogen/PhotonSoliton_Kinematic.lean
+formalization/QFD/Hydrogen/SpeedOfLight.lean
+formalization/QFD/Hydrogen/TopologicalCharge.lean
+formalization/QFD/Hydrogen/UnifiedForces.lean
+formalization/QFD/Hydrogen/UnifiedForces_v2.lean
+formalization/QFD/Lepton/AnomalousMoment.lean
+formalization/QFD/Lepton/Antimatter.lean
+formalization/QFD/Lepton/FineStructure.lean
+formalization/QFD/Lepton/FormFactorCore.lean
+formalization/QFD/Lepton/FormFactors.lean
+formalization/QFD/Lepton/Generations.lean
+formalization/QFD/Lepton/GeometricAnomaly.lean
+formalization/QFD/Lepton/GeometricG2.lean
+formalization/QFD/Lepton/GeometricSignFlip.lean
+formalization/QFD/Lepton/IsomerCore.lean
+formalization/QFD/Lepton/KoideAlgebra.lean
+formalization/QFD/Lepton/KoideRelation.lean
+formalization/QFD/Lepton/LeptonG2Prediction.lean
+formalization/QFD/Lepton/LeptonIsomers.lean
+formalization/QFD/Lepton/MassFunctional.lean
+formalization/QFD/Lepton/MassSpectrum.lean
+formalization/QFD/Lepton/PairProduction.lean
+formalization/QFD/Lepton/Physics/Postulates.lean
+formalization/QFD/Lepton/QBallStructure.lean
+formalization/QFD/Lepton/RVacDerivation.lean
+formalization/QFD/Lepton/StabilityGuards.lean
+formalization/QFD/Lepton/TopologicalEnergy.lean
+formalization/QFD/Lepton/Topology.lean
+formalization/QFD/Lepton/VortexElectron.lean
+formalization/QFD/Lepton/VortexStability.lean
+formalization/QFD/Lepton/VortexStability_v3.lean
+formalization/QFD/Math/AlphaFormFactor.lean
+formalization/QFD/Math/BetaCriticality.lean
+formalization/QFD/Math/Exp_Bounds_Analysis.lean
+formalization/QFD/Math/Function_Monotonicity.lean
+formalization/QFD/Math/ReciprocalIneq.lean
+formalization/QFD/Math/Sin_Phase_Closure.lean
+formalization/QFD/Math/SpectralGapBounds.lean
+formalization/QFD/Math/VacuumSaturation.lean
+formalization/QFD/Math/VacuumSaturation_aristotle.lean
+formalization/QFD/Matter/ProtonTopology.lean
+formalization/QFD/Neutrino.lean
+formalization/QFD/NeutrinoMassTopology.lean
+formalization/QFD/Neutrino_Bleaching.lean
+formalization/QFD/Neutrino_Chirality.lean
+formalization/QFD/Neutrino_MassScale.lean
+formalization/QFD/Neutrino_MinimalRotor.lean
+formalization/QFD/Neutrino_Oscillation.lean
+formalization/QFD/Neutrino_Production.lean
+formalization/QFD/Neutrino_Topology.lean
+formalization/QFD/Nuclear/AlphaNDerivation.lean
+formalization/QFD/Nuclear/AlphaNDerivation_Complete.lean
+formalization/QFD/Nuclear/BetaNGammaEDerivation.lean
+formalization/QFD/Nuclear/BetaNGammaEDerivation_Complete.lean
+formalization/QFD/Nuclear/BindingMassScale.lean
+formalization/QFD/Nuclear/BoundaryCondition.lean
+formalization/QFD/Nuclear/CoreCompression.lean
+formalization/QFD/Nuclear/CoreCompressionLaw.lean
+formalization/QFD/Nuclear/DecayHalfLife.lean
+formalization/QFD/Nuclear/DeuteronFit.lean
+formalization/QFD/Nuclear/FissionLimit.lean
+formalization/QFD/Nuclear/FissionTopology.lean
+formalization/QFD/Nuclear/Fission_Asymmetry.lean
+formalization/QFD/Nuclear/IsobarStability.lean
+formalization/QFD/Nuclear/IsomerDecay.lean
+formalization/QFD/Nuclear/MagicNumbers.lean
+formalization/QFD/Nuclear/NuclearScale_Bound.lean
+formalization/QFD/Nuclear/Nuclear_Coefficients_Derivation.lean
+formalization/QFD/Nuclear/ProtonBridge_Derivation.lean
+formalization/QFD/Nuclear/ProtonBridge_Geometry.lean
+formalization/QFD/Nuclear/ProtonSpin.lean
+formalization/QFD/Nuclear/QuarticStiffness.lean
+formalization/QFD/Nuclear/SelectionRules.lean
+formalization/QFD/Nuclear/SymmetryEnergyMinimization.lean
+formalization/QFD/Nuclear/TimeCliff.lean
+formalization/QFD/Nuclear/TimeCliff_Complete.lean
+formalization/QFD/Nuclear/VacuumStiffness.lean
+formalization/QFD/Nuclear/WellDepth.lean
+formalization/QFD/Nuclear/YukawaDerivation.lean
+formalization/QFD/Photon/Casimir_Mode_Restriction.lean
+formalization/QFD/Photon/CliffordBeltrami.lean
+formalization/QFD/Photon/HelicityDecay.lean
+formalization/QFD/Photon/Interaction.lean
+formalization/QFD/Photon/Photon_KdV_Interaction.lean
+formalization/QFD/Photon/Photon_Soliton_Stability.lean
+formalization/QFD/Photon/QuantumJump.lean
+formalization/QFD/Photon/SolitonQuantization.lean
+formalization/QFD/Physics/GoldenLoop_Existence.lean
+formalization/QFD/Physics/GoldenLoop_Solver.lean
+formalization/QFD/Physics/IntegerLadder_Quantization.lean
+formalization/QFD/Physics/Photon_Drag_Derivation.lean
+formalization/QFD/Physics/Postulates.lean
+formalization/QFD/Physics/Postulates_layered.lean
+formalization/QFD/Physics/Scale_Dependent_Hessian.lean
+formalization/QFD/Physics/Topological_Mass_Generation.lean
+formalization/QFD/ProofLedger.lean
+formalization/QFD/QM_Translation/DiracRealization.lean
+formalization/QFD/QM_Translation/Heisenberg.lean
+formalization/QFD/QM_Translation/MeasurementCollapse.lean
+formalization/QFD/QM_Translation/PauliBridge.lean
+formalization/QFD/QM_Translation/PauliBridge_Test.lean
+formalization/QFD/QM_Translation/PauliBridge_Test2.lean
+formalization/QFD/QM_Translation/PauliBridge_Test3.lean
+formalization/QFD/QM_Translation/PauliExclusion.lean
+formalization/QFD/QM_Translation/RealDiracEquation.lean
+formalization/QFD/QM_Translation/RealDiracEquation_original_backup.lean
+formalization/QFD/QM_Translation/SchrodingerEvolution.lean
+formalization/QFD/Relativity/LorentzRotors.lean
+formalization/QFD/Relativity/SagnacEffect.lean
+formalization/QFD/Relativity/TimeDilationMechanism.lean
+formalization/QFD/Rift/ChargeEscape.lean
+formalization/QFD/Rift/RotationDynamics.lean
+formalization/QFD/Rift/SequentialEruptions.lean
+formalization/QFD/Rift/SpinSorting.lean
+formalization/QFD/SaturationLimit.lean
+formalization/QFD/Schema/Constraints.lean
+formalization/QFD/Schema/Couplings.lean
+formalization/QFD/Schema/DimensionalAnalysis.lean
+formalization/QFD/Soliton/BreatherModes.lean
+formalization/QFD/Soliton/GaussianMoments.lean
+formalization/QFD/Soliton/HardWall.lean
+formalization/QFD/Soliton/MassEnergyCore.lean
+formalization/QFD/Soliton/MassEnergyDensity.lean
+formalization/QFD/Soliton/Quantization.lean
+formalization/QFD/Soliton/RickerAnalysis.lean
+formalization/QFD/Soliton/Soliton_Packing_Geometry.lean
+formalization/QFD/Soliton/TopologicalCore.lean
+formalization/QFD/Soliton/TopologicalStability.lean
+formalization/QFD/Soliton/TopologicalStability_Refactored.lean
+formalization/QFD/SpacetimeEmergence_Complete.lean
+formalization/QFD/SpectralGap.lean
+formalization/QFD/StabilityCriterion.lean
+formalization/QFD/Topology/FormFactorCore.lean
+formalization/QFD/TopologyFormFactor.lean
+formalization/QFD/ToyModel.lean
+formalization/QFD/Vacuum/StrongCP.lean
+formalization/QFD/Vacuum/VacuumHydrodynamics.lean
+formalization/QFD/Vacuum/VacuumParameters.lean
+formalization/QFD/Vacuum/ZetaPhysics.lean
+formalization/QFD/VacuumEigenvalue.lean
+formalization/QFD/VacuumHydrodynamics.lean
+formalization/QFD/Validation/BackbonePredictionBridge.lean
+formalization/QFD/Validation/DerivedConstantConsistency.lean
+formalization/QFD/Validation/IntegerLadderConstraint.lean
+formalization/QFD/Validation/KdVRedshiftBridge.lean
+formalization/QFD/Validation/ShellGravityBridge.lean
+formalization/QFD/Validation/SolitonBackboneFromModel.lean
+formalization/QFD/Validation/ValidationLockstep.lean
+formalization/QFD/Weak/CPViolation.lean
+formalization/QFD/Weak/ChiralAnomaly.lean
+formalization/QFD/Weak/DoubleBetaDecay.lean
+formalization/QFD/Weak/PionGeometry.lean
+
+### Python Code
+analysis/nuclear/scripts/analyze_all_decay_transitions.py
+analysis/nuclear/scripts/integer_ladder_test.py
+analysis/nuclear/scripts/nucleus_classifier.py
+analysis/nuclear/scripts/validate_fission_pythagorean.py
+analysis/nuclear/src/harmonic_model.py
+analysis/scripts/compare_models.py
+analysis/scripts/create_publication_figures.py
+analysis/scripts/deformation_geometry.py
+analysis/scripts/derive_cmb_temperature.py
+analysis/scripts/hubble_validation_lean4.py
+analysis/scripts/isomer_resonance_final.py
+analysis/scripts/lepton_stability.py
+analysis/scripts/nucleus_classifier.py
+analysis/scripts/run_all_validations.py
+analysis/scripts/validate_conservation_law.py
+analysis/scripts/validate_g2_corrected.py
+analysis/scripts/validate_lepton_isomers.py
+analysis/scripts/validate_proton_engine.py
+analysis/src/__init__.py
+analysis/src/harmonic_model.py
+analysis/src/parse_nubase.py
+analysis/src/two_center_model.py
+docs/generate_index.py
+qfd/Cl33.py
+qfd/__init__.py
+qfd/shared_constants.py
+qfd_proof.py
+simulation/scripts/QFD_ALPHA_DERIVED_CONSTANTS.py
+simulation/scripts/derive_beta_from_alpha.py
+simulation/scripts/derive_hbar_clifford.py
+simulation/scripts/derive_hbar_from_topology.py
+simulation/scripts/derive_hbar_from_topology_gpu.py
+simulation/scripts/derive_hbar_from_topology_parallel.py
+simulation/scripts/derive_hbar_parallel.py
+simulation/scripts/explore_beta_tension.py
+simulation/scripts/verify_golden_loop.py
+simulation/scripts/verify_lepton_g2.py
+simulation/scripts/verify_photon_soliton.py
+simulation/src/shared_constants.py
+
+### LaTeX Manuscripts
+formalization/QFD/Cosmology/CMB_AxisOfEvil_COMPLETE_v1.1.tex
+formalization/QFD/Cosmology/PAPER_TEMPLATE_WITH_FORMALIZATION.tex
+
+### Other
+docs/llms.txt
+docs/robots.txt
+formalization/QFD/CLAIMS_INDEX.txt
+formalization/QFD/THEOREM_STATEMENTS.txt
+project_map.txt
+requirements.txt

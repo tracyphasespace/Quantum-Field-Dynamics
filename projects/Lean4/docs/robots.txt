@@ -1,0 +1,12 @@
+# QFD-Universe robots.txt
+# Allow full crawling for AI and search engines
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://tracyphasespace.github.io/QFD-Universe/sitemap.xml
+
+# AI-specific metadata
+# See llms.txt for structured metadata: https://tracyphasespace.github.io/QFD-Universe/llms.txt
+# See files.json for machine-readable index: https://tracyphasespace.github.io/QFD-Universe/files.json
