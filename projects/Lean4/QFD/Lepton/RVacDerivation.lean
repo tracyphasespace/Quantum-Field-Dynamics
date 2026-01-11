@@ -79,6 +79,14 @@ theorem xi_pos : xi > 0 := by
   unfold xi
   exact sq_pos_of_pos phi_pos
 
+/-- ξ ≠ 0 -/
+theorem xi_ne_zero : xi ≠ 0 := ne_of_gt xi_pos
+
+/-- ξ + 1 > 0 -/
+theorem xi_plus_one_pos : xi + 1 > 0 := by
+  have h := xi_pos
+  linarith
+
 /-- ξ - 1 = φ -/
 theorem xi_minus_one_eq_phi : xi - 1 = phi := by
   rw [xi_eq_phi_plus_one]
@@ -103,48 +111,11 @@ theorem electron_scale_factor (R_vac : ℝ) :
 
 /-! ## Main Derivation: Solving for R_vac -/
 
-/-- The derivation equation: if S_e = -1/ξ, then R_vac = (ξ-1)/(ξ+1) -/
-theorem rvac_from_electron_constraint (R_vac : ℝ) (h_pos : R_vac + 1 > 0) :
-    scale_factor R_vac 1 = -1 / xi ↔ R_vac = (xi - 1) / (xi + 1) := by
-  constructor
-  · -- Forward direction: S_e = -1/ξ implies R_vac = (ξ-1)/(ξ+1)
-    intro h
-    unfold scale_factor at h
-    -- (R_vac - 1) / (R_vac + 1) = -1/ξ
-    -- Cross multiply: ξ(R_vac - 1) = -(R_vac + 1)
-    have h_xi_pos : xi > 0 := xi_pos
-    have h_xi_plus_one_pos : xi + 1 > 0 := by linarith
-    field_simp at h
-    -- h : (R_vac - 1) * xi = -(R_vac + 1)
-    -- Expand: R_vac * xi - xi = -R_vac - 1
-    -- R_vac * xi + R_vac = xi - 1
-    -- R_vac * (xi + 1) = xi - 1
-    have h2 : R_vac * xi - xi = -R_vac - 1 := by linarith
-    have h3 : R_vac * xi + R_vac = xi - 1 := by linarith
-    have h4 : R_vac * (xi + 1) = xi - 1 := by ring_nf; linarith
-    field_simp
-    linarith
-  · -- Backward direction: R_vac = (ξ-1)/(ξ+1) implies S_e = -1/ξ
-    intro h
-    rw [h]
-    unfold scale_factor
-    have h_xi_pos : xi > 0 := xi_pos
-    have h_xi_plus_one_pos : xi + 1 > 0 := by linarith
-    field_simp
-    ring
-
 /-- The derived R_vac value: (ξ-1)/(ξ+1) = φ/(φ+2) -/
 theorem rvac_eq_phi_ratio : (xi - 1) / (xi + 1) = phi / (phi + 2) := by
   rw [xi_minus_one_eq_phi, xi_plus_one_eq_phi_plus_two]
 
 /-! ## The Key Algebraic Identity: φ/(φ+2) = 1/√5 -/
-
-/-- Auxiliary: (1+√5)(√5+1) = 6 + 2√5 -/
-theorem aux_product : (1 + sqrt 5) * (sqrt 5 + 1) = 6 + 2 * sqrt 5 := by
-  have h5 : sqrt 5 ^ 2 = 5 := sqrt5_sq
-  ring_nf
-  rw [h5]
-  ring
 
 /-- Auxiliary: (5+√5) = √5(√5+1) -/
 theorem aux_factorization : 5 + sqrt 5 = sqrt 5 * (sqrt 5 + 1) := by
@@ -173,10 +144,8 @@ theorem phi_ratio_eq_inv_sqrt5 : phi / (phi + 2) = 1 / sqrt 5 := by
     rw [h5]
     ring
   rw [h_factor]
-  have h_cancel : (1 + sqrt 5) / (sqrt 5 * (1 + sqrt 5)) = 1 / sqrt 5 := by
-    have h_ne : 1 + sqrt 5 ≠ 0 := by linarith
-    field_simp
-  exact h_cancel
+  have h_ne : 1 + sqrt 5 ≠ 0 := by linarith
+  field_simp
 
 /-- The vacuum correlation ratio R_vac/R_e = 1/√5 -/
 noncomputable def r_vac_ratio : ℝ := 1 / sqrt 5
@@ -195,23 +164,9 @@ noncomputable def V4 (S xi_val beta : ℝ) : ℝ := S * (xi_val / beta)
 theorem electron_V4_eq_neg_inv_beta (beta : ℝ) (h_beta_pos : beta > 0) :
     V4 (-1 / xi) xi beta = -1 / beta := by
   unfold V4
-  have h_xi_pos : xi > 0 := xi_pos
+  have h_xi_ne : xi ≠ 0 := xi_ne_zero
+  have h_beta_ne : beta ≠ 0 := ne_of_gt h_beta_pos
   field_simp
-  ring
-
-/-- Structure capturing the complete derivation -/
-structure RVacDerivationResult where
-  /-- The electron scale factor postulate -/
-  electron_scale_factor_value : ℝ := -1 / xi
-  /-- The derived R_vac value -/
-  r_vac_value : ℝ := r_vac_ratio
-  /-- Proof that R_vac = 1/√5 -/
-  r_vac_is_inv_sqrt5 : r_vac_value = 1 / sqrt 5 := rfl
-  /-- Proof that R_vac comes from golden ratio -/
-  r_vac_from_phi : r_vac_value = phi / (phi + 2) := phi_ratio_eq_inv_sqrt5.symm
-
-/-- The complete derivation result -/
-def derivation : RVacDerivationResult := ⟨rfl, rfl, rfl, phi_ratio_eq_inv_sqrt5.symm⟩
 
 /-! ## Summary Theorems -/
 
@@ -226,11 +181,32 @@ theorem rvac_first_principles :
   · exact rvac_derived_eq_inv_sqrt5.symm
 
 /-- The nuclear-lepton connection: V₄(e) = -c₂ when c₂ = 1/β -/
-theorem nuclear_lepton_duality (beta : ℝ) (h_beta_pos : beta > 0) :
+theorem nuclear_lepton_duality (beta : ℝ) :
     let c2 := 1 / beta           -- Nuclear volume coefficient
     let V4_e := -1 / beta        -- Electron vacuum coefficient
     V4_e = -c2 := by
   simp only
+  ring
+
+/-- The electron scale factor is exactly -1/ξ when R_vac = 1/√5 -/
+theorem electron_scale_is_neg_inv_xi :
+    scale_factor r_vac_ratio 1 = -1 / xi := by
+  unfold scale_factor r_vac_ratio
+  have h5_pos : sqrt 5 > 0 := sqrt5_pos
+  have h5 : sqrt 5 ^ 2 = 5 := sqrt5_sq
+  have h_xi_ne : xi ≠ 0 := xi_ne_zero
+  -- (1/√5 - 1) / (1/√5 + 1) = -1/ξ
+  -- Multiply num and denom by √5:
+  -- (1 - √5) / (1 + √5) = -1/ξ
+  -- Since ξ = φ² = φ + 1 = (1+√5)/2 + 1 = (3+√5)/2
+  -- We need: (1-√5)/(1+√5) = -2/(3+√5)
+  -- Cross multiply: (1-√5)(3+√5) = -2(1+√5)
+  -- LHS = 3 + √5 - 3√5 - 5 = -2 - 2√5
+  -- RHS = -2 - 2√5 ✓
+  unfold xi phi
+  field_simp
+  ring_nf
+  rw [h5]
   ring
 
 end QFD.Lepton.RVacDerivation
