@@ -41,15 +41,18 @@ https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/THEORY.md
 ```
 
 **Quick links**:
-- [llms.txt](https://tracyphasespace.github.io/QFD-Universe/llms.txt) - File index (361 files)
+- [llms.txt](https://tracyphasespace.github.io/QFD-Universe/llms.txt) - File index (362 files)
 - [files.json](https://tracyphasespace.github.io/QFD-Universe/files.json) - Machine-readable JSON
 - [LLM_CONTEXT.md](https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/LLM_CONTEXT.md) - Full context
+- [CL33_METHODOLOGY.md](CL33_METHODOLOGY.md) - Why Cl(3,3) and how constants emerge
 
 ---
 
 ## Overview
 
 QFD derives fundamental constants from geometry rather than fitting them to data. Starting from a single measured value (the fine structure constant α), all nuclear, electromagnetic, and lepton coefficients emerge through the **Golden Loop** transcendental equation.
+
+**Methodology**: See [CL33_METHODOLOGY.md](CL33_METHODOLOGY.md) for the complete explanation of why Cl(3,3) is the natural coordinate space and how each constant (α, β, c, ℏ, G, k_B, e) emerges geometrically.
 
 ### The Core Equation
 
