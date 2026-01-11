@@ -2,6 +2,7 @@
 
 **Last Updated**: 2025-09-29
 **Session Context**: Post-documentation update, framework production-ready
+**AI Index**: https://tracyphasespace.github.io/QFD-Universe/llms.txt
 
 ## 🎯 **CURRENT STATUS: MISSION ACCOMPLISHED**
 

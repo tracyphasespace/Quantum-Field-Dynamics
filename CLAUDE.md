@@ -22,6 +22,19 @@
 
 ---
 
+## 🌐 AI-Browsable Index
+
+**GitHub Pages**: https://tracyphasespace.github.io/QFD-Universe/
+
+For browser-based LLMs or API access:
+- **llms.txt**: https://tracyphasespace.github.io/QFD-Universe/llms.txt (compact file index)
+- **files.json**: https://tracyphasespace.github.io/QFD-Universe/files.json (machine-readable)
+- **sitemap.xml**: https://tracyphasespace.github.io/QFD-Universe/sitemap.xml
+
+**Raw file access**: Prepend `https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/` to any path in llms.txt
+
+---
+
 ## 🗺️ Project Structure Overview
 
 ```

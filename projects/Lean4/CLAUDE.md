@@ -23,6 +23,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Validation tools**:
 - **verify_constants.sh** - Check for contaminated constant definitions
 
+**AI-Browsable Index** (for browser-based LLMs):
+- https://tracyphasespace.github.io/QFD-Universe/llms.txt - Compact file index
+- https://tracyphasespace.github.io/QFD-Universe/files.json - Machine-readable JSON
+- Raw files: prepend `https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/` to any path
+
 ## Repository Overview
 
 This is a **Lean 4 formalization** of Quantum Field Dynamics (QFD) theorems, proving spacetime emergence, cosmology, nuclear physics, and particle physics using the Clifford algebra Cl(3,3). The project contains **1,106 proven statements** (891 theorems + 215 lemmas) across **238 Lean files**.
