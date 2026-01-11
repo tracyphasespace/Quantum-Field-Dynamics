@@ -4,6 +4,40 @@
 
 ---
 
+## The Glass Box Philosophy
+
+Physics today is a collection of **black boxes**. Quantum mechanics works but says "don't ask why." General relativity predicts but breaks at singularities. The Standard Model fits data with 26 free parameters nobody can derive. These theories succeed in their domains but fundamentally contradict each other.
+
+**QFD is a Glass Box.** One theory. One algebra. One unbroken chain from α ≈ 1/137 to nuclear binding, lepton masses, CMB temperature, and beyond. Every derivation is visible. Every prediction is falsifiable. There are no seams where one theory ends and another begins.
+
+### The Rules of the Glass Box
+
+| Forbidden | Required |
+|-----------|----------|
+| Imaginary numbers | Real geometric algebra only |
+| Singularities | Smooth fields everywhere |
+| Infinities | Finite, convergent integrals |
+| Free parameters | Derive from α or reject |
+| Scale-dependent theories | Same Cl(3,3) at all scales |
+| "Effective" approximations | Exact geometric relationships |
+
+### Why "Glass" Matters
+
+The Glass Box is **deliberately fragile**. In black-box physics, a failed prediction means "adjust a parameter" or "add a correction term." In the Glass Box, a failed prediction means **the entire framework is wrong**.
+
+This is not a weakness—it's the definition of falsifiability. QFD either works everywhere or nowhere. There is no middle ground.
+
+### What You Won't Find Here
+
+- ✗ Complex numbers (replaced by bivector B where B² = -1)
+- ✗ Extra dimensions beyond 6 (Cl(3,3) is the complete arena)
+- ✗ Dark matter as a particle (geometry explains rotation curves)
+- ✗ Dark energy as a substance (vacuum structure explains acceleration)
+- ✗ Singularities (no infinities, no dragons, no elves)
+- ✗ Tunable parameters (if we can't derive it from α, we don't claim it)
+
+---
+
 ## For the Skeptic: 5 Minutes to Verify We're Not Hallucinating
 
 Before investing hours, run this in any Python 3 REPL:
