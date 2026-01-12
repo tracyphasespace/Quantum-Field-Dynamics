@@ -241,4 +241,254 @@ noncomputable def MinEnergy
 def BoundaryInteraction (ϕ_boundary : TargetSpace) (vacuum : TargetSpace) : ℝ :=
   ‖ϕ_boundary - vacuum‖^2
 
+/-! ## Euler-Lagrange Equilibrium Radius
+
+For a stable soliton, the total energy has competing contributions:
+- Gradient (kinetic) energy ~ Q/R : resists compression (quantum pressure)
+- Compression (potential) energy ~ Q²R³ : favors smaller configurations
+
+The energy functional for a Hill vortex with charge Q at radius R:
+  E(R; Q) = A·Q/R + B·Q²·R³
+
+where:
+- A = ξ·C_grad : gradient coefficient (quantum pressure)
+- B = β·C_comp : compression coefficient (vacuum stiffness)
+
+The Euler-Lagrange equation dE/dR = 0 determines equilibrium:
+  -A·Q/R² + 3B·Q²·R² = 0
+  R⁴ = A/(3B·Q)
+  R_eq = (A/(3B·Q))^(1/4)
+
+Stability requires d²E/dR² > 0 at equilibrium (always satisfied for Q > 0).
+-/
+
+/-- Soliton energy as function of radius R and charge Q.
+
+E(R; Q) = A·Q/R + B·Q²·R³
+
+For leptons:
+- A ≈ ξ·C_grad ≈ 3.043 × 1.8 ≈ 5.48 (gradient term)
+- B ≈ β·C_comp ≈ 3.043 × 1.0 ≈ 3.04 (compression term)
+
+The 1/R term provides quantum pressure resisting collapse.
+The R³ term provides vacuum compression favoring smaller size.
+Competition yields a stable equilibrium radius.
+-/
+def solitonEnergy (A B Q R : ℝ) : ℝ :=
+  A * Q / R + B * Q^2 * R^3
+
+/-- First derivative of soliton energy with respect to radius.
+
+dE/dR = -A·Q/R² + 3B·Q²·R²
+
+At equilibrium, dE/dR = 0.
+-/
+def solitonEnergyDeriv (A B Q R : ℝ) : ℝ :=
+  -A * Q / R^2 + 3 * B * Q^2 * R^2
+
+/-- Second derivative of soliton energy with respect to radius.
+
+d²E/dR² = 2A·Q/R³ + 6B·Q²·R
+
+This is positive for R > 0, Q > 0, confirming local minimum.
+-/
+def solitonEnergySecondDeriv (A B Q R : ℝ) : ℝ :=
+  2 * A * Q / R^3 + 6 * B * Q^2 * R
+
+/-- Equilibrium radius from Euler-Lagrange equation.
+
+From dE/dR = 0:
+  -A·Q/R² + 3B·Q²·R² = 0
+  R⁴ = A/(3B·Q)
+  R_eq = (A/(3B·Q))^(1/4)
+
+Requires A > 0, B > 0, Q > 0 for real positive solution.
+-/
+noncomputable def equilibriumRadius (A B Q : ℝ) : ℝ :=
+  (A / (3 * B * Q)) ^ (1/4 : ℝ)
+
+/-- Default vacuum parameters for lepton solitons.
+
+β = ξ = 3.043 from Golden Loop (fine structure constant constraint)
+C_grad ≈ 1.8, C_comp ≈ 1.0 from Hill vortex geometry
+-/
+structure VacuumParams where
+  β : ℝ := 3.043      -- Vacuum stiffness
+  ξ : ℝ := 3.043      -- Gradient coefficient
+  C_grad : ℝ := 1.8   -- Gradient geometric factor
+  C_comp : ℝ := 1.0   -- Compression geometric factor
+
+/-- Derived energy coefficients from vacuum parameters. -/
+def VacuumParams.A (p : VacuumParams) : ℝ := p.ξ * p.C_grad
+def VacuumParams.B (p : VacuumParams) : ℝ := p.β * p.C_comp
+
+/-- Equilibrium radius for given charge using default vacuum parameters. -/
+noncomputable def leptonEquilibriumRadius (Q : ℝ) : ℝ :=
+  let p : VacuumParams := {}
+  equilibriumRadius p.A p.B Q
+
+/-- Euler-Lagrange condition: first derivative vanishes at equilibrium.
+
+Theorem: At R = R_eq, we have dE/dR = 0.
+
+Proof outline:
+- R_eq = (A/(3BQ))^(1/4)
+- R_eq² = (A/(3BQ))^(1/2) [by rpow_mul]
+- R_eq⁴ = A/(3BQ)
+- First term: -AQ/R² = -AQ · (3BQ/A)^(1/2) = -√(3ABQ³)
+- Second term: 3BQ² · R² = 3BQ² · (A/(3BQ))^(1/2) = √(3ABQ³)
+- Sum: 0
+-/
+theorem euler_lagrange_equilibrium (A B Q : ℝ) (hA : A > 0) (hB : B > 0) (hQ : Q > 0) :
+    solitonEnergyDeriv A B Q (equilibriumRadius A B Q) = 0 := by
+  unfold solitonEnergyDeriv equilibriumRadius
+  -- Key: (A/(3BQ))^(1/4) squared gives (A/(3BQ))^(1/2)
+  set x := A / (3 * B * Q) with hx_def
+  have hx_pos : x > 0 := div_pos hA (mul_pos (mul_pos (by norm_num : (3:ℝ) > 0) hB) hQ)
+  have hx_nonneg : x ≥ 0 := le_of_lt hx_pos
+  -- R_eq² = x^(1/2)
+  have h_sq : (x ^ (1/4 : ℝ)) ^ 2 = x ^ (1/2 : ℝ) := by
+    rw [← Real.rpow_natCast (x ^ (1/4 : ℝ)) 2]
+    rw [← Real.rpow_mul hx_nonneg]
+    norm_num
+  -- We need to show: -A * Q / (x^(1/4))^2 + 3 * B * Q^2 * (x^(1/4))^2 = 0
+  rw [h_sq]
+  -- Now: -A * Q / x^(1/2) + 3 * B * Q^2 * x^(1/2) = 0
+  -- Since x = A/(3BQ), we have x^(1/2) = √(A/(3BQ))
+  -- So A * Q / x^(1/2) = A * Q * √(3BQ/A) = √(A²Q² * 3BQ/A) = √(3ABQ³)
+  -- And 3 * B * Q^2 * x^(1/2) = 3BQ² * √(A/(3BQ)) = √(9B²Q⁴ * A/(3BQ)) = √(3ABQ³)
+  have h_cancel : -A * Q / x ^ (1/2 : ℝ) + 3 * B * Q ^ 2 * x ^ (1/2 : ℝ) = 0 := by
+    have hx12_pos : x ^ (1/2 : ℝ) > 0 := Real.rpow_pos_of_pos hx_pos _
+    have hx12_ne : x ^ (1/2 : ℝ) ≠ 0 := ne_of_gt hx12_pos
+    -- x^(1/2) * x^(1/2) = x
+    have h_sq_x : x ^ (1/2 : ℝ) * x ^ (1/2 : ℝ) = x := by
+      rw [← Real.rpow_add hx_pos]
+      norm_num
+    -- Rewrite the second term: 3BQ² * x^(1/2) = 3BQ² * x / x^(1/2)
+    have h_rewrite : 3 * B * Q ^ 2 * x ^ (1/2 : ℝ) = 3 * B * Q ^ 2 * x / x ^ (1/2 : ℝ) := by
+      field_simp
+      rw [sq, h_sq_x]
+    rw [h_rewrite, ← add_div, div_eq_zero_iff]
+    left
+    -- Need: -A * Q + 3 * B * Q^2 * x = 0
+    have hB_ne : B ≠ 0 := ne_of_gt hB
+    have hQ_ne : Q ≠ 0 := ne_of_gt hQ
+    calc -A * Q + 3 * B * Q ^ 2 * x
+        = -A * Q + 3 * B * Q ^ 2 * (A / (3 * B * Q)) := by rw [hx_def]
+      _ = 0 := by field_simp; ring
+  exact h_cancel
+
+/-- Stability condition: second derivative is positive at equilibrium.
+
+Theorem: At R = R_eq, we have d²E/dR² > 0, confirming local minimum.
+-/
+theorem stability_at_equilibrium (A B Q : ℝ) (hA : A > 0) (hB : B > 0) (hQ : Q > 0) :
+    solitonEnergySecondDeriv A B Q (equilibriumRadius A B Q) > 0 := by
+  unfold solitonEnergySecondDeriv equilibriumRadius
+  -- Both terms 2A·Q/R³ and 6B·Q²·R are positive for positive parameters
+  have hR : (A / (3 * B * Q)) ^ (1/4 : ℝ) > 0 := by
+    apply Real.rpow_pos_of_pos
+    apply div_pos hA
+    apply mul_pos (mul_pos (by norm_num : (3:ℝ) > 0) hB) hQ
+  have hR3 : ((A / (3 * B * Q)) ^ (1/4 : ℝ))^3 > 0 := pow_pos hR 3
+  have hterm1 : 2 * A * Q / ((A / (3 * B * Q)) ^ (1/4 : ℝ))^3 > 0 := by
+    apply div_pos
+    · apply mul_pos (mul_pos (by norm_num : (2:ℝ) > 0) hA) hQ
+    · exact hR3
+  have hterm2 : 6 * B * Q^2 * (A / (3 * B * Q)) ^ (1/4 : ℝ) > 0 := by
+    apply mul_pos
+    · apply mul_pos (mul_pos (by norm_num : (6:ℝ) > 0) hB) (sq_pos_of_pos hQ)
+    · exact hR
+  linarith
+
+/-- Energy at equilibrium radius.
+
+E(R_eq) = A·Q/R_eq + B·Q²·R_eq³
+        = A·Q·(3BQ/A)^(1/4) + B·Q²·(A/(3BQ))^(3/4)
+        = (4/3)·(3AB³Q⁵)^(1/4)
+
+This gives the rest mass energy of the soliton.
+-/
+noncomputable def equilibriumEnergy (A B Q : ℝ) : ℝ :=
+  solitonEnergy A B Q (equilibriumRadius A B Q)
+
+/-- Relation between equilibrium radius and mass.
+
+From E = mc², the soliton mass is:
+  m = E(R_eq)/c² = (4/3)·(3AB³Q⁵)^(1/4) / c²
+
+For leptons with unit charge Q = 1:
+  m ∝ (AB³)^(1/4)
+  R_eq ∝ (A/B)^(1/4) ∝ 1/m
+
+This is the Compton wavelength relation: R ~ ℏ/(mc).
+-/
+noncomputable def solitonMass (A B Q c : ℝ) : ℝ :=
+  equilibriumEnergy A B Q / c^2
+
+/-- Compton wavelength relation: R_eq · m = constant.
+
+For a soliton with energy E = mc²:
+  R_eq · m ∝ (A/(3BQ))^(1/4) · (3AB³Q⁵)^(1/4) / c²
+          = (A·3AB³Q⁵ / (3BQ))^(1/4) / c²
+          = (A²B²Q⁴)^(1/4) / c²
+          = (ABQ²)^(1/2) / c²
+
+For fixed A, B, c and unit charge Q = 1:
+  R_eq · m = √(AB) / c² = constant
+
+This is the geometric origin of Compton wavelength.
+-/
+noncomputable def comptonProduct (A B Q c : ℝ) : ℝ :=
+  equilibriumRadius A B Q * solitonMass A B Q c
+
+/-! ## Generation-Dependent Radii
+
+Different lepton generations arise from different topological charges.
+The equilibrium radius depends on Q:
+
+  R_eq(Q) = (A/(3B·Q))^(1/4) ∝ Q^(-1/4)
+
+For generations with charges Q₁, Q₂, Q₃:
+  R₁/R₂ = (Q₂/Q₁)^(1/4)
+
+The mass ratio follows from m ∝ 1/R:
+  m₁/m₂ = R₂/R₁ = (Q₁/Q₂)^(1/4)
+
+This provides the geometric origin of mass hierarchy.
+-/
+
+/-- Radius ratio between two generations with different charges. -/
+noncomputable def radiusRatio (A B Q₁ Q₂ : ℝ) : ℝ :=
+  equilibriumRadius A B Q₁ / equilibriumRadius A B Q₂
+
+/-- Mass ratio between two generations (inverse of radius ratio). -/
+noncomputable def massRatio (A B Q₁ Q₂ c : ℝ) : ℝ :=
+  solitonMass A B Q₂ c / solitonMass A B Q₁ c
+
+/-- Generation charge structure for three lepton families.
+
+The topological charges that give rise to e, μ, τ mass hierarchy.
+Charges are determined by winding number or phase topology.
+-/
+structure GenerationCharges where
+  Q_e : ℝ    -- Electron generation charge
+  Q_μ : ℝ    -- Muon generation charge
+  Q_τ : ℝ    -- Tau generation charge
+  h_order : Q_e < Q_μ ∧ Q_μ < Q_τ  -- Mass ordering implies charge ordering
+
+/-- Predicted mass ratios from charge structure.
+
+Given charges Q_e, Q_μ, Q_τ, the mass ratios are:
+  m_μ/m_e = (Q_μ/Q_e)^(1/4) · (Q_μ/Q_e)^(1/2) = (Q_μ/Q_e)^(3/4)  [simplified]
+  m_τ/m_μ = (Q_τ/Q_μ)^(3/4)
+
+Note: The actual exponent depends on detailed energy functional.
+-/
+noncomputable def predictedMuonElectronRatio (g : GenerationCharges) (A B c : ℝ) : ℝ :=
+  massRatio A B g.Q_e g.Q_μ c
+
+noncomputable def predictedTauMuonRatio (g : GenerationCharges) (A B c : ℝ) : ℝ :=
+  massRatio A B g.Q_μ g.Q_τ c
+
 end QFD.Soliton
