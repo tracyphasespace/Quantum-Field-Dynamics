@@ -71,8 +71,8 @@ lemma Q_basis (i : Fin 6) :
   trans (∑ k : Fin 6, if k = i then (if i.val < 3 then 1 else -1) * (1 * 1) else 0)
   · congr 1
     ext k
-    by_cases h : k = i <;> simp [h, QuadraticMap.proj]
-  · simp [Finset.sum_ite_eq, Finset.mem_univ]
+    by_cases h : k = i <;> simp [h]
+  · simp [Finset.mem_univ]
 
 /-- Lemma: Basis vectors square to their metric signature -/
 lemma e_sq (i : Fin 6) :
@@ -86,17 +86,14 @@ lemma basis_orthogonal (i j : Fin 6) (h : i ≠ j) :
     QuadraticMap.polar Q_sig33 (Pi.single i (1 : ℝ)) (Pi.single j (1 : ℝ)) = 0 := by
   classical
   unfold QuadraticMap.polar
-
   -- abbreviations
   set wi : ℝ := if i.val < 3 then 1 else -1
   set wj : ℝ := if j.val < 3 then 1 else -1
-
   -- Use your already-proved Q_basis for the singletons.
   have hQi : Q_sig33 (Pi.single i (1 : ℝ)) = wi := by
     simpa [wi] using (Q_basis i)
   have hQj : Q_sig33 (Pi.single j (1 : ℝ)) = wj := by
     simpa [wj] using (Q_basis j)
-
   -- Prove using function extensionality with a simpler function
   have hQsum : Q_sig33 (Pi.single i (1 : ℝ) + Pi.single j (1 : ℝ)) = wi + wj := by
     -- Define a simpler function that avoids Pi.single type issues
@@ -142,7 +139,6 @@ lemma basis_orthogonal (i j : Fin 6) (h : i ≠ j) :
             simp [f, hk.1.2, hk.2]
           rw [rest_zero]
           ring
-
   -- Finish polar arithmetic
   rw [hQsum, hQi, hQj]
   ring
@@ -283,7 +279,7 @@ theorem centralizer_contains_spacetime :
   intro i hi
   rw [Centralizer, Subalgebra.mem_centralizer_iff]
   intro x hx
-  simp at hx
+  simp only [Set.mem_singleton_iff] at hx
   rw [hx]
   exact (spacetime_commutes_with_B i hi).symm
 
@@ -294,16 +290,15 @@ variable [Nontrivial Cl33]
 lemma e_ne_zero (i : Fin 6) : e i ≠ 0 := by
   intro h0
   have hs : e i * e i = algebraMap ℝ Cl33 (if i.val < 3 then 1 else -1) := e_sq i
-
   -- If e i = 0, then (e i)^2 = 0, contradicting ±1.
   have hmap : algebraMap ℝ Cl33 (if i.val < 3 then 1 else -1) = 0 := by
-    simpa [h0] using hs.symm
-
+    simp only [h0, mul_zero] at hs
+    exact hs.symm
   by_cases hi : i.val < 3
-  · have : (1 : Cl33) = 0 := by simpa [hi] using hmap
-    exact one_ne_zero this
-  · have : (-(1 : Cl33)) = 0 := by simpa [hi] using hmap
-    exact (neg_ne_zero.mpr (one_ne_zero : (1 : Cl33) ≠ 0)) this
+  · simp only [hi, ↓reduceIte, map_one] at hmap
+    exact one_ne_zero hmap
+  · simp only [hi, ↓reduceIte, map_neg, map_one] at hmap
+    exact (neg_ne_zero.mpr (one_ne_zero : (1 : Cl33) ≠ 0)) hmap
 
 /-- The internal generators do NOT centralize B -/
 theorem internal_not_in_centralizer :

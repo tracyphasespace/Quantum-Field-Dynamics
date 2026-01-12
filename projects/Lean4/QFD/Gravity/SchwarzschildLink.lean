@@ -55,11 +55,11 @@ Rosetta stone: QFD g00 is exactly an inverse-one-plus-x form where
 `x = 2GM/(r c²)` (for ρ = M/r, κ = 2G/c²).
 -/
 theorem qfd_g00_point_eq_inv
-    (G M c : ℝ) (hc : 0 < c) (r : ℝ) (hr : r ≠ 0) :
+    (G M c : ℝ) (hc : 0 < c) (r : ℝ) (_hr : r ≠ 0) :
     qfd_g00_point G M c hc r = (1 + (2 * G * M) / (r * c ^ 2))⁻¹ := by
   -- Expand definitions.
   unfold qfd_g00_point ctxGR kappa_GR g00 n2 rhoPointMass
-  simp [hr]
+  simp only []
   ring
 
 /--
@@ -88,11 +88,9 @@ theorem qfd_matches_schwarzschild_first_order
     have := qfd_g00_point_eq_inv (G := G) (M := M) (c := c) (hc := hc) (r := r) hr
     -- rewrite the concrete fraction as x
     simpa [x] using this
-
   -- Schwarzschild g00 is 1 - x by definition
   have hs : schwarzschild_g00 G M c r = 1 - x := by
     simp [schwarzschild_g00, x]
-
   -- Combine:
   -- (1 + x)⁻¹ = (1 - x) + x²*(1 + x)⁻¹
   -- so (1 + x)⁻¹ = schwarzschild + remainder

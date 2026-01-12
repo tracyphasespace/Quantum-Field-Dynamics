@@ -89,7 +89,8 @@ theorem nuclearPotential_eq
       = -(c ^ 2) / 2 * (κₙ * solitonDensity A r₀ r) := by
   unfold nuclearPotential
   -- `timePotential_eq` from the no-Filters gravity file
-  simpa [ctxNuclear] using (timePotential_eq (ctx := ctxNuclear c κₙ hc) (rho := solitonDensity A r₀) (r := r))
+  simpa [ctxNuclear] using
+    (timePotential_eq (ctx := ctxNuclear c κₙ hc) (rho := solitonDensity A r₀) (r := r))
 
 /-- Well depth at the core: V(0) is explicit. -/
 theorem wellDepth
@@ -148,17 +149,14 @@ theorem nuclearPotential_deriv
     funext x
     -- use nuclearPotential_eq and fold C
     simp [nuclearPotential_eq, C, mul_assoc, mul_left_comm, mul_comm]
-
   -- derivative of solitonDensity
   have hρ : HasDerivAt (solitonDensity A r₀)
       (A * exp ((-1 / r₀) * r) * (-1 / r₀)) r :=
     hasDerivAt_solitonDensity' (A := A) (r₀ := r₀) (r := r)
-
   -- scale by constant C
   have hCV : HasDerivAt (fun x => C * solitonDensity A r₀ x)
       (C * (A * exp ((-1 / r₀) * r) * (-1 / r₀))) r :=
     hρ.const_mul C
-
   -- transport derivative back to nuclearPotential via hVfun
   refine ⟨C * (A * exp ((-1 / r₀) * r) * (-1 / r₀)), ?_, ?_⟩
   · -- HasDerivAt goal
@@ -186,8 +184,8 @@ theorem nuclearForce_closed_form
   have hderiv : deriv (nuclearPotential c κₙ A r₀ hc) r = dV := by
     simpa using hdV.deriv
   -- nuclearPotential unfolds to timePotential with ctxNuclear and solitonDensity
-  have hVeq : nuclearPotential c κₙ A r₀ hc = timePotential (ctxNuclear c κₙ hc) (solitonDensity A r₀) := by
-    rfl
+  have hVeq : nuclearPotential c κₙ A r₀ hc =
+      timePotential (ctxNuclear c κₙ hc) (solitonDensity A r₀) := by rfl
   -- substitute and simplify
   rw [QFD.Gravity.radialForce, ← hVeq, hderiv, hdV_eq]
   ring

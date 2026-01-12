@@ -281,29 +281,27 @@ theorem emission_geometric_match
 
 /- 7) Summary Theorems -/
 
-/-- Creation theorem: electron exists if config meets 4 gates -/
+/-- Creation theorem: electron exists if config meets the four stability gates. -/
 theorem electron_exists_of_config
     (h :
       ∃ c : Config,
         M.PhaseClosed c ∧ M.OnShell c ∧ M.FiniteEnergy c ∧
         M.ShapeInvariant c ∧ c.charge = (-1)) :
-    ∃ _ : Electron M, True := by
+    Nonempty (Electron M) := by
   rcases h with ⟨c, hcClosed, hcOnShell, hcFinite, hcShape, hcCharge⟩
   let s : Soliton M := soliton_of_config (M := M) c hcClosed hcOnShell hcFinite hcShape
-  refine ⟨⟨s, ?_⟩, trivial⟩
-  simpa [Soliton.charge, s] using hcCharge
+  exact ⟨⟨s, by simpa [Soliton.charge, s] using hcCharge⟩⟩
 
-/-- Creation theorem: proton exists if config meets 4 gates -/
+/-- Creation theorem: proton exists if config meets the four stability gates. -/
 theorem proton_exists_of_config
     (h :
       ∃ c : Config,
         M.PhaseClosed c ∧ M.OnShell c ∧ M.FiniteEnergy c ∧
         M.ShapeInvariant c ∧ c.charge = (1)) :
-    ∃ _ : Proton M, True := by
+    Nonempty (Proton M) := by
   rcases h with ⟨c, hcClosed, hcOnShell, hcFinite, hcShape, hcCharge⟩
   let s : Soliton M := soliton_of_config (M := M) c hcClosed hcOnShell hcFinite hcShape
-  refine ⟨⟨s, ?_⟩, trivial⟩
-  simpa [Soliton.charge, s] using hcCharge
+  exact ⟨⟨s, by simpa [Soliton.charge, s] using hcCharge⟩⟩
 
 end QFDModel
 end QFD

@@ -39,10 +39,8 @@ open CliffordAlgebra
 /-- Local shorthand for basis vectors -/
 private def e (i : Fin 6) : Cl33 := ι33 (basis_vector i)
 
-/-- 
-Standard Helper: e_i e_i = 1 for spatial vectors (0,1,2).
-Recall from `Cl33.lean`, indices 0,1,2 have signature +1.
--/ 
+/-- Standard Helper: e_i e_i = 1 for spatial vectors (0,1,2).
+Recall from `Cl33.lean`, indices 0,1,2 have signature +1. -/
 lemma spatial_sq_one (i : Fin 6) (h : i < 3) : e i * e i = 1 := by
   unfold e
   rw [generator_squares_to_signature]
@@ -76,11 +74,9 @@ def sigma_x : Cl33 := e 0
 def sigma_y : Cl33 := e 1
 def sigma_z : Cl33 := e 2
 
-/-- 
-The "Imaginary Unit" I is the Pseudoscalar (Volume element).
+/-- The "Imaginary Unit" I is the Pseudoscalar (Volume element).
 In matrix mechanics, they define $\sigma_x \sigma_y = i \sigma_z$.
-We prove this 'i' is actually the volume trivector $e_0 e_1 e_2$.
--/ 
+We prove this 'i' is actually the volume trivector $e_0 e_1 e_2$. -/
 def I_spatial : Cl33 := e 0 * e 1 * e 2
 
 -----------------------------------------------------------
@@ -91,13 +87,15 @@ def I_spatial : Cl33 := e 0 * e 1 * e 2
 Property 1: Unitary Squaring (Real Basis).
 $\sigma_i^2 = 1$
 -/ 
-theorem pauli_squares_to_one : 
-  sigma_x * sigma_x = 1 ∧ 
-  sigma_y * sigma_y = 1 ∧ 
+theorem pauli_squares_to_one :
+  sigma_x * sigma_x = 1 ∧
+  sigma_y * sigma_y = 1 ∧
   sigma_z * sigma_z = 1 := by
-  constructor; apply spatial_sq_one 0 (by decide)
-  constructor; apply spatial_sq_one 1 (by decide)
-  apply spatial_sq_one 2 (by decide)
+  constructor
+  · apply spatial_sq_one 0 (by decide)
+  constructor
+  · apply spatial_sq_one 1 (by decide)
+  · apply spatial_sq_one 2 (by decide)
 
 /--
 Property 2: Anti-commutation.
@@ -128,7 +126,7 @@ theorem pseudoscalar_is_imaginary : I_spatial * I_spatial = -1 := by
   have sq2 := spatial_sq_one 2 (by decide)
   -- Manually expand: (e0*e1*e2)^2
   -- First, apply associativity to get explicit form
-  show (e 0 * e 1 * e 2) * (e 0 * e 1 * e 2) = -1
+  change (e 0 * e 1 * e 2) * (e 0 * e 1 * e 2) = -1
   -- Rewrite to normalize associativity
   rw [show (e 0 * e 1 * e 2) * (e 0 * e 1 * e 2) = e 0 * e 1 * (e 2 * e 0) * (e 1 * e 2) by
     simp only [mul_assoc]]

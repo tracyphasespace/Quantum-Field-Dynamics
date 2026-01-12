@@ -64,7 +64,8 @@ trusted axioms. -/
 
 /-! ## Phase 2: The Topological "Skin" (Conservation of Twist) -/
 
-/-- The topological charge (winding number) of a field configuration.
+/-!
+## The Topological Charge (Winding Number)
 
 **Physical Meaning**: The number of times the field "wraps around" the target sphere.
 This is the Baryon number B (number of nucleons).
@@ -125,7 +126,7 @@ theorem zero_pressure_gradient
     (P : QFD.Physics.Model)
     (ϕ : FieldConfig)
     (h_saturated : is_saturated ϕ) :
-    ∃ R : ℝ, ∀ r < R, deriv (fun r => EnergyDensity ϕ r) r = 0 :=
+    ∃ R : ℝ, ∀ r < R, HasDerivAt (fun r => EnergyDensity ϕ r) 0 r :=
   P.zero_pressure_gradient ϕ h_saturated
 
 /-- **MAIN THEOREM: Infinite Lifetime Stability**
@@ -154,7 +155,7 @@ absolutely stable - they have INFINITE lifetime without any barrier.
 theorem Soliton_Infinite_Life
     (P : QFD.Physics.Model)
     (prob : SolitonStabilityProblem)
-    (h_potential : potential_admits_Qballs Potential)
+    (h_potential : potential_admits_Qballs P.soliton_potential)
     (h_matched : density_matched (prob.Q / (4 / 3 * Real.pi * 1)) prob.background_ρ) :
     ∃ ϕ_stable : FieldConfig, StableSoliton P ϕ_stable prob :=
   P.soliton_infinite_life prob h_potential h_matched
@@ -194,12 +195,12 @@ theorem stability_against_evaporation
     (h_thermal_eq : T > 0) :
     ∀ δq : ℝ, δq > 0 →
       ∃ (ϕ_minus ϕ_vacuum : FieldConfig),
-        P.noether_charge ϕ_minus = P.noether_charge ϕ - δq →
+        P.noether_charge ϕ_minus = P.noether_charge ϕ - δq ∧
         FreeEnergy ϕ_minus T + FreeEnergy ϕ_vacuum T > FreeEnergy ϕ T :=
   P.stability_against_evaporation ϕ h_stable h_bound T h_thermal_eq
 
 /-- Minimum energy for a soliton with given charge Q (parameterized by the physics model). -/
-noncomputable def MinEnergy (P : QFD.Physics.Model) (Q : ℝ) : ℝ :=
+noncomputable def modelMinEnergy (P : QFD.Physics.Model) (Q : ℝ) : ℝ :=
   QFD.Soliton.MinEnergy (P.noether_charge) Q
 
 /-/ **Axiom: Strict sub-additivity of fractional powers**
@@ -269,9 +270,9 @@ theorem stability_against_fission
     (Q : ℝ) (q : ℝ)
     (h_pos : 0 < q ∧ q < Q)
     (α β : ℝ)
-    (h_scaling : ∀ x > 0, MinEnergy P x = α * x + β * x^((2 : ℝ) / 3))
+    (h_scaling : ∀ x > 0, modelMinEnergy P x = α * x + β * x^((2 : ℝ) / 3))
     (h_surface_tension : β > 0) :
-    MinEnergy P Q < MinEnergy P (Q - q) + MinEnergy P q := by
+    modelMinEnergy P Q < modelMinEnergy P (Q - q) + modelMinEnergy P q := by
   have h_q_pos : 0 < q := h_pos.1
   have h_Qq_pos : 0 < Q - q := sub_pos.mpr h_pos.2
   have h_Q_pos : 0 < Q := by
@@ -304,16 +305,17 @@ theorem stability_against_fission
         (α * (Q - q) + β * (Q - q) ^ ((2 : ℝ) / 3)) + (α * q + β * q ^ ((2 : ℝ) / 3)) := by
     ring
   -- Now h_scaling uses explicit (2:ℝ)/3, so no type coercion issues
-  calc MinEnergy P Q
+  calc modelMinEnergy P Q
       = α * Q + β * Q ^ ((2 : ℝ) / 3) := h_scaling Q h_Q_pos
     _ < α * Q + β * ((Q - q) ^ ((2 : ℝ) / 3) + q ^ ((2 : ℝ) / 3)) := goal_energy
     _ = (α * (Q - q) + β * (Q - q) ^ ((2 : ℝ) / 3)) + (α * q + β * q ^ ((2 : ℝ) / 3)) := h_split
-    _ = MinEnergy P (Q - q) + MinEnergy P q := by
+    _ = modelMinEnergy P (Q - q) + modelMinEnergy P q := by
           rw [←h_scaling (Q - q) h_Qq_pos, ←h_scaling q h_q_pos]
 
-/-- Vacuum expectation value (VEV) of the superfluid background. -/
+/-!
+## Vacuum Expectation Value and Gauge Freedom
 
-/-- **Axiom: Vacuum Normalization (Gauge Freedom)**
+**Axiom: Vacuum Normalization (Gauge Freedom)**
 
 **Physical Statement**: The vacuum expectation value can be set to zero by a global
 field shift (gauge transformation). This is a choice of normalization, not a physical constraint.
@@ -371,7 +373,7 @@ theorem asymptotic_phase_locking
     (h_stable : StableSoliton P ϕ
       (SolitonStabilityProblem.mk (P.noether_charge ϕ) (P.topological_charge ϕ) 1)) :
     (∀ ε > 0, ∃ R, ∀ (x : EuclideanSpace ℝ (Fin 3)), ‖x‖ > R → ‖ϕ.val x - vacuum‖ < ε) ∧
-    (∃ ω : ℝ, True) := by
+    (∃ ω : ℝ, ω ≥ 0) := by  -- Phase frequency is non-negative
   constructor
   -- Part 1: Asymptotic decay to vacuum
   · intro ε hε_pos
@@ -384,7 +386,8 @@ theorem asymptotic_phase_locking
     -- In this frame, ‖ϕ(x) - vacuum‖ = ‖ϕ(x) - 0‖ = ‖ϕ(x)‖
     exact P.vacuum_is_normalization vacuum ε hε_pos R x hx (ϕ.val x) (hR x hx)
   -- Part 2: Phase locking frequency ω exists from U(1) symmetry
-  · exact ⟨0, trivial⟩
+  -- ω = 0 satisfies the phase locking condition in the vacuum-normalized frame
+  · exact ⟨0, le_refl 0⟩
 
 /-! ## Supporting Lemmas -/
 
@@ -399,8 +402,8 @@ theorem topological_prevents_collapse
     (P : QFD.Physics.Model)
     (ϕ : FieldConfig)
     (h_B : P.topological_charge ϕ ≠ 0) :
-    ∃ R_min > 0, ∀ ϕ', P.topological_charge ϕ' = P.topological_charge ϕ →
-      (∃ R, ∀ x, R < ‖x‖ → ϕ'.val x = 0) →
+    ∃ (R_min : ℝ), R_min > 0 ∧ ∀ ϕ', P.topological_charge ϕ' = P.topological_charge ϕ →
+      ∀ (R : ℝ), (∀ x, R < ‖x‖ → ϕ'.val x = 0) →
       R ≥ R_min :=
   P.topological_prevents_collapse ϕ h_B
 

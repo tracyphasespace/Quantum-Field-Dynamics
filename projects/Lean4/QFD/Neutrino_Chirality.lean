@@ -36,34 +36,27 @@ We prove that even as $A \to 0$, the Chirality of $R$ is invariant
 
 namespace QFD.Neutrino_Chirality
 
-open scoped Classical
 open QFD.GA
 open QFD.QM_Translation.PauliBridge
 open CliffordAlgebra
 
 variable {Ψ : Type*} [AddCommGroup Ψ] [Module ℝ Ψ]
 
-/-- 
-A "Vortex" is a State with a separate Amplitude (scalar) and Rotor (geometry).
-Using a simplified model to demonstrate the topological locking.
--/ 
-structure Vortex :=
-  (amplitude : ℝ)
-  (rotor : Cl33)
+/-- A "Vortex" is a State with a separate Amplitude (scalar) and Rotor (geometry).
+Using a simplified model to demonstrate the topological locking. -/
+structure Vortex where
+  amplitude : ℝ
+  rotor : Cl33
 
-/--
-**Definition: Chirality Operator**
-In Spacetime Algebra, Chirality is determined by the sign relative to 
+/-- **Definition: Chirality Operator**
+In Spacetime Algebra, Chirality is determined by the sign relative to
 the pseudoscalar $I$ (or $\gamma_5$ in Dirac).
 Here we use the `I_spatial` we defined in PauliBridge.
-Left vs Right = Eigenvalues ±1.
--/ 
+Left vs Right = Eigenvalues ±1. -/
 def chirality_op (v : Vortex) : Cl33 :=
   I_spatial * v.rotor
 
-/-- 
-We define discrete chirality states.
--/ 
+/-- We define discrete chirality states. -/
 inductive ChiralityState
 | Left
 | Right
@@ -74,11 +67,12 @@ Extract the Chirality State from the rotor geometry.
 Logic: If R commutes/anticommutes with I to give sign.
 Simplified for proof: we assume the rotor is in an eigenstate.
 -/
-noncomputable def get_chirality (v : Vortex) : ChiralityState :=
-  if v.rotor = 0 then .None
-  else if I_spatial * v.rotor = v.rotor * I_spatial then .Right
-  else if I_spatial * v.rotor = - (v.rotor * I_spatial) then .Left
-  else .None
+noncomputable def get_chirality (v : Vortex) : ChiralityState := by
+  classical
+  exact if v.rotor = 0 then .None
+    else if I_spatial * v.rotor = v.rotor * I_spatial then .Right
+    else if I_spatial * v.rotor = - (v.rotor * I_spatial) then .Left
+    else .None
 
 /--
 **Theorem: The Chirality Lock**
@@ -89,7 +83,7 @@ Standard vectors fade away to 0 vector.
 Topology is robust.
 -/ 
 theorem chirality_invariant_under_bleaching
-  (v : Vortex) (k : ℝ) (h_k : k ≠ 0) :
+  (v : Vortex) (k : ℝ) (_h_k : k ≠ 0) :
   let bleached_vortex := Vortex.mk (v.amplitude * k) v.rotor
   get_chirality bleached_vortex = get_chirality v := by
   intro bleached_vortex
@@ -105,9 +99,7 @@ You cannot continuously deform a Left-Handed state into a Right-Handed state
 without passing through a "Singularity" (where Rotor vanishes or geometry breaks).
 
 This protects the neutrino species. A decay event produces a specific
-geometric knot. It cannot simply "untie" or "flip" without interaction.
--/ 
-
+geometric knot. It cannot simply "untie" or "flip" without interaction. -/
 theorem chirality_gap (L R : Vortex) :
   (get_chirality L = .Left) →
   (get_chirality R = .Right) →
@@ -117,9 +109,9 @@ theorem chirality_gap (L R : Vortex) :
   by_contra h_eq
   -- Then get_chirality L = get_chirality R
   have : get_chirality L = get_chirality R := by
+    -- Since L.rotor = R.rotor, both evaluate the same
     unfold get_chirality
-    -- Since L.rotor = R.rotor, all conditions evaluate the same
-    simp [h_eq]
+    rw [h_eq]
   -- But we have .Left = get_chirality L = get_chirality R = .Right
   -- which is a contradiction
   rw [hL, hR] at this

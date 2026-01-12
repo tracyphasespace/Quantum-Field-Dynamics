@@ -54,10 +54,12 @@ structure OscillationHypotheses where
       (Kept as a hypothesis to avoid fighting library lemma names; later we can discharge it.) -/
   prob_sum_eq_norm_sq : ∀ ψ : State, (∑ α : Flavor, prob ψ α) = ‖ψ‖ ^ 2
 
-  /-- Nontriviality hook: existence of some initial state and flavor whose probability changes in time. -/
+  /-- Nontriviality hook: existence of some initial state and flavor whose probability
+      changes in time. -/
   exists_nontrivial_oscillation :
     ∃ (ψ0 : State) (α : Flavor) (t1 t2 : ℝ),
-      IsNormalized ψ0 ∧ prob (U (D t1 (U.symm ψ0))) α ≠ prob (U (D t2 (U.symm ψ0))) α
+      IsNormalized ψ0 ∧
+        prob (U (D t1 (U.symm ψ0))) α ≠ prob (U (D t2 (U.symm ψ0))) α
 
 namespace OscillationHypotheses
 
@@ -78,11 +80,11 @@ theorem norm_evolve (H : OscillationHypotheses) (t : ℝ) (ψ0 : State) :
   calc
     ‖evolve H t ψ0‖
         = ‖H.D t (H.U.symm ψ0)‖ := by
-            simpa [evolve] using (H.U.norm_map (H.D t (H.U.symm ψ0)))
+            simp only [evolve, LinearIsometryEquiv.norm_map]
     _   = ‖H.U.symm ψ0‖ := by
-            simpa using ((H.D t).norm_map (H.U.symm ψ0))
+            simp only [LinearIsometryEquiv.norm_map]
     _   = ‖ψ0‖ := by
-            simpa using (H.U.symm.norm_map ψ0)
+            simp only [LinearIsometryEquiv.norm_map]
 
 /-- Total probability is conserved: ∑α P(t,α) = ‖ψ0‖². -/
 theorem sum_P_eq_norm_sq (H : OscillationHypotheses) (ψ0 : State) (t : ℝ) :
@@ -93,7 +95,8 @@ theorem sum_P_eq_norm_sq (H : OscillationHypotheses) (ψ0 : State) (t : ℝ) :
   -- Replace ‖evolve H t ψ0‖ with ‖ψ0‖
   rw [norm_evolve H t ψ0] at h1
   -- Unfold P and prob
-  simpa [P, prob, evolve] using h1
+  simp only [P, prob, evolve] at h1 ⊢
+  exact h1
 
 /-- If ψ0 is normalized, probabilities sum to 1 for all t. -/
 theorem sum_P_eq_one (H : OscillationHypotheses) (ψ0 : State) (t : ℝ)
@@ -101,7 +104,7 @@ theorem sum_P_eq_one (H : OscillationHypotheses) (ψ0 : State) (t : ℝ)
     (∑ α : Flavor, H.P ψ0 t α) = 1 := by
   rw [sum_P_eq_norm_sq]
   -- Turn ‖ψ0‖^2 into 1^2 = 1
-  simp [IsNormalized] at hψ
+  simp only [IsNormalized] at hψ
   rw [hψ]
   norm_num
 

@@ -37,7 +37,8 @@ private lemma algebraMap_ne_zero {r : ℝ} (hr : r ≠ 0) :
   -- Multiply by `r⁻¹` to deduce `1 = 0`, contradicting nontriviality.
   have : (1 : Cl33) = 0 := by
     have h' := congrArg (fun x => r⁻¹ • x) h_smul
-    simpa [smul_smul, hr, inv_mul_cancel, one_smul] using h'
+    simp only [smul_smul, inv_mul_cancel₀ hr, one_smul, smul_zero] at h'
+    exact h'
   exact zero_ne_one_Cl33 this.symm
 
 lemma algebraMap_injective : Function.Injective (algebraMap ℝ Cl33) := by

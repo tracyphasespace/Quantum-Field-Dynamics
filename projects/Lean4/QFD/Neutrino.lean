@@ -17,7 +17,8 @@ proved in `QFD.EmergentAlgebra_Heavy`.
 - `B := e 4 * e 5` is the internal bivector fixed by the vacuum/particle.
 - Spacetime generators commute with `B` (proved as `spacetime_commutes_with_B`).
 - Any **spacetime bivector** constructed from those generators therefore commutes with `B`.
-- Any **internal state** that is a polynomial/expression in `B` (and scalars) commutes with such spacetime bivectors.
+- Any **internal state** that is a polynomial/expression in `B` (and scalars)
+  commutes with such spacetime bivectors.
 
 We package this as a "zero EM coupling" commutator statement for one representative
 photon bivector `F_EM := e 1 * e 2`.
@@ -59,7 +60,6 @@ lemma F_EM_commutes_P_Internal : F_EM * P_Internal = P_Internal * F_EM := by
   -- Scalars commute with everything in an `Algebra`.
   have hsc : algebraMap ℝ Cl33 (1/2) * F_EM = F_EM * algebraMap ℝ Cl33 (1/2) :=
     Algebra.commutes (1/2 : ℝ) F_EM
-
   -- Now commute through by associativity.
   calc
     F_EM * P_Internal

@@ -43,15 +43,15 @@ structure Quantity (d : Dimensions) where
 /-! ## Fundamental Units -/
 
 def Unitless := Quantity Dimensions.none
-def Length   := Quantity ⟨1, 0, 0, 0⟩
-def Mass     := Quantity ⟨0, 1, 0, 0⟩
-def Time     := Quantity ⟨0, 0, 1, 0⟩
-def Charge   := Quantity ⟨0, 0, 0, 1⟩
+def Length := Quantity ⟨1, 0, 0, 0⟩
+def Mass := Quantity ⟨0, 1, 0, 0⟩
+def Time := Quantity ⟨0, 0, 1, 0⟩
+def Charge := Quantity ⟨0, 0, 0, 1⟩
 def Velocity := Quantity ⟨1, 0, -1, 0⟩
-def Energy   := Quantity ⟨2, 1, -2, 0⟩
-def Force    := Quantity ⟨1, 1, -2, 0⟩
-def Action   := Quantity ⟨2, 1, -1, 0⟩ -- Angular Momentum / Planck
-def Density  := Quantity ⟨-3, 1, 0, 0⟩
+def Energy := Quantity ⟨2, 1, -2, 0⟩
+def Force := Quantity ⟨1, 1, -2, 0⟩
+def Action := Quantity ⟨2, 1, -1, 0⟩ -- Angular Momentum / Planck
+def Density := Quantity ⟨-3, 1, 0, 0⟩
 
 /-! ## Operations -/
 

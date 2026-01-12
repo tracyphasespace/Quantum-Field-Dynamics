@@ -38,7 +38,6 @@ theorem radialForce_eq
     -- timePotential = -(c^2)/2 * (kappa * rho x)
     -- and A is defined as (-(c^2)/2)*kappa
     simp [A, timePotential_eq, mul_assoc, mul_left_comm, mul_comm]
-
   rw [hV]
   -- Differentiate A * rho using HasDerivAt scaling.
   have h_scaled : HasDerivAt (fun x => A * rho x) (A * rho') r :=

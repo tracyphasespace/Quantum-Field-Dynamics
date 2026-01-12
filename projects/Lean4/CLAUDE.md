@@ -18,7 +18,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **QFD_THREE_PILLARS.md** - Coherence, Consilience, Conciseness (reviewer summary)
 - **WORK_QUEUE.md** - Prioritized task list
 - **BUILD_STATUS.md** - Current build health, sorry count
-- **CLAIMS_INDEX.txt** - All 1,139 proven theorems/lemmas (grep-able)
+- **CLAIMS_INDEX.txt** - All 1,145 proven theorems/lemmas (grep-able)
 
 **Validation tools**:
 - **verify_constants.sh** - Check for contaminated constant definitions
@@ -30,7 +30,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a **Lean 4 formalization** of Quantum Field Dynamics (QFD) theorems, proving spacetime emergence, cosmology, nuclear physics, and particle physics using the Clifford algebra Cl(3,3). The project contains **1,139 proven statements** (924 theorems + 215 lemmas) across **243 Lean files**.
+This is a **Lean 4 formalization** of Quantum Field Dynamics (QFD) theorems, proving spacetime emergence, cosmology, nuclear physics, and particle physics using the Clifford algebra Cl(3,3). The project contains **1,145 proven statements** (926 theorems + 219 lemmas) across **243 Lean files**.
 
 **New modules (Jan 2026)**: Math/ (pure scaffolding), Atomic/ (chaos/resonance), Physics/Postulates.lean (centralized axioms)
 
@@ -499,30 +499,32 @@ See `CITATION.cff` for complete metadata.
 ## Key Statistics (as of 2026-01-11)
 
 - **Lean Files**: **243**
-- **Proven Theorems**: **924** (all substantive, zero stubs)
-- **Proven Lemmas**: **215**
-- **Total Proven**: **1,139 statements**
-- **Definitions**: **796**
+- **Proven Theorems**: **926** (all substantive, zero stubs)
+- **Proven Lemmas**: **219**
+- **Total Proven**: **1,145 statements**
+- **Definitions**: **788**
 - **Structures**: **188**
 - **Standalone Axioms**: **11** (centralized in Physics/Postulates.lean)
-- **Build Status**: ✅ Successful (3171 jobs)
+- **Build Status**: ✅ Successful (3178 jobs)
 - **Sorries**: **0** ✨
 - **Stub Theorems**: **0** (all converted to structures/definitions)
 
 **Counting Methodology** (IMPORTANT):
 ```bash
 # Count DECLARATIONS only (start of line):
-grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # theorems → 924
-grep -rn "^lemma" QFD/ --include="*.lean" | wc -l    # lemmas → 215
+grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # theorems → 926
+grep -rn "^lemma" QFD/ --include="*.lean" | wc -l    # lemmas → 219
 grep -rn "^axiom " QFD/ --include="*.lean" | wc -l   # axioms → 11
 grep -rn "^theorem.*: True" QFD/ --include="*.lean" | wc -l  # stubs → 0
 # DO NOT use grep without ^ anchor - inflates count by ~200 (includes comments)
 ```
 
 **Recent Progress (Jan 11, 2026)**:
-- **4 new starch proofs**: IntegerBridge, VolumeBalance, ResidualStrain, BoltzmannEntropy
-- **Complete formal verification**: 0 sorries, 0 stubs, 1,139 substantive proofs
-- **All 17 validation tests passing**
+- **True stub elimination complete**: All `True` placeholders → meaningful predicates
+- **Soliton Topological files fixed**: TopologicalCore, TopologicalStability
+- **Import cycle resolved**: Lepton/Topology.lean
+- **Field access fixed**: SpeedOfLight.lean `M.hbar` → `M.ℏ`
+- **Complete formal verification**: 0 sorries, 0 stubs, 1,145 substantive proofs
 
 **Earlier Progress (Jan 10, 2026)**:
 - **TopologicalEnergy.lean**: IVT-based proofs for lepton mass hierarchy

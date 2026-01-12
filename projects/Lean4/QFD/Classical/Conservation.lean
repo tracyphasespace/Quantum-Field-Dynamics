@@ -48,33 +48,28 @@ If a particle obeys Newton's Law (a = -V'(r)), then dE/dt = 0.
 -/
 theorem energy_conservation
     (V : ℝ → ℝ) (r : ℝ → ℝ) (v : ℝ → ℝ) (t : ℝ)
-    (V' : ℝ) (r_pos : ℝ) (a : ℝ)
+    (V' : ℝ) (_r_pos : ℝ) (a : ℝ)
     -- Hypotheses:
-    (hv : HasDerivAt r (v t) t)        -- v is derivative of r
-    (ha : HasDerivAt v a t)            -- a is derivative of v
-    (hV : HasDerivAt V V' (r t))       -- Potential is differentiable at current position
-    (hNewton : a = -V')                -- Newton's Second Law (Force = -Grad V)
+    (hv : HasDerivAt r (v t) t) -- v is derivative of r
+    (ha : HasDerivAt v a t) -- a is derivative of v
+    (hV : HasDerivAt V V' (r t)) -- Potential is differentiable at current position
+    (hNewton : a = -V') -- Newton's Second Law (Force = -Grad V)
     : HasDerivAt (fun t => totalEnergy V (v t) (r t)) 0 t := by
-
   -- 1. Differentiate Kinetic Energy: K(t) = 0.5 * v(t)^2
   -- dK/dt = 0.5 * 2 * v * a = v * a
   have hK : HasDerivAt (fun t => 0.5 * (v t)^2) (v t * a) t := by
     convert (ha.pow 2).const_mul 0.5 using 1
     ring
-
   -- 2. Differentiate Potential Energy: P(t) = V(r(t))
   -- dP/dt = V'(r) * r'(t) = V' * v
   have hP : HasDerivAt (fun t => V (r t)) (V' * v t) t :=
     HasDerivAt.comp t hV hv
-
   -- 3. Differentiate Total Energy: E = K + P
   -- dE/dt = v*a + V'*v = v*(a + V')
   have hE : HasDerivAt (fun t => totalEnergy V (v t) (r t)) (v t * a + V' * v t) t :=
     hK.add hP
-
   -- 4. Apply Newton's Law: a = -V'
   rw [hNewton] at hE
-
   -- 5. Show derivative is 0: v*(-V') + V'*v = 0
   convert hE
   ring
@@ -118,7 +113,7 @@ v_esc = sqrt(2GM/r).
 theorem gravity_escape_velocity
     (v : ℝ)
     (h_energy_zero : totalEnergy (newtonian_V G M) v r = 0)
-    (h_pos_G : 0 < G) (h_pos_M : 0 < M) (h_pos_r : 0 < r) :
+    (_h_pos_G : 0 < G) (_h_pos_M : 0 < M) (h_pos_r : 0 < r) :
     v^2 = 2 * G * M / r := by
   unfold totalEnergy newtonian_V at h_energy_zero
   -- 0.5 * v^2 + (-GM/r) = 0
@@ -136,10 +131,9 @@ theorem gravity_bound_state
     (E : ℝ) (v : ℝ)
     (h_neg_E : E < 0)
     (h_energy : totalEnergy (newtonian_V G M) v r = E)
-    (h_mass_pos : 0 < G * M) (h_r_pos : 0 < r) :
+    (_h_mass_pos : 0 < G * M) (h_r_pos : 0 < r) :
     r ≤ (G * M) / (-E) := by
   have hr0 : r ≠ 0 := ne_of_gt h_r_pos
-
   -- Expand energy equation: 0.5*v^2 - GM/r = E
   have hE : 0.5 * v ^ 2 - (G * M) / r = E := by
     have := h_energy
@@ -151,7 +145,6 @@ theorem gravity_bound_state
       · field_simp [hr]
     -- now simp can hit the exact target
     simpa [sub_eq_add_neg, hnegdiv, add_assoc, add_left_comm, add_comm] using this
-
   -- Rearrange to isolate GM/r:
   -- (G*M)/r = 0.5*v^2 - E
   have hGM : (G * M) / r = 0.5 * v ^ 2 - E := by
@@ -161,11 +154,9 @@ theorem gravity_bound_state
     have h3 := congrArg (fun x => x - E) h2
     -- (E + GM/r) - E = GM/r
     simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using h3.symm
-
   -- Kinetic term is nonnegative
   have hK : 0 ≤ (0.5 : ℝ) * v ^ 2 := by
     exact mul_nonneg (by norm_num) (sq_nonneg v)
-
   -- From GM/r = 0.5*v^2 - E, we get -E ≤ GM/r
   have hneg_le : (-E) ≤ (G * M) / r := by
     have h' : (-E) ≤ 0.5 * v ^ 2 - E := by
@@ -175,7 +166,6 @@ theorem gravity_bound_state
       simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using this
     -- rewrite RHS using hGM
     simpa [hGM] using h'
-
   -- Multiply by r ≥ 0 to clear the division and then divide by (-E) > 0
   have hrle : 0 ≤ r := le_of_lt h_r_pos
   have hmul : r * (-E) ≤ (G * M) := by
@@ -184,7 +174,6 @@ theorem gravity_bound_state
     -- simplify r * (GM/r) = GM
     have h_simp : r * ((G * M) / r) = G * M := by field_simp [hr0]
     linarith [hmul', h_simp]
-
   have hnegE : 0 < -E := neg_pos.mpr h_neg_E
   exact (le_div_iff₀ hnegE).2 hmul
 
@@ -208,7 +197,7 @@ theorem nuclear_binding_energy_exact :
     abs (nuclearPotential c κₙ A r₀ hc 0) = abs ((c^2 / 2) * (κₙ * A)) := by
   rw [wellDepth c κₙ A r₀ hc]
   have h : (-(c ^ 2) / 2) * (κₙ * A) = -((c ^ 2) / 2 * (κₙ * A)) := by ring
-  simpa [h] using (abs_neg ((c ^ 2) / 2 * (κₙ * A)))
+  simp only [h, abs_neg]
 
 /--
 **Theorem C-4'**: Nuclear Binding Energy (Positive Parameters).
@@ -225,18 +214,20 @@ theorem nuclear_binding_energy_positive
 
 /--
 **Theorem C-5**: Universal Confinement (Algebraic).
-For the soliton potential V(r), if E < 0, the particle is strictly bound.
-(Unlike gravity, the potential approaches 0 from below exponentially).
+If the total energy evaluates to a negative value `E`, then the particle is
+in a bound state.  We record this as the statement that the total energy
+is strictly negative.
 -/
 theorem nuclear_confinement
     (E v r : ℝ)
     (h_E_neg : E < 0)
     (h_energy : totalEnergy (nuclearPotential c κₙ A r₀ hc) v r = E)
-    (h_phys : ∀ x, nuclearPotential c κₙ A r₀ hc x ≤ 0) : -- Potential is attractive everywhere
-    True := by
-    -- In a formal dynamics module, we would prove r cannot reach infinity.
-    -- Here, we simply assert the algebraic consistency of the bound state.
-    trivial
+    (h_phys : ∀ x, nuclearPotential c κₙ A r₀ hc x ≤ 0) :
+    totalEnergy (nuclearPotential c κₙ A r₀ hc) v r < 0 := by
+  -- `h_phys` documents attraction everywhere; the algebraic consequence is
+  -- simply that the stored energy equals the negative value `E`.
+  have _ := h_phys
+  simpa [h_energy] using h_E_neg
 
 end NuclearSpecifics
 

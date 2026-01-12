@@ -25,8 +25,8 @@ Model definitions:
 
 /-- Minimal gravity context for time-refraction modeling. -/
 structure GravityContext where
-  c     : ℝ
-  hc    : 0 < c
+  c : ℝ
+  hc : 0 < c
   kappa : ℝ
 
 /-- Primitive object: `n²(r) := 1 + κ ρ(r)`. -/

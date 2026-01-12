@@ -111,7 +111,7 @@ theorem planck_depends_on_stiffness
     (vac : VacuumMedium)
     (M : EmergentConstants Point)
     (h_match_c : M.cVac = vac.sonicVelocity) :
-    M.hbar =
+    M.ℏ =
       (M.Gamma_vortex * M.lam_mass * M.L_zero) * Real.sqrt (vac.β / vac.ρ) := by
   -- Start from the bridge definition of ℏ
   have h := M.h_hbar_match
@@ -129,11 +129,11 @@ theorem hbar_proportional_sqrt_beta
     (vac : VacuumMedium)
     (M : EmergentConstants Point)
     (h_match_c : M.cVac = vac.sonicVelocity) :
-    ∃ k : ℝ, M.hbar = k * Real.sqrt vac.β := by
+    ∃ k : ℝ, M.ℏ = k * Real.sqrt vac.β := by
   refine ⟨(M.Gamma_vortex * M.lam_mass * M.L_zero) / Real.sqrt vac.ρ, ?_⟩
 
   have h0 :
-      M.hbar =
+      M.ℏ =
         (M.Gamma_vortex * M.lam_mass * M.L_zero) * Real.sqrt (vac.β / vac.ρ) :=
     planck_depends_on_stiffness (Point := Point) vac M h_match_c
 
@@ -141,7 +141,7 @@ theorem hbar_proportional_sqrt_beta
     Real.sqrt_div (β_nonneg vac) vac.ρ
 
   calc
-    M.hbar
+    M.ℏ
         = (M.Gamma_vortex * M.lam_mass * M.L_zero) * Real.sqrt (vac.β / vac.ρ) := h0
     _   = (M.Gamma_vortex * M.lam_mass * M.L_zero) * (Real.sqrt vac.β / Real.sqrt vac.ρ) := by
           simp [hsqrt]
@@ -183,7 +183,7 @@ theorem unified_beta_scaling
     (M : EmergentConstants Point)
     (h_match_c : M.cVac = vac.sonicVelocity) :
     (∃ (k_c : ℝ), M.cVac = k_c * Real.sqrt vac.β) ∧
-    (∃ (k_h : ℝ), M.hbar = k_h * Real.sqrt vac.β) := by
+    (∃ (k_h : ℝ), M.ℏ = k_h * Real.sqrt vac.β) := by
 
   constructor
   · -- c ∝ √β
@@ -203,7 +203,7 @@ theorem L0_inversely_depends_on_stiffness
     (M : EmergentConstants Point)
     (h_match_c : M.cVac = vac.sonicVelocity) :
     M.L_zero =
-      M.hbar / (M.Gamma_vortex * M.lam_mass * Real.sqrt (vac.β / vac.ρ)) := by
+      M.ℏ / (M.Gamma_vortex * M.lam_mass * Real.sqrt (vac.β / vac.ρ)) := by
   -- From the EmergentConstants layer: L₀ = ℏ / (Γ·λ·cVac)
   have hL0 := EmergentConstants.vacuum_length_scale_inversion (M := M)
   -- Substitute cVac = √(β/ρ) and unfold sonicVelocity

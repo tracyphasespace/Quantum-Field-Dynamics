@@ -1,6 +1,7 @@
 -- QFD/Rift/RotationDynamics.lean
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.Calculus.ContDiff
 import Mathlib.Tactic
 
 /-!
@@ -73,8 +74,10 @@ structure RotatingScalarField where
   phi : ℝ → ℝ → ℝ → ℝ
   /-- Angular velocity of rotation -/
   Omega : AngularVelocity
-  /-- Field must be smooth -/
-  smooth : True  -- Placeholder for smoothness axiom
+  /-- Smoothness of the scalar field in all variables. -/
+  smooth :
+    ContDiff ℝ ⊤ fun p : ℝ × ℝ × ℝ =>
+      phi p.1 p.2.1 p.2.2
 
 /-! ## 3. QFD Potential with Angular Structure -/
 

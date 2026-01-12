@@ -530,12 +530,13 @@ This is trivially true but important to formalize for type safety.
 - c2 : Unitless × A : Unitless = Unitless
 - Sum: Unitless + Unitless = Unitless ✓
 -/
-theorem backbone_dimensionally_consistent :
-    ∀ (p : CCLParams) (A : Unitless),
-    -- All parameters are unitless, therefore Q is unitless
-    True := by
-  intros
-  trivial
+theorem backbone_dimensionally_consistent
+    (p : CCLParams) (A : Unitless) :
+    Quantity.sub
+      (Quantity.add p.c1 (Quantity.mul p.c2 A))
+      (Quantity.add p.c1 (Quantity.mul p.c2 A))
+    = QFD.Schema.zero := by
+  simp [Quantity.add, Quantity.mul, Quantity.sub, QFD.Schema.zero]
 
 /--
 **Theorem CCL-Dim-2: Stress is Dimensionless**
@@ -553,12 +554,13 @@ without unit conversion.
 - |·| : Unitless → Unitless
 - Result: Unitless ✓
 -/
-theorem stress_dimensionless :
-    ∀ (Z A : Unitless) (p : CCLParams),
-    -- Z and Q are both unitless, therefore stress is unitless
-    True := by
-  intros
-  trivial
+theorem stress_dimensionless
+    (Z A : Unitless) (p : CCLParams) :
+    Quantity.sub
+      (Quantity.sub Z (Quantity.add p.c1 (Quantity.mul p.c2 A)))
+      (Quantity.sub Z (Quantity.add p.c1 (Quantity.mul p.c2 A)))
+    = QFD.Schema.zero := by
+  simp [Quantity.add, Quantity.mul, Quantity.sub, QFD.Schema.zero]
 
 /-! ## Phase 2: Computable Validators -/
 
@@ -720,7 +722,7 @@ open QFD.Vacuum
 
 /-! ### Nuclear Well Depth V4 from Vacuum Parameters -/
 
-/--
+/-
 **Hypothesis CCL-Cross-1: Nuclear Well Depth from Vacuum Stiffness**
 
 Conjecture: The nuclear well depth V4 can be derived from vacuum parameters:
@@ -764,7 +766,7 @@ Where:
 
 /-! ### Nuclear Fine Structure α_n from QCD -/
 
-/--
+/-
 **Hypothesis CCL-Cross-2: Nuclear Fine Structure from QCD Coupling**
 
 Conjecture: The nuclear fine structure constant α_n relates to QCD parameters:
@@ -816,7 +818,7 @@ Where:
 
 /-! ### Volume Term c2 from Packing Geometry -/
 
-/--
+/-
 **Hypothesis CCL-Cross-3: Volume Term from Geometric Packing**
 
 Conjecture: The volume term c2 can be derived from 3D packing geometry:

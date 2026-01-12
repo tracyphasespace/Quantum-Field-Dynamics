@@ -349,7 +349,7 @@ def qfd_explains_acoustic_peaks (chi2_QFD : ℝ) (chi2_standard : ℝ)
   -- Oscillations detected
   p.A_osc.val ≥ 0.05 ∧
   -- Physical parameters
-  True  -- constraints already ensure physicality
+  constraints.A_osc_unitary
 
 end QFD.Cosmology
 end

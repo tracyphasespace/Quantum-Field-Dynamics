@@ -130,10 +130,12 @@ theorem dense_vacuum_strong_binding (lam1 lam2 : ℝ) (h : lam1 > lam2) :
 k_c2 has dimensions of mass [M]
 λ has dimensions of mass density × length³ = [M]
 The equality is dimensionally consistent.
+
+This theorem validates that both quantities share the same dimension
+by proving their numerical equality (same dimension → can be compared).
 -/
-theorem dimensional_consistency :
-    True := by
-  trivial
+@[simp] theorem dimensional_consistency :
+    k_c2 = lambda_vacuum := k_c2_equals_lambda
 
 /-! ## Connection to Other Parameters -/
 

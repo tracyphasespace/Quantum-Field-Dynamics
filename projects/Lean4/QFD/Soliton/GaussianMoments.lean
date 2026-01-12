@@ -73,7 +73,7 @@ theorem Gamma_four : Gamma 4 = 6 := by
 
 **Blueprint Status**: Axiomatized pending full integration theorem from Mathlib.
 -/
-theorem gaussian_moment_odd (n : ℕ) (h_odd : Odd n) (h_pos : 0 < n) :
+theorem gaussian_moment_odd (n : ℕ) (_h_odd : Odd n) (_h_pos : 0 < n) :
     ∃ I : ℝ, I = 2^((n-1:ℝ)/2) * Gamma ((n+1:ℝ)/2) := by
   -- NOTE: In the final "axiom-zero" treatment, this lemma should be replaced by an
   -- actual integral identity (i.e. with `I = ∫₀^∞ ...`). Here we keep it as a

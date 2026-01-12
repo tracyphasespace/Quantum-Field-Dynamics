@@ -48,7 +48,7 @@ The "at hand" constants of physics - α, β, c, ℏ, G, ξ, R_vac, Yukawa scale 
 - **One Lagrangian**: L₆C in Cl(3,3) phase space
 - **One action principle**: Geodesic motion on vacuum manifold
 - **Minimal axioms**: All 11 centralized in `Physics/Postulates.lean`
-- **Zero sorries**: Complete formal verification (1,101 proven statements)
+- **Zero sorries**: Complete formal verification (1,145 proven statements)
 - **Reproducible**: Full validation suite runs in minutes
 
 ### The Cl(3,3) Methodology
@@ -103,8 +103,8 @@ After QFD: Single derivation chain from α → β → everything else. The "ugly
 ## Verification
 
 ### Lean Formalization
-- **1,101 proven statements** (886 theorems + 215 lemmas)
-- **238 Lean files** with explicit axiom tracking
+- **1,145 proven statements** (926 theorems + 219 lemmas)
+- **243 Lean files** with explicit axiom tracking
 - **Zero sorries, zero stubs** - complete formal verification
 - Every derivation chain formally verified
 

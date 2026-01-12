@@ -136,20 +136,20 @@ Rigorous formalization of Quantum Field Dynamics theorems in Lean 4, covering sp
 
 ---
 
-## Statistics (Updated 2026-01-10)
+## Statistics (Updated 2026-01-11)
 
 **Complete Formal Verification**: Zero sorries, zero stubs, all proofs substantive.
 
 | Metric | Value |
 |--------|-------|
-| **Proven Theorems** | **886** |
-| **Proven Lemmas** | **215** |
-| **Total Proven Statements** | **1,101** |
-| **Definitions** | **749+** |
-| **Structures** | **174+** |
+| **Proven Theorems** | **926** |
+| **Proven Lemmas** | **219** |
+| **Total Proven Statements** | **1,145** |
+| **Definitions** | **788** |
+| **Structures** | **188** |
 | **Axioms** | **11** (centralized in Physics/Postulates.lean) |
-| **Lean Files** | **238** |
-| **Build Status** | ✅ Successful (3171 jobs) |
+| **Lean Files** | **243** |
+| **Build Status** | ✅ Successful (3178 jobs) |
 | **Sorry Count** | **0** ✨ |
 | **Stub Count** | **0** (all converted to structures) |
 

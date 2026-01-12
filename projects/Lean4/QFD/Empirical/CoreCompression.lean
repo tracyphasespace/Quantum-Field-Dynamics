@@ -72,7 +72,7 @@ theorem backbone_unique_minimizer
     Q = backbone_charge A c₁ c₂ := by
   unfold deformation_energy at h_min
   have : (Q - backbone_charge A c₁ c₂)^2 = 0 := by nlinarith
-  have : Q - backbone_charge A c₁ c₂ = 0 := pow_eq_zero this
+  have : Q - backbone_charge A c₁ c₂ = 0 := eq_zero_of_pow_eq_zero this
   linarith
 
 /-! ## 4. Decay Dynamics (The Gradient) -/
@@ -84,20 +84,16 @@ This formally predicts the β+ / Electron Capture decay channel.
 -/
 theorem beta_decay_favorable
     (c₁ c₂ k : ℝ) (hk : 0 < k)
-    (Q : ℝ) (h_excess : Q > backbone_charge A c₁ c₂) -- "Overcharged" condition
-    (delta : ℝ) (h_delta_pos : 0 < delta)           -- Small decay step
+    (Q : ℝ) (_h_excess : Q > backbone_charge A c₁ c₂) -- "Overcharged" condition
+    (delta : ℝ) (h_delta_pos : 0 < delta) -- Small decay step
     (h_small_step : delta < Q - backbone_charge A c₁ c₂) : -- Step doesn't overshoot
     deformation_energy A c₁ c₂ k (Q - delta) < deformation_energy A c₁ c₂ k Q := by
-
   unfold deformation_energy
   let target := backbone_charge A c₁ c₂
-
   -- We need to show: 0.5*k*(Q - δ - target)^2 < 0.5*k*(Q - target)^2
   -- Since 0.5*k > 0, we just need to compare the squares.
   have h_factor_pos : 0 < 0.5 * k := by linarith
-
   apply mul_lt_mul_of_pos_left _ h_factor_pos
-
   -- We compare x_new^2 < x_old^2
   -- Let x_old = Q - target
   -- Let x_new = Q - delta - target

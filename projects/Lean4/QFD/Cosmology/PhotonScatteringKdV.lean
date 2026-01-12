@@ -117,9 +117,6 @@ variable (M : QFDModelStable Point)
 --     let ΔE := PhotonWave.energy (M := M) γ_probe - PhotonWave.energy (M := M) res.γ_probe_out
 --     ΔE = (CouplingEfficiency VacuumNonLinearity γ_probe γ_bg) * 1e-30
 
-/-- Placeholder for downstream theorems that used the axiom. -/
-def kdv_interaction_placeholder : Prop := True
-
 /-!
   ## 3. Macroscopic Cosmological Consequences
 -/

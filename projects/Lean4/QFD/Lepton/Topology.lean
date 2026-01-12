@@ -1,7 +1,6 @@
 import Mathlib.Topology.Homotopy.Basic
 import Mathlib.Geometry.Euclidean.Sphere.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
-import Physics.Postulates
 import QFD.GA.Cl33
 
 /-!
@@ -30,14 +29,29 @@ See AXIOM_INVENTORY.md for elimination strategy (Mathlib singular homology).
 
 -/
 
+noncomputable section
+
 namespace QFD.Lepton.Topology
 
-open ContinuousMap QFD.Physics
+open ContinuousMap
 
-abbrev Sphere3 : Type := QFD.Physics.Sphere3
-abbrev RotorGroup : Type := QFD.Physics.RotorGroup
+/-- The 3-sphere S³ ⊂ ℝ⁴ (local definition to avoid import cycle). -/
+abbrev Sphere3 : Type := Metric.sphere (0 : EuclideanSpace ℝ (Fin 4)) 1
 
-variable (P : QFD.Physics.Model)
+/-- The rotor group (SU(2) ≅ S³) for internal rotations (local definition). -/
+abbrev RotorGroup : Type := Sphere3
+
+/-- Minimal physics model structure for topological theorems. -/
+structure TopologyModel where
+  /-- Winding number / degree of field configuration. -/
+  winding_number : C(Sphere3, RotorGroup) → ℤ
+  /-- Homotopic maps have equal degree. -/
+  homotopy_invariance : ∀ f g : C(Sphere3, RotorGroup),
+    ContinuousMap.Homotopic f g → winding_number f = winding_number g
+  /-- Constant map has degree 0. -/
+  vacuum_degree : ∀ x : Sphere3, winding_number (ContinuousMap.const Sphere3 x) = 0
+
+variable (P : TopologyModel)
 
 /-!
 ## Algebraic Topology Axioms
@@ -66,7 +80,7 @@ def winding_number : C(Sphere3, RotorGroup) → ℤ :=
     Standard result: Degree factors through homotopy classes [S³, S³] ≅ ℤ. -/
 theorem degree_homotopy_invariant {f g : C(Sphere3, RotorGroup)} :
     ContinuousMap.Homotopic f g → winding_number P f = winding_number P g :=
-  P.degree_homotopy_invariant
+  P.homotopy_invariance f g
 
 -----------------------------------------------------------
 -- Physical Definitions
@@ -92,8 +106,13 @@ def IsStableParticle (psi : C(Sphere3, RotorGroup)) : Prop :=
 /-- The trivial vacuum state has winding number 0.
     Standard result: Constant maps have degree 0 by definition. -/
 theorem vacuum_winding :
-    ∃ (vac : C(Sphere3, RotorGroup)), winding_number P vac = 0 :=
-  P.vacuum_winding
+    ∃ (vac : C(Sphere3, RotorGroup)), winding_number P vac = 0 := by
+  -- The sphere S³ is nonempty (it contains the unit vector e₀)
+  let e0 : EuclideanSpace ℝ (Fin 4) := EuclideanSpace.single 0 1
+  have h_e0_mem : e0 ∈ Metric.sphere (0 : EuclideanSpace ℝ (Fin 4)) 1 := by
+    rw [Metric.mem_sphere, dist_eq_norm, sub_zero, EuclideanSpace.norm_single, norm_one]
+  let pt : Sphere3 := ⟨e0, h_e0_mem⟩
+  exact ⟨ContinuousMap.const Sphere3 pt, P.vacuum_degree pt⟩
 
 -----------------------------------------------------------
 -- The Theorem
@@ -113,7 +132,7 @@ theorem topological_protection
     False := by
   have h_equal :
       winding_number P ψ = winding_number P vac :=
-    degree_homotopy_invariant (P := P)
+    degree_homotopy_invariant P
       (by simpa [ContinuousEvolution] using h_evolution)
   have hψ_zero : winding_number P ψ = 0 := h_equal.trans h_vacuum
   exact h_stable hψ_zero
@@ -129,7 +148,7 @@ theorem no_decay_into_vacuum
       winding_number P vac = 0 →
       ¬ ContinuousEvolution ψ vac := by
   intro vac hvac hpath
-  exact topological_protection (P := P) h_stable hvac hpath
+  exact topological_protection P h_stable hvac hpath
 
 -----------------------------------------------------------
 -- Significance Discussion
@@ -153,3 +172,5 @@ This explains why matter is stable without invoking ad hoc conservation laws.
 -/
 
 end QFD.Lepton.Topology
+
+end

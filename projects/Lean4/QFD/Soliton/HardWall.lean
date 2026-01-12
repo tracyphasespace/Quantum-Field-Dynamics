@@ -170,7 +170,7 @@ Any A < -v₀ violates the admissibility condition at R=0.
 3. Therefore A ≥ -v₀
 -/
 theorem critical_vortex_amplitude_necessary (ctx : VacuumContext) (A : ℝ)
-    (h_neg : A < 0) (h_adm : is_admissible ctx A) :
+    (_h_neg : A < 0) (h_adm : is_admissible ctx A) :
     -ctx.v₀ ≤ A := by
   unfold is_admissible at h_adm
   have h_center := h_adm 0 (le_refl 0)

@@ -57,23 +57,17 @@ This is the geometric suppression mechanism: m_ν = (R_p/λ_e)³ · m_e < m_e.
 theorem neutrino_mass_hierarchy (ctx : MassContext) (h_scale : ctx.R_p < ctx.lambda_e) :
     0 < neutrino_mass ctx ∧ neutrino_mass ctx < ctx.m_e := by
   unfold neutrino_mass coupling_efficiency
-
   have h_ratio_pos : 0 < ctx.R_p / ctx.lambda_e :=
     div_pos ctx.h_Rp_pos ctx.h_lam_pos
-
   have h_pow_pos : 0 < (ctx.R_p / ctx.lambda_e) ^ (3 : ℕ) :=
     pow_pos h_ratio_pos 3
-
   constructor
-
   -- 1. Positivity: 0 < m_ν
   · exact mul_pos h_pow_pos ctx.h_me_pos
-
   -- 2. Hierarchy: m_ν < m_e
   · have h_ratio_lt_1 : ctx.R_p / ctx.lambda_e < 1 := by
       rw [div_lt_one ctx.h_lam_pos]
       exact h_scale
-
     -- For 0 < x < 1, prove x^2 < 1 first
     have h_sq_lt_one : (ctx.R_p / ctx.lambda_e) ^ 2 < 1 := by
       calc (ctx.R_p / ctx.lambda_e) ^ 2
@@ -81,7 +75,6 @@ theorem neutrino_mass_hierarchy (ctx : MassContext) (h_scale : ctx.R_p < ctx.lam
         _ < (ctx.R_p / ctx.lambda_e) * 1 := mul_lt_mul_of_pos_left h_ratio_lt_1 h_ratio_pos
         _ = ctx.R_p / ctx.lambda_e := by ring
         _ < 1 := h_ratio_lt_1
-
     -- Then prove x^3 < 1
     have h_pow_lt_1 : (ctx.R_p / ctx.lambda_e) ^ 3 < 1 := by
       calc (ctx.R_p / ctx.lambda_e) ^ 3
@@ -89,7 +82,6 @@ theorem neutrino_mass_hierarchy (ctx : MassContext) (h_scale : ctx.R_p < ctx.lam
         _ < (ctx.R_p / ctx.lambda_e) * 1 := mul_lt_mul_of_pos_left h_sq_lt_one h_ratio_pos
         _ = ctx.R_p / ctx.lambda_e := by ring
         _ < 1 := h_ratio_lt_1
-
     -- Multiply both sides by m_e > 0
     calc coupling_efficiency ctx * ctx.m_e
         < 1 * ctx.m_e := mul_lt_mul_of_pos_right h_pow_lt_1 ctx.h_me_pos

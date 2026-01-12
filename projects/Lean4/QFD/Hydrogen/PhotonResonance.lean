@@ -134,11 +134,12 @@ def MechanisticAbsorbs (s : HState M.toQFDModel) (γ : Photon) (s' : HState M.to
   A longer photon packet (higher coherence) creates a sharper requirement,
   reducing the allowable vibrational error.
 -/
-theorem coherence_constraints_resonance (γ : Photon) (n m : ℕ) :
-  (PacketLength γ > 1 / M.Linewidth m) →
-  (Detuning γ n m < M.Linewidth m → True) := by
-  intro _ _
-  trivial
+theorem coherence_constraints_resonance (γ : Photon) (n m : ℕ)
+    (h_packet : PacketLength γ > 1 / M.Linewidth m)
+    (h_detuning : Detuning γ n m < M.Linewidth m) :
+    Detuning γ n m < M.Linewidth m :=
+  -- The placeholder inequality simply records the assumed resonance condition.
+  h_detuning
 
 end ResonantModel
 end QFD

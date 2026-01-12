@@ -61,6 +61,8 @@ python analysis/scripts/run_all_validations.py
 | **Muon g-2** | 0.00116595205 | 0.00116592071 (Fermilab 2025) | **0.0027%** | 0 |
 | **CMB Temperature** | 2.7248 K | 2.7255 K | **0.03%** | 0 |
 | **Muon/Electron Mass** | 205.9 | 206.8 | **0.93%** | 0 |
+
+*Note:* `analysis/scripts/validate_g2_corrected.py` currently injects the experimentally measured muon/electron mass ratio to demonstrate the geometric g‑2 formula; the internal topology-derived ratio (0.93 % high) is under active refinement.
 | **Nuclear c₁** | 0.496351 | 0.496297 | **0.01%** | 0 |
 | **Conservation Law** | 210/210 | — | **100%** | 0 |
 

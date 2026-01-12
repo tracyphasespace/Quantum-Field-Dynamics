@@ -396,10 +396,10 @@ For a photon soliton with helicity H = ∫A·B dV:
 
 | Metric | Count |
 |--------|-------|
-| Lean files | 238 |
-| Theorems | 886 |
-| Lemmas | 215 |
-| **Total proven** | **1,101** |
+| Lean files | 243 |
+| Theorems | 926 |
+| Lemmas | 219 |
+| **Total proven** | **1,145** |
 | Explicit axioms | 11 |
 | Sorries | **0** ✨ |
 | **Completion rate** | **100%** |

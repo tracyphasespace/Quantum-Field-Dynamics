@@ -227,15 +227,14 @@ theorem correction_factor_ge_one (tau : ℝ) (h_tau : tau ≥ 0) :
 /--
 **Expected Outcome: Dark Energy Not Required**
 
-If QFD scattering (Ω_Λ = 0) achieves comparable χ² to ΛCDM (Ω_Λ ≈ 0.7)
-on Pantheon+ data, dark energy is not necessary to explain SNe dimming.
+If a set of scattering parameters satisfies the theoretical constraints and
+produces a χ² no worse than ΛCDM (up to some tolerance Δχ²), then the
+QFD scattering explanation suffices without invoking dark energy.
 -/
-def dark_energy_not_required : Prop :=
-  ∃ (p : ScatteringParams),
+def dark_energy_not_required (χ_QFD χ_LCDM Δχ : ℝ) : Prop :=
+  ∃ p : ScatteringParams,
     ScatteringConstraints p ∧
-    -- The Grand Solver will test this empirically:
-    -- χ²_QFD(p) ≤ χ²_ΛCDM + Δχ²_threshold
-    True  -- Placeholder for actual fit quality comparison
+    χ_QFD ≤ χ_LCDM + Δχ
 
 end QFD.Cosmology
 end
