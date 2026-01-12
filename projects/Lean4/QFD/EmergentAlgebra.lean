@@ -2,10 +2,14 @@ import Mathlib.Algebra.Ring.Basic
 import Mathlib.Data.Int.Basic
 import Mathlib.Tactic.Ring
 import QFD.GA.Cl33
+import QFD.GA.BasisOperations
+import QFD.GA.Cl33Instances
 
 noncomputable section
 
 namespace QFD
+
+open QFD.GA
 
 /-!
 # Algebraic Emergence of 4D Spacetime
@@ -96,6 +100,20 @@ def genIndex : Generator → Fin 6
 def γ33 (a : Generator) : QFD.GA.Cl33 :=
   QFD.GA.ι33 (QFD.GA.basis_vector (genIndex a))
 
+/-!
+### Bridge lemmas: γ33 gammaX = e (genIndex gammaX)
+
+These connect the abstract Generator-based notation with the concrete
+Cl33 basis vectors, enabling simp to use commutation lemmas.
+-/
+
+@[simp] lemma γ33_gamma1 : γ33 gamma1 = e 0 := rfl
+@[simp] lemma γ33_gamma2 : γ33 gamma2 = e 1 := rfl
+@[simp] lemma γ33_gamma3 : γ33 gamma3 = e 2 := rfl
+@[simp] lemma γ33_gamma4 : γ33 gamma4 = e 3 := rfl
+@[simp] lemma γ33_gamma5 : γ33 gamma5 = e 4 := rfl
+@[simp] lemma γ33_gamma6 : γ33 gamma6 = e 5 := rfl
+
 /--
 `Generator` squaring law, now as a *real* theorem in the concrete Clifford algebra `Cl33`.
 
@@ -120,6 +138,164 @@ For anticommuting generators: γₐ ∧ γᵦ = γₐγᵦ
 def internalBivector : Generator × Generator :=
   (gamma5, gamma6)
 
+/-- The internal bivector B = e₄ * e₅ in the concrete Clifford algebra Cl33.
+    (gamma5 maps to index 4, gamma6 maps to index 5) -/
+def B_cl33 : Cl33 := e 4 * e 5
+
+/-!
+## 3.5 Algebraic Commutation Proofs
+
+We prove that generators γ₁, γ₂, γ₃, γ₄ (indices 0,1,2,3) commute with the
+internal bivector B = γ₅γ₆ (= e 4 * e 5).
+
+**Key calculation**: For i ∈ {0,1,2,3} (distinct from 4 and 5):
+  γᵢ * B = γᵢ * (e₄ * e₅)
+         = (γᵢ * e₄) * e₅           [associativity]
+         = (-(e₄ * γᵢ)) * e₅        [anticommute: i ≠ 4]
+         = -e₄ * (γᵢ * e₅)          [associativity]
+         = -e₄ * (-(e₅ * γᵢ))       [anticommute: i ≠ 5]
+         = e₄ * e₅ * γᵢ             [double negation]
+         = B * γᵢ                    ✓
+-/
+
+/-- Generator at index i commutes with B = e 4 * e 5 when i ∉ {4, 5} -/
+theorem generator_commutes_with_B (i : Fin 6) (hi4 : i ≠ 4) (hi5 : i ≠ 5) :
+    e i * B_cl33 = B_cl33 * e i := by
+  unfold B_cl33
+  -- Use anticommutation twice: γᵢγ₅γ₆ = -γ₅γᵢγ₆ = +γ₅γ₆γᵢ
+  -- Step 1: associate left
+  rw [← mul_assoc]
+  -- Goal: e i * e 4 * e 5 = e 4 * e 5 * e i
+  -- Step 2: anticommute e i and e 4
+  rw [basis_anticomm hi4]
+  -- Goal: -e 4 * e i * e 5 = e 4 * e 5 * e i
+  -- Step 3: push negation and reassociate
+  rw [neg_mul, neg_mul, mul_assoc]
+  -- Goal: -(e 4 * (e i * e 5)) = e 4 * e 5 * e i
+  -- Step 4: anticommute e i and e 5
+  rw [basis_anticomm hi5]
+  -- Goal: -(e 4 * (-e 5 * e i)) = e 4 * e 5 * e i
+  -- Step 5: simplify double negation
+  rw [neg_mul, mul_neg, neg_neg, mul_assoc]
+
+/-- γ₁ (index 0) commutes with B -/
+@[simp] theorem gamma1_commutes_with_B : e 0 * B_cl33 = B_cl33 * e 0 :=
+  generator_commutes_with_B 0 (by decide) (by decide)
+
+/-- γ₂ (index 1) commutes with B -/
+@[simp] theorem gamma2_commutes_with_B : e 1 * B_cl33 = B_cl33 * e 1 :=
+  generator_commutes_with_B 1 (by decide) (by decide)
+
+/-- γ₃ (index 2) commutes with B -/
+@[simp] theorem gamma3_commutes_with_B : e 2 * B_cl33 = B_cl33 * e 2 :=
+  generator_commutes_with_B 2 (by decide) (by decide)
+
+/-- γ₄ (index 3) commutes with B -/
+@[simp] theorem gamma4_commutes_with_B : e 3 * B_cl33 = B_cl33 * e 3 :=
+  generator_commutes_with_B 3 (by decide) (by decide)
+
+/-- Helper: e i ≠ 0 for any basis vector -/
+lemma e_ne_zero (i : Fin 6) : e i ≠ 0 := by
+  dsimp [e]
+  exact basis_vector_ne_zero i
+
+/-- Helper: signature33 4 = -1 (timelike) -/
+lemma sig4_eq_neg_one : signature33 4 = -1 := rfl
+
+/-- Helper: signature33 5 = -1 (timelike) -/
+lemma sig5_eq_neg_one : signature33 5 = -1 := rfl
+
+/-- Helper: In CharZero module, x = -x implies x = 0 -/
+lemma eq_neg_self_iff_zero (x : Cl33) : x = -x ↔ x = 0 := by
+  constructor
+  · intro h
+    -- x = -x implies x + x = 0
+    have h2 : x + x = 0 := by
+      calc x + x = x + (-x) := by rw [← h]
+        _ = 0 := add_neg_cancel x
+    -- x + x = (2 : ℝ) • x in an ℝ-algebra
+    have h2_smul : (2 : ℝ) • x = 0 := by
+      rw [show (2 : ℝ) • x = x + x from two_smul ℝ x]
+      exact h2
+    -- In an ℝ-module, (2 : ℝ) • x = 0 with 2 ≠ 0 implies x = 0
+    have h2_ne : (2 : ℝ) ≠ 0 := by norm_num
+    exact (smul_eq_zero_iff_right h2_ne).mp h2_smul
+  · intro h; simp [h]
+
+/-- γ₅ (index 4) does NOT commute with B = e 4 * e 5.
+
+    **Algebraic calculation**:
+    - LHS: e 4 * (e 4 * e 5) = (e 4)² * e 5 = (-1) * e 5 = -e 5
+    - RHS: (e 4 * e 5) * e 4 = e 4 * (e 5 * e 4) = e 4 * (-e 4 * e 5) = -(e 4)² * e 5 = e 5
+    - If LHS = RHS, then -e 5 = e 5, so e 5 = 0, contradicting e 5 ≠ 0.
+-/
+theorem gamma5_anticommutes_with_B : e 4 * B_cl33 ≠ B_cl33 * e 4 := by
+  intro h_eq
+  unfold B_cl33 at h_eq
+  -- Calculate LHS: e 4 * (e 4 * e 5) = (e 4 * e 4) * e 5 = -e 5
+  have h_lhs : e 4 * (e 4 * e 5) = -(e 5) := by
+    rw [← mul_assoc, basis_sq 4, sig4_eq_neg_one]
+    simp only [map_neg, map_one, neg_mul, one_mul]
+  -- Calculate RHS: (e 4 * e 5) * e 4 = e 4 * (e 5 * e 4) = e 4 * (-e 4 * e 5) = e 5
+  have h_rhs : (e 4 * e 5) * e 4 = e 5 := by
+    have h54_ne : (5 : Fin 6) ≠ 4 := by decide
+    have h54 : e 5 * e 4 = -e 4 * e 5 := @basis_anticomm 5 4 h54_ne
+    calc (e 4 * e 5) * e 4
+      = e 4 * (e 5 * e 4) := mul_assoc _ _ _
+    _ = e 4 * (-e 4 * e 5) := by rw [h54]
+    _ = e 4 * -(e 4 * e 5) := by rw [neg_mul]
+    _ = -(e 4 * (e 4 * e 5)) := by rw [mul_neg]
+    _ = -((e 4 * e 4) * e 5) := by rw [← mul_assoc]
+    _ = -(algebraMap ℝ Cl33 (signature33 4) * e 5) := by rw [basis_sq 4]
+    _ = -(algebraMap ℝ Cl33 (-1) * e 5) := by rw [sig4_eq_neg_one]
+    _ = -(-e 5) := by simp only [map_neg, map_one, neg_mul, one_mul]
+    _ = e 5 := neg_neg _
+  -- From h_eq: -e 5 = e 5
+  have h_neg_eq : -(e 5) = e 5 := by
+    calc -(e 5) = e 4 * (e 4 * e 5) := h_lhs.symm
+      _ = (e 4 * e 5) * e 4 := h_eq
+      _ = e 5 := h_rhs
+  -- This means e 5 = 0
+  have h_e5_zero : e 5 = 0 := (eq_neg_self_iff_zero (e 5)).mp h_neg_eq.symm
+  exact e_ne_zero 5 h_e5_zero
+
+/-- γ₆ (index 5) does NOT commute with B = e 4 * e 5.
+
+    **Algebraic calculation**:
+    - LHS: e 5 * (e 4 * e 5) = (e 5 * e 4) * e 5 = (-e 4 * e 5) * e 5 = -e 4 * (e 5)² = e 4
+    - RHS: (e 4 * e 5) * e 5 = e 4 * (e 5)² = e 4 * (-1) = -e 4
+    - If LHS = RHS, then e 4 = -e 4, so e 4 = 0, contradicting e 4 ≠ 0.
+-/
+theorem gamma6_anticommutes_with_B : e 5 * B_cl33 ≠ B_cl33 * e 5 := by
+  intro h_eq
+  unfold B_cl33 at h_eq
+  -- Calculate LHS: e 5 * (e 4 * e 5) = (e 5 * e 4) * e 5 = (-e 4 * e 5) * e 5 = e 4
+  have h_lhs : e 5 * (e 4 * e 5) = e 4 := by
+    have h54_ne : (5 : Fin 6) ≠ 4 := by decide
+    have h54 : e 5 * e 4 = -e 4 * e 5 := @basis_anticomm 5 4 h54_ne
+    calc e 5 * (e 4 * e 5)
+      = (e 5 * e 4) * e 5 := (mul_assoc _ _ _).symm
+    _ = (-e 4 * e 5) * e 5 := by rw [h54]
+    _ = (-(e 4 * e 5)) * e 5 := by rw [neg_mul]
+    _ = -((e 4 * e 5) * e 5) := by rw [neg_mul]
+    _ = -(e 4 * (e 5 * e 5)) := by rw [mul_assoc]
+    _ = -(e 4 * algebraMap ℝ Cl33 (signature33 5)) := by rw [basis_sq 5]
+    _ = -(e 4 * algebraMap ℝ Cl33 (-1)) := by rw [sig5_eq_neg_one]
+    _ = -(-e 4) := by simp only [map_neg, map_one, mul_neg, mul_one]
+    _ = e 4 := neg_neg _
+  -- Calculate RHS: (e 4 * e 5) * e 5 = e 4 * (e 5 * e 5) = e 4 * (-1) = -e 4
+  have h_rhs : (e 4 * e 5) * e 5 = -(e 4) := by
+    rw [mul_assoc, basis_sq 5, sig5_eq_neg_one]
+    simp only [map_neg, map_one, mul_neg, mul_one]
+  -- From h_eq: e 4 = -e 4
+  have h_neg_eq : e 4 = -(e 4) := by
+    calc e 4 = e 5 * (e 4 * e 5) := h_lhs.symm
+      _ = (e 4 * e 5) * e 5 := h_eq
+      _ = -(e 4) := h_rhs
+  -- This means e 4 = 0
+  have h_e4_zero : e 4 = 0 := (eq_neg_self_iff_zero (e 4)).mp h_neg_eq
+  exact e_ne_zero 4 h_e4_zero
+
 /-!
 ## 4. Centralizer (Commutant)
 
@@ -132,17 +308,10 @@ These are the elements that "see" the emergent 4D spacetime.
 /-- A generator γ centralizes (commutes with) bivector B = γ₅ ∧ γ₆ if:
     γ * (γ₅ γ₆) = (γ₅ γ₆) * γ
 
-    By the anticommutation relations:
-    - If γ ∈ {γ₁, γ₂, γ₃, γ₄}: commutes (centralizes)
-    - If γ ∈ {γ₅, γ₆}: anticommutes (does NOT centralize)
+    This is the ACTUAL algebraic condition, not a lookup table.
 -/
-def centralizes_internal_bivector : Generator → Prop
-  | gamma1 => True   -- γ₁ commutes with γ₅γ₆
-  | gamma2 => True   -- γ₂ commutes with γ₅γ₆
-  | gamma3 => True   -- γ₃ commutes with γ₅γ₆
-  | gamma4 => True   -- γ₄ commutes with γ₅γ₆
-  | gamma5 => False  -- γ₅ anticommutes with γ₅γ₆ (it's part of B!)
-  | gamma6 => False  -- γ₆ anticommutes with γ₅γ₆ (it's part of B!)
+def centralizes_internal_bivector (g : Generator) : Prop :=
+  γ33 g * B_cl33 = B_cl33 * γ33 g
 
 /-!
 ## 5. Main Theorem: Algebraic Emergence of Minkowski Space
@@ -157,27 +326,36 @@ This is exactly Cl(3,1) - the Clifford algebra of Minkowski spacetime!
 def is_spacetime_generator (g : Generator) : Prop :=
   centralizes_internal_bivector g
 
-/-- Theorem: γ₁, γ₂, γ₃ are spacelike spacetime generators -/
+/-- Theorem: γ₁, γ₂, γ₃ are spacelike spacetime generators.
+
+    **Proof**: Uses the algebraic commutation lemmas `gamma1_commutes_with_B`,
+    `gamma2_commutes_with_B`, `gamma3_commutes_with_B` which prove that
+    e i * B = B * e i for i ∈ {0, 1, 2}. -/
 theorem spacetime_has_three_space_dims :
     is_spacetime_generator gamma1 ∧
     is_spacetime_generator gamma2 ∧
     is_spacetime_generator gamma3 := by
-  unfold is_spacetime_generator centralizes_internal_bivector
-  exact ⟨trivial, trivial, trivial⟩
+  unfold is_spacetime_generator centralizes_internal_bivector γ33 genIndex
+  exact ⟨gamma1_commutes_with_B, gamma2_commutes_with_B, gamma3_commutes_with_B⟩
 
-/-- Theorem: γ₄ is the timelike spacetime generator -/
+/-- Theorem: γ₄ is the timelike spacetime generator.
+
+    **Proof**: Uses `gamma4_commutes_with_B` which proves e 3 * B = B * e 3. -/
 theorem spacetime_has_one_time_dim :
     is_spacetime_generator gamma4 ∧
     metric gamma4 = -1 := by
-  unfold is_spacetime_generator centralizes_internal_bivector metric
-  exact ⟨trivial, rfl⟩
+  unfold is_spacetime_generator centralizes_internal_bivector γ33 genIndex metric
+  exact ⟨gamma4_commutes_with_B, rfl⟩
 
-/-- Theorem: γ₅, γ₆ are NOT spacetime generators (they're internal) -/
+/-- Theorem: γ₅, γ₆ are NOT spacetime generators (they're internal).
+
+    **Proof**: Uses `gamma5_anticommutes_with_B` and `gamma6_anticommutes_with_B`
+    which prove that e 4 and e 5 do NOT commute with B = e 4 * e 5. -/
 theorem internal_dims_not_spacetime :
     ¬is_spacetime_generator gamma5 ∧
     ¬is_spacetime_generator gamma6 := by
-  unfold is_spacetime_generator centralizes_internal_bivector
-  simp
+  unfold is_spacetime_generator centralizes_internal_bivector γ33 genIndex
+  exact ⟨gamma5_anticommutes_with_B, gamma6_anticommutes_with_B⟩
 
 /-- The signature of spacetime generators is exactly (+,+,+,-) -/
 theorem spacetime_signature :
@@ -277,37 +455,73 @@ For anticommuting generators (distinct γ's):
 - γ₅γ₅γ₆ = η₅₅ γ₆ = -γ₆ ≠ γ₅γ₆γ₅ (anticommutes)
 -/
 
-/-- Helper lemma: Generators distinct from γ₅ and γ₆ commute with B -/
+/-- Helper lemma: Generators distinct from γ₅ and γ₆ commute with B.
+
+    This follows from the explicit commutation/anticommutation proofs. -/
 lemma commutes_with_internal_bivector_iff_distinct :
     ∀ g : Generator,
     centralizes_internal_bivector g ↔ (g ≠ gamma5 ∧ g ≠ gamma6) := by
   intro g
-  cases g <;> {
+  constructor
+  · intro h_commutes
+    cases g with
+    | gamma1 => exact ⟨by decide, by decide⟩
+    | gamma2 => exact ⟨by decide, by decide⟩
+    | gamma3 => exact ⟨by decide, by decide⟩
+    | gamma4 => exact ⟨by decide, by decide⟩
+    | gamma5 => exfalso; unfold centralizes_internal_bivector at h_commutes; simp only [γ33_gamma5] at h_commutes; exact gamma5_anticommutes_with_B h_commutes
+    | gamma6 => exfalso; unfold centralizes_internal_bivector at h_commutes; simp only [γ33_gamma6] at h_commutes; exact gamma6_anticommutes_with_B h_commutes
+  · intro ⟨h5, h6⟩
     unfold centralizes_internal_bivector
-    simp
-  }
+    cases g with
+    | gamma1 => simp only [γ33_gamma1]; exact gamma1_commutes_with_B
+    | gamma2 => simp only [γ33_gamma2]; exact gamma2_commutes_with_B
+    | gamma3 => simp only [γ33_gamma3]; exact gamma3_commutes_with_B
+    | gamma4 => simp only [γ33_gamma4]; exact gamma4_commutes_with_B
+    | gamma5 => exact absurd rfl h5
+    | gamma6 => exact absurd rfl h6
 
 /-- The spacetime sector is exactly the generators distinct from γ₅, γ₆ -/
 theorem spacetime_sector_characterization :
     ∀ g : Generator,
     is_spacetime_generator g ↔ (g = gamma1 ∨ g = gamma2 ∨ g = gamma3 ∨ g = gamma4) := by
   intro g
-  unfold is_spacetime_generator
-  cases g <;> {
-    unfold centralizes_internal_bivector
-    simp
-  }
+  constructor
+  · intro h_st
+    cases g with
+    | gamma1 => left; rfl
+    | gamma2 => right; left; rfl
+    | gamma3 => right; right; left; rfl
+    | gamma4 => right; right; right; rfl
+    | gamma5 => exfalso; exact internal_dims_not_spacetime.1 h_st
+    | gamma6 => exfalso; exact internal_dims_not_spacetime.2 h_st
+  · intro h_or
+    cases h_or with
+    | inl h => rw [h]; exact spacetime_has_three_space_dims.1
+    | inr h => cases h with
+      | inl h => rw [h]; exact spacetime_has_three_space_dims.2.1
+      | inr h => cases h with
+        | inl h => rw [h]; exact spacetime_has_three_space_dims.2.2
+        | inr h => rw [h]; exact spacetime_has_one_time_dim.1
 
 /-- The internal sector is exactly γ₅ and γ₆ -/
 theorem internal_sector_characterization :
     ∀ g : Generator,
     ¬is_spacetime_generator g ↔ (g = gamma5 ∨ g = gamma6) := by
   intro g
-  unfold is_spacetime_generator
-  cases g <;> {
-    unfold centralizes_internal_bivector
-    simp
-  }
+  constructor
+  · intro h_not_st
+    cases g with
+    | gamma1 => exfalso; exact h_not_st spacetime_has_three_space_dims.1
+    | gamma2 => exfalso; exact h_not_st spacetime_has_three_space_dims.2.1
+    | gamma3 => exfalso; exact h_not_st spacetime_has_three_space_dims.2.2
+    | gamma4 => exfalso; exact h_not_st spacetime_has_one_time_dim.1
+    | gamma5 => left; rfl
+    | gamma6 => right; rfl
+  · intro h_or
+    cases h_or with
+    | inl h => rw [h]; exact internal_dims_not_spacetime.1
+    | inr h => rw [h]; exact internal_dims_not_spacetime.2
 
 /-- Count theorem: Exactly 4 generators form spacetime -/
 theorem spacetime_has_four_dimensions :
@@ -319,8 +533,9 @@ theorem spacetime_has_four_dimensions :
     -- And exactly 2 that don't
     (¬is_spacetime_generator gamma5 ∧
      ¬is_spacetime_generator gamma6) := by
-  unfold is_spacetime_generator centralizes_internal_bivector
-  simp
+  refine ⟨⟨spacetime_has_three_space_dims.1, spacetime_has_three_space_dims.2.1,
+          spacetime_has_three_space_dims.2.2, spacetime_has_one_time_dim.1⟩,
+         internal_dims_not_spacetime⟩
 
 /-!
 ## 10. Connection to Spectral Gap Theorem
