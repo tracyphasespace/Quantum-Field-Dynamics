@@ -129,10 +129,11 @@ theorem generator_squares_to_signature (i : Fin 6) :
   rw [QuadraticMap.weightedSumSquares_apply]
   -- The sum collapses because Pi.single i 1 j = 0 for j ≠ i
   classical
-  have hi : i ∈ (Finset.univ : Finset (Fin 6)) := by simp
-  -- Use Finset.sum_eq_single_of_mem to isolate the i term
-  simpa [Pi.single_apply] using
-    Finset.sum_eq_single_of_mem hi (fun j _ hji => by simp [Pi.single_apply, hji])
+  simp only [Pi.single_apply]
+  rw [Finset.sum_eq_single i]
+  · simp
+  · intro j _ hne; simp [hne]
+  · intro h; exact absurd (Finset.mem_univ i) h
 
 -- ## 4. Anticommutation Relations
 
@@ -169,15 +170,16 @@ theorem generators_anticommute (i j : Fin 6) (h_ne : i ≠ j) :
     have hsum :
         (∑ t : Fin 6, signature33 t • (basis_vector k t * basis_vector k t)) =
           signature33 k • (basis_vector k k * basis_vector k k) := by
-      simpa using (Fintype.sum_eq_single (a := k)
-        (f := fun t => signature33 t • (basis_vector k t * basis_vector k t)) h0)
-    simpa [hsum, basis_vector, Pi.single_apply, smul_eq_mul]
+      simp only [Fintype.sum_eq_single (a := k)
+        (f := fun t => signature33 t • (basis_vector k t * basis_vector k t)) h0]
+    simp [Pi.single_apply, smul_eq_mul]
   have hQ_add :
       Q33 (basis_vector i + basis_vector j) = signature33 i + signature33 j := by
     unfold Q33 basis_vector
     rw [QuadraticMap.weightedSumSquares_apply]
     let f : Fin 6 → ℝ := fun t =>
-      signature33 t • ((basis_vector i t + basis_vector j t) * (basis_vector i t + basis_vector j t))
+      signature33 t • ((basis_vector i t + basis_vector j t) *
+        (basis_vector i t + basis_vector j t))
     have h0 : ∀ t : Fin 6, t ≠ i ∧ t ≠ j → f t = 0 := by
       intro t ht
       have hi : basis_vector i t = 0 := by simp [basis_vector, Pi.single_apply, ht.1]
@@ -199,8 +201,7 @@ theorem generators_anticommute (i j : Fin 6) (h_ne : i ≠ j) :
   unfold QuadraticMap.polar
   -- `Q33 (eᵢ + eⱼ) - Q33 eᵢ - Q33 eⱼ = 0`.
   -- We discharge the arithmetic with `ring` on the scalar identity.
-  have : (signature33 i + signature33 j) - signature33 i - signature33 j = (0 : ℝ) := by ring
-  simpa [hQ_add, hQ_basis, this]
+  simp [hQ_add, hQ_basis]
 
 /--
 **Theorem**: Basis vectors are pairwise orthogonal with respect to Q33.
@@ -227,9 +228,9 @@ theorem basis_isOrtho (i j : Fin 6) (h_ne : i ≠ j) :
     have hsum :
         (∑ t : Fin 6, signature33 t • (basis_vector k t * basis_vector k t)) =
           signature33 k • (basis_vector k k * basis_vector k k) := by
-      simpa using (Fintype.sum_eq_single (a := k)
-        (f := fun t => signature33 t • (basis_vector k t * basis_vector k t)) h0)
-    simpa [hsum, basis_vector, Pi.single_apply, smul_eq_mul]
+      simp only [Fintype.sum_eq_single (a := k)
+        (f := fun t => signature33 t • (basis_vector k t * basis_vector k t)) h0]
+    simp [Pi.single_apply, smul_eq_mul]
   -- Compute Q33 for sum of basis vectors
   have hQ_add :
       Q33 (basis_vector i + basis_vector j) = signature33 i + signature33 j := by
@@ -255,8 +256,7 @@ theorem basis_isOrtho (i j : Fin 6) (h_ne : i ≠ j) :
     simp only [f, basis_vector, smul_eq_mul] at hf_sum
     exact hf_sum
   -- polar = Q(i+j) - Q(i) - Q(j) = 0
-  have : (signature33 i + signature33 j) - signature33 i - signature33 j = (0 : ℝ) := by ring
-  simp [QuadraticMap.polar, hQ_add, hQ_basis, this]
+  simp [hQ_add, hQ_basis]
 
 /--
 **Theorem**: Cleaner anticommutation using IsOrtho.
@@ -294,7 +294,8 @@ theorem signature_values :
 -- This file reduces the EmergentAlgebra axiom to:
 -- - 1 placeholder: Computing Q₃₃(basis_vector i) (Pi.single calculation)
 -- - Uses Mathlib anchor: `ι_sq_scalar`
--- The previous placeholder is now resolved; the former `generator_square` axiom can be eliminated via this file.
+-- The previous placeholder is now resolved; the former `generator_square`
+-- axiom can be eliminated via this file.
 
 -- ## Next Steps
 -- 1. (Completed) Pi.single computation for `generator_squares_to_signature`
