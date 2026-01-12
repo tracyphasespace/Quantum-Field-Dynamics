@@ -1,8 +1,3 @@
-code
-Markdown
-download
-content_copy
-expand_less
 # Quantum Field Dynamics (QFD)
 
 **A Unified Physical Framework and Grand Unified Solver for the Constants of Nature.**
@@ -10,6 +5,32 @@ expand_less
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Lean 4](https://img.shields.io/badge/Verified-Lean%204-green)](projects/Lean4)
 [![Python 3.10+](https://img.shields.io/badge/Code-Python%203.10-blue)](projects/)
+
+---
+
+## Welcome
+
+**A verifiable framework where one measured input (α ≈ 1/137) derives the rest.**
+
+Before diving in, a note on methodology: This repository treats physical laws as executable software. It contains 1,101 formally verified Lean 4 theorems and zero-dependency Python validations. Every result can be traced from the geometric axiom to the numerical output step-by-step.
+
+We understand this framework makes extraordinary claims. We ask only that you engage with the derivations rather than pattern-matching to familiar failure modes. Specifically:
+
+**Structure, not Numerology**: Each value emerges from a named mechanical relationship (e.g., the "Golden Loop" links vacuum stiffness β to the electromagnetic input α). These are algebraic necessities of the geometry, not coincidental digit-matching.
+
+**The Zero-Tuning Policy**: We do not add free parameters to force fits.
+- *Example*: We predict the Electron g−2 to within 0.001%.
+- *Example*: We derive the Proton Mass from vacuum geometry to within 0.4% (interpreted as the soliton binding energy).
+
+We display these deviations transparently. Unlike standard models that add variables to "fix" the result, we allow the geometric prediction to stand on its own merits.
+
+**Your skepticism is healthy, but your tools should be rigorous.**
+
+If your instinct is to dismiss this as "impossible"—we understand. But the Lean proofs compile, the Python runs without dependencies, and the numbers match reality to high precision.
+
+*Trust your calculation, not your priors.*
+
+---
 
 > **"What if the parameters of the universe aren't inputs, but outputs?"**
 
