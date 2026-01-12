@@ -14,6 +14,16 @@ configuration structure, and the helper predicates for saturation, potentials,
 and stability checks.  Keeping these definitions in one place lets both
 `Physics/Postulates.lean` (which declares the axioms) and the proof files
 reuse the same vocabulary without duplicating declarations.
+
+## TODO: Generation-Dependent Radii
+
+To derive the muon radius (and mass ratio) from topology alone, we need:
+1. Replace placeholder `EnergyDensity` and `Action` definitions with real integrals
+2. Implement Euler-Lagrange conditions that solve for equilibrium radius R
+3. Link generation labels (Q*, winding number) to distinct radial quantization
+
+Until this is complete, validation scripts use the experimental muon mass.
+See `analysis/scripts/validate_g2_corrected.py` and `Lepton/VortexStability.lean`.
 -/
 
 noncomputable section
