@@ -44,15 +44,22 @@ https://tracyphasespace.github.io/Quantum-Field-Dynamics/
 - Topological field configurations
 - **Suitable for**: Mathematical physics, topology studies
 
-### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/Neutrino.HTML" target="_blank">`Neutrino.HTML`</a>
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/Neutrino.html" target="_blank">`Neutrino.html`</a>
 **Neutrino Dynamics**
 - Visualization of neutrino field dynamics.
 - **Suitable for**: Particle physics, field theory research
 
-### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/PoyntingVector4.HTML" target="_blank">`PoyntingVector4.HTML`</a>
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/PoyntingVector4.html" target="_blank">`PoyntingVector4.html`</a>
 **Poynting Vector Visualization**
 - Visualization of the Poynting vector in 4D.
 - **Suitable for**: Electrodynamics, field theory research
+
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/field-theory/SolitonCanonPhoton.html" target="_blank">`SolitonCanonPhoton.html`</a>
+**Photon Soliton Canon - Vortex Dynamics**
+- Driven nonlinear oscillator with absorption & emission cycles
+- Interactive 3D visualization of electron vortex, proton, and photon soliton
+- Ground state, excited state, and photon ejection modes
+- **Suitable for**: Field theory research, quantum dynamics education
 
 ---
 
@@ -69,6 +76,12 @@ https://tracyphasespace.github.io/Quantum-Field-Dynamics/
 - Extended lepton physics visualization
 - Detailed particle interaction models
 - **Suitable for**: Particle physics research
+
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/particle-physics/QFD_Composite_Solitons.html" target="_blank">`QFD_Composite_Solitons.html`</a>
+**QFD Composite Solitons**
+- Interactive visualization of composite soliton structures
+- Multi-particle topological configurations
+- **Suitable for**: Particle physics, soliton theory research
 
 ---
 
@@ -103,7 +116,7 @@ https://tracyphasespace.github.io/Quantum-Field-Dynamics/
 - ψ-mediated photon scattering visualization
 - **Based on**: [`projects/astrophysics/redshift-analysis/`](../projects/astrophysics/redshift-analysis/)
 
-### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/SuperNova.HTML" target="_blank">`SuperNova.HTML`</a>
+### <a href="https://tracyphasespace.github.io/Quantum-Field-Dynamics/visualizations/astrophysics/SuperNova.html" target="_blank">`SuperNova.html`</a>
 **Supernova Dynamics**
 - Visualization of supernova explosion dynamics.
 - **Suitable for**: Astrophysicists, computational physicists

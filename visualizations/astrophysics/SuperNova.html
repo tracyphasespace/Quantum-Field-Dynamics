@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Supernova Interpretation — ΛCDM vs QFD</title>
+<style>
+  :root{
+    --bg:#0b0d12;
+    --panel:#141923;
+    --fg:#dbe3ea;
+    --muted:#9fb0bf;
+    --hi:#4aa3ff;
+    --ok:#4caf50;
+    --warn:#ff5c5c;
+    --snGray:#888888;
+    --snObs:#ff4444;
+    --snModel:#4aa3ff;
+  }
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  }
+  .wrap{
+    display:grid;
+    grid-template-columns:360px 1fr 380px;
+    gap:16px;
+    height:100%;
+    padding:16px;
+    box-sizing:border-box;
+  }
+  .panel{
+    background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:14px;
+    overflow:auto;
+  }
+  h2{margin:0 0 8px 0;font-size:18px}
+  h3{margin:8px 0 6px 0;font-size:14px;color:var(--muted)}
+  p{margin:0 0 10px 0;font-size:13px;line-height:1.4}
+  .muted{color:var(--muted)}
+  .group{
+    border-top:1px solid rgba(255,255,255,.08);
+    margin-top:10px;
+    padding-top:10px;
+  }
+  .kv{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:6px 10px;
+    align-items:center;
+    margin:6px 0;
+    font-size:13px;
+  }
+  .kv label{cursor:pointer}
+  .mono{font-family:ui-monospace,Consolas,monospace}
+  .preset{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+  button{
+    background:transparent;
+    border:1px solid rgba(255,255,255,.2);
+    color:var(--fg);
+    padding:8px 10px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:13px;
+    line-height:1.2;
+  }
+  button:hover{border-color:var(--hi)}
+  button.active{background:var(--hi);border-color:var(--hi);color:white}
+  input[type=checkbox]{accent-color:var(--hi);cursor:pointer}
+  canvas{
+    width:100%;
+    height:100%;
+    display:block;
+    border-radius:14px;
+  }
+  .legend{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-top:6px;
+    font-size:12px;
+  }
+  .chip{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    color:#cfe3ff;
+  }
+  .dot{
+    width:12px;
+    height:12px;
+    border-radius:2px;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+  }
+  th,td{
+    padding:6px 8px;
+    border-bottom:1px solid rgba(255,255,255,.12);
+    vertical-align:top;
+    text-align:left;
+  }
+  th{
+    position:sticky;
+    top:0;
+    background:rgba(255,255,255,.04);
+    backdrop-filter:blur(4px);
+    color:var(--fg);
+    font-weight:500;
+  }
+  .ok{color:var(--ok)}
+  .warn{color:var(--warn)}
+  .smallnote{
+    font-size:12px;
+    line-height:1.4;
+    color:var(--muted);
+    margin:-4px 0 8px 0;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- LEFT PANEL -->
+  <div class="panel" id="left">
+    <h2>Supernova Observation Interpreter</h2>
+    <p>Same data. Two physical explanations. Top plot is brightness vs time. Bottom plot is spectrum. Gray = nearby template. Red = observed high-z SN. Blue = model.</p>
+
+    <div class="group">
+      <div class="preset">
+        <button id="btnLCDM" class="active">ΛCDM View</button>
+        <button id="btnQFD">QFD View</button>
+      </div>
+    </div>
+
+    <!-- ΛCDM body -->
+    <div id="lcdmPanel">
+      <div class="group">
+        <h3>ΛCDM Interpretation</h3>
+        <p class="muted">How distant Type&nbsp;Ia supernovae are traditionally explained.</p>
+
+        <div class="kv"><div>Stretch ("time dilation")</div>
+          <div class="mono">(1+z)</div></div>
+
+        <div class="kv"><div>Dimness</div>
+          <div class="mono">"dark energy"</div></div>
+
+        <div class="kv"><div>Redshift</div>
+          <div class="mono">metric expansion</div></div>
+
+        <div class="kv"><div>Distance</div>
+          <div class="mono">D<sub>FRW</sub>(z)</div></div>
+
+        <div class="kv"><div>Standard candle?</div>
+          <div class="mono">assumed, then corrected</div></div>
+      </div>
+
+      <div class="group mono" id="lcdmReadout">
+        <div>z_obs = 0.50</div>
+        <div>μ_FRW(z) ≈ 42.1</div>
+      </div>
+    </div>
+
+    <!-- QFD body -->
+    <div id="qfdPanel" style="display:none">
+      <div class="group">
+        <h3>QFD Interpretation</h3>
+        <p class="muted">Static universe + photon/medium interaction.</p>
+
+        <div class="kv">
+          <div>
+            <label><input type="checkbox" id="togVeil">
+            Plasma veil (early blue suppression)</label>
+          </div>
+        </div>
+        <div class="smallnote">
+          Dense plasma near the explosion absorbs/scatters short wavelengths first.
+          This kills the early blue flash and makes the rise look slower —
+          which ΛCDM calls "time dilation".
+        </div>
+
+        <div class="kv">
+          <div>
+            <label><input type="checkbox" id="togFDR">
+            FDR opacity (radiative drag over path)</label>
+          </div>
+        </div>
+        <div class="smallnote">
+          Light loses energy while traveling through the medium.
+          Peak looks too faint without invoking "dark energy".
+        </div>
+
+        <div class="kv">
+          <div>
+            <label><input type="checkbox" id="togCandle">
+            Non-identical candle</label>
+          </div>
+        </div>
+        <div class="smallnote">
+          We solve each SN's intrinsic luminosity and color instead of assuming
+          one perfect standard candle.
+        </div>
+
+        <div class="kv">
+          <div>
+            <label><input type="checkbox" id="togDrag">
+            Distance drag redshift (k<sub>J</sub> · distance)</label>
+          </div>
+        </div>
+        <div class="smallnote">
+          Redshift comes from cumulative energy exchange along the path,
+          not metric expansion. Longer path → more energy lost → spectrum
+          shifts red.
+        </div>
+      </div>
+
+      <div class="group">
+        <h3>QFD Fit Parameters</h3>
+        <div class="kv"><div>k<sub>J</sub></div><div class="mono" id="read_kj">—</div></div>
+        <div class="kv"><div>D<sub>true</sub></div><div class="mono" id="read_Dtrue">—</div></div>
+        <div class="kv"><div>z<sub>total</sub></div><div class="mono" id="read_z">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER PANEL -->
+  <div class="panel" id="vizPanel">
+    <canvas id="cv"></canvas>
+    <div class="legend">
+      <div class="chip"><span class="dot" style="background:var(--snGray)"></span>Nearby SN template</div>
+      <div class="chip"><span class="dot" style="background:var(--snObs)"></span>Observed high-z SN</div>
+      <div class="chip"><span class="dot" style="background:var(--snModel)"></span>QFD reconstruction</div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel" id="right">
+    <h2>Supernova Snapshot</h2>
+    <div id="matchbadge" class="mono" style="margin:6px 0 10px 0"></div>
+    <p class="muted">
+      Toggle QFD effects on the left. When all active, the blue reconstruction
+      should match the red observed SN without cosmic expansion.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Quantity</th>
+          <th>ΛCDM</th>
+          <th>QFD</th>
+        </tr>
+      </thead>
+      <tbody id="cmpTable">
+        <tr>
+          <td>Cause of faintness</td>
+          <td>Accelerated expansion ("dark energy")</td>
+          <td>Radiative drag + plasma veil along path</td>
+        </tr>
+        <tr>
+          <td>Cause of stretch</td>
+          <td>Cosmic time dilation (1+z)</td>
+          <td>Early blue suppressed → apparent slower rise</td>
+        </tr>
+        <tr>
+          <td>Cause of redshift</td>
+          <td>Metric expansion</td>
+          <td>Energy loss to medium (k<sub>J</sub>)</td>
+        </tr>
+        <tr>
+          <td>Distance to SN</td>
+          <td>D<sub>FRW</sub>(z)</td>
+          <td>D<sub>true</sub> (larger, static universe)</td>
+        </tr>
+        <tr>
+          <td>Standard candle?</td>
+          <td>Assumed, then standardized</td>
+          <td>Solved per SN (intrinsic fit)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:8px" class="mono" id="statenote"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // DOM refs
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const btnLCDM = document.getElementById('btnLCDM');
+  const btnQFD  = document.getElementById('btnQFD');
+  const lcdmPanel = document.getElementById('lcdmPanel');
+  const qfdPanel  = document.getElementById('qfdPanel');
+  const badgeEl   = document.getElementById('matchbadge');
+  const noteEl    = document.getElementById('statenote');
+
+  const togVeil   = document.getElementById('togVeil');
+  const togFDR    = document.getElementById('togFDR');
+  const togCandle = document.getElementById('togCandle');
+  const togDrag   = document.getElementById('togDrag');
+
+  const read_kj    = document.getElementById('read_kj');
+  const read_Dtrue = document.getElementById('read_Dtrue');
+  const read_z     = document.getElementById('read_z');
+
+  // Resolve CSS colors once
+  const css = getComputedStyle(document.documentElement);
+  const COL_GRAY  = css.getPropertyValue('--snGray').trim()   || '#888888';
+  const COL_OBS   = css.getPropertyValue('--snObs').trim()    || '#ff4444';
+  const COL_MODEL = css.getPropertyValue('--snModel').trim()  || '#4aa3ff';
+
+  // state
+  let mode = 'lcdm'; // 'lcdm' or 'qfd'
+  const qfdState = { veil:false, fdr:false, candle:false, drag:false };
+
+  // time axis (observer days)
+  const N_t = 200;
+  const t_obs = Array.from({length:N_t}, (_,i)=>i*0.3); // 0..~60d
+
+  // intrinsic nearby lightcurve (gray)
+  function lc_intrinsic(t){
+    const rise = Math.min(1, t/10);
+    const decay = Math.exp(-(t-10)/20);
+    return (t<10 ? (0.1+0.9*rise) : (1.0*decay));
+  }
+
+  // observed high-z (red): broader+dim+stretched
+  function lc_observed(t){
+    const tt = t/1.3;
+    return 0.6*lc_intrinsic(tt);
+  }
+
+  // QFD reconstruction (blue)
+  function lc_qfd(t, st){
+    let val = lc_intrinsic(t);
+
+    if(st.candle){
+      val *= 1.1; // intrinsic L_peak freedom
+    }
+
+    if(st.veil){
+      const earlySupp = 0.3*Math.exp(-t/5); // kills early blue-heavy flash
+      val *= (1.0 - earlySupp);
+    }
+
+    if(st.fdr){
+      val *= 0.7; // global drag dimming
+    }
+
+    if(st.drag){
+      const stretch = 1.3;
+      const tt = t/stretch;
+      let vv = lc_intrinsic(tt);
+      if(st.candle){ vv*=1.1; }
+      if(st.veil){
+        const earlySupp2 = 0.3*Math.exp(-tt/5);
+        vv *= (1.0 - earlySupp2);
+      }
+      if(st.fdr){ vv*=0.7; }
+      val = vv;
+    }
+
+    return val;
+  }
+
+  // wavelength axis
+  const N_lam = 200;
+  const lam_rest = Array.from({length:N_lam},(_,i)=>300 + i*3); // 300..~900 nm
+
+  // rest-frame spectrum (gray)
+  function spec_intrinsic(l){
+    const blueBoost = Math.exp(-(l-400)/80);
+    const redTail   = Math.exp(-(700-l)/200);
+    return 1.2*blueBoost + 0.3*redTail;
+  }
+
+  // observed high-z spectrum (red): shifted, blue suppressed, dim
+  function spec_observed(l){
+    const ll = l/1.3;
+    let val = spec_intrinsic(ll);
+    const blueKill = 0.5*Math.exp(-(l-350)/40);
+    val *= (1.0 - blueKill);
+    return 0.6*val;
+  }
+
+  // QFD reconstruction (blue)
+  function spec_qfd(l, st){
+    let ll = l;
+    if(st.drag){
+      ll = l/1.3; // distance-drag redshift
+    }
+    let val = spec_intrinsic(ll);
+
+    if(st.candle){
+      // color temp tweak
+      const colorBoost = 1.1*Math.exp(-(ll-400)/200);
+      val *= (0.9 + 0.1*colorBoost);
+    }
+
+    if(st.veil){
+      const veilKill = 0.5*Math.exp(-(ll-350)/40);
+      val *= (1.0 - veilKill);
+    }
+
+    if(st.fdr){
+      val *= 0.7;
+    }
+    return val;
+  }
+
+  // clamp spectrum so the bottom plot doesn't explode
+  function safeFlux(v){
+    if(v < 0) v = 0;
+    if(v > 1.2) v = 1.2;
+    return v;
+  }
+
+  // canvas sizing
+  let DPR = window.devicePixelRatio||1;
+  function fitCanvas(){
+    const r = document.getElementById('vizPanel').getBoundingClientRect();
+    cv.width  = Math.floor(r.width*DPR);
+    // leave some room for legend below
+    cv.height = Math.floor((r.height-28)*DPR);
+  }
+  window.addEventListener('resize',()=>{fitCanvas(); draw();});
+  fitCanvas();
+
+  function draw(){
+    const W = cv.width;
+    const H = cv.height;
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0,0,W,H);
+
+    // background gradient
+    const g = ctx.createRadialGradient(W*.5,H*.5,10, W*.5,H*.5,Math.max(W,H)*.7);
+    g.addColorStop(0,'#0e121a');
+    g.addColorStop(1,'#0b0d12');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+
+    // layout tuned: less dead space below spectrum
+    const topY  = H*0.06;
+    const topH  = H*0.36;
+    const divY  = H*0.48;
+    const botY  = H*0.54;
+    const botH  = H*0.34;
+
+    drawLightcurvePlot(W*0.08, topY, W*0.84, topH, qfdState);
+    drawDivider(W, divY, "Observed at z = 0.5");
+    drawSpectrumPlot(W*0.08, botY, W*0.84, botH, qfdState);
+
+    updateBadgeAndNote();
+    updateReads();
+  }
+
+  function drawLightcurvePlot(x,y,w,h,st){
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(x,y,w,h);
+    ctx.clip();
+
+    // axes
+    ctx.strokeStyle='rgba(255,255,255,.2)';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(x,y+h); ctx.lineTo(x,y); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x,y+h); ctx.lineTo(x+w,y+h); ctx.stroke();
+
+    const tMax = t_obs[t_obs.length-1];
+    const valMax = 1.1;
+    function mapPoint(t,v){
+      const xx = x + (t/tMax)*w;
+      const yy = y + h - (v/valMax)*h;
+      return [xx,yy];
+    }
+
+    // curves
+    drawCurve(t_obs, t=>lc_intrinsic(t), COL_GRAY, 2, mapPoint); // gray
+    drawCurve(t_obs, t=>lc_observed(t), COL_OBS,  2, mapPoint);  // red
+
+    if(mode==='qfd'){
+      drawCurve(t_obs, t=>lc_qfd(t,st), COL_MODEL, 2, mapPoint); // blue
+    }else{
+      ctx.save();
+      ctx.globalAlpha=0.2;
+      drawCurve(t_obs, t=>lc_observed(t), COL_MODEL, 2, mapPoint);
+      ctx.restore();
+    }
+
+    // axis labels
+    ctx.fillStyle='rgba(255,255,255,.6)';
+    ctx.font='12px Inter, system-ui, sans-serif';
+    ctx.textAlign='left'; ctx.textBaseline='bottom';
+    ctx.fillText('Observer Time (days)', x, y+h+14);
+
+    ctx.save();
+    ctx.translate(x-32, y+h*0.5);
+    ctx.rotate(-Math.PI/2);
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    if(mode==='lcdm'){
+      ctx.fillText('Apparent Brightness (Expected vs Extended Distance)',0,0);
+    }else{
+      ctx.fillText('Relative Brightness',0,0);
+    }
+    ctx.restore();
+
+    // ΛCDM annotations on curves
+    if(mode==='lcdm'){
+      annotateCurve(t_obs, t=>lc_intrinsic(t),
+        "Expected", COL_GRAY, mapPoint, {dx:10,dy:-10});
+      annotateCurve(t_obs, t=>lc_observed(t),
+        "Stretched + dimmer", COL_OBS, mapPoint, {dx:10,dy:-10});
+    }
+
+    ctx.restore();
+  }
+
+  function drawSpectrumPlot(x,y,w,h,st){
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(x,y,w,h);
+    ctx.clip();
+
+    // axes
+    ctx.strokeStyle='rgba(255,255,255,.2)';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(x,y+h); ctx.lineTo(x,y); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x,y+h); ctx.lineTo(x+w,y+h); ctx.stroke();
+
+    const lamMin = lam_rest[0];
+    const lamMax = lam_rest[lam_rest.length-1];
+    const fluxMax = 1.2; // matches safeFlux cap
+    function mp(l,v){
+      const xx = x + ((l-lamMin)/(lamMax-lamMin))*w;
+      const yy = y + h - (safeFlux(v)/fluxMax)*h;
+      return [xx,yy];
+    }
+
+    drawCurve(lam_rest,
+      l=>safeFlux(spec_intrinsic(l)), COL_GRAY, 2, mp);
+    drawCurve(lam_rest,
+      l=>safeFlux(spec_observed(l)), COL_OBS,  2, mp);
+
+    if(mode==='qfd'){
+      drawCurve(lam_rest,
+        l=>safeFlux(spec_qfd(l,st)), COL_MODEL, 2, mp);
+    }else{
+      ctx.save();
+      ctx.globalAlpha=0.2;
+      drawCurve(lam_rest,
+        l=>safeFlux(spec_observed(l)), COL_MODEL, 2, mp);
+      ctx.restore();
+    }
+
+    // labels
+    ctx.fillStyle='rgba(255,255,255,.6)';
+    ctx.font='12px Inter, system-ui, sans-serif';
+    ctx.textAlign='left'; ctx.textBaseline='bottom';
+    ctx.fillText('Observed Wavelength (nm)', x, y+h+14);
+
+    ctx.save();
+    ctx.translate(x-32, y+h*0.5);
+    ctx.rotate(-Math.PI/2);
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('Relative Flux',0,0);
+    ctx.restore();
+
+    ctx.restore();
+  }
+
+  function drawCurve(xArr, fn, color, lw, mapFn){
+    ctx.beginPath();
+    for(let i=0;i<xArr.length;i++){
+      const xv = xArr[i];
+      const yv = fn(xv);
+      const [px,py] = mapFn(xv,yv);
+      if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.strokeStyle=color;
+    ctx.lineWidth=lw;
+    ctx.stroke();
+  }
+
+  function annotateCurve(xArr, fn, label, color, mapFn, offset){
+    const idx = Math.floor(xArr.length*0.3);
+    const xv = xArr[idx];
+    const yv = fn(xv);
+    const [px,py] = mapFn(xv,yv);
+    ctx.fillStyle=color;
+    ctx.font='12px Inter, system-ui, sans-serif';
+    ctx.textAlign='left';
+    ctx.textBaseline='bottom';
+    ctx.fillText(label, px+offset.dx, py+offset.dy);
+  }
+
+  function drawDivider(W, y, label){
+    ctx.save();
+    ctx.strokeStyle='rgba(255,255,255,.25)';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(W*0.06,y);
+    ctx.lineTo(W*0.94,y);
+    ctx.stroke();
+
+    ctx.font='14px Inter, system-ui, sans-serif';
+    const tw = ctx.measureText(label).width;
+    const tx = W*0.5;
+    ctx.fillStyle='rgba(255,255,255,0.95)';
+    ctx.fillRect(tx-tw/2-12, y-20, tw+24, 28);
+    ctx.fillStyle='#111';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(label, tx, y-6);
+    ctx.restore();
+  }
+
+  function updateBadgeAndNote(){
+    if(mode==='lcdm'){
+      badgeEl.innerHTML = '<span class="ok">✔ Consistent with accelerating expansion (ΛCDM interpretation)</span>';
+      noteEl.textContent = 'ΛCDM: dimness → dark energy; stretch → (1+z) time dilation; redshift → metric expansion.';
+      return;
+    }
+    const allOn = qfdState.veil && qfdState.fdr && qfdState.candle && qfdState.drag;
+    if(allOn){
+      badgeEl.innerHTML = '<span class="ok">✔ Matches Observed Supernova Without Expansion</span>';
+      noteEl.textContent = 'All QFD effects active: plasma veil, FDR opacity, intrinsic fit, and distance drag reproduce brightness, stretch, and redshift.';
+    }else{
+      badgeEl.innerHTML = '<span class="warn">⭘ Incomplete: missing interaction terms</span>';
+      const missing = [
+        !qfdState.veil   ? 'veil'   : null,
+        !qfdState.fdr    ? 'FDR'    : null,
+        !qfdState.candle ? 'candle' : null,
+        !qfdState.drag   ? 'drag'   : null
+      ].filter(Boolean).join(', ');
+      noteEl.textContent = 'QFD: enable '+missing+' to fully match the observed high-z SN without invoking cosmic expansion.';
+    }
+  }
+
+  function updateReads(){
+    if(mode==='qfd'){
+      read_kj.textContent    = qfdState.drag ? 'kJ ≈ 7e-5 / Mpc' : '—';
+      read_Dtrue.textContent = qfdState.drag ? 'D_true > D_FRW'   : '—';
+      read_z.textContent     = qfdState.drag ? 'z_total ≈ 0.50'   : '—';
+    }else{
+      read_kj.textContent    = '—';
+      read_Dtrue.textContent = '—';
+      read_z.textContent     = '—';
+    }
+  }
+
+  // UI events
+  btnLCDM.addEventListener('click',()=>{
+    mode='lcdm';
+    btnLCDM.classList.add('active');
+    btnQFD.classList.remove('active');
+    lcdmPanel.style.display='';
+    qfdPanel.style.display='none';
+    draw();
+  });
+  btnQFD.addEventListener('click',()=>{
+    mode='qfd';
+    btnQFD.classList.add('active');
+    btnLCDM.classList.remove('active');
+    lcdmPanel.style.display='none';
+    qfdPanel.style.display='';
+    // turn all toggles on by default if you want the "match" state on load:
+    // togVeil.checked = togFDR.checked = togCandle.checked = togDrag.checked = true;
+    // qfdState.veil=true; qfdState.fdr=true; qfdState.candle=true; qfdState.drag=true;
+    draw();
+  });
+
+  togVeil.addEventListener('change',()=>{ qfdState.veil   = togVeil.checked;   draw(); });
+  togFDR.addEventListener('change',()=>{ qfdState.fdr    = togFDR.checked;    draw(); });
+  togCandle.addEventListener('change',()=>{ qfdState.candle = togCandle.checked; draw(); });
+  togDrag.addEventListener('change',()=>{ qfdState.drag   = togDrag.checked;   draw(); });
+
+  // initial frame + gentle heartbeat
+  draw();
+  setInterval(draw,200);
+})();
+</script>
+</body>
+</html>
