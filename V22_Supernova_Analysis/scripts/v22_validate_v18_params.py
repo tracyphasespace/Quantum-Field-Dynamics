@@ -74,10 +74,18 @@ def validate_v18_parameters():
     print()
 
     # Load V18 Stage2 best-fit parameters
-    v18_stage2_file = Path("/home/tracy/development/SupernovaSrc/qfd-supernova-v15/v15_clean/v18/results/stage2_fullscale_5468sne/summary.json")
+    # Try local copy first, then fall back to external path
+    local_v18_file = Path(__file__).parent.parent / "data" / "v18_stage2_params.json"
+    external_v18_file = Path("/home/tracy/development/SupernovaSrc/qfd-supernova-v15/v15_clean/v18/results/stage2_fullscale_5468sne/summary.json")
 
-    if not v18_stage2_file.exists():
-        print(f"ERROR: V18 Stage2 results not found at:\n  {v18_stage2_file}")
+    if local_v18_file.exists():
+        v18_stage2_file = local_v18_file
+    elif external_v18_file.exists():
+        v18_stage2_file = external_v18_file
+    else:
+        print(f"ERROR: V18 Stage2 results not found at:")
+        print(f"  Local:    {local_v18_file}")
+        print(f"  External: {external_v18_file}")
         return
 
     print(f"Loading V18 Stage2 results from:\n  {v18_stage2_file}")
