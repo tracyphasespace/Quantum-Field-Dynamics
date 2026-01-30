@@ -12,7 +12,7 @@
 
 **A verifiable framework where one measured input (α ≈ 1/137) derives the rest.**
 
-Before diving in, a note on methodology: This repository treats physical laws as executable software. It contains 1,101 formally verified Lean 4 theorems and zero-dependency Python validations. Every result can be traced from the geometric axiom to the numerical output step-by-step.
+Before diving in, a note on methodology: This repository treats physical laws as executable software. It contains 1,100+ formally verified Lean 4 theorems and zero-dependency Python validations. Every result can be traced from the geometric axiom to the numerical output step-by-step.
 
 We understand this framework makes extraordinary claims. We ask only that you engage with the derivations rather than pattern-matching to familiar failure modes. Specifically:
 
