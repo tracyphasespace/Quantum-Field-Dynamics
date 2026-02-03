@@ -4,7 +4,7 @@
 
 **Tested**: 10 different formula combinations using fundamental constants:
 - α = 1/137.036 (fine structure constant)
-- β = 1/3.058 (vacuum stiffness from QFD)
+- β = 1/3.043233053 (vacuum stiffness from QFD)
 - λ = 0.42 (temporal metric parameter)
 - M_p = 938.272 MeV (proton mass scale)
 
@@ -68,7 +68,7 @@
 
 **Constants**:
 - α_EM = 1/137 = 0.007297 (fine structure constant)
-- β_QFD = 1/3.058 = 0.327011 (vacuum stiffness)
+- β_QFD = 1/3.043233053 = 0.327011 (vacuum stiffness)
 - λ = 0.42 (temporal metric parameter)
 - M_p = 938.272 MeV (proton mass)
 
@@ -85,7 +85,7 @@ Fitted α = 927.6 MeV is **close** to M_p = 938.3 MeV (1.1% difference)
 
 ### What Doesn't Work
 - α_EM = 1/137 is **dimensionless**, not an energy scale
-- β_QFD = 1/3.058 ≈ 0.327 is **not 10 MeV**
+- β_QFD = 1/3.043233053 ≈ 0.327 is **not 10 MeV**
 - λ = 0.42 doesn't bridge the gap in any tested combination
 
 ### Missing Link?
@@ -132,7 +132,7 @@ Interpretation: Volume term reduced by λ, pure surface term added
 
 1. **Verify constant interpretations**
    - Is α_EM = 1/137 the same α in topological formula?
-   - Is β_QFD = 1/3.058 the same β?
+   - Is β_QFD = 1/3.043233053 the same β?
    - Or are they related by conversion factors?
 
 2. **Test additional formulas**
@@ -152,7 +152,7 @@ Interpretation: Volume term reduced by λ, pure surface term added
 
 ## Conclusion
 
-**No simple combination of (α_EM=1/137, β_QFD=1/3.058, λ=0.42, M_p=938.272) reproduces nuclear masses.**
+**No simple combination of (α_EM=1/137, β_QFD=1/3.043233053, λ=0.42, M_p=938.272) reproduces nuclear masses.**
 
 The pure topological formula E = α·A + β·A^(2/3) **works perfectly** with fitted α≈928 MeV and β≈10 MeV, but the connection to fundamental constants remains unclear.
 

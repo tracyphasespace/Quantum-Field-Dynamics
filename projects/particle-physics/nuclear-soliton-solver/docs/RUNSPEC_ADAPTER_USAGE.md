@@ -392,7 +392,7 @@ Future feature: Share vacuum stiffness β across sectors:
 ```json
 {
   "name": "vacuum.beta",
-  "value": 3.058,
+  "value": 3.043233053,
   "role": "coupling",
   "shared_with": ["nuclear", "electronic", "cosmology"]
 }

@@ -42,7 +42,7 @@ python3 analysis/alpha_derivation.py
 
 3. **docs/CONSTANTS_CATALOG.md** (18 KB)
    - α: Coupling strength (1/137)
-   - β: Vacuum stiffness (3.058)
+   - β: Vacuum stiffness (3.043233053)
    - λ: Saturation scale (~1 GeV)
 
 4. **docs/PREDICTIONS.md**
@@ -64,7 +64,7 @@ Error: 89.8%  ✗
 ```
 
 **Possible fixes**:
-- β should be 0.77, not 3.058? OR
+- β should be 0.77, not 3.043233053? OR
 - c₂/c₁ should be 0.65, not 6.42? OR
 - Formula is wrong?
 
@@ -149,7 +149,7 @@ grep -r "beta\|c2.*c1" . --include="*.py" | head -20
 ```
 
 **Questions to answer**:
-1. Is β = 3.058 correct in nuclear model?
+1. Is β = 3.043233053 correct in nuclear model?
 2. Is c₂/c₁ = 6.42 correct?
 3. What is the exact formula for α?
 

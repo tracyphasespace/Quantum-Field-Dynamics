@@ -7,7 +7,7 @@
 
 ## One-Sentence Summary
 
-**β = 3.058230856, inferred from the fine structure constant α = 1/137.036 through a conjectured QFD identity, supports Hill vortex solutions that reproduce all three charged lepton mass ratios (electron, muon, tau) to better than 10⁻⁴ relative precision.**
+**β = 3.043233053, inferred from the fine structure constant α = 1/137.036 through a conjectured QFD identity, supports Hill vortex solutions that reproduce all three charged lepton mass ratios (electron, muon, tau) to better than 10⁻⁴ relative precision.**
 
 ---
 
@@ -61,12 +61,12 @@
 
 **Source**: Conjectured identity relating (α, c₁, c₂, β_crit)
 
-**Value**: β_crit = 3.058230856
+**Value**: β_crit = 3.043233053
 
 **Uncertainty**: Propagated from nuclear fit uncertainties on (c₁, c₂):
 - c₁ = 15.56 ± 0.15 MeV (bootstrap from semi-empirical mass formula fits)
 - c₂ = 17.23 ± 0.20 MeV (same)
-- **Propagated**: β_crit = 3.058 ± 0.012
+- **Propagated**: β_crit = 3.043233053 ± 0.012
 
 ### β from Nuclear Stability Fits (prior work)
 
@@ -87,7 +87,7 @@
 ### Convergence Test
 
 **Overlap**: All three β determinations overlap within 1σ uncertainties:
-- β_crit (from α): 3.058 ± 0.012
+- β_crit (from α): 3.043233053 ± 0.012
 - β_nuclear (direct): 3.1 ± 0.05
 - β_cosmo (inferred): 3.0-3.2
 
@@ -129,7 +129,7 @@
 ### ✅ DEFENSIBLE (What We Can Say)
 
 1. **β from α supports mass solutions**
-   - "For β = 3.058 inferred from α, Hill vortex solutions exist that reproduce e, μ, τ masses to < 10⁻⁷ relative error"
+   - "For β = 3.043233053 inferred from α, Hill vortex solutions exist that reproduce e, μ, τ masses to < 10⁻⁷ relative error"
    - **Not**: "β from α predicts masses with 100% accuracy"
 
 2. **No free coupling parameters**
@@ -214,13 +214,13 @@
 
 ### Lead with the Identity
 
-**Opening**: "A conjectured relation between the fine structure constant α, nuclear binding coefficients (c₁, c₂), and vacuum stiffness β implies a critical value β_crit = 3.058..."
+**Opening**: "A conjectured relation between the fine structure constant α, nuclear binding coefficients (c₁, c₂), and vacuum stiffness β implies a critical value β_crit = 3.043233053..."
 
 **Falsifiable prediction**: "If β inferred from independent sectors (nuclear stability, cosmology) does not overlap β_crit within uncertainties, the identity is ruled out."
 
 ### Present Three-Lepton Table as Consistency Test
 
-**Framing**: "At fixed β = 3.058, we seek Hill vortex solutions matching the three lepton mass ratios. The existence of such solutions across three orders of magnitude in mass is a nontrivial consistency check."
+**Framing**: "At fixed β = 3.043233053, we seek Hill vortex solutions matching the three lepton mass ratios. The existence of such solutions across three orders of magnitude in mass is a nontrivial consistency check."
 
 **Results**: [Table with residuals and uncertainties]
 
@@ -274,7 +274,7 @@ Using identity [specify exact formula]:
 ```
 
 **Result**:
-- β_crit = 3.058 ± 0.012 (statistical + systematic combined)
+- β_crit = 3.043233053 ± 0.012 (statistical + systematic combined)
 
 **Overlap with independent β**:
 - β_nuclear = 3.1 ± 0.05 → **0.84σ separation** ✓ Consistent

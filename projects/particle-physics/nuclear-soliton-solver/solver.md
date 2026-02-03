@@ -10,7 +10,7 @@ The primary goal is to optimize a set of physics parameters for the `qfd-nuclear
 
 The project has achieved a major breakthrough, followed by a significant challenge:
 
-1.  **"Golden Probe" Success:** A focused optimization on Carbon-12 (`C-12`) was successful. It validated the core physics of the model, converging on a vacuum stiffness parameter (`c_v2_base` ≈ 3.11) that is within 1.8% of the theoretically predicted `β ≈ 3.058` from the Fine Structure Constant. This was achieved after significant performance (~23x speedup) and physics-based fixes to the loss function.
+1.  **"Golden Probe" Success:** A focused optimization on Carbon-12 (`C-12`) was successful. It validated the core physics of the model, converging on a vacuum stiffness parameter (`c_v2_base` ≈ 3.11) that is within 1.8% of the theoretically predicted `β ≈ 3.043233053` from the Fine Structure Constant. This was achieved after significant performance (~23x speedup) and physics-based fixes to the loss function.
 
 2.  **"Octet Test" Failure (Debugging in Progress):** An attempt to validate the C-12 parameters against a wider set of 8 isotopes (from H-1 to Pb-208) failed. The solver was unable to find a single successful solution when running at a higher-fidelity 48-point grid, resulting in a catastrophic loss value. A second attempt with the physically-motivated `c_sym=0` parameter also failed in the same manner.
 

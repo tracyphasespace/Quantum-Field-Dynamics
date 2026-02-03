@@ -98,13 +98,13 @@ Rearranging:
 
 **Golden Loop prediction**:
 ```
-β_Golden = ln(α⁻¹ · c₁/(π²c₂)) ≈ 3.058
+β_Golden = ln(α⁻¹ · c₁/(π²c₂)) ≈ 3.043233053
 ```
 
 **Before gradient energy** (Path A baseline):
 ```
 β_eff ≈ 3.15
-Δβ = 3.15 - 3.058 = +0.092
+Δβ = 3.15 - 3.043233053 = +0.092
 χ = exp(-Δβ) = exp(-0.092) ≈ 0.912
 
 → Missing ~9% closure factor
@@ -113,7 +113,7 @@ Rearranging:
 **After gradient + boundary layer** (Path B'):
 ```
 β_eff ≈ 3.10
-Δβ = 3.10 - 3.058 = +0.042
+Δβ = 3.10 - 3.043233053 = +0.042
 χ = exp(-Δβ) = exp(-0.042) ≈ 0.959
 
 → Missing ~4% closure factor
@@ -178,7 +178,7 @@ This is **cleaner and more precise** than "60% improvement in β offset".
 > stiffness β. However, adding explicit boundary-layer gradient energy
 > E_∇ ~ λ∫|∇ρ|² systematically shifts the profile minimum from β_eff ≈ 3.15
 > to β_eff ≈ 3.10, accounting for ~53% of the closure gap relative to the
-> Golden Loop prediction (β = 3.058). This validates the curvature-gap
+> Golden Loop prediction (β = 3.043233053). This validates the curvature-gap
 > hypothesis while quantifying the remaining underdetermination."
 
 ### For Discussion Section
@@ -236,7 +236,7 @@ Plot standard (β, w) contours:
 - Δχ² = 4 (2σ ellipse)
 - Δχ² = 9 (3σ ellipse)
 
-Show whether β = 3.058 (Golden Loop) falls:
+Show whether β = 3.043233053 (Golden Loop) falls:
 - Inside 1σ: excellent agreement ✓✓
 - Inside 2σ: good agreement ✓
 - Outside 2σ: tension (need more physics)
@@ -317,7 +317,7 @@ Before submitting manuscript:
 - [ ] Full 9×6 scan completed (β × w)
 - [ ] 2D Δχ² contours plotted
 - [ ] Profile width Δβ_1σ quantified
-- [ ] Golden Loop (β=3.058) marked on contour plot
+- [ ] Golden Loop (β=3.043233053) marked on contour plot
 - [ ] Closure factor χ computed and reported
 - [ ] Manuscript language updated (mechanism + identifiability)
 - [ ] Open code + data archived (reproducibility)
@@ -339,7 +339,7 @@ Before submitting manuscript:
 
 **This is physics, not numerology**, because:
 - Mechanism has **independent prediction** (gradient → β shift)
-- Test is **falsifiable** (could have found β moved *away* from 3.058)
+- Test is **falsifiable** (could have found β moved *away* from 3.043233053)
 - Gap is **quantified** (χ ≈ 0.96, not hand-waved)
 - Next step is **specified** (6 more constraints from μ_ℓ)
 

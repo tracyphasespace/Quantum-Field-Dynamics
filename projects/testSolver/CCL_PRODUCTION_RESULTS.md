@@ -20,7 +20,7 @@ Using Core Compression Law: **Q(A) = c₁·A^(2/3) + c₂·A**
 ## Key Finding: c₂ ≈ 1/β Connection VALIDATED
 
 ### QFD Vacuum Stiffness
-- β = 3.058 (from Golden Loop analysis)
+- β = 3.043233053 (from Golden Loop analysis)
 - **1/β = 0.327**
 
 ### Empirical Bulk Charge
@@ -111,7 +111,7 @@ Possible explanations:
 **Implication**: The bulk charge fraction in large nuclei equals the **vacuum compliance** (inverse stiffness).
 
 **Proposed mechanism**:
-1. Vacuum has stiffness β = 3.058 (resistance to curvature)
+1. Vacuum has stiffness β = 3.043233053 (resistance to curvature)
 2. Nuclear bulk exists in "softened" vacuum with compliance 1/β
 3. Equilibrium charge density adjusts to vacuum compliance
 4. Z/A → 1/β as A → ∞

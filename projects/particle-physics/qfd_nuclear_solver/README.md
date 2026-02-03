@@ -135,7 +135,7 @@ Energy minimization via L-BFGS-B:
 
 ## Open Questions
 
-1. Can λ be derived from vacuum parameters (β = 3.058, α_em = 1/137)?
+1. Can λ be derived from vacuum parameters (β = 3.043233053, α_em = 1/137)?
 2. Does λ require A-dependent corrections for heavier nuclei?
 3. What is the connection to lepton sector (if any)?
 4. Can the model predict charge radii and form factors?

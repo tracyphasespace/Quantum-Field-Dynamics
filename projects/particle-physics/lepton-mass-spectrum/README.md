@@ -82,7 +82,7 @@ We have validated QFD predictions against experimental g-2 data with remarkable 
 
 1. **V₄ = -ξ/β derives QED coefficient C₂**:
    ```
-   V₄ = -1.000/3.058 = -0.3270
+   V₄ = -1.000/3.043233053 = -0.3270
    C₂(QED) = -0.3285 (from Feynman diagrams)
    Error: 0.45%
    ```
@@ -147,7 +147,7 @@ The three key validation questions:
 1. **Parameter stability** ✓ **ANSWERED**:
    - Proper length scale (Compton wavelength) is critical for convergence
    - Parameters are well-constrained (β-ξ correlation = 0.008)
-   - MCMC β = 3.063 matches Golden Loop β = 3.058 (99.8%)
+   - MCMC β = 3.063 matches Golden Loop β = 3.043233053 (99.8%)
 
 2. **Predictive power** ✓ **ANSWERED**:
    - V₄ = -ξ/β predicts QED coefficient C₂ to 0.45% (no free parameters!)

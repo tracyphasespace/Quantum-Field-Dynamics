@@ -55,7 +55,7 @@
 4. ✅ `QFD/GA/BasisProducts.lean` - Pre-computed products
 5. ✅ `QFD/Vacuum/VacuumParameters.lean` - **VALIDATED 2025-12-29**
    - alpha_circ = e/(2π) ✓
-   - beta = 3.058 ✓
+   - beta = 3.043233053 ✓
    - xi = 1.0 ✓
    - All constants Python-validated
 

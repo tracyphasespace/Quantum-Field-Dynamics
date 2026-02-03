@@ -10,7 +10,7 @@
 
 ## Overview
 
-This guide provides complete instructions for replicating the V22 Hill vortex lepton mass calculations. The work demonstrates that for a fixed vacuum stiffness parameter β ≈ 3.058 (inferred from the fine structure constant through a conjectured relation), numerical optimization yields Hill vortex geometries that reproduce charged lepton mass ratios to better than 10⁻⁷ relative precision.
+This guide provides complete instructions for replicating the V22 Hill vortex lepton mass calculations. The work demonstrates that for a fixed vacuum stiffness parameter β ≈ 3.043233053 (inferred from the fine structure constant through a conjectured relation), numerical optimization yields Hill vortex geometries that reproduce charged lepton mass ratios to better than 10⁻⁷ relative precision.
 
 ### Key Result
 
@@ -25,7 +25,7 @@ This guide provides complete instructions for replicating the V22 Hill vortex le
 ### Current Scope and Limitations
 
 **What this demonstrates**:
-- Hill vortex solutions exist that match lepton mass ratios when β = 3.058
+- Hill vortex solutions exist that match lepton mass ratios when β = 3.043233053
 - Solutions are numerically robust (grid-converged, profile-insensitive)
 - Circulation velocity U scales approximately as √m across three orders of magnitude
 - β values from particle, nuclear, and cosmological sectors overlap within uncertainties
@@ -217,7 +217,7 @@ In these units:
 ### 3.2 The Optimization Problem
 
 **Given**:
-- β = 3.058230856 (from fine structure constant via conjectured identity)
+- β = 3.043233053 (from fine structure constant via conjectured identity)
 - Target mass m_target for each lepton
 
 **Find**: (R, U, amplitude) such that E_total(R, U, amplitude; β) ≈ m_target
@@ -352,7 +352,7 @@ result = minimize(
 
 ### 5.1 Electron (Ground State)
 
-**Goal**: Reproduce m_e = 1.0 (dimensionless units) with β = 3.058
+**Goal**: Reproduce m_e = 1.0 (dimensionless units) with β = 3.043233053
 
 **Command**:
 ```bash
@@ -382,7 +382,7 @@ Electron:
 
 ### 5.2 Muon (Enhanced Circulation)
 
-**Goal**: Reproduce m_μ = 206.768 with same β = 3.058
+**Goal**: Reproduce m_μ = 206.768 with same β = 3.043233053
 
 **Expected result**:
 ```
@@ -404,7 +404,7 @@ Muon:
 
 ### 5.3 Tau (Highly Excited Mode)
 
-**Goal**: Reproduce m_τ = 3477.228 with same β = 3.058
+**Goal**: Reproduce m_τ = 3477.228 with same β = 3.043233053
 
 **Expected result**:
 ```
@@ -528,7 +528,7 @@ The ~10% systematic deviation from pure √m scaling is attributed to weak depen
 ### 7.1 Three-Lepton Summary
 
 ```
-β = 3.058230856 (from α = 1/137.036 via conjectured identity)
+β = 3.043233053 (from α = 1/137.036 via conjectured identity)
 
 Particle   R       U       amplitude   E_circ   E_stab   E_total   Residual
 --------   -----   -----   ---------   ------   ------   -------   --------
@@ -563,7 +563,7 @@ Tau        1.12×   53.6×   1.05×       2880×    1.6×     3477×
 
 | Source | β Value | Uncertainty | Reference |
 |--------|---------|-------------|-----------|
-| Particle (this work) | 3.058 | ±0.012 | From α via conjectured identity |
+| Particle (this work) | 3.043233053 | ±0.012 | From α via conjectured identity |
 | Nuclear (prior work) | 3.1 | ±0.05 | Direct fit to binding energies |
 | Cosmology (prior work) | 3.0-3.2 | — | Dark energy EOS interpretation |
 
@@ -710,7 +710,7 @@ Fine structure constant:
 
 **Checklist**:
 - Using actual ρ(r) in circulation energy (not constant ρ_vac)?
-- Correct β value (3.058230856 from α, not 3.1)?
+- Correct β value (3.043233053 from α, not 3.1)?
 - Grid resolution sufficient (at least 100×20)?
 - Using Simpson's rule integration with 2π factor for φ?
 - Dimensionless units correctly implemented?
@@ -742,7 +742,7 @@ Fine structure constant:
 
 ```json
 {
-  "beta": 3.058230856,
+  "beta": 3.043233053,
   "target_particles": ["electron", "muon", "tau"],
   "grid": {"num_r": 100, "num_theta": 20},
   "optimization": {
@@ -813,7 +813,7 @@ If using these results, please cite:
   title = {V22 Hill Vortex Lepton Mass Investigation},
   year = {2025},
   url = {https://github.com/qfd-project/v22-lepton-analysis},
-  note = {Numerical evidence for β ≈ 3.058 consistency across sectors}
+  note = {Numerical evidence for β ≈ 3.043233053 consistency across sectors}
 }
 ```
 

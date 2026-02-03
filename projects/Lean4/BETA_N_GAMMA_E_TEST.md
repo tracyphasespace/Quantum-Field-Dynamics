@@ -21,7 +21,7 @@ From `QFD/Schema/Constraints.lean`:
 - Genesis compatible: |γ_e - 5.5| < 2.0
 
 **β (Vacuum bulk modulus)**:
-- Value: **3.058231** (Golden Loop)
+- Value: **3.043233053** (Golden Loop)
 
 ---
 
@@ -31,8 +31,8 @@ From `QFD/Schema/Constraints.lean`:
 
 **Calculation**:
 ```
-β = 3.058231
-(4/3) × β = 1.3333 × 3.058231 = 4.077641
+β = 3.043233053
+(4/3) × β = 1.3333 × 3.043233053 = 4.077641
 ```
 
 **Comparison**:
@@ -46,7 +46,7 @@ From `QFD/Schema/Constraints.lean`:
 
 **Calculation**:
 ```
-(5/4) × β = 1.25 × 3.058231 = 3.822789
+(5/4) × β = 1.25 × 3.043233053 = 3.822789
 ```
 
 **Comparison**:
@@ -60,7 +60,7 @@ From `QFD/Schema/Constraints.lean`:
 
 **Calculation**:
 ```
-(9/7) × β = 1.2857 × 3.058231 = 3.932011
+(9/7) × β = 1.2857 × 3.043233053 = 3.932011
 ```
 
 **Comparison**:
@@ -74,7 +74,7 @@ From `QFD/Schema/Constraints.lean`:
 
 **Calculation**:
 ```
-(11/9) × β = 1.2222 × 3.058231 = 3.738060
+(11/9) × β = 1.2222 × 3.043233053 = 3.738060
 ```
 
 **Comparison**:
@@ -101,8 +101,8 @@ From `QFD/Schema/Constraints.lean`:
 
 **Calculation**:
 ```
-β = 3.058231
-(9/5) × β = 1.8 × 3.058231 = 5.504816
+β = 3.043233053
+(9/5) × β = 1.8 × 3.043233053 = 5.504816
 ```
 
 **Comparison**:
@@ -116,7 +116,7 @@ From `QFD/Schema/Constraints.lean`:
 
 **Calculation**:
 ```
-(11/6) × β = 1.8333 × 3.058231 = 5.606757
+(11/6) × β = 1.8333 × 3.043233053 = 5.606757
 ```
 
 **Comparison**:
@@ -130,7 +130,7 @@ From `QFD/Schema/Constraints.lean`:
 
 **Calculation**:
 ```
-(7/4) × β = 1.75 × 3.058231 = 5.351904
+(7/4) × β = 1.75 × 3.043233053 = 5.351904
 ```
 
 **Comparison**:
@@ -310,7 +310,7 @@ Error: 0.7%
 
 | Parameter | Formula | Value | Empirical | Error | Numerator | Denominator |
 |-----------|---------|-------|-----------|-------|-----------|-------------|
-| β | β | 3.058 | 3.058 | 0% | — | — |
+| β | β | 3.043233053 | 3.043233053 | 0% | — | — |
 | α_n | (8/7)β | 3.495 | 3.5 | 0.14% | 8 | 7 |
 | β_n | (9/7)β | 3.932 | 3.9 | 0.82% | 9 | 7 |
 | γ_e | (9/5)β | 5.505 | 5.5 | 0.09% | 9 | 5 |

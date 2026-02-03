@@ -10,9 +10,9 @@
 
 ### X.1 The Identifiability Problem
 
-The Hill-vortex energy functional (Eq. ?) contains three adjustable parameters per lepton—radius *R*, circulation velocity *U*, and density amplitude *A*—but provides only one constraint: matching the observed mass. This leaves a two-dimensional manifold of solutions for each fixed vacuum stiffness β, raising the question: does the lepton mass spectrum actually *determine* β = 3.058, or can comparable solutions exist across a wide range of β?
+The Hill-vortex energy functional (Eq. ?) contains three adjustable parameters per lepton—radius *R*, circulation velocity *U*, and density amplitude *A*—but provides only one constraint: matching the observed mass. This leaves a two-dimensional manifold of solutions for each fixed vacuum stiffness β, raising the question: does the lepton mass spectrum actually *determine* β = 3.043233053, or can comparable solutions exist across a wide range of β?
 
-To test this, we performed a systematic β-scan: for each value of β ∈ [2.5, 3.5], we optimized (*R*, *U*, *A*) to match the electron, muon, and tau masses and recorded whether convergence to the target residual (< 10⁻⁴) was achieved. The initial scan (21 β values, Δβ = 0.05) revealed **weak falsifiability**: 81% of tested β values produced converged solutions with nearly identical residuals (variation < 1%), and the apparent "minimum" occurred at β ≈ 2.6, not the expected β = 3.058.
+To test this, we performed a systematic β-scan: for each value of β ∈ [2.5, 3.5], we optimized (*R*, *U*, *A*) to match the electron, muon, and tau masses and recorded whether convergence to the target residual (< 10⁻⁴) was achieved. The initial scan (21 β values, Δβ = 0.05) revealed **weak falsifiability**: 81% of tested β values produced converged solutions with nearly identical residuals (variation < 1%), and the apparent "minimum" occurred at β ≈ 2.6, not the expected β = 3.043233053.
 
 This result could indicate either (a) a numerical artifact (e.g., β not entering the calculation), (b) optimizer tolerance masking a genuine preference, or (c) a **real scaling degeneracy** that allows the energy functional to absorb β changes through parameter rescaling. We conducted three diagnostic tests to distinguish these scenarios.
 
@@ -24,11 +24,11 @@ We computed the stabilization energy *E*_stab at fixed (*R*, *U*, *A*) for multi
 
 #### X.2.2 Frozen-Parameter Test: β Matters Physically
 
-We optimized parameters at β = 3.058 to obtain a reference electron solution, then evaluated the mass residual at other β values *without re-optimizing*. The residual changed by ~8.5 × 10⁶ % across the β range, demonstrating that β is physically consequential when the optimizer is not allowed to compensate. This rules out the possibility that β is "effectively absent" from the physics.
+We optimized parameters at β = 3.043233053 to obtain a reference electron solution, then evaluated the mass residual at other β values *without re-optimizing*. The residual changed by ~8.5 × 10⁶ % across the β range, demonstrating that β is physically consequential when the optimizer is not allowed to compensate. This rules out the possibility that β is "effectively absent" from the physics.
 
 #### X.2.3 Restricted Refit: Scaling Symmetry
 
-We fixed *R* and *U* at their β = 3.058 values and allowed *only* the density amplitude *A* to vary with β. The product *A* × √β remained constant to within 0.00% variation (CV < 10⁻⁴), and all β values achieved mass residuals < 10⁻⁴. This directly confirms the **scaling degeneracy**:
+We fixed *R* and *U* at their β = 3.043233053 values and allowed *only* the density amplitude *A* to vary with β. The product *A* × √β remained constant to within 0.00% variation (CV < 10⁻⁴), and all β values achieved mass residuals < 10⁻⁴. This directly confirms the **scaling degeneracy**:
 
 Because the stabilization energy scales as *E*_stab ~ β *A*², the transformation
 
@@ -52,13 +52,13 @@ The Hill spherical vortex produces a toroidal circulation pattern with associate
 
 μ = *k* *Q* *R* *U*,    (X.1)
 
-where *k* ≈ 0.2 is the geometric factor for uniform vorticity and *Q* is the fundamental charge. We then map μ to the *g*-factor via an empirical normalization calibrated to match the electron's measured *g*_e = 2.00231930436256 at the β = 3.058 reference solution.
+where *k* ≈ 0.2 is the geometric factor for uniform vorticity and *Q* is the fundamental charge. We then map μ to the *g*-factor via an empirical normalization calibrated to match the electron's measured *g*_e = 2.00231930436256 at the β = 3.043233053 reference solution.
 
 We performed a refined β-scan with 31 points (Δβ = 0.01) over β ∈ [2.95, 3.25], optimizing (*R*, *U*, *A*) to simultaneously match both mass and *g*-factor (with equal weights in the objective function). This produced:
 
 1. **Non-flat landscape**: Objective variation = 1248% (factor of ~13), compared to < 1% for mass-only.
 2. **All β converge**: 31/31 solutions satisfied both constraints (no failure mode).
-3. **Shifted minimum**: Best-fit at β = 3.190, not β = 3.058 (offset: 0.132).
+3. **Shifted minimum**: Best-fit at β = 3.190, not β = 3.043233053 (offset: 0.132).
 
 This demonstrates that the magnetic moment constraint *does* break the scaling degeneracy—the β landscape is no longer flat. However, when we normalize the objective by experimental uncertainties (σ(*g*_e) ≈ 2.8 × 10⁻¹³), the *g*-factor residuals become ~7 × 10⁵ σ, and *all* solutions fail to converge. This reveals that:
 
@@ -74,7 +74,7 @@ The diagnostic sequence clarifies what the lepton mass spectrum *does* and *does
 - Adding a second observable with different (*R*, *U*) scaling breaks the flat degeneracy.
 
 **What remains open**:
-- The apparent β-minimum at 3.190 (not 3.058) could reflect (a) an incorrect geometric factor *k* in Eq. X.1, (b) missing β-dependent terms in the moment functional, or (c) optimizer artifacts on a still-shallow landscape.
+- The apparent β-minimum at 3.190 (not 3.043233053) could reflect (a) an incorrect geometric factor *k* in Eq. X.1, (b) missing β-dependent terms in the moment functional, or (c) optimizer artifacts on a still-shallow landscape.
 - The 100% convergence rate (without experimental-uncertainty weighting) indicates the model retains substantial flexibility.
 
 Two paths forward are under investigation:
@@ -83,7 +83,7 @@ Two paths forward are under investigation:
 
 2. **Alternative second observable**: The charge radius (or electromagnetic form factor) may provide a more rigorously derivable constraint at the precision required for sharp β-selection. This is addressed in Appendix G (future work).
 
-Until one of these is implemented, we interpret the β = 3.058 inference (§3) as a *compatibility statement*—the lepton spectrum is consistent with the Golden Loop relation, but the mass data alone do not yet *uniquely determine* β at the claimed precision.
+Until one of these is implemented, we interpret the β = 3.043233053 inference (§3) as a *compatibility statement*—the lepton spectrum is consistent with the Golden Loop relation, but the mass data alone do not yet *uniquely determine* β at the claimed precision.
 
 ---
 
@@ -131,8 +131,8 @@ Caption: "Parameter identifiability diagnostics. (A) Mass-only β-scan shows wea
 
 ### Cross-References to Update
 
-1. **Abstract/Introduction**: Change "vacuum stiffness β = 3.058 is *determined* by..." → "is *compatible with*..."
-2. **§3 (Golden Loop)**: Add forward reference: "...predicts β = 3.058 (see §X for identifiability analysis)."
+1. **Abstract/Introduction**: Change "vacuum stiffness β = 3.043233053 is *determined* by..." → "is *compatible with*..."
+2. **§3 (Golden Loop)**: Add forward reference: "...predicts β = 3.043233053 (see §X for identifiability analysis)."
 3. **Discussion**: Emphasize cross-lepton coupling as the critical next test.
 
 ### Response to Reviewer

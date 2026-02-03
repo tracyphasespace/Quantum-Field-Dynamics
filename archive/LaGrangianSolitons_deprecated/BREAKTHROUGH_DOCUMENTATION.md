@@ -42,7 +42,7 @@ V₀        = M_p × (1 - α²/β)    = 938.119 MeV  (well depth)
 
 ```
 α (fine structure)   = 1/137.036 = 0.007297
-β (vacuum stiffness) = 1/3.058   = 0.327011
+β (vacuum stiffness) = 1/3.043233053   = 0.327011
 λ (temporal metric)  = 0.42
 M_p (proton mass)    = 938.272 MeV
 ```
@@ -96,7 +96,7 @@ M_p (proton mass)    = 938.272 MeV
 - This is the **Geometrical Shielding** effect
 
 **Derivation Steps**:
-1. Start with vacuum stiffness: β = 1/3.058
+1. Start with vacuum stiffness: β = 1/3.043233053
 2. Scale to nuclear stiffness: β_nuclear = M_p × β/2 = 153.413 MeV
 3. Apply dimensional projection: E_surface = β_nuclear / 15 = 10.228 MeV
 
@@ -110,7 +110,7 @@ M_p (proton mass)    = 938.272 MeV
 
 ```
 α = 1/137.036  (fine structure constant)
-β = 1/3.058    (vacuum stiffness)
+β = 1/3.043233053    (vacuum stiffness)
 ```
 
 These are locked by the Golden Loop:
@@ -435,7 +435,7 @@ Using the parameter-free formula, we can predict masses for nuclei not in the ca
 
 3. **Topological stability**: Fission barriers should match Q^(2/3) subadditivity exactly
 
-4. **Universality**: Same β = 1/3.058 should appear in lepton sector, cosmology
+4. **Universality**: Same β = 1/3.043233053 should appear in lepton sector, cosmology
 
 ---
 
@@ -470,7 +470,7 @@ Using the parameter-free formula, we can predict masses for nuclei not in the ca
 ```python
 # Fundamental constants (locked)
 alpha_fine   = 1.0 / 137.036
-beta_vacuum  = 1.0 / 3.058
+beta_vacuum  = 1.0 / 3.043233053
 lambda_time  = 0.42
 M_proton     = 938.272  # MeV
 
@@ -741,7 +741,7 @@ Asymptotic limit:            q∞ = 0.149
 
 **All coefficients trace back to**:
 - α = 1/137.036 (fine structure)
-- β = 1/3.058 (vacuum stiffness)
+- β = 1/3.043233053 (vacuum stiffness)
 - λ = 0.42 (temporal metric)
 - Geometric factors (12π, 15)
 

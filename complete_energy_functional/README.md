@@ -1,6 +1,6 @@
 # Complete Energy Functional - MCMC Implementation
 
-**Goal**: Resolve 3% β offset (V22: β≈3.15 vs Golden Loop: β=3.058) by including gradient density and emergent time terms.
+**Goal**: Resolve 3% β offset (V22: β≈3.15 vs Golden Loop: β=3.043233053) by including gradient density and emergent time terms.
 
 ---
 
@@ -38,9 +38,9 @@ samples, sampler = run_stage1_mcmc(
 # Analyze results
 results = analyze_stage1_results(samples, sampler, output_dir='results')
 
-# Key question: Did β → 3.058?
+# Key question: Did β → 3.043233053?
 print(f"β posterior: {results['β']['median']:.4f} ± {results['β']['std']:.4f}")
-print(f"Target:      3.0580")
+print(f"Target:      3.043233053")
 ```
 
 ---
@@ -102,7 +102,7 @@ E = ∫ [½ξ|∇ρ|² + β(δρ)² + τ(∂ρ/∂t)² + E_EM[ρ]] dV
 
 ### Shared (Cross-Lepton)
 - **ξ**: Gradient stiffness (dimensionless, ~1)
-- **β**: Vacuum stiffness (dimensionless, target=3.058)
+- **β**: Vacuum stiffness (dimensionless, target=3.043233053)
 - **τ**: Temporal stiffness (Stage 2, dimensionless, ~1)
 
 ### Per-Lepton (3 sets for e, μ, τ)
@@ -120,12 +120,12 @@ E = ∫ [½ξ|∇ρ|² + β(δρ)² + τ(∂ρ/∂t)² + E_EM[ρ]] dV
 ## Expected Outcomes
 
 ### Scenario 1: Gradient Term Resolves Offset ✓
-- **Result**: β_posterior ≈ 3.058 ± 0.02
+- **Result**: β_posterior ≈ 3.043233053 ± 0.02
 - **Interpretation**: V22 offset was due to missing ∇ρ term
 - **Next**: Validate ξ value from first principles
 
 ### Scenario 2: Temporal Term Needed ⚠
-- **Result**: Stage 1 shows β ≈ 3.1, Stage 2 → β ≈ 3.058
+- **Result**: Stage 1 shows β ≈ 3.1, Stage 2 → β ≈ 3.043233053
 - **Interpretation**: Both gradient and time terms contribute
 - **Next**: Search for breathing mode signatures
 
@@ -205,7 +205,7 @@ print(f"V22 energy: {E_v22:.6e}")
 from functionals import gradient_energy_functional
 
 ξ = 1.0  # Try gradient stiffness
-β = 3.058  # Golden Loop value
+β = 3.043233053  # Golden Loop value
 
 E_total, E_grad, E_comp = gradient_energy_functional(ρ, r, ξ, β)
 
@@ -219,10 +219,10 @@ print(f"Compression contribution: {E_comp:.6e} ({100*E_comp/E_total:.1f}%)")
 from solvers import solve_euler_lagrange, integrate_energy
 
 # Solve for equilibrium density
-r, ρ_eq = solve_euler_lagrange(ξ=1.0, β=3.058, R=1e-13, U=0.5)
+r, ρ_eq = solve_euler_lagrange(ξ=1.0, β=3.043233053, R=1e-13, U=0.5)
 
 # Compute energy
-E = integrate_energy(ξ=1.0, β=3.058, ρ=ρ_eq, r=r)
+E = integrate_energy(ξ=1.0, β=3.043233053, ρ=ρ_eq, r=r)
 print(f"Equilibrium energy: {E:.6e}")
 ```
 

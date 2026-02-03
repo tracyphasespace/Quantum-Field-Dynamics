@@ -18,7 +18,7 @@ def derive_constants():
 
     # 1. PARAMETERS (The "Input")
     # Beta: Vacuum Stiffness (from Nuclear/Cosmology)
-    beta = 3.058
+    beta = 3.043233053
     # Rho: Vacuum Inertia (arbitrary normalization for now)
     rho_vac = 1.0
 

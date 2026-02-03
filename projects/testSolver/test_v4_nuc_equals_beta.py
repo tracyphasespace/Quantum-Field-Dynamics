@@ -5,7 +5,7 @@ Test V₄_nuc = β Hypothesis
 From Lean: projects/Lean4/QFD/Nuclear/QuarticStiffness.lean
 
 Hypothesis: The quartic soliton stiffness coefficient V₄_nuc equals
-the universal vacuum stiffness parameter β = 3.058.
+the universal vacuum stiffness parameter β = 3.043233053.
 
 Physical validation:
 1. Nuclear saturation density ρ₀ ≈ 0.16 fm⁻³ should emerge
@@ -15,7 +15,7 @@ Physical validation:
 Energy functional:
   E[ρ] = ∫ [-μ²ρ + λρ² + κρ³ + V₄_nuc·ρ⁴] dV
 
-Test: Does V₄_nuc = β = 3.058 reproduce nuclear observables?
+Test: Does V₄_nuc = β = 3.043233053 reproduce nuclear observables?
 """
 
 import numpy as np
@@ -24,7 +24,7 @@ from scipy.integrate import quad
 import matplotlib.pyplot as plt
 
 # Constants
-BETA_GOLDEN = 3.058230856  # From Golden Loop
+BETA_GOLDEN = 3.043233053  # From Golden Loop
 HBAR_C = 197.3269804  # MeV·fm (natural units)
 
 # Nuclear observables (targets for validation)

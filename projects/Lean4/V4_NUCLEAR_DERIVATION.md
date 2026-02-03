@@ -237,7 +237,7 @@ V₄ = |V(ρ₀) - V(0)|
 For vacuum with stiffness λ and β:
 ```
 V₄ ~ λ × ρ₀ ~ λ/β (approximate)
-   ~ 938/3.058
+   ~ 938/3.043233053
    ~ 307 MeV
 ```
 
@@ -340,7 +340,7 @@ V₄ ≈ λ/19
 
 We derived:
 - c₂ = 1/β = 0.327
-- β = 3.058
+- β = 3.043233053
 
 **Check if V₄ relates to β**:
 
@@ -348,7 +348,7 @@ We derived:
 V₄/λ ≈ 1/19
 
 Compare to:
-1/β² = 1/(3.058)² = 1/9.35 ≈ 0.107
+1/β² = 1/(3.043233053)² = 1/9.35 ≈ 0.107
 
 Ratio:
 (V₄/λ) / (1/β²) = (1/19) / (1/9.35)
@@ -379,12 +379,12 @@ V₄ ≈ λ/(2β²)
 
 where:
 - λ ≈ m_p = 938 MeV (vacuum stiffness)
-- β = 3.058 (vacuum bulk modulus)
+- β = 3.043233053 (vacuum bulk modulus)
 
 ### Numerical Validation
 
 ```
-V₄ = 938 MeV / (2 × (3.058)²)
+V₄ = 938 MeV / (2 × (3.043233053)²)
    = 938 / (2 × 9.351)
    = 938 / 18.702
    = 50.16 MeV
@@ -426,7 +426,7 @@ Where λ itself comes from β:
 λ = k_geom × β × (m_e/α) ≈ m_p
 ```
 
-**Everything traces back to β = 3.058!**
+**Everything traces back to β = 3.043233053!**
 
 ---
 
@@ -514,7 +514,7 @@ def V4_nuclear (λ : ℝ) (β : ℝ) : ℝ := λ / (2 * β^2)
 
 ```lean
 theorem V4_validates :
-  abs (V4_nuclear 938 3.058 - 50) < 1 := by
+  abs (V4_nuclear 938 3.043233053 - 50) < 1 := by
   norm_num
 ```
 

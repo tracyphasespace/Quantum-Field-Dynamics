@@ -5,7 +5,7 @@ We model the scalar potential as:
 
     V(ρ) = -μ² ρ + λ ρ² + κ ρ³ + β ρ⁴ ,
 
-with β fixed by the Golden-Loop constraint (β = 3.058230856).
+with β fixed by the Golden-Loop constraint (β = 3.043233053).
 Demanding that this potential admit *two* degenerate minima at radii
 proportional to the electron and muon masses results in a fully
 determined set of coefficients.
@@ -37,7 +37,7 @@ import numpy as np
 
 ELECTRON_MASS_MEV = 0.510_998_95
 MUON_MASS_MEV = 105.658_375_5
-GOLDEN_LOOP_BETA = 3.058_230_856
+GOLDEN_LOOP_BETA = 3.043233053_230_856
 
 
 @dataclass(frozen=True)

@@ -6,7 +6,7 @@ Tests the hypothesis that stable nuclei occur at simple harmonic ratios:
   ω_n / ω_e = p/q (simple rational)
 
 where:
-  ω_n = nuclear cavity frequency (from β = 3.058)
+  ω_n = nuclear cavity frequency (from β = 3.043233053)
   ω_e = electron K-shell frequency (from Z)
 """
 
@@ -24,7 +24,7 @@ alpha_fs = 1/137.036  # fine structure constant
 MeV_to_J = 1.602e-13  # J/MeV
 
 # QFD parameter
-beta_vacuum = 3.058
+beta_vacuum = 3.043233053
 
 # Field sound speed from vacuum stiffness
 c_field = c_light * np.sqrt(beta_vacuum)  # m/s

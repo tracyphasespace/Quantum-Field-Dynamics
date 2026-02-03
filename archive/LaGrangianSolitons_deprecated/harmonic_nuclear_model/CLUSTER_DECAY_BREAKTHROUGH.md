@@ -342,7 +342,7 @@ The same conservation law applies to:
 
 ### QFD Vacuum Dynamics
 
-In QFD framework, vacuum has stiffness parameter β ≈ 3.058, and standing waves in this medium satisfy:
+In QFD framework, vacuum has stiffness parameter β ≈ 3.043233053, and standing waves in this medium satisfy:
 
 ```
 E_standing_wave = ∫ [½ρv² + ½β(δρ)²] dV

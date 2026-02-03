@@ -16,7 +16,7 @@ We report **perfect classification** (285/285, 100% accuracy) of all stable nucl
 
 ### A. QFD Soliton Framework
 
-Nuclear structure arises from topological solitons in QFD vacuum with stiffness parameter β ≈ 3.058. Energy functional:
+Nuclear structure arises from topological solitons in QFD vacuum with stiffness parameter β ≈ 3.043233053. Energy functional:
 
 ```
 E[ρ] = ∫ [V₀ρ + β_nuclear/15 (∇ρ)² + ...] d³r
@@ -280,7 +280,7 @@ N = +3: Low surface tension, compressed envelope
 
 ### D. Connection to QFD Universality
 
-**Same β ≈ 3.058 appears in**:
+**Same β ≈ 3.043233053 appears in**:
 1. Nuclear binding (this work)
 2. Lepton masses (Hill vortex model, V22 analysis)
 3. CMB anomalies (axis of evil)

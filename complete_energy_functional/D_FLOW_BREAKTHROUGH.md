@@ -123,15 +123,15 @@ V22 (no gradient):  β ≈ 3.15
 
 **Golden Loop target**:
 ```
-β_theory = 3.058
+β_theory = 3.043233053
 ```
 
 **Offset**:
 ```
-Δβ = 3.15 - 3.058 = 0.092
+Δβ = 3.15 - 3.043233053 = 0.092
 Δβ/β = 3.0%
 
-Remarkably: 3.15/3.058 ≈ 1.030
+Remarkably: 3.15/3.043233053 ≈ 1.030
 ```
 
 ### The π Connection
@@ -150,7 +150,7 @@ Then:
 β_core = 3.15 / (π/2) ≈ 3.15 / 1.571 ≈ 2.00
 ```
 
-Hmm, that gives β_core ≈ 2, not 3.058...
+Hmm, that gives β_core ≈ 2, not 3.043233053...
 
 **Alternative**: The 3% offset is the **topological cost** of the U-turn
 
@@ -286,7 +286,7 @@ R_e_correct = 386  # fm (Compton wavelength)
 
 # Re-run Stage 3 with proper scale
 # Hypothesis: ξ will NOT collapse to zero
-# Prediction: β → 3.058 ± 0.02
+# Prediction: β → 3.043233053 ± 0.02
 ```
 
 ### Test 2: D-Flow Geometry
@@ -306,7 +306,7 @@ R_e_correct = 386  # fm (Compton wavelength)
 # where η ~ 0.03 (3% correction)
 
 # Hypothesis: β_effective = β_core × (1 + η)
-# Check if: β_core = 3.058, β_eff = 3.15
+# Check if: β_core = 3.043233053, β_eff = 3.15
 ```
 
 ---
@@ -352,7 +352,7 @@ Previous Stage 3 used R = 0.84 fm (500× too small)
 **With correct R ~ 400 fm**:
 - Gradient energy scales properly
 - ξ should be ~1-10 (not 0, not 26)
-- β should converge to 3.058
+- β should converge to 3.043233053
 
 ### 2. Spin Breaks Degeneracy
 
@@ -386,7 +386,7 @@ Previous Stage 3 used R = 0.84 fm (500× too small)
 
 **Then we will find**:
 ```
-β = 3.058 ± 0.01  (Golden Loop validated!)
+β = 3.043233053 ± 0.01  (Golden Loop validated!)
 ξ = 2-5           (Moderate gradient stiffness)
 τ = 1.0 ± 0.1     (Temporal stiffness as expected)
 
@@ -409,7 +409,7 @@ R_e,core = 246 fm (2/π × flow radius)
 
 **Expected completion**: 1-2 hours to implement and test
 
-**Expected outcome**: β = 3.058 ± 0.01 with all parameters uniquely determined
+**Expected outcome**: β = 3.043233053 ± 0.01 with all parameters uniquely determined
 
 ---
 

@@ -6,7 +6,7 @@ Based on Appendix Z.17:
   α^(-1) ≈ π² × exp(β) × (c2/c1)
 
 With c2/c1 = 0.6522 (V22 nuclear) and α^(-1) = 137.036:
-  → β_crit = 3.058
+  → β_crit = 3.043233053
 
 This script fixes β and fits only:
   - R_c_e, U_e (electron)
@@ -27,7 +27,7 @@ import gc
 # ============================================================================
 # FIXED β FROM α CONSTRAINT
 # ============================================================================
-BETA_FIXED = 3.058230856  # From Appendix Z.17
+BETA_FIXED = 3.043233053  # From Appendix Z.17
 
 # ============================================================================
 # PHYSICAL CONSTANTS

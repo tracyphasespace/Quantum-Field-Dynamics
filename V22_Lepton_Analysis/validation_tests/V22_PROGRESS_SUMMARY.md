@@ -10,7 +10,7 @@
 
 **Not a Bug**: The circulation energy integral E_circ = ∫ ½ρ(r)v²(r) d³r is correctly implemented, but the model makes ρ(r) variations irrelevant because v² peaks where ρ ≈ 1 for all leptons.
 
-**Current Status**: Running Test 3 (e,μ only fit) to determine if light leptons validate β ≈ 3.058, isolating τ as the outlier.
+**Current Status**: Running Test 3 (e,μ only fit) to determine if light leptons validate β ≈ 3.043233053, isolating τ as the outlier.
 
 ---
 
@@ -70,7 +70,7 @@ Variation when A varies 0.70 → 0.99: 0.0%
 **Expected Outcomes**:
 
 **Outcome A (τ is outlier)**:
-- β_min(e,μ) ≈ 3.058 ± 0.02 (Golden Loop target)
+- β_min(e,μ) ≈ 3.043233053 ± 0.02 (Golden Loop target)
 - S_e/S_μ ≈ 1.0 (universal scaling)
 - χ² < 20
 - **→ Light leptons validate model; τ requires extension**
@@ -169,7 +169,7 @@ Test 2 (Circulation Prefactor)
   ↓
 Test 3 (Two-Lepton e,μ Fit) ← CURRENTLY HERE
   ↓
-  ├─ Outcome A (β_min ≈ 3.058, S_e/S_μ ≈ 1.0)
+  ├─ Outcome A (β_min ≈ 3.043233053, S_e/S_μ ≈ 1.0)
   │   → τ IS OUTLIER
   │   → Publish: "(e,μ) validation + τ anomaly quantified"
   │   ↓
@@ -203,10 +203,10 @@ Test 3 (Two-Lepton e,μ Fit) ← CURRENTLY HERE
 **Title**: *"Lepton Masses from Quantum Fluid Vortices: Validation of Light Leptons and the Tau Anomaly"*
 
 **Abstract**:
-> We demonstrate that electron and muon masses are successfully described by a quantum fluid dynamics (QFD) model with circulation-dominated vortex solutions, validating the theoretical vacuum stiffness β = 3.058 ± 0.02 derived from the fine-structure constant via the Golden Loop relation. However, the tau lepton (m_τ ≈ 2 m_proton) exhibits a systematic 46% energy deficit, requiring E_τ/E_μ ≈ 9 from circulation scaling while the mass ratio demands ≈ 17. We quantify this regime change as S_τ/S_μ ≈ 1.86, persistent across all closure configurations, and identify the root cause as spatial orthogonality between the Hill vortex velocity field and the density deficit profile. This suggests a transition from charge-circulation-dominated physics (light leptons) to a regime where mass-scale compression/ballast physics becomes relevant (tau), consistent with the tau's short lifetime (2.9×10⁻¹³ s) indicating metastability at the hadronic mass scale.
+> We demonstrate that electron and muon masses are successfully described by a quantum fluid dynamics (QFD) model with circulation-dominated vortex solutions, validating the theoretical vacuum stiffness β = 3.043233053 ± 0.02 derived from the fine-structure constant via the Golden Loop relation. However, the tau lepton (m_τ ≈ 2 m_proton) exhibits a systematic 46% energy deficit, requiring E_τ/E_μ ≈ 9 from circulation scaling while the mass ratio demands ≈ 17. We quantify this regime change as S_τ/S_μ ≈ 1.86, persistent across all closure configurations, and identify the root cause as spatial orthogonality between the Hill vortex velocity field and the density deficit profile. This suggests a transition from charge-circulation-dominated physics (light leptons) to a regime where mass-scale compression/ballast physics becomes relevant (tau), consistent with the tau's short lifetime (2.9×10⁻¹³ s) indicating metastability at the hadronic mass scale.
 
 **Key Claims**:
-1. Electron and muon validate β = 3.058 (from α via Golden Loop)
+1. Electron and muon validate β = 3.043233053 (from α via Golden Loop)
 2. Circulation energy scaling E_circ ∝ U² confirmed for m < 200 MeV
 3. Tau energy deficit quantified: 46% shortfall from required mass ratio
 4. Root cause identified: functional profile-insensitivity (spatial orthogonality)
@@ -219,7 +219,7 @@ Test 3 (Two-Lepton e,μ Fit) ← CURRENTLY HERE
 **Title**: *"Systematic Investigation of Circulation Energy Scaling in Quantum Fluid Lepton Models"*
 
 **Abstract**:
-> We investigate the cross-lepton consistency of a quantum fluid dynamics (QFD) model for lepton masses based on Hill vortex circulation and density deficit stabilization. While the model successfully generates the observed mass hierarchy (m_e : m_μ : m_τ ≈ 1 : 200 : 3500), we find systematic deviations in the inferred vacuum stiffness parameter: β_eff ≈ 3.15 vs the theoretical prediction β = 3.058 from the fine-structure constant. Detailed diagnostics reveal that the circulation energy functional E_circ exhibits profile-insensitivity (I_ℓ = E_circ/U² constant across leptons to 0.01%), arising from spatial orthogonality between the velocity field (concentrated at vortex boundary) and density deficit (concentrated in core). This suggests the need for either: (1) a density-weighted kinetic energy formulation, (2) compact-support localization of the vortex, or (3) additional constraints from observables beyond mass (magnetic moments, charge radii).
+> We investigate the cross-lepton consistency of a quantum fluid dynamics (QFD) model for lepton masses based on Hill vortex circulation and density deficit stabilization. While the model successfully generates the observed mass hierarchy (m_e : m_μ : m_τ ≈ 1 : 200 : 3500), we find systematic deviations in the inferred vacuum stiffness parameter: β_eff ≈ 3.15 vs the theoretical prediction β = 3.043233053 from the fine-structure constant. Detailed diagnostics reveal that the circulation energy functional E_circ exhibits profile-insensitivity (I_ℓ = E_circ/U² constant across leptons to 0.01%), arising from spatial orthogonality between the velocity field (concentrated at vortex boundary) and density deficit (concentrated in core). This suggests the need for either: (1) a density-weighted kinetic energy formulation, (2) compact-support localization of the vortex, or (3) additional constraints from observables beyond mass (magnetic moments, charge radii).
 
 **Key Claims**:
 1. Mass hierarchy successfully reproduced
@@ -341,7 +341,7 @@ Test 1 (widened bounds) is still valuable AFTER fixing the functional.
 ### Internal Documents
 - `Background_and_Schema/QFD_Version_1.0_Cross_Sector_Validation.md`
 - `projects/astrophysics/blackhole-dynamics/config.py`
-- Golden Loop: α → β ≈ 3.058
+- Golden Loop: α → β ≈ 3.043233053
 
 ### Key Papers (to cite if publishing)
 - Hill vortex solutions in fluid dynamics

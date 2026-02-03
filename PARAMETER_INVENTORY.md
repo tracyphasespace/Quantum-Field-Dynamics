@@ -101,7 +101,7 @@ via `QFD/Schema/DimensionalAnalysis.lean`
 ### Validation Status
 
 **VALIDATED (5/5)**: β, ξ, τ, λ, α_circ
-- ✅ β validates Golden Loop (β_Golden = 3.058 from α)
+- ✅ β validates Golden Loop (β_Golden = 3.043233053 from α)
 - ✅ ξ, τ confirm order-unity predictions
 - ✅ λ = m_proton is Proton Bridge hypothesis
 - ✅ α_circ = e/(2π) from spin constraint L = ℏ/2

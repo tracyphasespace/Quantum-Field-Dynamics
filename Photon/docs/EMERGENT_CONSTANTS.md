@@ -27,7 +27,7 @@ c_vac = √(β/ρ_vac) · Γ_geo
 ```
 
 Where:
-* **β = 3.058**: Vacuum Bulk Modulus (Stiffness)
+* **β = 3.043233053**: Vacuum Bulk Modulus (Stiffness)
 * **ρ_vac**: Vacuum Inertia Density
 * **Γ_geo**: Geometric factor from Cl(3,3) lattice (likely √3 or π)
 
@@ -153,7 +153,7 @@ c = √(β/ρ)  (Wave Speed)
 - β (unknown)
 
 **After** (QFD):
-- **β = 3.058** (fundamental - vacuum property)
+- **β = 3.043233053** (fundamental - vacuum property)
 - c = f(β, ρ) (emergent)
 - ℏ = f(β, c, vortex geometry) (emergent)
 - m_e = f(β, vortex stability) (emergent)
@@ -256,7 +256,7 @@ L_z = (1/2)·M_e·R_e·c ≡ (1/2)ℏ
 - "Anthropic principle" invoked
 
 **QFD**:
-- 1 fundamental parameter (β = 3.058)
+- 1 fundamental parameter (β = 3.043233053)
 - All other "constants" emergent
 - Values **predicted** from geometry
 
@@ -266,7 +266,7 @@ L_z = (1/2)·M_e·R_e·c ≡ (1/2)ℏ
 
 **Standard answer**: "It just is. Fundamental constant."
 
-**QFD answer**: "Because the vacuum has stiffness β = 3.058 and density ρ = 1 (in natural units). The sound speed of this medium is √(β/ρ) ≈ 1.75, which in SI units is c."
+**QFD answer**: "Because the vacuum has stiffness β = 3.043233053 and density ρ = 1 (in natural units). The sound speed of this medium is √(β/ρ) ≈ 1.75, which in SI units is c."
 
 **Question**: Why is ℏ = 1.054×10⁻³⁴ J·s?
 
@@ -315,7 +315,7 @@ L_z = (1/2)·M_e·R_e·c ≡ (1/2)ℏ
 
 3. **Vacuum Stiffness Direct Probe**
    - Casimir force modulation
-   - Test β = 3.058 prediction
+   - Test β = 3.043233053 prediction
 
 ---
 
@@ -326,7 +326,7 @@ L_z = (1/2)·M_e·R_e·c ≡ (1/2)ℏ
 ```lean
 -- Define vacuum stiffness as fundamental parameter
 axiom vacuum_stiffness : ℝ
-axiom vacuum_stiffness_value : vacuum_stiffness = 3.058
+axiom vacuum_stiffness_value : vacuum_stiffness = 3.043233053
 
 -- Derive speed of light as wave speed
 def speed_of_light (β ρ : ℝ) : ℝ := Real.sqrt (β / ρ)
@@ -360,7 +360,7 @@ theorem hbar_emergent :
 
 ### What Remains Unexplained
 
-❓ **Why β = 3.058?**: What sets the vacuum stiffness?
+❓ **Why β = 3.043233053?**: What sets the vacuum stiffness?
 ❓ **Vacuum lattice structure**: Is it really Cl(3,3)?
 ❓ **Initial conditions**: Why this vacuum, not another?
 
@@ -440,7 +440,7 @@ Relative error: 0.0 (machine precision) ✅
 **Numerical result**:
 ```
 Γ_vortex = 1.6919
-√β       = √3.058 = 1.7487
+√β       = √3.043233053 = 1.7487
 Ratio    = Γ/√β = 0.9675
 ```
 
@@ -455,7 +455,7 @@ Ratio    = Γ/√β = 0.9675
 
 **QFD**: **1 fundamental parameter**
 ```
-β = 3.058 → c, ℏ, L₀ (all predicted)
+β = 3.043233053 → c, ℏ, L₀ (all predicted)
 ```
 
 **If L₀ = 0.125 fm is confirmed experimentally, QFD is the Theory of Everything.** ✅🌌

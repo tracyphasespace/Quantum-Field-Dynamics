@@ -5,7 +5,7 @@ Calibrate magnetic moment normalization factor.
 Problem: μ = k × Q × R × U gives correct scaling, but g-factor normalization is wrong.
 
 Approach:
-1. Take known electron solution (R, U, amplitude) at β = 3.058
+1. Take known electron solution (R, U, amplitude) at β = 3.043233053
 2. Calculate μ = k × Q × R × U
 3. Find normalization that gives g = 2.00231930436256
 """
@@ -20,8 +20,8 @@ from test_all_leptons_beta_from_alpha import (
 )
 from test_multi_objective_beta_scan import magnetic_moment_hill_vortex
 
-# Known electron solution at β = 3.058
-beta_ref = 3.058
+# Known electron solution at β = 3.043233053
+beta_ref = 3.043233053
 target_mass = ELECTRON_MASS
 target_g = 2.00231930436256
 
@@ -37,9 +37,9 @@ if results_file.exists():
     with open(results_file, 'r') as f:
         data = json.load(f)
 
-    # Find β = 3.058 solution
+    # Find β = 3.043233053 solution
     for beta_result in data['scan_results']:
-        if abs(beta_result['beta'] - 3.058) < 0.01:
+        if abs(beta_result['beta'] - 3.043233053) < 0.01:
             electron_solution = beta_result['leptons']['electron']
 
             if electron_solution['converged']:
@@ -47,7 +47,7 @@ if results_file.exists():
                 U_known = electron_solution['U']
                 amp_known = electron_solution['amplitude']
 
-                print(f"\nKnown electron solution at β = 3.058:")
+                print(f"\nKnown electron solution at β = 3.043233053:")
                 print(f"  R = {R_known:.6f}")
                 print(f"  U = {U_known:.6f}")
                 print(f"  amplitude = {amp_known:.6f}")
@@ -96,7 +96,7 @@ if results_file.exists():
 
                 break
     else:
-        print("\n✗ No converged electron solution found at β = 3.058")
+        print("\n✗ No converged electron solution found at β = 3.043233053")
         print("  Run production β-scan first to get reference solution")
 else:
     print(f"\n✗ Results file not found: {results_file}")

@@ -272,7 +272,7 @@ def test_beta_variation():
     print()
 
     # Compare to Golden Loop
-    beta_golden = 3.058
+    beta_golden = 3.043233053
     offset = beta_min - beta_golden
     offset_pct = offset / beta_golden * 100
 

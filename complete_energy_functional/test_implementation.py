@@ -111,7 +111,7 @@ def test_gradient_functional():
     U = 0.5
     A = 1.0
     ξ = 1.0
-    β = 3.058  # Golden Loop value
+    β = 3.043233053  # Golden Loop value
 
     r = np.linspace(0, 10*R, 500)
     ρ = solv.hill_vortex_profile(r, R, U, A)
@@ -141,7 +141,7 @@ def test_euler_lagrange():
     print("="*70)
 
     ξ = 1.0
-    β = 3.058
+    β = 3.043233053
     R = 1.0
     U = 0.5
     A = 1.0
@@ -203,7 +203,7 @@ def test_priors_likelihood():
     # Test parameters near expected values
     params = np.array([
         1.0,      # ξ
-        3.058,    # β
+        3.043233053,    # β
         1e-13,    # R_e
         0.5,      # U_e
         1.0,      # A_e

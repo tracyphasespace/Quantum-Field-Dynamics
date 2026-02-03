@@ -138,14 +138,14 @@ def log_prior(params):
     """
     Prior for (β, ξ, τ) with R_e FIXED.
 
-    β ~ Normal(3.058, 0.15)
+    β ~ Normal(3.043233053, 0.15)
     ξ ~ LogNormal(0, 0.5)
     τ ~ LogNormal(0, 0.5)
     """
     beta, xi, tau = params
 
     # β prior
-    beta_mean = 3.058
+    beta_mean = 3.043233053
     beta_std = 0.15
     lp_beta = -0.5 * ((beta - beta_mean) / beta_std)**2
 
@@ -231,7 +231,7 @@ def run_fixed_radius_mcmc(
     print()
 
     # Initialize walkers
-    beta_init = 3.058
+    beta_init = 3.043233053
     xi_init = 1.0
     tau_init = 1.0
 
@@ -312,7 +312,7 @@ def analyze_fixed_radius_results(sampler, output_dir='results'):
     beta_median = results['β']['median']
     beta_std = results['β']['std']
     xi_median = results['ξ']['median']
-    beta_target = 3.058
+    beta_target = 3.043233053
     beta_offset = abs(beta_median - beta_target)
 
     print("="*70)
@@ -340,7 +340,7 @@ def analyze_fixed_radius_results(sampler, output_dir='results'):
     print()
 
     if beta_offset < 0.02 and abs(corr_beta_xi) < 0.3:
-        print("✅ SUCCESS! Fixed R_e collapsed banana → β = 3.058!")
+        print("✅ SUCCESS! Fixed R_e collapsed banana → β = 3.043233053!")
         print("   Hard length scale broke degeneracy!")
         result = "success"
     elif beta_offset < 0.05:
@@ -359,7 +359,7 @@ def analyze_fixed_radius_results(sampler, output_dir='results'):
     fig = corner.corner(
         samples,
         labels=['β', 'ξ', 'τ'],
-        truths=[3.058, 1.0, 1.0],
+        truths=[3.043233053, 1.0, 1.0],
         quantiles=[0.16, 0.5, 0.84],
         show_titles=True,
         title_fmt='.3f'
@@ -374,7 +374,7 @@ def analyze_fixed_radius_results(sampler, output_dir='results'):
     chain = sampler.get_chain()
     fig, axes = plt.subplots(3, 1, figsize=(10, 10))
 
-    for i, (ax, label, target) in enumerate(zip(axes, ['β', 'ξ', 'τ'], [3.058, 1.0, 1.0])):
+    for i, (ax, label, target) in enumerate(zip(axes, ['β', 'ξ', 'τ'], [3.043233053, 1.0, 1.0])):
         ax.plot(chain[:, :, i], alpha=0.3, color='k', lw=0.5)
         ax.axhline(target, color='r', ls='--', lw=2, label=f'Expected: {target}')
         ax.set_ylabel(label, fontsize=12)

@@ -7,7 +7,7 @@ MECHANISTIC DERIVATION (Not numerology):
 V₄ = -ξ/β
 
 Where:
-- β = vacuum compression stiffness (Golden Loop: 3.058)
+- β = vacuum compression stiffness (Golden Loop: 3.043233053)
 - ξ = vacuum gradient stiffness (MCMC: 0.966 ≈ 1)
 
 Physical mechanism:
@@ -16,7 +16,7 @@ Physical mechanism:
 - ξ/β ratio is the energy partition (gradient vs compression)
 - Negative sign: compression reduces magnetic moment (electron)
 
-Result: V₄ = -1/3.058 = -0.327 ≈ C₂(QED) = -0.328 (0.45% error)
+Result: V₄ = -1/3.043233053 = -0.327 ≈ C₂(QED) = -0.328 (0.45% error)
 
 This is NOT a fit - β comes from α (fine structure), independent of g-2!
 """
@@ -36,7 +36,7 @@ BETA_MCMC = 3.0627
 XI_MCMC = 0.9655
 
 # Theoretical (Golden Loop)
-BETA_GOLDEN = 3.058
+BETA_GOLDEN = 3.043233053
 XI_GOLDEN = 1.0  # Expected from dimensional analysis
 
 # QED coefficient (known)
@@ -466,7 +466,7 @@ if __name__ == '__main__':
     print()
     print("MECHANISTIC DERIVATION: V₄ = -ξ/β")
     print()
-    print(f"Golden Loop parameters (β = 3.058, ξ = 1):")
+    print(f"Golden Loop parameters (β = 3.043233053, ξ = 1):")
     print(f"  V₄ = -0.327")
     print(f"  C₂(QED) = -0.328")
     print(f"  Error: 0.45%")

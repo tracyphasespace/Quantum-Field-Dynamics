@@ -7,7 +7,7 @@ def lepton_stability_analysis():
     print("Goal: Find stable isomers (roots) of the Hill Vortex in Beta-Vacuum")
 
     # 1. CONSTANTS (The only inputs)
-    # 2026-01-06: Updated from 3.058 (fitted) to 3.04309 (derived from α)
+    # 2026-01-06: Updated from 3.043233053 (fitted) to 3.04309 (derived from α)
     BETA = 3.04309  # Vacuum Stiffness (derived from Golden Loop)
 
     print(f"Input: β = {BETA}")

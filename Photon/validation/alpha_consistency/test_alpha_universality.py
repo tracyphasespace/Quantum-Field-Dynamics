@@ -2,7 +2,7 @@
 """
 Test: Fine structure constant α universality across QFD sectors.
 
-Goal: Check if all sectors predict the same α from β = 3.058.
+Goal: Check if all sectors predict the same α from β = 3.043233053.
 
 Sectors:
 1. Nuclear: α⁻¹ = π² · exp(β) · (c₂/c₁)
@@ -23,7 +23,7 @@ epsilon_0 = 8.854187817e-12  # F/m
 alpha_measured = 1 / 137.035999084  # CODATA 2018
 
 # QFD parameters
-beta = 3.058  # Vacuum stiffness
+beta = 3.043233053  # Vacuum stiffness
 c2_over_c1 = 6.42  # Nuclear coupling ratio (empirical)
 
 

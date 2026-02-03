@@ -3,7 +3,7 @@
 Derive speed of light from vacuum stiffness parameter β.
 
 In QFD, the vacuum is a dynamic medium with:
-- Stiffness parameter: β ≈ 3.058
+- Stiffness parameter: β ≈ 3.043233053
 - Geometric algebra: Cl(3,3)
 - Metric signature: (3,3)
 
@@ -25,7 +25,7 @@ epsilon_0 = 8.854187817e-12  # F/m
 mu_0 = 1.25663706212e-6  # H/m
 
 # QFD parameter
-beta = 3.058  # Vacuum stiffness (dimensionless)
+beta = 3.043233053  # Vacuum stiffness (corrected value)
 
 def derive_speed_of_light():
     """

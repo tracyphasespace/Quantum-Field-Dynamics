@@ -18,7 +18,7 @@ In response to your observation that **V22's β ≈ 3.15 offset** is due to miss
 E = ∫ β(δρ)² dV
 ```
 
-**Result**: β ≈ 3.15 (3% offset from Golden Loop β = 3.058)
+**Result**: β ≈ 3.15 (3% offset from Golden Loop β = 3.043233053)
 
 **Missing Physics**:
 1. Gradient density: ξ|∇ρ|² (spatial kinetic term)
@@ -35,7 +35,7 @@ E = ∫ β(δρ)² dV
 E = ∫ [½ξ|∇ρ|² + β(δρ)²] dV
 ```
 - New parameter: ξ (gradient stiffness)
-- Test: Does including ∇ρ term push β → 3.058?
+- Test: Does including ∇ρ term push β → 3.043233053?
 
 **Stage 2 (Framework ready)**: Add Temporal Term
 ```
@@ -179,7 +179,7 @@ print(f"ξ posterior: {results['ξ']['median']:.4f} ± {results['ξ']['std']:.4f
 | Parameter | Prior | Interpretation |
 |-----------|-------|----------------|
 | **ξ** | LogNormal(0, 0.5) | Gradient stiffness (expect ~1) |
-| **β** | Normal(3.058, 0.15) | Vacuum stiffness (target: 3.058) |
+| **β** | Normal(3.043233053, 0.15) | Vacuum stiffness (target: 3.043233053) |
 | **R_e** | LogNormal(log(10⁻¹³), 1.0) | Electron vortex radius |
 | **U_e** | Uniform(0.1, 0.9) | Electron velocity / c |
 | **A_e** | LogNormal(0, 2.0) | Electron amplitude |
@@ -199,10 +199,10 @@ print(f"ξ posterior: {results['ξ']['median']:.4f} ± {results['ξ']['std']:.4f
 ### Q1: Does gradient term ξ resolve the 3% β offset?
 
 **Test**: Run Stage 1 MCMC
-**Success criteria**: β_posterior peaks at 3.058 ± 0.02 (not 3.15)
+**Success criteria**: β_posterior peaks at 3.043233053 ± 0.02 (not 3.15)
 
 **Scenarios**:
-- ✓ **Yes**: β → 3.058 → V22 offset was purely due to missing ∇ρ term
+- ✓ **Yes**: β → 3.043233053 → V22 offset was purely due to missing ∇ρ term
 - ⚠ **Partial**: β → 3.10 → Gradient helps but need Stage 2 (temporal)
 - ✗ **No**: β ≈ 3.15 → Need Stage 3 (full EM functional)
 
@@ -230,7 +230,7 @@ print(f"ξ posterior: {results['ξ']['median']:.4f} ± {results['ξ']['std']:.4f
 ### Scenario 1: Gradient Resolves Offset ✓ (BEST CASE)
 
 ```
-β_posterior = 3.058 ± 0.02
+β_posterior = 3.043233053 ± 0.02
 ξ_posterior = 1.2 ± 0.3
 ```
 
@@ -250,7 +250,7 @@ print(f"ξ posterior: {results['ξ']['median']:.4f} ± {results['ξ']['std']:.4f
 
 ```
 β_posterior = 3.10 ± 0.03  (Stage 1)
-β_posterior = 3.058 ± 0.02  (Stage 2 with τ)
+β_posterior = 3.043233053 ± 0.02  (Stage 2 with τ)
 ```
 
 **Interpretation**:
@@ -330,7 +330,7 @@ print(f"ξ posterior: {results['ξ']['median']:.4f} ± {results['ξ']['std']:.4f
    ```
 
 5. **Analyze results** (~1 hour)
-   - Did β → 3.058?
+   - Did β → 3.043233053?
    - What is ξ value?
    - Corner plots for degeneracies
    - Convergence diagnostics (R̂ < 1.01?)
@@ -362,12 +362,12 @@ print(f"ξ posterior: {results['ξ']['median']:.4f} ± {results['ξ']['std']:.4f
 - ✓ Posterior shows clear structure (not uniform)
 
 ### Target Success
-- ✓ β_posterior peaks near 3.058 (not 3.15)
+- ✓ β_posterior peaks near 3.043233053 (not 3.15)
 - ✓ Offset reduced from 3% to <1%
 - ✓ ξ value is physically reasonable (~1)
 
 ### Optimal Success
-- ✓ β = 3.058 ± 0.02 (Golden Loop confirmed)
+- ✓ β = 3.043233053 ± 0.02 (Golden Loop confirmed)
 - ✓ All leptons fit to <0.1% residuals
 - ✓ Clear physical interpretation of ξ and/or τ
 
@@ -476,7 +476,7 @@ results = analyze_stage1_results(samples, sampler)
 
 **What's ready to run**: Everything for Stage 1 (gradient-only)
 
-**Critical question**: Will including ξ|∇ρ|² push β from 3.15 → 3.058?
+**Critical question**: Will including ξ|∇ρ|² push β from 3.15 → 3.043233053?
 
 **How to find out**: Run the MCMC and check β_posterior!
 

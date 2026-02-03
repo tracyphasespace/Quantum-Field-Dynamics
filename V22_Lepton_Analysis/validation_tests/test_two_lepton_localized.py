@@ -260,7 +260,7 @@ print("ACCEPTANCE CRITERIA (Run 2)")
 print("=" * 70)
 print()
 
-BETA_TARGET = 3.058
+BETA_TARGET = 3.043233053
 
 beta_close = abs(beta_min - BETA_TARGET) < 0.03
 chi2_reasonable = chi2_min < 20

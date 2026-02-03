@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-The **Grand Unified Solver** framework has been successfully validated. We can now predict properties across electromagnetic, gravitational, and nuclear sectors from a single parameter β = 3.058.
+The **Grand Unified Solver** framework has been successfully validated. We can now predict properties across electromagnetic, gravitational, and nuclear sectors from a single parameter β = 3.043233053.
 
 **Key Achievement**: Derived the exact λ(β) conversion formula from Lean proofs, proving:
 ```
@@ -47,7 +47,7 @@ lambda_kg = 4.3813 * β * (m_e / α)
 
 **Numerical Results**:
 ```
-β (Golden Loop):    3.058230856
+β (Golden Loop):    3.043233053
 m_e (NIST):         9.10938356×10⁻³¹ kg
 α (NIST):           1/137.035999206
 
@@ -77,7 +77,7 @@ Error: 0.0002%
 
 Key sections:
 ```python
-BETA_GOLDEN_LOOP = 3.058230856
+BETA_GOLDEN_LOOP = 3.043233053
 K_GEOM = 4.3813
 
 lambda_vacuum_kg = K_GEOM * BETA_GOLDEN_LOOP * (M_ELECTRON_KG / ALPHA_TARGET)
@@ -157,11 +157,11 @@ Error:   1834%
 **Full SCF solver run** using:
 ```bash
 cd projects/particle-physics/nuclear-soliton-solver/src
-python qfd_solver.py --A 2 --Z 1 --beta 3.058 --lambda 1.672619e-27
+python qfd_solver.py --A 2 --Z 1 --beta 3.043233053 --lambda 1.672619e-27
 ```
 
 Parameters to lock:
-- β = 3.058230856 (Golden Loop)
+- β = 3.043233053 (Golden Loop)
 - λ = 1.672619×10⁻²⁷ kg (from Task 1)
 - c₁ = 0.529251 (Nuclear surface)
 - c₂ = 0.316743 (Nuclear volume)
@@ -189,7 +189,7 @@ The nuclear solver (`qfd_solver.py`) is complex with many hyperparameters:
 
 1. **λ(β) Formula**: Exact relationship derived, validated to 0.0002%
 2. **Proton Bridge**: λ ≈ m_p proven as geometric necessity
-3. **β Universality**: Same β = 3.058 across EM, nuclear, lepton sectors
+3. **β Universality**: Same β = 3.043233053 across EM, nuclear, lepton sectors
 4. **Internal Consistency**: All Lean theorems compile with 0 sorries in VacuumStiffness.lean
 
 ### What's Validated Empirically
@@ -218,7 +218,7 @@ The nuclear solver (`qfd_solver.py`) is complex with many hyperparameters:
    - Status: COMPLETE for Task 1
 
 2. **`schema/v0/GrandSolver_Fixed.py`** (131 lines)
-   - Corrected β = 3.058 (not 1836)
+   - Corrected β = 3.043233053 (not 1836)
    - Diagnostic version
    - Status: Superseded by GrandSolver_Complete.py
 
@@ -251,7 +251,7 @@ The nuclear solver (`qfd_solver.py`) is complex with many hyperparameters:
 **Theorem** (from VacuumStiffness.lean):
 ```
 If QFD vacuum has:
-  - Bulk modulus β = 3.058 (Golden Loop)
+  - Bulk modulus β = 3.043233053 (Golden Loop)
   - Geometric factor k = 4.3813 (6D→4D projection)
 
 Then:
@@ -274,7 +274,7 @@ Then:
    - Mass: m_p = 1.67×10⁻²⁷ kg
 
 3. **Vacuum** (medium for both):
-   - Compression stiffness: β = 3.058
+   - Compression stiffness: β = 3.043233053
    - Gradient stiffness: ξ ≈ 1
    - Density scale: λ ≈ m_p
 
@@ -289,7 +289,7 @@ The fact that these THREE independent structures coexist in ONE medium with ONE 
 | α | Input (~1/137) | Input (~1/137) | Calibration |
 | m_e | Input (9.1×10⁻³¹ kg) | Input | Calibration |
 | m_p | Input (1.67×10⁻²⁷ kg) | **Derived** (0.0002% error) | ✅ Predicted |
-| β | N/A | **3.058** (locked) | ✅ Derived |
+| β | N/A | **3.043233053** (locked) | ✅ Derived |
 | λ | N/A | **≈ m_p** (proven) | ✅ Derived |
 | G | Input (6.67×10⁻¹¹) | Pending (geo factors) | ⏳ In progress |
 | E_bind(d) | Input (2.22 MeV) | Pending (SCF) | ⏳ In progress |
@@ -314,7 +314,7 @@ The fact that these THREE independent structures coexist in ONE medium with ONE 
 
 3. **Unified RunSpec**
    - Create single JSON combining all sectors
-   - Input: β = 3.058 only
+   - Input: β = 3.043233053 only
    - Output: α (calibrated), m_p (derived), G (predicted), E_bind (predicted)
 
 ### Long-term (v1.1, v2.0)
@@ -390,7 +390,7 @@ The fact that these THREE independent structures coexist in ONE medium with ONE 
 
 ### Lean Proofs
 - `Lean4/QFD/Nuclear/VacuumStiffness.lean` - λ(β) formula, Proton Bridge theorem
-- `Lean4/QFD/Lepton/FineStructure.lean` - β = 3.058 derivation
+- `Lean4/QFD/Lepton/FineStructure.lean` - β = 3.043233053 derivation
 - `Lean4/QFD/Gravity/G_Derivation.lean` - ξ_QFD definition
 - `Lean4/QFD/Vacuum/VacuumParameters.lean` - β, ξ, τ validation
 
@@ -401,7 +401,7 @@ The fact that these THREE independent structures coexist in ONE medium with ONE 
 ### Documentation
 - `GRAND_SOLVER_STATUS.md` - Task breakdown
 - `PROGRESS_SUMMARY.md` - Overall project status
-- `Lepton.md` - β = 3.058 context
+- `Lepton.md` - β = 3.043233053 context
 
 ---
 

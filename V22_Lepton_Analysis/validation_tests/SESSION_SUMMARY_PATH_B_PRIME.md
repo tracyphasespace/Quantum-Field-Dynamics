@@ -82,7 +82,7 @@ Landscape:
   → (β, w) NOT uniquely determined by mass alone
 
 β offset from Golden Loop:
-  β_min = 3.100 vs β_Golden = 3.058
+  β_min = 3.100 vs β_Golden = 3.043233053
   Δβ = +0.042 (+1.37%)
 
   Comparison:
@@ -95,7 +95,7 @@ Landscape:
 ## Key Findings
 
 ### ✓ Gradient Energy Validated
-- **Mechanism confirmed**: β shifts 3.15 → 3.10 (closer to 3.058)
+- **Mechanism confirmed**: β shifts 3.15 → 3.10 (closer to 3.043233053)
 - **Closure gap reduced**: ~60% improvement (3% → 1.4%)
 - **Physics validated**: Curvature term accounts for missing factor
 
@@ -171,13 +171,13 @@ r = R_c+w:   Δρ =  0.00000  (smooth cutoff) ✓
 **Current claim** (before Path B'):
 > "Mass spectrum alone provides weak constraints on β (81% convergence rate,
 > flat χ² landscape). Effective value β_eff ≈ 3.14-3.18 differs from Golden
-> Loop prediction β = 3.058 by 3-4%."
+> Loop prediction β = 3.043233053 by 3-4%."
 
 **Updated claim** (with Path B'):
 > "Adding explicit boundary-layer gradient energy (E_∇ ~ λ∫|∇ρ|²) with
 > non-self-similar thickness parameter w reduces the effective vacuum stiffness
 > from β_eff ≈ 3.15 to β_eff ≈ 3.10, bringing it within 1.4% of the Golden Loop
-> prediction (β = 3.058). This validates the curvature-gap hypothesis and
+> prediction (β = 3.043233053). This validates the curvature-gap hypothesis and
 > accounts for ~60% of the closure discrepancy. However, mass constraints alone
 > remain insufficient for unique β-identification (profile likelihood variation
 > 46% < 100%). Magnetic moment data providing 6 additional DOF is required for
@@ -190,7 +190,7 @@ r = R_c+w:   Δρ =  0.00000  (smooth cutoff) ✓
 **Response**:
 1. **Mechanism demonstrated** ✓: Gradient energy systematically shifts β toward prediction
 2. **Gap quantified** ✓: 46% landscape variation, need 6 more DOF
-3. **Testable prediction** ✓: Magnetic moments will either sharpen minimum near 3.058 or falsify model
+3. **Testable prediction** ✓: Magnetic moments will either sharpen minimum near 3.043233053 or falsify model
 
 This is **mechanism-seeking, not numerology**.
 
@@ -208,7 +208,7 @@ This is **mechanism-seeking, not numerology**.
 
 ### Energy Components (Electron)
 ```
-R_c = 0.88, w = 0.02, A = 0.92, β = 3.058, λ = 0.0065
+R_c = 0.88, w = 0.02, A = 0.92, β = 3.043233053, λ = 0.0065
 
 E_circ = 2.71 (circulation kinetic)
 E_stab = 0.88 (stabilization)

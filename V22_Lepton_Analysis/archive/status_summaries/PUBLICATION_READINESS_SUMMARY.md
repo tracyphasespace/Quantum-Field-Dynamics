@@ -15,7 +15,7 @@ All figures generated from validation test JSON data and saved to `publication_f
 - **Content**:
   - Panel A: Target vs achieved mass ratios (bar chart)
   - Panel B: Residuals on log scale (5×10⁻¹¹, 6×10⁻⁸, 2×10⁻⁷)
-- **Caption**: "Hill vortex solutions for three leptons with β = 3.058 (inferred from α). Panel (a) shows target and achieved mass ratios. Panel (b) shows optimization residuals demonstrating numerical precision."
+- **Caption**: "Hill vortex solutions for three leptons with β = 3.043233053 (inferred from α). Panel (a) shows target and achieved mass ratios. Panel (b) shows optimization residuals demonstrating numerical precision."
 
 ### Figure 2: Grid Convergence Test
 - **File**: `figure2_grid_convergence.[pdf|png]`
@@ -202,7 +202,7 @@ theorem energy_has_unique_local_minimum (β m : ℝ) :
 The conjectured relation used in V22:
 β = f(α) where α = 1/137.036...
 
-Currently, β = 3.058230856 is computed from α but not derived.
+Currently, β = 3.043233053 is computed from α but not derived.
 -/
 def beta_from_alpha (alpha : ℝ) : ℝ :=
   -- Current implementation is empirical, not derived

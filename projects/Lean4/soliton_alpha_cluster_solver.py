@@ -27,7 +27,7 @@ import math
 # Physical constants
 M_PROTON = 938.272       # MeV
 M_NEUTRON = 939.565      # MeV
-BETA = 3.058231          # Vacuum stiffness (from GoldenLoop.lean)
+BETA = 3.043233053          # Vacuum stiffness (from GoldenLoop.lean)
 ALPHA_EM = 1/137.036     # Fine structure constant
 HC = 197.327             # ℏc in MeV·fm
 

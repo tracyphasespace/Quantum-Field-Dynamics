@@ -4,7 +4,7 @@ Test Global Scale Profiling (S_opt)
 
 Sanity check after implementing analytic S-profiling:
 1. χ² values should be ~ O(1), not 10⁷
-2. β shift direction should be preserved (toward 3.058)
+2. β shift direction should be preserved (toward 3.043233053)
 3. χ closure improvement should remain (~53%)
 
 Small 3×3 grid as recommended by Tracy.

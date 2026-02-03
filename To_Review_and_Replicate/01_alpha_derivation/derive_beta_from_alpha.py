@@ -144,7 +144,7 @@ def main():
     print(f"{'Golden Loop (e^β/β = K)':<40} {beta_golden:>12.6f} {1/beta_golden:>12.6f}")
     print(f"{'LEVEL4 (NuBase c₂/c₁ = 0.659)':<40} {beta_level4_nubase:>12.6f} {1/beta_level4_nubase:>12.6f}")
     print(f"{'LEVEL4 (FineStruct c₂/c₁ = 0.598)':<40} {beta_level4_fine:>12.6f} {1/beta_level4_fine:>12.6f}")
-    print(f"{'Current GoldenLoop.lean':<40} {'3.058231':>12} {'0.326986':>12}")
+    print(f"{'Current GoldenLoop.lean':<40} {'3.043233053':>12} {'0.326986':>12}")
     print()
 
     print("=" * 70)
@@ -179,14 +179,14 @@ def main():
     print(f"  β_corrected = {beta_corrected:.4f}")
     print()
 
-    # What k would make β = 3.058?
-    beta_target = 3.058230856
+    # What k would make β = 3.043233053?
+    beta_target = 3.043233053
     # exp(β) = α⁻¹ / (π² × (c₂/c₁)_eff)
     # (c₂/c₁)_eff = α⁻¹ / (π² × exp(β))
     c2_c1_needed = ALPHA_INV / (PI_SQ * np.exp(beta_target))
     k_needed = c2_c1_fine / c2_c1_needed
 
-    print(f"To get β = 3.058 from LEVEL4 formula:")
+    print(f"To get β = 3.043233053 from LEVEL4 formula:")
     print(f"  Need (c₂/c₁)_eff = {c2_c1_needed:.6f}")
     print(f"  Requires k = {c2_c1_fine:.4f} / {c2_c1_needed:.4f} = {k_needed:.4f}")
     print()
@@ -202,7 +202,7 @@ def main():
     print("This is the TRUE ROOT of the transcendental equation")
     print("e^β/β = (α⁻¹ × c₁) / π²")
     print()
-    print(f"The current β = 3.058 in GoldenLoop.lean differs by ~0.5%")
+    print(f"The current β = 3.043233053 in GoldenLoop.lean differs by ~0.5%")
     print("because it was optimized for c₂ prediction rather than")
     print("strict satisfaction of the transcendental equation.")
     print()

@@ -5,6 +5,13 @@ Authors: Tracy, Claude Sonnet 4.5
 
 # Density-Matched Topological Soliton (Skyrmed Q-Ball)
 
+/-
+NOTE: All proofs in this module currently use the placeholder analytic
+objects from `Soliton/TopologicalCore`.  Once the advanced topology
+prototype provides the real energy/action functionals we should return
+here and swap out the simplified assumptions.
+-/
+
 This module formalizes the infinite lifetime stability of nuclear solitons
 via topological conservation and density matching.
 

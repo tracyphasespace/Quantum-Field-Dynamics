@@ -54,7 +54,7 @@ Result: Z/A → c₂ = 1/β (as A → ∞)
 5. Numerical validation (99.08% agreement)
 
 **Result**:
-- Theoretical: c₂ = 1/β = 1/3.058 = 0.327
+- Theoretical: c₂ = 1/β = 1/3.043233053 = 0.327
 - Empirical: c₂ = 0.324 (from 2,550 nuclei)
 - Error: 0.92%
 
@@ -351,7 +351,7 @@ This connects nuclear binding directly to vacuum properties:
 13. **QFD/Nuclear/QuarticStiffness.lean** (222 lines)
     - Quartic soliton stiffness derivation
     - 11 theorems proven (1 sorry)
-    - V₄_nuc = β = 3.058 (direct property, no correction factor)
+    - V₄_nuc = β = 3.043233053 (direct property, no correction factor)
     - Parameter closure update (17/17 → 94%)
 
 ---
@@ -386,7 +386,7 @@ Jobs: 3091
 ### Before Session (Morning)
 ```
 Locked: 9/17 parameters (53%)
-- β = 3.058 (Golden Loop)
+- β = 3.043233053 (Golden Loop)
 - λ ≈ m_p (Proton Bridge - 0.0002%)
 - ξ, τ ≈ 1 (order unity)
 - α_circ = e/(2π) (topology)
@@ -407,7 +407,7 @@ Locked: 17/17 parameters (94%)
 - ✅ α_n = (8/7) × β = 3.495 (0.14% error)
 - ✅ β_n = (9/7) × β = 3.932 (0.82% error)
 - ✅ γ_e = (9/5) × β = 5.505 (0.09% error)
-- ✅ V₄_nuc = β = 3.058 (direct property)
+- ✅ V₄_nuc = β = 3.043233053 (direct property)
 - (all previous 9 remain)
 
 Pending: 1/17 parameters (6%)
@@ -502,7 +502,7 @@ Pending: 1/17 parameters (6%)
                 ↓             ↓
            c₂ (charge)   V₄, k_c2 (nuclear binding)
 
-1. Golden Loop: α → β = 3.058
+1. Golden Loop: α → β = 3.043233053
 2. Proton Bridge: β → λ ≈ m_p (k_geom = 4.38)
 3. Nuclear equilibrium: β → c₂ = 1/β
 4. Well depth scaling: λ, β → V₄ = λ/(2β²)
@@ -518,7 +518,7 @@ Pending: 1/17 parameters (6%)
 
 | Parameter | Source | Theoretical | Empirical | Error | Status |
 |-----------|--------|-------------|-----------|-------|---------|
-| β | Golden Loop | 3.058231 | 3.063 (MCMC) | 0.15% | Locked |
+| β | Golden Loop | 3.043233053 | 3.063 (MCMC) | 0.15% | Locked |
 | λ | Proton Bridge | m_p | m_p | 0.0002% | Locked |
 | c₂ | Vacuum compliance | 0.327 | 0.324 | 0.92% | Derived |
 | ξ_QFD | Geometric projection | 16.0 | ~16 | < 0.6% | Derived |
@@ -527,7 +527,7 @@ Pending: 1/17 parameters (6%)
 | α_n | Vacuum bulk modulus | 3.495 | 3.5 | 0.14% | Derived |
 | β_n | Geometric renormalization | 3.932 | 3.9 | 0.82% | Derived |
 | γ_e | Vacuum structure | 5.505 | 5.5 | 0.09% | Derived |
-| V₄_nuc | Compression resistance | 3.058 | β | 0% | Derived |
+| V₄_nuc | Compression resistance | 3.043233053 | β | 0% | Derived |
 
 **Validation**: All parameters match empirical values within 1% error.
 
@@ -543,7 +543,7 @@ Pending: 1/17 parameters (6%)
 - Started: 17 parameters (multi-sector framework)
 - After today: 11/17 derived (65%)
 - Trajectory: 17/17 derivable from β + geometry
-- **Goal**: ZERO free parameters (only β = 3.058 from α)
+- **Goal**: ZERO free parameters (only β = 3.043233053 from α)
 
 ### Theory vs. Phenomenology
 
@@ -814,7 +814,7 @@ Paper 4: "Grand Unification from Vacuum Stiffness" (full closure)
 
 **Target**: 100% parameter closure
 
-**Significance**: If successful, establishes QFD as theory with minimal free parameters (only β = 3.058 determined by α, plus standard constants)
+**Significance**: If successful, establishes QFD as theory with minimal free parameters (only β = 3.043233053 determined by α, plus standard constants)
 
 ---
 

@@ -524,7 +524,7 @@ if __name__ == "__main__":
     print("-" * 70)
 
     # Use calibrated λ for η=0.03 at electron
-    beta_test = 3.058
+    beta_test = 3.043233053
     R_c_e = 0.88
     lam_test = 0.03 * (beta_test * R_c_e**2) / 11.0  # Calibrated
 

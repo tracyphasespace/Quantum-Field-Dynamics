@@ -61,7 +61,7 @@ ALPHA_INV = 137.035999206
 
 ALPHA_INV = 137.035999206
 BETA_VACUUM = 3.043233053  # Vacuum stiffness (α-derived)
-BETA_VACUUM_OLD = 3.058  # DEPRECATED: Was fitted to nuclear data
+BETA_VACUUM_OLD = 3.043233053  # DEPRECATED: Was fitted to nuclear data
 
 # =============================================================================
 # FUNDAMENTAL SOLITON EQUATION COEFFICIENTS
@@ -326,7 +326,7 @@ if __name__ == '__main__':
     print()
     print("  Parameter    Old (Fitted)    New (α-Derived)    Change")
     print("  ---------    ------------    ---------------    ------")
-    print(f"  β            3.058           {BETA_VACUUM:.5f}          -0.49%")
+    print(f"  β            3.043233053           {BETA_VACUUM:.5f}          -0.49%")
     print(f"  c₁           0.529           {C1_SURFACE:.6f}         -6.18%")
     print(f"  c₂           0.327           {C2_VOLUME:.6f}         +0.49%")
     print()

@@ -25,7 +25,7 @@ python test_golden_loop_pipeline.py
 ================================================================================
 
 Initial parameter registry:
-  β = 3.058230856 (from α = 1/137.036)
+  β = 3.043233053 (from α = 1/137.036)
 
 ================================================================================
   REALM 5: ELECTRON
@@ -75,7 +75,7 @@ pip install numpy scipy
 ## What Gets Tested
 
 ### 1. Universal Vacuum Stiffness
-- Same β = 3.058230856 for all three leptons
+- Same β = 3.043233053 for all three leptons
 - No retuning between electron → muon → tau
 - β derived from fine structure constant α, not fitted to leptons
 
@@ -134,7 +134,7 @@ qfd_10_realms_pipeline/
 
 ```json
 {
-  "beta": 3.058230856,
+  "beta": 3.043233053,
   "timestamp": "2025-12-22T18:51:31.454363",
   "leptons": {
     "electron": {
@@ -249,7 +249,7 @@ Try different β values to see how sensitive results are:
 
 ```python
 # Modify test_golden_loop_pipeline.py
-BETA_FROM_ALPHA = 3.1  # Instead of 3.058
+BETA_FROM_ALPHA = 3.1  # Instead of 3.043233053
 
 # Run again
 python test_golden_loop_pipeline.py
@@ -317,7 +317,7 @@ If you use these results in your research:
 
 **Runtime**: ~20 seconds
 
-**Output**: All three lepton masses from β = 3.058 (derived from α)
+**Output**: All three lepton masses from β = 3.043233053 (derived from α)
 
 **Demonstrates**: Universal vacuum stiffness connecting electromagnetism to inertia through geometric quantization
 

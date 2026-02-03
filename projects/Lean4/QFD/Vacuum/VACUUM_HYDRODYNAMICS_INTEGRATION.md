@@ -34,7 +34,7 @@ c = √(β / ρ)
 
 Where:
 - c = speed of light (hydrodynamic sound speed)
-- β = bulk modulus (vacuum stiffness) ≈ 3.058
+- β = bulk modulus (vacuum stiffness) ≈ 3.043233053
 - ρ = mass density (vacuum inertia) ≈ proton mass per unit volume
 
 **Physical Meaning**: Light is a shear wave propagating through the vacuum medium, just like sound in water or steel. The "speed limit" c is determined by the stiffness-to-density ratio (standard wave equation).
@@ -253,7 +253,7 @@ If vacuum stiffness β changes by Δβ, then:
 
 **QFD Connection**: β is related to fine structure constant α via Golden Loop
 - α = (electron properties) / (vacuum stiffness)
-- β ≈ ϕ² ≈ 2.618² ≈ 6.854 or β ≈ 3.058 (from MCMC fit)
+- β ≈ ϕ² ≈ 2.618² ≈ 6.854 or β ≈ 3.043233053 (from MCMC fit)
 
 **Prediction**: Extract β from measured α and electron mass
 ```

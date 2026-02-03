@@ -119,7 +119,7 @@ theorem compton_condition (m : ℝ) (h_pos : m > 0) :
 - Hypothesis: V₄_comp ≈ -mcmcXi/mcmcBeta (within MCMC uncertainties)
 - Result: Consistency between Golden Loop and MCMC approaches
 - Note: ξ = 1.0 vs mcmcXi = 0.9655 (4% difference)
-- Note: β = 3.058 vs mcmcBeta = 3.0627 (0.15% difference)
+- Note: β = 3.043233053 vs mcmcBeta = 3.0627 (0.15% difference)
 
 ---
 

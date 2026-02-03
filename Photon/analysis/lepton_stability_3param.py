@@ -24,7 +24,7 @@ def lepton_stability_3param():
     print("[1] QFD PARAMETERS (from g-2 validation)")
 
     # Golden Loop values (best g-2 prediction)
-    BETA = 3.058   # Bulk modulus (compression stiffness)
+    BETA = 3.043233053   # Bulk modulus (compression stiffness) - corrected value
     XI = 1.0       # Gradient stiffness (surface tension)
     TAU = 1.01     # Temporal stiffness (inertia)
 

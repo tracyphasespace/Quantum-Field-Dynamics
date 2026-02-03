@@ -203,7 +203,7 @@ theorem absorption_geometric_match
 
 ### The Crisis: Dispersion Paradox
 
-**Problem**: Even with extreme vacuum stiffness (β = 3.058), standard soliton balance predicts:
+**Problem**: Even with extreme vacuum stiffness (β = 3.043233053), standard soliton balance predicts:
 
 ```
 ξ ~ 1/exp(β)³ ≈ 10⁻⁴  (cubic suppression)

@@ -148,7 +148,7 @@ for A_test in [0.70, 0.80, 0.90, 0.99]:
 
 ### Hypothesis
 
-If τ is the outlier driving β upward, then fitting only (e, μ) should recover β ≈ 3.058.
+If τ is the outlier driving β upward, then fitting only (e, μ) should recover β ≈ 3.043233053.
 
 ### Implementation
 
@@ -189,11 +189,11 @@ beta_min = min(results, key=lambda x: x["chi2"])["beta"]
 ### Expected Outcomes
 
 **Outcome 3A (τ is outlier)**:
-- β_min ≈ 3.058 ± 0.02 for (e, μ) fit
+- β_min ≈ 3.043233053 ± 0.02 for (e, μ) fit
 - χ² < 10 (good fit quality)
 - S_e/S_μ ≈ 1.00 ± 0.10 (universal scaling)
 - **Interpretation**: e, μ validate the Hill vortex model with β from α
-- **Narrative**: "Light leptons confirm β=3.058; τ exhibits systematic deviation consistent with hadronic mass scale"
+- **Narrative**: "Light leptons confirm β=3.043233053; τ exhibits systematic deviation consistent with hadronic mass scale"
 - **Next step**: Publish two-lepton validation, treat τ as future work
 
 **Outcome 3B (universal EM proxy issue)**:
@@ -204,7 +204,7 @@ beta_min = min(results, key=lambda x: x["chi2"])["beta"]
 
 ### Success Criteria
 
-**Pass**: |β_min - 3.058| < 0.03 AND χ² < 20 AND |S_e/S_μ - 1.0| < 0.15
+**Pass**: |β_min - 3.043233053| < 0.03 AND χ² < 20 AND |S_e/S_μ - 1.0| < 0.15
 
 **Fail**: β_min > 3.10 OR S_e/S_μ > 1.15
 
@@ -332,9 +332,9 @@ Test 1 (Widen Bounds)
           ↓
         Test 3 (Two-Lepton Fit)
           ↓
-          ├─ PASS (β_min ≈ 3.058 for e,μ)
+          ├─ PASS (β_min ≈ 3.043233053 for e,μ)
           │   → DONE: τ is genuine outlier
-          │   → Publish: "e,μ validate β=3.058; τ puzzle"
+          │   → Publish: "e,μ validate β=3.043233053; τ puzzle"
           │
           └─ FAIL (β_min > 3.10 even for e,μ)
               ↓
@@ -365,7 +365,7 @@ Test 1 (Widen Bounds)
 **Title**: "Light Lepton Masses from Quantum Fluid Vortices and the Tau Anomaly"
 
 **Key claims**:
-- Electron and muon masses confirm β = 3.058 ± 0.02 (from α via Golden Loop)
+- Electron and muon masses confirm β = 3.043233053 ± 0.02 (from α via Golden Loop)
 - Circulation-dominated energy scaling validated for m < 200 MeV
 - Tau (m_τ ≈ 2 m_proton) exhibits systematic 46% energy deficit
 - Deviation consistent with hadronic mass-scale transition where charge-circulation and bulk-compression physics compete

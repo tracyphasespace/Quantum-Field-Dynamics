@@ -37,7 +37,7 @@ Muon       206.768     206.768     6×10⁻⁸      ~7 sec
 Tau        3477.228    3477.228    2×10⁻⁷      ~8 sec
 ```
 
-All with **same β = 3.058** (no adjustment between particles)
+All with **same β = 3.043233053** (no adjustment between particles)
 
 ### Validation Tests ✓
 
@@ -50,7 +50,7 @@ All with **same β = 3.058** (no adjustment between particles)
 
 - Mass arises from **geometric cancellation**: E_circulation - E_stabilization ≈ 0.5 MeV
 - Hierarchy from **circulation velocity**: U scales with √m naturally
-- **Cross-sector β convergence**: Particle (3.058), Nuclear (3.1), Cosmo (3.0-3.2) overlap
+- **Cross-sector β convergence**: Particle (3.043233053), Nuclear (3.1), Cosmo (3.0-3.2) overlap
 
 ---
 
@@ -193,7 +193,7 @@ This is **existence proof + robustness**, not yet **unique prediction**.
 
 ### Good Framing Example (from GOLDEN_LOOP_REVISED):
 
-> "β = 3.058, inferred from the fine structure constant α through a conjectured
+> "β = 3.043233053, inferred from the fine structure constant α through a conjectured
 > QFD identity, supports Hill vortex solutions that reproduce all three charged
 > lepton mass ratios to better than 10⁻⁴ relative precision."
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Koide Relation Numerical Validation for beta = 3.058 rad
+Koide Relation Numerical Validation for beta = 3.043233053 rad
 
 Quick validation script for lepton mass predictions using geometric Koide formula.
 
@@ -17,7 +17,7 @@ import numpy as np
 # ============================================================================
 # PARAMETERS (UPDATE THESE IF YOU HAVE FITTED VALUES)
 # ============================================================================
-DELTA = 3.058  # rad - generation phase angle
+DELTA = 3.043233053  # rad - generation phase angle
 MU = 1.0       # MeV - PLACEHOLDER! Replace with fitted value if available
 
 # Experimental values (PDG 2024)
@@ -65,7 +65,7 @@ def koide_ratio(m_e, m_mu, m_tau):
 
 def main():
     print("=" * 80)
-    print("KOIDE RELATION VALIDATION: beta = 3.058 rad")
+    print("KOIDE RELATION VALIDATION: beta = 3.043233053 rad")
     print("=" * 80)
     print()
 

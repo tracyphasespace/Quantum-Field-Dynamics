@@ -38,7 +38,7 @@ Photon/
 
 2. **CONSTANTS_CATALOG.md** (18 KB)
    - α ≈ 1/137 (coupling strength) - full analysis
-   - β ≈ 3.058 (vacuum stiffness) - role and measurements
+   - β ≈ 3.043233053 (vacuum stiffness) - role and measurements
    - λ ~ 1 GeV (saturation scale) - nonlinear focusing
    - Cross-sector consistency requirements
 
@@ -84,7 +84,7 @@ Measured:        α⁻¹ = 137.036  ✓
 
 **Possible causes**:
 
-1. **β is wrong**: Should be β ≈ 0.77, not 3.058
+1. **β is wrong**: Should be β ≈ 0.77, not 3.043233053
    ```
    exp(β) = 137.036 / (π² · 6.42) = 2.16
    β = ln(2.16) = 0.77
@@ -92,7 +92,7 @@ Measured:        α⁻¹ = 137.036  ✓
 
 2. **c₂/c₁ is wrong**: Should be c₂/c₁ ≈ 0.65, not 6.42
    ```
-   c₂/c₁ = 137.036 / (π² · exp(3.058)) = 0.65
+   c₂/c₁ = 137.036 / (π² · exp(3.043233053)) = 0.65
    ```
 
 3. **Formula is wrong**: Missing factor or different physics
@@ -161,7 +161,7 @@ Ratio: QFD/QED ~ 10⁻¹⁶  (negligible) ✓
 | Constant | Value | Role | Physical Effect |
 |----------|-------|------|-----------------|
 | **α** | ~1/137 | Coupling | Quantization precision, gear mesh strength |
-| **β** | ~3.058 | Stiffness | Dispersion suppression, sound speed |
+| **β** | ~3.043233053 | Stiffness | Dispersion suppression, sound speed |
 | **λ** | ~1 GeV | Saturation | Nonlinear self-focusing, counters spreading |
 
 **Together**: Create self-stabilizing soliton stable over Gpc.
@@ -190,7 +190,7 @@ Ratio: QFD/QED ~ 10⁻¹⁶  (negligible) ✓
 1. Check nuclear sector β and c₂/c₁ values in harmonic model code
 2. Verify formula: α⁻¹ = π²·exp(β)·(c₂/c₁) is correct
 3. Determine which parameter is wrong (β or c₂/c₁)
-4. If β = 3.058 is correct, then c₂/c₁ should be ~0.65, not 6.42
+4. If β = 3.043233053 is correct, then c₂/c₁ should be ~0.65, not 6.42
 5. Update all documentation with correct values
 
 ### Priority 2: Calculate Dispersion Properly ⚠️
@@ -336,7 +336,7 @@ Ratio: QFD/QED ~ 10⁻¹⁶  (negligible) ✓
 
 ### For Tracy (Project Lead)
 
-1. **Check nuclear model code**: Verify β = 3.058 and c₂/c₁ = 6.42
+1. **Check nuclear model code**: Verify β = 3.043233053 and c₂/c₁ = 6.42
 2. **Resolve α formula**: Is it π²·exp(β)·(c₂/c₁) or something else?
 3. **Correct parameters**: Update Photon sector with correct values
 4. **Run validation**: `python3 analysis/three_constant_model.py` after fix

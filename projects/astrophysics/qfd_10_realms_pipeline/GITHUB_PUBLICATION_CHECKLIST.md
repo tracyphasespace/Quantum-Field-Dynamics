@@ -259,7 +259,7 @@ python test_golden_loop_pipeline.py
 ```markdown
 ## Results
 
-All three charged lepton masses reproduced from β = 3.058 (from α):
+All three charged lepton masses reproduced from β = 3.043233053 (from α):
 
 | Lepton | Target m/m_e | Achieved | Chi² | Status |
 |--------|--------------|----------|------|--------|

@@ -36,10 +36,10 @@ Suppression models:
 
 **Standard approach**: "Stiff vacuum → low dispersion"
 - Higher β → smaller ξ
-- But even with β = 3.058, suppression is insufficient
+- But even with β = 3.043233053, suppression is insufficient
 
 **The paradox**:
-- β = 3.058 is already extreme (vacuum ~10⁹× stiffer than steel)
+- β = 3.043233053 is already extreme (vacuum ~10⁹× stiffer than steel)
 - Increasing β further creates other problems (c changes, α shifts)
 - Cannot "tune" β to fix dispersion without breaking other sectors
 

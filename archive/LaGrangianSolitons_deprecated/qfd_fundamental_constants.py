@@ -6,7 +6,7 @@ No free parameters - everything from first principles.
 
 Fundamental Constants:
     α = 1/137     (electromagnetic coupling)
-    β = 1/3.058   (vacuum stiffness from QFD)
+    β = 1/3.043233053   (vacuum stiffness from QFD)
     λ = 938.272 MeV (proton mass scale)
 
 Question: What is the exact formula combining these?
@@ -17,7 +17,7 @@ import numpy as np
 
 # QFD Fundamental Constants (not fitted!)
 ALPHA_EM = 1.0 / 137.036      # Fine structure constant
-BETA_QFD = 1.0 / 3.058        # Vacuum stiffness (from He-4 calibration)
+BETA_QFD = 1.0 / 3.043233053        # Vacuum stiffness (from He-4 calibration)
 LAMBDA_SCALE = 938.272        # Proton mass (MeV)
 
 def mass_formula_attempt_1(A):
@@ -75,7 +75,7 @@ print("QFD MASS FORMULA - TESTING DIFFERENT COMBINATIONS")
 print("="*75)
 print(f"\nConstants:")
 print(f"  α (EM)     = 1/137 = {ALPHA_EM:.6f}")
-print(f"  β (QFD)    = 1/3.058 = {BETA_QFD:.6f}")
+print(f"  β (QFD)    = 1/3.043233053 = {BETA_QFD:.6f}")
 print(f"  λ (scale)  = {LAMBDA_SCALE} MeV")
 print()
 

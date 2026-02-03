@@ -49,7 +49,7 @@ the transcendental equation, and c₂ emerges as 1/β automatically.
 
 ## Transformation from "Fit" to "Derived"
 
-**Before (v1.0)**: β = 3.058 was treated as an empirical constant
+**Before (v1.0)**: β = 3.043233053 was treated as an empirical constant
 **After (v1.1)**: β is the root of e^β/β = K, a geometric necessity
 
 This shifts the Golden Loop from a "consistency check" to a "structural definition."
@@ -164,7 +164,7 @@ vacuum can only achieve stability at discrete stiffness values.
 - NuBase measures c₂ = 0.32704
 - Discrepancy: 0.48% (within NuBase uncertainty ~1%)
 
-**Interpretation**: The constant 3.058 was previously used because it
+**Interpretation**: The constant 3.043233053 was previously used because it
 fits c₂ directly, but that is circular.  The vacuum eigenvalue should be
 derived from the high-precision EM input (α), then used to predict c₂.
 The 0.48% tension is attributed to experimental uncertainty in the NuBase
@@ -289,7 +289,7 @@ theorem K_target_approx :
 -- - Error: < 10⁻⁶ (essentially zero)
 -- - Script: derive_beta_from_alpha.py
 --
--- **2026-01-06 Update**: Changed from β = 3.058 (fitted) to β = 3.043233… (derived).
+-- **2026-01-06 Update**: Changed from β = 3.043233053 (fitted) to β = 3.043233… (derived).
 -- The new value is the unique root of the transcendental equation, derived from
 -- α⁻¹ = 137.035999084 (CODATA 2018, 10⁻¹⁰ precision).
 --

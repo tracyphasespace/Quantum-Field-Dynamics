@@ -23,7 +23,7 @@ All coefficients are derived from fundamental QFD constants and require **no fit
 | `a_sym`     | `(β · M_p) / 15`                    | 20.455      |
 | `a_c`       | `α · ħc / r₀`                       | 1.200       |
 
-with `α = 1/137.036`, `β = 1/3.058`, `λ = 0.42`, `r₀ = 1.2 fm`.
+with `α = 1/137.036`, `β = 1/3.043233053`, `λ = 0.42`, `r₀ = 1.2 fm`.
 
 ### Prediction Quality
 

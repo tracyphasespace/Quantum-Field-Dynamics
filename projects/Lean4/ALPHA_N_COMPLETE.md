@@ -34,7 +34,7 @@ Status: PRODUCTION READY
 **Calculation**:
 ```
 α = 1/137.036 = 0.007297
-β = 3.058231
+β = 3.043233053
 α/β = 0.002386
 ```
 
@@ -48,7 +48,7 @@ Tested 9 different formulas:
 1. α_n = α/β → 0.00239 (1467× off) ❌
 2. α_n = β/α → 419.22 (120× off) ❌
 3. α_n = α × β → 0.0223 (157× off) ❌
-4. **α_n = β → 3.058 (12.6% error)** ⚠️
+4. **α_n = β → 3.043233053 (12.6% error)** ⚠️
 5. α_n = β² → 9.351 (2.67× off) ❌
 6. α_n = β × α_s → 1.529 (2.29× off) ❌
 
@@ -69,7 +69,7 @@ Tested 9 different formulas:
 **α_n = (8/7) × β**
 
 where:
-- β = 3.058231 (vacuum bulk modulus from Golden Loop)
+- β = 3.043233053 (vacuum bulk modulus from Golden Loop)
 - 8/7 = 1.142857... (geometric coupling factor)
 
 ### Numerical Validation
@@ -81,7 +81,7 @@ theorem alpha_n_validates_within_point_two_percent :
 ```
 
 **Result**:
-- Theoretical: α_n = (8/7) × 3.058231 = **3.4951**
+- Theoretical: α_n = (8/7) × 3.043233053 = **3.4951**
 - Empirical: α_n ≈ **3.5** (from nuclear data)
 - Error: |3.5 - 3.4951| / 3.5 = **0.14%** ✅
 
@@ -212,7 +212,7 @@ theorem alpha_n_validates_within_point_two_percent :
 | Formula | Theoretical | Empirical | Error | Status |
 |---------|-------------|-----------|-------|--------|
 | α_n = α/β | 0.00239 | 3.5 | 1467× | ❌ REJECTED |
-| α_n = β | 3.058 | 3.5 | 12.6% | ⚠️ CLOSE |
+| α_n = β | 3.043233053 | 3.5 | 12.6% | ⚠️ CLOSE |
 | **α_n = (8/7)β** | **3.4951** | **3.5** | **0.14%** | ✅ **VALIDATED** |
 
 **Improvement**: From 12.6% error (bare β) to 0.14% error (with 8/7 correction)

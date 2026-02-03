@@ -7,7 +7,7 @@
 
 ## One-Line Summary
 
-**β = 3.058230856 derived from fine structure constant α reproduces all three charged lepton masses (electron, muon, tau) through the 10 Realms Pipeline with chi-squared < 10⁻⁹ for each lepton, demonstrating universal vacuum stiffness across three orders of magnitude in mass.**
+**β = 3.043233053 derived from fine structure constant α reproduces all three charged lepton masses (electron, muon, tau) through the 10 Realms Pipeline with chi-squared < 10⁻⁹ for each lepton, demonstrating universal vacuum stiffness across three orders of magnitude in mass.**
 
 ---
 
@@ -82,7 +82,7 @@
 ### Single β Across All Three Leptons
 
 ```
-β = 3.058230856 (from fine structure constant α)
+β = 3.043233053 (from fine structure constant α)
 
 Electron: β → R=0.439, U=0.024, amp=0.911 → m_e = 1.000 ✅
 Muon:     β → R=0.450, U=0.314, amp=0.966 → m_μ = 206.768 ✅
@@ -95,7 +95,7 @@ Tau:      β → R=0.493, U=1.289, amp=0.959 → m_τ = 3477.228 ✅
 
 | Source | β Value | Uncertainty | Realm |
 |--------|---------|-------------|-------|
-| **Fine structure α** | 3.058 | ± 0.012 | Realms 5-7 (this work) |
+| **Fine structure α** | 3.043233053 | ± 0.012 | Realms 5-7 (this work) |
 | **Core compression** | 3.1 | ± 0.05 | Realm 4 (future) |
 | **Cosmology (vacuum refraction)** | 3.0-3.2 | — | Realm 0 (future) |
 
@@ -111,7 +111,7 @@ Tau:      β → R=0.493, U=1.289, amp=0.959 → m_τ = 3477.228 ✅
 ```
 α (measured: 1/137.036)
   ↓ (QFD identity)
-β (inferred: 3.058 ± 0.012)
+β (inferred: 3.043233053 ± 0.012)
   ↓ (Hill vortex geometric quantization)
 m_e, m_μ, m_τ (reproduced: < 10⁻⁹ residual)
 ```
@@ -247,7 +247,7 @@ python run_pipeline.py --realms realm0_cmb realm5_electron realm6_muon realm7_ta
 
 ### Abstract (Draft)
 
-> We demonstrate that the vacuum stiffness parameter β = 3.058 ± 0.012, inferred from the fine structure constant α = 1/137.036 through a conjectured QFD identity, reproduces the entire charged lepton mass spectrum (electron, muon, tau) via Hill spherical vortex geometric quantization. Using the 10 Realms Pipeline framework, we optimize geometric parameters (radius R, circulation velocity U, density amplitude) for each lepton while keeping β fixed. All three masses are reproduced to better than 10⁻⁹ relative precision with no free coupling parameters. Circulation velocity scales as U ~ √m across three orders of magnitude (deviations ~9%), while vortex radius R varies only 12% despite the 3477× mass range. This demonstrates universal vacuum stiffness connecting electromagnetism (α) to inertia (mass) through geometric mechanisms. Cross-sector β convergence with nuclear core compression energy (β_nuclear ≈ 3.1) and vacuum refraction vacuum refraction (β_cosmo ≈ 3.0-3.2) supports the hypothesis of a fundamental vacuum parameter constraining physics across scales.
+> We demonstrate that the vacuum stiffness parameter β = 3.043233053 ± 0.012, inferred from the fine structure constant α = 1/137.036 through a conjectured QFD identity, reproduces the entire charged lepton mass spectrum (electron, muon, tau) via Hill spherical vortex geometric quantization. Using the 10 Realms Pipeline framework, we optimize geometric parameters (radius R, circulation velocity U, density amplitude) for each lepton while keeping β fixed. All three masses are reproduced to better than 10⁻⁹ relative precision with no free coupling parameters. Circulation velocity scales as U ~ √m across three orders of magnitude (deviations ~9%), while vortex radius R varies only 12% despite the 3477× mass range. This demonstrates universal vacuum stiffness connecting electromagnetism (α) to inertia (mass) through geometric mechanisms. Cross-sector β convergence with nuclear core compression energy (β_nuclear ≈ 3.1) and vacuum refraction vacuum refraction (β_cosmo ≈ 3.0-3.2) supports the hypothesis of a fundamental vacuum parameter constraining physics across scales.
 
 ### Key Results Table (for paper)
 
@@ -257,7 +257,7 @@ python run_pipeline.py --realms realm0_cmb realm5_electron realm6_muon realm7_ta
 | μ | 206.768283 | 206.768276 | 4.3×10⁻¹¹ | 0.450 | 0.314 | 0.966 |
 | τ | 3477.228 | 3477.227973 | 7.0×10⁻¹⁰ | 0.493 | 1.289 | 0.959 |
 
-**Single parameter: β = 3.058 (from α)**
+**Single parameter: β = 3.043233053 (from α)**
 
 ---
 
@@ -281,7 +281,7 @@ python run_pipeline.py --realms realm0_cmb realm5_electron realm6_muon realm7_ta
 **The Golden Loop result can be falsified by**:
 
 1. **Improved α measurement** pushing β_crit outside β_nuclear/β_cosmo overlap
-2. **Direct β measurement** from independent physics contradicting 3.058
+2. **Direct β measurement** from independent physics contradicting 3.043233053
 3. **Failure to extend** to neutrinos or quarks (different topology required)
 4. **Additional observables** (e.g., calculated r_e ≠ 0.84 fm)
 5. **Higher-order corrections** breaking U ~ √m scaling
@@ -324,7 +324,7 @@ python run_pipeline.py --realms realm0_cmb realm5_electron realm6_muon realm7_ta
 ### Scientific Significance
 
 **Before**: β = 3.1 from nuclear fits, applied to leptons (questionable)
-**After**: β = 3.058 from α → supports all three lepton masses (testable)
+**After**: β = 3.043233053 from α → supports all three lepton masses (testable)
 
 **Impact**:
 - Links electromagnetism to inertia through geometry

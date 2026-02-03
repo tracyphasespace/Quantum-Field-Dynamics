@@ -188,7 +188,7 @@ Where:
 ### How This Fits in QFD Framework
 
 **QFD (Quantum Field Dynamics)** proposes:
-1. Vacuum has stiffness parameter β ≈ 3.058
+1. Vacuum has stiffness parameter β ≈ 3.043233053
 2. Particles are topological structures in this medium
 3. Mass arises from energy balance in these structures
 
@@ -198,7 +198,7 @@ Where:
 - Tests if β appears in nuclear binding (via calibrated parameters)
 
 **Connection to other QFD work**:
-- Lepton masses: Hill vortex model (β = 3.058)
+- Lepton masses: Hill vortex model (β = 3.043233053)
 - Cosmology: CMB axis of evil formalization
 - Lean proofs: 500+ theorems on QFD framework
 

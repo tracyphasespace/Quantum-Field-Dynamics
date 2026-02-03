@@ -75,7 +75,7 @@ def create_figure1_main_result():
     ax1.set_yscale('log')
     ax1.legend(loc='upper left')
     ax1.grid(True, alpha=0.3, which='both')
-    ax1.set_title(r'(a) Target vs Achieved Mass Ratios ($\beta = 3.058$)', fontsize=10)
+    ax1.set_title(r'(a) Target vs Achieved Mass Ratios ($\beta = 3.043233053$)', fontsize=10)
 
     # Panel B: Residuals (log scale)
     residuals = [abs(r['residual']) for r in results]

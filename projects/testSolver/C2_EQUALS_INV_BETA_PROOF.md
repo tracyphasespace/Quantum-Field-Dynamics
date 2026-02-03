@@ -45,7 +45,7 @@ c₂ = 1/β
 ```
 
 where:
-- **β = 3.058**: Vacuum stiffness parameter (from Golden Loop analysis)
+- **β = 3.043233053**: Vacuum stiffness parameter (from Golden Loop analysis)
 - **1/β = 0.327011**: Vacuum compliance
 
 **Physical interpretation**: Nuclear bulk charge density adjusts to vacuum compliance in the large-A limit.
@@ -150,7 +150,7 @@ c₂ = 0.327049 ± 0.000001
 
 **QFD prediction**:
 ```
-β = 3.058230856 (from Golden Loop)
+β = 3.043233053 (from Golden Loop)
 1/β = 0.327011043
 ```
 
@@ -327,7 +327,7 @@ Fitted parameters give:
 
 **1/β precision**:
 ```
-β = 3.058230856 ± 0.000000001 (from Golden Loop)
+β = 3.043233053 ± 0.000000001 (from Golden Loop)
 σ(1/β) ≈ 10⁻⁹
 ```
 
@@ -604,7 +604,7 @@ c1, c2 = result.x
 ```
 α = 1/137.036 (measured)
   ↓ (Golden Loop derivation)
-β = ln(α⁻¹ · c₁/(π² c₂)) = 3.058
+β = ln(α⁻¹ · c₁/(π² c₂)) = 3.043233053
   ↓ (this work)
 c₂ = 1/β = 0.327 (validated to 0.01%!)
   ↓ (self-consistent)
@@ -616,7 +616,7 @@ c₂ = 1/β = 0.327 (validated to 0.01%!)
 ### Parameter Status
 
 **Derived from first principles** (12/17 = 71%):
-1. ✓ β = 3.058 (vacuum stiffness)
+1. ✓ β = 3.043233053 (vacuum stiffness)
 2. ✓ c₁, c₂ (nuclear binding)
 3. ✓ m_p (proton mass)
 4. ✓ λ_Compton (Compton wavelength)

@@ -412,7 +412,7 @@ where:
   ↓
   Golden Loop
   ↓
-β = 3.058231 (vacuum bulk modulus)
+β = 3.043233053 (vacuum bulk modulus)
   ↓
   ├─→ (Nuclear sector: denominator 7)
   │   ├─→ α_n = (8/7) × β (fine structure)

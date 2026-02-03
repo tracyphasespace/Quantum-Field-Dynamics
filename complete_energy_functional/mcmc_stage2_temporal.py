@@ -162,14 +162,14 @@ def log_prior(params):
     """
     Prior for (β, ξ, τ).
 
-    β ~ Normal(3.058, 0.15)     # From α-constraint
+    β ~ Normal(3.043233053, 0.15)     # From α-constraint
     ξ ~ LogNormal(0, 0.5)       # Gradient stiffness ~1
     τ ~ LogNormal(0, 0.5)       # Temporal stiffness ~1
     """
     beta, xi, tau = params
 
     # β prior
-    beta_mean = 3.058
+    beta_mean = 3.043233053
     beta_std = 0.15
     lp_beta = -0.5 * ((beta - beta_mean) / beta_std)**2
 
@@ -262,7 +262,7 @@ def run_stage2_mcmc(
     print()
 
     # Initialize walkers
-    beta_init = 3.058
+    beta_init = 3.043233053
     xi_init = 1.0
     tau_init = 1.0
 
@@ -337,7 +337,7 @@ def analyze_stage2_results(sampler, output_dir='results'):
     # Critical assessment
     beta_median = results['β']['median']
     beta_std = results['β']['std']
-    beta_target = 3.058
+    beta_target = 3.043233053
     beta_offset = abs(beta_median - beta_target)
 
     print("="*70)
@@ -352,7 +352,7 @@ def analyze_stage2_results(sampler, output_dir='results'):
 
     if beta_offset < 0.02:
         print("✅ SUCCESS! Temporal term resolved β offset!")
-        print("   β → 3.058 when (ξ, τ) included")
+        print("   β → 3.043233053 when (ξ, τ) included")
         result = "success"
     elif beta_offset < 0.05:
         print("⚠️ PARTIAL: Improved but still offset")
@@ -370,7 +370,7 @@ def analyze_stage2_results(sampler, output_dir='results'):
     fig = corner.corner(
         samples,
         labels=['β', 'ξ', 'τ'],
-        truths=[3.058, 1.0, 1.0],
+        truths=[3.043233053, 1.0, 1.0],
         quantiles=[0.16, 0.5, 0.84],
         show_titles=True,
         title_fmt='.3f'
@@ -384,7 +384,7 @@ def analyze_stage2_results(sampler, output_dir='results'):
     chain = sampler.get_chain()
     fig, axes = plt.subplots(3, 1, figsize=(10, 10))
 
-    for i, (ax, label, target) in enumerate(zip(axes, ['β', 'ξ', 'τ'], [3.058, 1.0, 1.0])):
+    for i, (ax, label, target) in enumerate(zip(axes, ['β', 'ξ', 'τ'], [3.043233053, 1.0, 1.0])):
         ax.plot(chain[:, :, i], alpha=0.3, color='k', lw=0.5)
         ax.axhline(target, color='r', ls='--', lw=2, label=f'Expected: {target}')
         ax.set_ylabel(label, fontsize=12)
@@ -418,7 +418,7 @@ if __name__ == '__main__':
     print("\n" + "="*70)
     print("STAGE 2: TESTING TEMPORAL TERM")
     print("="*70)
-    print("\nHypothesis: τ breaks β-ξ degeneracy → β converges to 3.058")
+    print("\nHypothesis: τ breaks β-ξ degeneracy → β converges to 3.043233053")
     print()
 
     # Run

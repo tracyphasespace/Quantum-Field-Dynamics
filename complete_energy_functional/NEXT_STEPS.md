@@ -21,7 +21,7 @@
 
 ❌ **β offset unresolved**:
 - MCMC finds: β ≈ 2.96 ± 0.15
-- Golden Loop: β = 3.058
+- Golden Loop: β = 3.043233053
 - Still 3% offset
 
 ### The Degeneracy
@@ -46,7 +46,7 @@ Many (β, ξ) pairs fit equally well:
 
 Golden Loop α-constraint predicts:
 ```
-β = 3.058 (from fine structure constant)
+β = 3.043233053 (from fine structure constant)
 ```
 
 This is **independent** of lepton masses - it comes from gauge coupling.
@@ -56,7 +56,7 @@ This is **independent** of lepton masses - it comes from gauge coupling.
 **Quick test** (30 min):
 ```python
 # mcmc_fixed_beta.py
-β = 3.058  # FIXED
+β = 3.043233053  # FIXED
 ξ ~ ?      # Fit to masses
 τ ~ ?      # Fit to masses
 ```
@@ -75,7 +75,7 @@ If this works:
 4. No need for Stage 3
 
 If this fails:
-- β ≠ 3.058 in reality
+- β ≠ 3.043233053 in reality
 - Need electromagnetic constraints
 - Proceed to Option 2
 
@@ -134,7 +134,7 @@ This **breaks β-ξ degeneracy** via different scaling than mass.
 
 ### Expected Outcome
 
-- β → 3.058 ± 0.02 (Golden Loop confirmed)
+- β → 3.043233053 ± 0.02 (Golden Loop confirmed)
 - ξ uniquely determined
 - τ ≈ 1 (unchanged)
 - g-2 anomaly reproduced
@@ -188,7 +188,7 @@ Then δ might constrain β/ξ ratio.
 
 ### Path A: Fast Validation (TODAY)
 
-1. **Test Option 1**: Fix β = 3.058, fit (ξ, τ)
+1. **Test Option 1**: Fix β = 3.043233053, fit (ξ, τ)
    - Time: 30 min
    - If success → Done!
    - If failure → Proceed to Path B
@@ -206,7 +206,7 @@ Then δ might constrain β/ξ ratio.
    - Full 9-observable fit
 
 2. **Document breakthrough**:
-   - β = 3.058 validated
+   - β = 3.043233053 validated
    - ξ, τ isolated
    - V22 offset explained
    - Paper-ready results
@@ -218,7 +218,7 @@ Then δ might constrain β/ξ ratio.
 ### If Option 1 Works
 
 **Immediate validation**:
-- Golden Loop β = 3.058 confirmed
+- Golden Loop β = 3.043233053 confirmed
 - α-constraint → lepton sector connection
 - Emergent QED from vacuum refraction
 
@@ -246,7 +246,7 @@ Then δ might constrain β/ξ ratio.
 ### Immediate (Today)
 
 - [ ] Run Option 1: mcmc_fixed_beta.py
-- [ ] Check if β = 3.058 fits masses
+- [ ] Check if β = 3.043233053 fits masses
 - [ ] Analyze Koide-δ constraint
 - [ ] Document results
 
@@ -261,7 +261,7 @@ Then δ might constrain β/ξ ratio.
 
 ## Questions to Resolve
 
-1. **Is β = 3.058 exact?**
+1. **Is β = 3.043233053 exact?**
    - Test by fixing β and fitting masses
    - If yes: Golden Loop validated
    - If no: Need EM constraints
@@ -282,4 +282,4 @@ Then δ might constrain β/ξ ratio.
 
 ---
 
-**Recommended immediate action**: Run Option 1 (fix β = 3.058) to test hypothesis.
+**Recommended immediate action**: Run Option 1 (fix β = 3.043233053) to test hypothesis.

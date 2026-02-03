@@ -197,11 +197,11 @@ Small % error in M_total → large % error in E_stab (small number)
 **Current**: λ = 0.42 is empirically fitted to He-4
 
 **Desired**: Derive from:
-- Vacuum stiffness β = 3.058?
+- Vacuum stiffness β = 3.043233053?
 - α_EM = 1/137?
 - Nuclear density saturation?
 
-**Connection to Lepton sector?**: In `V22_Lepton_Analysis`, β = 3.058 appears in vacuum stiffness. Is λ_temporal related?
+**Connection to Lepton sector?**: In `V22_Lepton_Analysis`, β = 3.043233053 appears in vacuum stiffness. Is λ_temporal related?
 
 ### Q4: What About Geometry Optimization?
 
@@ -243,12 +243,12 @@ Small % error in M_total → large % error in E_stab (small number)
 ### Medium-Term Research
 
 1. **Derive λ_temporal from first principles**:
-   - Relate to β = 3.058 (vacuum stiffness)?
+   - Relate to β = 3.043233053 (vacuum stiffness)?
    - Connect to α_EM (fine structure constant)?
    - Link to nuclear saturation density?
 
 2. **Connection to lepton sector**:
-   - V22_Lepton_Analysis has β = 3.058 as Hill vortex stiffness
+   - V22_Lepton_Analysis has β = 3.043233053 as Hill vortex stiffness
    - Is λ_temporal the SAME parameter in different context?
    - Test: compute lepton masses with metric integration?
 
@@ -312,7 +312,7 @@ Same mechanism might apply to:
 If λ_temporal = 0.42 works across periodic table:
 - Evidence for GEOMETRIC origin of nuclear force
 - Not just curve fitting - predictive physics!
-- Connects β = 3.058 (vacuum) to nuclear phenomena
+- Connects β = 3.043233053 (vacuum) to nuclear phenomena
 
 ---
 
@@ -458,7 +458,7 @@ M_total = ∫ H(φ) × √(g_00) dV
 ### What We Haven't Proven
 
 1. ❓ **Universality** of λ = 0.42 across periodic table (only tested on 3 isotopes)
-2. ❓ **First-principles derivation** of λ_temporal from β = 3.058 or other constants
+2. ❓ **First-principles derivation** of λ_temporal from β = 3.043233053 or other constants
 3. ❓ **Geometric predictions** - whether node arrangements are correct
 4. ❓ **Independent observables** - charge radii, magnetic moments (not yet computed)
 5. ❓ **Connection to leptons** - is this the SAME physics as V22_Lepton_Analysis?
@@ -472,7 +472,7 @@ M_total = ∫ H(φ) × √(g_00) dV
 **Path to acceptance**:
 1. Test λ = 0.42 on 10+ isotopes (wide A, Z range)
 2. Predict independent observable (charge radius, g-factor, etc.)
-3. Derive λ from first principles (connect to β = 3.058)
+3. Derive λ from first principles (connect to β = 3.043233053)
 4. Explain C-12 overshoot (geometry? A-scaling?)
 
 **GIGO warning**: 3 fitted parameters (R_scale + λ + σ) → 3 targets (H-1, He-4, C-12) is NOT predictive yet. Need to test on UNFITTED isotopes!

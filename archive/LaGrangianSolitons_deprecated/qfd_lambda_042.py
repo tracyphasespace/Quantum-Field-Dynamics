@@ -6,7 +6,7 @@ Testing different combinations with the correct λ value.
 
 Constants:
     α = 1/137      (electromagnetic coupling)
-    β = 1/3.058    (vacuum stiffness)
+    β = 1/3.043233053    (vacuum stiffness)
     λ = 0.42       (temporal metric parameter)
     M_p = 938.272 MeV (proton mass scale)
 ===========================================================================
@@ -16,7 +16,7 @@ import numpy as np
 
 # QFD Fundamental Constants
 ALPHA_EM = 1.0 / 137.036
-BETA_QFD = 1.0 / 3.058
+BETA_QFD = 1.0 / 3.043233053
 LAMBDA_METRIC = 0.42
 M_PROTON = 938.272  # MeV
 
@@ -93,7 +93,7 @@ print("QFD MASS FORMULA - TESTING WITH λ = 0.42")
 print("="*85)
 print(f"\nConstants:")
 print(f"  α (EM)     = 1/137 = {ALPHA_EM:.6f}")
-print(f"  β (QFD)    = 1/3.058 = {BETA_QFD:.6f}")
+print(f"  β (QFD)    = 1/3.043233053 = {BETA_QFD:.6f}")
 print(f"  λ (metric) = {LAMBDA_METRIC}")
 print(f"  M_proton   = {M_PROTON} MeV")
 print()

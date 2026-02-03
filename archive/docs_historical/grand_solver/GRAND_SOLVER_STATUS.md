@@ -3,7 +3,7 @@
 ## ✅ What's DONE (Session 2025-12-30)
 
 ### 1. Parameter Lockdown (9/10 complete)
-- ✅ β = 3.058 (Golden Loop + Lean proofs)
+- ✅ β = 3.043233053 (Golden Loop + Lean proofs)
 - ✅ c₁ = 0.529, c₂ = 0.327 (CCL fit, Lean-bounded)
 - ✅ α_circ = e/(2π) (D-flow proof)
 - ✅ η′ = 7.75×10⁻⁶ (Tolman/FIRAS solver)
@@ -32,11 +32,11 @@
 
 ### Issue: Unit Conversion β → λ
 
-**Problem**: We have β = 3.058 (dimensionless vacuum stiffness), but to predict G and nuclear binding, we need λ in physical units (kg or inverse length).
+**Problem**: We have β = 3.043233053 (dimensionless vacuum stiffness), but to predict G and nuclear binding, we need λ in physical units (kg or inverse length).
 
 **Current situation**:
 ```
-β = 3.058           ← LOCKED ✓
+β = 3.043233053           ← LOCKED ✓
 λ = ?               ← MISSING CONVERSION
 G = f(λ)            ← Can't compute without λ
 E_bind = g(λ)       ← Can't compute without λ
@@ -70,7 +70,7 @@ E_bind = g(λ)       ← Can't compute without λ
 - `Lean4/QFD/Nuclear/VacuumStiffness.lean` (if it exists)
 
 **Success metric**: Get λ in kg such that:
-- β = 3.058 (input)
+- β = 3.043233053 (input)
 - λ ≈ m_p × (some O(1) factor)
 - Can convert to inverse length for nuclear range
 
@@ -114,7 +114,7 @@ G = (geometric factor) × ℏc/λ²
 
 **Already exists**: `particle-physics/nuclear-soliton-solver/src/qfd_solver.py`
 
-**Just need**: Run it with locked β = 3.058 for deuteron case
+**Just need**: Run it with locked β = 3.043233053 for deuteron case
 
 ---
 
@@ -124,7 +124,7 @@ G = (geometric factor) × ℏc/λ²
 Grand Solver v1.0 Complete When:
 
 [ ] Task 1: λ(β) formula derived from Lean
-    - Can convert β = 3.058 to λ in kg
+    - Can convert β = 3.043233053 to λ in kg
     - Formula has geometric justification
     
 [ ] Task 2: Geometric factors for G extracted
@@ -136,7 +136,7 @@ Grand Solver v1.0 Complete When:
     - Uses locked β, no additional fits
     
 [ ] Run unified solver with all three:
-    - Input: β = 3.058 only
+    - Input: β = 3.043233053 only
     - Output: Predictions for α, G, E_bind
     - Errors: O(10-30%) across all sectors
     
@@ -152,7 +152,7 @@ Grand Solver v1.0 Complete When:
 
 **Option A: Quick Finish (1-2 hours)**
 1. Trace λ(β) through existing Lean files
-2. Run nuclear solver for deuteron with β = 3.058
+2. Run nuclear solver for deuteron with β = 3.043233053
 3. Document "best effort" results even if errors are ~30-50%
 4. Tag as "v1.0-beta" (framework validated, geometric factors pending)
 
@@ -173,7 +173,7 @@ Grand Solver v1.0 Complete When:
 ## Current Files
 
 **Created this session**:
-- `schema/v0/GrandSolver_Fixed.py` - Uses β = 3.058 correctly
+- `schema/v0/GrandSolver_Fixed.py` - Uses β = 3.043233053 correctly
 - `GRAND_SOLVER_FIX.md` - Documents the β unit issue
 - `GRAND_SOLVER_STATUS.md` - This file
 

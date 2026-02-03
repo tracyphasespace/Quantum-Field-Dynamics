@@ -161,7 +161,7 @@ Z/A → 1/2  (as A → ∞)
 
 But:
 - Empirical: c₂ ≈ 0.324
-- Theory: 1/β = 1/3.058 ≈ 0.327
+- Theory: 1/β = 1/3.043233053 ≈ 0.327
 - Naive: 1/2 = 0.5 ❌
 
 **What went wrong?** We need to reconsider the symmetry energy functional!
@@ -353,7 +353,7 @@ a_sym = (constant)/β
 β = K/a_sym ≈ K/25 MeV
 ```
 
-With β = 3.058 (dimensionless), we need K ≈ 75 MeV.
+With β = 3.043233053 (dimensionless), we need K ≈ 75 MeV.
 
 ---
 
@@ -459,7 +459,7 @@ c₂ = 1/β
 **Prediction**: c₂ = 1/β
 
 **From β**:
-- β = 3.058 (Golden Loop)
+- β = 3.043233053 (Golden Loop)
 - 1/β = 0.3270
 
 **From data** (CCL_PRODUCTION_RESULTS.md):
@@ -511,7 +511,7 @@ c₂ = 1/β
 **The result**:
 
 ```
-c₂ = 1/β = 1/3.058 = 0.327
+c₂ = 1/β = 1/3.043233053 = 0.327
 
 Empirical: c₂ = 0.324
 Error: 0.92%

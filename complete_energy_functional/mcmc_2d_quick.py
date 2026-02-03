@@ -2,7 +2,7 @@
 """
 Quick 2D MCMC: Fit only (β, ξ) with geometry fixed
 
-Goal: Test if β → 3.058 when gradient term ξ is included
+Goal: Test if β → 3.043233053 when gradient term ξ is included
 
 Strategy:
 - Fix geometry (R, U, A) from V22 or physical estimates
@@ -126,13 +126,13 @@ def log_prior(params):
     """
     Prior for (β, ξ).
 
-    β ~ Normal(3.058, 0.15)  # From α-constraint
+    β ~ Normal(3.043233053, 0.15)  # From α-constraint
     ξ ~ LogNormal(0, 0.5)     # Median=1, range 0.3-3
     """
     beta, xi = params
 
     # β prior
-    beta_mean = 3.058
+    beta_mean = 3.043233053
     beta_std = 0.15
     lp_beta = -0.5 * ((beta - beta_mean) / beta_std)**2
 
@@ -228,7 +228,7 @@ def run_quick_mcmc(
     print()
 
     # Initialize walkers near expected values
-    beta_init = 3.058
+    beta_init = 3.043233053
     xi_init = 1.0
 
     pos = np.array([beta_init, xi_init]) + 0.1 * np.random.randn(n_walkers, n_dim)
@@ -300,7 +300,7 @@ def analyze_results(sampler, output_dir='results'):
     print()
 
     # Critical question
-    beta_target = 3.058
+    beta_target = 3.043233053
     beta_v22 = 3.15
     beta_offset = abs(beta_median - beta_target)
 
@@ -334,7 +334,7 @@ def analyze_results(sampler, output_dir='results'):
     fig = corner.corner(
         samples,
         labels=['β', 'ξ'],
-        truths=[3.058, 1.0],
+        truths=[3.043233053, 1.0],
         quantiles=[0.16, 0.5, 0.84],
         show_titles=True,
         title_fmt='.4f',
@@ -349,7 +349,7 @@ def analyze_results(sampler, output_dir='results'):
     chain = sampler.get_chain()
     fig, axes = plt.subplots(2, 1, figsize=(10, 8))
 
-    for i, (ax, label, target) in enumerate(zip(axes, ['β', 'ξ'], [3.058, 1.0])):
+    for i, (ax, label, target) in enumerate(zip(axes, ['β', 'ξ'], [3.043233053, 1.0])):
         ax.plot(chain[:, :, i], alpha=0.3, color='k', lw=0.5)
         ax.axhline(target, color='r', ls='--', lw=2, label=f'Expected: {target}')
         ax.set_ylabel(label, fontsize=12)
@@ -401,7 +401,7 @@ if __name__ == '__main__':
     print("\n" + "="*70)
     print("QUICK 2D MCMC TEST")
     print("="*70)
-    print("\nTesting hypothesis: Does ξ term push β → 3.058?")
+    print("\nTesting hypothesis: Does ξ term push β → 3.043233053?")
     print()
 
     # Run MCMC

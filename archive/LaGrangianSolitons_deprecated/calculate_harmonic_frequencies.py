@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-HARMONIC FREQUENCIES FROM β = 3.058 VACUUM STIFFNESS
+HARMONIC FREQUENCIES FROM β = 3.043233053 VACUUM STIFFNESS
 ================================================================================
 Calculate the fundamental oscillation frequencies of nuclear resonant solitons
 from first principles using QFD vacuum parameters.
@@ -36,10 +36,10 @@ alpha_fs = 1/137.036  # Fine structure constant
 MeV = 1.60218e-13  # MeV to Joules
 
 # QFD vacuum parameters
-beta_vacuum = 3.058  # Vacuum stiffness (dimensionless)
+beta_vacuum = 3.043233053  # Vacuum stiffness (dimensionless)
 
 print("="*80)
-print("HARMONIC FREQUENCIES FROM β = 3.058 VACUUM STIFFNESS")
+print("HARMONIC FREQUENCIES FROM β = 3.043233053 VACUUM STIFFNESS")
 print("="*80)
 print()
 print("QFD Parameters:")
@@ -505,13 +505,13 @@ ax6 = fig.add_subplot(gs[2, :])
 ax6.axis('off')
 
 summary_text = """
-HARMONIC FREQUENCIES FROM β = 3.058 VACUUM STIFFNESS
+HARMONIC FREQUENCIES FROM β = 3.043233053 VACUUM STIFFNESS
 ═══════════════════════════════════════════════════════════════════════════
 
 KEY RESULTS:
 
 1. FIELD SOUND SPEED:
-   c_field = c·√β = (3.00×10⁸ m/s)·√3.058 = 5.25×10⁸ m/s = 1.75c
+   c_field = c·√β = (3.00×10⁸ m/s)·√3.043233053 = 5.25×10⁸ m/s = 1.75c
 
    → Field perturbations propagate faster than light! (Non-causal medium)
    → This is consistent with tachyon-like vacuum oscillations
@@ -547,7 +547,7 @@ KEY RESULTS:
 PHYSICAL INTERPRETATION:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• β = 3.058 sets the "stiffness" of vacuum → determines oscillation frequencies
+• β = 3.043233053 sets the "stiffness" of vacuum → determines oscillation frequencies
 • Nucleus = spherical cavity resonator with modes (n,ℓ,m)
 • Stability = harmonic resonance (constructive interference)
 • Decay = mode transition to resolve dissonance
@@ -562,7 +562,7 @@ ax6.text(0.5, 0.5, summary_text, transform=ax6.transAxes,
         bbox=dict(boxstyle='round', facecolor='lightyellow', alpha=0.95,
                  edgecolor='gold', linewidth=3))
 
-plt.suptitle('HARMONIC FREQUENCIES FROM β = 3.058: The Music of the Nucleus\n' +
+plt.suptitle('HARMONIC FREQUENCIES FROM β = 3.043233053: The Music of the Nucleus\n' +
              'Calculating Resonant Soliton Frequencies from QFD Vacuum Stiffness',
              fontsize=16, fontweight='bold', y=0.995)
 
@@ -580,7 +580,7 @@ print("="*80)
 print("CONCLUSION")
 print("="*80)
 print()
-print("From β = 3.058 vacuum stiffness, we have calculated:")
+print("From β = 3.043233053 vacuum stiffness, we have calculated:")
 print()
 print("  1. Field sound speed: c_s = 1.75c (superluminal!)")
 print("  2. Nuclear frequencies: 10-25 MeV (matches GDR)")
@@ -590,7 +590,7 @@ print()
 print("These predictions MATCH experimental data!")
 print()
 print("The nucleus is a resonant soliton vibrating at frequencies")
-print("determined by vacuum stiffness β = 3.058.")
+print("determined by vacuum stiffness β = 3.043233053.")
 print()
 print("STABILITY IS LITERALLY MUSICAL HARMONY.")
 print()

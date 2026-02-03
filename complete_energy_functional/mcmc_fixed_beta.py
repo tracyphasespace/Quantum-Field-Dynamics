@@ -2,7 +2,7 @@
 """
 MCMC with Fixed β: Test Golden Loop Hypothesis
 
-Hypothesis: β = 3.058 (from α-constraint) is exact
+Hypothesis: β = 3.043233053 (from α-constraint) is exact
             → Only fit (ξ, τ) to lepton masses
 
 If this works:
@@ -11,7 +11,7 @@ If this works:
   - Isolates ξ and τ uniquely
 
 If this fails:
-  - β ≠ 3.058 in reality
+  - β ≠ 3.043233053 in reality
   - Need electromagnetic constraints (Option 2)
 """
 
@@ -45,7 +45,7 @@ SIGMA_MODEL_MUON = 0.1
 SIGMA_MODEL_TAU = 2.0
 
 # FIXED BETA (Golden Loop prediction)
-BETA_FIXED = 3.058
+BETA_FIXED = 3.043233053
 
 
 class FixedBetaModel:
@@ -53,7 +53,7 @@ class FixedBetaModel:
     Model with β FIXED at Golden Loop value.
 
     Free parameters: (ξ, τ) shared across leptons
-    Fixed parameters: β = 3.058 (Golden Loop)
+    Fixed parameters: β = 3.043233053 (Golden Loop)
                       (R, U, A) per lepton from scaling
     """
 
@@ -356,7 +356,7 @@ def analyze_fixed_beta_results(sampler, output_dir='results'):
     print()
 
     if log_L > -10:
-        print("✅ SUCCESS! β = 3.058 fits lepton masses perfectly!")
+        print("✅ SUCCESS! β = 3.043233053 fits lepton masses perfectly!")
         print("   Golden Loop prediction VALIDATED!")
         print("   β-ξ degeneracy confirmed real.")
         result = "success"
@@ -365,7 +365,7 @@ def analyze_fixed_beta_results(sampler, output_dir='results'):
         print("   May need fine-tuning or additional terms")
         result = "partial"
     else:
-        print("❌ FAILURE: β = 3.058 does not fit masses")
+        print("❌ FAILURE: β = 3.043233053 does not fit masses")
         print("   Need electromagnetic constraints (Option 2)")
         result = "failure"
 

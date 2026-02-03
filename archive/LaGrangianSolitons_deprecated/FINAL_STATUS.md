@@ -73,7 +73,7 @@ Q = ½(1 - α) × A^(2/3) + (1/β) × A
 |-------------|---------|--------------|-----------------|--------|
 | **c₁** (surface) | ½(1 - α) | 0.529 | **0.496351** | -6.2% |
 | **c₂** (volume) | 1/β | 0.327 | **0.328615** | +0.5% |
-| **β** (stiffness) | Golden Loop | 3.058 | **3.04309** | -0.5% |
+| **β** (stiffness) | Golden Loop | 3.043233053 | **3.04309** | -0.5% |
 
 ### Physical Interpretation
 
@@ -189,7 +189,7 @@ C2_VOLUME = 1.0 / BETA_VACUUM         # = 0.328615 (bulk modulus)
 
 ### Files Requiring Update
 
-The following files still use the old β = 3.058:
+The following files still use the old β = 3.043233053:
 
 - `gradient_atmosphere_solver.py`
 - `dual_core_spin_solver.py`

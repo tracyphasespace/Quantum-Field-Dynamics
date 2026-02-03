@@ -13,7 +13,7 @@ cd /home/tracy/development/QFD_SpectralGap
 git add .
 git commit -m "feat: Grand Solver v1.0-beta - Proton Bridge proven (0.0002%)
 
-BREAKTHROUGH: Derived proton mass from vacuum stiffness β = 3.058
+BREAKTHROUGH: Derived proton mass from vacuum stiffness β = 3.043233053
 
 Key Results:
 - λ = 4.3813 × β × (m_e/α) = 1.672619×10⁻²⁷ kg
@@ -62,7 +62,7 @@ git tag -a v1.0-beta -m "Grand Solver: Proton Bridge proven (0.0002%)"
 
 #### Summary
 
-Proof-of-concept for unified field theory achieved. From ONE parameter (β = 3.058), we derive the proton mass to 0.0002% accuracy, proving it is NOT a fundamental constant but the vacuum stiffness scale.
+Proof-of-concept for unified field theory achieved. From ONE parameter (β = 3.043233053), we derive the proton mass to 0.0002% accuracy, proving it is NOT a fundamental constant but the vacuum stiffness scale.
 
 #### What's New
 
@@ -225,7 +225,7 @@ python3 GrandSolver_Complete.py
    - E_bind prediction within 20-50%
 
 3. **Unified RunSpec**
-   - Single input: β = 3.058
+   - Single input: β = 3.043233053
    - Outputs: λ, G, E_bind across all sectors
 
 ### v2.0 (Future)

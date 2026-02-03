@@ -618,7 +618,7 @@ observables:
 ```yaml
 # qfd_params/defaults.yaml (add)
 beta:
-  value: 3.058230856
+  value: 3.043233053
   uncertainty: 0.012
   source: "fine_structure_identity"
   constraints:

@@ -6,7 +6,7 @@ Uses the same LeptonEnergy solver that successfully reproduced all three
 lepton masses, to test whether solutions exist across a range of β values.
 
 This is the CRITICAL falsifiability test: if solutions exist for all β,
-the model is too flexible. If they exist only near β ≈ 3.058, that's evidence.
+the model is too flexible. If they exist only near β ≈ 3.043233053, that's evidence.
 """
 
 import numpy as np
@@ -243,7 +243,7 @@ def run_beta_scan(beta_min=2.5, beta_max=3.5, num_points=21, tolerance=1e-4):
 
     This is the critical test that distinguishes "evidence" from "compatibility":
     - If solutions exist for all β → model too flexible
-    - If solutions exist only near β ≈ 3.058 → genuine constraint
+    - If solutions exist only near β ≈ 3.043233053 → genuine constraint
 
     Args:
         beta_min: Minimum β value
@@ -338,7 +338,7 @@ def run_beta_scan(beta_min=2.5, beta_max=3.5, num_points=21, tolerance=1e-4):
             'min': float(beta_window_min) if beta_window_min else None,
             'max': float(beta_window_max) if beta_window_max else None,
             'width': float(beta_window_width) if beta_window_width else None,
-            'relative_width_percent': float(beta_window_width / 3.058 * 100) if beta_window_width else None
+            'relative_width_percent': float(beta_window_width / 3.043233053 * 100) if beta_window_width else None
         }
     }
 
@@ -387,7 +387,7 @@ def print_summary(results):
 
         print(f"\n✓ Minimum residual at β = {analysis['min_residual_beta']:.4f}")
         print(f"  Sum of residuals: {analysis['min_residual_sum']:.2e}")
-        print(f"  Compare to inferred: β = 3.058 (from α)")
+        print(f"  Compare to inferred: β = 3.043233053 (from α)")
 
     else:
         print("✗ WARNING: No β value where all three leptons converge!")

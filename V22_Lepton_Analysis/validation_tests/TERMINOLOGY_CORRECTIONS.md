@@ -163,7 +163,7 @@ No outdated SM/GR terminology found in code.
 ```markdown
 | Source | β Value | Uncertainty | Realm |
 |--------|---------|-------------|-------|
-| **Fine structure α** | 3.058 | ± 0.012 | Realms 5-7 (this work) |
+| **Fine structure α** | 3.043233053 | ± 0.012 | Realms 5-7 (this work) |
 | **Core compression** | 3.1 | ± 0.05 | Realm 4 (future) |
 | **Vacuum refraction (CMB/SNe)** | 3.0-3.2 | — | Realm 0 (future) |
 ```

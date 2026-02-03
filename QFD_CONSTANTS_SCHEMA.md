@@ -49,18 +49,18 @@ SPEED_OF_LIGHT = 299792.458   # km/s (SI)
 
 ```python
 # Vacuum stiffness (dimensionless)
-BETA = 3.058  # From cosmology/nuclear constraint
+BETA = 3.043233053  # From cosmology/nuclear constraint
 
 # Alternative name in some contexts:
-VACUUM_STIFFNESS = 3.058
+VACUUM_STIFFNESS = 3.043233053
 
 # Measured values by sector:
-BETA_COSMOLOGY = 3.058    # CMB axis alignment
+BETA_COSMOLOGY = 3.043233053    # CMB axis alignment
 BETA_NUCLEAR = 3.1 ± 0.05 # Nuclear binding energies
 BETA_LEPTON = 3.15 ± 0.05 # Hill vortex fits (effective)
 
 # Note: Small offset (3%) between sectors under investigation
-# Working hypothesis: β = 3.058 is fundamental, offsets are systematic
+# Working hypothesis: β = 3.043233053 is fundamental, offsets are systematic
 ```
 
 **Physical Meaning**:
@@ -108,7 +108,7 @@ class HillVortexContext:
     def __init__(self, R, U, beta, rho_vac=1.0, g_c=0.985):
         self.R = R              # Vortex radius (fm)
         self.U = U              # Propagation velocity (c units)
-        self.beta = beta        # Vacuum stiffness (3.058)
+        self.beta = beta        # Vacuum stiffness (3.043233053)
         self.rho_vac = rho_vac  # Vacuum density floor
         self.g_c = g_c          # Charge coupling constant
 ```
@@ -374,7 +374,7 @@ u = (beta/2) * (grad_rho)**2  # QFD interpretation
 # QFD: Z₀ ~ β × (geometric factors)?
 
 # Hypothesis: β → ε₀, μ₀ via dimensional analysis
-# Testable: Does β = 3.058 predict correct Z₀?
+# Testable: Does β = 3.043233053 predict correct Z₀?
 ```
 
 ### Fine Structure from Vacuum Geometry
@@ -384,7 +384,7 @@ u = (beta/2) * (grad_rho)**2  # QFD interpretation
 # π² · exp(β) · (c₂/c₁) = α⁻¹
 
 # Can photon sector derive α independently?
-# If yes → strong validation of β = 3.058
+# If yes → strong validation of β = 3.043233053
 ```
 
 ---
@@ -473,7 +473,7 @@ class QFDState:
     """Unified QFD state across sectors"""
     sector: str            # "lepton", "nuclear", "photon"
     soliton_type: str      # "Hill_vortex", "Q_ball", "wave"
-    beta: float            # Vacuum stiffness (3.058)
+    beta: float            # Vacuum stiffness (3.043233053)
     density_profile: callable  # ρ(r) function
     energy_functional: callable  # E[ψ] functional
     conserved_charges: dict  # {N: int, Q: int, L_z: float}
@@ -627,16 +627,16 @@ Master: /CLAUDE.md (project briefing)
 ```python
 def test_beta_consistency():
     """
-    Check if β = 3.058 is consistent across sectors
+    Check if β = 3.043233053 is consistent across sectors
 
     Tests:
-    1. Cosmology: CMB axis alignment → β ≈ 3.058 ✓
+    1. Cosmology: CMB axis alignment → β ≈ 3.043233053 ✓
     2. Nuclear: Binding energies → β ≈ 3.1 ± 0.05 ✓ (3% offset)
     3. Lepton: Hill vortex masses → β ≈ 3.15 ± 0.05 (fitted)
     4. Photon: α derivation → β ≈ ? (TBD)
 
     Status: 3% systematic offset between sectors
-    Hypothesis: β = 3.058 fundamental, offsets are closure errors
+    Hypothesis: β = 3.043233053 fundamental, offsets are closure errors
     """
     pass
 ```
@@ -670,7 +670,7 @@ def test_alpha_consistency():
    - Bivector structure F = E + iB
    - Wave equation from vacuum dynamics
 
-3. **Coupling**: Use β = 3.058 for vacuum response
+3. **Coupling**: Use β = 3.043233053 for vacuum response
    - Stiffness determines photon-vortex interaction strength
    - Same β links lepton structure to photon emission
 

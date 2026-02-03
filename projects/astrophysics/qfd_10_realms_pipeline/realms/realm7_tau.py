@@ -3,7 +3,7 @@ Realm 7: Tau Mass from Hill Vortex Quantization
 
 Purpose:
   - Test whether β from fine structure constant α (same as electron and muon) supports tau mass solution
-  - Uses validated V22 Hill vortex solver with β = 3.058230856 FIXED (no retuning!)
+  - Uses validated V22 Hill vortex solver with β = 3.043233053 FIXED (no retuning!)
   - Optimizes geometric parameters (R, U, amplitude) to match m_τ/m_e = 3477.228
 
 Key Physics:
@@ -43,7 +43,7 @@ from scipy.integrate import simps
 
 # Physical constants (dimensionless units)
 RHO_VAC = 1.0  # Normalized vacuum density
-BETA_FROM_ALPHA = 3.058230856  # From fine structure constant (Golden Loop)
+BETA_FROM_ALPHA = 3.043233053  # From fine structure constant (Golden Loop)
 
 # Tau mass ratio
 TAU_ELECTRON_MASS_RATIO = 3477.228  # PDG 2024
@@ -333,7 +333,7 @@ def optimize_tau_geometry(cfg: TauConfig, electron_params: Dict = None,
 
 def run(params: Dict[str, Any], cfg: TauConfig = None) -> Dict[str, Any]:
     """
-    Realm 7 main execution: Tau mass from β = 3.058 (same as electron/muon).
+    Realm 7 main execution: Tau mass from β = 3.043233053 (same as electron/muon).
 
     Args:
         params: Parameter registry from previous realms

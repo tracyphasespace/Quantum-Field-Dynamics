@@ -172,7 +172,7 @@ SUMMARY: DIMENSIONAL CONSISTENCY CHECK
 1. c or ℏ "emerge" from first principles
 2. L₀ is experimentally confirmed
 3. This is a "Theory of Everything"
-4. β = 3.058 is "the only parameter in physics"
+4. β = 3.043233053 is "the only parameter in physics"
 5. QFD replaces Standard Model
 
 ### Honest Framing

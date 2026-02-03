@@ -3,7 +3,7 @@
 Complete Three-Lepton Test with β from Fine Structure Constant
 ===============================================================
 
-Test all three leptons (e, μ, τ) with β = 3.058230856 derived from α.
+Test all three leptons (e, μ, τ) with β = 3.043233053 derived from α.
 
 This is the final validation:
   α → β → m_e, m_μ, m_τ (all from same universal β)
@@ -18,7 +18,7 @@ from datetime import datetime
 
 # Constants
 RHO_VAC = 1.0
-BETA_FROM_ALPHA = 3.058230856  # Derived from fine structure constant
+BETA_FROM_ALPHA = 3.043233053  # Derived from fine structure constant
 
 # Lepton masses (in electron-mass units)
 ELECTRON_MASS = 1.0
@@ -281,7 +281,7 @@ def analyze_three_leptons(results):
     print("GOLDEN LOOP COMPLETE")
     print("="*80)
     print()
-    print("✓ β = 3.058230856 (from fine structure constant α)")
+    print("✓ β = 3.043233053 (from fine structure constant α)")
     print("✓ Produces all three lepton masses:")
     print(f"    Electron: {electron['accuracy_percent']:.4f}% accuracy")
     print(f"    Muon:     {muon['accuracy_percent']:.4f}% accuracy")
@@ -328,7 +328,7 @@ if __name__ == "__main__":
 
     output = {
         'test': 'Three Leptons with β from Fine Structure Constant',
-        'beta_source': 'α = 1/137.036... → β = 3.058230856',
+        'beta_source': 'α = 1/137.036... → β = 3.043233053',
         'timestamp': datetime.now().isoformat(),
         'results': results,
         'analysis': analysis

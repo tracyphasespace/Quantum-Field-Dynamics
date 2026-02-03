@@ -24,7 +24,7 @@ from collections import Counter, defaultdict
 
 # Constants
 alpha_fine = 1.0 / 137.036
-beta_vacuum = 1.0 / 3.058231
+beta_vacuum = 1.0 / 3.043233053
 M_proton = 938.272
 LAMBDA_TIME_0 = 0.42
 KAPPA_E = 0.0001
@@ -279,7 +279,7 @@ print("  • A mod 4 = winding number in reduced 4D space")
 print("  • A ≡ 1 (mod 4) = minimal non-trivial winding")
 print()
 
-print("β = 3.058 ≈ π connection:")
+print("β = 3.043233053 ≈ π connection:")
 print(f"  • β/π = {beta_vacuum/np.pi:.6f} ≈ 0.973")
 print("  • π ≈ 22/7 = 3.142857")
 print("  • Might relate to 4-fold + 7-fold combined structure")

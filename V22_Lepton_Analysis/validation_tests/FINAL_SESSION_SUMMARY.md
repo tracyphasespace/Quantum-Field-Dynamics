@@ -101,7 +101,7 @@ w = 0.0250: χ² = 1.65×10⁷  (Δχ² = +6.4×10³)
 - This is OPPOSITE direction from expected mechanism
 
 **Comparison to expectations**:
-| Scenario | β_min | Offset from 3.058 |
+| Scenario | β_min | Offset from 3.043233053 |
 |----------|-------|-------------------|
 | No gradient (baseline) | ~3.15 | +3.0% |
 | Expected with gradient | ~3.10 | +1.4% ✓ |
@@ -301,7 +301,7 @@ If χ² still ~ 10⁷:
 
 ### 3. Next Steps if β = 3.20 Persists
 
-**If new mapping still gives β far from 3.058**:
+**If new mapping still gives β far from 3.043233053**:
 - Debug gradient formula?
 - Re-examine λ calibration?
 - Accept that mass-only truly insufficient?

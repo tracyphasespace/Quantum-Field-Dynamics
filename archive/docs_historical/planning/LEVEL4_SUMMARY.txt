@@ -15,7 +15,7 @@
 **Result**: Tier C → Tier B (geometric prediction, not tuning)
 
 ### Gap 2: β Derivation (Fitted → Topological) - CHALLENGING
-**Problem**: β = 3.058 fitted to masses, not derived from geometry
+**Problem**: β = 3.043233053 fitted to masses, not derived from geometry
 **Solution**: β = √(π·k_geom)/c where c from Cl(3,3) signature structure
 **Timeline**: 2-4 months
 **Result**: Tier D → Tier B (topological invariant)

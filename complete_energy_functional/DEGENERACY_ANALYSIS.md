@@ -19,7 +19,7 @@ V22 lepton model predicts β ≈ 3.15 using simplified energy functional:
 E_V22 = ∫ β(δρ)² dV
 ```
 
-But Golden Loop α-constraint predicts β = 3.058 (3% offset).
+But Golden Loop α-constraint predicts β = 3.043233053 (3% offset).
 
 **Hypothesis**: Offset due to missing gradient density and emergent time terms.
 
@@ -38,7 +38,7 @@ E₁ = ∫ [½ξ|∇ρ|² + β(δρ)²] dV
 
 ### Prior
 ```
-β ~ Normal(3.058, 0.15)    # α-constraint
+β ~ Normal(3.043233053, 0.15)    # α-constraint
 ξ ~ LogNormal(0, 0.5)       # Expect ξ ~ 1
 ```
 
@@ -56,7 +56,7 @@ E₁ = ∫ [½ξ|∇ρ|² + β(δρ)²] dV
    - Or there's a scaling factor we're missing
 
 2. **β offset persists**:
-   - β = 2.95 ± 0.15 (target: 3.058)
+   - β = 2.95 ± 0.15 (target: 3.043233053)
    - Offset = 0.106 (3.47%)
    - Actually slightly **worse** than V22's 3.15
 
@@ -89,7 +89,7 @@ For static soliton: ∂ρ/∂t = 0, but τ affects equilibrium via:
 
 ### Prior
 ```
-β ~ Normal(3.058, 0.15)     # α-constraint
+β ~ Normal(3.043233053, 0.15)     # α-constraint
 ξ ~ LogNormal(0, 0.5)        # Expect ξ ~ 1
 τ ~ LogNormal(0, 0.5)        # Expect τ ~ 1
 ```
@@ -214,17 +214,17 @@ To compensate for missing gradient energy, V22 **inflated β**:
 
 V22's offset is **not an error** - it's absorbing the gradient contribution into an effective β.
 
-### Why Doesn't β = 3.058?
+### Why Doesn't β = 3.043233053?
 
-Golden Loop predicts β = 3.058 from α-constraint.
+Golden Loop predicts β = 3.043233053 from α-constraint.
 
 But our MCMC finds β ≈ 2.96 ± 0.15.
 
 **Possible explanations**:
 
 1. **Golden Loop applies to β_eff**:
-   - β_eff = β + c·ξ = 3.058
-   - If ξ ≈ 26: β = 3.058 - c×26
+   - β_eff = β + c·ξ = 3.043233053
+   - If ξ ≈ 26: β = 3.043233053 - c×26
    - For β ≈ 2.96: c ≈ 0.004
 
 2. **Independent constraint needed**:
@@ -263,16 +263,16 @@ with charge density: ρ_charge = -e·ρ(r)
 
 **Expected outcome**:
 - Charge radius ∝ 1/√(ξβ) breaks degeneracy
-- β → 3.058 ± 0.02
+- β → 3.043233053 ± 0.02
 - ξ, τ uniquely determined
 
 ### Alternative: Use α-Constraint Directly
 
-**Hypothesis**: Golden Loop's β = 3.058 from α-constraint
+**Hypothesis**: Golden Loop's β = 3.043233053 from α-constraint
 
-If we **fix β = 3.058** and fit only (ξ, τ):
+If we **fix β = 3.043233053** and fit only (ξ, τ):
 ```
-β = 3.058 (FIXED)
+β = 3.043233053 (FIXED)
 ξ ~ ?
 τ ~ ?
 ```
@@ -358,7 +358,7 @@ E_total ≈ 4.0 (arbitrary units)
 
 4. **V22 offset explained**: Effective β_eff = β + c·ξ ≈ 3.15 in both cases
 
-5. **Golden Loop discrepancy**: β ≈ 2.96 vs β_target = 3.058 unresolved
+5. **Golden Loop discrepancy**: β ≈ 2.96 vs β_target = 3.043233053 unresolved
 
 6. **Next step**: Stage 3 with EM functional or fix β via α-constraint
 

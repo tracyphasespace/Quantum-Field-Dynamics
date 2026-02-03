@@ -36,7 +36,7 @@ Error: 0.0002%
 **What this means**:
 
 - Standard Model: m_p/m_e ≈ 1836 is unexplained empirical fact
-- QFD: m_p/m_e = k_geom × β = 4.3813 × 3.058 ≈ 13.4 × 137 ≈ 1836
+- QFD: m_p/m_e = k_geom × β = 4.3813 × 3.043233053 ≈ 13.4 × 137 ≈ 1836
 - **The mass ratio is a geometric leverage ratio!**
 
 ### Physical Interpretation
@@ -44,7 +44,7 @@ Error: 0.0002%
 The proton is NOT a fundamental particle with arbitrary mass.
 The proton is the **vacuum unit cell** - the stiffness scale required for:
 - Electrons (low-density vortices) with α ≈ 1/137
-- Nucleons (high-density solitons) with β ≈ 3.058
+- Nucleons (high-density solitons) with β ≈ 3.043233053
 
 To coexist in the SAME medium with SAME stiffness λ.
 
@@ -356,7 +356,7 @@ The simple Yukawa estimate gives the **wrong magnitude** because it uses the wro
 
 ```
 k_geom = 4.3813
-β      = 3.058230856
+β      = 3.043233053
 k × β  = 13.399
 
 α⁻¹    = 137.036
@@ -387,6 +387,6 @@ The proton (high-density soliton):
 The "4.38β linkage" is the 6D→4D projection factor that couples the two soliton types through the same vacuum medium.
 
 **Standard Model**: "Why 1836? ¯\_(ツ)_/¯"
-**QFD**: "Because k×β×α⁻¹ = 4.38 × 3.058 × 137 = 1836" ✓
+**QFD**: "Because k×β×α⁻¹ = 4.38 × 3.043233053 × 137 = 1836" ✓
 
 This is engineering. This is physics. This is why the Proton Bridge holds.

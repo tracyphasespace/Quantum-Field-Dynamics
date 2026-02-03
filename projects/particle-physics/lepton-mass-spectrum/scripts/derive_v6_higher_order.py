@@ -37,7 +37,7 @@ ALPHA = 1/137.035999177
 HBARC = 197.3269804  # MeV·fm
 
 # QFD parameters
-BETA = 3.058  # From Golden Loop
+BETA = 3.043233053  # From Golden Loop
 XI = 1.0      # From mass fit
 
 # QED coefficients

@@ -29,7 +29,7 @@ Verdict: ✓ β IS entering calculation correctly
 
 #### Test B: Frozen-Parameter Test
 ```
-Method: Optimize at β=3.058, evaluate at other β without re-optimizing
+Method: Optimize at β=3.043233053, evaluate at other β without re-optimizing
 Result: Residual varies by 8.5 MILLION %
 Verdict: ✓ β DOES matter physically (not a plumbing bug)
 ```
@@ -96,7 +96,7 @@ where:
 
 #### Step 3b: Calibration ✓
 
-**Method**: Use known electron solution at β = 3.058 to empirically determine normalization.
+**Method**: Use known electron solution at β = 3.043233053 to empirically determine normalization.
 
 **Calibration** (`calibrate_magnetic_moment.py`):
 ```
@@ -137,7 +137,7 @@ Required normalization = g / μ = 948.0
 - ✓ **Smooth variation**: Objective function shows clear minimum
 
 **Failure metrics**:
-- ✗ **Wrong minimum**: β = 3.200, not β = 3.058 (offset: 0.142)
+- ✗ **Wrong minimum**: β = 3.200, not β = 3.043233053 (offset: 0.142)
 - ✗ **All β work**: 11/11 converged (100% success rate)
 - ✗ **Weak selectivity**: Only factor-of-2 variation
 
@@ -157,7 +157,7 @@ Required normalization = g / μ = 948.0
    - Different scalings (Mass ~ U²R³, μ ~ UR) add information
    - Optimizer finds consistent solutions
 
-3. **But β = 3.058 is NOT validated**:
+3. **But β = 3.043233053 is NOT validated**:
    - Minimum at β = 3.200 (4.6% offset)
    - All β values in range [2.5, 3.5] work
    - No failure mode demonstrated
@@ -171,7 +171,7 @@ Required normalization = g / μ = 948.0
    - May need β-dependence or other terms
 
 2. **Why is the minimum shifted?**:
-   - Expected β = 3.058 (from fine structure constant)
+   - Expected β = 3.043233053 (from fine structure constant)
    - Observed β = 3.200
    - Possible causes:
      - Wrong geometric factor k
@@ -200,7 +200,7 @@ Required normalization = g / μ = 948.0
 
 3. **calibrate_magnetic_moment.py**
    - Empirical calibration of normalization factor
-   - Uses known electron solution at β = 3.058
+   - Uses known electron solution at β = 3.043233053
    - Found: normalization = 948.0 (not 10.0)
 
 4. **test_multi_objective_beta_scan.py** (Option 1)
@@ -252,11 +252,11 @@ Required normalization = g / μ = 948.0
 
 ### Remaining Issues ✗
 
-1. **β minimum shifted** from 3.058 to 3.200
+1. **β minimum shifted** from 3.043233053 to 3.200
 2. **All β values work** (100% success rate)
 3. **Weak selectivity** (only factor-of-2 variation)
 4. **Magnetic moment normalization unclear** (empirical, not theoretical)
-5. **Manuscript claim not validated** (β = 3.058 not uniquely selected)
+5. **Manuscript claim not validated** (β = 3.043233053 not uniquely selected)
 
 ---
 
@@ -274,12 +274,12 @@ Required normalization = g / μ = 948.0
 
 2. **Test sensitivity**:
    - Vary k ∈ [0.15, 0.25] and re-run scan
-   - Check if β minimum shifts toward 3.058
+   - Check if β minimum shifts toward 3.043233053
    - Try β-dependent formula: μ = k(β) × Q × R × U
 
 3. **If successful**:
    - Re-run multi-objective scan with corrected formula
-   - Check if minimum at β ≈ 3.058
+   - Check if minimum at β ≈ 3.043233053
    - Check if variation increases (sharper minimum)
    - Proceed with manuscript
 
@@ -300,7 +300,7 @@ Required normalization = g / μ = 948.0
 
 ### Path C: Manuscript Revision
 
-**If neither Path A nor B restores β = 3.058**:
+**If neither Path A nor B restores β = 3.043233053**:
 
 1. **Weaken claims**:
    - "uniquely determines" → "constrains to β ≈ 3 ± 0.5"
@@ -338,7 +338,7 @@ Required normalization = g / μ = 948.0
 ### Strategic Questions
 
 4. **Manuscript direction**:
-   - Given β minimum at 3.200 (not 3.058), what do you recommend?
+   - Given β minimum at 3.200 (not 3.043233053), what do you recommend?
    - Should we pursue Path A (fix formula) or Path B (add constraint)?
    - Are you comfortable weakening the claim to "compatibility"?
 
@@ -351,14 +351,14 @@ Required normalization = g / μ = 948.0
 
 ## Bottom Line
 
-**Question**: Can we restore β = 3.058 as uniquely selected by the lepton spectrum?
+**Question**: Can we restore β = 3.043233053 as uniquely selected by the lepton spectrum?
 
 **Current Answer**: **PARTIAL** - We've made progress but haven't reached the goal:
 
 | Metric | Before | After Option 1 | Target |
 |--------|--------|---------------|--------|
 | **Objective variation** | <1% | 96.9% | >1000% |
-| **β minimum** | 2.6 | 3.200 | 3.058 |
+| **β minimum** | 2.6 | 3.200 | 3.043233053 |
 | **β success rate** | 81% | 100% | <30% |
 | **Selectivity** | None | Moderate | Sharp |
 

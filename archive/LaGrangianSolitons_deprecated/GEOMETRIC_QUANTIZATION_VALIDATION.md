@@ -561,7 +561,7 @@ for N in range(-3, 4):
 5. ⏳ Derive (c₁₀, Δc₁, ...) from first principles
 
 **Long-term goals**:
-- **Unified theory**: Connect to lepton sector (β=3.058 universality?)
+- **Unified theory**: Connect to lepton sector (β=3.043233053 universality?)
 - **Cosmological implications**: Does N affect nucleosynthesis yields?
 - **Experimental test**: Measure surface oscillation modes directly
 - **Formal proof**: Lean 4 verification of mathematical structure

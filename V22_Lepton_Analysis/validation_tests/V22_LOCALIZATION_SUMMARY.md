@@ -190,13 +190,13 @@ Tying R_v to existing geometry ensures:
 ### Run 2 (e,μ regression) - Expected
 
 If localization is correct:
-- β_min ≈ 3.058 (validates Golden Loop)
+- β_min ≈ 3.043233053 (validates Golden Loop)
 - χ² ~ O(1-10) (good fit)
 - S_e/S_μ ≈ 1.0 (universal scaling)
 - F_inner ≈ 98% for both e, μ
 
 If localization breaks something:
-- β_min drifts from 3.058
+- β_min drifts from 3.043233053
 - χ² increases
 - S_e/S_μ ≠ 1 (regime split persists)
 
@@ -238,7 +238,7 @@ Localization breaks light leptons:
 
 Success! Publish:
 - "Lepton masses from localized quantum fluid vortices"
-- β = 3.058 validated
+- β = 3.043233053 validated
 - τ anomaly resolved by localization
 - No new physics terms needed
 

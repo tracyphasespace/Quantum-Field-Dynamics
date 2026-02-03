@@ -213,7 +213,7 @@ V₄(R) = -ξ/β + (e/2π) · Ĩ_circ · (R_ref/R)²
 
 where ALL parameters are derived:
   ξ = 1 (gradient stiffness, fundamental)
-  β = 3.058 (compression stiffness, from Golden Loop α⁻¹)
+  β = 3.043233053 (compression stiffness, from Golden Loop α⁻¹)
   e/(2π) = 0.4326 (geometric constant, from Euler's number)
   Ĩ_circ = 9.4 (universal Hill vortex integral)
   R_ref = 1 fm (QCD vacuum scale)
@@ -225,7 +225,7 @@ where ALL parameters are derived:
 
 1. **QED is emergent**: The vertex correction C₂ = -0.328 arises from vortex compression of vacuum
 
-2. **Fine structure is geometric**: α⁻¹ = 137.036 sets vacuum stiffness β = 3.058
+2. **Fine structure is geometric**: α⁻¹ = 137.036 sets vacuum stiffness β = 3.043233053
 
 3. **Generations are scale**: Electron, muon, tau are the same vortex at different R
 

@@ -11,7 +11,7 @@ Key Questions:
 3. Do all three leptons co-occur in the same β window?
 
 Expected Outcome:
-- Solutions should exist only in narrow window around β ≈ 3.058
+- Solutions should exist only in narrow window around β ≈ 3.043233053
 - Deep minimum in residual vs β
 - All three generations converge simultaneously only near inferred β
 
@@ -188,7 +188,7 @@ def run_beta_scan(beta_min=2.5, beta_max=3.5, num_points=51):
 
     This is the critical test: if solutions exist for all β,
     then the claim is trivial. If they exist only in a narrow
-    window around the inferred β ≈ 3.058, that's evidence.
+    window around the inferred β ≈ 3.043233053, that's evidence.
 
     Args:
         beta_min: Minimum β value
@@ -301,7 +301,7 @@ def print_summary(results):
 
         print(f"\n✓ β window where all leptons exist: [{beta_min_converged:.3f}, {beta_max_converged:.3f}]")
         print(f"  Width: Δβ = {beta_width:.3f}")
-        print(f"  Relative width: Δβ/β ≈ {beta_width/3.058 * 100:.1f}%")
+        print(f"  Relative width: Δβ/β ≈ {beta_width/3.043233053 * 100:.1f}%")
     else:
         print("\n✗ WARNING: No β value where all three leptons converge!")
         print("  This suggests the model may not be physical.")
@@ -327,7 +327,7 @@ if __name__ == "__main__":
     print("="*60)
     print("\nThis test answers:")
     print("  1. Do stable vortex solutions exist for all β?")
-    print("  2. Is there a unique minimum at the inferred β ≈ 3.058?")
+    print("  2. Is there a unique minimum at the inferred β ≈ 3.043233053?")
     print("  3. Do all three leptons co-occur only in a narrow window?")
     print("\nThis is the CRITICAL TEST for falsifiability.")
     print("="*60)

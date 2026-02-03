@@ -3,7 +3,7 @@
 Profile Likelihood in β with Radius Constraint
 
 Purpose: Test whether adding RMS radius as a second geometric observable
-         (independent of EM coupling) shifts β_min from ~3.15 toward 3.058.
+         (independent of EM coupling) shifts β_min from ~3.15 toward 3.043233053.
 
 Method:
 - For each β on a dense grid:
@@ -15,7 +15,7 @@ Constraints (6 total):
 - 3 masses: |E_total,ℓ - m_ℓ| / (σ_m,model · m_ℓ)
 - 3 radius: |m_ℓ·R_rms,ℓ - κ_opt| / (σ_κ)
 
-Success mode: β_min shifts toward 3.058, κ stable, G_τ/G_e ~ O(1)
+Success mode: β_min shifts toward 3.043233053, κ stable, G_τ/G_e ~ O(1)
 Failure mode: β_min remains ~3.15, tau cannot satisfy radius constraint,
               G_τ/G_e >> 1 (pathological boundary)
 """
@@ -265,7 +265,7 @@ def profile_likelihood_with_radius(
 
     return {
         'test': 'Profile Likelihood in β with Radius Constraint',
-        'purpose': 'Test if geometric constraint shifts β_min toward 3.058',
+        'purpose': 'Test if geometric constraint shifts β_min toward 3.043233053',
         'beta_range': [float(beta_grid[0]), float(beta_grid[-1])],
         'num_points': len(beta_grid),
         'theory_uncertainties': {
@@ -322,11 +322,11 @@ def analyze_profile_likelihood_with_radius(data):
     print(f"  G_τ / G_e = {G_ratio_at_min:.2f}")
 
     # Comparison to Golden Loop
-    offset = abs(beta_min - 3.058)
+    offset = abs(beta_min - 3.043233053)
     print(f"\nβ minimum vs expected:")
     print(f"  Observed: {beta_min:.6f}")
-    print(f"  Expected: 3.058000")
-    print(f"  Offset: {offset:.6f} ({offset/3.058*100:.2f}%)")
+    print(f"  Expected: 3.043233053")
+    print(f"  Offset: {offset:.6f} ({offset/3.043233053*100:.2f}%)")
 
     if offset < 0.01:
         print(f"  ✓ Within 1% of expected value")
@@ -352,7 +352,7 @@ def analyze_profile_likelihood_with_radius(data):
         print(f"  → Curvature/geometry constraint resolved the offset")
         print(f"  → Mechanism test: SUCCESS")
     else:
-        print(f"\n✗ β STILL OFFSET FROM 3.058")
+        print(f"\n✗ β STILL OFFSET FROM 3.043233053")
         print(f"  → Missing curvature energy is not the only discrepancy")
         print(f"  → Additional closure refinement needed")
 

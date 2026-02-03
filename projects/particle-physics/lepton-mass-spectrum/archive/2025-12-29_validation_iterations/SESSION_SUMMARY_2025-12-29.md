@@ -137,7 +137,7 @@ V₄(R) = -ξ/β + (e/2π) · Ĩ_circ · (R_ref/R)²
 
 All parameters derived:
   ξ = 1.0 (gradient stiffness, from mass fit)
-  β = 3.058 (compression stiffness, from Golden Loop/α)
+  β = 3.043233053 (compression stiffness, from Golden Loop/α)
   e/(2π) = 0.4326 (geometric constant, Euler/circumference)
   Ĩ_circ ≈ 9.4 (universal Hill vortex integral)
   R_ref = 1 fm (QCD vacuum scale)
@@ -158,7 +158,7 @@ All parameters derived:
 - ✓ Logic fortress established
 
 **Layer 2: External Calibration** (Python MCMC)
-- ✓ β = 3.063 ± 0.149 (MCMC) matches β = 3.058 (Golden Loop) to 99.8%
+- ✓ β = 3.063 ± 0.149 (MCMC) matches β = 3.043233053 (Golden Loop) to 99.8%
 - ✓ Mass spectrum reproduced to < 0.1% for all leptons
 - ✓ Parameters well-constrained (β-ξ correlation = 0.008)
 
@@ -448,7 +448,7 @@ feat: V₆ and α_circ analysis - dimensional resolution
 
 > "The QED coefficient C₂ = -0.328, previously known only through Feynman diagram calculations, is shown to arise from the vacuum stiffness ratio ξ/β with 0.45% accuracy. This suggests quantum electrodynamics is not fundamental, but emergent from classical fluid dynamics of the quantum vacuum."
 
-> "Three numbers - β = 3.058, e/(2π) = 0.433, Ĩ_circ = 9.4 - derived from vacuum geometry, reproduce the muon g-2 anomaly from first principles without new physics."
+> "Three numbers - β = 3.043233053, e/(2π) = 0.433, Ĩ_circ = 9.4 - derived from vacuum geometry, reproduce the muon g-2 anomaly from first principles without new physics."
 
 ---
 

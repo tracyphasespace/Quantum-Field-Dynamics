@@ -67,7 +67,7 @@ Q(A) = c₁ · A^(2/3) + c₂ · A
 ### c₂ ≈ 1/β Connection
 
 **Observation**:
-- β = 3.058 (vacuum stiffness from Golden Loop)
+- β = 3.043233053 (vacuum stiffness from Golden Loop)
 - 1/β = 0.327
 - c₂ (empirical Z/A fit) = 0.312
 - **Error: 4.59%**

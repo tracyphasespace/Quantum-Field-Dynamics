@@ -6,7 +6,7 @@
 |----------|--------|-------|
 | Fine structure α | Experimental constant 1/137.035999 | Input to the Golden Loop |
 | c₁, c₂ nuclear coefficients | Fit to NuMass.csv (5 842 nuclides) | Produced by `projects/particle-physics/nuclide-prediction` |
-| β = 3.058230856 | Derived in `FineStructure.lean` from α, c₁, c₂ | Depends on the global nuclide fit |
+| β = 3.043233053 | Derived in `FineStructure.lean` from α, c₁, c₂ | Depends on the global nuclide fit |
 | ξ, τ | Inferred by fitting Hill-vortex energy functional to lepton masses (Stage 2 MCMC) | ≈ 1 after Compton-scale correction |
 | α_circ | Currently calibrated from the muon g−2 run; converges to ≈ e/(2π) | Goal: derive directly from geometry |
 
@@ -19,7 +19,7 @@
 ## What is calibrated vs checked
 
 - **Spin:** Matches ℏ/2 after setting β, ξ, τ, and R; demonstrates self-consistency.
-- **g−2:** \(V_4 = -ξ/β\) gives −0.327 when ξ = 1, β = 3.058 (Schwinger’s value). The muon anomaly match requires tuning α_circ. Neither is yet parameter-free.
+- **g−2:** \(V_4 = -ξ/β\) gives −0.327 when ξ = 1, β = 3.043233053 (Schwinger’s value). The muon anomaly match requires tuning α_circ. Neither is yet parameter-free.
 - **Tau regime:** Requires higher-order terms (V₆); unresolved.
 
 ## Strengths

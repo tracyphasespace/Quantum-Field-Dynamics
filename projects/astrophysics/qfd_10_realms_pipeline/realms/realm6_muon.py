@@ -3,7 +3,7 @@ Realm 6: Muon Mass from Hill Vortex Quantization
 
 Purpose:
   - Test whether β from fine structure constant α (same as electron) supports muon mass solution
-  - Uses validated V22 Hill vortex solver with β = 3.058230856 FIXED (no retuning!)
+  - Uses validated V22 Hill vortex solver with β = 3.043233053 FIXED (no retuning!)
   - Optimizes geometric parameters (R, U, amplitude) to match m_μ/m_e = 206.768283
 
 Key Physics:
@@ -38,7 +38,7 @@ from scipy.integrate import simps
 
 # Physical constants (dimensionless units)
 RHO_VAC = 1.0  # Normalized vacuum density
-BETA_FROM_ALPHA = 3.058230856  # From fine structure constant (Golden Loop)
+BETA_FROM_ALPHA = 3.043233053  # From fine structure constant (Golden Loop)
 
 # Muon mass ratio
 MUON_ELECTRON_MASS_RATIO = 206.768283  # PDG 2024
@@ -316,7 +316,7 @@ def optimize_muon_geometry(cfg: MuonConfig, electron_params: Dict = None) -> Dic
 
 def run(params: Dict[str, Any], cfg: MuonConfig = None) -> Dict[str, Any]:
     """
-    Realm 6 main execution: Muon mass from β = 3.058 (same as electron).
+    Realm 6 main execution: Muon mass from β = 3.043233053 (same as electron).
 
     Args:
         params: Parameter registry from previous realms

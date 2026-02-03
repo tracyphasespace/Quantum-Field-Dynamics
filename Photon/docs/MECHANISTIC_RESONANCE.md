@@ -2,7 +2,7 @@
 
 **Date**: 2026-01-03
 **Status**: Specification for Lean formalization
-**Foundation**: Emergent constants (L₀ = 0.125 fm, Γ = 1.6919, β = 3.058)
+**Foundation**: Emergent constants (L₀ = 0.125 fm, Γ = 1.6919, β = 3.043233053)
 
 ---
 
@@ -11,7 +11,7 @@
 Photon absorption is not a probabilistic event but a **mechanical gear-meshing process** with tolerances determined by:
 1. **L₀ = 0.125 fm**: Vacuum grid spacing → packet length quantization
 2. **Γ = 1.6919**: Vortex shape factor → vibrational capacity
-3. **β = 3.058**: Vacuum stiffness → damping rate
+3. **β = 3.043233053**: Vacuum stiffness → damping rate
 
 This unifies Rayleigh, Raman, and fluorescence scattering under one mechanistic framework.
 
@@ -172,7 +172,7 @@ E_max_wobble = Γ * E_gap ≈ 1.69 * E_gap
 
 **Testable**: Maximum Stokes shift should be ~70% of excitation energy
 
-### β = 3.058 Sets Damping Rate
+### β = 3.043233053 Sets Damping Rate
 
 **Vibration decay to lattice**:
 ```
@@ -192,7 +192,7 @@ E_max_wobble = Γ * E_gap ≈ 1.69 * E_gap
 structure QFDEmergentConstants where
   L₀ : ℝ := 0.125e-15  -- vacuum grid spacing (m)
   Γ_vortex : ℝ := 1.6919  -- Hill Vortex shape factor
-  β : ℝ := 3.058  -- vacuum stiffness
+  β : ℝ := 3.043233053  -- vacuum stiffness
 
 def PacketLength (n : ℕ) (M : QFDEmergentConstants) : ℝ :=
   n * M.L₀
@@ -281,7 +281,7 @@ E_Stokes_max / E_gap ≈ 0.69  (69% energy loss to vibration)
 
 ### Nuclear Sector
 - L₀ = 0.125 fm sets nucleon hard core
-- β = 3.058 determines binding energy scale
+- β = 3.043233053 determines binding energy scale
 
 ### Lepton Sector  
 - Γ = 1.6919 from Hill Vortex (electron structure)
@@ -316,7 +316,7 @@ E_Stokes_max / E_gap ≈ 0.69  (69% energy loss to vibration)
 ---
 
 **Status**: Framework specified, ready for Lean formalization  
-**Foundation**: Emergent constants validated (L₀ = 0.125 fm, Γ = 1.6919, β = 3.058)  
+**Foundation**: Emergent constants validated (L₀ = 0.125 fm, Γ = 1.6919, β = 3.043233053)  
 **Goal**: Unified mechanistic scattering theory with zero free parameters
 
 *Absorption is not probability - it's geometry.* 🔧

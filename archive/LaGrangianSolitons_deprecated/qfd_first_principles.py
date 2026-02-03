@@ -6,7 +6,7 @@ Using the correct derivation chain from QFD Parameter Table.
 
 FUNDAMENTAL CONSTANTS (locked by Golden Loop):
     alpha_fine   = 1/137.036  (fine structure constant)
-    beta_vacuum  = 1/3.058    (vacuum stiffness)
+    beta_vacuum  = 1/3.043233053    (vacuum stiffness)
 
 DERIVED CONSTANTS:
     M_proton     = 938.272 MeV (mass scale λ)
@@ -29,7 +29,7 @@ import numpy as np
 # ============================================================================
 
 alpha_fine   = 1.0 / 137.036        # Fine structure constant
-beta_vacuum  = 1.0 / 3.058          # Vacuum stiffness
+beta_vacuum  = 1.0 / 3.043233053          # Vacuum stiffness
 M_proton     = 938.272              # Proton mass (MeV) - the λ mass scale
 
 # ============================================================================

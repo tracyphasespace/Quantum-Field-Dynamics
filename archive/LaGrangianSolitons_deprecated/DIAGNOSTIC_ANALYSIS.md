@@ -1,10 +1,10 @@
 # Missing Physics Diagnostic Analysis
 **Date**: 2025-12-31
-**Method**: Fixed β=3.058 sweep across periodic table
+**Method**: Fixed β=3.043233053 sweep across periodic table
 
 ## Executive Summary
 
-**VERDICT**: The pure soliton model with β=3.058 **fails catastrophically** across the entire periodic table.
+**VERDICT**: The pure soliton model with β=3.043233053 **fails catastrophically** across the entire periodic table.
 
 - **Low A (≤16)**: Missing 26-224 MeV of binding (rotational/winding energy)
 - **High A (≥40)**: Missing 1,000-25,000 MeV of binding (exponential failure)
@@ -62,7 +62,7 @@ Expected scaling: Δ ~ 1/A^(5/3)
 2. **Pairing Energy**: Nucleons pair, reducing energy
 3. **Surface Tension**: Discrete surface vs continuous field
 
-**This regime shows β=3.058 might work IF we add correction terms**
+**This regime shows β=3.043233053 might work IF we add correction terms**
 
 ### Domain 3: High A (Saturation Regime, A ≥ 120)
 
@@ -73,7 +73,7 @@ Expected scaling: Δ ~ 1/A^(5/3)
 2. **Coulomb Barrier**: Z²/A^(1/3) grows, overwhelming attractive potential
 3. **Surface Dominance**: Volume binding saturates, surface costs dominate
 
-**This regime indicates β=3.058 is fundamentally WRONG for heavy nuclei**
+**This regime indicates β=3.043233053 is fundamentally WRONG for heavy nuclei**
 
 ## Critical Findings
 
@@ -97,7 +97,7 @@ This diagnostic confirms:
 
 **Root cause**: The SCF solver finds repulsive branch for ALL isotopes.
 
-### 3. β=3.058 is NOT Universal
+### 3. β=3.043233053 is NOT Universal
 
 If β were universal, middle A should match experiment. Instead:
 - Fe-56: Off by factor of 4.8x
@@ -105,17 +105,17 @@ If β were universal, middle A should match experiment. Instead:
 
 **Conclusion**: Either:
 - β must be A-dependent: β(A)
-- OR β=3.058 is ONLY valid for a specific A range (maybe A ≈ 1-4?)
+- OR β=3.043233053 is ONLY valid for a specific A range (maybe A ≈ 1-4?)
 - OR the entire V4 potential formulation is wrong
 
 ## Proposed Path Forward
 
 ### Option A: Add Missing Lagrangian Terms (Pragmatic)
 
-Keep β=3.058 as the "vacuum stiffness" but add corrections:
+Keep β=3.043233053 as the "vacuum stiffness" but add corrections:
 
 ```python
-E_total = E_vacuum(β=3.058) + E_rotor(A, J) + E_shell(Z, N) + E_saturation(A)
+E_total = E_vacuum(β=3.043233053) + E_rotor(A, J) + E_shell(Z, N) + E_saturation(A)
 ```
 
 Where:

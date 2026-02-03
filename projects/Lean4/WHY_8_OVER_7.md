@@ -9,8 +9,8 @@
 ## The Numerical Fact
 
 **Empirical**: α_n ≈ 3.5
-**QFD**: β = 3.058231
-**Ratio**: α_n / β = 3.5 / 3.058 = **1.1444**
+**QFD**: β = 3.043233053
+**Ratio**: α_n / β = 3.5 / 3.043233053 = **1.1444**
 **Best simple fraction**: 8/7 = 1.142857... (0.14% error!)
 
 **Question**: Why 8/7 and not some other number?

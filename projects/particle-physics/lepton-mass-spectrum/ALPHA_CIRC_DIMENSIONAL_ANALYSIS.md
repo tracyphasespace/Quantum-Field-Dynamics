@@ -245,7 +245,7 @@ V₄(R) = -ξ/β + (e/2π) · Ĩ_circ · (R_ref/R)²
 
 where:
   ξ = 1.0 (gradient stiffness)
-  β = 3.058 (compression stiffness, from Golden Loop)
+  β = 3.043233053 (compression stiffness, from Golden Loop)
   e/2π = 0.4326 (geometric constant)
   Ĩ_circ ≈ 9.4 (universal geometric integral)
   R_ref = 1 fm (QCD vacuum scale)
@@ -306,7 +306,7 @@ V₄ = -0.327 + 0.433 · 9.4 · 81 = 332 ✗ Divergent
    - All generation effects from (R_ref/R)² scaling
 
 3. **No Free Parameters**:
-   - β = 3.058 from fine structure (Golden Loop)
+   - β = 3.043233053 from fine structure (Golden Loop)
    - e/2π = 0.4326 from geometric analysis
    - Ĩ_circ = 9.4 from Hill vortex integral
    - R_ref = 1 fm from QCD vacuum physics

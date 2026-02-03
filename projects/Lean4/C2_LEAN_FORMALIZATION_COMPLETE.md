@@ -61,7 +61,7 @@ Status: PRODUCTION READY
    **Next step**: Replace axioms with full calculus derivation.
 
 7. **Numerical Validation** (lines 255-280)
-   - `β_golden`: 3.058230856
+   - `β_golden`: 3.043233053
    - `c2_theoretical`: 1/β = 0.327
    - `c2_empirical`: 0.324
    - ✅ `c2_validates_within_one_percent`: |c₂_theory - c₂_emp| < 1%
@@ -132,7 +132,7 @@ Status: PRODUCTION READY
 ### ✅ `c2_validates_within_one_percent` (Proven)
 
 **Input**:
-- β = 3.058230856 (Golden Loop)
+- β = 3.043233053 (Golden Loop)
 - c₂ (theoretical) = 1/β = 0.327
 - c₂ (empirical) = 0.324 (from 2,550 nuclei)
 
@@ -277,7 +277,7 @@ Status: BUILD SUCCESSFUL ✅
 - One of ~12 fit parameters
 
 **QFD Framework**:
-- β = 3.058 (vacuum stiffness)
+- β = 3.043233053 (vacuum stiffness)
 - Separate from nuclear sector
 - No direct connection proven
 
@@ -302,7 +302,7 @@ Status: BUILD SUCCESSFUL ✅
 ### Before c₂ Derivation
 
 **Locked**: 9/17 parameters (53%)
-- β = 3.058 (Golden Loop)
+- β = 3.043233053 (Golden Loop)
 - λ ≈ m_p (Proton Bridge - 0.0002%)
 - ξ, τ ≈ 1 (order unity)
 - α_circ = e/(2π) (topology)

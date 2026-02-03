@@ -47,7 +47,7 @@ This is the **single source of truth** for QFD validation status. All claims are
 
 **Results**:
 ```
-QFD prediction:  V₄ = -ξ/β = -1.0/3.058 = -0.327
+QFD prediction:  V₄ = -ξ/β = -1.0/3.043233053 = -0.327
 QED calculation: A₂ = -0.328479 (from perturbation theory)
 Error: 0.45%
 ```
@@ -119,7 +119,7 @@ Vary β, verify ℏ/√β remains constant (tests algebra + code consistency)
 **Results**:
 ```
 β = 1.0   → ℏ/√β = 0.05714
-β = 3.058 → ℏ/√β = 0.05714
+β = 3.043233053 → ℏ/√β = 0.05714
 β = 10.0  → ℏ/√β = 0.05714
 (constant to machine precision across all test values)
 ```
@@ -257,7 +257,7 @@ Result: L₀ = 0.125 fm (computed from known ℏ_SI)
 where:
   c₁ = 0.529 (nuclear surface tension, empirical)
   c₂ = 0.317 (nuclear volume packing, empirical)
-  β = 3.058 (vacuum stiffness, from fits)
+  β = 3.043233053 (vacuum stiffness, from fits)
 ```
 
 **Results**:
@@ -328,7 +328,7 @@ These are **not yet resolved** and represent the current frontier.
 ### D1. Ab Initio Derivation of β and ρ
 
 **The Problem**:
-Currently, β = 3.058 is determined by:
+Currently, β = 3.043233053 is determined by:
 - Fitting lepton masses (3 parameters → 3 targets)
 - Or inferring from nuclear data (c₁, c₂)
 - Or matching to α via nuclear bridge

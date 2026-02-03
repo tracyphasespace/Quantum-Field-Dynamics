@@ -2,7 +2,7 @@
 """
 OPTIMIZE EMPIRICAL Z FORMULA COEFFICIENTS
 ===========================================================================
-User's formula: Z = 0.529 × A^(2/3) + (1/3.058) × A
+User's formula: Z = 0.529 × A^(2/3) + (1/3.043233053) × A
 
 This gave 59/285 (20.7%) with mean error +1.547 (overpredicts by ~1.5)
 
@@ -60,7 +60,7 @@ print("="*95)
 print()
 
 c1_user = 0.529
-c2_user = 1.0 / 3.058231
+c2_user = 1.0 / 3.043233053
 c3_user = 0.0
 
 matches_user = count_exact_matches([c1_user, c2_user, c3_user])

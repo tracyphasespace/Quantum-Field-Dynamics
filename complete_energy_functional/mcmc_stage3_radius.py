@@ -14,7 +14,7 @@ Observables:
 1. Lepton masses: m_e, m_μ, m_τ
 2. Electron charge radius: ⟨r²⟩_e^1/2 ≈ 0.84 fm
 
-Hypothesis: R constraint will collapse "banana" → β → 3.058
+Hypothesis: R constraint will collapse "banana" → β → 3.043233053
 """
 
 import numpy as np
@@ -190,7 +190,7 @@ def log_prior(params):
     """
     Prior for (β, ξ, τ, R_e).
 
-    β ~ Normal(3.058, 0.15)           # From α-constraint
+    β ~ Normal(3.043233053, 0.15)           # From α-constraint
     ξ ~ LogNormal(0, 0.5)             # Gradient stiffness
     τ ~ LogNormal(0, 0.5)             # Temporal stiffness
     R_e ~ Normal(R_exp, σ_R)          # Charge radius (in natural units)
@@ -198,7 +198,7 @@ def log_prior(params):
     beta, xi, tau, R_e = params
 
     # β prior
-    beta_mean = 3.058
+    beta_mean = 3.043233053
     beta_std = 0.15
     lp_beta = -0.5 * ((beta - beta_mean) / beta_std)**2
 
@@ -316,7 +316,7 @@ def run_stage3_mcmc(
     print()
 
     # Initialize walkers
-    beta_init = 3.058
+    beta_init = 3.043233053
     xi_init = 1.0
     tau_init = 1.0
     R_e_init = R_ELECTRON_NATURAL  # Natural units
@@ -405,7 +405,7 @@ def analyze_stage3_results(sampler, output_dir='results'):
     # Critical assessment
     beta_median = results['β']['median']
     beta_std = results['β']['std']
-    beta_target = 3.058
+    beta_target = 3.043233053
     beta_offset = abs(beta_median - beta_target)
 
     print("="*70)
@@ -419,7 +419,7 @@ def analyze_stage3_results(sampler, output_dir='results'):
     print()
 
     if beta_offset < 0.02:
-        print("✅ SUCCESS! Radius constraint collapsed banana → β = 3.058!")
+        print("✅ SUCCESS! Radius constraint collapsed banana → β = 3.043233053!")
         print("   Degeneracy BROKEN by hard length scale!")
         result = "success"
     elif beta_offset < 0.05:
@@ -442,7 +442,7 @@ def analyze_stage3_results(sampler, output_dir='results'):
     fig = corner.corner(
         samples_plot,
         labels=labels,
-        truths=[3.058, 1.0, 1.0, R_ELECTRON_EXP],
+        truths=[3.043233053, 1.0, 1.0, R_ELECTRON_EXP],
         quantiles=[0.16, 0.5, 0.84],
         show_titles=True,
         title_fmt='.3f'

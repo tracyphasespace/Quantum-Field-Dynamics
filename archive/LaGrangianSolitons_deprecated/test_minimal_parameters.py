@@ -31,7 +31,7 @@ import itertools
 
 # Fundamental constants (truly locked)
 alpha_fine = 1.0 / 137.036
-beta_vacuum = 1.0 / 3.058231
+beta_vacuum = 1.0 / 3.043233053
 M_proton = 938.272
 
 # Parameters to test
@@ -290,7 +290,7 @@ print()
 
 print("TRULY FUNDAMENTAL (cannot be changed):")
 print("  • α = 1/137.036 (fine structure constant)")
-print("  • β = 1/3.058231 (vacuum stiffness)")
+print("  • β = 1/3.043233053 (vacuum stiffness)")
 print("  • M_proton = 938.272 MeV")
 print()
 

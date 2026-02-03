@@ -155,7 +155,7 @@ def current_parameters : List Coupling := [
   { name := "beta",
     source := "derived",
     description := "Vacuum stiffness (from α, c₁, c₂ via FineStructure.lean)",
-    default_value := 3.058 },
+    default_value := 3.043233053 },
 
   -- FITTED TO LEPTON MASSES
   { name := "xi",

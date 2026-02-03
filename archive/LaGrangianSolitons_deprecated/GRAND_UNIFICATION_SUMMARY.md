@@ -322,7 +322,7 @@ Where:
 ```
 
 **These coefficients may connect to**:
-- β = 3.058 (vacuum stiffness from V22 lepton analysis)
+- β = 3.043233053 (vacuum stiffness from V22 lepton analysis)
 - α = 1/137.036 (fine structure constant)
 - Nuclear binding energy coefficients (c₂/c₁ ratio)
 

@@ -24,13 +24,13 @@ These are the **primary figures for the manuscript body** matching your captions
   - Panel A: Density profile ρ(r) showing vacuum floor and vortex core
   - Panel B: Streamlines in cross-section with circulation velocity
 - **Caption**:
-  > Density profile and streamlines of the stable Hill Spherical Vortex solution for the electron mass state. The solution exists at the intersection of the Virial Theorem constraint (stability) and the Mass constraint (energy), governed by the vacuum stiffness β = 3.058.
+  > Density profile and streamlines of the stable Hill Spherical Vortex solution for the electron mass state. The solution exists at the intersection of the Virial Theorem constraint (stability) and the Mass constraint (energy), governed by the vacuum stiffness β = 3.043233053.
 
 #### Figure 3: Mass Spectrum Error ✓
 - **File**: `figure3_mass_spectrum.[pdf|png]`
 - **Content**: Bar chart showing relative error for e, μ, τ (log scale)
 - **Caption**:
-  > Relative error of the solved lepton masses compared to CODATA 2018 values. All three generations (e, μ, τ) are reproduced with residuals < 10⁻⁷ using the single fixed stiffness parameter β = 3.058.
+  > Relative error of the solved lepton masses compared to CODATA 2018 values. All three generations (e, μ, τ) are reproduced with residuals < 10⁻⁷ using the single fixed stiffness parameter β = 3.043233053.
 
 #### Figure 4: Scaling Law ✓
 - **File**: `figure4_scaling_law.[pdf|png]`
@@ -42,7 +42,7 @@ These are the **primary figures for the manuscript body** matching your captions
 - **File**: `figure5_cross_sector.[pdf|png]`
 - **Content**: Horizontal error bars comparing β from particle, nuclear, CMB
 - **Caption**:
-  > Comparison of the Vacuum Stiffness parameter (β) derived from three independent physical sectors: Nuclear Stability (β = 3.1 ± 0.1), Cosmic Microwave Background morphology (β = 3.1 ± 0.15), and the Lepton Mass Spectrum (β = 3.058 ± 0.012). The overlap suggests a unified vacuum geometry across 40 orders of magnitude in scale.
+  > Comparison of the Vacuum Stiffness parameter (β) derived from three independent physical sectors: Nuclear Stability (β = 3.1 ± 0.1), Cosmic Microwave Background morphology (β = 3.1 ± 0.15), and the Lepton Mass Spectrum (β = 3.043233053 ± 0.012). The overlap suggests a unified vacuum geometry across 40 orders of magnitude in scale.
 
 ---
 
@@ -239,7 +239,7 @@ leptons ($e$, $\mu$, $\tau$) as geometric resonances of the vacuum.}
 \includegraphics[width=\columnwidth]{figures/figure3_mass_spectrum.pdf}
 \caption{Relative error of the solved lepton masses compared to CODATA 2018
 values. All three generations are reproduced with residuals $< 10^{-7}$ using
-the single fixed stiffness parameter $\beta = 3.058$.}
+the single fixed stiffness parameter $\beta = 3.043233053$.}
 \label{fig:mass_spectrum}
 \end{figure}
 ```

@@ -30,7 +30,7 @@
 | 4 | α_n | (8/7)β | 3.495 | 3.5 | 0.14% | AlphaNDerivation |
 | 5 | β_n | (9/7)β | 3.932 | 3.9 | 0.82% | BetaNGammaEDerivation |
 | 6 | γ_e | (9/5)β | 5.505 | 5.5 | 0.09% | BetaNGammaEDerivation |
-| 7 | V₄_nuc | β | 3.058 | N/A | — | QuarticStiffness |
+| 7 | V₄_nuc | β | 3.043233053 | N/A | — | QuarticStiffness |
 
 **Total theorems proven**: 85 main theorems + helper lemmas ≈ 100 total
 
@@ -85,7 +85,7 @@ Validates that 5 and 7 form consistent structure!
 ```
 α = 1/137.036 (EM fine structure)
   ↓ Golden Loop Constraint
-β = 3.058231 (vacuum bulk modulus)
+β = 3.043233053 (vacuum bulk modulus)
   ↓
   ├─→ Proton Bridge
   │   └─→ λ = m_p = 938.272 MeV
@@ -96,7 +96,7 @@ Validates that 5 and 7 form consistent structure!
   │
   ├─→ Direct Properties (no denominators)
   │   ├─→ c₂ = 1/β = 0.327
-  │   └─→ V₄_nuc = β = 3.058
+  │   └─→ V₄_nuc = β = 3.043233053
   │
   ├─→ QCD Sector (denominator 7)
   │   ├─→ α_n = (8/7) × β = 3.495
@@ -157,7 +157,7 @@ Validates that 5 and 7 form consistent structure!
 
 ### Priority 1: V₄_nuc Numerical Validation
 
-- Simulate soliton with V₄_nuc = 3.058
+- Simulate soliton with V₄_nuc = 3.043233053
 - Check ρ₀ ≈ 0.16 fm⁻³ emerges
 - Check B/A ≈ 8 MeV emerges
 - Timeline: 1-2 weeks

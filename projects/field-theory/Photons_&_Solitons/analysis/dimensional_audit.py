@@ -103,7 +103,7 @@ def dimensional_audit():
     # 7. THE √β CONNECTION
     print("\n[7] THE √β CONNECTION")
 
-    beta = 3.058
+    beta = 3.043233053
     c_emergent = np.sqrt(beta)
 
     print(f"    From vacuum stiffness: c_emergent = √β = {c_emergent:.4f}")

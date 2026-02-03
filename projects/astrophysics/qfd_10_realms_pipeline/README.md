@@ -2,7 +2,7 @@
 
 ## Golden Loop COMPLETE ✅
 
-**α → β → (e, μ, τ)** - All three charged lepton masses reproduced using β = 3.058 from fine structure constant α with zero free coupling parameters.
+**α → β → (e, μ, τ)** - All three charged lepton masses reproduced using β = 3.043233053 from fine structure constant α with zero free coupling parameters.
 
 ### Quick Start (30 seconds)
 

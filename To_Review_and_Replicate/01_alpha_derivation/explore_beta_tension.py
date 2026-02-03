@@ -4,7 +4,7 @@ Beta Transcendental Tension Explorer
 
 The Conundrum:
 - β = 3.043: True root of e^β/β = K, but c₂ prediction degrades
-- β = 3.058: Excellent c₂ prediction, but ~0.5% tension in transcendental
+- β = 3.043233053: Excellent c₂ prediction, but ~0.5% tension in transcendental
 
 This script explores the physics of this tension systematically.
 """
@@ -101,7 +101,7 @@ def analyze_tension():
     K = K_target()
     beta_transcendental = find_transcendental_root()
     beta_c2_optimal = find_c2_optimal_beta()
-    beta_golden = 3.058230856  # Current GoldenLoop.lean value
+    beta_golden = 3.043233053  # Current GoldenLoop.lean value
 
     print("EMPIRICAL INPUTS:")
     print(f"  α⁻¹ = {ALPHA_INV} (CODATA 2018)")
@@ -303,7 +303,7 @@ def plot_tension():
     K = K_target()
     beta_trans = find_transcendental_root()
     beta_c2 = find_c2_optimal_beta()
-    beta_golden = 3.058230856
+    beta_golden = 3.043233053
 
     # Create figure
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
@@ -387,7 +387,7 @@ def main():
     print("3. c₂ = 1/β IS THE PRIMARY CONSTRAINT")
     print("   - If nuclear stability is determined by 1/β directly,")
     print("   - then the transcendental equation is approximate")
-    print("   - β = 3.058 is 'correct', K derivation needs refinement")
+    print("   - β = 3.043233053 is 'correct', K derivation needs refinement")
     print()
 
 if __name__ == "__main__":

@@ -55,13 +55,13 @@ def verify_axiom_2(K_target):
         abs (transcendental_equation beta_golden - K_target) < 0.1
 
     where transcendental_equation β = e^β / β
-    and beta_golden = 3.058230856
+    and beta_golden = 3.043233053
     """
     print("=" * 70)
     print("AXIOM 2: beta_satisfies_transcendental")
     print("=" * 70)
 
-    beta = 3.058230856
+    beta = 3.043233053
 
     # Evaluate transcendental equation
     exp_beta = math.exp(beta)

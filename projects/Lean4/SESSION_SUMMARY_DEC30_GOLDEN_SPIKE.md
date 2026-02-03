@@ -61,7 +61,7 @@ $$m_p = \lambda = k_{geom} \cdot \frac{m_e}{\alpha}$$
 
 Where:
 - k_geom = 4.3813 · β_crit (geometric integration factor)
-- β_crit = 3.058 (Golden Loop - vacuum bulk modulus)
+- β_crit = 3.043233053 (Golden Loop - vacuum bulk modulus)
 - Precision: |λ_calc - m_p_exp| < 10⁻³¹ kg
 
 **Physical Breakthrough**:
@@ -75,7 +75,7 @@ Where:
 - mass_proton_exp_kg = 1.6726219×10⁻²⁷ kg
 - c1_surface = 0.529251 (from NuBase fit)
 - c2_volume = 0.316743 (from NuBase fit)
-- beta_crit = 3.058230856 (Golden Loop)
+- beta_crit = 3.043233053 (Golden Loop)
 
 **Status**: 1 sorry (numerical verification)
 

@@ -18,7 +18,7 @@ def integrate_hbar():
     # 1. SETUP PARAMETERS (Natural Units)
     # We work in units where R=1 and rho_vac=1 to find the GEOMETRIC FACTOR
     R = 1.0
-    beta = 3.058
+    beta = 3.043233053  # Corrected vacuum stiffness
 
     # Emergent speed of light from previous step
     # c = sqrt(beta/rho)

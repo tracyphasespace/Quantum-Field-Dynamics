@@ -22,7 +22,7 @@ from scipy.optimize import minimize, root_scalar
 import matplotlib.pyplot as plt
 
 # Constants
-BETA = 3.058230856
+BETA = 3.043233053
 HBAR_C = 197.3269804  # MeV·fm
 M_N = 939.0  # MeV (nucleon mass)
 

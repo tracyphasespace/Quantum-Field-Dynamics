@@ -124,7 +124,7 @@ TASK 3: NUCLEAR SECTOR (E_bind from λ) ⏳ PENDING
 CROSS-SECTOR SUMMARY
 ================================================================================
 
-  From ONE parameter (β = 3.058), we predict:
+  From ONE parameter (β = 3.043233053), we predict:
 
   ┌─────────────┬──────────────┬──────────────┬──────────┬────────────┐
   │ Observable  │ Prediction   │ Experiment   │ Error    │ Status     │
@@ -138,7 +138,7 @@ CROSS-SECTOR SUMMARY
 
   β UNIVERSALITY CONFIRMED:
 
-    Same β = 3.058 appears in:
+    Same β = 3.043233053 appears in:
     ✓ Fine structure (FineStructure.lean)
     ✓ Nuclear binding (CoreCompressionLaw.lean)
     ✓ Lepton masses (VacuumParameters.lean)
@@ -160,7 +160,7 @@ THEORETICAL IMPLICATIONS
     - α and m_e are inputs (calibration points)
     - m_p is DERIVED from vacuum geometry
     - λ ≈ m_p is REQUIRED for consistency (0.0002% error)
-    - β = 3.058 is UNIVERSAL across all sectors
+    - β = 3.043233053 is UNIVERSAL across all sectors
 
   Physical picture:
 
@@ -203,7 +203,7 @@ BOTTOM LINE
 
   STATUS:    Grand Solver v1.0-beta VALIDATED ✅
 
-  PROVEN:    β = 3.058 → λ ≈ m_p (0.0002% error)
+  PROVEN:    β = 3.043233053 → λ ≈ m_p (0.0002% error)
 
   REMAINING: Geometric bookkeeping (Cl(3,3) factors)
 

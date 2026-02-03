@@ -23,7 +23,7 @@ E[ρ] = ∫ (-μ²ρ + λρ² + κρ³ + V₄_nuc·ρ⁴) dV
 
 ### The Vacuum Bulk Modulus
 
-**β = 3.058231** (from Golden Loop)
+**β = 3.043233053** (from Golden Loop)
 
 **Physical meaning**: Resistance to vacuum compression
 - Larger β → stiffer vacuum → harder to compress
@@ -159,13 +159,13 @@ E[ρ₀] = -(B/A) × A ≈ -8A MeV
 
 ### Hypothesis 1: V₄_nuc = β (direct)
 
-**Value**: V₄_nuc = 3.058231 (dimensionless)
+**Value**: V₄_nuc = 3.043233053 (dimensionless)
 
 **Check**: Does this prevent over-compression?
 
 **Quartic term at ρ = 1** (scaled):
 ```
-V₄_nuc·ρ⁴ = 3.058 × 1⁴ = 3.058
+V₄_nuc·ρ⁴ = 3.043233053 × 1⁴ = 3.043233053
 ```
 
 **Compared to quadratic**:
@@ -175,7 +175,7 @@ V₄_nuc·ρ⁴ = 3.058 × 1⁴ = 3.058
 
 **If λ ~ 938 MeV** (vacuum stiffness):
 ```
-Ratio: 3.058 / 938 ≈ 0.0033 (quartic much smaller)
+Ratio: 3.043233053 / 938 ≈ 0.0033 (quartic much smaller)
 ```
 
 **Conclusion**: At ρ ~ 1, quartic is small. But at ρ >> 1, quartic dominates ✓
@@ -184,7 +184,7 @@ Ratio: 3.058 / 938 ≈ 0.0033 (quartic much smaller)
 
 ### Hypothesis 2: V₄_nuc = 4πβ
 
-**Value**: V₄_nuc = 4π × 3.058 = 38.4
+**Value**: V₄_nuc = 4π × 3.043233053 = 38.4
 
 **Physical meaning**: Geometric surface factor
 
@@ -199,7 +199,7 @@ V₄_nuc·ρ⁴ = 38.4 × 1 = 38.4
 
 ### Hypothesis 3: V₄_nuc = β²
 
-**Value**: V₄_nuc = (3.058)² = 9.351
+**Value**: V₄_nuc = (3.043233053)² = 9.351
 
 **Physical meaning**: Squared stiffness
 
@@ -212,7 +212,7 @@ V₄_nuc·ρ⁴ = 9.351
 
 ### Hypothesis 4: V₄_nuc = β/(4π)
 
-**Value**: V₄_nuc = 3.058 / (4π) = 0.244
+**Value**: V₄_nuc = 3.043233053 / (4π) = 0.244
 
 **Physical meaning**: Inverse geometric factor
 
@@ -266,7 +266,7 @@ We've derived:
 V₄_nuc ~ (surface factor) × β ~ 4π × β
 ```
 
-**Value**: V₄_nuc = 4πβ = 4π × 3.058 = **38.35**
+**Value**: V₄_nuc = 4πβ = 4π × 3.043233053 = **38.35**
 
 ---
 

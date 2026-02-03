@@ -3,7 +3,7 @@
 DIAGNOSE_MISSING_PHYSICS.py
 
 Objective:
-    Map the failure modes of the "Pure Soliton" model (Beta = 3.058)
+    Map the failure modes of the "Pure Soliton" model (Beta = 3.043233053)
     to identify the specific Lagrangian terms missing at Low A and High A.
 
 Methodology:
@@ -28,7 +28,7 @@ from qfd_solver import Phase8Model, scf_minimize, RotorParams, torch_det_seed
 from qfd_metaopt_ame2020 import M_PROTON
 
 # --- PHYSICS CONSTANTS (The "Golden Coordinates") ---
-BETA_GOLDEN = 3.058231   # From Z.17 Golden Loop derivation
+BETA_GOLDEN = 3.043233053   # From Z.17 Golden Loop derivation
 C4_STIFFNESS = 12.0      # Hard wall backstop (heuristic stability)
 
 # The Targets

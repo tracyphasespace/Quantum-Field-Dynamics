@@ -5,10 +5,10 @@ Test 3: Two-Lepton Fit (e, μ Only)
 Goal: Determine if τ is the sole driver of cross-lepton β drift.
 
 Hypothesis: If τ is the outlier, fitting only (e, μ) should recover
-            β ≈ 3.058 (Golden Loop target from α).
+            β ≈ 3.043233053 (Golden Loop target from α).
 
 Expected outcomes:
-  A) β_eff(e,μ) ≈ 3.058 ± 0.02 → τ is outlier, light leptons validate model
+  A) β_eff(e,μ) ≈ 3.043233053 ± 0.02 → τ is outlier, light leptons validate model
   B) β_eff(e,μ) ≈ 3.15+ → universal issue, model wrong even for light leptons
 """
 
@@ -159,7 +159,7 @@ print("β SCAN: ELECTRON + MUON ONLY")
 print("=" * 70)
 print()
 
-# Scan range (cover theoretical target β ≈ 3.058 and current best β ≈ 3.15)
+# Scan range (cover theoretical target β ≈ 3.043233053 and current best β ≈ 3.15)
 beta_range = (3.00, 3.20)
 n_beta = 21
 
@@ -250,7 +250,7 @@ print("=" * 70)
 print()
 
 # Expected β from Golden Loop
-BETA_TARGET = 3.058
+BETA_TARGET = 3.043233053
 
 # Criteria
 beta_close_to_target = abs(beta_min - BETA_TARGET) < 0.03
@@ -282,7 +282,7 @@ if beta_close_to_target and chi2_reasonable and S_ratio_universal:
     print("  - Consistent with hadronic mass-scale transition")
     print()
     print("Publishable narrative:")
-    print("  'Electron and muon masses confirm β = 3.058 ± 0.02'")
+    print("  'Electron and muon masses confirm β = 3.043233053 ± 0.02'")
     print("  'Tau exhibits systematic 46% energy deficit'")
     print("  'Deviation consistent with charge-circulation → ballast transition'")
     print()

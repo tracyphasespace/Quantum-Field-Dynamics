@@ -50,7 +50,7 @@ def test_echo_beta_enters():
     U = 0.024
     amplitude = 0.90
 
-    beta_values = [2.5, 3.0, 3.058, 3.5, 4.0]
+    beta_values = [2.5, 3.0, 3.043233053, 3.5, 4.0]
 
     print(f"\nFixed parameters: R={R}, U={U}, amplitude={amplitude}")
     print(f"\nβ Value | E_total | E_circ | E_stab | E_stab/β")
@@ -99,7 +99,7 @@ def test_echo_beta_enters():
 
 def test_frozen_parameter():
     """
-    Take optimized parameters at β=3.058 and evaluate residual at other β
+    Take optimized parameters at β=3.043233053 and evaluate residual at other β
     WITHOUT re-optimizing.
 
     If residual changes substantially: β matters, but optimizer reabsorbs it
@@ -108,10 +108,10 @@ def test_frozen_parameter():
     print("\n" + "="*70)
     print("TEST B: Frozen-Parameter Test")
     print("="*70)
-    print("Optimize at β=3.058, then evaluate at other β WITHOUT re-optimizing")
+    print("Optimize at β=3.043233053, then evaluate at other β WITHOUT re-optimizing")
 
-    # First, optimize at β = 3.058
-    beta_ref = 3.058
+    # First, optimize at β = 3.043233053
+    beta_ref = 3.043233053
     target_mass = ELECTRON_MASS
 
     print(f"\nStep 1: Optimize electron at β = {beta_ref}")
@@ -143,7 +143,7 @@ def test_frozen_parameter():
     print(f"\nβ Value | E_total | Residual | Residual/Ref")
     print("-" * 70)
 
-    beta_test_values = [2.5, 2.75, 3.0, 3.058, 3.25, 3.5]
+    beta_test_values = [2.5, 2.75, 3.0, 3.043233053, 3.25, 3.5]
 
     results = []
     residual_ref = None
@@ -220,7 +220,7 @@ def test_restricted_refit():
     print(f"Fixed: R={R_fixed}, U={U_fixed}")
     print(f"Only amplitude varies with β\n")
 
-    beta_values = [2.5, 2.75, 3.0, 3.058, 3.25, 3.5]
+    beta_values = [2.5, 2.75, 3.0, 3.043233053, 3.25, 3.5]
 
     print(f"β Value | Opt Amplitude | E_total | Residual")
     print("-" * 70)
@@ -252,7 +252,7 @@ def test_restricted_refit():
         E_total, E_circ, E_stab = energy_calc.total_energy(R_fixed, U_fixed, amp_opt)
         residual = abs(E_total - target_mass)
 
-        marker = " ← REFERENCE" if abs(beta - 3.058) < 0.01 else ""
+        marker = " ← REFERENCE" if abs(beta - 3.043233053) < 0.01 else ""
         print(f"{beta:7.3f} | {amp_opt:13.6f} | {E_total:8.4f} | {residual:.2e}{marker}")
 
         results.append({

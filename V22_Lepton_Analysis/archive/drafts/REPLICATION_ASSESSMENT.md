@@ -24,7 +24,7 @@ Multiple documents contain celebratory language and overclaims that would not su
 
 ## Replication Results
 
-### Test 1: Three-Lepton Fit with β = 3.058 (from α)
+### Test 1: Three-Lepton Fit with β = 3.043233053 (from α)
 
 **Command**: `python3 validation_tests/test_all_leptons_beta_from_alpha.py`
 
@@ -62,10 +62,10 @@ Tau        3477.2         3477.2       2.0e-07     (0.493, 1.289, 0.959)
 ## Critical Assessment: What This Is vs. What's Claimed
 
 ### What This IS ✓
-1. **Consistency demonstration**: For fixed β = 3.058, Hill vortex solutions exist that match lepton mass ratios
+1. **Consistency demonstration**: For fixed β = 3.043233053, Hill vortex solutions exist that match lepton mass ratios
 2. **Numerical robustness**: Solutions are grid-converged and profile-insensitive
 3. **Scaling relationship**: Circulation velocity U approximately scales as √m (within ~10%)
-4. **Cross-sector β convergence**: β from α (3.058 ± 0.012), β from nuclear (3.1 ± 0.05), β from cosmology (3.0-3.2) overlap within uncertainties
+4. **Cross-sector β convergence**: β from α (3.043233053 ± 0.012), β from nuclear (3.1 ± 0.05), β from cosmology (3.0-3.2) overlap within uncertainties
 
 ### What This IS NOT ✗
 1. **Not a parameter-free prediction**: Each lepton uses 3 geometric DOFs (R, U, amplitude) to fit 1 target (mass)
@@ -99,7 +99,7 @@ Tau        3477.2         3477.2       2.0e-07     (0.493, 1.289, 0.959)
 
 5. Line 1002: ~~"🎉 COMPLETE UNIFICATION ACHIEVED! 🎉"~~
    - **Issue**: Celebratory language inappropriate for scientific publication
-   - **Fix**: "Results Summary: Three-lepton consistency established with β = 3.058"
+   - **Fix**: "Results Summary: Three-lepton consistency established with β = 3.043233053"
 
 **General Tone**: Too promotional, needs rewrite for scientific audience
 
@@ -183,7 +183,7 @@ Tau        3477.2         3477.2       2.0e-07     (0.493, 1.289, 0.959)
 
    ## What This Repository Contains
 
-   Numerical evidence that a vacuum stiffness parameter β ≈ 3.058,
+   Numerical evidence that a vacuum stiffness parameter β ≈ 3.043233053,
    inferred from the fine structure constant through a conjectured
    relationship, supports Hill vortex solutions matching charged
    lepton mass ratios to < 10⁻⁷ relative precision.
@@ -222,7 +222,7 @@ Tau        3477.2         3477.2       2.0e-07     (0.493, 1.289, 0.959)
    - Can these be mapped? Test if V2, V4 relate to (R, U, amplitude)
 
 7. **Add uncertainty propagation**:
-   - β = 3.058 ± 0.012 from nuclear fit uncertainties
+   - β = 3.043233053 ± 0.012 from nuclear fit uncertainties
    - How do geometric parameters change within ±1σ?
 
 ### Long-Term Actions (For Full Publication)
@@ -259,7 +259,7 @@ Tau        3477.2         3477.2       2.0e-07     (0.493, 1.289, 0.959)
 ### Appropriate Framing:
 
 **Good example** (from GOLDEN_LOOP_REVISED):
-> "β = 3.058, inferred from the fine structure constant α through a conjectured
+> "β = 3.043233053, inferred from the fine structure constant α through a conjectured
 > QFD identity, supports Hill vortex solutions that reproduce all three charged
 > lepton mass ratios to better than 10⁻⁴ relative precision."
 

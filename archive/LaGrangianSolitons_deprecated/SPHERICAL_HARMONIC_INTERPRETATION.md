@@ -432,7 +432,7 @@ N ≠ 0: Detuned (dissonant)
 
 ### 1. Vacuum as Resonant Medium
 
-**β = 3.058** (vacuum stiffness) sets:
+**β = 3.043233053** (vacuum stiffness) sets:
 ```
 ω_0 = √(β/ρ)  (characteristic frequency)
 
@@ -508,7 +508,7 @@ Mass gaps, energy gaps → all from harmonics
 
 **The unified picture**:
 ```
-QFD vacuum (β = 3.058)
+QFD vacuum (β = 3.043233053)
     ↓
 Oscillating solitons (standing waves)
     ↓

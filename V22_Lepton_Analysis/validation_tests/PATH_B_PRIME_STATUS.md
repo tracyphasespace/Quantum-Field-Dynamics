@@ -14,7 +14,7 @@ Path B' tests whether adding BOTH:
 
 ...breaks the β-degeneracy and identifies β uniquely.
 
-**Result**: Gradient + boundary layer shift β toward Golden Loop (3.10 vs 3.058, 1.4% offset) but landscape remains relatively flat (46% variation). **Mass-only constraints insufficient even with boundary layer.** Need magnetic moments.
+**Result**: Gradient + boundary layer shift β toward Golden Loop (3.10 vs 3.043233053, 1.4% offset) but landscape remains relatively flat (46% variation). **Mass-only constraints insufficient even with boundary layer.** Need magnetic moments.
 
 ---
 
@@ -72,7 +72,7 @@ Landscape:
   Variation: 46% (< 100% threshold)
 
 Offset from Golden Loop:
-  β_min = 3.100 vs β_Golden = 3.058
+  β_min = 3.100 vs β_Golden = 3.043233053
   Δβ = +0.042 (+1.37%)
 ```
 
@@ -86,7 +86,7 @@ Offset from Golden Loop:
 - **Reason**: 11 parameters vs 6 DOF → 5 unconstrained directions
 
 ### 2. β Shifted Toward Golden Loop ✓
-- **Achievement**: β_min = 3.10 (was 3.15 without gradient, target 3.058)
+- **Achievement**: β_min = 3.10 (was 3.15 without gradient, target 3.043233053)
 - **Offset**: 1.37% (down from 3-4% without boundary layer)
 - **Conclusion**: Gradient energy mechanism validated, reduces closure gap
 
@@ -157,7 +157,7 @@ Offset from Golden Loop:
 
 5. **EM response coupling**
    - Add electromagnetic energy contribution
-   - May further shift β toward 3.058 (remaining 1-2% gap)
+   - May further shift β toward 3.043233053 (remaining 1-2% gap)
 
 6. **Analytic gradient formulas for tapered profile**
    - Current: Numerical integration (robust but slower)
@@ -210,7 +210,7 @@ Offset from Golden Loop:
 | Gradient energy | Analytic K_grad | Numeric ∫\|∇ρ\|² |
 | β landscape | Flat (failed) | Flat but improved |
 | β_min | 3.15 | 3.10 |
-| Offset from 3.058 | 3% | 1.4% ✓ |
+| Offset from 3.043233053 | 3% | 1.4% ✓ |
 | Conclusion | Radius redundant | Gradient validated |
 
 **Path B' advances the physics** even though landscape remains flat for mass-only.
@@ -219,7 +219,7 @@ Offset from Golden Loop:
 
 ## Scientific Conclusion
 
-**Gradient energy (curvature) IS a missing piece** → β shifts 3.15 → 3.10 (closer to 3.058)
+**Gradient energy (curvature) IS a missing piece** → β shifts 3.15 → 3.10 (closer to 3.043233053)
 
 **But mass spectrum alone is insufficient** → Need magnetic moments for full identification
 
@@ -237,7 +237,7 @@ Offset from Golden Loop:
 
 > "Adding explicit boundary-layer gradient energy (E_∇ ~ λ∫|∇ρ|²) shifts the
 > effective vacuum stiffness from β_eff ≈ 3.15 to β_eff ≈ 3.10, reducing the
-> offset from the Golden Loop prediction (β = 3.058) from ~3% to ~1.4%. However,
+> offset from the Golden Loop prediction (β = 3.043233053) from ~3% to ~1.4%. However,
 > mass constraints alone remain insufficient to uniquely identify β; the 2D
 > profile likelihood landscape over (β, w) shows only 46% variation. Magnetic
 > moment data (providing 6 additional DOF to match 11 parameters) is required

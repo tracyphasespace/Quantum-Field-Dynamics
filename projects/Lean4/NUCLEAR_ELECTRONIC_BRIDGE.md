@@ -15,7 +15,7 @@ This document presents the complete mathematical derivation proving that the vac
 Input:  α = 1/137.035999 (measured)
         c₁ = 0.529251 (nuclear surface from AME2020)
         c₂ = 0.316743 (nuclear volume from AME2020)
-        β_crit = 3.058230856 (Golden Loop geometric factor)
+        β_crit = 3.043233053 (Golden Loop geometric factor)
 
 Derive: λ = k_geom × m_e / α
         where k_geom = 4.3813 × β_crit ≈ 13.399
@@ -110,7 +110,7 @@ Step 1: Shape ratio (proton/electron topology)
   shape_ratio = c₁ / c₂ = 0.529251 / 0.316743 ≈ 1.6709
 
 Step 2: Topological kernel (Golden Loop critical beta)
-  β_crit = 3.058230856
+  β_crit = 3.043233053
 
 Step 3: Geometric normalization
   k_geom = 4.3813 × β_crit
@@ -163,7 +163,7 @@ This is the proton/electron mass ratio (m_p / m_e).
 
 **β_Geometric (Topological Kernel):**
 ```
-β_Geometric = 3.058230856
+β_Geometric = 3.043233053
 ```
 
 This is the Golden Loop critical beta from V22 lepton analysis.
@@ -175,7 +175,7 @@ This is the Golden Loop critical beta from V22 lepton analysis.
 β_Mass ≈ 1836 ✓
 
 k_geom = 4.3813 × β_Geometric
-13.399 = 4.3813 × 3.058 ✓
+13.399 = 4.3813 × 3.043233053 ✓
 ```
 
 Both β values are correct—they measure different aspects of the geometry:
@@ -335,7 +335,7 @@ noncomputable def c1_surface : ℝ := 0.529251
 noncomputable def c2_volume : ℝ := 0.316743
 
 /-- Critical beta limit from Golden Loop (exported for Python bridge) -/
-noncomputable def beta_critical : ℝ := 3.058230856
+noncomputable def beta_critical : ℝ := 3.043233053
 ```
 
 **The Bridge Formula:**
@@ -355,7 +355,7 @@ noncomputable def geometricAlpha (stiffness_lam : ℝ) (mass_e : ℝ) : ℝ :=
   let c2_volume  : ℝ := 0.316743  -- Volume packing coefficient
 
   -- 2. Critical Beta Limit (The Golden Loop)
-  let beta_crit  : ℝ := 3.058230856
+  let beta_crit  : ℝ := 3.043233053
 
   -- 3. Geometric Factor (Nuclear-Electronic Bridge)
   --    The topology of the electron (1D winding) vs nucleus (3D soliton)
@@ -577,7 +577,7 @@ def solve_lambda_from_alpha(mass_electron, alpha_target):
     Where k_geom is derived from:
       c₁ = 0.529251 (nuclear surface)
       c₂ = 0.316743 (nuclear volume)
-      β_crit = 3.058230856 (Golden Loop)
+      β_crit = 3.043233053 (Golden Loop)
       k_geom = 4.3813 × β_crit ≈ 13.399
 
     Returns:
@@ -586,7 +586,7 @@ def solve_lambda_from_alpha(mass_electron, alpha_target):
     # Constants from Core Compression Law and Golden Loop
     c1_surface = 0.529251
     c2_volume = 0.316743
-    beta_crit = 3.058230856
+    beta_crit = 3.043233053
 
     # Geometric factor
     shape_ratio = c1_surface / c2_volume  # ≈ 1.6709
@@ -665,7 +665,7 @@ Level 1: Fundamental Constants (Measured)
   m_e = 9.11×10⁻³¹ kg
 
 Level 2: Derived Parameters (Geometric)
-  β_crit = 3.058 (topological kernel)
+  β_crit = 3.043233053 (topological kernel)
   k_geom = 13.399 (bridge factor)
 
 Level 3: Vacuum Property (Solved)
@@ -778,7 +778,7 @@ git push origin v1.0-RC1
    - Expected: O(1) geometric correction to match G = 6.67×10⁻¹¹
 
 2. **β Normalization**
-   - Need formal proof relating β_Mass = 1836 to β_Geometric = 3.058
+   - Need formal proof relating β_Mass = 1836 to β_Geometric = 3.043233053
    - Connection through phase space volume in Cl(3,3)
 
 3. **Koide Sorries**

@@ -33,7 +33,7 @@ HBARC = 197.3269804  # MeV·fm
 PI = np.pi
 
 # QFD parameters
-BETA = 3.058
+BETA = 3.043233053
 XI = 1.0
 
 # Known result

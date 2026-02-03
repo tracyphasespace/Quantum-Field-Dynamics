@@ -28,7 +28,7 @@ E[ρ] = ∫ (-μ²ρ + λρ² + κρ³ + V₄_nuc·ρ⁴) dV
 
 ## The Vacuum Bulk Modulus
 
-**β = 3.058231** (from Golden Loop constraint on α)
+**β = 3.043233053** (from Golden Loop constraint on α)
 
 **Physical meaning**: Resistance of vacuum to compression
 
@@ -209,20 +209,20 @@ At **nuclear saturation density** ρ₀ ≈ 0.16 fm⁻³:
 **For soliton stability**, need V₄_nuc > 0:
 
 ```
-V₄_nuc = β = 3.058231 > 0 ✓
+V₄_nuc = β = 3.043233053 > 0 ✓
 ```
 
 **Quartic term dominates** at high density:
 ```
 At ρ = 1 (scaled):
-  Quartic: V₄_nuc·ρ⁴ = 3.058
+  Quartic: V₄_nuc·ρ⁴ = 3.043233053
   Harmonic: λρ² = λ (for comparison)
 
 If λ ~ 938 MeV (from Proton Bridge):
-  Ratio: 3.058 / 938 ≈ 0.003 (quartic smaller at ρ=1)
+  Ratio: 3.043233053 / 938 ≈ 0.003 (quartic smaller at ρ=1)
 
 But at ρ = 2:
-  Quartic: 3.058 × 16 = 48.9
+  Quartic: 3.043233053 × 16 = 48.9
   Harmonic: λ × 4 = 3752
 
 Still smaller, but growing faster (ρ⁴ vs ρ²)
@@ -260,19 +260,19 @@ E[ρ₀]/A = -μ²ρ₀ + λρ₀² + κρ₀³ + V₄_nuc·ρ₀⁴
 
 **Option A: V₄_nuc = 4πβ**
 ```
-V₄_nuc = 4π × 3.058 = 38.4
+V₄_nuc = 4π × 3.043233053 = 38.4
 ```
 **Much larger stiffness** → over-stabilizes?
 
 **Option B: V₄_nuc = β²**
 ```
-V₄_nuc = (3.058)² = 9.35
+V₄_nuc = (3.043233053)² = 9.35
 ```
 **Intermediate value** → possible but less motivated
 
 **Option C: V₄_nuc = β/4π**
 ```
-V₄_nuc = 3.058 / (4π) = 0.244
+V₄_nuc = 3.043233053 / (4π) = 0.244
 ```
 **Too weak** → likely under-stabilizes
 
@@ -326,7 +326,7 @@ V₄ = λ / (2β²)
 
 **Now adding V₄_nuc**:
 ```
-V₄_nuc = β = 3.058 (dimensionless)
+V₄_nuc = β = 3.043233053 (dimensionless)
 ```
 
 **These are different quantities**:
@@ -358,11 +358,11 @@ V₄_nuc = (μ² - 2λρ₀ - 3κρ₀²) / (4ρ₀³)
 
 **But this is circular** (uses empirical parameters).
 
-**QFD prediction**: V₄_nuc = β = 3.058 (no fitting!)
+**QFD prediction**: V₄_nuc = β = 3.043233053 (no fitting!)
 
 **Check consistency**:
 ```
-Given: β = 3.058, λ ≈ 938 MeV, ρ₀ = 1 (scaled)
+Given: β = 3.043233053, λ ≈ 938 MeV, ρ₀ = 1 (scaled)
 Solve for: μ², κ consistent with binding energy
 ```
 
@@ -380,12 +380,12 @@ E[ρ₀] = -μ² + λ + κ + β
 
 **Empirical**: E[ρ₀]/A ≈ -8 MeV (binding per nucleon)
 
-**With β = 3.058** (dimensionless, needs unit conversion):
+**With β = 3.043233053** (dimensionless, needs unit conversion):
 ```
 β_MeV = β × (energy scale)
 
 If energy scale = λ = 938 MeV:
-β_MeV ≈ 3.058 × 938 ≈ 2868 MeV
+β_MeV ≈ 3.043233053 × 938 ≈ 2868 MeV
 
 This is too large! Need different scaling...
 ```

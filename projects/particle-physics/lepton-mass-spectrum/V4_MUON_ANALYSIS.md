@@ -79,7 +79,7 @@ Large vortex:
   → V₄ < 0
 ```
 
-**Formula**: V₄_electron = -ξ/β = -1/3.058 = -0.327
+**Formula**: V₄_electron = -ξ/β = -1/3.043233053 = -0.327
 
 **Match to experiment**: 0.3% error!
 
@@ -192,7 +192,7 @@ The muon is in a **different regime** where geometric effects are qualitatively 
 
 **Electron** (compression-dominated):
 ```
-V₄_e = -ξ/β = -1/3.058 = -0.327
+V₄_e = -ξ/β = -1/3.043233053 = -0.327
 ```
 Derived from vacuum stiffness, matches experiment to 0.3%.
 
@@ -294,9 +294,9 @@ Hypothetical predictions:
 
 ### Electron Formula
 ```
-V₄_e = -ξ/β = -1/3.058
+V₄_e = -ξ/β = -1/3.043233053
 
-From Golden Loop: β = 3.058 (derived from α)
+From Golden Loop: β = 3.043233053 (derived from α)
 ```
 
 ### Muon Formula

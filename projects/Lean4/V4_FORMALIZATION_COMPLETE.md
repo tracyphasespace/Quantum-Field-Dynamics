@@ -29,7 +29,7 @@ Status: PRODUCTION READY
 
 where:
 - λ ≈ m_p = 938.272 MeV (vacuum stiffness from Proton Bridge)
-- β = 3.058 (vacuum bulk modulus from Golden Loop)
+- β = 3.043233053 (vacuum bulk modulus from Golden Loop)
 - β² = 9.351
 
 ### Numerical Validation
@@ -140,7 +140,7 @@ theorem V4_validates_fifty :
     - Statement: ∃β > 0 such that:
       - c₂ = 1/β ≈ 0.327 (< 1% error)
       - V₄ = λ/(2β²) ≈ 50 MeV (< 1% error)
-    - Proof: β = β_golden = 3.058
+    - Proof: β = β_golden = 3.043233053
     - Status: 0 sorries
 
 ---
@@ -195,7 +195,7 @@ V₄ = λ / (2β²)
    - Validates to 0.0002%
 
 2. **β²**: Suppression factor from vacuum stiffness
-   - β = 3.058 (Golden Loop from α constraint)
+   - β = 3.043233053 (Golden Loop from α constraint)
    - β² = 9.351
    - Physical meaning: Stiffer vacuum → shallower well
 
@@ -243,7 +243,7 @@ V₄ = λ / (2β²)
 ### Before V₄ Derivation
 
 **Locked**: 11/17 parameters (65%)
-- β = 3.058 (Golden Loop)
+- β = 3.043233053 (Golden Loop)
 - λ ≈ m_p (Proton Bridge)
 - c₂ = 1/β (just derived - 0.92%)
 - ξ_QFD = k_geom² × (5/6) (just derived - < 0.6%)
@@ -282,7 +282,7 @@ V₄ = λ / (2β²)
 
 **Step 1**: Golden Loop (α → β)
 ```
-α = 1/137.036 → β = 3.058231 (0.15% error)
+α = 1/137.036 → β = 3.043233053 (0.15% error)
 ```
 
 **Step 2**: Proton Bridge (β → λ)
@@ -309,7 +309,7 @@ V₄ = λ/(2β²) = 50.16 MeV (< 1% error vs. 50 MeV empirical)
 
 | Parameter | Formula | Value | Empirical | Error | Source |
 |-----------|---------|-------|-----------|-------|--------|
-| β | α constraint | 3.058 | 3.063 | 0.15% | Golden Loop |
+| β | α constraint | 3.043233053 | 3.063 | 0.15% | Golden Loop |
 | λ | k_geom×β×(m_e/α) | 938.272 MeV | m_p | 0.0002% | Proton Bridge |
 | c₂ | 1/β | 0.327 | 0.324 | 0.92% | **Derived Dec 30** |
 | ξ_QFD | k_geom²×(5/6) | 16.0 | ~16 | < 0.6% | **Derived Dec 30** |
@@ -345,7 +345,7 @@ V₄ = λ/(2β²) = 50.16 MeV (< 1% error vs. 50 MeV empirical)
 
 **Theoretical achievement**:
 - Third nuclear parameter derived from β today
-- All nuclear parameters (c₂, V₄) now trace to β = 3.058
+- All nuclear parameters (c₂, V₄) now trace to β = 3.043233053
 - Combined with Proton Bridge (λ ≈ m_p), nuclear sector unified
 - 12/17 total parameters locked (71%)
 

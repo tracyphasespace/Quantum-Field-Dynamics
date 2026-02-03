@@ -37,7 +37,7 @@ ax = axes[0, 0]
 ax.plot(betas, objectives, 'o-', linewidth=2, markersize=8, color='navy')
 min_idx = np.argmin(objectives)
 ax.plot(betas[min_idx], objectives[min_idx], 'r*', markersize=20, label=f'Min at β={betas[min_idx]:.3f}')
-ax.axvline(3.058, color='green', linestyle='--', linewidth=2, alpha=0.7, label='Expected β=3.058')
+ax.axvline(3.043233053, color='green', linestyle='--', linewidth=2, alpha=0.7, label='Expected β=3.043233053')
 ax.set_xlabel('β (Vacuum Stiffness)', fontsize=11)
 ax.set_ylabel('Total Objective', fontsize=11)
 ax.set_title('Combined Objective Function', fontweight='bold')
@@ -48,7 +48,7 @@ ax.grid(True, alpha=0.3)
 ax = axes[0, 1]
 ax.semilogy(betas, mass_residuals, 's-', linewidth=2, markersize=8, color='blue')
 ax.axhline(1e-3, color='red', linestyle='--', linewidth=1, alpha=0.7, label='Tolerance (10⁻³)')
-ax.axvline(3.058, color='green', linestyle='--', linewidth=2, alpha=0.7)
+ax.axvline(3.043233053, color='green', linestyle='--', linewidth=2, alpha=0.7)
 ax.set_xlabel('β (Vacuum Stiffness)', fontsize=11)
 ax.set_ylabel('Mass Residual', fontsize=11)
 ax.set_title('Mass Constraint Satisfaction', fontweight='bold')
@@ -59,7 +59,7 @@ ax.grid(True, alpha=0.3)
 ax = axes[0, 2]
 ax.semilogy(betas, g_residuals, '^-', linewidth=2, markersize=8, color='purple')
 ax.axhline(0.1, color='red', linestyle='--', linewidth=1, alpha=0.7, label='Tolerance (0.1)')
-ax.axvline(3.058, color='green', linestyle='--', linewidth=2, alpha=0.7)
+ax.axvline(3.043233053, color='green', linestyle='--', linewidth=2, alpha=0.7)
 ax.set_xlabel('β (Vacuum Stiffness)', fontsize=11)
 ax.set_ylabel('g-factor Residual', fontsize=11)
 ax.set_title('Magnetic Moment Constraint', fontweight='bold')
@@ -69,7 +69,7 @@ ax.grid(True, alpha=0.3)
 # Plot 4: R parameter evolution
 ax = axes[1, 0]
 ax.plot(betas, R_values, 'o-', linewidth=2, markersize=8, color='brown')
-ax.axvline(3.058, color='green', linestyle='--', linewidth=2, alpha=0.7, label='Expected β=3.058')
+ax.axvline(3.043233053, color='green', linestyle='--', linewidth=2, alpha=0.7, label='Expected β=3.043233053')
 ax.set_xlabel('β (Vacuum Stiffness)', fontsize=11)
 ax.set_ylabel('R (Vortex Radius)', fontsize=11)
 ax.set_title('Radius Parameter vs β', fontweight='bold')
@@ -79,7 +79,7 @@ ax.grid(True, alpha=0.3)
 # Plot 5: U parameter evolution
 ax = axes[1, 1]
 ax.plot(betas, U_values, 's-', linewidth=2, markersize=8, color='orange')
-ax.axvline(3.058, color='green', linestyle='--', linewidth=2, alpha=0.7, label='Expected β=3.058')
+ax.axvline(3.043233053, color='green', linestyle='--', linewidth=2, alpha=0.7, label='Expected β=3.043233053')
 ax.set_xlabel('β (Vacuum Stiffness)', fontsize=11)
 ax.set_ylabel('U (Circulation Velocity)', fontsize=11)
 ax.set_title('Velocity Parameter vs β', fontweight='bold')
@@ -104,8 +104,8 @@ Objective Range:
 
 β Minimum:
   Observed: {betas[min_idx]:.3f}
-  Expected: 3.058
-  Offset: {abs(betas[min_idx] - 3.058):.3f}
+  Expected: 3.043233053
+  Offset: {abs(betas[min_idx] - 3.043233053):.3f}
 
 Convergence:
   Success: {len(betas)}/11 (100%)

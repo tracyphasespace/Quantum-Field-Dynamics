@@ -12,7 +12,7 @@
 
 **Results**:
 - ⚠️ **81% of β values work** (17/21)
-- ⚠️ **NO minimum at β = 3.058** (flat residuals ~3.4×10⁻⁵)
+- ⚠️ **NO minimum at β = 3.043233053** (flat residuals ~3.4×10⁻⁵)
 - ⚠️ Minimum actually at β = 2.6
 - Reviewer assessment: "WEAK FALSIFIABILITY - model may be too flexible"
 
@@ -48,13 +48,13 @@ python3 validation_tests/test_beta_scan_production.py \
 
 #### Outcome A: Narrow Window (GOOD for manuscript) ✓
 - Solutions exist only for β ∈ [2.9, 3.2] (~5-10 β values)
-- Clear minimum at β ≈ 3.058
+- Clear minimum at β ≈ 3.043233053
 - **Interpretation**: "Model has genuine β-selectivity, loose tolerance masked it"
 - **Action**: Proceed with manuscript, use tight-tolerance scan for Figure 6
 
 #### Outcome B: Still Wide Window (BAD for manuscript) ✗
 - Solutions still exist for >60% of β values
-- No clear minimum at 3.058
+- No clear minimum at 3.043233053
 - **Interpretation**: "Model is fundamentally too flexible"
 - **Action**: Major manuscript revision OR add more constraints
 
@@ -89,7 +89,7 @@ python3 validation_tests/test_beta_scan_production.py \
 ### If Outcome A (Narrow Window):
 1. ✅ Use production scan results for Figure 6
 2. ✅ Manuscript proceeds with strong falsifiability claim
-3. ✅ β = 3.058 is validated as uniquely selected
+3. ✅ β = 3.043233053 is validated as uniquely selected
 4. ✅ Submit to PRD/EPJ C tier
 
 ### If Outcome B (Still Wide):
@@ -106,16 +106,16 @@ python3 validation_tests/test_beta_scan_production.py \
 The β-scan is testing the **core claim of the paper**:
 
 **Original Claim**:
-> "The fine structure constant α determines vacuum stiffness β = 3.058,
+> "The fine structure constant α determines vacuum stiffness β = 3.043233053,
 > which uniquely supports Hill vortex solutions at the three lepton masses."
 
 **What We're Checking**:
-- Does β = 3.058 actually select for lepton masses?
+- Does β = 3.043233053 actually select for lepton masses?
 - Or do many β values work equally well?
 
 **Current Status** (loose tolerance):
 - Many β values work (2.5 to 3.5)
-- β = 2.6 works as well as β = 3.058
+- β = 2.6 works as well as β = 3.043233053
 - **Claim not validated**
 
 **Next Test** (production tolerance):
@@ -169,7 +169,7 @@ python3 validation_tests/test_beta_scan_production.py \
 ## Bottom Line
 
 **The β-scan is THE critical test** the reviewer requested. It distinguishes:
-- **Evidence** (solutions only at β ≈ 3.058) vs
+- **Evidence** (solutions only at β ≈ 3.043233053) vs
 - **Compatibility** (solutions work for many β)
 
 We're currently in "compatibility" regime with loose tolerance. Production tolerance scan will determine if this is:

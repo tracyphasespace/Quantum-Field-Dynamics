@@ -15,7 +15,7 @@ Method:
     Profile likelihood scan: χ²_profile(β, w) = min_{R_c,U,A per lepton} χ²(all params)
 
     Parameters (11 total, or 10 if A fixed by cavitation):
-        β: vacuum stiffness (target: 3.058 from Golden Loop)
+        β: vacuum stiffness (target: 3.043233053 from Golden Loop)
         w: boundary thickness (global, shared across leptons)
         (R_c, U, A) × 3: per-lepton core radius, circulation, amplitude
 
@@ -24,13 +24,13 @@ Method:
         (Future: 3 magnetic moments for full 11-parameter ID)
 
 Expected outcome:
-    - If χ²_profile(β, w) has sharp minimum near (3.058, w_opt): SUCCESS
+    - If χ²_profile(β, w) has sharp minimum near (3.043233053, w_opt): SUCCESS
       → β identified, closure gap resolved, mechanism validated
 
     - If landscape remains flat: gradient alone insufficient
       → Need magnetic moments or other observables
 
-    - If minimum far from 3.058: closure gap deeper than expected
+    - If minimum far from 3.043233053: closure gap deeper than expected
       → Missing physics beyond boundary layer (EM response, etc.)
 """
 
@@ -47,7 +47,7 @@ M_TAU = 1776.8
 # Global profile parameters
 S_PROFILE = 2.0  # Family A with s=2 (C¹ smooth)
 
-# Calibrated gradient coefficient (from η=0.03 at electron, β=3.058, R_c≈0.88)
+# Calibrated gradient coefficient (from η=0.03 at electron, β=3.043233053, R_c≈0.88)
 def calibrate_lambda(eta_target, beta, R_c_reference):
     """
     Calibrate λ from target E_grad/E_stab ratio at reference lepton.
@@ -379,7 +379,7 @@ def profile_likelihood_scan(
     chi2_min = chi2_grid_np[i_min, j_min]
 
     # Golden Loop reference
-    beta_golden = 3.058
+    beta_golden = 3.043233053
 
     print()
     print("=" * 70)

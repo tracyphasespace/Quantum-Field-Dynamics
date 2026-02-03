@@ -32,7 +32,7 @@ HBARC = 197.3269804  # MeV·fm
 C_LIGHT = 299792458  # m/s (for v/c ratios)
 
 # QFD parameters (from MCMC/Golden Loop)
-BETA = 3.058
+BETA = 3.043233053
 XI = 1.0
 
 # Experimental values

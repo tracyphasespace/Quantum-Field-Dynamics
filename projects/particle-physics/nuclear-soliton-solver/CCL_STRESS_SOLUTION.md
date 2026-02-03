@@ -273,7 +273,7 @@ After optimization:
 - Unstable ones (U-238) may have higher errors (expected!)
 
 **Test 3**: Cross-sector validation
-- Compare parameters with lepton sector β = 3.058
+- Compare parameters with lepton sector β = 3.043233053
 - Check consistency across scales
 
 ### 3. Publication-Ready Analysis

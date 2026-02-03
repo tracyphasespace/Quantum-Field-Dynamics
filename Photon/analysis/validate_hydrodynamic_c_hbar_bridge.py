@@ -43,7 +43,7 @@ print()
 print_header("PART 1: Vacuum Material Properties")
 
 # Beta derived from the Golden Loop (Alpha-Beta bridge)
-beta_vac = 3.05823  # Vacuum Stiffness (dimensionless)
+beta_vac = 3.043233053  # Vacuum Stiffness (dimensionless)
 
 # Scaling Density: In natural QFD units, mass density is normalized.
 # To recover SI units, we must assume the unit cell mass density.
@@ -166,7 +166,7 @@ print("Expected: ℏ/√β should be CONSTANT (the coupling is real)")
 print()
 
 # Test different vacuum stiffness values
-betas = np.array([1.0, 2.0, 3.058, 5.0, 10.0, 20.0])
+betas = np.array([1.0, 2.0, 3.043233053, 5.0, 10.0, 20.0])
 results = []
 
 print(f"{'β':<8} {'c = √(β/ρ)':<12} {'ℏ = Γ·M·R·c':<15} {'ℏ/√β':<12} {'Status':<10}")

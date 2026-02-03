@@ -12,7 +12,7 @@
 
 **1. Calibrated vacuum parameters to lepton masses**:
 - Fit 3 parameters (β, ξ, τ) to 3 observables (m_e, m_μ, m_τ)
-- Result: β = 3.058, ξ = 1.0, τ = 1.01
+- Result: β = 3.043233053, ξ = 1.0, τ = 1.01
 - **Status**: This is a FIT, not a prediction
 
 **2. Derived geometric ratio**:
@@ -154,7 +154,7 @@
 
 | Test | Parameters | Observable | Result | Status |
 |------|-----------|-----------|--------|--------|
-| **Stability (β only)** | β = 3.058 | Mass ratio | 3.07 vs 206.77 | ❌ Missing ξ,τ |
+| **Stability (β only)** | β = 3.043233053 | Mass ratio | 3.07 vs 206.77 | ❌ Missing ξ,τ |
 | **Stability (3-param)** | β,ξ,τ | Discrete minima | 0 found | ⚠️ Circular anyway |
 | **g-2 prediction** | β,ξ,τ → V₄ | A₂ coefficient | 0.45% error | ✅ **VALIDATED** |
 

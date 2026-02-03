@@ -131,7 +131,7 @@ L₀ = ℏ / (Γ_vortex · λ_mass · c)
 2. ❌ L₀ is experimentally confirmed
 3. ❌ This is a "Theory of Everything"
 4. ❌ QFD replaces Standard Model
-5. ❌ β = 3.058 is "the only parameter in physics"
+5. ❌ β = 3.043233053 is "the only parameter in physics"
 
 ### Honest Framing
 

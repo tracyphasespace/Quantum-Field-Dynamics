@@ -20,7 +20,7 @@ from collections import Counter
 
 # Constants
 alpha_fine = 1.0 / 137.036
-beta_vacuum = 1.0 / 3.058231
+beta_vacuum = 1.0 / 3.043233053
 M_proton = 938.272
 LAMBDA_TIME_0 = 0.42
 KAPPA_E = 0.0001

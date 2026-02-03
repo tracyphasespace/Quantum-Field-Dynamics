@@ -182,7 +182,7 @@ end Atomic
 end QFD
 
 /-- Golden ratio based β constant. -/
-def beta_golden : ℝ := 3.058
+def beta_golden : ℝ := 3.043233053
 
 namespace QFD.Physics
 

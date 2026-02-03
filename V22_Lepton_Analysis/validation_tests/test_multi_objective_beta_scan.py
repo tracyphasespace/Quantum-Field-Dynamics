@@ -143,7 +143,7 @@ def g_factor_from_moment(mu, mass_ratio=1.0):
         g-factor (dimensionless)
     """
     # Normalization factor (calibrated from known electron solution)
-    # Calibration: At β=3.058, electron solution (R≈0.44, U≈0.024) gives:
+    # Calibration: At β=3.043233053, electron solution (R≈0.44, U≈0.024) gives:
     #   μ_raw = 0.2 × 1.0 × 0.44 × 0.024 ≈ 2.11×10⁻³
     #   g_target = 2.00231930436256
     #   normalization = g_target / μ_raw ≈ 948
@@ -329,7 +329,7 @@ def run_multi_objective_beta_scan(beta_min=2.5, beta_max=3.5, num_beta=11,
 
     This should show:
     - Narrow β window (if model is correct)
-    - Minimum near β = 3.058 (if Golden Loop is valid)
+    - Minimum near β = 3.043233053 (if Golden Loop is valid)
     - OR: Mismatch revealing model inadequacy
 
     Args:
@@ -425,11 +425,11 @@ def analyze_multi_objective_results(results):
     print(f"Objective range: {obj_range:.2e}")
     print(f"Variation: {obj_variation:.1%}")
 
-    if beta_min == 3.058 or abs(beta_min - 3.058) < 0.1:
-        print(f"\n✓ Minimum at β = {beta_min:.3f} ← MATCHES INFERRED VALUE (3.058)")
+    if beta_min == 3.043233053 or abs(beta_min - 3.043233053) < 0.1:
+        print(f"\n✓ Minimum at β = {beta_min:.3f} ← MATCHES INFERRED VALUE (3.043233053)")
     else:
-        print(f"\n⚠ Minimum at β = {beta_min:.3f} (inferred: 3.058)")
-        print(f"  Offset: {abs(beta_min - 3.058):.3f}")
+        print(f"\n⚠ Minimum at β = {beta_min:.3f} (inferred: 3.043233053)")
+        print(f"  Offset: {abs(beta_min - 3.043233053):.3f}")
 
     if obj_variation > 1.0:
         print("\n✓✓ SHARP β MINIMUM (>100% variation)")

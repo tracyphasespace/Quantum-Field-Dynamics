@@ -23,6 +23,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Validation tools**:
 - **verify_constants.sh** - Check for contaminated constant definitions
 
+**Cross-Project Sync** (IMPORTANT for multi-project work):
+- **CROSS_PROJECT_MANIFEST.md** - Track file dependencies between QFD, NSE, and Riemann projects
+
 **AI-Browsable Index** (for browser-based LLMs):
 - https://tracyphasespace.github.io/QFD-Universe/llms.txt - Compact file index
 - https://tracyphasespace.github.io/QFD-Universe/files.json - Machine-readable JSON

@@ -241,7 +241,7 @@ def derive_T_from_thermalization():
     3. Age of the universe
 
     The key insight from Lean4 proofs:
-    - β = 3.058 (Golden Loop eigenvalue)
+    - β = 3.043233053 (Golden Loop eigenvalue)
     - λ = m_proton (Proton Bridge)
     - c = √β in natural units
 
@@ -251,7 +251,7 @@ def derive_T_from_thermalization():
     print("-" * 60)
 
     # From GoldenLoop.lean
-    BETA_GOLDEN = 3.058230856
+    BETA_GOLDEN = 3.043233053
 
     # Proton mass sets the vacuum density scale
     M_PROTON_MEV = 938.272

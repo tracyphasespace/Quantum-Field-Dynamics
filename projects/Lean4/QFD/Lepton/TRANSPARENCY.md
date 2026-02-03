@@ -14,7 +14,7 @@ This document clarifies what is experimentally input, what is fitted, and what i
 |----------|--------|--------|
 | Fine structure constant α | Experimental (1/137.035999) | **Input** |
 | Nuclear coefficients c₁, c₂ | Fitted to 5,842 nuclides (NuMass.csv) | **Input** (from separate fit) |
-| Vacuum stiffness β = 3.058 | Derived in FineStructure.lean from (α, c₁, c₂) | **Derived** (depends on nuclear fit) |
+| Vacuum stiffness β = 3.043233053 | Derived in FineStructure.lean from (α, c₁, c₂) | **Derived** (depends on nuclear fit) |
 | Gradient coupling ξ | Fitted to lepton mass spectrum (Stage 2 MCMC) | **Fitted** (≈1.0 after corrections) |
 | Time coupling τ | Fitted to lepton mass spectrum (Stage 2 MCMC) | **Fitted** |
 | Circulation α_circ | Calibrated from muon g-2 anomaly | **Calibrated** (goal: derive from geometry) |

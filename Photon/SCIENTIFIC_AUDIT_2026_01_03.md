@@ -80,7 +80,7 @@
 
 **Evidence**:
 - Python script: `derive_constants.py`
-- Formula: c = √(β/ρ) with β = 3.058, ρ = 1 (natural units)
+- Formula: c = √(β/ρ) with β = 3.043233053, ρ = 1 (natural units)
 - Result: c = 1.7487 (natural units)
 
 **Status**: DIMENSIONAL ANALYSIS ONLY

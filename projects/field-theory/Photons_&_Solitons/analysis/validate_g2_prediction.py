@@ -54,7 +54,7 @@ def validate_g2_prediction():
     # Version 2: Golden Loop (from GitHub)
     params_golden = {
         "name": "Golden Loop",
-        "beta": 3.058,
+        "beta": 3.043233053,
         "xi": 1.0,
         "tau": 1.0,
         "source": "GitHub theoretical values"

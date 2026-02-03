@@ -3,7 +3,7 @@
 Golden Loop Test: β from Fine Structure Constant
 =================================================
 
-PURPOSE: Test if β = 3.058230856 (derived from α = 1/137.036...)
+PURPOSE: Test if β = 3.043233053 (derived from α = 1/137.036...)
          successfully produces the electron mass.
 
 This closes the logical circle:
@@ -15,7 +15,7 @@ Instead of "we fit β ≈ 3.1", we now have:
 EXPECTED:
   - Solution should converge (β robustness demonstrated in Test 3)
   - Parameters (R, U, amplitude) will shift slightly from β=3.1 case
-  - E_stab will be slightly lower (β dropped from 3.1 to 3.058)
+  - E_stab will be slightly lower (β dropped from 3.1 to 3.043233053)
   - Shift should be < 2% in all parameters
 """
 
@@ -28,7 +28,7 @@ from datetime import datetime
 
 # Constants
 RHO_VAC = 1.0
-BETA_FROM_ALPHA = 3.058230856  # Derived from fine structure constant
+BETA_FROM_ALPHA = 3.043233053  # Derived from fine structure constant
 BETA_NUCLEAR = 3.1             # Previous value from nuclear fits
 TARGET_MASS = 1.0              # Electron in electron-mass units
 
@@ -361,7 +361,7 @@ if __name__ == "__main__":
     print()
 
     if result_alpha['converged']:
-        print("✓ β = 3.058230856 (from α) successfully produces m_e = 1.000")
+        print("✓ β = 3.043233053 (from α) successfully produces m_e = 1.000")
         print()
         print("LOGICAL CIRCLE CLOSED:")
         print("  Cosmology (H₀) ↔ Nuclear (c₁, c₂) ↔ α (137.036...) ↔ Mass (m_e)")

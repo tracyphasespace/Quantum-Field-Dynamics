@@ -26,10 +26,10 @@ We have **four distinct solver implementations** that all reproduce the charged 
 
 | Solver | Location | Method | Parameters | Accuracy | β Source |
 |--------|----------|--------|------------|----------|----------|
-| **D-Flow Circulation** | `/projects/particle-physics/lepton-mass-spectrum/scripts/` | Hill vortex circulation | β, ξ, α_circ, U (universal) | 0.3% | 3.058 (from α) |
+| **D-Flow Circulation** | `/projects/particle-physics/lepton-mass-spectrum/scripts/` | Hill vortex circulation | β, ξ, α_circ, U (universal) | 0.3% | 3.043233053 (from α) |
 | **V22 Quartic** | `/V22_Lepton_Analysis/scripts/v22_lepton_mass_solver.py` | Schrödinger shooting | β, v | ~10⁻⁶ | 3.1 (nuclear/cosmology) |
 | **V22 Enhanced** | `/V22_Lepton_Analysis/integration_attempts/v22_enhanced_hill_vortex_solver.py` | Variational Hill vortex | β, R, U, amplitude | ~10⁻⁹ | 3.1 (nuclear/cosmology) |
-| **Pipeline Realms** | `/qfd_10_realms_pipeline/realms/realm[567]_*.py` | Direct Hill energy functional | R, U, amplitude (β fixed) | 10⁻⁹ - 10⁻¹³ | 3.058 (from α) |
+| **Pipeline Realms** | `/qfd_10_realms_pipeline/realms/realm[567]_*.py` | Direct Hill energy functional | R, U, amplitude (β fixed) | 10⁻⁹ - 10⁻¹³ | 3.043233053 (from α) |
 
 ---
 
@@ -299,7 +299,7 @@ E_stabilization = ∫ β × (δρ)² dV
 - **amplitude**: Density depression (bounds: 0.1-0.99, cavitation limit)
 
 **Universal parameter (FIXED, not optimized)**:
-- **β = 3.058230856**: From fine structure constant α = 1/137.036
+- **β = 3.043233053**: From fine structure constant α = 1/137.036
 
 ### How to Run
 
@@ -308,13 +308,13 @@ E_stabilization = ∫ β × (δρ)² dV
 cd /home/tracy/development/QFD_SpectralGap/projects/astrophysics/qfd_10_realms_pipeline
 
 # Electron
-python -c "import sys; sys.path.insert(0, 'realms'); import realm5_electron; realm5_electron.run({'beta': {'value': 3.058230856}})"
+python -c "import sys; sys.path.insert(0, 'realms'); import realm5_electron; realm5_electron.run({'beta': {'value': 3.043233053}})"
 
 # Muon
-python -c "import sys; sys.path.insert(0, 'realms'); import realm6_muon; realm6_muon.run({'beta': {'value': 3.058230856}})"
+python -c "import sys; sys.path.insert(0, 'realms'); import realm6_muon; realm6_muon.run({'beta': {'value': 3.043233053}})"
 
 # Tau
-python -c "import sys; sys.path.insert(0, 'realms'); import realm7_tau; realm7_tau.run({'beta': {'value': 3.058230856}})"
+python -c "import sys; sys.path.insert(0, 'realms'); import realm7_tau; realm7_tau.run({'beta': {'value': 3.043233053}})"
 ```
 
 **Complete Pipeline**:
@@ -600,7 +600,7 @@ All leptons show consistent ~9% deviation from pure U ~ √m scaling.
 
 ### 3. β Convergence Across Sectors
 
-Pipeline uses β = 3.058 from fine structure constant α.
+Pipeline uses β = 3.043233053 from fine structure constant α.
 Nuclear data suggests β ≈ 3.1 from core compression.
 Cosmology suggests β ≈ 3.0-3.2 from vacuum refraction.
 

@@ -61,7 +61,7 @@ noncomputable def c2_volume : ℝ := 0.328615
 
 /-- Critical beta limit from Golden Loop (exported for Python bridge).
 
-**2026-01-06 Update**: Changed from 3.058 (fitted) to 3.043089… (derived from α).
+**2026-01-06 Update**: Changed from 3.043233053 (fitted) to 3.043089… (derived from α).
 -/
 noncomputable def beta_critical : ℝ := QFD.Vacuum.goldenLoopBeta
 

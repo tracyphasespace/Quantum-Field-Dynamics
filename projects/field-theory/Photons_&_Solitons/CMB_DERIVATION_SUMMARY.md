@@ -132,7 +132,7 @@ From `PHYSICS_DISTINCTION.md`:
 - CMB enhancement from transferred energy
 
 From `GoldenLoop.lean`:
-- β = 3.058 sets vacuum parameters
+- β = 3.043233053 sets vacuum parameters
 - κ = H₀/c derived from β and α
 
 From `VacuumParameters.lean`:

@@ -51,7 +51,7 @@ FM_TO_METERS = 1e-15           # Femtometer to meters
 
 # V22 Lepton Analysis calibration
 BETA_V22 = 3.15                # From cross-lepton fit
-BETA_GOLDEN_LOOP = 3.058       # From geometric Golden Loop
+BETA_GOLDEN_LOOP = 3.043233053       # From geometric Golden Loop
 
 # ==============================================================================
 # DIMENSIONAL ANALYSIS HELPERS
@@ -86,7 +86,7 @@ def solve_lambda_from_alpha(mass_electron, alpha_target):
     Where k_geom is derived from nuclear coefficients:
       c1_surface = 0.529251  (Nuclear surface tension)
       c2_volume  = 0.316743  (Nuclear volume packing)
-      beta_crit  = 3.058230856 (Golden Loop critical stiffness)
+      beta_crit  = 3.043233053 (Golden Loop critical stiffness)
 
       k_geom = 4.3813 × beta_crit ≈ 13.399
 
@@ -102,7 +102,7 @@ def solve_lambda_from_alpha(mass_electron, alpha_target):
     # Constants from Core Compression Law and Golden Loop
     c1_surface = 0.529251      # Surface coefficient (CCL)
     c2_volume = 0.316743       # Volume coefficient (CCL)
-    beta_crit = 3.058230856    # Golden Loop critical beta
+    beta_crit = 3.043233053    # Golden Loop critical beta
 
     # Geometric factor (Nuclear-Electronic Bridge)
     # Derived from empirical alignment to α = 1/137.036...
@@ -296,7 +296,7 @@ def compare_with_v22(beta_derived, beta_v22=BETA_V22, beta_theory=BETA_GOLDEN_LO
     Args:
         beta_derived: β from our α extraction
         beta_v22: β from V22 cross-lepton fit (3.15)
-        beta_theory: β from Golden Loop theory (3.058)
+        beta_theory: β from Golden Loop theory (3.043233053)
     
     Returns:
         Dict with comparison metrics

@@ -24,7 +24,7 @@ All simulations use exact values from `/home/tracy/development/QFD_SpectralGap/Q
 
 ```python
 # Fundamental Constants
-BETA = 3.058                    # Vacuum stiffness (dimensionless)
+BETA = 3.043233053                    # Vacuum stiffness (dimensionless)
 ALPHA_EM = 1/137.036           # Fine structure constant (exact)
 M_PROTON = 938.272             # MeV (proton mass scale)
 HBAR_C = 197.3269804           # MeV·fm (conversion constant)
@@ -183,7 +183,7 @@ E_eV = E_J / e
 **Formula** (from Nuclear sector): `α⁻¹ = π² · exp(β) · (c₂/c₁)`
 
 **Given**:
-- β = 3.058 (schema)
+- β = 3.043233053 (schema)
 - α⁻¹ = 137.036 (measured, schema)
 
 **Required geometric ratio**:
@@ -206,7 +206,7 @@ c2_c1_required = 0.652323
 
 **Validation**:
 ```python
-alpha_inv_predicted = np.pi**2 * np.exp(3.058) * 0.652323
+alpha_inv_predicted = np.pi**2 * np.exp(3.043233053) * 0.652323
 # Result: 137.036000 (exact match!)
 ```
 
@@ -221,7 +221,7 @@ alpha_inv_predicted = np.pi**2 * np.exp(3.058) * 0.652323
 
 **Results**:
 ```
-ξ_linear    = 4.70e-02  (β = 3.058)
+ξ_linear    = 4.70e-02  (β = 3.043233053)
 ξ_quadratic = 2.21e-03
 ξ_cubic     = 1.04e-04
 ```

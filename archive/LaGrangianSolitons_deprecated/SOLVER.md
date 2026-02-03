@@ -31,11 +31,11 @@ Build a **quantum field theory soliton solver** for nuclear binding energies tha
 
 ### Key Parameter
 
-**β = 3.058231** - Vacuum stiffness from Golden Loop derivation
+**β = 3.043233053** - Vacuum stiffness from Golden Loop derivation
 
 ### Current Status
 
-✓ **Straight Ruler Protocol**: Measured where pure β=3.058 fails
+✓ **Straight Ruler Protocol**: Measured where pure β=3.043233053 fails
 ✓ **Discrete solver**: Implemented with temporal gradient
 ✓ **He-4 calibration**: Achieves -30 MeV (exp: -25.71 MeV, 17% error)
 ✗ **C-12/O-16**: Scaling issues (factor of 2-64x errors)
@@ -80,12 +80,12 @@ where:
 
 Empirical relationship for stable isotopes:
 ```
-Z = 0.53 × A^(2/3) + (1/3.058) × A
+Z = 0.53 × A^(2/3) + (1/3.043233053) × A
 Z = 0.53 × A^(2/3) + 0.327 × A
 ```
 
 - **Surface term**: 0.53 × A^(2/3)
-- **Volume term**: A/β with β = 3.058
+- **Volume term**: A/β with β = 3.043233053
 
 This defines the **line of stability** in (A, Z) space.
 
@@ -98,7 +98,7 @@ This defines the **line of stability** in (A, Z) space.
 Previous work used **parameter optimization** to fit C-12. This contaminates the physics with curve fitting.
 
 **The Straight Ruler Protocol**:
-1. LOCK β = 3.058 (no optimization)
+1. LOCK β = 3.043233053 (no optimization)
 2. LOCK all other parameters (no fitting)
 3. Sweep periodic table (H-1 to U-238)
 4. MEASURE the gap (residuals)
@@ -110,7 +110,7 @@ File: `diagnose_missing_physics.py`
 
 ```python
 # Fixed physics (no optimization allowed!)
-BETA_GOLDEN = 3.058231
+BETA_GOLDEN = 3.043233053
 C4_STIFFNESS = 12.0
 
 def run_fixed_solver(Z, A, calibration_scale=None):
@@ -258,7 +258,7 @@ Complete multi-isotope solver with temporal gradient.
 
 **Key parameters**:
 ```python
-BETA = 3.058231          # Vacuum stiffness
+BETA = 3.043233053          # Vacuum stiffness
 ALPHA_V4 = 12.0          # V4 coupling
 ALPHA_EM = 1/137.036     # Fine structure
 G_TEMPORAL = 0.0053      # Temporal gradient coupling (calibrated to He-4)

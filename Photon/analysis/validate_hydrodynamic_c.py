@@ -17,7 +17,7 @@ def validate_hydrodynamic_c():
     
     # 1. PARAMETERS
     print("\n[1] VACUUM PARAMETERS")
-    beta = 3.058  # Vacuum stiffness (dimensionless in natural units)
+    beta = 3.043233053  # Vacuum stiffness (corrected value)
     rho_vac = 1.0  # Vacuum density (normalized to 1 in natural units)
     
     print(f"    β (stiffness) = {beta}")
@@ -55,7 +55,7 @@ def validate_hydrodynamic_c():
     
     # 5. SCALING LAW
     print("\n[5] SCALING LAW: c ∝ √β")
-    beta_values = np.array([1.0, 2.0, 3.058, 4.0, 5.0])
+    beta_values = np.array([1.0, 2.0, 3.043233053, 4.0, 5.0])
     c_values = np.sqrt(beta_values / rho_vac)
     
     print("    β       c = √(β/ρ)")

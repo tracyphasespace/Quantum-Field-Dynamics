@@ -6,7 +6,7 @@ Uses the exact relationship from Lean4/QFD/Nuclear/VacuumStiffness.lean:
     λ = k_geom × (m_e / α)
     k_geom = 4.3813 × β
 
-Where β = 3.058230856 (Golden Loop vacuum stiffness)
+Where β = 3.043233053 (Golden Loop vacuum stiffness)
 
 This formula proves λ ≈ m_p to within 1% (vacuum_stiffness_is_proton_mass theorem)
 """
@@ -39,7 +39,7 @@ BINDING_H2_MEV = 2.224566           # Deuteron binding energy (MeV)
 # LOCKED CONSTANTS FROM GOLDEN LOOP
 # ===========================================================================
 # Source: Lean4/QFD/Nuclear/VacuumStiffness.lean, Lepton/FineStructure.lean
-BETA_GOLDEN_LOOP = 3.058230856  # Vacuum bulk modulus (dimensionless)
+BETA_GOLDEN_LOOP = 3.043233053  # Vacuum bulk modulus (dimensionless)
 C1_SURFACE = 0.529251           # Nuclear surface coefficient
 C2_VOLUME = 0.316743            # Nuclear volume coefficient
 K_GEOM = 4.3813                 # Geometric integration factor (6D→4D)

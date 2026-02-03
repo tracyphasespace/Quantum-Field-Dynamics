@@ -19,7 +19,7 @@
                                           │
                                           ↓
                             ┌─────────────────────────────────────┐
-                            │  β = 3.058231                       │
+                            │  β = 3.043233053                       │
                             │  (Vacuum Bulk Modulus)              │
                             │  DERIVED FROM α                     │
                             └─────────────┬───────────────────────┘
@@ -72,7 +72,7 @@
 |---|-----------|---------|-------|-----------|-------|--------|--------|
 | **LOCKED BEFORE DEC 30** (9 parameters) | | | | | | |
 | 1 | α | — | 1/137.036 | 1/137.036 | 0% | 🔒 INPUT | — |
-| 2 | β | Golden Loop | 3.058231 | 3.1±0.05 | ~1% | 🔒 DERIVED | VacuumParameters |
+| 2 | β | Golden Loop | 3.043233053 | 3.1±0.05 | ~1% | 🔒 DERIVED | VacuumParameters |
 | 3 | λ | Proton Bridge | 938.272 MeV | 938.272 | 0% | 🔒 DERIVED | ProtonBridge |
 | 4 | k_c2 | = λ | 938.272 MeV | — | — | 🔒 DERIVED | — |
 | 5 | k_geom | From β, λ | 4.3813 | — | — | 🔒 DERIVED | — |
@@ -88,7 +88,7 @@
 | 13 | α_n | (8/7)β | 3.495 | 3.5 | 0.14% | 🔒 DERIVED | AlphaNDerivation ✅ |
 | 14 | β_n | (9/7)β | 3.932 | 3.9 | 0.82% | 🔒 DERIVED | BetaNGammaEDerivation ✅ |
 | 15 | γ_e | (9/5)β | 5.505 | 5.5 | 0.09% | 🔒 DERIVED | BetaNGammaEDerivation ✅ |
-| 16 | V₄_nuc | β | 3.058 | N/A | N/A | 🔒 DERIVED | QuarticStiffness ✅ |
+| 16 | V₄_nuc | β | 3.043233053 | N/A | N/A | 🔒 DERIVED | QuarticStiffness ✅ |
 | **PENDING** (1 parameter) | | | | | | |
 | 17 | k_J or A_plasma | TBD | — | — | — | ⏳ PENDING | High complexity (2-4 weeks) |
 
@@ -217,7 +217,7 @@ TOTAL: 12 hours, 7 parameters, ~100 theorems, 6/6 builds successful
 ├────────────────────────────────────────────────────────────────┤
 │ Timeline: 1-2 weeks                                            │
 │ Tasks:                                                         │
-│   1. Implement soliton solver with V₄_nuc = 3.058              │
+│   1. Implement soliton solver with V₄_nuc = 3.043233053              │
 │   2. Check ρ₀ ≈ 0.16 fm⁻³ emerges                              │
 │   3. Check B/A ≈ 8 MeV emerges                                 │
 │   4. Verify stability                                          │

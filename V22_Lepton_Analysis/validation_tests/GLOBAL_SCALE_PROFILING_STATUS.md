@@ -69,7 +69,7 @@ If structure is correct (gradient + boundary layer model captures physics):
 - Bad: χ² > 10 (model missing physics)
 
 ### 2. β Shift Direction Preserved
-**Critical test**: Does β still move toward 3.058 with gradient?
+**Critical test**: Does β still move toward 3.043233053 with gradient?
 
 **Before** (old mapping):
 - No gradient: β_eff ≈ 3.15
@@ -109,7 +109,7 @@ If S_opt ~ 10⁻⁶ or 10⁶ → unit mismatch somewhere
 
 **Purpose**: Verify:
 1. χ² ~ O(1), not 10⁷
-2. β minimum direction same (toward 3.058)
+2. β minimum direction same (toward 3.043233053)
 3. Δχ² profiles smooth (no optimizer artifacts)
 
 ### B. Sensitivity Tests (Old Mapping)
@@ -173,7 +173,7 @@ If S_opt ~ 10⁻⁶ or 10⁶ → unit mismatch somewhere
 2. **Δχ² contour plots**
    - 2D landscape (β, w)
    - Standard 1σ/2σ/3σ contours
-   - Mark β_Golden = 3.058 on plot
+   - Mark β_Golden = 3.043233053 on plot
 
 3. **Profile width analysis**
    - Δβ_1σ: width where Δχ² = 1
@@ -280,7 +280,7 @@ If S_opt ~ 10⁻⁶ or 10⁶ → unit mismatch somewhere
 Before proceeding to 9×6 scan, verify ALL of:
 
 - [ ] χ² ~ O(1) to O(10), not 10⁷
-- [ ] β_min ≈ 3.10 (same direction toward 3.058)
+- [ ] β_min ≈ 3.10 (same direction toward 3.043233053)
 - [ ] S_opt ~ O(1) to O(10) (reasonable scale)
 - [ ] Masses_model close to m_targets (within σ)
 - [ ] No optimizer failures (all 9 points converge)

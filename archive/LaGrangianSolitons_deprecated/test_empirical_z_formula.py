@@ -3,7 +3,7 @@
 EMPIRICAL Z FORMULA TEST
 ===========================================================================
 User's Formula:
-Z = 0.529 × A^(2/3) + (1/3.058) × A
+Z = 0.529 × A^(2/3) + (1/3.043233053) × A
 
 Physical interpretation:
 - First term: 0.529 × A^(2/3)  [Surface-like scaling]
@@ -19,7 +19,7 @@ import numpy as np
 from collections import Counter
 
 # Constants
-BETA_VACUUM = 3.058231
+BETA_VACUUM = 3.043233053
 
 def predict_Z_empirical(A):
     """User's empirical formula."""
@@ -38,7 +38,7 @@ print("EMPIRICAL Z FORMULA TEST")
 print("="*95)
 print()
 
-print("Formula: Z = 0.529 × A^(2/3) + (1/3.058) × A")
+print("Formula: Z = 0.529 × A^(2/3) + (1/3.043233053) × A")
 print()
 print(f"First term:  0.529 × A^(2/3)  (surface scaling)")
 print(f"Second term: {1/BETA_VACUUM:.4f} × A  (bulk linear term, β_vacuum^(-1))")
@@ -235,7 +235,7 @@ print("   Coefficient 0.529 ≈ 0.52 (similar to SHIELD_FACTOR)")
 print("   Represents surface/boundary contribution to charge")
 print()
 print("2. Bulk term (A):")
-print("   Coefficient 1/3.058 = β_vacuum^(-1)")
+print("   Coefficient 1/3.043233053 = β_vacuum^(-1)")
 print("   Represents bulk volume contribution")
 print()
 print("This is a DIRECT fit, not derived from energy minimization.")
@@ -246,7 +246,7 @@ if abs(success_rate - 61.4) < 5:
     print("Similar performance suggests both approaches capture same physics:")
     print("  • Surface vs bulk balance")
     print("  • A^(2/3) and A scaling")
-    print("  • β_vacuum = 3.058 as fundamental parameter")
+    print("  • β_vacuum = 3.043233053 as fundamental parameter")
 else:
     print("Different performance suggests one approach misses key physics.")
 

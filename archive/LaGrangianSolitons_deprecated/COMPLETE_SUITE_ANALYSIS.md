@@ -24,7 +24,7 @@ The complete QFD suite implements a **parameter-free nuclear mass formula** with
 
 ```python
 α_fine   = 1/137.036        # Fine structure constant
-β_vacuum = 1/3.058231       # Vacuum stiffness (bulk modulus)
+β_vacuum = 1/3.043233053       # Vacuum stiffness (bulk modulus)
 λ_time   = 0.42             # Temporal metric parameter
 M_proton = 938.272 MeV      # Proton mass scale
 ```

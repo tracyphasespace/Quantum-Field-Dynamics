@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Aristotle created **two completely new nuclear modules** that derive three fundamental nuclear constants from a single vacuum parameter β = 3.058231 (Golden Loop).
+Aristotle created **two completely new nuclear modules** that derive three fundamental nuclear constants from a single vacuum parameter β = 3.043233053 (Golden Loop).
 
 **Impact**: This proves that nuclear physics emerges from vacuum geometry, not independent empirical parameters.
 
@@ -30,7 +30,7 @@ Aristotle created **two completely new nuclear modules** that derive three funda
 **α_n (nuclear fine structure constant) = (8/7) × β**
 
 Where:
-- β = 3.058231 (vacuum bulk modulus from Golden Loop)
+- β = 3.043233053 (vacuum bulk modulus from Golden Loop)
 - 8/7 ≈ 1.1429 (geometric coupling factor)
 
 #### Numerical Result
@@ -144,7 +144,7 @@ theorem gamma_e_increases_with_beta (beta1 beta2 : ℝ)
 
 ### The Three-Parameter Unification
 
-From **ONE vacuum parameter** β = 3.058231, we now derive **THREE nuclear constants**:
+From **ONE vacuum parameter** β = 3.043233053, we now derive **THREE nuclear constants**:
 
 | Constant | QFD Formula | Geometric Factor | Accuracy |
 |----------|-------------|------------------|----------|

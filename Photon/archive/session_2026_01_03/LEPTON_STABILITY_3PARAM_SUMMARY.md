@@ -11,12 +11,12 @@
 ### Redid Stability Test With Full Model
 
 **Original test** (failed):
-- Used only β = 3.058
+- Used only β = 3.043233053
 - Missing ξ and τ terms
 - Got ratio 3.07 vs 206.77 (98.5% error)
 
 **New test** (this analysis):
-- Used β = 3.058, ξ = 1.0, τ = 1.01
+- Used β = 3.043233053, ξ = 1.0, τ = 1.01
 - Full energy functional: E = β(δρ)² + ½ξ|∇ρ|² + τ(∂ρ/∂t)²
 - Proper equilibrium condition
 
@@ -114,7 +114,7 @@ To get discrete lepton spectrum, likely need:
 
 | Aspect | Original (β only) | 3-Parameter (β,ξ,τ) |
 |--------|------------------|---------------------|
-| Parameters | β = 3.058 | β=3.058, ξ=1.0, τ=1.01 |
+| Parameters | β = 3.043233053 | β=3.043233053, ξ=1.0, τ=1.01 |
 | Energy terms | Bulk only | Bulk + gradient + temporal |
 | Stable states | 5 (wrong spacing) | 0 (no discrete minima) |
 | Mass ratio | 3.07 (FAIL) | N/A (no minima) |

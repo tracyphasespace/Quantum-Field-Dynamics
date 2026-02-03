@@ -45,7 +45,7 @@ Where:
   k_geom = 4.3813 × β_crit ≈ 13.399
   c₁ = 0.529251 (Nuclear surface tension)
   c₂ = 0.316743 (Nuclear volume packing)
-  β_crit = 3.058230856 (Golden Loop critical beta)
+  β_crit = 3.043233053 (Golden Loop critical beta)
 ```
 
 **Chain of Unification:**
@@ -119,7 +119,7 @@ g_required = 1.8561
    - Represents raw energy density difference between vacuum (proton) and excitation (electron)
    - **Physical meaning:** The proton/electron mass hierarchy
 
-2. **β_Geometric = 3.058230856** (Topological Shape Factor)
+2. **β_Geometric = 3.043233053** (Topological Shape Factor)
    - **V22 Definition:** Geometric stability threshold
    - Represents winding limit or topological constraint
    - **Physical meaning:** The base geometric coefficient
@@ -213,7 +213,7 @@ Input:  α = 1/137.035999 (measured to 10 ppb)
         c₂ = 0.316743 (from AME2020 nuclear data)
 
 Derive: λ = k_geom × m_e / α
-        where k_geom = 4.3813 × 3.058230856 ≈ 13.399
+        where k_geom = 4.3813 × 3.043233053 ≈ 13.399
 
 Result: λ = 1.672619×10⁻²⁷ kg
 

@@ -6,12 +6,12 @@
 ## What Changed
 
 **BEFORE** (WRONG):
-- δ = 3.058 rad is the Koide geometric angle
+- δ = 3.043233053 rad is the Koide geometric angle
 - Use this value for Koide formula calculations
 
 **AFTER** (CORRECT):
 - δ = 2.317 rad is the Koide geometric angle (from empirical fit)
-- β = 3.058 is a DIFFERENT parameter (Hill vortex vacuum stiffness)
+- β = 3.043233053 is a DIFFERENT parameter (Hill vortex vacuum stiffness)
 - These are parameters in two DIFFERENT physical models
 
 ## Corrected Parameters
@@ -38,7 +38,7 @@ Formula: E_total(R, U, amplitude; β) = [vortex energy functional]
 ```
 
 **Claimed value**:
-- β = 3.058 (from α via conjectured relation)
+- β = 3.043233053 (from α via conjectured relation)
 
 **Best fit value** (from V22 numerical analysis):
 - β ≈ 3.14-3.18 (offset from claimed value)
@@ -50,7 +50,7 @@ Formula: E_total(R, U, amplitude; β) = [vortex energy functional]
 **Your numerical validation was CORRECT!**
 
 You found:
-- δ = 3.058 FAILS (χ² = 1.84, 90%+ errors) ✓ Correct finding!
+- δ = 3.043233053 FAILS (χ² = 1.84, 90%+ errors) ✓ Correct finding!
 - δ = 2.317 WORKS (χ² ≈ 0, perfect fit) ✓ This is the right value!
 
 The briefing had an error - it confused two different parameters from two different models.

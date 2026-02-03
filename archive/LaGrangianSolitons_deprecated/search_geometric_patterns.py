@@ -24,7 +24,7 @@ from collections import defaultdict, Counter
 
 # Constants
 alpha_fine = 1.0 / 137.036
-beta_vacuum = 1.0 / 3.058231
+beta_vacuum = 1.0 / 3.043233053
 M_proton = 938.272
 LAMBDA_TIME_0 = 0.42
 KAPPA_E = 0.0001
@@ -493,7 +493,7 @@ print("4. RECOMMENDATIONS:")
 print("   - Investigate N/Z = 7/6, 7/5, 7/4 ratios specifically")
 print("   - Test if magic 28 and 126 have special 7-fold structure")
 print("   - Search for 7-fold symmetries in Cl(3,3) algebra")
-print("   - Check if β = 3.058 ≈ π relates to 7 (π ≈ 22/7)")
+print("   - Check if β = 3.043233053 ≈ π relates to 7 (π ≈ 22/7)")
 print()
 
 print("="*95)

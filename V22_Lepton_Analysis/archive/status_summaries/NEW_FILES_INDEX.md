@@ -179,7 +179,7 @@ Runtime: ~20 seconds, all converged
 1. **Numbers are real**: All documented results replicate exactly
 2. **Methods are sound**: Grid-converged, profile-insensitive
 3. **Scaling law emerges**: U ∝ √m to ~10% accuracy
-4. **β convergence interesting**: 3.058 ± 0.012 (α), 3.1 ± 0.05 (nuclear), 3.0-3.2 (cosmo)
+4. **β convergence interesting**: 3.043233053 ± 0.012 (α), 3.1 ± 0.05 (nuclear), 3.0-3.2 (cosmo)
 
 ### Critical Caveats
 
@@ -216,7 +216,7 @@ Runtime: ~20 seconds, all converged
    - If matches: genuine prediction ✓
 
 9. **Add uncertainty propagation**:
-   - β = 3.058 ± 0.012 → how do (R, U, amplitude) vary?
+   - β = 3.043233053 ± 0.012 → how do (R, U, amplitude) vary?
    - Systematic errors from grid, profile choice
 
 ### Medium-Term (3-6 Months) 🟢

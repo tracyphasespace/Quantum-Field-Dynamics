@@ -91,7 +91,7 @@ python3 run_all.py
 ### 1. g-2 Prediction (VALIDATED) ⭐
 
 **Parameters** (from mass fit):
-- β = 3.058 (bulk stiffness)
+- β = 3.043233053 (bulk stiffness, corrected)
 - ξ = 1.000 (gradient/surface tension)
 - τ = 1.010 (temporal stiffness)
 
@@ -259,7 +259,7 @@ python3 analysis/lepton_stability_3param.py
 
 ## Connection to QFD Framework
 
-### Parameter β = 3.058
+### Parameter β = 3.043233053
 
 **Appears across sectors**:
 - Nuclear: Binding energies, saturation density

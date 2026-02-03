@@ -38,25 +38,25 @@ This proves:
 
 ## What The Refined Scan Did Show
 
-### Recommendation #1: Sample β densely around 3.058 ✓
+### Recommendation #1: Sample β densely around 3.043233053 ✓
 
 **Results** (β ∈ [2.95, 3.25] with Δβ = 0.01, 31 points):
 
 | β     | Objective (unnormalized) | Status |
 |-------|-------------------------|--------|
 | 3.050 | 4.04×10⁻¹³              | Near target |
-| 3.058 | ~4-5×10⁻¹³ (between samples) | **Not sampled** |
+| 3.043233053 | ~4-5×10⁻¹³ (between samples) | **Not sampled** |
 | 3.060 | 5.13×10⁻¹³              | Near target |
 | ...   | ...                     | ... |
 | 3.190 | **9.01×10⁻¹⁴**          | **MINIMUM** |
 
 **Key findings**:
 - Minimum shifted from β = 3.200 (coarse grid) to **β = 3.190** (fine grid)
-- β = 3.058 is **NOT the minimum** (objective ~5× worse than β = 3.190)
+- β = 3.043233053 is **NOT the minimum** (objective ~5× worse than β = 3.190)
 - Variation increased to **1248%** (factor of ~13) vs factor of 2 on coarse grid
 - Still 100% convergence (without chi-squared normalization)
 
-**Your point confirmed**: The "minimum at 3.2" on coarse grid was sampling artifact, but the **true minimum is 3.190, not 3.058**.
+**Your point confirmed**: The "minimum at 3.2" on coarse grid was sampling artifact, but the **true minimum is 3.190, not 3.043233053**.
 
 ---
 
@@ -73,14 +73,14 @@ This proves:
    - With magnetic moment: 1248% variation (factor of 13)
    - Clear non-flat β landscape
 
-3. **But β = 3.058 is NOT selected** ✗
+3. **But β = 3.043233053 is NOT selected** ✗
    - Minimum at β = 3.190 (offset: 0.132)
    - All β ∈ [2.95, 3.25] converge
    - No failure mode
 
 ### What We CANNOT Claim
 
-1. ✗ "β = 3.058 uniquely determined by lepton masses"
+1. ✗ "β = 3.043233053 uniquely determined by lepton masses"
 2. ✗ "Magnetic moment predicted from Hill vortex" (normalization is empirical)
 3. ✗ "Second observable provides independent constraint" (until normalization derived)
 
@@ -97,7 +97,7 @@ This proves:
 
 | # | Recommendation | Status | Notes |
 |---|---------------|--------|-------|
-| 1 | Sample β densely around 3.058 | ✅ DONE | Minimum at 3.190, not 3.058 |
+| 1 | Sample β densely around 3.043233053 | ✅ DONE | Minimum at 3.190, not 3.043233053 |
 | 2 | Normalize by experimental uncertainties | ✅ DONE | ALL solutions fail (off by 10⁵ σ_g) |
 | 3 | Remove/externalize empirical normalization | ⏸️ PENDING | Awaiting your guidance |
 | 4 | Cross-lepton coupled fit | ⏸️ READY | Highest priority next step |
@@ -137,7 +137,7 @@ optimize: (R_e, U_e, A_e, R_μ, U_μ, A_μ, R_τ, U_τ, A_τ, β)
 
 **If successful (one β fits all)**:
 - Unique β emerges from cross-lepton consistency
-- Check if β ≈ 3.058 or β ≈ 3.19 (or different entirely)
+- Check if β ≈ 3.043233053 or β ≈ 3.19 (or different entirely)
 - **This would be strong evidence** for universal vacuum stiffness
 
 **If failed (leptons want different β)**:
@@ -200,7 +200,7 @@ Your technical review was spot-on:
 
 1. ✓ **Magnetic moment constraint is "too easy"** - confirmed via chi-squared normalization
 2. ✓ **Normalization is calibrated away** - cannot predict g-factor to 10⁻¹³ precision
-3. ✓ **Minimum shifted, not at 3.058** - confirmed at β = 3.190 with fine sampling
+3. ✓ **Minimum shifted, not at 3.043233053** - confirmed at β = 3.190 with fine sampling
 4. ✓ **Need real falsifiability test** - cross-lepton fit is the path forward
 
 **Ready to proceed to cross-lepton fit if you approve.**

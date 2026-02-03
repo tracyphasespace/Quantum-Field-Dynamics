@@ -6,7 +6,7 @@ Using geometric projection from 6D Cl(3,3) to 4D spacetime.
 
 FUNDAMENTAL CONSTANTS (locked by Golden Loop):
     alpha_fine   = 1/137.036  (fine structure constant)
-    beta_vacuum  = 1/3.058    (vacuum stiffness)
+    beta_vacuum  = 1/3.043233053    (vacuum stiffness)
     lambda_time  = 0.42       (temporal metric parameter)
     M_proton     = 938.272 MeV (mass scale λ)
 
@@ -30,7 +30,7 @@ import numpy as np
 # ============================================================================
 
 alpha_fine   = 1.0 / 137.036        # Fine structure constant
-beta_vacuum  = 1.0 / 3.058          # Vacuum stiffness
+beta_vacuum  = 1.0 / 3.043233053          # Vacuum stiffness
 lambda_time  = 0.42                 # Temporal metric parameter
 M_proton     = 938.272              # Proton mass (MeV)
 

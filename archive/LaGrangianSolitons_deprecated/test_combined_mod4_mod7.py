@@ -26,7 +26,7 @@ import itertools
 
 # Constants
 alpha_fine = 1.0 / 137.036
-beta_vacuum = 1.0 / 3.058231
+beta_vacuum = 1.0 / 3.043233053
 M_proton = 938.272
 LAMBDA_TIME_0 = 0.42
 KAPPA_E = 0.0001
@@ -439,7 +439,7 @@ print()
 
 print("3. NEXT STEPS:")
 print("   • Derive mod 4 and mod 7 from Cl(3,3) algebra")
-print("   • Check if β = 3.058 ≈ π relates to 7-fold (22/7 = 3.142...)")
+print("   • Check if β = 3.043233053 ≈ π relates to 7-fold (22/7 = 3.142...)")
 print("   • Investigate why quaternion structure gives 4-fold")
 print("   • Test if patterns extend to unstable isotopes")
 

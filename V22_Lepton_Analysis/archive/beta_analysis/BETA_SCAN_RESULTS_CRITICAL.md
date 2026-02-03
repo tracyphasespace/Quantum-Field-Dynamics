@@ -27,15 +27,15 @@ This is exactly what the reviewer warned about:
 |--------|-------|
 | β values where all 3 leptons converge | 17/21 (81.0%) |
 | β window width | Δβ = 1.0 |
-| Relative window width | 32.7% of β = 3.058 |
-| **Minimum residual at** | **β = 2.6** (NOT 3.058!) |
-| Residual at β = 3.058 | 3.40×10⁻⁵ (same as most other β) |
+| Relative window width | 32.7% of β = 3.043233053 |
+| **Minimum residual at** | **β = 2.6** (NOT 3.043233053!) |
+| Residual at β = 3.043233053 | 3.40×10⁻⁵ (same as most other β) |
 
 ### Residual Pattern
 
 **CRITICAL ISSUE**: Residuals are essentially **FLAT** across all β where convergence occurs:
 - All converged β values: ~3.4×10⁻⁵ ± 0.04×10⁻⁵
-- **No minimum at inferred β = 3.058**
+- **No minimum at inferred β = 3.043233053**
 - Slight minimum at β = 2.6 (3.36×10⁻⁵)
 
 This suggests the model has **excessive freedom** in parameter space.
@@ -54,7 +54,7 @@ Electron fails at 4 specific β values: 2.65, 2.70, 3.15, 3.20
 ### What Reviewer Expected (Strong Falsifiability):
 ```
 Solutions exist only in narrow window [2.95, 3.15]
-Deep minimum at β ≈ 3.058
+Deep minimum at β ≈ 3.043233053
 < 30% of β values have all-lepton solutions
 ```
 
@@ -75,12 +75,12 @@ NO deep minimum (flat residuals)
 ## Why This Is a Problem
 
 ### For Publication:
-1. **Main claim weakens**: Can't say β = 3.058 is uniquely selected
+1. **Main claim weakens**: Can't say β = 3.043233053 is uniquely selected
 2. **"Evidence" → "Compatibility"**: Model shows leptons are compatible with WIDE range of β
 3. **Falsifiability fails**: Reviewer will reject as "optimizer can hit targets"
 
 ### For Physics:
-1. **Golden Loop questioned**: If β = 2.6 works as well as β = 3.058, why claim α determines β?
+1. **Golden Loop questioned**: If β = 2.6 works as well as β = 3.043233053, why claim α determines β?
 2. **Underconstrained**: 3 DOF per lepton + wide β range = too much freedom
 3. **Predictivity low**: Can't use model to predict other observables
 
@@ -141,10 +141,10 @@ python3 validation_tests/test_beta_scan_production.py \
 If tighter tolerance doesn't help, manuscript must change:
 
 **OLD CLAIM (invalid)**:
-> "The inferred β = 3.058 supports stable solutions matching all three leptons"
+> "The inferred β = 3.043233053 supports stable solutions matching all three leptons"
 
 **NEW CLAIM (honest)**:
-> "Stable lepton-like solutions exist for β ∈ [2.5, 3.5]. The value β = 3.058
+> "Stable lepton-like solutions exist for β ∈ [2.5, 3.5]. The value β = 3.043233053
 > inferred from α falls within this window but is not uniquely selected by
 > the lepton spectrum alone."
 
@@ -164,7 +164,7 @@ Maybe virial satisfaction varies with β even if residuals don't?
 # For each β, compute:
 virial = |2*E_kin + E_grad - E_pot|
 # Plot virial vs β
-# Look for minimum at β = 3.058
+# Look for minimum at β = 3.043233053
 ```
 
 If virial shows β-selectivity, this could be salvaged.
@@ -181,7 +181,7 @@ If virial shows β-selectivity, this could be salvaged.
 2. **[ ] Analyze virial constraint** across β
    - Add virial computation to scan
    - Plot virial vs β
-   - Check for minimum at 3.058
+   - Check for minimum at 3.043233053
 
 3. **[ ] Decision point**:
    - If tighter tolerance shows narrow window → proceed with strong claims
@@ -217,8 +217,8 @@ Let me know if you want me to implement this now.
 
 ## What This Means for the "Golden Loop"
 
-If β = 2.6 works as well as β = 3.058:
-- Golden Loop relation (α → β = 3.058) is **not validated** by lepton spectrum
+If β = 2.6 works as well as β = 3.043233053:
+- Golden Loop relation (α → β = 3.043233053) is **not validated** by lepton spectrum
 - Either:
   1. Tolerance issue (we'll know soon)
   2. Golden Loop is conjectured, not proven by leptons

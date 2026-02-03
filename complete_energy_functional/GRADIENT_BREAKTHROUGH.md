@@ -7,7 +7,7 @@
 
 ## The Discovery
 
-Test runs show **gradient density contributes 64% of total energy** when ξ=1, β=3.058:
+Test runs show **gradient density contributes 64% of total energy** when ξ=1, β=3.043233053:
 
 ```
 E_total = 3.97
@@ -56,9 +56,9 @@ E_full = ∫ [½ξ|∇ρ|² + β(δρ)²] · 4πr² dr
 If we naively match energies:
 ```
 β_V22 · I_comp = β · I_comp + ξ · I_grad
-3.15 · I_comp = 3.058 · I_comp + ξ · I_grad
+3.15 · I_comp = 3.043233053 · I_comp + ξ · I_grad
 
-→ ξ = (3.15 - 3.058) · (I_comp / I_grad)
+→ ξ = (3.15 - 3.043233053) · (I_comp / I_grad)
 → ξ = 0.092 · (1.42 / 2.55) = 0.051
 ```
 
@@ -84,9 +84,9 @@ If we naively match energies:
 
 **Correct interpretation**:
 - V22 forced Hill vortex shape with β=3.15 → E=1.46
-- Full model optimizes shape with β=3.058, ξ=? → E=m_lepton
+- Full model optimizes shape with β=3.043233053, ξ=? → E=m_lepton
 
-The MCMC will find what ξ value gives correct mass when β is FIXED at 3.058!
+The MCMC will find what ξ value gives correct mass when β is FIXED at 3.043233053!
 
 ---
 
@@ -96,14 +96,14 @@ The MCMC will find what ξ value gives correct mass when β is FIXED at 3.058!
 
 **Posterior**:
 ```
-β = 3.058 ± 0.02  (sharp peak at Golden Loop value!)
+β = 3.043233053 ± 0.02  (sharp peak at Golden Loop value!)
 ξ = 0.8 ± 0.2     (order unity, as expected)
 ```
 
 **Interpretation**:
 - Gradient term BREAKS degeneracy
 - V22 offset was incomplete functional
-- β=3.058 from α is VALIDATED
+- β=3.043233053 from α is VALIDATED
 
 **Implication**:
 - ✅ Golden Loop confirmed
@@ -123,7 +123,7 @@ But: β constrained to 3.0-3.1 range (not flat!)
 **Interpretation**:
 - Partial degeneracy remains
 - But range is MUCH tighter than V22
-- β=3.058 within 2σ of peak
+- β=3.043233053 within 2σ of peak
 
 **Implication**:
 - ⚠️ Need additional constraint (charge radius, g-2)
@@ -210,10 +210,10 @@ From Schrödinger correspondence:
 From test with Hill vortex profile:
 ```
 I_grad = ∫ |∇ρ|² · 4πr² dr = 2.55/ξ  (when ξ=1)
-I_comp = ∫ (δρ)² · 4πr² dr = 1.42/β  (when β=3.058)
+I_comp = ∫ (δρ)² · 4πr² dr = 1.42/β  (when β=3.043233053)
 ```
 
-Ratio: I_grad / I_comp = (2.55/1) / (1.42/3.058) = 2.55 / 0.464 = **5.5**
+Ratio: I_grad / I_comp = (2.55/1) / (1.42/3.043233053) = 2.55 / 0.464 = **5.5**
 
 **This means**: Hill vortex has VERY STEEP gradients!
 - ∇ρ contributes 5.5× more "action" than compression
@@ -248,7 +248,7 @@ Can we predict β_eff from ratio of integrals?
 r, ρ = hill_vortex_profile(r, R, U, A)
 
 # Compute integrals for range of β, ξ
-for β in [2.8, 3.058, 3.15, 3.3]:
+for β in [2.8, 3.043233053, 3.15, 3.3]:
     for ξ in [0, 0.5, 1.0, 1.5, 2.0]:
         E = integrate_energy(ξ, β, ρ, r)
         # Check which (β, ξ) give E ≈ m_electron
@@ -261,7 +261,7 @@ This maps out the degeneracy WITHOUT needing MCMC!
 Simplify to 2D parameter space:
 - Fix (R, U, A) from Koide or V22
 - Fit only (β, ξ)
-- See if β posterior peaks at 3.058
+- See if β posterior peaks at 3.043233053
 
 **Advantage**:
 - Much faster (2D not 11D)
@@ -295,14 +295,14 @@ m = E[ρ] = ∫ [½ξ|∇ρ|² + β(δρ)²] dV
 ```
 - Parameters: (β, ξ, R, U, A) per lepton
 - Status: ⚠️ Pending MCMC validation
-- β from α-constraint: β = 3.058
+- β from α-constraint: β = 3.043233053
 
 ### If both validate:
 
 **Interpretation**:
 - Koide: Geometric shadow of underlying dynamics
 - Hill vortex: Mechanistic realization
-- δ = 2.317 rad ↔ (β=3.058, ξ~1) relationship?
+- δ = 2.317 rad ↔ (β=3.043233053, ξ~1) relationship?
 
 **Deep question**: Can we DERIVE Koide δ from (β, ξ)?
 - Koide angle emerges from vortex dynamics?
@@ -322,7 +322,7 @@ m = E[ρ] = ∫ [½ξ|∇ρ|² + β(δρ)²] dV
 ### After (With Gradient):
 
 ✅ **Strong falsifiability**:
-- If β ≠ 3.058 ± 0.05 → α-constraint wrong
+- If β ≠ 3.043233053 ± 0.05 → α-constraint wrong
 - If ξ << 1 → gradient physics wrong
 - If ξ >> 1 → QFD functional wrong
 - Sharp predictions testable
@@ -344,7 +344,7 @@ Each is INDEPENDENT CHECK on (β, ξ, τ) values!
 **The 64% gradient contribution is a smoking gun!**
 
 If MCMC confirms:
-- β → 3.058 (not 3.15) when ξ included
+- β → 3.043233053 (not 3.15) when ξ included
 - ξ ~ 1 (order unity as expected)
 
 Then:
@@ -363,7 +363,7 @@ Then:
 **Priority 1**: Analytical scaling map (today)
 - Grid search (β, ξ) vs E(m_electron)
 - Visualize degeneracy structure
-- Check if β=3.058 line exists
+- Check if β=3.043233053 line exists
 
 **Priority 2**: Quick 2D MCMC (today)
 - Fix geometry from Koide/V22
@@ -383,7 +383,7 @@ Then:
 ---
 
 **Status**: Ready for decisive test!
-**Prediction**: β_posterior will peak at 3.058 ± 0.02
+**Prediction**: β_posterior will peak at 3.043233053 ± 0.02
 **Timeline**: Could know answer TODAY with 2D MCMC
 
 ---

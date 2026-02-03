@@ -134,7 +134,7 @@ def log_prior(params):
     beta, xi, tau = params
 
     # β prior (centered on theoretical prediction)
-    beta_mean = 3.058
+    beta_mean = 3.043233053
     beta_std = 0.15
     lp_beta = -0.5 * ((beta - beta_mean) / beta_std)**2
 
@@ -217,7 +217,7 @@ def run_mcmc(
     print()
 
     # Initialize walkers
-    beta_init = 3.058
+    beta_init = 3.043233053
     xi_init = 1.0
     tau_init = 1.0
 

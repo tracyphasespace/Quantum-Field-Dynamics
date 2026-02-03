@@ -7,7 +7,7 @@ Fits 11 parameters:
 - Shared: ξ, β
 - Per-lepton: R_e, U_e, A_e, R_μ, U_μ, A_μ, R_τ, U_τ, A_τ
 
-Goal: Test if including gradient term ξ resolves β offset from 3.15 → 3.058
+Goal: Test if including gradient term ξ resolves β offset from 3.15 → 3.043233053
 """
 
 import numpy as np
@@ -52,14 +52,14 @@ def log_prior(params: np.ndarray) -> float:
 
     Parameters (11D):
     - ξ: gradient stiffness (dimensionless, ~1)
-    - β: vacuum stiffness (dimensionless, ~3.058 from α-constraint)
+    - β: vacuum stiffness (dimensionless, ~3.043233053 from α-constraint)
     - R_e, U_e, A_e: electron geometry
     - R_μ, U_μ, A_μ: muon geometry
     - R_τ, U_τ, A_τ: tau geometry
 
     Priors:
     - ξ ~ LogNormal(μ=0, σ=0.5)  → median=1, allows 0.3-3
-    - β ~ Normal(μ=3.058, σ=0.15)  → ±5% around Golden Loop
+    - β ~ Normal(μ=3.043233053, σ=0.15)  → ±5% around Golden Loop
     - R ~ LogNormal  → expect Compton scale ~10^-13 m
     - U ~ Uniform(0.1, 0.9)  → fraction of c
     - A ~ LogNormal  → wide prior on amplitude
@@ -73,8 +73,8 @@ def log_prior(params: np.ndarray) -> float:
         return -np.inf
     lp += -0.5 * (np.log(ξ) / 0.5)**2 - np.log(ξ * 0.5 * np.sqrt(2*np.pi))
 
-    # β prior: Normal(3.058, 0.15)
-    lp += -0.5 * ((β - 3.058) / 0.15)**2
+    # β prior: Normal(3.043233053, 0.15)
+    lp += -0.5 * ((β - 3.043233053) / 0.15)**2
 
     # Radius priors: LogNormal around Compton scale
     for R in [R_e, R_μ, R_τ]:
@@ -189,7 +189,7 @@ def initialize_walkers(n_walkers: int, n_dim: int) -> np.ndarray:
     """
     # Expected values from V22 and physics intuition
     ξ_init = 1.0
-    β_init = 3.058
+    β_init = 3.043233053
     R_e_init = 1e-13  # ~Compton scale
     U_e_init = 0.5
     A_e_init = 1.0
@@ -345,18 +345,18 @@ def analyze_stage1_results(
 
         print(f"{name:8s}: {median:.6e} ± {std:.6e} [{q16:.6e}, {q84:.6e}]")
 
-    # Key question: Did β shift to 3.058?
+    # Key question: Did β shift to 3.043233053?
     β_median = results['β']['median']
     β_std = results['β']['std']
-    β_offset = abs(β_median - 3.058)
+    β_offset = abs(β_median - 3.043233053)
 
     print("\n" + "="*70)
     print("CRITICAL QUESTION: Did gradient term resolve β offset?")
     print("="*70)
     print(f"β posterior median: {β_median:.4f} ± {β_std:.4f}")
-    print(f"β Golden Loop:      3.0580")
+    print(f"β Golden Loop:      3.043233053")
     print(f"β V22 (ξ=0):        3.1500")
-    print(f"Offset from target: {β_offset:.4f} ({100*β_offset/3.058:.2f}%)")
+    print(f"Offset from target: {β_offset:.4f} ({100*β_offset/3.043233053:.2f}%)")
     print()
 
     if β_offset < 0.02:
@@ -370,7 +370,7 @@ def analyze_stage1_results(
     fig = corner.corner(
         samples[:, :2],  # Just ξ and β for clarity
         labels=['ξ', 'β'],
-        truths=[1.0, 3.058],
+        truths=[1.0, 3.043233053],
         quantiles=[0.16, 0.5, 0.84],
         show_titles=True,
         title_fmt='.4f'
@@ -385,7 +385,7 @@ def analyze_stage1_results(
     for i, (ax, name) in enumerate(zip(axes, ['ξ', 'β'])):
         ax.plot(chain[:, :, i], alpha=0.3, color='k')
         ax.set_ylabel(name)
-        ax.axhline(3.058 if i == 1 else 1.0, color='r', ls='--', label='Expected')
+        ax.axhline(3.043233053 if i == 1 else 1.0, color='r', ls='--', label='Expected')
         ax.legend()
 
     axes[-1].set_xlabel('Step')

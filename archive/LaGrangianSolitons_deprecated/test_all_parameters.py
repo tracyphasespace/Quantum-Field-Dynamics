@@ -26,7 +26,7 @@ from collections import Counter
 
 # Base constants (truly fundamental)
 alpha_fine = 1.0 / 137.036  # Fine structure constant
-beta_vacuum = 1.0 / 3.058231  # Vacuum stiffness
+beta_vacuum = 1.0 / 3.043233053  # Vacuum stiffness
 M_proton = 938.272  # MeV
 
 # Parameters to test
@@ -186,7 +186,7 @@ print()
 
 print("TRULY FUNDAMENTAL (from first principles):")
 print("  ✓ α = 1/137.036 (fine structure constant)")
-print("  ✓ β = 1/3.058 (vacuum stiffness)")
+print("  ✓ β = 1/3.043233053 (vacuum stiffness)")
 print("  ✓ M_proton = 938.272 MeV (proton mass)")
 print()
 

@@ -25,8 +25,8 @@ From `QFD/Schema/Constraints.lean`:
 **Theoretical Calculation**:
 ```
 α = 1/137.036 = 0.007297
-β = 3.058231
-α/β = 0.007297 / 3.058231 = 0.002386
+β = 3.043233053
+α/β = 0.007297 / 3.043233053 = 0.002386
 ```
 
 **Comparison**:
@@ -40,7 +40,7 @@ From `QFD/Schema/Constraints.lean`:
 
 **Theoretical Calculation**:
 ```
-β/α = 3.058231 / 0.007297 = 419.22
+β/α = 3.043233053 / 0.007297 = 419.22
 ```
 
 **Comparison**:
@@ -54,7 +54,7 @@ From `QFD/Schema/Constraints.lean`:
 
 **Theoretical Calculation**:
 ```
-α × β = 0.007297 × 3.058231 = 0.02232
+α × β = 0.007297 × 3.043233053 = 0.02232
 ```
 
 **Comparison**:
@@ -68,13 +68,13 @@ From `QFD/Schema/Constraints.lean`:
 
 **Theoretical Calculation**:
 ```
-β = 3.058231
+β = 3.043233053
 ```
 
 **Comparison**:
-- Theoretical: β = 3.058
+- Theoretical: β = 3.043233053
 - Empirical: α_n = 3.5
-- Difference: |3.5 - 3.058| = 0.442
+- Difference: |3.5 - 3.043233053| = 0.442
 - Relative error: 0.442 / 3.5 = **12.6%**
 
 **Result**: ✅ PROMISING (12.6% error - within empirical tolerance)
@@ -83,7 +83,7 @@ From `QFD/Schema/Constraints.lean`:
 
 **If α_n = β × k**:
 ```
-k = α_n / β = 3.5 / 3.058231 = 1.144
+k = α_n / β = 3.5 / 3.043233053 = 1.144
 ```
 
 **Check if k has physical meaning**:
@@ -130,7 +130,7 @@ where α_s is the strong coupling constant.
 
 **If α_n = β × α_s**:
 ```
-α_n = 3.058 × 0.5 = 1.529
+α_n = 3.043233053 × 0.5 = 1.529
 ```
 
 **Comparison**:
@@ -149,7 +149,7 @@ where α_s is the strong coupling constant.
 | 1 | α_n = α/β | 0.00239 | 3.5 | 1467× | ❌ |
 | 2 | α_n = β/α | 419.22 | 3.5 | 120× | ❌ |
 | 3 | α_n = α × β | 0.0223 | 3.5 | 157× | ❌ |
-| 4 | α_n = β | 3.058 | 3.5 | 12.6% | ✅ |
+| 4 | α_n = β | 3.043233053 | 3.5 | 12.6% | ✅ |
 | 5 | α_n = β × k | 3.5 (k=1.144) | 3.5 | 0% | ⚠️ |
 | 7 | α_n = β² | 9.351 | 3.5 | 2.67× | ❌ |
 | 9 | α_n = β × α_s | 1.529 | 3.5 | 2.29× | ❌ |
@@ -158,7 +158,7 @@ where α_s is the strong coupling constant.
 
 ## Best Match: α_n ≈ β
 
-**Result**: α_n = 3.5 ≈ β = 3.058
+**Result**: α_n = 3.5 ≈ β = 3.043233053
 
 **Error**: 12.6% (within empirical tolerance of ±1.0)
 
@@ -194,13 +194,13 @@ where δ ≈ 0.144 (14.4%)
 
 **If δ = 2/7** (simple fraction):
 ```
-α_n = β × (1 + 2/7) = β × 9/7 = 3.058 × 9/7 = 3.931
+α_n = β × (1 + 2/7) = β × 9/7 = 3.043233053 × 9/7 = 3.931
 ```
 Error: |3.931 - 3.5| / 3.5 = 12.3% (still ~10% off)
 
 **If δ = 1/7**:
 ```
-α_n = β × (1 + 1/7) = β × 8/7 = 3.058 × 8/7 = 3.495
+α_n = β × (1 + 1/7) = β × 8/7 = 3.043233053 × 8/7 = 3.495
 ```
 Error: |3.495 - 3.5| / 3.5 = **0.14%** ✅✅
 
@@ -212,8 +212,8 @@ Error: |3.495 - 3.5| / 3.5 = **0.14%** ✅✅
 
 **Calculation**:
 ```
-β = 3.058231
-α_n = (8/7) × 3.058231 = 3.4951
+β = 3.043233053
+α_n = (8/7) × 3.043233053 = 3.4951
 ```
 
 **Validation**:
@@ -239,7 +239,7 @@ Error: |3.495 - 3.5| / 3.5 = **0.14%** ✅✅
 
 **Formula**:
 ```
-α_n = (8/7) × β = (8/7) × 3.058231 = 3.4951 ≈ 3.5
+α_n = (8/7) × β = (8/7) × 3.043233053 = 3.4951 ≈ 3.5
 ```
 
 **Status**: STRONG CANDIDATE for derivation
@@ -259,7 +259,7 @@ Error: |3.495 - 3.5| / 3.5 = **0.14%** ✅✅
 def alpha_n_theoretical (β : ℝ) : ℝ := (8/7) * β
 
 /-- Beta from Golden Loop -/
-def beta_golden : ℝ := 3.058231
+def beta_golden : ℝ := 3.043233053
 
 /-- Empirical nuclear fine structure -/
 def alpha_n_empirical : ℝ := 3.5

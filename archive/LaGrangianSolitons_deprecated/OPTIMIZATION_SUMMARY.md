@@ -169,7 +169,7 @@ symm=0.40, nr=0.10  →  182/285 (63.9%) [+4]  [overfitting]
 ```python
 # Constants
 alpha_fine = 1.0 / 137.036
-beta_vacuum = 1.0 / 3.058231
+beta_vacuum = 1.0 / 3.043233053
 M_proton = 938.272 MeV
 LAMBDA_TIME_0 = 0.42
 KAPPA_E = 0.0001
@@ -422,7 +422,7 @@ All QFD Book corrections (vortex shielding, temporal modulation, angular locking
 ### Long-Term Research Directions
 
 7. **Derive β_vacuum from First Principles**
-   - Currently β = 3.058 is phenomenological
+   - Currently β = 3.043233053 is phenomenological
    - Connect to QCD vacuum, color flux tubes
    - **Goal:** Reduce free parameters to zero
 
@@ -491,7 +491,7 @@ This optimization was conducted as part of the **QFD Project** investigating top
 - Lepton sector (Hill vortex): `V22_Lepton_Analysis/`
 - Master briefing: `CLAUDE.md`
 
-**Key Insight:** The same vacuum parameter β = 3.058 appears in:
+**Key Insight:** The same vacuum parameter β = 3.043233053 appears in:
 1. Nuclear binding energy
 2. Lepton mass spectrum (Hill vortex model)
 3. CMB anomaly alignment (axis of evil)

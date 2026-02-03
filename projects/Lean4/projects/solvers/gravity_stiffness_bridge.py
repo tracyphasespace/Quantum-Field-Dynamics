@@ -13,7 +13,7 @@ c = 299_792_458
 hbar = 1.054571817e-34
 L0 = 0.8414e-15
 lp = 1.616255e-35
-beta = 3.058230856
+beta = 3.043233053
 
 def compute_alpha_g():
     return G * mp**2 / (hbar * c)

@@ -256,12 +256,12 @@ def analyze_profile_likelihood(data):
         print(f"  → β IS identified by cross-lepton data")
         print(f"  → Multi-start spread was likely optimization noise")
 
-    # Check if minimum near 3.058
-    offset = abs(beta_min - 3.058)
+    # Check if minimum near 3.043233053
+    offset = abs(beta_min - 3.043233053)
     print(f"\nβ minimum vs expected:")
     print(f"  Observed: {beta_min:.6f}")
-    print(f"  Expected: 3.058000")
-    print(f"  Offset: {offset:.6f} ({offset/3.058*100:.2f}%)")
+    print(f"  Expected: 3.043233053")
+    print(f"  Offset: {offset:.6f} ({offset/3.043233053*100:.2f}%)")
 
     if offset < 0.01:
         print(f"  ✓ Within 1% of expected value")

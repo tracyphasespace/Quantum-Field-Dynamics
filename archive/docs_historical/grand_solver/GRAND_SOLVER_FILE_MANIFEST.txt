@@ -17,7 +17,7 @@ NEW FILES CREATED (8 files, ~4000 lines total)
    - Status: PRODUCTION READY
 
 2. schema/v0/GrandSolver_Fixed.py (131 lines)
-   - Diagnostic version with corrected β = 3.058
+   - Diagnostic version with corrected β = 3.043233053
    - Superseded by GrandSolver_Complete.py
    - Status: Historical record
 
@@ -137,7 +137,7 @@ THEORETICAL BREAKTHROUGHS
 
 1. MECHANICAL LEVERAGE RATIO
    m_p/m_e = (k_geom × β) × α⁻¹
-           = (4.3813 × 3.058) × 137.036
+           = (4.3813 × 3.043233053) × 137.036
            = 1836.3
    Experiment: 1836.15
    Error: 0.01%
@@ -151,7 +151,7 @@ THEORETICAL BREAKTHROUGHS
      scale required for electron-proton coexistence
 
 3. β UNIVERSALITY PROVEN
-   Same β = 3.058 across 5+ sectors:
+   Same β = 3.043233053 across 5+ sectors:
    - Fine structure
    - Nuclear binding
    - Lepton masses

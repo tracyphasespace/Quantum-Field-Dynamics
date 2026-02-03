@@ -10,9 +10,9 @@
 The multi-objective optimization with magnetic moment constraint:
 - ✓ **BREAKS the flat degeneracy** (96.9% variation vs <1% before)
 - ⚠️ **ALL β values still converge** (11/11 = 100%)
-- ✗ **Minimum at β = 3.200, NOT β = 3.058** (offset: 0.142)
+- ✗ **Minimum at β = 3.200, NOT β = 3.043233053** (offset: 0.142)
 
-**Conclusion**: Magnetic moment adds discriminating power but does NOT validate β = 3.058 as uniquely selected.
+**Conclusion**: Magnetic moment adds discriminating power but does NOT validate β = 3.043233053 as uniquely selected.
 
 ---
 
@@ -23,7 +23,7 @@ The multi-objective optimization with magnetic moment constraint:
 **Problem identified**: Original normalization factor (10.0) was 94.8× too small
 
 **Calibration method**:
-1. Used known electron solution at β = 3.058: (R=0.44, U=0.024, A=0.90)
+1. Used known electron solution at β = 3.043233053: (R=0.44, U=0.024, A=0.90)
 2. Calculated raw magnetic moment: μ = 0.2 × 1.0 × 0.44 × 0.024 = 2.11×10⁻³
 3. Required normalization: g_target / μ_raw = 2.00232 / 0.00211 = **948.0**
 
@@ -85,7 +85,7 @@ The multi-objective optimization with magnetic moment constraint:
 ### What Didn't Work
 
 1. **β minimum is SHIFTED**:
-   - Expected: β = 3.058 (from fine structure constant)
+   - Expected: β = 3.043233053 (from fine structure constant)
    - Observed: β = 3.200
    - Offset: Δβ = 0.142 (~4.6%)
 
@@ -116,7 +116,7 @@ The magnetic moment formula may need β-dependence:
 
 ### 3. QFD Conventions Mismatch
 Normalization factor (948) is empirical:
-- Calibrated to match electron at β = 3.058
+- Calibrated to match electron at β = 3.043233053
 - May encode physics that should be explicit
 - **Need**: Theoretical derivation of normalization
 
@@ -138,7 +138,7 @@ for k in 0.15 0.18 0.20 0.22 0.25; do
     # Modify geometric_factor in magnetic_moment_hill_vortex()
     # Re-calibrate normalization
     # Run β-scan
-    # Check if minimum shifts toward 3.058
+    # Check if minimum shifts toward 3.043233053
 done
 ```
 
@@ -180,13 +180,13 @@ Instead of optimizing each lepton independently, require:
 
 ### Current Claim (From BETA_SCAN_READY.md)
 
-> "The fine structure constant α determines vacuum stiffness β = 3.058,
+> "The fine structure constant α determines vacuum stiffness β = 3.043233053,
 > which uniquely supports Hill vortex solutions at the three lepton masses."
 
 ### Evidence Status
 
 **Against claim**:
-- ✗ β = 3.058 is NOT the minimum (β = 3.2 is)
+- ✗ β = 3.043233053 is NOT the minimum (β = 3.2 is)
 - ✗ All β values in [2.5, 3.5] support solutions
 - ✗ Only factor-of-2 preference, not "unique selection"
 
@@ -199,7 +199,7 @@ Instead of optimizing each lepton independently, require:
 
 **Option A: Weaken claim to "compatibility"**
 
-> "The vacuum stiffness β = 3.058 inferred from the fine structure constant
+> "The vacuum stiffness β = 3.043233053 inferred from the fine structure constant
 > is compatible with Hill vortex solutions at the observed lepton masses and
 > magnetic moments, with β in the range [2.5, 3.5] showing factor-of-2
 > variation in fit quality."
@@ -261,15 +261,15 @@ Run **cross-lepton multi-objective scan**:
 
 ## Bottom Line
 
-**Question**: Does adding magnetic moment restore β = 3.058 as uniquely selected?
+**Question**: Does adding magnetic moment restore β = 3.043233053 as uniquely selected?
 
 **Answer**: **NO**, but it's closer than before:
 - Flat degeneracy → 96.9% variation ✓
 - 100% β success rate (still no failures) ✗
-- Minimum at β = 3.2, not β = 3.058 ✗
+- Minimum at β = 3.2, not β = 3.043233053 ✗
 
 **Critical decision**:
-- If magnetic moment formula can be corrected → Re-run and hope for β = 3.058
+- If magnetic moment formula can be corrected → Re-run and hope for β = 3.043233053
 - If formula is correct → Major manuscript revision needed
 
 **Recommendation**: Ask Tracy to review magnetic moment derivation before proceeding.

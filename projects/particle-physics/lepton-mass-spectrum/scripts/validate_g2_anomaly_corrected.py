@@ -25,7 +25,7 @@ MP = 938.27208816        # Proton mass in MeV (PDG 2024)
 # --- Parameters from MCMC Breakthrough ---
 BETA_CORE = 3.0627       # Vacuum compression stiffness
 XI = 0.9655              # Gradient stiffness
-BETA_GOLDEN = 3.058      # Theoretical prediction
+BETA_GOLDEN = 3.043233053      # Theoretical prediction
 
 # --- Geometric Factors ---
 SHAPE_FACTOR = np.pi / 2  # D-flow compression

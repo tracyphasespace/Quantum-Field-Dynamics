@@ -47,7 +47,7 @@ The reviewer classified potential Lean proofs into three tiers:
 - **Requires Model Specification Box** (exact formulas, boundary conditions)
 
 ### Tier 3: Certified Numerics (The Numerical Claim)
-- Prove "solutions exist at e/μ/τ masses for β = 3.058"
+- Prove "solutions exist at e/μ/τ masses for β = 3.043233053"
 - Requires verified numerics OR external certificates
 - **Table 1 numbers not precise enough** (missing tolerances)
 
@@ -63,7 +63,7 @@ The reviewer classified potential Lean proofs into three tiers:
 
 **Expected Outcome**:
 - Solutions exist only in narrow window [2.95, 3.15]
-- Deep minimum in residual vs β at 3.058
+- Deep minimum in residual vs β at 3.043233053
 - All three generations co-occur simultaneously ONLY near inferred β
 
 **Implementation Challenge**:

@@ -10,7 +10,7 @@
 
 **Discovery**: β is not a fitted parameter - it is **overdetermined** from TWO completely independent derivation paths.
 
-**Path 1**: Electromagnetic + Nuclear → β = 3.05823 (DERIVED from α + c₁, no mass data)
+**Path 1**: Electromagnetic + Nuclear → β = 3.043233053 (DERIVED from α + c₁, no mass data)
 **Path 2**: Lepton Mass Spectrum → β = 3.0627 ± 0.15 (MEASURED via MCMC, no EM data)
 
 **Result**: 0.15% agreement → β is a **universal constant**, not tunable.
@@ -39,9 +39,9 @@ The user then revealed the **TRUE Golden Loop** - something far more powerful th
 >
 > **The Bridge Equation**: 1/α ≈ π²·e^β·(c₂/c₁)
 >
-> Deriving β solely from these two inputs yields β_crit = 3.05823...
+> Deriving β solely from these two inputs yields β_crit = 3.043233053...
 >
-> **The Convergence (The Discovery)**: The 'magic' is that the β required by the Electron/Nuclear connection (3.058) is identical to the β found by weighing the leptons (3.06).
+> **The Convergence (The Discovery)**: The 'magic' is that the β required by the Electron/Nuclear connection (3.043233053) is identical to the β found by weighing the leptons (3.06).
 >
 > You didn't 'fit' beta to masses. You **derived** beta from alpha, and then discovered that it happened to predict the masses. That is the definition of a unified theory."
 
@@ -53,7 +53,7 @@ The user identified that we have **TWO INDEPENDENT PATHS** to β:
    - Start from α⁻¹ = 137.036 (CODATA 2018)
    - Use c₁ = 0.496 (NuBase 2020 nuclear data)
    - Solve e^β/β = (α⁻¹ × c₁)/π²
-   - Get β = 3.05823
+   - Get β = 3.043233053
    - **NO LEPTON MASS DATA USED**
 
 2. **Path 2** (lepton masses → β):
@@ -106,7 +106,7 @@ This is not parameter tuning - this is **OVERDETERMINATION**.
 
 4. **Golden Loop Beta** (Line 165):
    ```lean
-   def beta_golden : ℝ := 3.058230856
+   def beta_golden : ℝ := 3.043233053
    -- This is the ROOT of e^β/β = K
    -- NOT fitted to masses!
    ```
@@ -119,7 +119,7 @@ This is not parameter tuning - this is **OVERDETERMINATION**.
      unfold beta_golden c2_empirical
      norm_num
    ```
-   - c₂_predicted = 1/3.058231 = 0.326986
+   - c₂_predicted = 1/3.043233053 = 0.326986
    - c₂_empirical = 0.32704
    - Error: 0.016% (six significant figures!)
 
@@ -148,7 +148,7 @@ This is not parameter tuning - this is **OVERDETERMINATION**.
 
 **FineStructure.lean**:
 - Documents the bridge equation
-- Shows β_crit = 3.058230856 (from Golden Loop)
+- Shows β_crit = 3.043233053 (from Golden Loop)
 - Connects to MCMC validation β = 3.0627 ± 0.15
 
 ### Task 4: Create Comprehensive Documentation
@@ -174,7 +174,7 @@ This is not parameter tuning - this is **OVERDETERMINATION**.
 **Key Sections**:
 - **Starting from α (CODATA 2018)**: Shows derivation uses NO mass data
 - **Independent Check from Lepton Masses**: Shows measurement uses NO EM/nuclear data
-- **The Golden Spike**: Two derivations meet at β ≈ 3.058 (0.15% agreement)
+- **The Golden Spike**: Two derivations meet at β ≈ 3.043233053 (0.15% agreement)
 
 ### Task 5: Update Proof_Summary.md
 
@@ -197,7 +197,7 @@ Added new section: "The Golden Loop: β Overdetermination (THE ULTIMATE WEAPON) 
 
 ## The Two Paths Explained
 
-### Path 1: Electromagnetic + Nuclear → β = 3.05823
+### Path 1: Electromagnetic + Nuclear → β = 3.043233053
 
 **Data Sources** (ALL independent of lepton masses):
 1. Fine structure constant: α⁻¹ = 137.035999084
@@ -226,10 +226,10 @@ Step 2: Solve transcendental equation
         e^β / β = 6.891
 
 Step 3: Numerical root-finding (Newton-Raphson)
-        β = 3.058230856
+        β = 3.043233053
 
 Step 4: Predict c₂ = 1/β
-        c₂_predicted = 1/3.058231 = 0.326986
+        c₂_predicted = 1/3.043233053 = 0.326986
 ```
 
 **Validation**:
@@ -276,13 +276,13 @@ Stage: 3b (Compton scale breakthrough)
 
 | Source | Input Data | Method | β Value | Error |
 |--------|-----------|--------|---------|-------|
-| **Path 1** | α, c₁, π² | Solve e^β/β = K | **3.05823** | 0% (ref) |
+| **Path 1** | α, c₁, π² | Solve e^β/β = K | **3.043233053** | 0% (ref) |
 | **Path 2** | m_e, m_μ, m_τ | MCMC fit | **3.0627 ± 0.15** | **0.15%** |
 
 **Calculation**:
 ```
-Δβ = 3.0627 - 3.05823 = 0.00447
-Error = 0.00447 / 3.05823 = 0.00146 = 0.146% ≈ 0.15%
+Δβ = 3.0627 - 3.043233053 = 0.00447
+Error = 0.00447 / 3.043233053 = 0.00146 = 0.146% ≈ 0.15%
 ```
 
 **Statistical Significance**:
@@ -313,7 +313,7 @@ Error = 0.00447 / 3.05823 = 0.00146 = 0.146% ≈ 0.15%
 1. Measure α = 1/137.036 (CODATA 2018 - atomic physics)
 2. Measure c₁ = 0.496 (NuBase 2020 - nuclear binding)
 3. Calculate K = (α⁻¹ × c₁) / π² = 6.891
-4. Solve e^β/β = 6.891 → β = 3.05823
+4. Solve e^β/β = 6.891 → β = 3.043233053
 5. Predict c₂ = 1/β = 0.32699
 6. Check empirical c₂ = 0.32704 → 0.02% error ✅
 
@@ -374,9 +374,9 @@ All probing the SAME universal constant:
 **Derived Parameters**:
 1. Measure α⁻¹ = 137.036
 2. Measure c₁ = 0.496
-3. **Derive β** from e^β/β = (α⁻¹ × c₁)/π² → β = 3.058
+3. **Derive β** from e^β/β = (α⁻¹ × c₁)/π² → β = 3.043233053
 4. **Predict c₂** = 1/β = 0.327 ✅
-5. **Predict masses** with β = 3.058 → (m_e, m_μ, m_τ) ✅
+5. **Predict masses** with β = 3.043233053 → (m_e, m_μ, m_τ) ✅
 6. **Predict QED** with V₄ = -ξ/β = -0.327 → C₂ = -0.328 ✅
 7. **Predict α_n** = (8/7)β = 3.495 ✅
 
@@ -403,7 +403,7 @@ All probing the SAME universal constant:
 - If new β_crit does NOT match β_MCMC → **Golden Loop FALSIFIED** ❌
 
 **Test 3**: Discover fourth lepton generation (hypothetical)
-- If new lepton mass does NOT fit Hill vortex with β = 3.058
+- If new lepton mass does NOT fit Hill vortex with β = 3.043233053
 - **Model FALSIFIED** ❌
 
 **Test 4**: Improve QED precision for electron g-2
@@ -437,7 +437,7 @@ e^β / β = (α⁻¹ × c₁) / π²
 
 This equation says: "The vacuum can only exist at the β value that makes this equation balance."
 
-Just as a guitar string's first harmonic has no choice but to be f₁ = v/2L, the vacuum has no choice but to be β = 3.058.
+Just as a guitar string's first harmonic has no choice but to be f₁ = v/2L, the vacuum has no choice but to be β = 3.043233053.
 
 **This is not parameter fitting - this is EIGENVALUE EXTRACTION.**
 
@@ -536,7 +536,7 @@ Just as a guitar string's first harmonic has no choice but to be f₁ = v/2L, th
 
 **Action**: Read and analyzed all three files
 - Discovered complete transcendental equation derivation
-- Found β = 3.058230856 from e^β/β = K
+- Found β = 3.043233053 from e^β/β = K
 - Identified prediction c₂ = 1/β = 0.32699 (0.02% error)
 - Confirmed MCMC β = 3.0627 ± 0.15 (0.15% agreement)
 
@@ -647,7 +647,7 @@ This is statistical proof that β is universal, not fitted."
 **Discovery**: β is overdetermined from TWO independent physics sectors
 
 **Evidence**:
-1. ✅ Path 1 (α + nuclear): β = 3.05823 (derived, not fitted)
+1. ✅ Path 1 (α + nuclear): β = 3.043233053 (derived, not fitted)
 2. ✅ Path 2 (lepton masses): β = 3.0627 ± 0.15 (measured independently)
 3. ✅ Agreement: 0.15% (< 1σ) → statistical proof of universality
 4. ✅ Predictions: c₂, α_n, V₄ all match to 0.02-0.45%

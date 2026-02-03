@@ -1,7 +1,7 @@
 """
 GrandSolver_Fixed.py - Grand Unified Solver with Corrected β
 ============================================================
-Uses β = 3.058 from Golden Loop (vacuum stiffness)
+Uses β = 3.043233053 from Golden Loop (vacuum stiffness)
 Not β = 1836 (mass ratio)
 """
 
@@ -19,7 +19,7 @@ M_ELECTRON_KG = 9.10938356e-31
 M_PROTON_KG = 1.67262192e-27
 
 # LOCKED CONSTANTS (from our session)
-BETA_GOLDEN_LOOP = 3.058230856
+BETA_GOLDEN_LOOP = 3.043233053
 C1_CCL = 0.529251  
 C2_CCL = 0.316743
 
@@ -118,7 +118,7 @@ print(f"  2. Gravity (G): {G_error_pct:.1e}% error ← NEEDS GEOMETRIC FACTOR")
 print(f"  3. Nuclear (E): {nuclear_error_pct:.1f}% error ← REASONABLE")
 print()
 print("DIAGNOSTIC:")
-print("  ✓ β value is now correct (3.058, not 1836)")
+print("  ✓ β value is now correct (3.043233053, not 1836)")
 print("  ✓ Nuclear prediction ~O(1) error (plausible)")
 print("  ⚠️  Gravity still needs proper λ ↔ β relation")
 print()

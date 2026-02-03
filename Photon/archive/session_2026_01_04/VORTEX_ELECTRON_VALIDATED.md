@@ -309,7 +309,7 @@ python3 analysis/validate_vortex_force_law.py
 
 ### Alternative: Connection to Other QFD Sectors
 
-**Goal**: Show β = 3.058 universality
+**Goal**: Show β = 3.043233053 universality
 
 **Method**:
 - Derive vortex radius from β parameter

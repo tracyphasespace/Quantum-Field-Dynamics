@@ -70,7 +70,7 @@ Identical to production run (as expected, since parameters are identical):
 ### c₂ ≈ 1/β Validated
 
 **Theoretical prediction**:
-- β = 3.058 (QFD vacuum stiffness from Golden Loop)
+- β = 3.043233053 (QFD vacuum stiffness from Golden Loop)
 - **1/β = 0.327011**
 
 **Empirical fit** (Phase 2):

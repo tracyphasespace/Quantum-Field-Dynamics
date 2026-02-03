@@ -4,7 +4,7 @@ Derive fine structure constant α from vacuum geometry.
 
 In QFD:
 - Nuclear sector: π² · exp(β) · (c₂/c₁) = α⁻¹ = 137.036
-  where β ≈ 3.058, c₂/c₁ ≈ 6.42
+  where β ≈ 3.043233053, c₂/c₁ ≈ 6.42
 - Photon sector: α = e²/(4πε₀ℏc) ≈ 1/137.036
 
 Question: Can photon sector independently derive α from vacuum geometry?
@@ -26,7 +26,7 @@ epsilon_0 = 8.854187817e-12  # F/m
 alpha_measured = 1 / 137.035999084  # Fine structure constant (CODATA 2018)
 
 # QFD parameters
-beta = 3.058  # Vacuum stiffness
+beta = 3.043233053  # Vacuum stiffness (corrected value)
 c2_over_c1 = 6.42  # Nuclear coupling ratio (from saturation density fits)
 
 
@@ -191,7 +191,7 @@ def compare_sectors():
     print(f"\nAgreement:")
     print(f"  Nuclear vs QED: {abs(alpha_nuclear - alpha_qed)/alpha_qed * 100:.4f}% difference")
 
-    # If both use same β = 3.058, they should predict same α
+    # If both use same β = 3.043233053, they should predict same α
     # Nuclear: α⁻¹ = π²·exp(β)·(c₂/c₁)
     # Photon: α = e²/(4πε₀ℏc)
     # Consistency requires: ε₀ ∝ 1/(π²·exp(β)·(c₂/c₁))

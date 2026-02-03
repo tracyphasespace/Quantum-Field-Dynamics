@@ -19,7 +19,7 @@ The quartic term prevents over-compression at high density.
 
 **Theorem**: V₄_nuc = β
 
-where β = 3.058231 (vacuum bulk modulus from Golden Loop)
+where β = 3.043233053 (vacuum bulk modulus from Golden Loop)
 
 ## Physical Reasoning
 
@@ -176,9 +176,9 @@ theorem V4_nuc_theoretical_value :
   unfold V4_nuc_theoretical V4_nuc beta_golden
   rfl
 
-/-- Numerical value approximately 3.058 -/
+/-- Numerical value approximately 3.043233053 -/
 theorem V4_nuc_approx_three :
-    abs (V4_nuc_theoretical - 3.058) < 0.001 := by
+    abs (V4_nuc_theoretical - 3.043233053) < 0.001 := by
   unfold V4_nuc_theoretical V4_nuc beta_golden goldenLoopBeta
   norm_num
 
@@ -215,7 +215,7 @@ theorem V4_nuc_no_correction_factor :
 Note: V₄ (well depth, MeV) and V₄_nuc (quartic stiffness, dimensionless)
 are different quantities with different units and physical meanings:
 - V₄ = λ/(2β²) ≈ 50 MeV (energy scale of nuclear potential)
-- V₄_nuc = β ≈ 3.058 (dimensionless stiffness against compression)
+- V₄_nuc = β ≈ 3.043233053 (dimensionless stiffness against compression)
 
 Both derive from β but describe different physics.
 
@@ -248,7 +248,7 @@ with V₄_nuc = β to check:
 theorem V4_nuc_from_beta :
     V4_nuc_theoretical = goldenLoopBeta ∧
     V4_nuc_theoretical > 0 ∧
-    abs (V4_nuc_theoretical - 3.058) < 0.001 := by
+    abs (V4_nuc_theoretical - 3.043233053) < 0.001 := by
   constructor
   · exact V4_nuc_theoretical_value
   constructor

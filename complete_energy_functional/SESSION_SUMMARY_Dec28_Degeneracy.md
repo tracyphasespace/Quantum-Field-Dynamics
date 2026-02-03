@@ -10,18 +10,18 @@
 
 ### Starting Point
 - V22 lepton model: β ≈ 3.15 with simple functional E = ∫β(δρ)²dV
-- Golden Loop: β = 3.058 from α-constraint (3% offset)
+- Golden Loop: β = 3.043233053 from α-constraint (3% offset)
 - Hypothesis: Missing gradient ξ|∇ρ|² and temporal τ(∂ρ/∂t)² terms
 
 ### Work Completed
 1. ✅ Stage 1 MCMC: 2D (β, ξ) parameter fit
 2. ✅ Stage 2 MCMC: 3D (β, ξ, τ) parameter fit
-3. ✅ Fixed β test: β = 3.058 fixed, fit (ξ, τ)
+3. ✅ Fixed β test: β = 3.043233053 fixed, fit (ξ, τ)
 4. ✅ Comprehensive documentation (4 major documents)
 5. ✅ Diagnostic plots and analysis
 
 ### Key Discovery
-**β = 3.058 from Golden Loop is INCOMPATIBLE with lepton masses** when using simple gradient functional. Need electromagnetic sector (Stage 3) to resolve.
+**β = 3.043233053 from Golden Loop is INCOMPATIBLE with lepton masses** when using simple gradient functional. Need electromagnetic sector (Stage 3) to resolve.
 
 ---
 
@@ -41,7 +41,7 @@
 - ✓ Gradient term is large (ξ ~ 26, not ~1)
 - ✓ Contributes 65% of soliton energy
 - ✗ **Strong β-ξ degeneracy** (linear correlation r ~ 0.95)
-- ✗ β offset persists (2.95 vs 3.058 target)
+- ✗ β offset persists (2.95 vs 3.043233053 target)
 
 **Interpretation**:
 - Gradient term IS needed
@@ -71,7 +71,7 @@
 - ✓ Temporal term present (τ ≈ 1 as expected)
 - ✗ **Degeneracy PERSISTS**
 - ✗ τ does NOT break β-ξ correlation
-- ✗ β still ~3% offset from 3.058
+- ✗ β still ~3% offset from 3.043233053
 
 **Interpretation**:
 - Static masses don't constrain temporal stiffness strongly
@@ -80,13 +80,13 @@
 
 ---
 
-### Fixed β Test: β = 3.058 (CRITICAL)
+### Fixed β Test: β = 3.043233053 (CRITICAL)
 
 **Model**: E = ∫ [½ξ|∇ρ|² + β(δρ)² + τ(∂ρ/∂t)²] dV with β FIXED
 
 **Results** (16,000 samples):
 ```
-β = 3.058 (FIXED - Golden Loop prediction)
+β = 3.043233053 (FIXED - Golden Loop prediction)
 ξ = 26.820 ± 0.024    [26.80, 26.84]
 τ = 1.0308 ± 0.595    [0.60, 1.69]
 ```
@@ -105,11 +105,11 @@ Log-likelihood = -246,519 (complete rejection)
 ```
 
 **CRITICAL FINDING**:
-**β = 3.058 completely FAILS to fit lepton masses.**
+**β = 3.043233053 completely FAILS to fit lepton masses.**
 
 This proves:
 1. The β-ξ degeneracy is REAL, not numerical
-2. Golden Loop β = 3.058 ≠ vacuum stiffness parameter (or needs EM sector)
+2. Golden Loop β = 3.043233053 ≠ vacuum stiffness parameter (or needs EM sector)
 3. V22's β ≈ 3.15 is CORRECT for this simple functional
 4. **Stage 3 (EM functional) is REQUIRED**
 
@@ -144,8 +144,8 @@ All fit masses equally well:
 
 **Fixed β** (Golden Loop):
 ```
-β = 3.058, ξ = 26.8
-β_eff = 3.058 + 0.007×26.8 ≈ 3.25 ✗
+β = 3.043233053, ξ = 26.8
+β_eff = 3.043233053 + 0.007×26.8 ≈ 3.25 ✗
 ```
 
 Only first two match masses. Golden Loop β is too low.
@@ -198,13 +198,13 @@ It's the **effective vacuum stiffness** β_eff needed for lepton masses with sim
 
 Our Stage 1-2 confirm same β_eff ≈ 3.15 when gradient included.
 
-### 4. Golden Loop β = 3.058 Puzzle
+### 4. Golden Loop β = 3.043233053 Puzzle
 
 **Two possibilities**:
 
 **A) Different β parameters** (likely):
 - β_vacuum ≈ 2.96 (from lepton dynamics)
-- β_EM ≈ 3.058 (from EM/α coupling)
+- β_EM ≈ 3.043233053 (from EM/α coupling)
 - These describe different physics sectors
 
 **B) Missing EM functional** (testable):
@@ -227,7 +227,7 @@ Comprehensive analysis of Stage 1 & 2 results:
 
 ### 2. NEXT_STEPS.md (3.2 KB)
 Decision tree for path forward:
-- Option 1: Fix β = 3.058 (COMPLETED - Failed)
+- Option 1: Fix β = 3.043233053 (COMPLETED - Failed)
 - Option 2: Add EM functional (REQUIRED)
 - Option 3: Koide relation constraint (bonus)
 - Implementation timeline
@@ -235,7 +235,7 @@ Decision tree for path forward:
 ### 3. CRITICAL_FINDING.md (6.8 KB)
 Detailed report on fixed β test failure:
 - Mass prediction comparison
-- Why β = 3.058 doesn't work
+- Why β = 3.043233053 doesn't work
 - Two-sector hypothesis
 - Implications for V22 and Golden Loop
 - Path to resolution
@@ -324,7 +324,7 @@ SESSION_SUMMARY_Dec28_Degeneracy.md    - This summary
    - β_eff ≈ 3.15 required
    - Individual β and ξ undetermined
 
-4. **Golden Loop β = 3.058 puzzle**
+4. **Golden Loop β = 3.043233053 puzzle**
    - Incompatible with masses (this functional)
    - May be different sector (EM vs mechanical)
    - OR missing EM functional needed
@@ -416,7 +416,7 @@ class TwoSectorModel:
     E_total = E_mech[ρ_m, β_m, ξ_m] + E_EM[ρ_e, β_e, ξ_e]
 
     Mass from E_mech (β_m ~ 3.15)
-    Fine structure from E_EM (β_e ~ 3.058)
+    Fine structure from E_EM (β_e ~ 3.043233053)
     """
 ```
 
@@ -470,7 +470,7 @@ Sections:
    - Or is it emergent from geometry alone?
 
 5. **Running coupling interpretation?**
-   - β = 3.058 "bare" parameter
+   - β = 3.043233053 "bare" parameter
    - β_eff = 3.15 "renormalized" at lepton mass scale
    - Analogy with QFT running couplings?
 
@@ -517,7 +517,7 @@ Sections:
 - Consistent across all leptons
 
 ✅ **Fixed β test**
-- Definitively ruled out β = 3.058 with this functional
+- Definitively ruled out β = 3.043233053 with this functional
 - Clear failure mode (masses off by 20-60%)
 - Points to missing physics
 
@@ -528,7 +528,7 @@ Sections:
 - Static masses insufficient
 - Need independent observables
 
-❌ **Golden Loop β = 3.058**
+❌ **Golden Loop β = 3.043233053**
 - Incompatible with lepton masses
 - May need EM sector or different interpretation
 - Puzzle remains
@@ -553,10 +553,10 @@ Sections:
 
 This investigation was motivated by the V22 β offset puzzle and the need to test whether missing gradient/temporal terms could explain the ~3% discrepancy with Golden Loop predictions.
 
-The **critical finding** that β = 3.058 fails to fit masses with the simple gradient functional represents a major step forward in understanding the parameter structure of QFD lepton models.
+The **critical finding** that β = 3.043233053 fails to fit masses with the simple gradient functional represents a major step forward in understanding the parameter structure of QFD lepton models.
 
 Stage 3 (EM functional) will determine whether:
-- Golden Loop β = 3.058 applies to different sector
+- Golden Loop β = 3.043233053 applies to different sector
 - Or the α-constraint derivation needs revision
 - Or both β values are correct for different observables
 

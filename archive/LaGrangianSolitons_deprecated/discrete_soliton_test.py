@@ -12,7 +12,7 @@ from scipy.optimize import minimize
 from scipy.spatial import distance_matrix
 
 # Physical constants (same as He-4 solver)
-BETA = 3.058231
+BETA = 3.043233053
 ALPHA_V4 = 12.0
 ALPHA_EM = 1/137.036
 HC = 197.327

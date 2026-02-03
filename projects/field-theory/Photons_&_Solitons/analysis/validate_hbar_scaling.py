@@ -30,15 +30,15 @@ def validate_hbar_scaling():
     c_SI = 299792458  # m/s (defined)
     rho_vac = 1.0  # Normalized in natural units
     
-    # 2. DERIVE L₀ FROM MEASURED ℏ (for reference β = 3.058)
-    beta_ref = 3.058
+    # 2. DERIVE L₀ FROM MEASURED ℏ (for reference β = 3.043233053)
+    beta_ref = 3.043233053
     c_ref = np.sqrt(beta_ref / rho_vac)  # Natural units
     
     # Convert to SI: need to find what natural unit → SI conversion is
     # We know L₀ = ℏ/(Γ·λ·c) from dimensional_audit
     L_zero_SI = hbar_measured / (Gamma_vortex * lambda_mass * c_SI)
     
-    print("\n[2] REFERENCE VALUES (β = 3.058)")
+    print("\n[2] REFERENCE VALUES (β = 3.043233053)")
     print(f"    β_ref = {beta_ref}")
     print(f"    c (natural units) = √(β/ρ) = {c_ref:.4f}")
     print(f"    Γ_vortex = {Gamma_vortex}")
@@ -50,7 +50,7 @@ def validate_hbar_scaling():
     print("\n[3] SCALING LAW: ℏ(β) = ℏ_ref · √(β/β_ref)")
     print("    Assuming Γ, λ, L₀ remain constant (hypothesis)")
     
-    beta_values = np.array([1.0, 2.0, 3.058, 4.0, 5.0])
+    beta_values = np.array([1.0, 2.0, 3.043233053, 4.0, 5.0])
     
     print("\n    β       c/c_ref    ℏ/ℏ_ref    ℏ (×10⁻³⁴ J·s)")
     print("    " + "-"*55)
@@ -80,7 +80,7 @@ def validate_hbar_scaling():
     c_unity = np.sqrt(beta_unity / rho_vac)
     hbar_unity = hbar_measured * np.sqrt(beta_unity / beta_ref)
     
-    print(f"    If β = 1 (instead of 3.058):")
+    print(f"    If β = 1 (instead of 3.043233053):")
     print(f"    c would be {c_unity:.4f} (natural units)")
     print(f"    c/c_ref = {c_unity/c_ref:.4f}")
     print(f"    ℏ would be {hbar_unity:.6e} J·s")

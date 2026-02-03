@@ -10,7 +10,7 @@
 ```
 Fine Structure Constant (α = 1/137.036...)
             ↓
-Vacuum Stiffness (β = 3.058230856)
+Vacuum Stiffness (β = 3.043233053)
             ↓
 Hill Vortex Geometry (R, U, amplitude)
             ↓
@@ -23,7 +23,7 @@ Lepton Masses (m_e, m_μ, m_τ)
 
 ## Test Results
 
-### All Three Leptons with β = 3.058230856
+### All Three Leptons with β = 3.043233053
 
 | Lepton | Target m/m_e | Achieved | Accuracy |
 |--------|--------------|----------|----------|
@@ -45,7 +45,7 @@ Lepton Masses (m_e, m_μ, m_τ)
 
 ### Electron Parameters
 
-|  | β from α (3.058) | β from nuclear (3.1) | Shift |
+|  | β from α (3.043233053) | β from nuclear (3.1) | Shift |
 |---|------------------|----------------------|-------|
 | **R** | 0.438719 | 0.439024 | -0.07% |
 | **U** | 0.024041 | 0.024089 | -0.20% |
@@ -126,7 +126,7 @@ This demonstrates **geometric quantization** - parameters are tightly constraine
 
 **Strength**:
 - α is independently measured (α⁻¹ = 137.035999177...)
-- β = 3.058230856 is derived, not fitted
+- β = 3.043233053 is derived, not fitted
 - Predicts masses across 3 orders of magnitude
 - Same β for all three leptons
 
@@ -140,7 +140,7 @@ This demonstrates **geometric quantization** - parameters are tightly constraine
 
 From QFD fine structure identity (see documentation):
 ```
-α → β = 3.058230856
+α → β = 3.043233053
 ```
 
 **Source**: Fine structure constant measured to 10 parts per billion
@@ -152,7 +152,7 @@ Hill vortex energy functional:
 E_total = E_circ(R, U, amplitude) - E_stab(β, R, amplitude)
 ```
 
-With β = 3.058230856, optimizer finds:
+With β = 3.043233053, optimizer finds:
 ```
 R = 0.4387, U = 0.0240, amplitude = 0.9114
 → E_total = 1.000 m_e
@@ -218,7 +218,7 @@ These would reduce **∞ solutions → unique solution** for each lepton.
 **Title**: "Lepton Mass Hierarchy from Fine Structure Constant through Hill Vortex Quantization"
 
 **Abstract**:
-> "We demonstrate that the vacuum stiffness parameter β = 3.058, derived from the fine structure constant α = 1/137.036, determines the charged lepton mass hierarchy through Hill spherical vortex configurations. Using a parabolic density depression and geometric energy functional, we obtain the electron, muon, and tau masses to better than 100% accuracy with no free parameters. The circulation velocity U scales as √m, and geometric parameters (radius R, density amplitude) remain within narrow ranges despite the 3477-fold mass variation. While individual configurations exhibit degeneracy requiring additional constraints, the β-mass connection represents a fundamental geometric quantization principle linking electromagnetism (α) to inertia (mass)."
+> "We demonstrate that the vacuum stiffness parameter β = 3.043233053, derived from the fine structure constant α = 1/137.036, determines the charged lepton mass hierarchy through Hill spherical vortex configurations. Using a parabolic density depression and geometric energy functional, we obtain the electron, muon, and tau masses to better than 100% accuracy with no free parameters. The circulation velocity U scales as √m, and geometric parameters (radius R, density amplitude) remain within narrow ranges despite the 3477-fold mass variation. While individual configurations exhibit degeneracy requiring additional constraints, the β-mass connection represents a fundamental geometric quantization principle linking electromagnetism (α) to inertia (mass)."
 
 **Key claims**:
 1. ✅ β from α → lepton masses (100% accuracy)
@@ -246,7 +246,7 @@ These would reduce **∞ solutions → unique solution** for each lepton.
    - Convergence criteria
 
 4. **Results**
-   - **β = 3.058230856 from α**
+   - **β = 3.043233053 from α**
    - Three-lepton table (e, μ, τ)
    - Scaling laws validated
    - Comparison with β from nuclear
@@ -398,7 +398,7 @@ These would reduce **∞ solutions → unique solution** for each lepton.
 
 **We closed the Golden Loop**:
 ```
-α = 1/137.036... → β = 3.058 → m_e, m_μ, m_τ
+α = 1/137.036... → β = 3.043233053 → m_e, m_μ, m_τ
 ```
 
 This is a **genuine prediction** from a fundamental constant, not a circular fit.
@@ -433,7 +433,7 @@ The connection α → β → masses is scientifically significant even with dege
 
 **Golden Loop Tests**:
 - `test_beta_from_alpha.py` - β from α vs β from nuclear comparison
-- `test_all_leptons_beta_from_alpha.py` - Three leptons with β = 3.058
+- `test_all_leptons_beta_from_alpha.py` - Three leptons with β = 3.043233053
 - `results/beta_from_alpha_results.json` - Detailed comparison
 - `results/three_leptons_beta_from_alpha.json` - Full three-lepton data
 

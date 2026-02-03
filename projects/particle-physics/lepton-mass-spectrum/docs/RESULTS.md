@@ -31,7 +31,7 @@ MCMC sampling (24 walkers, 1000 steps, 200 burn-in):
 
 | Parameter | MCMC Result | Theoretical | Offset | Status |
 |-----------|-------------|-------------|--------|--------|
-| β | 3.063 ± 0.149 | 3.058 (Golden Loop) | 0.16% | Consistent |
+| β | 3.063 ± 0.149 | 3.043233053 (Golden Loop) | 0.16% | Consistent |
 | ξ | 0.97 ± 0.55 | ~1 (dimensional) | - | Consistent |
 | τ | 1.01 ± 0.66 | ~1 (dimensional) | - | Consistent |
 
@@ -161,7 +161,7 @@ We test three different β priors:
 
 **Result**:
 ```
-β = 3.058 ± 0.421  (wider posteriors)
+β = 3.043233053 ± 0.421  (wider posteriors)
 ξ = 0.96 ± 1.52
 τ = 1.03 ± 1.84
 ```

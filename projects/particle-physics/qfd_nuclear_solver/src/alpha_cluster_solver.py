@@ -21,7 +21,7 @@ import math
 
 # Physical constants (same as qfd_metric_solver.py)
 M_PROTON = 938.272       # MeV
-BETA = 3.058231          # Vacuum stiffness
+BETA = 3.043233053          # Vacuum stiffness
 ALPHA_EM = 1/137.036     # Fine structure constant
 HC = 197.327             # ℏc in MeV·fm
 

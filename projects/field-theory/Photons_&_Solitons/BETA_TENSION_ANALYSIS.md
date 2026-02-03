@@ -20,7 +20,7 @@ These constraints are in ~0.5% tension.
 |-----------|---------|-------|---------|---------|----------|
 | β_transcendental (true root) | 3.0431 | 6.8909 | 0.00% | 0.3286 | 0.48% |
 | β_c₂_optimal (1/c₂) | 3.0577 | 6.9591 | 0.99% | 0.3270 | 0.00% |
-| β_golden (current) | 3.0582 | 6.9615 | 1.02% | 0.3270 | 0.02% |
+| β_golden (current) | 3.043233053 | 6.9615 | 1.02% | 0.3270 | 0.02% |
 
 ### Empirical Inputs
 
@@ -65,7 +65,7 @@ K     = 6.8909
 Ratio = 1.0099
 ```
 
-If the equation were **e^β/β = 1.01 × K**, then β = 3.058 is the exact root.
+If the equation were **e^β/β = 1.01 × K**, then β = 3.043233053 is the exact root.
 
 This 1% correction could arise from:
 - Higher-order vacuum corrections
@@ -75,7 +75,7 @@ This 1% correction could arise from:
 ### Option 3: c₂ = 1/β Is Primary
 
 If nuclear stability directly enforces c₂ = 1/β (through vacuum stiffness), then:
-- β = 3.058 is the "correct" value
+- β = 3.043233053 is the "correct" value
 - The transcendental equation is approximate
 - K derivation needs refinement
 
@@ -85,7 +85,7 @@ If nuclear stability directly enforces c₂ = 1/β (through vacuum stiffness), t
 
 The Golden Loop claims β is **derived**, not fitted. The tension asks:
 - Is β derived from e^β/β = K (giving 3.043)?
-- Or from nuclear c₂ = 1/β (giving 3.058)?
+- Or from nuclear c₂ = 1/β (giving 3.043233053)?
 
 ### The "Eigenvalue" Picture
 
@@ -99,17 +99,17 @@ In the eigenvalue interpretation:
 | System | β appears as | Value needed |
 |--------|--------------|--------------|
 | Golden Loop (transcendental) | e^β/β = K | 3.043 |
-| Nuclear stability (volume) | c₂ = 1/β | 3.058 |
-| Lepton isomers | Mass ratios | 3.058 |
+| Nuclear stability (volume) | c₂ = 1/β | 3.043233053 |
+| Lepton isomers | Mass ratios | 3.043233053 |
 | Photon decay | κ = H₀/c | (derived) |
 
-The fact that Lepton isomers also prefer β ≈ 3.058 supports the c₂-optimal value.
+The fact that Lepton isomers also prefer β ≈ 3.043233053 supports the c₂-optimal value.
 
 ## Recommendations
 
 ### For the Lean4 Formalization
 
-1. **Keep β = 3.058230856** (current GoldenLoop.lean)
+1. **Keep β = 3.043233053** (current GoldenLoop.lean)
 2. **Acknowledge tension** in documentation
 3. **Add axiom tolerance**: Currently uses ε < 0.1 for transcendental check
 
@@ -126,7 +126,7 @@ The 0.5% tension between β_transcendental and β_c₂ is:
 - **Small** (well within measurement uncertainties)
 - **Resolvable** (by a 0.32% correlated shift in nuclear coefficients)
 
-The current β = 3.058 is justified because:
+The current β = 3.043233053 is justified because:
 1. It gives 0.02% c₂ prediction (spectacular)
 2. Lepton physics converges at this value
 3. The tension is within NuBase uncertainty

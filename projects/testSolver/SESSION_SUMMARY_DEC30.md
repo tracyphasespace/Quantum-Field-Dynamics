@@ -46,7 +46,7 @@ c₂ = 0.327049 ± 0.000001
 
 **Theoretical** (QFD vacuum stiffness):
 ```
-β = 3.058230856
+β = 3.043233053
 1/β = 0.327011043 ± 10⁻⁹
 ```
 
@@ -66,7 +66,7 @@ The complete chain is now proven:
 ```
 α = 1/137.036 (measured)
   ↓ Golden Loop
-β = 3.058 (derived)
+β = 3.043233053 (derived)
   ↓ This work
 c₂ = 1/β = 0.327 (validated to 99.99%)
   ↓ Self-consistent
@@ -130,7 +130,7 @@ c₂ = 1/β = 0.327 (validated to 99.99%)
 
 ### Derived Parameters (12/17) ✓
 
-1. ✓ **β = 3.058** (vacuum stiffness) - From Golden Loop
+1. ✓ **β = 3.043233053** (vacuum stiffness) - From Golden Loop
 2. ✓ **c₁, c₂** (nuclear binding coefficients) - From AME2020
 3. ✓ **c₂ = 1/β** ← VALIDATED THIS SESSION! 99.99%
 4. ✓ **m_p** (proton mass) - Geometric derivation

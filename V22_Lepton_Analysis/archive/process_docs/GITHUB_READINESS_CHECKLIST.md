@@ -31,7 +31,7 @@ Read through and check for these red flags:
 ### 2. β from α Relation
 
 - [ ] Is it labeled "conjectured" or "empirical" (not "derived from first principles")?
-- [ ] Are uncertainties stated: β = 3.058 ± 0.012?
+- [ ] Are uncertainties stated: β = 3.043233053 ± 0.012?
 - [ ] Is it marked as falsifiable via independent measurements?
 
 **If called "derived"**: Change to "inferred via conjectured relation"

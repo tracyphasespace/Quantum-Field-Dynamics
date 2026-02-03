@@ -109,17 +109,17 @@ print(f"Fit quality:")
 print(f"  chi2 = {chi2_opt:.2e}")
 print()
 
-# Check how close to delta = 3.058
-delta_target = 3.058
+# Check how close to delta = 3.043233053
+delta_target = 3.043233053
 delta_diff = delta_opt - delta_target
-print(f"Comparison to delta = 3.058:")
+print(f"Comparison to delta = 3.043233053:")
 print(f"  Δdelta = {delta_diff:+.6f} rad ({delta_diff * 180/np.pi:+.4f}°)")
 if abs(delta_diff) < 0.01:
     print(f"  → MATCHES claimed value! ✓")
 elif abs(delta_diff) < 0.05:
     print(f"  → Close to claimed value")
 else:
-    print(f"  → DIFFERS significantly from 3.058 ⚠")
+    print(f"  → DIFFERS significantly from 3.043233053 ⚠")
 print()
 
 # Save results
@@ -156,7 +156,7 @@ output = {
         }
     },
     'comparison_to_3058': {
-        'delta_target': 3.058,
+        'delta_target': 3.043233053,
         'delta_difference': float(delta_diff),
         'delta_diff_degrees': float(delta_diff * 180/np.pi)
     }

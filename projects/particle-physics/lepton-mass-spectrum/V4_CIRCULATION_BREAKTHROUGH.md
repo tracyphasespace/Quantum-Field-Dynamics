@@ -25,7 +25,7 @@ This validates that **QED emerges from vacuum geometry** and that **generation s
 V₄(R) = V₄_compression + α_circ · V₄_circulation(R)
 
 where:
-  V₄_compression = -ξ/β = -1/3.058 = -0.3270 (constant)
+  V₄_compression = -ξ/β = -1/3.043233053 = -0.3270 (constant)
   V₄_circulation(R) = ∫∫∫ (v_φ/c)² · (dρ/dr)² · r² sin(θ) dr dθ dφ / (U² R³)
   α_circ = 0.431410 (calibrated from muon)
 ```
@@ -103,7 +103,7 @@ This is the **generation boundary** in vortex parameter space!
 ### V₄ = -ξ/β (Energy Partition)
 
 **Source**: `derive_v4_geometric.py`
-**Result**: V₄ = -1/3.058 = -0.327
+**Result**: V₄ = -1/3.043233053 = -0.327
 **Match to QED**: C₂ = -0.328 (0.45% error)
 **Method**: Vacuum stiffness ratio from MCMC
 

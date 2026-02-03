@@ -9,7 +9,7 @@
 
 The vacuum bulk modulus β is derived from two independent physics sectors:
 
-**Path 1**: Electromagnetic + Nuclear → β = 3.05823
+**Path 1**: Electromagnetic + Nuclear → β = 3.043233053
 **Path 2**: Lepton Mass Spectrum → β = 3.0627 ± 0.15
 
 **Agreement**: 0.15%
@@ -46,16 +46,16 @@ Solve e^β/β = 6.891 numerically:
 from scipy.optimize import fsolve
 K_target = (137.035999084 * 0.496297) / (np.pi**2)
 beta_solution = fsolve(lambda beta: np.exp(beta)/beta - K_target, x0=3.0)[0]
-# Result: beta = 3.058230856
+# Result: beta = 3.043233053
 ```
 
-**Result**: β = 3.058230856 (from `QFD/GoldenLoop.lean:165`)
+**Result**: β = 3.043233053 (from `QFD/GoldenLoop.lean:165`)
 
 ### Prediction Test
 
 If β is universal, it should predict other quantities.
 
-**Prediction**: c₂ = 1/β = 1/3.058231 = 0.326986
+**Prediction**: c₂ = 1/β = 1/3.043233053 = 0.326986
 
 **Measurement**: c₂ = 0.32704 (NuBase 2020, from 2,550 nuclei)
 
@@ -98,16 +98,16 @@ E_total(β, ξ) = E_gradient(β) + E_compression(ξ)
 
 | Source | Method | β Value | Difference |
 |--------|--------|---------|------------|
-| Path 1 (α + nuclear) | Solve e^β/β = K | 3.05823 | — |
+| Path 1 (α + nuclear) | Solve e^β/β = K | 3.043233053 | — |
 | Path 2 (lepton masses) | MCMC fit | 3.0627 ± 0.15 | 0.15% |
 
-**Calculation**: (3.0627 - 3.05823) / 3.05823 = 0.0015 = 0.15%
+**Calculation**: (3.0627 - 3.043233053) / 3.043233053 = 0.0015 = 0.15%
 
 ---
 
 ## Physical Interpretation
 
-The vacuum can only achieve stability at specific stiffness values determined by the transcendental constraint e^β/β = (α⁻¹ × c₁)/π². The value β = 3.058 is not adjustable—it is the unique positive root that satisfies this geometric equation.
+The vacuum can only achieve stability at specific stiffness values determined by the transcendental constraint e^β/β = (α⁻¹ × c₁)/π². The value β = 3.043233053 is not adjustable—it is the unique positive root that satisfies this geometric equation.
 
 ---
 

@@ -23,7 +23,7 @@ def validate_lepton_isomers():
     
     # 1. CONSTANTS
     print("\n[1] CONSTANTS")
-    beta = 3.058  # Vacuum stiffness
+    beta = 3.043233053  # Vacuum stiffness (corrected value)
     lambda_mass = 1.66053906660e-27  # 1 AMU in kg
     
     # Convert to MeV/c² for particle physics

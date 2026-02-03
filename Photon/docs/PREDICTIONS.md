@@ -37,7 +37,7 @@ This document outlines **testable predictions** of QFD photon sector that differ
 
 ### A1. Fine Structure Constant Universality
 
-**Prediction**: All QFD sectors should give same α from β = 3.058.
+**Prediction**: All QFD sectors should give same α from β = 3.043233053.
 
 **Sectors to check**:
 1. **Nuclear**: α⁻¹ = π²·exp(β)·(c₂/c₁) ≈ 134.7 (need to fix c₂/c₁)
@@ -86,7 +86,7 @@ This document outlines **testable predictions** of QFD photon sector that differ
 
 **Test**:
 - Derive f from Cl(3,3)
-- Calculate Z₀ from β = 3.058
+- Calculate Z₀ from β = 3.043233053
 - Compare with measurement
 
 **Current status**: No clear relationship yet

@@ -37,7 +37,7 @@ try:
     BETA_FIXED = run2_results["beta_min"]
     print(f"Using β = {BETA_FIXED:.4f} from Run 2")
 except FileNotFoundError:
-    BETA_FIXED = 3.058  # Golden Loop target
+    BETA_FIXED = 3.043233053  # Golden Loop target
     print(f"Run 2 results not found, using β = {BETA_FIXED:.4f} (Golden Loop)")
 
 print("=" * 70)

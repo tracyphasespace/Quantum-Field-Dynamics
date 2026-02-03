@@ -10,7 +10,7 @@ We propose a mathematical identity connecting the fine structure constant α, nu
 
 This identity, if correct, implies a critical value:
 
-**β_crit = 3.058230856**
+**β_crit = 3.043233053**
 
 derived purely from α = 1/137.035999177 and nuclear binding systematics.
 
@@ -23,7 +23,7 @@ derived purely from α = 1/137.035999177 and nuclear binding systematics.
 ### Three Independent Determinations
 
 **1. From Fine Structure Identity** (this work):
-- β_crit = 3.058 ± 0.012
+- β_crit = 3.043233053 ± 0.012
 - Uncertainty from (c₁, c₂) nuclear fit errors
 
 **2. From Nuclear Binding Energy** (direct fit):
@@ -56,7 +56,7 @@ Nuclear:      [===========β_nuclear============]
 
 ## Testing β_crit with Charged Leptons
 
-Having inferred β = 3.058 from the fine structure constant, we now ask: **does this value support solutions for the charged lepton mass hierarchy?**
+Having inferred β = 3.043233053 from the fine structure constant, we now ask: **does this value support solutions for the charged lepton mass hierarchy?**
 
 ### The Hill Vortex Model
 
@@ -75,7 +75,7 @@ where:
 - v(r,θ) from Hill's spherical vortex stream function with circulation velocity U
 - β enters only in the stabilization term (vacuum stiffness resisting perturbation)
 
-**Key point**: β is fixed at 3.058. We optimize geometric parameters (R, U, amplitude) to match observed mass ratios.
+**Key point**: β is fixed at 3.043233053. We optimize geometric parameters (R, U, amplitude) to match observed mass ratios.
 
 ### Dimensionless Formulation
 
@@ -91,10 +91,10 @@ All masses become dimensionless ratios m/m_e.
 
 ### Solution Existence Test
 
-With β = 3.058230856 fixed (from α), we seek solutions (R, U, amplitude) satisfying:
+With β = 3.043233053 fixed (from α), we seek solutions (R, U, amplitude) satisfying:
 
 ```
-E_total(R, U, amplitude; β=3.058) = m_lepton / m_e
+E_total(R, U, amplitude; β=3.043233053) = m_lepton / m_e
 ```
 
 **Question**: Do such solutions exist for all three charged leptons?
@@ -151,7 +151,7 @@ Between finest two grids: **< 0.8% parameter drift**
 
 ### Profile Sensitivity (Test 3: Functional Form Robustness)
 
-Testing four different density depression profiles with β = 3.058 fixed:
+Testing four different density depression profiles with β = 3.043233053 fixed:
 
 | Profile | R_e | U_e | amp_e | E_total | Converged? |
 |---------|----------|--------|-------|---------|------------|
@@ -160,13 +160,13 @@ Testing four different density depression profiles with β = 3.058 fixed:
 | Gaussian | 0.4431 | 0.0250 | 0.8805 | 1.000 | ✓ |
 | Linear | 0.4642 | 0.0231 | 0.9347 | 1.000 | ✓ |
 
-**All four profiles reproduce m_e with β = 3.058 unchanged.**
+**All four profiles reproduce m_e with β = 3.043233053 unchanged.**
 
 **Conclusion**: β is robust to functional form choice. The value inferred from α is not fine-tuned to the parabolic profile.
 
 ### Comparison with β from Nuclear Fits
 
-| | β from α (3.058) | β from nuclear (3.1) | Shift |
+| | β from α (3.043233053) | β from nuclear (3.1) | Shift |
 |---|------------------|----------------------|-------|
 | **R_e** | 0.4387 | 0.4390 | -0.07% |
 | **U_e** | 0.0240 | 0.0241 | -0.20% |
@@ -197,7 +197,7 @@ Running 50 optimizations from random initial seeds, all converged to E_total = 1
 The degeneracy is **within a fixed β**, not across β values.
 
 What we have demonstrated:
-1. ✅ β = 3.058 from α **supports** mass solutions for all three leptons
+1. ✅ β = 3.043233053 from α **supports** mass solutions for all three leptons
 2. ✅ Cross-sector β convergence is **consistent**
 3. ✅ Scaling laws U ~ √m and geometric constraints **emerge**
 4. ⚠️ Unique (R, U, amplitude) are **not yet determined** without additional physics
@@ -278,7 +278,7 @@ While U varies 54×, R varies only 1.1× and amplitude only 1.05×.
 ### What We Have Demonstrated
 
 1. **Cross-sector β convergence**: β from α, nuclear, and cosmology overlap within uncertainties
-2. **Lepton mass solutions**: For β = 3.058, solutions exist reproducing e, μ, τ to < 10⁻⁷ precision
+2. **Lepton mass solutions**: For β = 3.043233053, solutions exist reproducing e, μ, τ to < 10⁻⁷ precision
 3. **Scaling laws**: U ~ √m observed; geometric parameters (R, amplitude) constrained
 4. **Robustness**: Results stable under grid refinement and profile choice
 5. **Consistency**: β from α and β from nuclear give similar geometries
@@ -319,7 +319,7 @@ The conjectured identity can be falsified by:
 
 ## Conclusion
 
-A conjectured mathematical identity relating the fine structure constant α to the vacuum stiffness β, when tested numerically, yields β_crit = 3.058 ± 0.012. This value:
+A conjectured mathematical identity relating the fine structure constant α to the vacuum stiffness β, when tested numerically, yields β_crit = 3.043233053 ± 0.012. This value:
 
 1. **Overlaps** β determined independently from nuclear and cosmological data
 2. **Supports** Hill vortex solutions reproducing all three charged lepton mass ratios

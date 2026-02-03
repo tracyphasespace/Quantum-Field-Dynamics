@@ -492,8 +492,8 @@ This needs more work!
 
 ### What We've Learned
 
-1. ✓ **β = 3.058 correctly predicts nuclear frequencies** (GDR, cavity modes)
-2. ✓ **β = 3.058 correctly predicts electron frequencies** (K-shell)
+1. ✓ **β = 3.043233053 correctly predicts nuclear frequencies** (GDR, cavity modes)
+2. ✓ **β = 3.043233053 correctly predicts electron frequencies** (K-shell)
 3. ✓ **Power law ω_n/ω_e ∝ A^(-2.18) is validated**
 4. ✓ **Magic numbers show tight clustering** (consistency = stability)
 
@@ -526,7 +526,7 @@ Hypothesis: Should give simple ratios (2:1, 3:2, 4:3)?
 
 **Priority 2**: Investigate **collective mode frequencies**
 ```
-Calculate ω_GDR, ω_GQR, ω_GMR from β = 3.058
+Calculate ω_GDR, ω_GQR, ω_GMR from β = 3.043233053
 Compare ratios ω_GDR/ω_GQR, ω_GDR/ω_GMR
 Look for musical intervals WITHIN nuclear excitations
 ```
@@ -600,7 +600,7 @@ Needs systematic investigation!
 **Achievement**: Calculated ω_n/ω_e for all 285 stable isotopes ✓
 
 **Validated**:
-- β = 3.058 produces correct frequencies ✓
+- β = 3.043233053 produces correct frequencies ✓
 - Power law A^(-2.18) confirmed ✓
 - Magic numbers show consistency ✓
 

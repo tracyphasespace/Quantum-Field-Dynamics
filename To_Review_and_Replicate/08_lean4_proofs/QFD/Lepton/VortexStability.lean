@@ -468,7 +468,7 @@ This theorem connects formal mathematics to numerical validation.
 theorem mcmc_validates_degeneracy_breaking :
     let β_mcmc := QFD.Vacuum.mcmcBeta  -- 3.0627
     let ξ_mcmc := QFD.Vacuum.mcmcXi    -- 0.9655
-    let β_golden := QFD.Vacuum.goldenLoopBeta  -- 3.058
+    let β_golden := QFD.Vacuum.goldenLoopBeta  -- 3.043233053
     -- Correlation ≈ 0 proves degeneracy broken
     ∃ g : HillGeometry, ∃ R mass : ℝ,
       R > 0 ∧ mass > 0 ∧

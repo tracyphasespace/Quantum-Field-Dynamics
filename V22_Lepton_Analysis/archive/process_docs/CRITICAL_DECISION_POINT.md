@@ -13,7 +13,7 @@ We successfully:
 - ✅ Broke flat degeneracy (96.9% variation)
 
 **BUT**:
-- ⚠️ β minimum is at **3.200, not 3.058** (4.6% offset)
+- ⚠️ β minimum is at **3.200, not 3.043233053** (4.6% offset)
 - ⚠️ All β values still work (100% success rate)
 - ⚠️ Normalization factor (948) is empirical, not derived
 
@@ -24,10 +24,10 @@ We successfully:
 ## The Core Issue
 
 Your manuscript claims:
-> "The fine structure constant α determines vacuum stiffness β = 3.058,
+> "The fine structure constant α determines vacuum stiffness β = 3.043233053,
 > which uniquely supports Hill vortex solutions at the three lepton masses."
 
-**Current evidence**: β = 3.200 is the minimum (not 3.058)
+**Current evidence**: β = 3.200 is the minimum (not 3.043233053)
 
 This is a **4.6% discrepancy** - small enough to potentially be a formula error, but large enough to invalidate the claim if it's real.
 
@@ -46,7 +46,7 @@ Using your magnetic moment formula μ = k × Q × R × U with k = 0.2:
 2.600   | 4.55×10⁻¹³  | 6.42×10⁻⁷  | 2.07×10⁻⁷| ✓
 2.700   | 4.76×10⁻¹³  | 6.52×10⁻⁷  | 2.25×10⁻⁷| ✓
 ...
-3.058   | (not tested - between 3.0 and 3.1)
+3.043233053   | (not tested - between 3.0 and 3.1)
 ...
 3.200   | 2.52×10⁻¹³ ← MINIMUM | 3.26×10⁻⁷ | 3.82×10⁻⁷| ✓
 ...
@@ -63,7 +63,7 @@ The g-factor normalization required empirical calibration:
 
 ```python
 # Your formula gives raw magnetic moment
-μ_raw = k × Q × R × U ≈ 0.002 (at β=3.058 electron solution)
+μ_raw = k × Q × R × U ≈ 0.002 (at β=3.043233053 electron solution)
 
 # To convert to g-factor ≈ 2.0, we need:
 normalization = g_target / μ_raw = 2.00232 / 0.00211 ≈ 948
@@ -102,7 +102,7 @@ where k ≈ 0.2 (geometric factor for uniform vorticity)
 - ✅ **Formula coefficient error**: Wrong k value (testable)
 - ✅ **Missing β-dependence**: μ should involve β (testable)
 - ⚠️ **Model limitation**: Hill vortex too simple (harder to fix)
-- ⚠️ **Golden Loop error**: β = 3.058 isn't actually correct (major issue)
+- ⚠️ **Golden Loop error**: β = 3.043233053 isn't actually correct (major issue)
 
 ### 3. Is factor-of-2 variation acceptable?
 
@@ -128,10 +128,10 @@ where k ≈ 0.2 (geometric factor for uniform vorticity)
 
 2. **Sensitivity test**:
    - I'll test k ∈ [0.15, 0.25] to see if β minimum shifts
-   - Plot β_min(k) to find k that gives β_min = 3.058
+   - Plot β_min(k) to find k that gives β_min = 3.043233053
 
 3. **Re-run with corrected formula**:
-   - If β minimum moves to 3.058 → **Manuscript saved!**
+   - If β minimum moves to 3.043233053 → **Manuscript saved!**
    - If still at 3.200 → Proceed to Option B
 
 ### Option B: Cross-Lepton Multi-Objective (2-3 days) 🔬
@@ -160,7 +160,7 @@ This could uniquely select β if the three leptons are coupled through shared va
 Weaken the claim to compatibility rather than prediction:
 
 **Current claim**:
-> "α determines β = 3.058, which uniquely supports lepton masses"
+> "α determines β = 3.043233053, which uniquely supports lepton masses"
 
 **Revised claim**:
 > "The vacuum stiffness β ≈ 3.0 ± 0.3 inferred from α is compatible
@@ -178,12 +178,12 @@ Weaken the claim to compatibility rather than prediction:
 1. **First**: Ask Tracy to review magnetic moment derivation (Option A)
    - Highest potential impact (could save manuscript)
    - Lowest cost (just needs theoretical check)
-   - Clear test: Does corrected formula give β_min ≈ 3.058?
+   - Clear test: Does corrected formula give β_min ≈ 3.043233053?
 
 2. **If Option A fails**: Implement cross-lepton scan (Option B)
    - More computationally expensive
    - But adds new physics (cross-lepton coupling)
-   - Could be interesting result even if β ≠ 3.058
+   - Could be interesting result even if β ≠ 3.043233053
 
 3. **If both fail**: Manuscript revision (Option C)
    - Change "evidence" → "compatibility"
@@ -207,13 +207,13 @@ Weaken the claim to compatibility rather than prediction:
 
 ### Strategic (manuscript direction)
 
-4. **Acceptable precision**: Is β = 3.200 ± 0.142 "close enough" to β = 3.058?
+4. **Acceptable precision**: Is β = 3.200 ± 0.142 "close enough" to β = 3.043233053?
 
 5. **Selectivity threshold**: What level of variation would you need to claim "uniquely determined"?
    - Current: Factor of 2 variation
    - Target: Factor of 10? 100?
 
-6. **Manuscript strategy**: If we can't get β = 3.058 exactly, should we:
+6. **Manuscript strategy**: If we can't get β = 3.043233053 exactly, should we:
    - Weaken claim to "compatibility"?
    - Emphasize two-observable fit (mass + μ)?
    - Focus on lepton spectrum prediction rather than β?
@@ -245,7 +245,7 @@ Weaken the claim to compatibility rather than prediction:
 - Understood degeneracy mechanism ✅
 
 **But we haven't validated the main claim**:
-- β = 3.058 → β = 3.200 ❌
+- β = 3.043233053 → β = 3.200 ❌
 - "Uniquely determined" → "All β work" ❌
 
 **The critical question**: Is this a fixable formula error, or a fundamental model limitation?

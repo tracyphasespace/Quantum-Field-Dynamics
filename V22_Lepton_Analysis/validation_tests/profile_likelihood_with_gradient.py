@@ -3,7 +3,7 @@
 Profile Likelihood in β with Gradient (Curvature) Term
 
 Purpose: THE DECISIVE TEST of whether missing curvature energy explains
-         the β_eff ≈ 3.15 offset from Golden Loop β = 3.058.
+         the β_eff ≈ 3.15 offset from Golden Loop β = 3.043233053.
 
 Method:
 - Use Family A profile: Δρ = -A(1-(r/R)²)^s with s=2 (fixed globally)
@@ -12,7 +12,7 @@ Method:
 - Record χ²_min(β)
 
 Success mode:
-- β_min shifts toward 3.058 (curvature gap was the culprit)
+- β_min shifts toward 3.043233053 (curvature gap was the culprit)
 - Landscape sharpens (E_grad ~ R breaks degeneracy)
 - e/μ/τ solutions converge without pathological geometry
 
@@ -285,12 +285,12 @@ def analyze_profile_likelihood_with_gradient(data):
     print(f"  Tau:      {ratio_tau:.4f}")
 
     # Comparison to Golden Loop
-    offset = abs(beta_min - 3.058)
-    offset_pct = offset / 3.058 * 100
+    offset = abs(beta_min - 3.043233053)
+    offset_pct = offset / 3.043233053 * 100
 
     print(f"\nβ minimum vs Golden Loop:")
     print(f"  Observed:  {beta_min:.6f}")
-    print(f"  Expected:  3.058000")
+    print(f"  Expected:  3.043233053")
     print(f"  Offset:    {offset:.6f} ({offset_pct:.2f}%)")
 
     # Interpretation

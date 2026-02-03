@@ -176,7 +176,7 @@ If ξ ~ β ~ 3, then E_grad/E_comp ~ 2 × 10⁻⁵ (tiny!).
 The parameter β is hypothesized to relate to the fine structure constant α:
 
 ```
-β = 3.058...
+β = 3.043233053...
 ```
 
 **Derivation** (Golden Loop constraint):
@@ -193,7 +193,7 @@ and fine structure:
 
 Combining with proton mass λ = m_p and dimensional analysis yields:
 ```
-β ≈ π + α × (geometric factor) ≈ 3.058
+β ≈ π + α × (geometric factor) ≈ 3.043233053
 ```
 
 **Current status**: This derivation is proposed but not yet rigorously proven. The MCMC result β = 3.063 ± 0.149 is consistent with this prediction within uncertainty.

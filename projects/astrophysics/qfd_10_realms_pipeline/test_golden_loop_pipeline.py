@@ -3,7 +3,7 @@
 Test: Golden Loop Complete via 10 Realms Pipeline
 
 Runs Realms 5→6→7 (electron→muon→tau) sequentially to validate:
-1. Same β = 3.058 from α reproduces all three lepton masses
+1. Same β = 3.043233053 from α reproduces all three lepton masses
 2. Parameters propagate correctly through parameter registry
 3. Scaling laws (U ~ √m, R narrow range) hold across pipeline
 4. Cross-lepton consistency checks pass
@@ -26,7 +26,7 @@ import realm6_muon
 import realm7_tau
 
 # Fine structure constant → β
-BETA_FROM_ALPHA = 3.058230856
+BETA_FROM_ALPHA = 3.043233053
 
 
 def print_banner(text):

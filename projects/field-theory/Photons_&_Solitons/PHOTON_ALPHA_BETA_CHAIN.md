@@ -84,11 +84,11 @@ The quantization law E = ℏω is **topological**, not postulated:
 6. Therefore: E ∝ k ∝ ω
 7. The ratio E/ω = ℏ_eff is scale-invariant!
 
-## Impact of β Change: 3.058 → 3.04309
+## Impact of β Change: 3.043233053 → 3.04309
 
 The paradigm shift from fitted β to derived β:
 
-| Property | Old (β=3.058) | New (β=3.04309) | Change |
+| Property | Old (β=3.043233053) | New (β=3.04309) | Change |
 |----------|---------------|-----------------|--------|
 | √β (c proxy) | 1.7487 | 1.7451 | -0.21% |
 | 1/β (c₂) | 0.3270 | 0.3286 | +0.49% |
@@ -145,10 +145,10 @@ The paradigm shift from fitted β to derived β:
 
 | File | Change |
 |------|--------|
-| `analysis/speed_of_light.py` | β: 3.058 → 3.04309 |
-| `analysis/integrate_hbar.py` | β: 3.058 → 3.04309 |
-| `analysis/validate_hydrodynamic_c.py` | β: 3.058 → 3.04309 |
-| `analysis/validate_hydrodynamic_c_hbar_bridge.py` | β: 3.05823 → 3.04309 |
+| `analysis/speed_of_light.py` | β: 3.043233053 → 3.04309 |
+| `analysis/integrate_hbar.py` | β: 3.043233053 → 3.04309 |
+| `analysis/validate_hydrodynamic_c.py` | β: 3.043233053 → 3.04309 |
+| `analysis/validate_hydrodynamic_c_hbar_bridge.py` | β: 3.043233053 → 3.04309 |
 | `derive_hbar_and_cosmic_aging.py` | Already updated |
 
 ## Conclusion

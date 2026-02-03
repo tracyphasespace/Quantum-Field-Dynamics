@@ -73,7 +73,7 @@ def create_figure1_golden_loop():
     ax.text(3.15, 4.8, 'conjectured\nrelation', fontsize=8, ha='center', style='italic')
 
     # Vacuum Stiffness (center)
-    ax.text(5, 4.5, r'$\beta \approx 3.058$', fontsize=14, ha='center', va='center',
+    ax.text(5, 4.5, r'$\beta \approx 3.043233053$', fontsize=14, ha='center', va='center',
             bbox=dict(boxstyle='round,pad=0.5', facecolor='#B4E5FF', edgecolor='black', linewidth=2))
     ax.text(5, 3.8, 'Vacuum Stiffness', fontsize=9, ha='center', va='top')
 
@@ -103,7 +103,7 @@ def create_figure1_golden_loop():
 
     # Cross-sector validation (right side)
     ax.text(8.5, 4.5, 'β from:', fontsize=10, ha='center', weight='bold')
-    sectors = ['Nuclear\n3.1 ± 0.1', 'CMB\n3.0-3.2', 'Leptons\n3.058 ± 0.012']
+    sectors = ['Nuclear\n3.1 ± 0.1', 'CMB\n3.0-3.2', 'Leptons\n3.043233053 ± 0.012']
     for i, sector in enumerate(sectors):
         y = 4.0 - i * 0.8
         ax.text(8.5, y, sector, fontsize=8, ha='center', va='center',
@@ -274,7 +274,7 @@ def create_figure3_mass_spectrum_error():
     ax.legend(loc='upper right', fontsize=10)
 
     # Add text box with β value
-    textstr = r'$\beta = 3.058$ (from $\alpha$)' + '\nSingle parameter fit'
+    textstr = r'$\beta = 3.043233053$ (from $\alpha$)' + '\nSingle parameter fit'
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.8)
     ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=10,
             verticalalignment='top', bbox=props)
@@ -358,7 +358,7 @@ def create_figure5_cross_sector_beta():
 
     # Data from different sectors
     sectors = ['Lepton\nMasses\n(this work)', 'Nuclear\nStability', 'CMB\nMorphology']
-    beta_values = [3.058, 3.1, 3.1]
+    beta_values = [3.043233053, 3.1, 3.1]
     uncertainties = [0.012, 0.1, 0.15]  # Approximate uncertainties
     colors = ['#4A90E2', '#E94B3C', '#50C878']
 

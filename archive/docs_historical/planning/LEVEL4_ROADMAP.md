@@ -11,7 +11,7 @@
 We have **one strong independent prediction** (g-2 at 0.45%), but three critical gaps prevent "Level 4" (ab initio theory from pure geometry):
 
 1. **α Gap (Tier C → Tier A)**: 9% error in `1/α = π²·exp(β)·(c₂/c₁)` due to empirical c₂/c₁ ratio
-2. **β Gap (Tier D → Tier B)**: β = 3.058 fitted to masses, not derived from Cl(3,3) topology
+2. **β Gap (Tier D → Tier B)**: β = 3.043233053 fitted to masses, not derived from Cl(3,3) topology
 3. **V6 Gap (Tier D → Tier C)**: High-energy sextic terms (tau, super-electron) are phenomenological
 
 **Strategy**: Reframe as **geometric form factor problems** rather than fundamental flaws.
@@ -28,7 +28,7 @@ We have **one strong independent prediction** (g-2 at 0.45%), but three critical
 ```
 
 **Where**:
-- π² · exp(β) = 291.3 (for β = 3.058, purely from vacuum stiffness)
+- π² · exp(β) = 291.3 (for β = 3.043233053, purely from vacuum stiffness)
 - c₂/c₁ = nuclear surface/volume ratio
 - Empirical α⁻¹ = 137.036
 - **Required**: c₂/c₁ = 0.4704 (back-calculated to match α)
@@ -36,7 +36,7 @@ We have **one strong independent prediction** (g-2 at 0.45%), but three critical
 
 **Current Error**:
 - Nuclear fits give c₂/c₁ ≈ 0.598 (from binding energy analysis)
-- Predicted α⁻¹ = π²·exp(3.058)·0.598 ≈ 174
+- Predicted α⁻¹ = π²·exp(3.043233053)·0.598 ≈ 174
 - **Error: ~27% too large** (137 vs 174)
 
 **Why This Is NOT a Flaw**:
@@ -93,7 +93,7 @@ projection_factor = f(k_geom, signature)
 c₂/c₁ = 0.598 (nuclear data)
 k_EM ≈ 4.3813/3.45 ≈ 1.27 (empirical scaling)
 (c₂/c₁)_eff = 0.598 / 1.27 ≈ 0.471
-α⁻¹ = π² · exp(3.058) · 0.471 ≈ 137.2
+α⁻¹ = π² · exp(3.043233053) · 0.471 ≈ 137.2
 Error: 0.1% ✓
 ```
 
@@ -138,7 +138,7 @@ p = topological exponent (1/2 for Aharonov-Bohm, 1 for direct coupling)
 - **Method 2**: Require α⁻¹ = 137.036, solve for β in `π²·exp(β)·(c₂/c₁) = 137`
 - **Method 3**: Nuclear binding fits → β ≈ 3.1 ± 0.05
 
-**Problem**: All three use **measured data** (masses, α, binding energies). We haven't derived β = 3.058 from **pure geometry**.
+**Problem**: All three use **measured data** (masses, α, binding energies). We haven't derived β = 3.043233053 from **pure geometry**.
 
 **What We Need**: Derive β from:
 - Clifford algebra signature (3,3)
@@ -154,7 +154,7 @@ Cl(3,3) signature: (+,+,+,-,-,-)
 
 **Key observation**:
 ```
-β = 3.058230856
+β = 3.043233053
 π = 3.141592654
 β/π = 0.97348 ≈ 31/32 = 0.96875 (simple fraction)
 ```
@@ -169,7 +169,7 @@ Cl(3,3) signature: (+,+,+,-,-,-)
 If `f_space = 1 + δ` and `f_time = 1 - δ`, then:
 ```
 β = 3(1+δ) - 3(1-δ) = 6δ
-3.058 = 6δ  ⟹  δ = 0.5097
+3.043233053 = 6δ  ⟹  δ = 0.5097
 ```
 
 **Not simple.** Try different weights.
@@ -188,7 +188,7 @@ Test:
 √(π · k_geom) = √(3.14159 · 4.3813) = 3.71  (close!)
 ```
 
-**Promising!** β ≈ √(π · k_geom) / 1.21 = 3.058
+**Promising!** β ≈ √(π · k_geom) / 1.21 = 3.043233053
 
 **Hypothesis 3**: Golden ratio embedding
 ```
@@ -282,12 +282,12 @@ This requires knowing the fundamental length scale L₀ → circular.
 
 ### Target Outcome (Tier B)
 
-**Statement**: "β = f(signature, k_geom, π) = √(π·k_geom)/c where c = 1.213 is derived from Cl(3,3) dimensional reduction theorem [citation needed]. Predicted β = 3.058 from pure geometry ✓"
+**Statement**: "β = f(signature, k_geom, π) = √(π·k_geom)/c where c = 1.213 is derived from Cl(3,3) dimensional reduction theorem [citation needed]. Predicted β = 3.043233053 from pure geometry ✓"
 
 **Why This Matters**:
 - Eliminates **all circularity** in constant derivation
 - β becomes a **topological invariant**, not a fit parameter
-- **Falsifiable**: If Cl(3,3) is wrong, β ≠ 3.058 from topology
+- **Falsifiable**: If Cl(3,3) is wrong, β ≠ 3.043233053 from topology
 
 **Action Items**:
 1. ⏳ Formalize dimensional reduction in `QFD/GA/DimensionalProjection.lean`

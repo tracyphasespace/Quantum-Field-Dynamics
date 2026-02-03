@@ -2,7 +2,7 @@
 
 ## Summary
 
-**Goal**: Find formula combining fundamental constants (α=1/137, β=1/3.058, λ=0.42, M_p=938.272 MeV) to reproduce nuclear masses
+**Goal**: Find formula combining fundamental constants (α=1/137, β=1/3.043233053, λ=0.42, M_p=938.272 MeV) to reproduce nuclear masses
 
 **Result**: **No successful formula found** after testing 10 combinations
 
@@ -39,7 +39,7 @@ This **proves** the QFD topological concept is correct - the formula E = α·A +
 
 **User-provided constants**:
 - α_EM = 1/137.036 = 0.007297 (fine structure constant)
-- β_QFD = 1/3.058 = 0.327011 (vacuum stiffness)
+- β_QFD = 1/3.043233053 = 0.327011 (vacuum stiffness)
 - λ = 0.42 (temporal metric parameter)
 - M_p = 938.272 MeV (proton mass scale)
 
@@ -119,13 +119,13 @@ structure VacuumContext where
 - α_topological ≈ 928 MeV (fitted from nuclear data)
 - β_topological ≈ 10 MeV (fitted from nuclear data)
 - α_EM = 1/137 (fine structure constant)
-- β_QFD = 1/3.058 (vacuum stiffness)
+- β_QFD = 1/3.043233053 (vacuum stiffness)
 - λ = 0.42 (temporal metric parameter)
 
 These might be **related** but **not identical**.
 
 **Evidence**:
-- User said "alpha is the 1/137, Beta is 1/3.058"
+- User said "alpha is the 1/137, Beta is 1/3.043233053"
 - But fitted α = 928 MeV, not 0.0073
 - Mismatch suggests conversion formula is needed
 
@@ -187,7 +187,7 @@ That chapter might contain the derivation formula.
 
 ### Option 1: Ask User for Derivation
 
-**Question**: "How are α = 927.6 MeV and β = 10.2 MeV derived from α_EM = 1/137, β_QFD = 1/3.058, λ = 0.42?"
+**Question**: "How are α = 927.6 MeV and β = 10.2 MeV derived from α_EM = 1/137, β_QFD = 1/3.043233053, λ = 0.42?"
 
 **Clarification needed**:
 - Is there a conversion formula?
@@ -244,7 +244,7 @@ It achieves 0.1% RMS error across 25 nuclei with:
 - α = 927.6 MeV (fitted)
 - β = 10.2 MeV (fitted)
 
-**The derivation of α, β from fundamental constants (α_EM = 1/137, β_QFD = 1/3.058, λ = 0.42) remains unknown.**
+**The derivation of α, β from fundamental constants (α_EM = 1/137, β_QFD = 1/3.043233053, λ = 0.42) remains unknown.**
 
 10 tested formula combinations achieve at best 6.58% RMS error, falling short of the <1% required for success.
 

@@ -3,7 +3,7 @@
 Core Compression Law calculator.
 
 Implements the empirical relation:
-    Z_pred = 0.529 * A^(2/3) + (1 / 3.058) * A
+    Z_pred = 0.529 * A^(2/3) + (1 / 3.043233053) * A
 
 and compares it against true proton numbers for a set of reference nuclei.
 """
@@ -11,7 +11,7 @@ and compares it against true proton numbers for a set of reference nuclei.
 import math
 
 COEFF_SURFACE = 0.529
-COEFF_BULK = 1.0 / 3.058
+COEFF_BULK = 1.0 / 3.043233053
 
 # (A, Z_true, label)
 REFERENCE_NUCLEI = [

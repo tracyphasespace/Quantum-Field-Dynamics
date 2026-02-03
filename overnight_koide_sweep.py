@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Koide delta parameter sweep for falsifiability test
 
-Tests whether delta = 3.058 rad is uniquely identified or just one of many values.
+Tests whether delta = 3.043233053 rad is uniquely identified or just one of many values.
 Sweeps delta from 2.9 to 3.2 rad and computes Q ratio and mass predictions.
 
 Expected runtime: ~30 minutes
@@ -119,8 +119,8 @@ best = results[min_idx]
 q_min_idx = min(range(len(results)), key=lambda i: results[i]['Q_error'])
 q_best = results[q_min_idx]
 
-# Find delta = 3.058 if in range
-target_delta = 3.058
+# Find delta = 3.043233053 if in range
+target_delta = 3.043233053
 target_idx = min(range(len(results)), key=lambda i: abs(results[i]['delta'] - target_delta))
 at_target = results[target_idx]
 
@@ -147,7 +147,7 @@ print(f"  chi2      = {q_best['chi2']:.2e}")
 print()
 
 if abs(at_target['delta'] - target_delta) < 0.001:
-    print(f"At delta = 3.058 rad:")
+    print(f"At delta = 3.043233053 rad:")
     print(f"  Q         = {at_target['Q']:.10f}")
     print(f"  |Q - 2/3| = {at_target['Q_error']:.2e}")
     print(f"  chi2      = {at_target['chi2']:.2e}")
@@ -227,7 +227,7 @@ print("  Qs = [r['Q'] for r in data['all_results']]")
 print()
 print("  fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))")
 print("  ax1.semilogy(deltas, chi2s, 'b-', lw=2)")
-print("  ax1.axvline(3.058, color='r', ls='--', label='delta=3.058')")
+print("  ax1.axvline(3.043233053, color='r', ls='--', label='delta=3.043233053')")
 print("  ax1.set_ylabel('chi^2')")
 print("  ax1.legend()")
 print("  ax1.grid(True)")

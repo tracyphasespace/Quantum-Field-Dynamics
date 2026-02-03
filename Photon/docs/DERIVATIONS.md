@@ -31,7 +31,7 @@ Starting from vacuum Lagrangian:
 ```
 
 where:
-- β ≈ 3.058 is vacuum stiffness
+- β ≈ 3.043233053 is vacuum stiffness
 - V(ρ) is self-interaction potential
 
 **TODO**: Derive electromagnetic field F from vacuum perturbations.
@@ -152,12 +152,12 @@ From QFD nuclear binding energy:
 ```
 
 where:
-- β ≈ 3.058 (vacuum stiffness)
+- β ≈ 3.043233053 (vacuum stiffness)
 - c₂/c₁ ≈ 6.42 (nuclear coupling ratio)
 
 **Prediction**:
 ```
-α⁻¹ = π² · exp(3.058) · 6.42
+α⁻¹ = π² · exp(3.043233053) · 6.42
      = 9.8696 · 21.280 · 6.42
      = 134.7
 ```
@@ -183,7 +183,7 @@ where:
 
 ### 3.4 Consistency Requirement
 
-If photon and nuclear sectors both use β = 3.058, they must predict same α.
+If photon and nuclear sectors both use β = 3.043233053, they must predict same α.
 
 **From nuclear**: α⁻¹ ≈ 134.7 (with c₂/c₁ = 6.42)
 **From photon**: α⁻¹ = 4πε₀ℏc/e² = 137.036 (measured)
@@ -309,7 +309,7 @@ Then nonlinear term β₂ → photon-photon scattering.
 ### Immediate (Week 1)
 1. Vacuum wave equation from Cl(3,3)
 2. Dimensional analysis: β → ε₀
-3. Numerical check: Does β = 3.058 give c correctly?
+3. Numerical check: Does β = 3.043233053 give c correctly?
 
 ### Short-term (Month 1)
 1. Complete α derivation from geometry

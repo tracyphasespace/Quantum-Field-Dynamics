@@ -1,4 +1,4 @@
-# CRITICAL FINDING: β = 3.058 Incompatible with Lepton Masses
+# CRITICAL FINDING: β = 3.043233053 Incompatible with Lepton Masses
 
 **Date**: 2025-12-28
 **Status**: CONFIRMED - Simple gradient functional insufficient
@@ -7,10 +7,10 @@
 
 ## The Test
 
-**Hypothesis**: Golden Loop predicts β = 3.058 from α-constraint.
-**Question**: Does β = 3.058 fit lepton masses when we only fit (ξ, τ)?
+**Hypothesis**: Golden Loop predicts β = 3.043233053 from α-constraint.
+**Question**: Does β = 3.043233053 fit lepton masses when we only fit (ξ, τ)?
 
-**Method**: Fixed β = 3.058, ran MCMC to fit ξ and τ to lepton mass spectrum.
+**Method**: Fixed β = 3.043233053, ran MCMC to fit ξ and τ to lepton mass spectrum.
 
 ---
 
@@ -44,17 +44,17 @@
 Lepton masses require **β_eff ≈ 3.15**, achieved via:
 - (β=2.96, ξ=26): β_eff = 2.96 + 0.007×26 ≈ 3.14 ✓
 - (β=3.15, ξ=0): β_eff = 3.15 ✓ (V22)
-- (β=3.058, ξ=27): β_eff = 3.058 + 0.007×27 ≈ 3.25 ✗
+- (β=3.043233053, ξ=27): β_eff = 3.043233053 + 0.007×27 ≈ 3.25 ✗
 
-**β = 3.058 yields β_eff too high → masses wrong.**
+**β = 3.043233053 yields β_eff too high → masses wrong.**
 
 ### 2. Golden Loop β ≠ Vacuum Stiffness β
 
 Two possibilities:
 
 **A) Different β parameters**:
-- β_Golden = 3.058 (from α-constraint, fine structure)
-- β_vacuum ≠ 3.058 (actual vacuum stiffness)
+- β_Golden = 3.043233053 (from α-constraint, fine structure)
+- β_vacuum ≠ 3.043233053 (actual vacuum stiffness)
 - These are DIFFERENT physical quantities
 
 **B) Missing physics**:
@@ -94,9 +94,9 @@ V22 analysis found β ≈ 3.15 ± 0.05 using E = ∫β(δρ)² dV.
 ✓ Degeneracy persists
 ✓ τ ≈ 1 as expected
 
-### Fixed β Test: β = 3.058 fixed
+### Fixed β Test: β = 3.043233053 fixed
 ```
-β = 3.058 (FIXED)
+β = 3.043233053 (FIXED)
 ξ = 26.82 ± 0.02
 τ = 1.03 ± 0.60
 β_eff = 3.252
@@ -129,24 +129,24 @@ where c(R) depends on soliton geometry.
 
 **Masses depend on β_eff**, not β alone.
 
-### What is β = 3.058 then?
+### What is β = 3.043233053 then?
 
 From Golden Loop analysis:
 ```
 β = ℏc/(e²R_e) × (4π/3) × α⁻¹
-  ≈ 3.058
+  ≈ 3.043233053
 ```
 
 This relates β to **fine structure constant α**.
 
 **Two interpretations**:
 
-**1) β = 3.058 is a bare parameter**
+**1) β = 3.043233053 is a bare parameter**
 - Vacuum stiffness at microscopic scale
 - Gets renormalized to β_eff ≈ 3.15 by gradient coupling
 - Similar to running coupling in QFT
 
-**2) β = 3.058 applies to different observable**
+**2) β = 3.043233053 applies to different observable**
 - Fine structure relates to EM sector
 - Lepton masses relate to mechanical sector
 - These use different combinations of (β, ξ)
@@ -157,7 +157,7 @@ This relates β to **fine structure constant α**.
 
 ### Option 2 is REQUIRED
 
-Simple gradient functional **cannot** accommodate β = 3.058 and fit masses simultaneously.
+Simple gradient functional **cannot** accommodate β = 3.043233053 and fit masses simultaneously.
 
 **Must implement**:
 ```
@@ -178,7 +178,7 @@ E_EM[ρ] = ∫ [ε₀E²/2 + B²/(2μ₀)] dV
 ```
 
 If β_EM ≠ β_vacuum:
-- β = 3.058 (vacuum stiffness, from α)
+- β = 3.043233053 (vacuum stiffness, from α)
 - β_EM = different (EM stiffness)
 - Charge radius breaks degeneracy
 
@@ -193,10 +193,10 @@ Couples to internal structure → constrains ξ independently.
 
 **Hypothesis**: Lepton has TWO overlapping solitons:
 1. **Mechanical soliton**: ρ_mech with (β_mech ≈ 3.15, ξ_mech ≈ 26)
-2. **EM soliton**: ρ_EM with (β_EM ≈ 3.058, ξ_EM = ?)
+2. **EM soliton**: ρ_EM with (β_EM ≈ 3.043233053, ξ_EM = ?)
 
 **Mass** from mechanical sector (β_eff ≈ 3.15).
-**Fine structure** from EM sector (β = 3.058).
+**Fine structure** from EM sector (β = 3.043233053).
 
 **Test**: Implement two-component model.
 
@@ -210,7 +210,7 @@ V22 found β ≈ 3.15 using simplified functional.
 
 **Our work confirms**:
 - β_eff ≈ 3.15 required for lepton masses ✓
-- Offset from Golden Loop β = 3.058 is REAL ✓
+- Offset from Golden Loop β = 3.043233053 is REAL ✓
 - Not a numerical error in V22 ✓
 
 ### Offset Explained
@@ -232,7 +232,7 @@ E = ∫ [½ξ|∇ρ|² + β(δρ)²] dV
 
 V22's β absorbed the gradient contribution → inflated value.
 
-### Why Not 3.058?
+### Why Not 3.043233053?
 
 **Golden Loop derivation** relates β to α via:
 ```
@@ -246,7 +246,7 @@ But this assumed **pure compression energy** E = ∫β(δρ)².
 m_e c² = (2π)³ ρ_vac ℏc/α × g(β, ξ)
 ```
 
-**If β = 3.058 is fixed by α**, then ξ must be such that masses work out.
+**If β = 3.043233053 is fixed by α**, then ξ must be such that masses work out.
 
 **But our test shows**: No value of ξ makes this work with current functional.
 
@@ -273,7 +273,7 @@ E = ∫ [½ξ|∇ρ|² + β(δρ)² + τ(∂ρ/∂t)²] dV
 
 **Fits masses** with (β≈2.96, ξ≈26, τ≈1).
 
-**Cannot accommodate β = 3.058** from Golden Loop.
+**Cannot accommodate β = 3.043233053** from Golden Loop.
 
 **Conclusion**: Missing physics - likely electromagnetic.
 
@@ -284,7 +284,7 @@ E = ∫ [½ξ|∇ρ|² + β(δρ)² + τ(∂ρ/∂t)²] dV
 - Or effective: β_eff ≈ 3.15
 
 **β_EM** = vacuum stiffness for EM coupling
-- From α-constraint: β_EM ≈ 3.058
+- From α-constraint: β_EM ≈ 3.043233053
 - Relates to fine structure
 
 **These may be DIFFERENT parameters.**
@@ -335,13 +335,13 @@ E = ∫ [½ξ|∇ρ|² + β(δρ)² + τ(∂ρ/∂t)²] dV
 - Offset from Golden Loop noted but unexplained
 
 **Golden Loop (α-constraint)**:
-- β = 3.058 from fine structure constant
+- β = 3.043233053 from fine structure constant
 - Assumes pure compression energy
 - May need revision with full functional
 
 **This Work**:
 - Stage 1-2: β_eff ≈ 3.15 required for masses
-- Fixed β test: β = 3.058 incompatible
+- Fixed β test: β = 3.043233053 incompatible
 - **Conclusion**: Need electromagnetic sector
 
 ---

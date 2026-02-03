@@ -7,7 +7,7 @@
 
 ## One-Line Summary
 
-**Realm 5 successfully reproduces electron mass (E_total = 1.0) using β = 3.058230856 from fine structure constant α with chi-squared = 2.687×10⁻¹³ and validation against Golden Loop results within 0.01% error.**
+**Realm 5 successfully reproduces electron mass (E_total = 1.0) using β = 3.043233053 from fine structure constant α with chi-squared = 2.687×10⁻¹³ and validation against Golden Loop results within 0.01% error.**
 
 ---
 
@@ -24,7 +24,7 @@ Convergence: 2 iterations, 16 function evaluations
 
 | Parameter | Optimized | Golden Loop | Error | Status |
 |-----------|-----------|-------------|-------|--------|
-| **β** (fixed) | 3.058230856 | 3.058230856 | — | ✅ From α |
+| **β** (fixed) | 3.043233053 | 3.043233053 | — | ✅ From α |
 | **R** (radius) | 0.438700 | 0.4387 | 0.00% | ✅ Perfect match |
 | **U** (circulation) | 0.023997 | 0.0240 | 0.01% | ✅ Within tolerance |
 | **amplitude** | 0.911400 | 0.9114 | 0.00% | ✅ Perfect match |
@@ -44,7 +44,7 @@ Convergence: 2 iterations, 16 function evaluations
 ## What This Achieves
 
 ### 1. Golden Loop Integration ✅
-- **β from α (3.058)** → **electron mass (1.0)** closed loop validated
+- **β from α (3.043233053)** → **electron mass (1.0)** closed loop validated
 - Reproduces V22 Golden Loop results within numerical precision
 - Demonstrates α → β → m_e logical chain
 
@@ -71,7 +71,7 @@ Convergence: 2 iterations, 16 function evaluations
 ```
 qfd_10_realms_pipeline/realms/realm5_electron.py (423 lines)
 ├── ElectronConfig (dataclass)
-│   ├── beta = 3.058230856 (BETA_FROM_ALPHA)
+│   ├── beta = 3.043233053 (BETA_FROM_ALPHA)
 │   ├── Grid: num_r=200, num_theta=40 (validated)
 │   └── Optimization: L-BFGS-B, tolerance=1e-8
 ├── HillVortexStreamFunction (Lamb 1932)
@@ -89,7 +89,7 @@ qfd_10_realms_pipeline/realms/realm5_electron.py (423 lines)
 ### Integration with Pipeline
 ```python
 # Realm 5 receives β from parameter registry
-beta = params.get("beta", {}).get("value", 3.058230856)
+beta = params.get("beta", {}).get("value", 3.043233053)
 
 # Realm 5 fixes electron geometric parameters for downstream
 fixed = {
@@ -192,7 +192,7 @@ python run_pipeline.py --realms realm0_cmb realm5_electron realm6_muon realm7_ta
 
 **Expected**:
 - β_nuclear ≈ 3.1 ± 0.05 (from prior work)
-- β_alpha = 3.058 ± 0.012 (from Realm 5)
+- β_alpha = 3.043233053 ± 0.012 (from Realm 5)
 - **Overlap within 1σ uncertainties** ✅
 
 **Publication claim**:
@@ -240,7 +240,7 @@ python run_pipeline.py --realms realm0_cmb realm5_electron realm6_muon realm7_ta
 ## Validation Checklist
 
 ### Physics Correctness ✅
-- [x] β = 3.058 from α (matches Golden Loop)
+- [x] β = 3.043233053 from α (matches Golden Loop)
 - [x] E_total = 1.0 reproduced (residual < 1e-6)
 - [x] Parabolic density profile (per HillVortex.lean)
 - [x] Cavitation constraint enforced (amplitude ≤ ρ_vac)

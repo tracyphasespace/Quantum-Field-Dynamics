@@ -3,7 +3,7 @@ Realm 5: Electron Mass from Hill Vortex Quantization
 
 Purpose:
   - Test whether β inferred from fine structure constant α supports electron mass solution
-  - Uses validated V22 Hill vortex solver with β = 3.058230856 FIXED (from Golden Loop)
+  - Uses validated V22 Hill vortex solver with β = 3.043233053 FIXED (from Golden Loop)
   - Optimizes geometric parameters (R, U, amplitude) to match m_e = 1.0 (dimensionless)
 
 Key Physics:
@@ -38,7 +38,7 @@ if str(V22_PATH) not in sys.path:
 
 # Physical constants (dimensionless units)
 RHO_VAC = 1.0  # Normalized vacuum density
-BETA_FROM_ALPHA = 3.058230856  # From fine structure constant (Golden Loop)
+BETA_FROM_ALPHA = 3.043233053  # From fine structure constant (Golden Loop)
 
 
 @dataclass
@@ -280,7 +280,7 @@ def optimize_electron_geometry(cfg: ElectronConfig) -> Dict[str, Any]:
 
 def run(params: Dict[str, Any], cfg: ElectronConfig = None) -> Dict[str, Any]:
     """
-    Realm 5 main execution: Electron mass from β = 3.058 (from α).
+    Realm 5 main execution: Electron mass from β = 3.043233053 (from α).
 
     Args:
         params: Parameter registry from previous realms

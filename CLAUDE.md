@@ -11,7 +11,7 @@
 
 **Quantum Field Dynamics** - A geometric algebra framework proposing that:
 
-1. **Vacuum is a dynamic medium** with stiffness parameter β ≈ 3.058
+1. **Vacuum is a dynamic medium** with stiffness parameter β ≈ 3.043233053
 2. **Particles are topological structures** (solitons, vortices) in this medium
 3. **Mass arises geometrically** from energy balance in these structures
 4. **Fundamental constants are related** through vacuum properties (α, β, nuclear binding)
@@ -41,7 +41,7 @@ For browser-based LLMs or API access:
 /home/tracy/development/QFD_SpectralGap/
 │
 ├── CLAUDE.md                          ← YOU ARE HERE (master briefing)
-├── Lepton.md                          ← Lepton-specific briefing (beta=3.058)
+├── Lepton.md                          ← Lepton-specific briefing (beta=3.043233053)
 ├── validate_koide_beta3058.py         ← Quick numerical validation
 ├── LEPTON_RECOVERY.txt               ← Emergency pointer (~/LEPTON_RECOVERY.txt)
 │
@@ -159,10 +159,10 @@ Dec 24-27: Further validation tests in main directory
 **What remains**:
 - ⏳ `koide_relation_is_universal` - Final proof that Q = 2/3
 
-**Key parameter**: δ = 3.058 rad (generation phase angle)
+**Key parameter**: δ = 3.043233053 rad (generation phase angle)
 
 **Your mission (if assigned to this)**:
-- Validate numerical predictions with β = 3.058
+- Validate numerical predictions with β = 3.043233053
 - Assess feasibility of completing final proof
 - Check connection to V22 Hill vortex β parameter
 
@@ -176,14 +176,14 @@ Dec 24-27: Further validation tests in main directory
 **Status**: Publication-ready numerical investigation (current through Dec 27)
 
 **Key findings**:
-- β = 3.058 as **vacuum stiffness** (different from Koide δ!)
+- β = 3.043233053 as **vacuum stiffness** (different from Koide δ!)
 - Fits e, μ, τ masses to χ² = 1.1×10⁻¹¹
 - From α-constraint: π²·exp(β)·(c₂/c₁) = α⁻¹ = 137.036
 - Extensive validation: grid convergence, multi-start, profile sensitivity
 - **Beta-identifiability resolved**: Cross-lepton coupling identifies β ≈ 3.15
 - **Profile likelihood**: Sharp minimum at β ≈ 3.14-3.18 (not flat!)
 
-**Critical question**: Is this the SAME 3.058 as Koide δ? Or coincidence?
+**Critical question**: Is this the SAME 3.043233053 as Koide δ? Or coincidence?
 
 **GIGO warning**: 3 DOF → 3 targets = fitting, not prediction. Need independent observables.
 
@@ -224,7 +224,7 @@ Dec 24-27: Further validation tests in main directory
 
 These are **TWO INDEPENDENT PARAMETERS**, not the same value:
 
-**1. Hill Vortex Vacuum Stiffness: β = 3.058**
+**1. Hill Vortex Vacuum Stiffness: β = 3.043233053**
 - **What it is**: Vacuum resistance to density perturbations (dimensionless)
 - **Formula**: E_stab = ∫ β(δρ)² dV
 - **Source**: From α-constraint π²·exp(β)·(c₂/c₁) = α⁻¹ = 137.036
@@ -244,10 +244,10 @@ These are **TWO INDEPENDENT PARAMETERS**, not the same value:
 
 ### NOT the Same Value
 
-**Initial confusion** (in earlier briefings): δ = 3.058 was incorrectly stated for Koide angle.
+**Initial confusion** (in earlier briefings): δ = 3.043233053 was incorrectly stated for Koide angle.
 
 **Correction** (Dec 27 overnight validation):
-- β = 3.058 ✓ (Hill vortex stiffness)
+- β = 3.043233053 ✓ (Hill vortex stiffness)
 - δ = 2.317 rad ✓ (Koide angle)
 - These are **different physics**, different parameters
 
@@ -266,13 +266,13 @@ These are **TWO INDEPENDENT PARAMETERS**, not the same value:
   m_tau = 1776.86 MeV ✓ (<0.004% error)
   Q = 0.66666667 = 2/3 ✓
 
-δ = 3.058 rad (if tested):
+δ = 3.043233053 rad (if tested):
   FAILS with 90%+ mass errors ✗
 ```
 
 **Hill vortex validation** (V22 analysis):
 ```
-β = 3.058, fitted geometry params:
+β = 3.043233053, fitted geometry params:
   χ² = 1.1×10⁻¹¹ ✓
   Reproduces all three lepton masses
 ```
@@ -286,7 +286,7 @@ These are **TWO INDEPENDENT PARAMETERS**, not the same value:
 
 **Your task**: Work with the correct parameter for your assigned model:
 - Koide geometric → use δ = 2.317 rad
-- Hill vortex → use β = 3.058
+- Hill vortex → use β = 3.043233053
 
 ---
 
@@ -304,7 +304,7 @@ These are **TWO INDEPENDENT PARAMETERS**, not the same value:
 
 ❌ **Physical validity**:
 - That the framework describes nature
-- That β = 3.058 is the correct value
+- That β = 3.043233053 is the correct value
 - That Hill vortex is the right model for leptons
 - That parabolic density profile is optimal
 
@@ -377,7 +377,7 @@ ls -lh *.md | head
 cat FINAL_STATUS_SUMMARY.md | less
 ```
 
-### Finding β = 3.058 in Code
+### Finding β = 3.043233053 in Code
 
 ```bash
 # Search everywhere
@@ -453,17 +453,17 @@ grep -r "delta.*=.*3\|beta.*=.*3\|phase.*=.*3" . --include="*.lean" --include="*
 ### If Working on Lepton Koide Relation
 
 **Primary briefing**: `Lepton.md`
-**Key parameter**: δ = 3.058 rad
+**Key parameter**: δ = 3.043233053 rad
 **Status**: 1 sorry left in `koide_relation_is_universal`
 **Your tasks**:
-1. Validate numerical predictions with δ = 3.058
+1. Validate numerical predictions with δ = 3.043233053
 2. Assess completing final proof using newly proven `sum_cos_symm`
 3. Investigate connection to V22 Hill vortex β
 
 ### If Working on V22 Hill Vortex Analysis
 
 **Primary briefing**: `V22_Lepton_Analysis/FINAL_STATUS_SUMMARY.md`
-**Key parameter**: β = 3.058 (vacuum stiffness)
+**Key parameter**: β = 3.043233053 (vacuum stiffness)
 **Status**: Publication-ready, needs independent predictions
 **Your tasks**:
 1. Implement charge radius predictions
@@ -532,7 +532,7 @@ Tracy monitors the project and may provide feedback. When blocked:
 
 ## ⚠️ Common Pitfalls and Solutions
 
-### Pitfall 1: "I can't find β = 3.058"
+### Pitfall 1: "I can't find β = 3.043233053"
 
 **Solution**: It might be stored as `delta`, `phase_angle`, or computed dynamically.
 
@@ -554,8 +554,8 @@ grep -r "3\.058\|delta.*=\|phase.*angle" . --include="*.lean" --include="*.py" |
 
 ```python
 # Common issues:
-delta_rad = 3.058  # Correct (radians)
-delta_deg = 3.058 * 180 / np.pi  # Wrong interpretation
+delta_rad = 3.043233053  # Correct (radians)
+delta_deg = 3.043233053 * 180 / np.pi  # Wrong interpretation
 
 # Verify formula
 m = mu * (1 + np.sqrt(2) * np.cos(...))**2  # Correct
@@ -652,7 +652,7 @@ ls -lh FINAL_STATUS_SUMMARY.md  # Should exist, dated Dec 23 20:05
 │ Count sorries:       grep -r "sorry" QFD/ | wc -l             │
 │ Safe build:          lake build QFD.Module  (NO PARALLEL!)     │
 │                                                                 │
-│ Key parameter:       β = δ = 3.058 (angle? stiffness? both?)  │
+│ Key parameter:       β = δ = 3.043233053 (angle? stiffness? both?)  │
 │ Status:              Koide trig proven, 1 sorry left          │
 │ Warning:             3 DOF → 3 targets = GIGO risk            │
 │                                                                 │

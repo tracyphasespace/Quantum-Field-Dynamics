@@ -7,7 +7,7 @@ fitted energy coefficients.
 
 FUNDAMENTAL CONSTANTS (from QFD theory):
     alpha_fine   = 1/137.036  (electromagnetic fine structure constant)
-    beta_vacuum  = 1/3.058    (QFD vacuum stiffness parameter)
+    beta_vacuum  = 1/3.043233053    (QFD vacuum stiffness parameter)
     lambda_time  = 0.42       (temporal metric scaling parameter)
     M_proton     = 938.272 MeV (proton mass scale)
 
@@ -31,7 +31,7 @@ import numpy as np
 # ============================================================================
 
 alpha_fine   = 1.0 / 137.036        # Fine structure constant (dimensionless)
-beta_vacuum  = 1.0 / 3.058          # Vacuum stiffness (dimensionless)
+beta_vacuum  = 1.0 / 3.043233053          # Vacuum stiffness (dimensionless)
 lambda_time  = 0.42                 # Temporal metric parameter (dimensionless)
 M_proton     = 938.272              # Proton mass in MeV
 
@@ -201,7 +201,7 @@ print("QFD MASS FORMULA - TESTING WITH NAMED CONSTANTS")
 print("="*85)
 print(f"\nFundamental Constants (QFD Theory):")
 print(f"  alpha_fine   = 1/137     = {alpha_fine:.6f}  (EM fine structure)")
-print(f"  beta_vacuum  = 1/3.058   = {beta_vacuum:.6f}  (vacuum stiffness)")
+print(f"  beta_vacuum  = 1/3.043233053   = {beta_vacuum:.6f}  (vacuum stiffness)")
 print(f"  lambda_time  = {lambda_time}            (temporal metric)")
 print(f"  M_proton     = {M_proton} MeV     (proton mass scale)")
 print()

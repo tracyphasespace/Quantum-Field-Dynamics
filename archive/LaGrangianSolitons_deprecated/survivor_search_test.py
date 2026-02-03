@@ -20,7 +20,7 @@ import numpy as np
 # 1. FUNDAMENTAL CONSTANTS & DERIVED PARAMETERS
 # ============================================================================
 alpha_fine   = 1.0 / 137.036
-beta_vacuum  = 1.0 / 3.058231
+beta_vacuum  = 1.0 / 3.043233053
 lambda_time  = 0.42
 M_proton     = 938.272
 

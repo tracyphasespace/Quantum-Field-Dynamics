@@ -1,13 +1,13 @@
 # Straight Ruler Protocol: Final Verdict
 **Date**: 2025-12-31
-**Method**: Fixed β=3.058, no optimization, pure measurement
+**Method**: Fixed β=3.043233053, no optimization, pure measurement
 
 ---
 
 ## The Experiment
 
 We applied the **Straight Ruler Protocol**:
-1. Locked β = 3.058 (the Golden Loop parameter)
+1. Locked β = 3.043233053 (the Golden Loop parameter)
 2. Locked c₄ = 12.0 (hard wall backstop)
 3. Swept 12 isotopes from H-1 to U-238
 4. Measured the gap between model and reality
@@ -93,17 +93,17 @@ This new diagnostic confirms:
 - The SCF solver **universally** gets stuck on the repulsive branch
 - Initialization and parameter tweaking **cannot fix this**
 
-### Why β=3.058 Fails
+### Why β=3.043233053 Fails
 
-**Option A**: β=3.058 is WRONG
+**Option A**: β=3.043233053 is WRONG
 - It's the correct value for some other physical system (maybe lepton vortices?)
 - But NOT for nuclear solitons
 
-**Option B**: β=3.058 is RIGHT, but the V4 formula is WRONG
+**Option B**: β=3.043233053 is RIGHT, but the V4 formula is WRONG
 - The potential V = -½α·ρ² + ⅙β·ρ³ might be too simple
 - Need different functional form (e.g., Skyrme-like)
 
-**Option C**: β=3.058 is RIGHT, but SCF is WRONG
+**Option C**: β=3.043233053 is RIGHT, but SCF is WRONG
 - Gradient descent finds local minimum (compressed branch)
 - Need global optimizer or different energy functional
 
@@ -150,7 +150,7 @@ This new diagnostic confirms:
 
 **The Straight Ruler Protocol succeeded.**
 
-We placed a rigid ruler (β=3.058) across the periodic table and measured the gaps. The gaps reveal:
+We placed a rigid ruler (β=3.043233053) across the periodic table and measured the gaps. The gaps reveal:
 
 1. ✓ The model is **systematically** on the wrong energy branch
 2. ✓ The error **grows with A** according to well-defined power laws

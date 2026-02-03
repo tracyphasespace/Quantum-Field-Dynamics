@@ -28,7 +28,7 @@ from collections import defaultdict, Counter
 
 # Constants
 alpha_fine = 1.0 / 137.036
-beta_vacuum = 1.0 / 3.058231
+beta_vacuum = 1.0 / 3.043233053
 M_proton = 938.272
 LAMBDA_TIME_0 = 0.42
 KAPPA_E = 0.0001
@@ -98,7 +98,7 @@ print("PURE QFD GEOMETRY - NO EMPIRICAL CORRECTIONS")
 print("="*95)
 print()
 print("Testing with ONLY fundamental QFD:")
-print("  ✓ E_bulk (vacuum volume energy, β = 3.058)")
+print("  ✓ E_bulk (vacuum volume energy, β = 3.043233053)")
 print("  ✓ E_surf (topological surface energy)")
 print("  ✓ E_asym (isospin asymmetry)")
 print("  ✓ E_vac (Coulomb/vacuum polarization)")

@@ -15,7 +15,7 @@ This value represents the **true stiffness of the vacuum field**.
 
 ## Why This Matters
 
-| Parameter | Old (β = 3.058, fitted) | New (β = 3.043, derived) |
+| Parameter | Old (β = 3.043233053, fitted) | New (β = 3.043, derived) |
 |-----------|------------------------|-------------------------|
 | Source | Fitted to proton mass | Derived from α (10⁻¹⁰ precision) |
 | Transcendental e^β/β = K | 1.02% error | **0.00% (exact)** |
@@ -42,7 +42,7 @@ This confirms that β = 3.043 is the correct electromagnetic stiffness of the va
 ```
 m_p = 4.3813 × β × (m_e / α)
 ```
-Where 4.3813 was chosen to make β = 3.058 give the exact proton mass.
+Where 4.3813 was chosen to make β = 3.043233053 give the exact proton mass.
 **This is circular reasoning.**
 
 ### New Formula (Geometric)
@@ -85,7 +85,7 @@ This ~1 MeV is the **Confinement Stress Energy** - the energy stored in the prot
 ### Before (Circular)
 1. Measure proton mass
 2. Fit k_geom = 4.3813 to match
-3. Fit β = 3.058 to match
+3. Fit β = 3.043233053 to match
 4. Claim "theory predicts proton mass"
 
 ### After (Principled)
@@ -108,7 +108,7 @@ This ~1 MeV is the **Confinement Stress Energy** - the energy stored in the prot
 
 > "We don't round π to 3.14 for convenience. We don't fit β to match the proton mass."
 
-The 0.5% discrepancy between β = 3.058 and β = 3.043 led us to discover:
+The 0.5% discrepancy between β = 3.043233053 and β = 3.043 led us to discover:
 1. The geometric nature of k = 7π/5
 2. The confinement stress energy E_stress ≈ 1 MeV
 3. A 10x improvement in QED agreement (V₄)

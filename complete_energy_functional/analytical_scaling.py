@@ -2,14 +2,14 @@
 """
 Analytical Scaling Analysis: Map (β, ξ) degeneracy structure
 
-Goal: Understand relationship between β_V22 ≈ 3.15 and β_theory = 3.058
+Goal: Understand relationship between β_V22 ≈ 3.15 and β_theory = 3.043233053
       when gradient term ξ is included.
 
 Approach:
 1. Use Hill vortex profile (no solver needed - analytical)
 2. Compute E(β, ξ) on grid
 3. Find contours of constant mass
-4. Check if β=3.058 line intersects m_electron target
+4. Check if β=3.043233053 line intersects m_electron target
 """
 
 import numpy as np
@@ -96,7 +96,7 @@ def find_degeneracy_lines(beta_grid, xi_grid, E_grid, E_targets):
     return results
 
 
-def plot_energy_landscape(beta_grid, xi_grid, E_grid, beta_theory=3.058, beta_v22=3.15):
+def plot_energy_landscape(beta_grid, xi_grid, E_grid, beta_theory=3.043233053, beta_v22=3.15):
     """
     Visualize E(β, ξ) landscape with key lines marked.
     """
@@ -148,11 +148,11 @@ def plot_energy_landscape(beta_grid, xi_grid, E_grid, beta_theory=3.058, beta_v2
     return fig
 
 
-def analyze_beta_lines(beta_grid, xi_grid, E_grid, beta_values=[3.058, 3.15]):
+def analyze_beta_lines(beta_grid, xi_grid, E_grid, beta_values=[3.043233053, 3.15]):
     """
     Extract E(ξ) along fixed β lines.
 
-    Check: For β=3.058, what ξ gives E ~ m_electron?
+    Check: For β=3.043233053, what ξ gives E ~ m_electron?
     """
     results = {}
 
@@ -205,7 +205,7 @@ def main():
     # TODO: Proper unit conversion
     E_targets = {
         'V22_baseline': E_grid[0, np.argmin(np.abs(beta_grid[0, :] - 3.15))],  # E at (β=3.15, ξ=0)
-        'theory': E_grid[0, np.argmin(np.abs(beta_grid[0, :] - 3.058))]        # E at (β=3.058, ξ=0)
+        'theory': E_grid[0, np.argmin(np.abs(beta_grid[0, :] - 3.043233053))]        # E at (β=3.043233053, ξ=0)
     }
 
     print("Target energies:")
@@ -215,10 +215,10 @@ def main():
 
     # Analyze β lines
     print("Extracting E(ξ) along fixed β lines...")
-    beta_lines = analyze_beta_lines(beta_grid, xi_grid, E_grid, [3.058, 3.15])
+    beta_lines = analyze_beta_lines(beta_grid, xi_grid, E_grid, [3.043233053, 3.15])
 
-    # Check β=3.058 line
-    beta_3058_data = beta_lines['beta_3.058']
+    # Check β=3.043233053 line
+    beta_3058_data = beta_lines['beta_3.043233053']
     xi_vals = np.array(beta_3058_data['xi_vals'])
     E_vals = np.array(beta_3058_data['E_vals'])
 
@@ -230,7 +230,7 @@ def main():
 
     print("CRITICAL RESULT:")
     print("="*70)
-    print(f"For β = 3.058 (Golden Loop):")
+    print(f"For β = 3.043233053 (Golden Loop):")
     print(f"  To match E_V22 = {E_v22_baseline:.4f}, need ξ ≈ {xi_match:.3f}")
     print(f"  Achieved: E = {E_match:.4f}")
     print(f"  Error: {abs(E_match - E_v22_baseline)/E_v22_baseline * 100:.2f}%")
@@ -241,7 +241,7 @@ def main():
         print()
         print("INTERPRETATION:")
         print("  - V22 used β≈3.15 with NO gradient term")
-        print("  - Full model uses β=3.058 WITH ξ≈{:.1f}".format(xi_match))
+        print("  - Full model uses β=3.043233053 WITH ξ≈{:.1f}".format(xi_match))
         print("  - Both give same energy (mass)")
         print("  - Gradient term RESOLVES β offset!")
     else:
@@ -253,21 +253,21 @@ def main():
 
     # Plot landscape
     print("Generating visualization...")
-    fig = plot_energy_landscape(beta_grid, xi_grid, E_grid, beta_theory=3.058, beta_v22=3.15)
+    fig = plot_energy_landscape(beta_grid, xi_grid, E_grid, beta_theory=3.043233053, beta_v22=3.15)
     fig.savefig('results/analytical_scaling_landscape.png', dpi=150, bbox_inches='tight')
     print("✓ Saved: results/analytical_scaling_landscape.png")
     print()
 
-    # Plot β=3.058 line specifically
+    # Plot β=3.043233053 line specifically
     fig2, ax = plt.subplots(figsize=(10, 6))
-    ax.plot(xi_vals, E_vals, 'b-', lw=2, label='E(ξ) at β=3.058')
+    ax.plot(xi_vals, E_vals, 'b-', lw=2, label='E(ξ) at β=3.043233053')
     ax.axhline(E_v22_baseline, color='orange', ls='--', lw=2, label=f'E_V22 = {E_v22_baseline:.3f}')
     ax.axvline(xi_match, color='r', ls='--', lw=2, alpha=0.5, label=f'ξ = {xi_match:.3f}')
     ax.scatter([xi_match], [E_match], s=100, c='red', marker='*', zorder=5, label='Match point')
 
     ax.set_xlabel('ξ (gradient stiffness)', fontsize=12)
     ax.set_ylabel('Energy E', fontsize=12)
-    ax.set_title('Energy vs ξ at β = 3.058 (Golden Loop)', fontsize=14, fontweight='bold')
+    ax.set_title('Energy vs ξ at β = 3.043233053 (Golden Loop)', fontsize=14, fontweight='bold')
     ax.legend(fontsize=10)
     ax.grid(alpha=0.3)
 
@@ -288,7 +288,7 @@ def main():
 
     # Save numerical results
     results = {
-        'beta_theory': 3.058,
+        'beta_theory': 3.043233053,
         'beta_v22': 3.15,
         'xi_match': float(xi_match),
         'E_v22_baseline': float(E_v22_baseline),
@@ -314,7 +314,7 @@ def main():
     print("="*70)
     print()
     print("KEY FINDING:")
-    print(f"  β = 3.058 + ξ ≈ {xi_match:.2f}  ←→  β = 3.15 + ξ = 0")
+    print(f"  β = 3.043233053 + ξ ≈ {xi_match:.2f}  ←→  β = 3.15 + ξ = 0")
     print()
     print("Next step: Run MCMC to confirm ξ posterior peaks at {:.2f}".format(xi_match))
     print("="*70)

@@ -9,7 +9,7 @@ Formula:
   1/α = π² · exp(β) · (c₂/c₁) · k_EM
 
 Where:
-  - β = 3.058 (vacuum stiffness)
+  - β = 3.043233053 (vacuum stiffness)
   - c₂/c₁ = nuclear surface/volume ratio
   - k_EM = dimensional projection form factor
 
@@ -31,7 +31,7 @@ def test_alpha_form_factor():
     print("-" * 80)
 
     # Parameters
-    beta = 3.058230856  # From Golden Loop / V22 fits
+    beta = 3.043233053  # From Golden Loop / V22 fits
     c2_nuclear = 0.316743  # Nuclear volume coefficient
     c1_nuclear = 0.529251  # Nuclear surface coefficient
     c2_over_c1 = c2_nuclear / c1_nuclear

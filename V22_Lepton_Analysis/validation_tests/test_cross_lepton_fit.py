@@ -232,7 +232,7 @@ def cross_lepton_objective(params, energy_calcs, use_analytic_C_mu=True):
 # CROSS-LEPTON FIT
 # ===========================================================================
 
-def fit_cross_lepton(beta_initial=3.058, use_analytic_C_mu=True,
+def fit_cross_lepton(beta_initial=3.043233053, use_analytic_C_mu=True,
                      method='L-BFGS-B', num_r=100, num_theta=20,
                      max_iter=1000, verbose=True):
     """
@@ -375,7 +375,7 @@ def fit_cross_lepton(beta_initial=3.058, use_analytic_C_mu=True,
         print(f"CROSS-LEPTON FIT RESULTS")
         print(f"{'='*70}")
         print(f"\nShared parameters:")
-        print(f"  β = {beta_opt:.6f} (expected: 3.058)")
+        print(f"  β = {beta_opt:.6f} (expected: 3.043233053)")
         print(f"  C_μ = {C_mu_opt:.2f}")
         print(f"\nElectron:")
         print(f"  R = {R_e:.6f}, U = {U_e:.6f}, A = {A_e:.6f}")
@@ -499,7 +499,7 @@ def multi_start_cross_lepton_fit(n_starts=5, beta_range=(2.8, 3.3),
         print(f"BEST RESULT (lowest χ²):")
         print(f"{'='*70}")
         best = results[0]
-        print(f"  β = {best['beta']:.6f} (offset from 3.058: {abs(best['beta'] - 3.058):.6f})")
+        print(f"  β = {best['beta']:.6f} (offset from 3.043233053: {abs(best['beta'] - 3.043233053):.6f})")
         print(f"  C_μ = {best['C_mu']:.2f}")
         print(f"  χ²_total = {best['chi2_total']:.2f}")
         print(f"  From initial β = {best['beta_initial']:.3f}")
@@ -545,7 +545,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Cross-lepton fit: ONE shared β for all three leptons'
     )
-    parser.add_argument('--beta-init', type=float, default=3.058,
+    parser.add_argument('--beta-init', type=float, default=3.043233053,
                        help='Initial β value')
     parser.add_argument('--multi-start', type=int, default=0,
                        help='Number of random starts (0 = single run)')

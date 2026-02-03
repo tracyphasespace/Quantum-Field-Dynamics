@@ -11,7 +11,7 @@ Key differences from old model:
 - NEW: Photon decay from helicity-locked soliton physics
 
 DERIVED PARAMETERS (from Lean4 formalization):
-1. β = 3.058230856 (Golden Loop: e^β/β = K)
+1. β = 3.043233053 (Golden Loop: e^β/β = K)
 2. c_vac = √β (vacuum wave speed)
 3. λ = m_proton (Proton Bridge hypothesis)
 4. ℏ = Γ × λ × L₀ × c (emergent from geometry)
@@ -35,7 +35,7 @@ from scipy.constants import c as speed_of_light_mps
 # DERIVED CONSTANTS (from Lean4 GoldenLoop.lean, VacuumParameters.lean)
 # =============================================================================
 
-# Golden Loop: e^β/β = (α⁻¹ × c₁)/π² → β = 3.058230856
+# Golden Loop: e^β/β = (α⁻¹ × c₁)/π² → β = 3.043233053
 ALPHA_INV = 137.035999084  # Fine structure constant inverse (CODATA 2018)
 C1_SURFACE = 0.496297      # Nuclear surface coefficient (NuBase 2020)
 PI_SQ = np.pi**2           # Topological constant

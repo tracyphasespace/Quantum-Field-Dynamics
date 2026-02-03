@@ -172,7 +172,7 @@ All documentation versioned with code. Update "Last Updated" dates in footers.
 **Answer**: We show that the fine structure constant α (which governs electromagnetism) determines lepton masses through universal vacuum stiffness β.
 
 **Question**: What's the key result?
-**Answer**: Same β = 3.058 from α reproduces electron, muon, and tau masses with zero free parameters.
+**Answer**: Same β = 3.043233053 from α reproduces electron, muon, and tau masses with zero free parameters.
 
 **Question**: How do I replicate it?
 **Answer**: `python test_golden_loop_pipeline.py` (~20 seconds)

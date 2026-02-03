@@ -6,7 +6,7 @@ import csv
 from math import pi
 
 ALPHA = 1.0 / 137.036
-BETA = 1.0 / 3.058231
+BETA = 1.0 / 3.043233053
 LAMBDA = 0.42
 M_PROTON = 938.272
 

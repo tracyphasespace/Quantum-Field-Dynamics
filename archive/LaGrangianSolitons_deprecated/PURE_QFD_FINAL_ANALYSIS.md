@@ -273,7 +273,7 @@ def qfd_energy_pure(A, Z):
    - Do they represent approximate symmetry breaking patterns?
 
 4. **Derive beta_vacuum and SHIELD_FACTOR from first principles**
-   - Currently β = 1/3.058231 is fitted to nuclear data
+   - Currently β = 1/3.043233053 is fitted to nuclear data
    - SHIELD_FACTOR = 0.52 is optimized empirically
    - Need geometric derivation from Cl(3,3)
 
@@ -324,7 +324,7 @@ def qfd_energy_pure(A, Z):
 ### Final Assessment
 
 **Pure QFD geometry (without lambda, without bonuses) captures ~61% of nuclear stability with only 4 essential parameters**:
-- β_vacuum = 1/3.058231 (vacuum stiffness)
+- β_vacuum = 1/3.043233053 (vacuum stiffness)
 - SHIELD_FACTOR = 0.52 (Coulomb screening)
 - DELTA_PAIRING = 11.0 MeV (fermion pairing)
 - KAPPA_E = 0.0001 (minor Z-dependent correction)
@@ -339,7 +339,7 @@ def qfd_energy_pure(A, Z):
 
 ### Fundamental Constants (locked)
 - α = 1/137.036 (fine structure constant)
-- β = 1/3.058231 (vacuum stiffness)
+- β = 1/3.043233053 (vacuum stiffness)
 - M_proton = 938.272 MeV
 
 ### Essential Derived Parameters

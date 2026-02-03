@@ -176,7 +176,7 @@ Coefficients (c₁, c₂) were determined by least-squares fitting to nuclear po
 
 **Note on empirical nature**: These coefficients are *fitted to nuclear data*, not derived from first principles. The functional form Q(A) = c₁·A^(2/3) + c₂·A is motivated by dimensional analysis and geometric theory, but the numerical values are empirically determined. Future work aims to derive these coefficients from fundamental QFD parameters (see Section 5.4).
 
-**Intriguing observation**: The bulk charge coefficient for charge_nominal, c₂ = 0.312, is remarkably close to the inverse of the QFD vacuum stiffness parameter β = 3.058, giving 1/β = 0.327 (4.59% discrepancy). Subsequent analysis (Section 5.4) reveals that in the optimal mass range (A=50-150), this agreement improves to 99.99%.
+**Intriguing observation**: The bulk charge coefficient for charge_nominal, c₂ = 0.312, is remarkably close to the inverse of the QFD vacuum stiffness parameter β = 3.043233053, giving 1/β = 0.327 (4.59% discrepancy). Subsequent analysis (Section 5.4) reveals that in the optimal mass range (A=50-150), this agreement improves to 99.99%.
 
 ### 2.3 Resonance Definition
 
@@ -548,11 +548,11 @@ The bulk charge coefficient for the stability valley (charge_nominal), fitted to
 
 ```
 c₂ (empirical, full dataset) = 0.312 ± 0.01
-1/β (QFD) = 1/3.058 = 0.327
+1/β (QFD) = 1/3.043233053 = 0.327
 Discrepancy: 4.59%
 ```
 
-where β = 3.058 is the vacuum stiffness (also called curvature parameter) derived from QFD analysis of the fine structure constant and muon anomalous magnetic moment [9,10].
+where β = 3.043233053 is the vacuum stiffness (also called curvature parameter) derived from QFD analysis of the fine structure constant and muon anomalous magnetic moment [9,10].
 
 **Note**: This represents the initial observation from the full dataset. Subsequent refined analysis (Section 5.4) demonstrates that this agreement improves dramatically when restricted to the optimal mass range.
 
@@ -714,7 +714,7 @@ c₂ = 0.327049 ± 0.000001 (statistical precision)
 
 **Theoretical** (QFD vacuum stiffness):
 ```
-β = 3.058230856 (from Golden Loop analysis)
+β = 3.043233053 (from Golden Loop analysis)
 1/β = 0.327011043 ± 10⁻⁹
 ```
 
@@ -1143,7 +1143,7 @@ This work was conducted as part of the QFD Spectral Gap project exploring geomet
 
 ### QFD and Vacuum Geometry (This Work)
 
-[34] T.A. McElmurry, "QFD Spectral Gap: Golden Loop Vacuum Stiffness Parameter β = 3.058," QFD_SpectralGap Repository (2024) [Unpublished].
+[34] T.A. McElmurry, "QFD Spectral Gap: Golden Loop Vacuum Stiffness Parameter β = 3.043233053," QFD_SpectralGap Repository (2024) [Unpublished].
 
 [35] T.A. McElmurry, "Geometric Nuclear Model: Surface-Bulk Energy Scaling from Soliton Topology," QFD_SpectralGap Repository (2024) [Unpublished].
 

@@ -314,7 +314,7 @@ Nuclear:   |N⟩ from QFD vacuum potential
 
 5. ⏳ Machine learning N predictor
 6. ⏳ First-principles derivation of (c₁⁰, Δc₁, ...)
-7. ⏳ Connection to lepton sector (β=3.058 universality?)
+7. ⏳ Connection to lepton sector (β=3.043233053 universality?)
 
 ### Long-term
 

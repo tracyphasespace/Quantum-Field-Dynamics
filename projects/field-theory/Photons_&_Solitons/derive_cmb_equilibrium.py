@@ -54,7 +54,7 @@ T_CMB_OBS = 2.7255  # K (Planck 2018)
 # =============================================================================
 
 # Golden Loop eigenvalue (from GoldenLoop.lean)
-BETA_GOLDEN = 3.058230856
+BETA_GOLDEN = 3.043233053
 
 # Proton mass (vacuum density scale from VacuumParameters.lean)
 M_PROTON_KG = 1.6726e-27  # kg

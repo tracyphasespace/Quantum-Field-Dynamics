@@ -3,7 +3,7 @@
 Lepton Energy Functional with Gradient (Curvature) Term
 
 Purpose: Test whether explicit gradient energy E_∇ breaks the β degeneracy
-         and shifts β_min from ~3.15 toward the Golden Loop value 3.058.
+         and shifts β_min from ~3.15 toward the Golden Loop value 3.043233053.
 
 Key physics:
 - E_circ ~ R³ (circulation, bulk hydrodynamics)
@@ -217,8 +217,8 @@ if __name__ == "__main__":
         print(f"  s={s:.1f}: K_stab={K_s:.6f}, K_grad={K_g:.6f}")
 
     # Test 2: Energy computation
-    print("\nTest energy computation (s=2, β=3.058, λ=1.0):")
-    energy_calc = LeptonEnergy(beta=3.058, s=2.0, lam=1.0)
+    print("\nTest energy computation (s=2, β=3.043233053, λ=1.0):")
+    energy_calc = LeptonEnergy(beta=3.043233053, s=2.0, lam=1.0)
 
     # Example parameters (electron-like)
     R, U, A = 0.88, 0.036, 0.92

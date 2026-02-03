@@ -148,7 +148,7 @@ Output: Δχ² profile for proper width analysis
 > "The lepton mass spectrum alone admits an 8-dimensional solution manifold,
 > preventing unique identification of β. However, adding boundary-layer gradient
 > energy systematically shifts β_eff from 3.15 to 3.10, accounting for ~53% of
-> the closure gap relative to Golden Loop (β = 3.058). This validates the
+> the closure gap relative to Golden Loop (β = 3.043233053). This validates the
 > curvature-gap hypothesis while quantifying the remaining underdetermination."
 
 ### Discussion Section
@@ -183,7 +183,7 @@ Output: Δχ² profile for proper width analysis
 - Final theory ✗
 
 **Why this is physics, not numerology**:
-1. Independent prediction (gradient → β shift toward 3.058)
+1. Independent prediction (gradient → β shift toward 3.043233053)
 2. Falsifiable (could have moved away)
 3. Gap quantified (χ ≈ 0.96, not hand-waved)
 4. Next step specified (6 constraints from μ_ℓ)

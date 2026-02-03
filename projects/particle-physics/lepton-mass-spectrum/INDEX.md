@@ -131,7 +131,7 @@ L = I_eff · ω
 
 Constants:
   ξ = 1 (gradient stiffness)
-  β = 3.058 (from fine structure α)
+  β = 3.043233053 (from fine structure α)
   e/(2π) = 0.4326
   Ĩ_circ = 9.4 (Hill vortex integral)
   R_ref = 1 fm (QCD scale)
@@ -178,7 +178,7 @@ Energy (and thus mass) concentrated in Arch + Chord → flywheel effect.
 | Component | Status | Precision | Method |
 |-----------|--------|-----------|--------|
 | Geometry (D-Flow) | 100% | Exact | Flywheel confirmed |
-| Mass (β = 3.058) | 100% | 0.15% | Golden Loop |
+| Mass (β = 3.043233053) | 100% | 0.15% | Golden Loop |
 | Charge (topology) | 100% | Exact | Cavitation |
 | **Spin (L = ℏ/2)** | **100%** | **0.3%** | **Energy-based ρ_eff** |
 | g-2 (V₄) | 99% | 0.3% | Circulation integral |

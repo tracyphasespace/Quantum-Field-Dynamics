@@ -16,9 +16,9 @@
 
 **Validation**: 
 ```python
-β = 3.058 (vacuum stiffness)
+β = 3.043233053 (vacuum stiffness)
 ρ = 1.0 (vacuum density, normalized)
-c = √(3.058/1.0) = 1.7487 (natural units)
+c = √(3.043233053/1.0) = 1.7487 (natural units)
 ```
 
 **Results**:
@@ -42,7 +42,7 @@ c = √(3.058/1.0) = 1.7487 (natural units)
 β       c/c_ref    ℏ/ℏ_ref
 1.000   0.5718     0.5718
 2.000   0.8087     0.8087
-3.058   1.0000     1.0000  (reference)
+3.043233053   1.0000     1.0000  (reference)
 4.000   1.1437     1.1437
 5.000   1.2787     1.2787
 ```
@@ -78,7 +78,7 @@ c = √(β/ρ) (hydrodynamic wave speed)
 
 ### Thought Experiment
 
-**Question**: What if β = 1 instead of 3.058?
+**Question**: What if β = 1 instead of 3.043233053?
 
 **Answer**:
 ```

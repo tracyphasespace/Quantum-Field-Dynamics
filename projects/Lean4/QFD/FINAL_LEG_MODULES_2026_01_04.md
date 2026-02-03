@@ -61,7 +61,7 @@ that will complete the theory.
        let α_n := F_sphere * β
        abs (α_n - 3.5) / 3.5 < 0.002
    ```
-   **Prediction**: α_n = (8/7) × 3.058 = 3.495 vs empirical 3.5 (0.14% error)
+   **Prediction**: α_n = (8/7) × 3.043233053 = 3.495 vs empirical 3.5 (0.14% error)
 
 4. **`sphere_torus_ratio`** (line 219):
    - Proves 8/7 factor from geometric eigenvalue ratio
@@ -74,7 +74,7 @@ that will complete the theory.
 **Required Script**: `solve_torus_form_factor.py`
 
 **Input**:
-- β = 3.058 (from Golden Loop)
+- β = 3.043233053 (from Golden Loop)
 - Boundary: Toroidal (R_major, R_minor)
 - Equations: Hill vortex energy functional
 
@@ -147,7 +147,7 @@ e^β / β = K where K = (α⁻¹ × c₁) / π² ≈ 6.891
        ∃! β : ℝ, 2 < β ∧ β < 4 ∧
          abs (transcendental_equation β - K_target) < 0.01
    ```
-   **Result**: β = 3.058 is the ONLY value in physical range (2, 4)
+   **Result**: β = 3.043233053 is the ONLY value in physical range (2, 4)
 
 5. **`beta_from_transcendental_equation`** (line 236):
    - Connects to Golden Loop: β derived from (α⁻¹, c₁, π²)
@@ -171,7 +171,7 @@ e^β / β = K where K = (α⁻¹ × c₁) / π² ≈ 6.891
 4. Return β with precision to 8 decimal places
 
 **Expected Output**:
-- β = 3.058230856
+- β = 3.043233053
 - Verification: e^β/β ≈ 6.891 (matches K to machine precision)
 
 **Error Handling**:
@@ -180,7 +180,7 @@ e^β / β = K where K = (α⁻¹ × c₁) / π² ≈ 6.891
 
 ### Impact
 
-**Before**: β = 3.058 was an empirical fit (vulnerable to "parameter tuning" critique)
+**Before**: β = 3.043233053 was an empirical fit (vulnerable to "parameter tuning" critique)
 
 **After**: β is the unique solution to e^β/β = (α⁻¹ × c₁)/π² (forced by geometry)
 
@@ -246,7 +246,7 @@ V(ρ) = μρ(1 + ρ/ρ_max + (ρ/ρ_max)² + (ρ/ρ_max)³ + ...)
 
 5. **`mu_from_beta_and_rho_max`** (line 246):
    - Connects μ to β: μ ~ β² × ρ_max (dimensional analysis)
-   - Prediction: μ ≈ (3.058)² × ρ_max ≈ 9.35 × ρ_max
+   - Prediction: μ ≈ (3.043233053)² × ρ_max ≈ 9.35 × ρ_max
 
 ### Python Bridge
 
@@ -258,7 +258,7 @@ V(ρ) = μρ(1 + ρ/ρ_max + (ρ/ρ_max)² + (ρ/ρ_max)³ + ...)
 - m_e = 0.51099895 MeV (PDG 2024)
 - m_μ = 105.6583755 MeV (PDG 2024)
 - m_τ = 1776.86 MeV (PDG 2024)
-- β = 3.058 (from Golden Loop)
+- β = 3.043233053 (from Golden Loop)
 
 **Task**:
 1. Define energy functional: E_total(β, ξ, ρ_max, μ) with saturation potential
@@ -292,7 +292,7 @@ V(ρ) = μρ(1 + ρ/ρ_max + (ρ/ρ_max)² + (ρ/ρ_max)³ + ...)
 
 **Purpose**: Compute form factors F_torus and F_sphere from Hill vortex integration
 
-**Input**: β = 3.058, toroidal/spherical boundary conditions
+**Input**: β = 3.043233053, toroidal/spherical boundary conditions
 
 **Output**: F_torus ≈ 0.327, F_sphere ≈ 0.373, ratio ≈ 8/7
 
@@ -306,7 +306,7 @@ V(ρ) = μρ(1 + ρ/ρ_max + (ρ/ρ_max)² + (ρ/ρ_max)³ + ...)
 
 **Input**: α⁻¹ = 137.036, c₁ = 0.496, π² = 9.87
 
-**Output**: β = 3.058230856 (to 8 decimal places)
+**Output**: β = 3.043233053 (to 8 decimal places)
 
 **Validates**: β is uniquely determined by (α, c₁, π²), not fitted
 
@@ -316,7 +316,7 @@ V(ρ) = μρ(1 + ρ/ρ_max + (ρ/ρ_max)² + (ρ/ρ_max)³ + ...)
 
 **Purpose**: Refit lepton masses with saturation potential V = μρ/(1 - ρ/ρ_max)
 
-**Input**: (m_e, m_μ, m_τ), β = 3.058
+**Input**: (m_e, m_μ, m_τ), β = 3.043233053
 
 **Output**: ρ_max ~ 10¹⁸ kg/m³, μ ~ β² × ρ_max, χ² < polynomial
 
@@ -370,7 +370,7 @@ All three modules build successfully:
 ### Before (V22 Lepton Analysis)
 
 **Status**: Numerical fits with ad hoc terms
-- β = 3.058 fitted to masses (vulnerable to "parameter tuning" critique)
+- β = 3.043233053 fitted to masses (vulnerable to "parameter tuning" critique)
 - v₆ coefficient arbitrary (vulnerable to "fudge factor" critique)
 - α_n independent of α (no connection between sectors)
 
@@ -400,7 +400,7 @@ All three modules build successfully:
 
 2. **Write solve_beta_eigenvalue.py**
    - Implement Newton-Raphson for e^β/β = K
-   - Verify β = 3.058230856
+   - Verify β = 3.043233053
    - Cross-check with Golden Loop
 
 3. **Write fit_tau_saturation.py**
@@ -448,7 +448,7 @@ Integrate results into papers:
 
 ### Transformation 1: β from "Fit" to "Eigenvalue"
 
-**Before**: "We fit β = 3.058 to the lepton masses"
+**Before**: "We fit β = 3.043233053 to the lepton masses"
 - Critique: "Of course it fits, you tuned it!"
 - Defense: Weak (just numerical agreement)
 

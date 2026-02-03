@@ -20,7 +20,7 @@ energy scales.
 
 where:
 - lam ≈ m_p = 938 MeV (vacuum stiffness scale)
-- beta = 3.058 (vacuum bulk modulus)
+- beta = 3.043233053 (vacuum bulk modulus)
 
 ## Numerical Validation
 

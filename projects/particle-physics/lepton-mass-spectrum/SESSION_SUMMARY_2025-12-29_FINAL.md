@@ -297,7 +297,7 @@ In field theory, "mass" is energy density. For a vortex, that means ρ_eff ∝ v
 | Component | Status | Precision | Evidence |
 |-----------|--------|-----------|----------|
 | Geometry (D-Flow) | 100% | Exact | Flywheel I_eff/I_sphere = 2.32 |
-| Mass (β = 3.058) | 100% | 0.15% | Golden Loop validated |
+| Mass (β = 3.043233053) | 100% | 0.15% | Golden Loop validated |
 | Charge (Topology) | 100% | Exact | Cavitation quantization |
 | **Spin (L = ℏ/2)** | **100%** | **0.3%** | **Energy-based ρ_eff** |
 | g-2 (V₄) | 99% | 0.3% | Electron + Muon match |
@@ -343,7 +343,7 @@ M·R = ℏ/c (Compton condition)
 
 All constants:
   ξ = 1 (fundamental)
-  β = 3.058 (from α)
+  β = 3.043233053 (from α)
   e/(2π) = 0.4326 (Euler/circumference)
   Ĩ_circ = 9.4 (Hill vortex integral)
   R_ref = 1 fm (QCD scale)

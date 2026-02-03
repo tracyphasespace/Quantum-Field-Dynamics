@@ -20,8 +20,8 @@ def validate_fine_structure():
     print("Source: UnifiedForces.lean line 282 (currently has sorry)")
     
     # 1. REFERENCE VALUES
-    print("\n[1] REFERENCE VALUES (β = 3.058)")
-    beta_ref = 3.058
+    print("\n[1] REFERENCE VALUES (β = 3.043233053)")
+    beta_ref = 3.043233053
     alpha_inv_ref = 137.036  # Fine structure constant (inverse)
     
     print(f"    β_ref = {beta_ref}")
@@ -37,7 +37,7 @@ def validate_fine_structure():
     # 3. SCALING LAW TEST
     print("\n[3] SCALING LAW: α⁻¹(β) = α⁻¹_ref · (β/β_ref)")
     
-    beta_values = np.array([1.0, 2.0, 3.058, 4.0, 5.0])
+    beta_values = np.array([1.0, 2.0, 3.043233053, 4.0, 5.0])
     
     print("\n    β       α⁻¹       Ratio to ref")
     print("    " + "-"*45)

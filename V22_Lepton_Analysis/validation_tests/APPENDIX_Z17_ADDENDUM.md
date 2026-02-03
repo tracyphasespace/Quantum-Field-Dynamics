@@ -3,14 +3,14 @@
 ## Z.17.8a Empirical Validation: Lepton Data Confirms α-Constrained β
 
 **Date**: 2025-12-26
-**Status**: Cross-sector validation of β_crit = 3.058
+**Status**: Cross-sector validation of β_crit = 3.043233053
 
 ### Z.17.8a.1 The Question
 
 Section Z.17.6 established that the α-constraint combined with the V22 nuclear c2/c1 ratio predicts:
 
 ```
-β_crit = 3.058230856
+β_crit = 3.043233053
 ```
 
 This raises an immediate falsifiability test: **Does β_crit fit lepton data independently?**
@@ -32,7 +32,7 @@ When β was initially treated as a **free fit parameter** in lepton mass and g-f
 | 2-lepton (e, μ) | 1.90 | 3.3 × 10⁻¹² | Apparent optimum |
 | 3-lepton (e, μ, τ) | 2.50 | 7.5 × 10⁻⁴ | Apparent optimum |
 
-Both values are **significantly lower** than β_crit = 3.058, creating apparent tension with the α-constraint.
+Both values are **significantly lower** than β_crit = 3.043233053, creating apparent tension with the α-constraint.
 
 **Interpretation error**: These results were initially interpreted as:
 - "Leptons prefer β ≈ 1.9–2.5"
@@ -55,7 +55,7 @@ When this test was performed using the **full V22 lepton energy calculator** (Hi
 | 1.90 | 3.3 × 10⁻¹² | 0.305 | 941 | 0.0086 | 0.797 | Free-β artifact |
 | **3.10** | **1.1 × 10⁻¹¹** | **0.269** | **925** | **0.0099** | **0.775** | **α-constrained** |
 
-(Note: β = 3.10 was the nearest grid point to β_crit = 3.058 in the β-scan used; refined grids would interpolate to the exact value.)
+(Note: β = 3.10 was the nearest grid point to β_crit = 3.043233053 in the β-scan used; refined grids would interpolate to the exact value.)
 
 **Result**: The α-constrained β = 3.10 produces χ² = 1.1 × 10⁻¹¹, which is:
 - An **essentially perfect fit** to lepton data (relative errors ~10⁻⁶ in masses and g-factors)
@@ -80,7 +80,7 @@ In standard model terms, this is analogous to fitting the fine structure constan
 
 ### Z.17.8a.5 Technical Note: Why Simplified Formulas Fail at β ≈ 3
 
-An initial attempt to validate β_crit = 3.058 using **simplified closed-form mass and g-factor formulas** (algebraic approximations to the full Hill vortex calculation) produced catastrophic failure:
+An initial attempt to validate β_crit = 3.043233053 using **simplified closed-form mass and g-factor formulas** (algebraic approximations to the full Hill vortex calculation) produced catastrophic failure:
 - Predicted masses off by factors of 100–1000
 - χ² ~ 10¹⁰ (completely unacceptable)
 
@@ -99,12 +99,12 @@ The **full V22 energy calculator** (which integrates the Hill vortex stress tens
 
 The empirical result is unambiguous:
 
-**The α-constrained β_crit = 3.058 fits lepton mass and g-factor data with χ² = 1.1 × 10⁻¹¹ when evaluated using the proper QFD energy calculator.**
+**The α-constrained β_crit = 3.043233053 fits lepton mass and g-factor data with χ² = 1.1 × 10⁻¹¹ when evaluated using the proper QFD energy calculator.**
 
 This is a **cross-sector validation**:
 - Nuclear stability data → c2/c1 = 0.6522
 - Electromagnetic coupling → α⁻¹ = 137.036
-- Bridge identity → β_crit = 3.058
+- Bridge identity → β_crit = 3.043233053
 - **Lepton masses & g-factors → consistent with β_crit** ✓
 
 The fact that the same β works across nuclear stability (collective droplet stress balance), lepton structure (soliton/vortex self-energy), and electromagnetic coupling (boundary-to-bulk impedance) is strong evidence that:
@@ -161,7 +161,7 @@ The three hardening steps outlined in Z.17.8 remain the theoretical targets:
 3. Report cross-sector β with full precision
 
 The empirical validation here provides strong motivation for that program:
-- We now know the answer: β_crit ≈ 3.058 works
+- We now know the answer: β_crit ≈ 3.043233053 works
 - We know the bridge formula (π² × exp(β) × c2/c1) is empirically correct
 - The remaining task is to **derive** those functional forms from first principles, rather than treating them as conjectures
 
@@ -179,7 +179,7 @@ The validation also clarifies what **not** to do:
 |-------|--------|----------|
 | β is universal across sectors | **Validated** | Same β ≈ 3.06 works in nuclear (c2/c1), EM (α), lepton (m, g) |
 | α-bridge identity is physical | **Validated** | β from α+nuclear → fits leptons independently |
-| β_crit = 3.058 is correct value | **Validated** | Lepton χ² = 1.1×10⁻¹¹ at β = 3.10 (grid limit) |
+| β_crit = 3.043233053 is correct value | **Validated** | Lepton χ² = 1.1×10⁻¹¹ at β = 3.10 (grid limit) |
 | Free-β fits are overfitting | **Validated** | β = 1.90 improvement is 3.3× (within systematics) |
 | Simplified formulas fail at β~3 | **Validated** | Full energy calculator required for stiff vacuum |
 | Tau requires model refinement | **Open question** | U_τ > 1.0 issue appears at all β, likely model limitation |

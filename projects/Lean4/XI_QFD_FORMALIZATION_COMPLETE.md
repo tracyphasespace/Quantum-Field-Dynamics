@@ -274,7 +274,7 @@ projection_factor = 5/6 = 0.8333
 ### Before ξ_QFD Derivation
 
 **Locked**: 10/17 parameters (59%)
-- β = 3.058 (Golden Loop)
+- β = 3.043233053 (Golden Loop)
 - λ ≈ m_p (Proton Bridge - 0.0002%)
 - c₂ = 1/β (just derived analytically - 0.92%)
 - ξ, τ ≈ 1 (order unity)
@@ -329,7 +329,7 @@ projection_factor = 5/6 = 0.8333
 2. **Nuclear → Lepton**: β determines λ via Proton Bridge
 3. **Lepton → Gravity**: k_geom determines ξ_QFD via projection ← NEW!
 
-**Result**: One parameter (β = 3.058) links all three forces!
+**Result**: One parameter (β = 3.043233053) links all three forces!
 
 ---
 

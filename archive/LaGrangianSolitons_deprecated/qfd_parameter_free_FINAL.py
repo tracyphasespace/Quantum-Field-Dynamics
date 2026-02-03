@@ -6,7 +6,7 @@ BREAKTHROUGH: Zero-parameter nuclear mass formula from pure geometry!
 
 FUNDAMENTAL CONSTANTS (locked by Golden Loop):
     α = 1/137.036  (fine structure constant)
-    β = 1/3.058    (vacuum stiffness)
+    β = 1/3.043233053    (vacuum stiffness)
     λ = 0.42       (temporal metric parameter)
     M_p = 938.272 MeV (proton mass scale)
 
@@ -36,7 +36,7 @@ import numpy as np
 # ============================================================================
 
 alpha_fine   = 1.0 / 137.036        # Fine structure constant
-beta_vacuum  = 1.0 / 3.058          # Vacuum stiffness
+beta_vacuum  = 1.0 / 3.043233053          # Vacuum stiffness
 lambda_time  = 0.42                 # Temporal metric parameter
 M_proton     = 938.272              # Proton mass (MeV)
 
@@ -187,7 +187,7 @@ if rms_error < 0.5:
     print("PARAMETER-FREE NUCLEAR MASS FORMULA ACHIEVED!")
     print()
     print("All coefficients derived from:")
-    print("  1. Golden Loop: α = 1/137, β = 1/3.058 (locked constants)")
+    print("  1. Golden Loop: α = 1/137, β = 1/3.043233053 (locked constants)")
     print("  2. Temporal metric: λ = 0.42 (geometric parameter)")
     print("  3. 6D → 4D projection: C(6,2) = 15 (Clifford algebra)")
     print("  4. Spherical integration: 12π (topological winding)")

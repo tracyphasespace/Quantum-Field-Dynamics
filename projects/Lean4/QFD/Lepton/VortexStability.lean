@@ -4,6 +4,26 @@ Authors: Tracy
 
 # Vortex Stability: β-ξ Degeneracy Resolution
 
+/-
+TODO (Topology → Radius):
+At present the analysis below still feeds in the lepton radius from
+experiment (ℏc/m).  Once the advanced topological core derives
+generation-specific radii, thread that result through this module so
+the β–ξ degeneracy break becomes fully parameter-free.
+
+We know the current muon/electron mass ratio is **0.93% high**
+(`205.9` vs `206.768`).  Bringing the energy-based Hill profile up by
+roughly **0.42%** would close the gap (scale ≈ `1.004217`).  Keep this
+note here so the next round of Hill-profile integrals can target that
+correction explicitly.
+
+⚠️ Important: simply rescaling the radius by this empirical factor
+would recover the measured muon mass and drive the g‑2 agreement below
+0.0027 %, but it would also reintroduce the experimental input we are
+trying to replace.  The goal is to obtain that correction from the
+topology itself, not by baking the measurement into the Hill profile.
+-/
+
 This module formalizes the mathematical breakthrough that resolved the β-parameter
 offset between V22 (β ≈ 3.15) and Golden Loop (β ≈ 3.043, derived from α).
 

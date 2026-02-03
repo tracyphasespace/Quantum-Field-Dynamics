@@ -6,11 +6,11 @@
 
 ## Overview
 
-This repository contains numerical evidence that a vacuum stiffness parameter β ≈ 3.058, inferred from the fine structure constant through a conjectured relationship, supports Hill vortex solutions matching the charged lepton mass ratios (electron, muon, tau) to better than 10⁻⁷ relative precision.
+This repository contains numerical evidence that a vacuum stiffness parameter β ≈ 3.043233053, inferred from the fine structure constant through a conjectured relationship, supports Hill vortex solutions matching the charged lepton mass ratios (electron, muon, tau) to better than 10⁻⁷ relative precision.
 
 ## Key Result
 
-For **fixed β = 3.058230856** (derived from α = 1/137.036 via conjectured identity):
+For **fixed β = 3.043233053** (derived from α = 1/137.036 via conjectured identity):
 
 | Lepton | Target m/m_e | Achieved m/m_e | Residual | Parameters (R, U, amp) |
 |--------|--------------|----------------|----------|------------------------|
@@ -42,7 +42,7 @@ This demonstrates **existence and robustness**, not yet **unique prediction**.
 
 | Source | β Value | Uncertainty | Method |
 |--------|---------|-------------|--------|
-| Fine structure constant (this work) | 3.058 | ±0.012 | Conjectured identity with (α, c₁, c₂) |
+| Fine structure constant (this work) | 3.043233053 | ±0.012 | Conjectured identity with (α, c₁, c₂) |
 | Nuclear stability (prior work) | 3.1 | ±0.05 | Direct fit to binding energies |
 | Cosmology (prior work) | 3.0-3.2 | — | Dark energy EOS interpretation |
 
@@ -230,7 +230,7 @@ Circulation velocity U follows approximate √m scaling:
 ### Cross-Sector β Consistency
 
 All three β determinations overlap within 1σ uncertainties:
-- **Particle scale** (this work): 3.058 ± 0.012
+- **Particle scale** (this work): 3.043233053 ± 0.012
 - **Nuclear scale** (prior): 3.1 ± 0.05
 - **Cosmological scale** (prior): 3.0-3.2
 
@@ -242,7 +242,7 @@ All three β determinations overlap within 1σ uncertainties:
 
 ### ✓ Appropriate Claims
 
-1. "For β = 3.058 inferred from α, Hill vortex solutions exist that reproduce lepton mass ratios to < 10⁻⁷ relative error"
+1. "For β = 3.043233053 inferred from α, Hill vortex solutions exist that reproduce lepton mass ratios to < 10⁻⁷ relative error"
 
 2. "Once β is fixed by α-identity, no additional coupling constants are adjusted between leptons"
 
@@ -286,7 +286,7 @@ All three β determinations overlap within 1σ uncertainties:
    - Ensure dimensionless units properly defined
 
 3. **Uncertainty propagation**:
-   - β = 3.058 ± 0.012 → How do (R, U, amplitude) vary within ±1σ?
+   - β = 3.043233053 ± 0.012 → How do (R, U, amplitude) vary within ±1σ?
    - Systematic uncertainty from grid resolution, profile choice
 
 ### Short-Term (Strengthens Case)
@@ -339,7 +339,7 @@ If you use this work, please cite:
   title = {V22 Lepton Mass Investigation: Hill Vortex Consistency Tests},
   year = {2025},
   url = {https://github.com/qfd-project/lepton-masses-v22},
-  note = {Numerical evidence for β ≈ 3.058 supporting lepton mass ratios}
+  note = {Numerical evidence for β ≈ 3.043233053 supporting lepton mass ratios}
 }
 ```
 

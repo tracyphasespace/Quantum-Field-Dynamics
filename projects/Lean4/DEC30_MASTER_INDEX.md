@@ -186,7 +186,7 @@ NUCLEAR SECTOR (7 parameters) ← ALL NOW DERIVED!
   8. α_n     = (8/7)β = 3.495    **DERIVED (PM)**    ✅✅ 0.14%
   9. β_n     = (9/7)β = 3.932    **DERIVED (EVE)**   ✅✅ 0.82%
   10. γ_e    = (9/5)β = 5.505    **DERIVED (EVE)**   ✅✅ 0.09%
-  11. V₄_nuc = β = 3.058         **DERIVED (EVE)**   ✅✅ N/A*
+  11. V₄_nuc = β = 3.043233053         **DERIVED (EVE)**   ✅✅ N/A*
 
 COMPLETE DERIVATION CHAIN (α → ALL 16 PARAMETERS)
   [Full chain diagram included in file]
@@ -309,7 +309,7 @@ lake build QFD.Nuclear.QuarticStiffness            ✅ (3064 jobs, 3 warnings, 1
 **Timeline**: 1-2 weeks
 
 **Tasks**:
-1. Implement soliton solver with V₄_nuc = 3.058
+1. Implement soliton solver with V₄_nuc = 3.043233053
 2. Check ρ₀ ≈ 0.16 fm⁻³ emerges
 3. Check B/A ≈ 8 MeV emerges
 4. Verify soliton stability

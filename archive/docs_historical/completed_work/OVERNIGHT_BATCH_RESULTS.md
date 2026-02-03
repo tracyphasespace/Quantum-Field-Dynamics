@@ -29,7 +29,7 @@ The overnight batch successfully:
    - Parameter summary
 
 2. **beta_vs_delta_comparison.png/pdf**
-   - Clarifies β = 3.058 (Hill vortex stiffness, dimensionless)
+   - Clarifies β = 3.043233053 (Hill vortex stiffness, dimensionless)
    - Clarifies δ = 2.317 rad (Koide angle, radians)
    - Shows these are DIFFERENT parameters for DIFFERENT models
 
@@ -214,7 +214,7 @@ This addresses the GIGO concern raised in earlier discussions:
 
 7. Run V22 three-lepton validation with corrected energy calculator
 8. Implement independent observable predictions (charge radius, g-2)
-9. Cross-validate β = 3.058 from α-constraint with Hill vortex numerics
+9. Cross-validate β = 3.043233053 from α-constraint with Hill vortex numerics
 10. Prepare figures for journal submission
 
 ---

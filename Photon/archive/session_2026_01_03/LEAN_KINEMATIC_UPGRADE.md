@@ -242,7 +242,7 @@ Energy     | Focus/Dispersion | Status
 @dataclass
 class QFDModel:
     alpha_inv: float = 137.035999  # Coupling (α⁻¹)
-    beta: float = 3.058            # Stiffness (β)
+    beta: float = 3.043233053            # Stiffness (β)
     lambda_sat: float = 0.938      # Saturation (λ)
     hbar_c: float = 0.1973         # Planck constant
 ```

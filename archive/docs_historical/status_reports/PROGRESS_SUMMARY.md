@@ -152,7 +152,7 @@
 
 ### Essential Reading
 - `CLAUDE.md` - Master briefing for AI assistants
-- `Lepton.md` - Lepton-specific context (β = 3.058, Koide δ = 2.317)
+- `Lepton.md` - Lepton-specific context (β = 3.043233053, Koide δ = 2.317)
 - `schema/v0/README.md` - Schema usage and derived coupling policy
 - `Lean4/QFD/PROOF_INDEX.md` - Theorem lookup and status
 

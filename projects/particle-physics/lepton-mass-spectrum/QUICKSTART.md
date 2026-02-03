@@ -89,7 +89,7 @@ results/
 **β (vacuum compression stiffness)**:
 - Value: 3.06 ± 0.15
 - Interpretation: Dimensionless vacuum bulk modulus
-- Comparison: Theoretical prediction β = 3.058 (Golden Loop)
+- Comparison: Theoretical prediction β = 3.043233053 (Golden Loop)
 - Status: Consistent within uncertainty
 
 **ξ (vacuum gradient stiffness)**:
@@ -171,7 +171,7 @@ def log_prior(params):
     beta, xi, tau = params
 
     # Modify β prior
-    beta_mean = 3.058  # Center value
+    beta_mean = 3.043233053  # Center value
     beta_std = 0.15    # Standard deviation
 
     # Modify ξ prior

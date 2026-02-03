@@ -8,7 +8,7 @@ Physics:
   - Geometry: Tetrahedral mass structure + dipole charge
 
 Energy Terms:
-  1. V4 mass self-interaction (β = 3.058)
+  1. V4 mass self-interaction (β = 3.043233053)
   2. Coulomb charge self-energy
   3. Temporal gradient binding (NEW!)
   4. Geometric strain energy
@@ -25,7 +25,7 @@ from scipy.optimize import minimize
 from mpl_toolkits.mplot3d import Axes3D
 
 # Physical constants (QFD units where ℏ = c = 1, energies in MeV, lengths in fm)
-BETA = 3.058231          # Vacuum stiffness (Golden Loop)
+BETA = 3.043233053          # Vacuum stiffness (Golden Loop)
 ALPHA_V4 = 12.0          # V4 self-interaction strength
 ALPHA_EM = 1/137.036     # Fine structure constant
 HC = 197.327            # ℏc in MeV·fm

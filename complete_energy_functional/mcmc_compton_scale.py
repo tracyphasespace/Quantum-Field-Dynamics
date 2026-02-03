@@ -10,7 +10,7 @@ NOT:
 - Classical radius (2.82 fm) - too small
 - Proton radius (0.84 fm) - WRONG PARTICLE!
 
-Test: Does correct scale + D-flow geometry → β = 3.058?
+Test: Does correct scale + D-flow geometry → β = 3.043233053?
 """
 
 import numpy as np
@@ -147,7 +147,7 @@ def log_prior(params):
     beta, xi, tau = params
 
     # β prior
-    beta_mean = 3.058
+    beta_mean = 3.043233053
     beta_std = 0.15
     lp_beta = -0.5 * ((beta - beta_mean) / beta_std)**2
 
@@ -231,7 +231,7 @@ def run_compton_mcmc(
     print()
 
     # Initialize walkers
-    beta_init = 3.058
+    beta_init = 3.043233053
     xi_init = 1.0
     tau_init = 1.0
 
@@ -311,7 +311,7 @@ def analyze_compton_results(sampler, output_dir='results'):
     beta_median = results['β']['median']
     beta_std = results['β']['std']
     xi_median = results['ξ']['median']
-    beta_target = 3.058
+    beta_target = 3.043233053
     beta_offset = abs(beta_median - beta_target)
 
     # Check correlation
@@ -335,7 +335,7 @@ def analyze_compton_results(sampler, output_dir='results'):
     print()
 
     if beta_offset < 0.02 and abs(corr_beta_xi) < 0.3:
-        print("✅ BREAKTHROUGH! Compton scale → β = 3.058!")
+        print("✅ BREAKTHROUGH! Compton scale → β = 3.043233053!")
         print("   Correct electron radius broke degeneracy!")
         result = "success"
     elif beta_offset < 0.05:
@@ -352,7 +352,7 @@ def analyze_compton_results(sampler, output_dir='results'):
     fig = corner.corner(
         samples,
         labels=['β', 'ξ', 'τ'],
-        truths=[3.058, 1.0, 1.0],
+        truths=[3.043233053, 1.0, 1.0],
         quantiles=[0.16, 0.5, 0.84],
         show_titles=True,
         title_fmt='.3f'
@@ -384,7 +384,7 @@ if __name__ == '__main__':
     print("\n" + "="*70)
     print("D-FLOW BREAKTHROUGH TEST")
     print("="*70)
-    print("\nHypothesis: Correct Compton scale → β = 3.058")
+    print("\nHypothesis: Correct Compton scale → β = 3.043233053")
     print("  Previous: R = 0.84 fm (proton!) → ξ collapsed")
     print("  Corrected: R = 386 fm (electron Compton) → should work!")
     print()

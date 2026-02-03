@@ -80,7 +80,7 @@ Following user insight that **"there are no shells or binding energies"** - only
 **Command:** *"also turn off nr and any other mystery bonuses"*
 
 **Test:** ALL bonuses = 0, keep only:
-- E_bulk (vacuum volume energy, β = 3.058)
+- E_bulk (vacuum volume energy, β = 3.043233053)
 - E_surf (topological surface energy)
 - E_asym (isospin asymmetry)
 - E_vac (Coulomb/vacuum polarization)
@@ -143,7 +143,7 @@ Following user insight that **"there are no shells or binding energies"** - only
 **Connection to magic numbers:**
 - **28 = 4×7** (magic number contains factor of 7!)
 - **126 = 18×7** (magic number contains factor of 7!)
-- β = 3.058 ≈ π ≈ **22/7** (classical π approximation!)
+- β = 3.043233053 ≈ π ≈ **22/7** (classical π approximation!)
 
 **Possible origin:**
 - 7-fold topological resonance
@@ -256,7 +256,7 @@ Let's check if A mod 4 = 1 is the real pattern...
 **Why is A mod 7 = 6 favored?**
 
 **Connection to β ≈ π:**
-- β = 3.058231...
+- β = 3.043233053...
 - π = 3.141592...
 - **22/7 = 3.142857...** (classical π approximation)
 - β ≈ 0.973π (about 3%)
@@ -432,7 +432,7 @@ Looking for patterns in what pure QFD gets wrong:
    - Predict which A mod k values are stable
 
 2. **Connect to β parameter**
-   - β = 3.058 ≈ 0.973π
+   - β = 3.043233053 ≈ 0.973π
    - Why is this ratio close to 1?
    - Does 22/7 approximation of π matter?
 
@@ -494,7 +494,7 @@ Looking for patterns in what pure QFD gets wrong:
 
 **QFD approach:**
 - Start with geometric algebra Cl(3,3)
-- Define vacuum stiffness β = 3.058
+- Define vacuum stiffness β = 3.043233053
 - Solve topological soliton energy
 - Pure geometry: 61.4% accuracy, ~5 fundamental parameters
 - Add geometric patterns: target 75%+ accuracy

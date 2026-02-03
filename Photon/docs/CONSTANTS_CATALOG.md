@@ -10,7 +10,7 @@
 In QFD, photon physics emerges from **three fundamental constants** that characterize the vacuum medium:
 
 1. **α ≈ 1/137.036** - Coupling strength (gear mesh precision)
-2. **β ≈ 3.058** - Vacuum stiffness (sound speed, dispersion suppression)
+2. **β ≈ 3.043233053** - Vacuum stiffness (sound speed, dispersion suppression)
 3. **λ ~ 1 AMU** - Saturation scale (nonlinear self-focusing)
 
 These are NOT independent empirical fits. They are **material properties** of the ψ-vacuum that together determine all electromagnetic phenomena.
@@ -90,7 +90,7 @@ These are NOT independent empirical fits. They are **material properties** of th
 
 **QFD**: Dimensionless parameter characterizing resistance to vacuum compression.
 
-**Value**: β ≈ 3.058 (from nuclear binding energy fits and fine structure constant)
+**Value**: β ≈ 3.043233053 (from nuclear binding energy fits and fine structure constant)
 
 **Relation to π**: β ≈ 0.973 π (intriguing, but not exactly π)
 
@@ -145,7 +145,7 @@ Where:
 ```
 β = ln(α⁻¹ / (π² · (c₂/c₁)))
   = ln(137.036 / (9.8696 · 6.42))
-  ≈ 3.058
+  ≈ 3.043233053
 ```
 
 **Consistency**: Nuclear and photon sectors agree to ~2%!
@@ -159,7 +159,7 @@ Where:
 | Air | K ~ 10⁵ Pa | 343 m/s | Compressible gas |
 | Water | K ~ 2.2 GPa | 1480 m/s | Incompressible liquid |
 | Steel | K ~ 160 GPa | 5000 m/s | Rigid solid |
-| **ψ-Vacuum** | **β ≈ 3.058** | **c = 3×10⁸ m/s** | **Ultra-stiff superfluid** |
+| **ψ-Vacuum** | **β ≈ 3.043233053** | **c = 3×10⁸ m/s** | **Ultra-stiff superfluid** |
 
 **ψ-vacuum is 10⁹× stiffer than steel** (in appropriate units).
 
@@ -313,7 +313,7 @@ dL/dt = (Dispersion - Focusing) = 0
 **Our universe**:
 ```
 α = 1/137.036     ✓ (in allowed range)
-β = 3.058         ✓ (sufficiently stiff)
+β = 3.043233053         ✓ (sufficiently stiff)
 λ ~ 1 GeV         ✓ (proton mass scale)
 ```
 
@@ -375,7 +375,7 @@ dL/dt = (Dispersion - Focusing) = 0
 | Constant | Value | Source | Status |
 |----------|-------|--------|--------|
 | **α** | 1/137.036 | CODATA (measured) | ⏳ Derive from β, c₂/c₁ |
-| **β** | 3.058 | Nuclear + α formula | ⏳ Derive from Cl(3,3) |
+| **β** | 3.043233053 | Nuclear + α formula | ⏳ Derive from Cl(3,3) |
 | **λ** | ~1 GeV | Proton mass | ⏳ Derive from α, β |
 
 **Goal**: Reduce 3 constants to 0 (all derived from pure geometry).
@@ -419,7 +419,7 @@ dL/dt = (Dispersion - Focusing) = 0
 | Constant | Value | Dimension | Role | Derived From | Status |
 |----------|-------|-----------|------|--------------|--------|
 | **α** | ~1/137 | Dimensionless | Coupling strength | π²·exp(β)·(c₂/c₁) | ⏳ c₂/c₁ needed |
-| **β** | ~3.058 | Dimensionless | Vacuum stiffness | Nuclear binding + α | ⏳ Cl(3,3) derivation |
+| **β** | ~3.043233053 | Dimensionless | Vacuum stiffness | Nuclear binding + α | ⏳ Cl(3,3) derivation |
 | **λ** | ~1 GeV | Energy | Saturation scale | Proton mass | ⏳ Link to α, β |
 | **c** | 3×10⁸ m/s | Velocity | Light speed | √(β/ρ_vac) | ⏳ Dimensional analysis |
 | **ℏ** | 6.6×10⁻³⁴ J·s | Action | Quantum of action | E₀·L₀/c (electron) | ✓ Derived! |

@@ -43,7 +43,7 @@ If you encounter sorries in these files, **SKIP THEM** and report to the human.
    - **NEVER hardcode these constants elsewhere**
    - Critical constants (validated 2025-12-29):
      - `alpha_circ = e/(2π) ≈ 0.4326` ⚠️ **NOT 1/(2π) ≈ 0.159!**
-     - `beta = 3.058` (Golden Loop)
+     - `beta = 3.043233053` (Golden Loop)
      - `xi = 1.0` (MCMC validated)
    - **If you modify this file, you MUST re-run Python validation**
 

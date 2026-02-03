@@ -13,7 +13,7 @@ Given:
   α^(-1) = 137.036 (observed)
 
 Therefore:
-  β_crit = 3.058
+  β_crit = 3.043233053
 ```
 
 ## Initial Confusion: Fitted β vs α-Predicted β
@@ -25,7 +25,7 @@ When treating β as a **free parameter** in lepton fits:
 | 2-lepton (e,μ) | 1.90 | 3.3e-12 | Overfitting |
 | 3-lepton (e,μ,τ) | 2.50 | 7.5e-04 | Overfitting |
 
-This created apparent tension with α-predicted β = 3.058.
+This created apparent tension with α-predicted β = 3.043233053.
 
 ## Resolution: α-Predicted β Works!
 
@@ -36,13 +36,13 @@ From **proven 2-lepton run** using full V22 energy calculator:
 | 1.90 | 3.3e-12 | 0.305 | 941 | 0.0086 | 0.797 | "Optimal" |
 | **3.10** | **1.1e-11** | **0.269** | **925** | **0.0099** | **0.775** | **Excellent!** |
 
-**Key Finding**: β=3.1 (closest grid point to α-predicted 3.058) gives χ² only **3.3x worse** than the "optimal" β=1.90.
+**Key Finding**: β=3.1 (closest grid point to α-predicted 3.043233053) gives χ² only **3.3x worse** than the "optimal" β=1.90.
 
 Both are **essentially perfect fits** - the difference is negligible within systematic uncertainties!
 
 ## Why the Simplified Script Failed
 
-My `t3b_fixed_beta_alpha.py` script failed catastrophically at β=3.058 because it used **incorrect simplified formulas**:
+My `t3b_fixed_beta_alpha.py` script failed catastrophically at β=3.043233053 because it used **incorrect simplified formulas**:
 
 ```python
 # WRONG (my script):
@@ -62,7 +62,7 @@ The simplified formulas are **not valid** at high β and miss critical physics.
 
 ### Evidence for β ≈ 3.06 Universality
 
-1. **α constraint** (Appendix Z.17): β = 3.058
+1. **α constraint** (Appendix Z.17): β = 3.043233053
 2. **Nuclear fit** (V22): Uses β range including 3.0-3.3 successfully
 3. **Lepton data** (this analysis): β = 3.1 gives χ² = 1.1e-11 ✓
 
@@ -77,7 +77,7 @@ The simplified formulas are **not valid** at high β and miss critical physics.
 
 | Parameter | Value | Source | Status |
 |-----------|-------|--------|--------|
-| **β** | **3.058** | **α constraint (fundamental)** | **✓ FIXED** |
+| **β** | **3.043233053** | **α constraint (fundamental)** | **✓ FIXED** |
 | S | 0.269 | Lepton fit at β=3.1 | Fitted |
 | C_g | 925 | Lepton fit at β=3.1 | Fitted |
 | U_e | 0.0099 | Lepton fit at β=3.1 | Fitted |
@@ -121,7 +121,7 @@ The correct approach:
 
 1. **Validate with 3-lepton fit using proper V22 energy calculator**
    - Would require extending the proven energy calculation to include τ
-   - Check if U_τ > 1.0 issue persists at β=3.058
+   - Check if U_τ > 1.0 issue persists at β=3.043233053
 
 2. **Compare S values across sectors**
    - Lepton fit: S = 0.269 (at β=3.1)
@@ -129,7 +129,7 @@ The correct approach:
    - Should these match if β is universal?
 
 3. **Refine β determination**
-   - Current: β = 3.058 from α + nuclear c2/c1
+   - Current: β = 3.043233053 from α + nuclear c2/c1
    - Could also extract β from cosmology/gravitational sectors
    - All should converge to same value if unification is real
 

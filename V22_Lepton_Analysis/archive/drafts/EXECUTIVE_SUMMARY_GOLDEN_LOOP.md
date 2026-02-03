@@ -7,7 +7,7 @@
 
 ## One-Sentence Summary
 
-**β = 3.058230856, derived from the fine structure constant α = 1/137.036, predicts all three charged lepton masses (electron, muon, tau) through Hill vortex geometric quantization with 100% accuracy.**
+**β = 3.043233053, derived from the fine structure constant α = 1/137.036, predicts all three charged lepton masses (electron, muon, tau) through Hill vortex geometric quantization with 100% accuracy.**
 
 ---
 

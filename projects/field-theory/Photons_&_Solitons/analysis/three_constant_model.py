@@ -4,7 +4,7 @@ QFD Photon Physics: The Three-Constant Model
 
 Calculate photon properties from fundamental constants:
 - α ≈ 1/137.036 (coupling strength)
-- β ≈ 3.058 (vacuum stiffness)
+- β ≈ 3.043233053 (vacuum stiffness)
 - λ ~ 1 GeV (saturation scale)
 
 Goal: Derive all electromagnetic phenomena from these three.
@@ -40,7 +40,7 @@ GeV = 1e9 * eV
 
 # The Three Constants
 alpha_qfd = alpha_measured  # For now, use measured (goal: derive from β, c₂/c₁)
-beta = 3.058  # Vacuum stiffness (from nuclear binding + α formula)
+beta = 3.043233053  # Vacuum stiffness (from nuclear binding + α formula)
 lambda_sat = m_p * c**2  # Saturation scale ≈ 938.3 MeV (proton mass energy)
 
 # Nuclear coupling ratio (empirical - needs geometric derivation!)

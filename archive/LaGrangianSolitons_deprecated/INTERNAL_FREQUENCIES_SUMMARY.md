@@ -361,7 +361,7 @@ Again, ambiguous!
 
 ### Validated ✓
 
-1. **β = 3.058 predicts correct frequency scales**:
+1. **β = 3.043233053 predicts correct frequency scales**:
    - Nuclear cavity: ω_n ~ 10²³ rad/s ✓
    - Giant resonances: ω_GDR ~ 10²² rad/s ✓
    - Vibrations: ω_vib ~ 10²¹ rad/s ✓
@@ -414,7 +414,7 @@ Three tests performed:
 3. ω_GDR/ω_vib, ω_GQR/ω_GDR: ✗ ARTIFACTS (constant ratios)
 
 **What DOES work**:
-- β = 3.058 predicts correct frequency scales ✓
+- β = 3.043233053 predicts correct frequency scales ✓
 - Internal frequencies are right range (2-30) ✓
 - Magic numbers show strong pattern ✓
 - Lego quantization (Δ = 2/3, 1/6) still works ✓
@@ -490,7 +490,7 @@ Question: Are nuclei really spherical harmonic resonators?
 Evidence FOR:
   - Shell structure matches (n,ℓ,m) quantum numbers ✓
   - Magic numbers from degeneracy (2ℓ+1) ✓
-  - β = 3.058 gives correct frequencies ✓
+  - β = 3.043233053 gives correct frequencies ✓
 
 Evidence AGAINST:
   - No simple frequency ratios found ✗
@@ -523,6 +523,6 @@ The nucleus might still "play music" — but we need better instruments (experim
 **Date**: January 2, 2026
 **Status**: Internal frequency analysis complete; musical hypothesis inconclusive
 **Next**: Acquire experimental E(2+), E_vib, E_GDR data from NNDC
-**Verdict**: β = 3.058 WORKS (frequencies correct), but simple harmonics DON'T (yet)
+**Verdict**: β = 3.043233053 WORKS (frequencies correct), but simple harmonics DON'T (yet)
 
 ---

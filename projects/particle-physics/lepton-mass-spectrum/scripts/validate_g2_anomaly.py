@@ -7,7 +7,7 @@ This script bridges the Lean 4 theoretical proofs with experimental data.
 - This script proves the theory is externally accurate (numbers match Fermilab/CODATA)
 
 Validates:
-1. The "3.15% Tax": Does β = 3.058 + correction → β ≈ 3.15 align g-2 values?
+1. The "3.15% Tax": Does β = 3.043233053 + correction → β ≈ 3.15 align g-2 values?
 2. Generational Bridge: Do R_e and R_μ from mass spectrum predict correct g-2?
 3. Model Falsification: Are predictions within experimental bounds?
 """
@@ -35,7 +35,7 @@ TAU = 1.0073             # Temporal stiffness
 TAU_STD = 0.6584
 
 # Theoretical prediction (Golden Loop)
-BETA_GOLDEN = 3.058
+BETA_GOLDEN = 3.043233053
 
 # --- Geometric Factors from Hill Vortex ---
 # From D-flow geometry (π/2 compression)
@@ -201,7 +201,7 @@ def test_beta_sensitivity():
     """
     Test how g-2 predictions vary with β (the "3.15% Tax").
 
-    This tests whether β = 3.058 + correction ≈ 3.15 improves agreement.
+    This tests whether β = 3.043233053 + correction ≈ 3.15 improves agreement.
     """
     print("="*80)
     print("BETA SENSITIVITY ANALYSIS: The 3.15% Tax")

@@ -149,7 +149,7 @@ Z_stable(A) = argmin_Z E_total(A, Z)  # Independent optimization per A
 ```python
 # VACUUM PARAMETERS
 alpha_fine = 1 / 137.036
-beta_vacuum = 1 / 3.058231
+beta_vacuum = 1 / 3.043233053
 lambda_time_0 = 0.42
 M_proton = 938.272
 

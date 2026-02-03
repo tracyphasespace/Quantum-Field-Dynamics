@@ -21,7 +21,7 @@ from dataclasses import dataclass
 class QFDModel:
     # 1. Fundamental Parameters (From QFD_CONSTANTS_SCHEMA.md)
     alpha_inv: float = 137.036      # Fine structure (ALPHA_EM^-1, exact)
-    beta: float      = 3.058        # Vacuum stiffness (BETA)
+    beta: float      = 3.043233053        # Vacuum stiffness (BETA)
     lambda_sat: float = 0.938272    # Saturation scale in GeV (M_PROTON)
 
     # 2. Derived Constants (From schema)
@@ -254,8 +254,8 @@ def plot_dispersion_models():
     # Fermi LAT limit
     plt.axhline(1e-15, color='k', linestyle=':', linewidth=2, label='Fermi LAT Limit')
 
-    # QFD value β = 3.058
-    plt.axvline(3.058, color='orange', linestyle='--', linewidth=2, alpha=0.7, label='QFD β = 3.058')
+    # QFD value β = 3.043233053
+    plt.axvline(3.043233053, color='orange', linestyle='--', linewidth=2, alpha=0.7, label='QFD β = 3.043233053')
 
     plt.xlabel('Vacuum Stiffness (β)', fontsize=12)
     plt.ylabel('Dispersion Coefficient (ξ)', fontsize=12)

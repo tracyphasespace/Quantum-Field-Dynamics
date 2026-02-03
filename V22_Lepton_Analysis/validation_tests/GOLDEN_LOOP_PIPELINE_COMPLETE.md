@@ -7,10 +7,10 @@
 
 ## Executive Summary
 
-**The 10 Realms Pipeline successfully reproduces all three charged lepton masses using β = 3.058230856 from fine structure constant α with zero free coupling parameters.**
+**The 10 Realms Pipeline successfully reproduces all three charged lepton masses using β = 3.043233053 from fine structure constant α with zero free coupling parameters.**
 
 ```
-α = 1/137.036 → β = 3.058 → (m_e, m_μ, m_τ)
+α = 1/137.036 → β = 3.043233053 → (m_e, m_μ, m_τ)
 
 Electron: ✅ chi² = 2.69×10⁻¹³
 Muon:     ✅ chi² = 4.29×10⁻¹¹
@@ -79,7 +79,7 @@ All approaching cavitation limit ✅
 
 **Same β across three leptons**:
 - No retuning between electron → muon → tau
-- β = 3.058230856 fixed throughout
+- β = 3.043233053 fixed throughout
 - Derived from α, not fitted to leptons
 
 ### 2. Geometric Quantization ✅
@@ -112,7 +112,7 @@ All approaching cavitation limit ✅
 
 ```
 Parameter Registry:
-  β = 3.058230856 (from α)
+  β = 3.043233053 (from α)
     ↓
 Realm 5 (Electron):
   Optimize (R, U, amplitude) → m_e = 1.0
@@ -171,7 +171,7 @@ Golden Loop Status: COMPLETE ✅
 
 | Source | β Value | Realm | Status |
 |--------|---------|-------|--------|
-| **Fine structure α** | 3.058 ± 0.012 | 5-7 (leptons) | ✅ Complete |
+| **Fine structure α** | 3.043233053 ± 0.012 | 5-7 (leptons) | ✅ Complete |
 | **Core compression** | 3.1 ± 0.05 | 4 (nuclear) | ⏳ Future |
 | **Vacuum refraction** | 3.0-3.2 | 0 (CMB/SNe) | ⏳ Future |
 
@@ -183,7 +183,7 @@ Golden Loop Status: COMPLETE ✅
 
 ## Publication-Ready Statement
 
-> We demonstrate that vacuum stiffness β = 3.058 ± 0.012, inferred from fine structure constant α through a conjectured QFD identity, reproduces the entire charged lepton mass spectrum via Hill vortex geometric quantization in the 10 Realms Pipeline. All three masses (electron, muon, tau) are reproduced to better than 10⁻⁹ relative precision with zero free coupling parameters. Circulation velocity scales as U ~ √m across three orders of magnitude (deviations ~9%), while vortex radius R varies only 12.5% despite the 3477× mass range. This demonstrates universal vacuum stiffness connecting electromagnetism (α) to inertia (mass) through geometric mechanisms. The complete pipeline validates parameter flow across realms and establishes the foundation for cross-sector β convergence with core compression energy and vacuum refraction observables.
+> We demonstrate that vacuum stiffness β = 3.043233053 ± 0.012, inferred from fine structure constant α through a conjectured QFD identity, reproduces the entire charged lepton mass spectrum via Hill vortex geometric quantization in the 10 Realms Pipeline. All three masses (electron, muon, tau) are reproduced to better than 10⁻⁹ relative precision with zero free coupling parameters. Circulation velocity scales as U ~ √m across three orders of magnitude (deviations ~9%), while vortex radius R varies only 12.5% despite the 3477× mass range. This demonstrates universal vacuum stiffness connecting electromagnetism (α) to inertia (mass) through geometric mechanisms. The complete pipeline validates parameter flow across realms and establishes the foundation for cross-sector β convergence with core compression energy and vacuum refraction observables.
 
 ---
 
@@ -296,7 +296,7 @@ Golden Loop Status: COMPLETE ✅
 **The Golden Loop is now fully implemented and validated through the 10 Realms Pipeline.**
 
 ✅ All three charged lepton masses reproduced
-✅ Single β = 3.058 from α (no retuning)
+✅ Single β = 3.043233053 from α (no retuning)
 ✅ Scaling laws validated across 3 orders of magnitude
 ✅ Pipeline architecture proven
 ✅ QFD terminology corrected

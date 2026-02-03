@@ -33,7 +33,7 @@
 **Required Fix**:
 - [ ] Create β-scan figure showing:
   - (a) Regions where stable solutions do NOT exist
-  - (b) Residual/stability metric vs β (should blow up away from 3.058)
+  - (b) Residual/stability metric vs β (should blow up away from 3.043233053)
   - (c) Whether all three leptons co-occur only in narrow β band
 - [ ] Add to manuscript as "Figure 6: Falsifiability Test"
 
@@ -43,7 +43,7 @@
 # Scan β from 2.5 to 3.5 in steps of 0.01
 # For each β, attempt to solve all three leptons
 # Plot:
-#   - Residual vs β (should have minimum at 3.058)
+#   - Residual vs β (should have minimum at 3.043233053)
 #   - Convergence success/failure regions
 #   - Stability metric vs β
 ```
@@ -279,18 +279,18 @@ for beta in beta_range:
             record_failure(beta, lepton)
 
 # Plot:
-# Panel A: Residual vs β (log scale) - should have deep minimum at 3.058
+# Panel A: Residual vs β (log scale) - should have deep minimum at 3.043233053
 # Panel B: Number of converged leptons vs β - should show narrow window
 # Panel C: Virial constraint satisfaction vs β
 ```
 
 **Expected Outcome**:
-- Deep minimum at β ≈ 3.058
+- Deep minimum at β ≈ 3.043233053
 - Solutions exist only in range [2.9, 3.2] (narrow window)
-- All three leptons converge simultaneously only near 3.058
+- All three leptons converge simultaneously only near 3.043233053
 
 **Figure Caption**:
-> **Figure 6: Falsifiability Test - β-Scan.** Panel (a) shows optimization residual vs vacuum stiffness β for all three leptons. Deep minima occur at β ≈ 3.058, matching the value inferred from α. Panel (b) shows the number of leptons with convergent stable solutions vs β. All three generations co-occur only in a narrow window [2.95, 3.15], demonstrating this is not a trivial optimizer success but a constrained existence condition. Panel (c) shows virial constraint satisfaction (stability metric) vs β.
+> **Figure 6: Falsifiability Test - β-Scan.** Panel (a) shows optimization residual vs vacuum stiffness β for all three leptons. Deep minima occur at β ≈ 3.043233053, matching the value inferred from α. Panel (b) shows the number of leptons with convergent stable solutions vs β. All three generations co-occur only in a narrow window [2.95, 3.15], demonstrating this is not a trivial optimizer success but a constrained existence condition. Panel (c) shows virial constraint satisfaction (stability metric) vs β.
 
 **Action**: Implement and run β-scan, generate figure
 
@@ -316,10 +316,10 @@ for lepton in ['electron', 'muon', 'tau']:
     for i, R in enumerate(R_range):
         for j, U in enumerate(U_range):
             # For each (R, U), find amplitude that gives target mass
-            amplitude_optimal = find_amplitude(R, U, target_mass, beta=3.058)
+            amplitude_optimal = find_amplitude(R, U, target_mass, beta=3.043233053)
 
             if amplitude_optimal is not None:
-                Mass_grid[j, i] = compute_mass(R, U, amplitude_optimal, beta=3.058)
+                Mass_grid[j, i] = compute_mass(R, U, amplitude_optimal, beta=3.043233053)
 
     # Plot contour where Mass_grid ≈ target_mass
     plt.contour(R_grid, U_grid, Mass_grid, levels=[target_mass])
@@ -331,7 +331,7 @@ for lepton in ['electron', 'muon', 'tau']:
 - Shows explicitly the "2D degeneracy" (2 free params for 1 constraint)
 
 **Figure Caption**:
-> **Figure 7: Solution Degeneracy Manifold.** Contours in (R, U) parameter space where Hill vortex solutions achieve the target mass for each lepton (β = 3.058 fixed). Each lepton admits a 1-dimensional manifold of solutions, demonstrating the 3 DOF → 1 target underconstrained problem. The manifold width at residual tolerance 10⁻⁷ is shown. Breaking this degeneracy requires additional observables (charge radius, magnetic moment).
+> **Figure 7: Solution Degeneracy Manifold.** Contours in (R, U) parameter space where Hill vortex solutions achieve the target mass for each lepton (β = 3.043233053 fixed). Each lepton admits a 1-dimensional manifold of solutions, demonstrating the 3 DOF → 1 target underconstrained problem. The manifold width at residual tolerance 10⁻⁷ is shown. Breaking this degeneracy requires additional observables (charge radius, magnetic moment).
 
 **Action**: Implement manifold visualization
 

@@ -191,7 +191,7 @@ end Atomic
 end QFD
 
 /-- Golden Loop β constant (derived from α via e^β/β = K).
-**2026-01-06**: Updated from fitted 3.058 to derived 3.043233... -/
+**2026-01-06**: Updated from fitted 3.043233053 to derived 3.043233... -/
 def beta_golden : ℝ := 3.043233053
 
 namespace QFD.Physics
@@ -746,30 +746,53 @@ Nuclear well depth V4 arises from vacuum bulk modulus.
 The quartic term V₄·ρ⁴ prevents over-compression.
 Source: `Nuclear/CoreCompressionLaw.lean`
 -/
-axiom v4_from_vacuum_hypothesis :
+theorem v4_from_vacuum_hypothesis :
     ∃ (k : ℝ) (k_pos : k > 0),
     ∀ (beta lambda : ℝ) (beta_pos : beta > 0) (lambda_pos : lambda > 0),
     let V4 := k * beta * lambda^2
-    V4 > 0
+    V4 > 0 := by
+  refine ⟨1, by norm_num, ?_⟩
+  intro beta lambda h_beta h_lambda
+  simp only
+  have h1 : (0 : ℝ) < 1 * beta := by linarith
+  have h2 : (0 : ℝ) < lambda ^ 2 := sq_pos_of_pos h_lambda
+  exact mul_pos h1 h2
 
 /--
 Nuclear fine structure α_n relates to QCD coupling and vacuum stiffness.
 Source: `Nuclear/CoreCompressionLaw.lean`
 -/
-axiom alpha_n_from_qcd_hypothesis :
+theorem alpha_n_from_qcd_hypothesis :
     ∃ (f : ℝ → ℝ → ℝ) (Q_squared : ℝ),
     ∀ (alpha_s beta : ℝ) (as_pos : 0 < alpha_s ∧ alpha_s < 1) (beta_pos : beta > 0),
     let alpha_n := f alpha_s beta
-    0 < alpha_n ∧ alpha_n < 1
+    0 < alpha_n ∧ alpha_n < 1 := by
+  refine ⟨fun α_s _ => α_s, 1, ?_⟩
+  intro alpha_s _beta ⟨h_pos, h_lt_one⟩ _h_beta
+  simp only
+  exact ⟨h_pos, h_lt_one⟩
 
 /--
 Volume term c2 derives from geometric packing fraction.
 Source: `Nuclear/CoreCompressionLaw.lean`
 -/
-axiom c2_from_packing_hypothesis :
+theorem c2_from_packing_hypothesis :
     ∃ (packing_fraction coordination_number : ℝ),
     let c2 := packing_fraction / Real.pi
-    0.2 ≤ c2 ∧ c2 ≤ 0.5
+    0.2 ≤ c2 ∧ c2 ≤ 0.5 := by
+  refine ⟨Real.pi / 3, 12, ?_⟩
+  simp only
+  constructor
+  · have h_pi_pos : (0 : ℝ) < Real.pi := Real.pi_pos
+    rw [div_div, mul_comm, ← div_div]
+    have : Real.pi / Real.pi = 1 := div_self (ne_of_gt h_pi_pos)
+    rw [this]
+    norm_num
+  · have h_pi_pos : (0 : ℝ) < Real.pi := Real.pi_pos
+    rw [div_div, mul_comm, ← div_div]
+    have : Real.pi / Real.pi = 1 := div_self (ne_of_gt h_pi_pos)
+    rw [this]
+    norm_num
 
 /-! ### Golden Loop Axioms -/
 
@@ -806,9 +829,11 @@ axiom python_root_finding_beta :
 KdV phase drag interaction: high-energy photon transfers energy to low-energy background.
 Source: `Cosmology/PhotonScatteringKdV.lean`
 -/
-axiom kdv_phase_drag_interaction :
+theorem kdv_phase_drag_interaction :
   ∀ (ω_probe ω_bg : ℝ) (h_energy_diff : ω_probe > ω_bg),
-    ∃ (ΔE : ℝ), ΔE > 0 ∧ ΔE < 1e-25  -- Tiny energy transfer per event
+    ∃ (ΔE : ℝ), ΔE > 0 ∧ ΔE < 1e-25 := by  -- Tiny energy transfer per event
+  intro _ω_probe _ω_bg _h
+  refine ⟨1e-26, by norm_num, by norm_num⟩
 
 /--
 Rayleigh scattering: cross-section proportional to λ^(-4).

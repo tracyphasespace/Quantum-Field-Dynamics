@@ -9,7 +9,7 @@
 ## Executive Summary
 
 The V22 lepton analysis found **β ≈ 3.15 ± 0.1** using a simplified Hill vortex model.
-The Golden Loop α-constraint predicts **β = 3.058**.
+The Golden Loop α-constraint predicts **β = 3.043233053**.
 **Systematic offset**: Δβ ≈ 0.092 (~3%)
 
 **Hypothesis**: The offset arises from missing terms in the energy functional:
@@ -43,7 +43,7 @@ E_V22 = ∫ β(δρ)² dV
 - ✗ Time evolution
 - ✗ EM response from first principles
 
-**Result**: β_eff ≈ 3.15 (3% offset from β = 3.058)
+**Result**: β_eff ≈ 3.15 (3% offset from β = 3.043233053)
 
 ---
 
@@ -147,11 +147,11 @@ E = ∫ [½ξ|∇ρ|² + β(δρ)²] dV
 
 **Fit**: (ξ, β, R, U, A) × 3 leptons
 **Constraint**: Cross-lepton shared (ξ, β)
-**Target**: Does β → 3.058 when ξ is included?
+**Target**: Does β → 3.043233053 when ξ is included?
 
 **Prior expectations**:
 - ξ ~ 1 ± 0.5 (dimensionless in natural units)
-- β ~ 3.058 ± 0.1 (from α-constraint)
+- β ~ 3.043233053 ± 0.1 (from α-constraint)
 - R_e ~ 10⁻¹³ m (Compton scale)
 
 ---
@@ -226,7 +226,7 @@ If stages 1-2 don't resolve offset:
 
 ```python
 # Vacuum stiffness from α-constraint
-β ~ Normal(μ=3.058, σ=0.15)  # Allow ±5% deviation
+β ~ Normal(μ=3.043233053, σ=0.15)  # Allow ±5% deviation
 
 # Gradient stiffness (dimensionless, order unity)
 ξ ~ LogNormal(μ=0, σ=0.5)  # Median=1, allows 0.3-3 range
@@ -348,7 +348,7 @@ def log_likelihood(params, data):
 
 ### Scenario 1: Gradient term resolves offset
 
-**Result**: β_posterior peaks at 3.058 ± 0.02 when ξ is included
+**Result**: β_posterior peaks at 3.043233053 ± 0.02 when ξ is included
 
 **Interpretation**:
 - V22 offset was entirely due to missing ∇ρ term
@@ -361,7 +361,7 @@ def log_likelihood(params, data):
 
 ### Scenario 2: Temporal term needed
 
-**Result**: Stage 1 still shows β ≈ 3.1, but Stage 2 → β ≈ 3.058
+**Result**: Stage 1 still shows β ≈ 3.1, but Stage 2 → β ≈ 3.043233053
 
 **Interpretation**:
 - Both gradient and temporal terms contribute
@@ -488,12 +488,12 @@ def log_likelihood(params, data):
 - Can reproduce V22 result as limiting case
 
 **Target success**:
-- β posterior peaks near 3.058 (not 3.15)
+- β posterior peaks near 3.043233053 (not 3.15)
 - Offset reduced from 3% to <1%
 - ξ value is physically reasonable (~1)
 
 **Optimal success**:
-- β = 3.058 ± 0.02 (within α-constraint prediction)
+- β = 3.043233053 ± 0.02 (within α-constraint prediction)
 - All three leptons fit to <0.1% residuals
 - Gradient and/or temporal terms justify offset quantitatively
 

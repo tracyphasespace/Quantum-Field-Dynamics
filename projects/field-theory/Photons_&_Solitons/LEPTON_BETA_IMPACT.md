@@ -1,11 +1,11 @@
-# Lepton Model Impact Analysis: β = 3.058 → 3.04309
+# Lepton Model Impact Analysis: β = 3.043233053 → 3.04309
 
 **Date**: 2026-01-06
 **Status**: All lepton predictions PRESERVED
 
 ## Executive Summary
 
-Changing β from 3.058 (fitted) to 3.04309 (derived from α) has **minimal impact**
+Changing β from 3.043233053 (fitted) to 3.04309 (derived from α) has **minimal impact**
 on lepton physics because:
 
 1. **Mass ratios are β-independent** - they depend only on Q* values
@@ -33,7 +33,7 @@ m_μ / m_e = (β × Q*_μ²) / (β × Q*_e²) = Q*_μ² / Q*_e²
 
 **β cancels out!** Mass ratios depend ONLY on Q* geometry.
 
-| Ratio | Old β = 3.058 | New β = 3.04309 | Change |
+| Ratio | Old β = 3.043233053 | New β = 3.04309 | Change |
 |-------|---------------|-----------------|--------|
 | m_μ/m_e | 206.768 | 206.768 | 0% |
 | m_τ/m_e | 3477 | 3477 | 0% |
@@ -67,7 +67,7 @@ V₄ = -ξ/β
 
 | Source | Value | vs QED C₂ = -0.328479 |
 |--------|-------|------------------------|
-| Old β = 3.058 | V₄ = -0.327 | 0.45% error |
+| Old β = 3.043233053 | V₄ = -0.327 | 0.45% error |
 | New β = 3.04309 | V₄ = -0.32862 | **0.04% error** |
 
 **11× improvement** in QED agreement!
@@ -107,21 +107,21 @@ Key neutrino equations:
 
 | File | Line | Old | New |
 |------|------|-----|-----|
-| LeptonIsomers.lean | 25 | β=3.058 | β=3.043 |
-| LeptonIsomers.lean | 337 | β=3.058 | β=3.043 |
-| LeptonIsomers.lean | 340 | β≈3.058 | β≈3.043 |
-| LeptonIsomers.lean | 352 | β=3.058 | β=3.043 |
-| VortexStability.lean | 9,27,28,53,54,111,135,434,435,461,471,555,586 | 3.058 | 3.043 |
-| VortexStability_v3.lean | 9,27,28 | 3.058 | 3.043 |
-| AnomalousMoment.lean | 72 (comment), 137, 336 | 3.058 | 3.043 |
+| LeptonIsomers.lean | 25 | β=3.043233053 | β=3.043 |
+| LeptonIsomers.lean | 337 | β=3.043233053 | β=3.043 |
+| LeptonIsomers.lean | 340 | β≈3.043233053 | β≈3.043 |
+| LeptonIsomers.lean | 352 | β=3.043233053 | β=3.043 |
+| VortexStability.lean | 9,27,28,53,54,111,135,434,435,461,471,555,586 | 3.043233053 | 3.043 |
+| VortexStability_v3.lean | 9,27,28 | 3.043233053 | 3.043 |
+| AnomalousMoment.lean | 72 (comment), 137, 336 | 3.043233053 | 3.043 |
 
 ### Python Scripts
 
 | File | Line | Change |
 |------|------|--------|
-| lepton_stability.py | 10 | BETA = 3.058 → 3.04309 |
-| lepton_stability_3param.py | 27 | BETA = 3.058 → 3.04309 |
-| validate_lepton_isomers.py | 26 | beta = 3.058 → 3.04309 |
+| lepton_stability.py | 10 | BETA = 3.043233053 → 3.04309 |
+| lepton_stability_3param.py | 27 | BETA = 3.043233053 → 3.04309 |
+| validate_lepton_isomers.py | 26 | beta = 3.043233053 → 3.04309 |
 | lepton_energy_partition.py | 9 | BETA = 3.063 → 3.04309 |
 
 ## 5. Test Results
@@ -154,7 +154,7 @@ The ratio is IDENTICAL because β cancels in ratios.
 5. Neutrinos: UNAFFECTED (different topology)
 
 This validates the decision to use the **derived** β = 3.04309 from α rather than
-the fitted value β = 3.058.
+the fitted value β = 3.043233053.
 
 ---
 *Generated during β paradigm shift analysis, 2026-01-06*

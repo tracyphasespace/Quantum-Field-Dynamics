@@ -21,14 +21,14 @@ This suggests **quantum electrodynamics is emergent from vacuum geometry**, not 
 V₄ = -ξ / β
 
 where:
-  β = 3.058  (vacuum compression stiffness, from fine structure constant)
+  β = 3.043233053  (vacuum compression stiffness, from fine structure constant)
   ξ = 1.000  (vacuum gradient stiffness, from dimensional analysis)
 ```
 
 ### Result
 
 ```
-V₄(QFD) = -1/3.058 = -0.327011
+V₄(QFD) = -1/3.043233053 = -0.327011
 C₂(QED) = -0.328479
 
 Error: 0.447%
@@ -72,7 +72,7 @@ Gradient:    ξ|∇ρ|² resists sharp boundaries
 ```
 Δa / a₀ = -ξ/β · (α/π)
 
-For β = 3.058:
+For β = 3.043233053:
   Δa/a₀ = -0.327 · (α/π) ≈ -0.000758
 
 This matches the known QED correction!
@@ -188,7 +188,7 @@ a = (α/2π) · [1 + V₄(α/π) + V₆(α/π)² + ...]
 
 Derived coefficients:
   C₁ = 0.5      (exact, from α)
-  V₄ = -0.327   (from β = 3.058)
+  V₄ = -0.327   (from β = 3.043233053)
   V₆ = ?        (to be calculated)
 ```
 
@@ -224,7 +224,7 @@ Layer 1: Lean 4 Proofs (Internal Consistency)
 
 Layer 2: Python MCMC (External Calibration)
   → Fit β, ξ, τ to lepton masses
-  → β = 3.063 ± 0.149 (matches Golden Loop 3.058)
+  → β = 3.063 ± 0.149 (matches Golden Loop 3.043233053)
 
 Layer 3: g-2 Probe (QED Validation)
   → V₄ = -ξ/β = -0.327
@@ -321,7 +321,7 @@ Layer 3: g-2 Probe (QED Validation)
 
 | Parameter | Source | Value | Match | Error |
 |-----------|--------|-------|-------|-------|
-| β | Golden Loop (α) | 3.058 | - | - |
+| β | Golden Loop (α) | 3.043233053 | - | - |
 | ξ | MCMC (masses) | 0.966 ≈ 1 | - | - |
 | V₄ | QFD (-ξ/β) | -0.327 | C₂(QED) | 0.45% |
 | C₂ | Feynman diagrams | -0.328 | - | - |

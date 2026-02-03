@@ -10,7 +10,7 @@ Current empirical formula:
   
 Where:
   c1 ≈ 0.879  (related to 0.529 user mentioned?)
-  c2 ≈ 0.258  (related to 1/3.058 = 0.327?)
+  c2 ≈ 0.258  (related to 1/3.043233053 = 0.327?)
 
 Test:
 1. Fit coefficients separately for light/medium/heavy mass regions
@@ -29,7 +29,7 @@ from collections import Counter
 
 # QFD Constants
 alpha_fine = 1.0 / 137.036
-beta_vacuum = 1.0 / 3.058231
+beta_vacuum = 1.0 / 3.043233053
 M_proton = 938.272
 KAPPA_E = 0.0001
 SHIELD_FACTOR = 0.52
@@ -269,7 +269,7 @@ print()
 # Compare to user's values
 print("User's mentioned values:")
 print("  c1 related to 0.529?")
-print("  c2 related to 1/3.058 = 0.327?")
+print("  c2 related to 1/3.043233053 = 0.327?")
 print()
 
 # Check evolution
@@ -413,7 +413,7 @@ print()
 # Compare to user's values
 print("Comparison to user's mentioned values:")
 print(f"  c1 = {c1_global:.6f}  vs  0.529  (ratio: {c1_global/0.529:.3f})")
-print(f"  c2 = {c2_global:.6f}  vs  1/3.058 = 0.327  (ratio: {c2_global/0.327:.3f})")
+print(f"  c2 = {c2_global:.6f}  vs  1/3.043233053 = 0.327  (ratio: {c2_global/0.327:.3f})")
 print()
 
 if abs(c1_global - 0.529) / 0.529 > 0.1:
@@ -423,7 +423,7 @@ if abs(c2_global - 0.327) / 0.327 > 0.1:
     print(f"★ c2 differs from 1/β by {100*abs(c2_global - 0.327)/0.327:.1f}%")
 elif abs(c2_global - 0.327) / 0.327 < 0.05:
     print(f"★★★ c2 ≈ 1/β within {100*abs(c2_global - 0.327)/0.327:.1f}%!")
-    print(f"    Confirms β = {1/c2_global:.6f} ≈ 3.058")
+    print(f"    Confirms β = {1/c2_global:.6f} ≈ 3.043233053")
 
 print()
 

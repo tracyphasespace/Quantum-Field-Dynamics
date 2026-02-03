@@ -227,7 +227,7 @@ E(A,Z) = V₀(1 - λ/(12π)) × A           [Stabilization constraint]
 
 **All four terms** derived from:
 - **α = 1/137.036** (fine structure)
-- **β = 1/3.058** (vacuum stiffness)
+- **β = 1/3.043233053** (vacuum stiffness)
 - **λ = 0.42** (temporal metric)
 - **Geometric factors** (12π, 15, 0.60)
 

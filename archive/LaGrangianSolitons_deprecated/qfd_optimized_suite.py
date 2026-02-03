@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 # FUNDAMENTAL CONSTANTS (Locked by the Golden Loop)
 # ============================================================================
 alpha_fine   = 1.0 / 137.036        # Fine structure constant
-beta_vacuum  = 1.0 / 3.058231       # Vacuum stiffness (bulk modulus)
+beta_vacuum  = 1.0 / 3.043233053       # Vacuum stiffness (bulk modulus)
 lambda_time  = 0.42                 # Temporal metric parameter
 M_proton     = 938.272              # Proton mass scale in MeV
 

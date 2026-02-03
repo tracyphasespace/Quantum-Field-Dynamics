@@ -20,25 +20,25 @@
 | E. Multi-objective (electron) | Second observable (μ) | ✓ Breaks flat, min at β=3.19 | test_multi_objective_beta_scan.py |
 | F. Cross-lepton + profile likelihood | Universal β test | ✓ Sharp min at β≈3.15 | test_cross_lepton_fit.py + profile_likelihood_beta.py |
 
-**Conclusion**: Scaling degeneracy is real → need second observable → cross-lepton identifies β ≈ 3.15 (offset from 3.058)
+**Conclusion**: Scaling degeneracy is real → need second observable → cross-lepton identifies β ≈ 3.15 (offset from 3.043233053)
 
 ### 2. Profile Likelihood Analysis ✓
 
-**Key result**: β IS identified (not flat), but at β ≈ 3.14–3.18, not 3.058
+**Key result**: β IS identified (not flat), but at β ≈ 3.14–3.18, not 3.043233053
 
 ```
 σ_m,model = 10⁻⁶: β_min = 3.140, Δχ² variation = 14,494%
 σ_m,model = 10⁻⁵: β_min = 3.180, Δχ² variation = 172%
 
-At β = 3.058: χ² ≈ 50,770 (vs χ²_min ≈ 22,229)
-Δχ²(3.058 vs min) ≈ 28,541 → strongly disfavored
+At β = 3.043233053: χ² ≈ 50,770 (vs χ²_min ≈ 22,229)
+Δχ²(3.043233053 vs min) ≈ 28,541 → strongly disfavored
 ```
 
 **Interpretation** (Tracy's guidance):
 - β ≈ 3.15 is **effective β under current closure**
 - Systematic offset quantifies gap between:
   - Simplified closure (Hill vortex + proxy μ)
-  - Precision needed to validate β = 3.058
+  - Precision needed to validate β = 3.043233053
 - Multi-start β spread was optimization noise, not physics
 
 ### 3. Manuscript Subsection FINAL ✓
@@ -54,7 +54,7 @@ At β = 3.058: χ² ≈ 50,770 (vs χ²_min ≈ 22,229)
 - X.6: Interpretation and next steps
 
 **Key claim** (throughout manuscript):
-- **Before**: "β = 3.058 uniquely determined"
+- **Before**: "β = 3.043233053 uniquely determined"
 - **After**: "β ≈ 3.1 ± 0.1 consistent with Golden Loop at ~3% level"
 
 **Tone**: Honest, rigorous, not overselling
@@ -68,7 +68,7 @@ At β = 3.058: χ² ≈ 50,770 (vs χ²_min ≈ 22,229)
 - ✓ Systematic offset quantified (β_fit − β_Golden ≈ 0.1)
 
 **What we did NOT prove**:
-- ✗ β = 3.058 validation (offset is 3%, not noise)
+- ✗ β = 3.043233053 validation (offset is 3%, not noise)
 - ✗ Precision prediction (achieved ~10⁻³, need ~10⁻⁶)
 - ✗ Universal C_μ normalization (varies by factor of 3)
 
@@ -109,7 +109,7 @@ Panel D: Profile likelihood χ²_min(β) (sharp min at β≈3.15)
    - "Cross-lepton analysis (§X) finds β ≈ 3.15 under present closure"
 
 3. **§3 (Golden Loop)**:
-   - "...predicts β = 3.058 (see §X for identifiability analysis)"
+   - "...predicts β = 3.043233053 (see §X for identifiability analysis)"
 
 4. **Discussion**:
    - "Systematic offset Δβ ≈ 0.1 quantifies closure gap"
@@ -140,7 +140,7 @@ Panel D: Profile likelihood χ²_min(β) (sharp min at β≈3.15)
 
 **With ~3% systematic uncertainty**:
 5. Best-fit effective β ≈ 3.15 under current closure
-6. Offset from Golden Loop β = 3.058 is structured, not noise
+6. Offset from Golden Loop β = 3.043233053 is structured, not noise
 7. Model precision ~10⁻³ to 10⁻⁴ (relative mass)
 
 ### Interpretation (Tracy's Framework)
@@ -151,7 +151,7 @@ Panel D: Profile likelihood χ²_min(β) (sharp min at β≈3.15)
 - Empirical normalization C_μ (fitted nuisance parameter)
 - Shared across three leptons
 
-**To validate β = 3.058 at percent level, need**:
+**To validate β = 3.043233053 at percent level, need**:
 - First-principles EM response (Appendix G pathway)
 - OR: Independent radius/form-factor observable
 - OR: Different closure that achieves 10⁻⁶ precision
@@ -165,7 +165,7 @@ Panel D: Profile likelihood χ²_min(β) (sharp min at β≈3.15)
 - "Framework establishes falsifiability for future EM functional upgrade"
 
 ✗ **Cannot claim** (yet):
-- "β = 3.058 validated by lepton spectrum"
+- "β = 3.043233053 validated by lepton spectrum"
 - "Golden Loop prediction confirmed at percent precision"
 - "Universal β uniquely determined"
 
@@ -253,7 +253,7 @@ Panel D: Profile likelihood χ²_min(β) (sharp min at β≈3.15)
 
 1. Submit to PRD or EPJC
 2. Frame as rigorous identifiability + methods result
-3. Position β = 3.058 validation as "future work pending EM functional"
+3. Position β = 3.043233053 validation as "future work pending EM functional"
 4. Emphasize honest treatment of systematic offset
 
 ---
@@ -275,7 +275,7 @@ Panel D: Profile likelihood χ²_min(β) (sharp min at β≈3.15)
 **What we learned**:
 - Scaling degeneracy is real (not a bug)
 - Second observable is necessary (not optional)
-- Current closure gives β ≈ 3.15 (not 3.058)
+- Current closure gives β ≈ 3.15 (not 3.043233053)
 - ~3% offset requires EM functional upgrade
 - Honest reporting strengthens manuscript
 

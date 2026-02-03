@@ -28,7 +28,7 @@ m_nucleon = (m_proton + m_neutron) / 2  # Average
 MeV_to_J = 1.602e-13  # J/MeV
 
 # QFD parameter
-beta_vacuum = 3.058
+beta_vacuum = 3.043233053
 
 # Field sound speed
 c_field = c_light * np.sqrt(beta_vacuum)

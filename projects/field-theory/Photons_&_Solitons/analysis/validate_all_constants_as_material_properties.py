@@ -6,7 +6,7 @@ This script demonstrates that the "fundamental constants" of physics are NOT
 independent axioms but DERIVED material properties of the vacuum superfluid.
 
 The Vacuum is Characterized by TWO Properties:
-1. β (vacuum stiffness) ≈ 3.058 - Bulk modulus (resistance to compression)
+1. β (vacuum stiffness) ≈ 3.043233053 - Bulk modulus (resistance to compression)
 2. ρ (vacuum density) ≈ m_p - Unit cell inertia
 
 ALL other "constants" emerge from these:
@@ -51,7 +51,7 @@ print()
 print_header("PART 1: The Two Primary Vacuum Properties", 1)
 
 # From Golden Loop and Nuclear analysis
-beta_vacuum = 3.058230856  # Dimensionless vacuum stiffness (bulk modulus)
+beta_vacuum = 3.043233053  # Dimensionless vacuum stiffness (bulk modulus)
 rho_vacuum_normalized = 1.0  # Normalized vacuum density
 
 print("\nPrimary Properties (Natural Units):")
@@ -177,7 +177,7 @@ print_header("PART 4: Fine Structure Constant α (Coupling Geometry)", 1)
 # From FineStructure.lean
 c1_surface = 0.529251  # Nuclear surface tension coefficient
 c2_volume = 0.316743   # Nuclear volume packing coefficient
-beta_crit = 3.058230856  # Critical beta from Golden Loop
+beta_crit = 3.043233053  # Critical beta from Golden Loop
 k_geom = 4.3813  # Geometric projection factor (6D → 4D)
 
 print("\nFrom QFD:")
@@ -317,7 +317,7 @@ print("\nIf we change β (vacuum stiffness), what happens?")
 print()
 
 # Test different β values
-betas_test = np.array([1.0, 2.0, 3.058, 5.0, 10.0])
+betas_test = np.array([1.0, 2.0, 3.043233053, 5.0, 10.0])
 
 print(f"{'β':<8} {'c=√(β/ρ)':<12} {'ℏ/√β':<12} {'α (approx)':<15} {'ξ_QFD':<10}")
 print("-"*80)

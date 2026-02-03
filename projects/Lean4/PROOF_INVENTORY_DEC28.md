@@ -148,7 +148,7 @@
 
 ### Theoretical Validations
 
-- β = 3.058 from fine structure constant (Golden Loop) ✅
+- β = 3.043233053 from fine structure constant (Golden Loop) ✅
 - Gradient energy dominates vacuum structure (64% vs 36%) ✅
 - MCMC convergence mathematically inevitable ✅
 - Internal consistency of geometric particle models ✅

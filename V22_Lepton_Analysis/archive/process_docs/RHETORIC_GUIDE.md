@@ -46,7 +46,7 @@
 | "Complete unification achieved from cosmic to particle scales" | "Parameter β ≈ 3 emerges consistently across cosmological, nuclear, and particle sectors" |
 | "Single parameter explains everything" | "Fixed β supports solutions across three scales; origin of consistency under investigation" |
 | "All of physics unified" | "Cross-sector parameter convergence suggests common underlying mechanism" |
-| "β = 3.1 is universal" | "β values from independent sectors overlap within uncertainties (3.058 ± 0.012, 3.1 ± 0.05, 3.0-3.2)" |
+| "β = 3.1 is universal" | "β values from independent sectors overlap within uncertainties (3.043233053 ± 0.012, 3.1 ± 0.05, 3.0-3.2)" |
 
 **Why it matters**: "Unification" is earned through multiple independent validations, not fits. Cosmology β and particle β may be related but aren't proven identical.
 
@@ -103,7 +103,7 @@
 > "We present the complete unification of physics from cosmic acceleration to subatomic particle masses using a single universal parameter β = 3.1, achieving 100% accuracy across 26 orders of magnitude."
 
 ✓ **Good opening**:
-> "We report numerical evidence that a vacuum stiffness parameter β ≈ 3.058, inferred from the fine structure constant through a conjectured relation, supports Hill vortex solutions reproducing charged lepton mass ratios to better than 10⁻⁷ relative precision. β values from independent cosmological, nuclear, and particle sector analyses overlap within uncertainties, suggesting a common underlying mechanism. Current solutions involve three optimized geometric parameters per lepton; tests with additional constraints and independent observables are underway."
+> "We report numerical evidence that a vacuum stiffness parameter β ≈ 3.043233053, inferred from the fine structure constant through a conjectured relation, supports Hill vortex solutions reproducing charged lepton mass ratios to better than 10⁻⁷ relative precision. β values from independent cosmological, nuclear, and particle sector analyses overlap within uncertainties, suggesting a common underlying mechanism. Current solutions involve three optimized geometric parameters per lepton; tests with additional constraints and independent observables are underway."
 
 **What changed**:
 - "Complete unification" → "numerical evidence... suggests common mechanism"
@@ -118,7 +118,7 @@
 > "Our theory perfectly predicts the electron, muon, and tau masses with zero error from first principles using only the fine structure constant."
 
 ✓ **Good result statement**:
-> "For β = 3.058230856 derived from α = 1/137.036 via a conjectured identity with nuclear binding coefficients, numerical optimization yields Hill vortex geometries (R, U, amplitude) that reproduce lepton mass ratios m_μ/m_e = 206.768 and m_τ/m_e = 3477.228 with residuals of 6×10⁻⁸ and 2×10⁻⁷, respectively. The same β is used for all three leptons without adjustment."
+> "For β = 3.043233053 derived from α = 1/137.036 via a conjectured identity with nuclear binding coefficients, numerical optimization yields Hill vortex geometries (R, U, amplitude) that reproduce lepton mass ratios m_μ/m_e = 206.768 and m_τ/m_e = 3477.228 with residuals of 6×10⁻⁸ and 2×10⁻⁷, respectively. The same β is used for all three leptons without adjustment."
 
 **What changed**:
 - "Perfectly predicts" → "numerical optimization yields... with residuals"
@@ -183,16 +183,16 @@
 ### Always report uncertainties
 
 ❌ **No uncertainty**:
-> "β = 3.058230856 from the fine structure constant"
+> "β = 3.043233053 from the fine structure constant"
 
 ✓ **With uncertainty**:
-> "β = 3.058 ± 0.012, propagated from uncertainties in nuclear coefficients c₁ = 15.56 ± 0.15 MeV and c₂ = 17.23 ± 0.20 MeV"
+> "β = 3.043233053 ± 0.012, propagated from uncertainties in nuclear coefficients c₁ = 15.56 ± 0.15 MeV and c₂ = 17.23 ± 0.20 MeV"
 
 ❌ **Vague agreement**:
 > "β from different sectors are consistent"
 
 ✓ **Quantified agreement**:
-> "β determinations from three sectors overlap within 1σ: particle (3.058 ± 0.012), nuclear (3.1 ± 0.05), cosmology (3.0-3.2), suggesting cross-sector consistency"
+> "β determinations from three sectors overlap within 1σ: particle (3.043233053 ± 0.012), nuclear (3.1 ± 0.05), cosmology (3.0-3.2), suggesting cross-sector consistency"
 
 ---
 
@@ -333,7 +333,7 @@ Before declaring a document ready for publication, check:
 
 ### ✓ Revised (Appropriate)
 
-> "We report numerical evidence that a vacuum stiffness parameter β ≈ 3.058 ± 0.012, inferred from the fine structure constant α through a conjectured relation involving nuclear binding coefficients, supports Hill vortex solutions reproducing the charged lepton mass ratios m_μ/m_e = 206.768 and m_τ/m_e = 3477.228 with numerical residuals of 6×10⁻⁸ and 2×10⁻⁷, respectively. The same β is applied to all three leptons without adjustment. Independent determinations of β from cosmological (3.0-3.2) and nuclear (3.1 ± 0.05) sector analyses overlap within uncertainties, suggesting a common underlying vacuum dynamics mechanism. Current solutions optimize three geometric parameters (vortex radius R, circulation velocity U, density amplitude) per lepton to match mass ratios, leaving 2-dimensional solution manifolds. Implementation of cavitation saturation and charge radius constraints is underway to test for unique solutions. Predictive validation via anomalous magnetic moment calculations and form factor predictions is planned as an independent test beyond fitted masses."
+> "We report numerical evidence that a vacuum stiffness parameter β ≈ 3.043233053 ± 0.012, inferred from the fine structure constant α through a conjectured relation involving nuclear binding coefficients, supports Hill vortex solutions reproducing the charged lepton mass ratios m_μ/m_e = 206.768 and m_τ/m_e = 3477.228 with numerical residuals of 6×10⁻⁸ and 2×10⁻⁷, respectively. The same β is applied to all three leptons without adjustment. Independent determinations of β from cosmological (3.0-3.2) and nuclear (3.1 ± 0.05) sector analyses overlap within uncertainties, suggesting a common underlying vacuum dynamics mechanism. Current solutions optimize three geometric parameters (vortex radius R, circulation velocity U, density amplitude) per lepton to match mass ratios, leaving 2-dimensional solution manifolds. Implementation of cavitation saturation and charge radius constraints is underway to test for unique solutions. Predictive validation via anomalous magnetic moment calculations and form factor predictions is planned as an independent test beyond fitted masses."
 
 **Word count**: Increases from 89 to 166 words, but gains precision and honesty
 

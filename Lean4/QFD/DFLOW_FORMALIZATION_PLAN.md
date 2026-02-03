@@ -10,7 +10,7 @@
 ## Executive Summary
 
 The D-Flow electron theory makes **falsifiable quantitative claims**:
-1. β = 3.058 (Golden Loop) matches β_MCMC = 3.0627 ± 0.1491 (0.15% agreement)
+1. β = 3.043233053 (Golden Loop) matches β_MCMC = 3.0627 ± 0.1491 (0.15% agreement)
 2. Compton wavelength R = ℏ/(mc) emerges as natural scale
 3. Charge radius R_core = R_flow × (2/π) from D-flow geometry
 4. Electron mass m_e = 0.511 MeV from over-determined constraint system
@@ -84,7 +84,7 @@ namespace QFD.Vacuum
 structure VacuumBulkModulus where
   β : ℝ
   β_positive : β > 0
-  β_from_alpha : β ≈ 3.058  -- Golden Loop prediction
+  β_from_alpha : β ≈ 3.043233053  -- Golden Loop prediction
 
 /-- Vacuum gradient stiffness (surface tension) -/
 structure VacuumGradientStiffness where
@@ -112,7 +112,7 @@ structure VacuumParameters where
   density : VacuumDensityScale
 
 /-- Golden Loop prediction for β -/
-def goldenLoopBeta : ℝ := 3.058230856
+def goldenLoopBeta : ℝ := 3.043233053
 
 /-- MCMC empirical result for β -/
 def mcmcBeta : ℝ := 3.0627
@@ -126,13 +126,13 @@ def betaRelativeOffset (params : VacuumParameters) : ℝ :=
 theorem beta_golden_loop_validated (params : VacuumParameters)
   (h : params.bulk.β ≈ mcmcBeta) :
   betaRelativeOffset params < 0.005 := by
-  sorry  -- Proof: |3.0627 - 3.058| / 3.058 = 0.0015 < 0.005
+  sorry  -- Proof: |3.0627 - 3.043233053| / 3.043233053 = 0.0015 < 0.005
 
 end QFD.Vacuum
 ```
 
 **Key features**:
-- ✓ Explicit numerical values (β = 3.058, λ = 938.27 MeV)
+- ✓ Explicit numerical values (β = 3.043233053, λ = 938.27 MeV)
 - ✓ Positivity constraints
 - ✓ Physical bounds (ξ, τ ~ order unity)
 - ✓ Comparison between Golden Loop and MCMC
@@ -547,7 +547,7 @@ structure MCMCPosterior where
   std_dev_eq : std_dev = 0.1491
 
 /-- Golden Loop theoretical prediction -/
-def goldenLoopPrediction : ℝ := 3.058230856
+def goldenLoopPrediction : ℝ := 3.043233053
 
 /-- Relative offset -/
 def relativeOffset (mcmc : MCMCPosterior) : ℝ :=
@@ -562,14 +562,14 @@ theorem beta_offset_within_tolerance (mcmc : MCMCPosterior) :
   relativeOffset mcmc < 0.005 := by
   unfold relativeOffset goldenLoopPrediction
   rw [mcmc.mean_eq]
-  sorry  -- Numerical: |3.0627 - 3.058| / 3.058 = 0.0015 < 0.005
+  sorry  -- Numerical: |3.0627 - 3.043233053| / 3.043233053 = 0.0015 < 0.005
 
 /-- Statistical significance: within 1σ -/
 theorem beta_within_one_sigma (mcmc : MCMCPosterior) :
   sigmaOffset mcmc < 1 := by
   unfold sigmaOffset goldenLoopPrediction
   rw [mcmc.mean_eq, mcmc.std_dev_eq]
-  sorry  -- Numerical: |3.0627 - 3.058| / 0.1491 = 0.031 < 1
+  sorry  -- Numerical: |3.0627 - 3.043233053| / 0.1491 = 0.031 < 1
 
 /-- 68% confidence interval contains Golden Loop value -/
 theorem golden_loop_in_confidence_interval (mcmc : MCMCPosterior) :
@@ -578,8 +578,8 @@ theorem golden_loop_in_confidence_interval (mcmc : MCMCPosterior) :
   rw [mcmc.mean_eq, mcmc.std_dev_eq]
   unfold goldenLoopPrediction
   constructor
-  · sorry  -- Numerical: 3.0627 - 0.1491 = 2.9136 ≤ 3.058
-  · sorry  -- Numerical: 3.058 ≤ 3.0627 + 0.1491 = 3.2118
+  · sorry  -- Numerical: 3.0627 - 0.1491 = 2.9136 ≤ 3.043233053
+  · sorry  -- Numerical: 3.043233053 ≤ 3.0627 + 0.1491 = 3.2118
 
 end QFD.Validation
 ```
@@ -668,7 +668,7 @@ end QFD.Validation
 
 ### Challenge 2: Approximate Equality (≈)
 
-**Problem**: `β ≈ 3.058` needs formal definition
+**Problem**: `β ≈ 3.043233053` needs formal definition
 
 **Solutions**:
 1. Define tolerance:

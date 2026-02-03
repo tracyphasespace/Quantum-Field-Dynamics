@@ -221,7 +221,7 @@
 
 26. **Line 263**: `axiom golden_loop_identity`
     - **Statement**: β satisfies transcendental equation e^β/β = K
-    - **Physical meaning**: β = 3.058231 is numerical root
+    - **Physical meaning**: β = 3.043233053 is numerical root
     - **Status**: Requires Real.exp evaluation (Lean 4 limitation)
 
 ---
@@ -247,7 +247,7 @@ All three axioms verified via Python computational verification:
    - **Elimination path**: Awaiting interval arithmetic for π bounds
 
 27. **Line 231**: `axiom beta_satisfies_transcendental`
-   - **Statement**: `abs (e^β/β - K_target) < 0.1` for β = 3.058230856
+   - **Statement**: `abs (e^β/β - K_target) < 0.1` for β = 3.043233053
    - **Computed value**: e^β/β = 6.961495... (error = 0.0706)
    - **Verification**: ✓ Python verified
    - **Mathlib limitation**: `norm_num` cannot evaluate `Real.exp`

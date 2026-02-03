@@ -39,7 +39,7 @@ G_MU = 2.0023318414     # Muon g-factor (user noted: be careful with normalizati
 # Magnetic moment proxy parameters
 K_GEOMETRIC = 0.2       # Hill vortex geometric factor
 Q_CHARGE = 1.0          # Fundamental charge
-G_NORMALIZATION = 948.0 # Calibrated from β=3.058 electron solution
+G_NORMALIZATION = 948.0 # Calibrated from β=3.043233053 electron solution
 
 # Configuration (same as T1c best)
 W = 0.020

@@ -141,7 +141,7 @@ Fixed parameters:
 
 **β prior** (Gaussian):
 ```
-p(β) ∝ exp(-½((β - 3.058)/0.15)²)
+p(β) ∝ exp(-½((β - 3.043233053)/0.15)²)
 ```
 Centered on theoretical prediction from fine structure constant.
 
@@ -197,7 +197,7 @@ Affine-invariant ensemble sampler (emcee):
 
 Random ball around theoretical values:
 ```python
-θ_init = [3.058, 1.0, 1.0]
+θ_init = [3.043233053, 1.0, 1.0]
 pos = θ_init + 0.1 × randn(n_walkers, 3)
 # Enforce ξ > 0, τ > 0
 ```
