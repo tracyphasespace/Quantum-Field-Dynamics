@@ -255,8 +255,18 @@
             uni.re = STD.re * (uni.h_bar/STD.h_bar) / (uni.c/STD.c);
             uni.lambda_e = 2 * Math.PI * uni.re;
 
-            // Electron g-2 anomaly: a_e = (g-2)/2 ≈ α/(2π) with geometric corrections
-            uni.g2 = (alpha / (2 * Math.PI)) * (1 + 0.328 * alpha / Math.PI);
+            // Electron g-2 anomaly from geometric Möbius transform
+            // V4(R) = [(R_vac - R) / (R_vac + R)] * (xi/beta)
+            // where R_vac = 1/√5, xi = φ², R_e = 1 (reference)
+            const phi = (1 + Math.sqrt(5)) / 2;
+            const xi_g2 = phi * phi;  // φ² = φ + 1 ≈ 2.618
+            const R_vac = 1 / Math.sqrt(5);  // ≈ 0.4472
+            const R_e = 1.0;  // Electron Compton wavelength (reference)
+            const S_electron = (R_vac - R_e) / (R_vac + R_e);  // Scale factor (negative for electron)
+            const V4 = S_electron * (xi_g2 / beta);
+            const a_schwinger = alpha / (2 * Math.PI);
+            const term_2 = V4 * Math.pow(alpha / Math.PI, 2);
+            uni.g2 = a_schwinger + term_2;  // ≈ 0.00115965 (0.001% error)
 
             return uni;
         }
@@ -334,7 +344,7 @@
         re: { name: "Vortex Radius", symbol: "re", type: "output", mode: "torus", desc: "Reduced Compton Wavelength. ", equation: "rₑ = ħ / (mₑc)", flow: ["Driver: ħ, c", "Result: Radius"], metricName: "Vortex Size", metricFunc: r => 1, unit: "m", consequence: r => "Interaction cross-section." },
         lambda_e: { name: "Compton Wave", symbol: "λe", type: "output", mode: "wavetank", desc: "Full geometric circumference. ", equation: "λₑ = 2πrₑ", flow: ["Driver: re", "Scale: 2π"], metricName: "Circumference", metricFunc: r => 1, unit: "m", consequence: r => "Wave-particle duality scale." },
         spin: { name: "Electron Spin", symbol: "S", type: "output", mode: "torus", desc: "Mechanistic Result: Required angular momentum. ", equation: "S = h/2", flow: ["Topology: Fixed"], metricName: "Momentum", metricFunc: r => 1, unit: "J·s", consequence: r => "Fermion statistics." },
-        g2: { name: "Anomalous Moment", symbol: "aₑ", type: "resonance", mode: "hill", desc: "<b>Electron g-2:</b> The anomalous magnetic moment emerges from vortex geometry. QFD derives this to 0.001% accuracy.", equation: "aₑ = α/(2π) × (1 + corrections)", flow: ["Driver: α", "Geometry: Vortex", "Result: g-2"], metricName: "Magnetic Anomaly", metricFunc: r => Math.max(0, 1 - Math.abs(r - 1) * 100), unit: "Dimensionless", consequence: r => "Precision test of QED/QFD." },
+        g2: { name: "Anomalous Moment", symbol: "aₑ", type: "resonance", mode: "hill", desc: "<b>Electron g-2:</b> The anomalous magnetic moment emerges from vacuum geometry via Möbius transform. QFD derives this to 0.001% accuracy with zero free parameters.", equation: "aₑ = α/(2π) + V₄(α/π)²", flow: ["Driver: α, β", "Möbius: S(R)", "V₄ = S·(ξ/β)", "Result: g-2"], metricName: "Magnetic Anomaly", metricFunc: r => Math.max(0, 1 - Math.abs(r - 1) * 1000), unit: "Dimensionless", consequence: r => "Precision test: 0.001% error." },
 
         // --- FORCES (EMERGENT) ---
         alpha_n: { name: "Strong Force", symbol: "αn", type: "resonance", mode: "density_graph", subMode:"pressure", desc: "<b>Binding Pressure:</b> Empirical coupling derived as vacuum resonance (8/7). [cite: 9]", equation: "αₙ = (8/7)β", flow: ["Driver: β", "Resonance: 8/7"], metricName: "Binding Depth", metricFunc: r => 1, unit: "Coupling", consequence: r => "Nuclear glue strength." },
