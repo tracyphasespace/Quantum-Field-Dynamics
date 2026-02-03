@@ -32,6 +32,15 @@ If your instinct is to dismiss this as "impossible"—we understand. But the Lea
 
 ---
 
+## Interactive Visualizations
+
+Explore QFD concepts through interactive browser-based visualizations:
+
+- **[QFD Engine](https://tracyphasespace.github.io/QFD-Universe/visualizations/qfd_engine.html)** - Interactive demonstration of 21 interdependent parameters derived from vacuum stiffness β = 3.043233053
+- **[Nuclear Resonance](https://tracyphasespace.github.io/QFD-Universe/visualizations/nucleus_resonance.html)** - 3D visualization of nuclear shell structure
+
+---
+
 > **"What if the parameters of the universe aren't inputs, but outputs?"**
 
 This repository contains the complete theoretical, mathematical, and computational framework for **Quantum Field Dynamics (QFD)**. QFD is a first-principles theory that reconstructs particles, forces, and cosmology as emergent solutions of a single multivector field (ψ) in a 6-coordinate Cl(3,3) Phase Space.
