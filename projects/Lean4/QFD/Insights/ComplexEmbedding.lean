@@ -72,15 +72,11 @@ This forms a subalgebra isomorphic to ℂ.
 def Cl33Complex (a b : ℝ) : Cl33 :=
   algebraMap ℝ Cl33 a + b • B_internal
 
-/--
-**Theorem**: The real part (scalar) of a Cl33Complex element.
+/-!
+Note: Grade projections (extracting scalar and B-coefficient from arbitrary Cl33)
+require infrastructure not yet formalized. For the QFD use case, we work with
+Cl33Complex elements directly via construction, not decomposition.
 -/
-def Cl33Complex.re (z : Cl33) : ℝ := sorry -- Would require scalar projection
-
-/--
-**Theorem**: The imaginary part (B coefficient) of a Cl33Complex element.
--/
-def Cl33Complex.im (z : Cl33) : ℝ := sorry -- Would require B projection
 
 /-! ## 4. Algebraic Properties -/
 
