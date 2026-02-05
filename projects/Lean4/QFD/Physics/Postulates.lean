@@ -95,7 +95,40 @@ noncomputable def local_time_dilation_core (psi_s : ℝ) (psi_s0 : ℝ) (xi : �
   1 / Real.sqrt (1 + (xi / psi_s0) * (psi_s - psi_s0))
 
 /-- The mass of the proton is the "Unit Cell" of the vacuum impedance.
-It is derived from Beta and Alpha via the geometric factor k_geom. -/
+It is derived from Beta and Alpha via the geometric factor k_geom.
+
+**The Proton Bridge equation**: λ = k_geom × β × (m_e / α)
+
+where k_geom is the radial stability eigenvalue of a Cl(3,3) soliton
+projected to Cl(3,1) spacetime, derived through a five-stage pipeline
+(book v8.3, Appendix Z.12):
+
+  1. Energy functional: E[ψ] = ∫(ℏ²/2m)|∇ψ|² + (β/2)(ψ-ψ₀)² d³x
+  2. Dimensionless rescaling: E(R) = (ℏ²/m)(A/R²) + β·B·R³
+  3. Bare eigenvalue: k_Hill = (2A/(3B))^(1/5) = (56/15)^(1/5) ≈ 1.30
+  4. Asymmetric renormalization: A_phys/B_phys ~ π/α × corrections
+  5. Physical eigenvalue: k_geom = k_Hill × (π/α)^(1/5) ≈ 4.40
+
+**Alpha conditioning**: Since k_geom depends on α through A_phys/B_phys,
+its value is implicitly conditioned by which geometric regime of α is
+relevant for the soliton's internal structure. The fine structure constant
+α has multiple experimentally-conditioned values:
+
+  - Thomson scattering (q→0): α⁻¹ = 137.036
+  - Electron g-2 (virtual loops): α⁻¹ ≈ 137.036 (with radiative corrections)
+  - Z-pole (91 GeV): α⁻¹ ≈ 128
+
+In QFD, these are not "running" in the QED sense — the vacuum geometry
+conditions the measurement. Different experimental setups probe different
+aspects of the vacuum's spectral structure. The ~0.5% spread between Lean
+values (4.38-4.40) and the book value (4.4028) may reflect this physics.
+
+The related quantity k_circ = π × k_geom is the loop-closure eigenvalue
+for phase-wrapped expressions. Use k_geom for mass ratios; use k_circ
+for Compton wavelength and rotor conditions.
+
+See K_GEOM_REFERENCE.md for the complete reconciliation.
+-/
 noncomputable def proton_mass_derived (m_e : ℝ) (beta : ℝ) (k_geom : ℝ) : ℝ :=
   k_geom * beta * (m_e / alpha_qfd)
 

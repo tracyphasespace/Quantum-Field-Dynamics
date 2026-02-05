@@ -1,10 +1,28 @@
 /-
   Proof: Geometric Projection Integration (Starch)
   Lemma: sphere_projection_factor
-  
+
   Description:
-  Formalizes the integration of a 6D sphere's volume projected onto 
-  a 4D subspace, defining k_geom.
+  Formalizes the integration of a 6D sphere's volume projected onto
+  a 4D subspace, defining the pure geometric ratio V₆/V₄.
+
+  ## k_geom Pipeline Stage: 1 (Pure Geometry)
+
+  This file computes the **pure geometric ratio** V₆/V₄ = π/3 ≈ 1.047.
+  This is Stage 1 of the k_geom derivation pipeline from book v8.3, Z.12.
+
+  The full pipeline proceeds:
+    Stage 1: V₆/V₄ = π/3 ≈ 1.047 ← THIS FILE
+    Stage 2: Dimensionless rescaling → geometric integrals A, B
+    Stage 3: Bare eigenvalue k_Hill = (56/15)^(1/5) ≈ 1.30
+    Stage 4: Asymmetric renormalization (A_phys/B_phys ~ π/α × corrections)
+    Stage 5: k_geom = k_Hill × (π/α)^(1/5) = 4.4028 (book value)
+
+  Note: V₆/V₄ = π/3 is close to TopologicalTax = 1.046 (ProtonBridge_Geometry.lean).
+  This near-coincidence is suggestive but the two quantities enter the pipeline
+  at different stages and should not be identified without further proof.
+
+  See K_GEOM_REFERENCE.md for the complete pipeline documentation.
 -/
 
 import Mathlib.Data.Real.Basic

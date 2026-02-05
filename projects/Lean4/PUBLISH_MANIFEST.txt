@@ -6,7 +6,7 @@
 # Usage: ./sync_to_universe.sh          (dry run)
 #        ./sync_to_universe.sh --push   (sync and push)
 #
-# Last updated: 2026-01-10
+# Last updated: 2026-02-04
 
 # =============================================================================
 # EXCLUDE FIRST - Development-only files that NEVER sync
@@ -59,6 +59,8 @@
 
 # Root .lean files
 + /*.lean
++ /GoldenLoop.lean
++ /GoldenLoop_PathIntegral.lean
 
 # Essential documentation
 + /CLAIMS_INDEX.txt

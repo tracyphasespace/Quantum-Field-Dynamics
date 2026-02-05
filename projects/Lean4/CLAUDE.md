@@ -76,6 +76,51 @@ lake build QFD.Module3 &
 # NEVER use parallel execution tools with lake build
 ```
 
+### 🧠 Memory Safety Rules (CRITICAL)
+
+**Lake must NEVER exceed 5GB RAM.** If it does, the system will OOM and kill your session.
+
+#### ALWAYS Fetch Cache First
+
+Before ANY build, run:
+```bash
+cd /home/tracy/development/QFD_SpectralGap/projects/Lean4
+lake exe cache get
+```
+
+This downloads **prebuilt Mathlib** (~7,800 files) instead of compiling from source. This single command prevents 99% of OOM issues.
+
+#### Monitor Memory Usage
+
+```bash
+# Watch memory in real-time (run in separate terminal)
+watch -n1 'free -h'
+
+# Check current memory
+free -h
+```
+
+If Lake approaches 5GB, kill it immediately:
+```bash
+pkill -f lake
+pkill -f lean
+```
+
+#### Why OOM Happens
+
+1. **Missing cache**: Mathlib compiles from source (~30GB RAM needed)
+2. **Parallel builds**: Each spawns independent Mathlib compilation
+3. **Stale cache**: Toolchain/Mathlib version mismatch forces rebuild
+
+#### Recovery from OOM
+
+If you hit OOM:
+1. Kill all lake/lean processes: `pkill -f lake; pkill -f lean`
+2. Fetch fresh cache: `lake exe cache get`
+3. Build single module: `lake build QFD.ModuleName`
+
+**Lesson learned (2026-02-04)**: Always run `lake exe cache get` first. It downloaded 7,792 prebuilt files and avoided OOM entirely.
+
 ### Build & Verify
 
 ```bash

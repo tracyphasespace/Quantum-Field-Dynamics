@@ -2,6 +2,7 @@ import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
 import QFD.Lepton.Generations
 import QFD.Lepton.KoideRelation -- Links to geometric masses
+import QFD.Vacuum.VacuumParameters -- For goldenLoopBeta
 
 /-!
 # The Fine Structure Constant
@@ -89,7 +90,7 @@ theorem beta_validated_from_mcmc :
     let β_golden : ℝ := QFD.Vacuum.goldenLoopBeta
     let error := |β_mcmc - β_golden| / β_golden
     error < 0.007 := by
-  unfold error
+  show |3.0627 - QFD.Vacuum.goldenLoopBeta| / QFD.Vacuum.goldenLoopBeta < 0.007
   have hg : QFD.Vacuum.goldenLoopBeta > 0 := by
     unfold QFD.Vacuum.goldenLoopBeta
     norm_num

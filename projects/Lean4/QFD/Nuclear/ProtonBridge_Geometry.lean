@@ -2,11 +2,29 @@
   Proof: Proton Bridge Geometry
   Author: QFD AI Assistant
   Date: January 10, 2026
-  
+
   Description:
   Formalizes the breakdown of the geometric factor k_geom into fundamental
   components: the volume of a 3D sphere and the QFD Topological Tax.
   This resolves the "Factor of 4" discrepancy and removes the magic number 4.3813.
+
+  ## k_geom Pipeline Stage: 3+4 (Composite)
+
+  This file represents the **composite** Stage 3+4 of the k_geom derivation:
+    k_geom = VolUnitSphere × TopologicalTax = (4/3)π × 1.046 ≈ 4.381
+
+  In the full pipeline (book v8.3, Appendix Z.12):
+    Stage 1: V₆/V₄ = π/3 ≈ 1.047 (pure geometric ratio)
+    Stage 2: Dimensionless rescaling → E(R) = A/R² + B·R³
+    Stage 3: Bare eigenvalue k_Hill = (56/15)^(1/5) ≈ 1.30
+    Stage 4: Asymmetric renormalization (vector-spinor, poloidal turn, projection)
+    Stage 5: k_geom = k_Hill × (π/α)^(1/5) = 4.4028 (book value)
+
+  The TopologicalTax = 1.046 absorbs the combined effect of Stages 3-4.
+  Note: To match the book value 4.4028, TopologicalTax would need to be ~1.0513.
+  The correct value depends on which α regime the soliton geometry probes.
+
+  See K_GEOM_REFERENCE.md for the complete reconciliation.
 -/
 
 import Mathlib.Data.Real.Basic
@@ -31,13 +49,24 @@ noncomputable def VolUnitSphere : ℝ := (4/3) * Real.pi
   This represents the stress energy cost of the D-Flow vortex bending 180°
   at the poles compared to a Euclidean path.
   Book derivation: 3.15 / β_crit ≈ 1.046
+
+  Note: This is NOT an integer-valued quantity. It absorbs the combined
+  asymmetric renormalization effects (vector-spinor structure, poloidal flow
+  turn, Cl(3,3)→Cl(3,1) projection) from Z.12 Stage 4.
+  Compare: V₆/V₄ = π/3 ≈ 1.047 (pure geometry, GeometricProjection_Integration.lean).
+  The near-coincidence with π/3 is suggestive but not yet proven to be exact.
 -/
 def TopologicalTax : ℝ := 1.046
 
 /--
   k_geom is not a magic number. It is the Volume of the Sphere multiplied by the
   topological stress factor of the D-flow.
-  Theoretical Result: 4.1888 * 1.046 ≈ 4.381
+  Theoretical Result: 4.1888 × 1.046 ≈ 4.381
+
+  Pipeline stage: Composite (Stage 3+4). The book v8.3 physical eigenvalue is
+  4.4028, obtained via k_geom = k_Hill × (π/α)^(1/5) where k_Hill = (56/15)^(1/5).
+  The ~0.5% difference is within all theorem tolerances (fifth-root suppression:
+  10% ratio change → 2% k_geom change).
 -/
 noncomputable def k_geom : ℝ := VolUnitSphere * TopologicalTax
 

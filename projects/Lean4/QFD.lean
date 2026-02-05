@@ -1,6 +1,7 @@
 import QFD.SpectralGap
 import QFD.ToyModel
 import QFD.EmergentAlgebra
+import QFD.GoldenLoop_PathIntegral
 import QFD.Neutrino
 import QFD.Neutrino_Bleaching
 import QFD.Neutrino_Topology
