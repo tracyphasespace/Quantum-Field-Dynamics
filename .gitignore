@@ -75,3 +75,52 @@ results/
 
 # Large backup files
 *.tar.gz
+*.zip
+
+# ============================================================
+# REPO HYGIENE: Keep internal/archival content out of GitHub
+# Applied: 2026-02-08
+# These files remain on disk — just untracked for pushes.
+# ============================================================
+
+# --- AI Assistant Briefings (internal, not for researchers) ---
+CLAUDE.md
+Lepton.md
+LEPTON_RECOVERY.txt
+**/AI_WORKFLOW.md
+**/SESSION_SUMMARY*.md
+**/MATHLIB_SEARCH_GUIDE.md
+
+# --- Archive (deprecated code, old versions) ---
+archive/
+To_Review_and_Replicate/
+v18/
+
+# --- Session artifacts ---
+session_logs/
+overnight_batch_all.sh
+debug_stage1_perf.py
+
+# --- Books and large binaries ---
+Books and Documents/*.pdf
+Books and Documents/*.docx
+
+# --- Deprecated directories ---
+projects/particle-physics/V22_Lepton_Analysis_V2/
+
+# --- Internal planning/cleanup docs ---
+CLEANUP_PLAN.md
+DOCS_CATEGORIZATION.md
+PARAMETER_INVENTORY.md
+PROJECT_INDEX.md
+
+# --- Internal tooling ---
+qfd_research_suite/
+
+# --- Intermediate results (regenerable) ---
+koide_*.json
+koide_*.png
+**/results/*.json
+**/results/*.csv
+**/results/*.png
+**/results/*.pdf
