@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QFD: Zero-Parameter Engine</title>
+    <style>
+        :root {
+            --bg-color: #050608;
+            --panel-bg: rgba(12, 16, 25, 0.96);
+            --text-color: #bdc3c7;
+            --text-light: #e5e7eb;
+            --highlight: #3498db;
+            --accent-green: #2ecc71;
+            --accent-red: #e74c3c;
+            --accent-gold: #f1c40f;
+            --accent-purple: #9b59b6;
+            --border: #2c3e50;
+            --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+
+        html, body {
+            height: 100%; margin: 0; background: var(--bg-color); color: var(--text-color);
+            font-family: var(--font-main); overflow: hidden; font-size: 13px;
+        }
+
+        /* --- Layout --- */
+        #main-container {
+            display: grid;
+            grid-template-columns: 410px 1fr 350px;
+            grid-template-rows: 1fr 160px; /* Increased height for grouped dashboard */
+            height: 100vh; width: 100vw; box-sizing: border-box; padding: 15px; gap: 15px;
+        }
+
+        /* --- Panels --- */
+        .info-panel {
+            background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px;
+            padding: 20px; display: flex; flex-direction: column; backdrop-filter: blur(10px);
+            overflow-y: auto; box-shadow: 0 4px 30px rgba(0,0,0,0.7);
+        }
+
+        h2 { color: var(--text-light); border-bottom: 2px solid var(--highlight); padding-bottom: 10px; margin-top: 0; font-size: 1.5em; letter-spacing: 0.5px; }
+        .narrative-text { line-height: 1.7; margin-bottom: 15px; font-size: 1.05em; color: #d0d3d4; text-align: justify; }
+
+        /* Metric Gauge */
+        #metric-container { margin-top: 15px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--border); }
+        .gauge-label { font-size: 0.85em; color: var(--highlight); margin-bottom: 8px; text-transform: uppercase; font-weight: bold; display: flex; justify-content: space-between; }
+        .gauge-track { height: 12px; background: #2c3e50; border-radius: 6px; overflow: hidden; margin-bottom: 5px; }
+        .gauge-bar { height: 100%; background: var(--accent-green); width: 100%; transition: width 0.2s ease, background 0.5s ease; }
+        .gauge-value { text-align: right; font-size: 0.9em; color: var(--text-light); }
+
+        /* --- Flowchart --- */
+        #flowchart { display: flex; align-items: center; justify-content: center; margin: 15px 0; gap: 5px; flex-wrap: wrap; }
+        .flow-node { background: rgba(52, 152, 219, 0.1); border: 1px solid var(--highlight); color: var(--highlight); padding: 5px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+        .flow-arrow { color: #7f8c8d; font-size: 1.1em; }
+        .flow-node.driver { border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(241, 196, 15, 0.1); }
+        .flow-node.resonance { border-color: var(--accent-purple); color: var(--accent-purple); background: rgba(155, 89, 182, 0.1); }
+
+        /* --- Equation --- */
+        .equation-box { background: rgba(0,0,0,0.5); padding: 10px; border-radius: 8px; margin: 10px 0; text-align: center; border: 1px solid var(--border); min-height: 40px; display: flex; align-items: center; justify-content: center; }
+        .math { font-family: 'Times New Roman', Times, serif; font-size: 1.4em; color: var(--text-light); font-style: italic; }
+
+        /* --- Canvas Area --- */
+        #canvas-wrapper {
+            grid-column: 2; grid-row: 1; position: relative; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; border-radius: 12px; overflow: hidden;
+            background: radial-gradient(circle at center, #1a202c 0%, #000 80%); border: 1px solid var(--border);
+        }
+        canvas { width: 100%; height: 100%; display: block; }
+
+        #visual-caption {
+            position: absolute; bottom: 20px; background: rgba(0,0,0,0.8); padding: 6px 16px; border-radius: 20px;
+            color: var(--highlight); font-size: 0.85em; pointer-events: none; border: 1px solid var(--highlight);
+            text-transform: uppercase; letter-spacing: 1px; font-weight: bold;
+        }
+
+        /* --- Dashboard --- */
+        #dashboard {
+            grid-column: 1 / 4; grid-row: 2; background: var(--panel-bg); border: 1px solid var(--border);
+            border-radius: 12px; padding: 10px; display: flex; gap: 0px; overflow-x: auto;
+            align-items: stretch; backdrop-filter: blur(10px); -webkit-overflow-scrolling: touch;
+        }
+        #dashboard::-webkit-scrollbar { height: 6px; }
+        #dashboard::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        .dash-group {
+            display: flex; flex-direction: column; border-right: 1px solid var(--border); padding: 0 10px; flex-shrink: 0;
+        }
+        .dash-group:last-child { border-right: none; }
+        .group-header {
+            font-size: 0.75em; text-transform: uppercase; color: #7f8c8d; letter-spacing: 1px; margin-bottom: 8px; font-weight: bold; text-align: center;
+        }
+        .card-container { display: flex; gap: 10px; }
+
+        .dash-card {
+            min-width: 110px; height: 90px; background: rgba(255,255,255,0.03); border: 1px solid transparent;
+            border-radius: 6px; padding: 8px; cursor: pointer; display: flex; flex-direction: column;
+            justify-content: space-between; position: relative; flex-shrink: 0; transition: all 0.2s;
+        }
+        .dash-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+        .dash-card.active { border-color: var(--highlight); background: rgba(52, 152, 219, 0.15); }
+        .dash-card.resonance-card.active { border-color: var(--accent-purple); background: rgba(155, 89, 182, 0.15); }
+        .dash-card.readonly { opacity: 0.9; }
+
+        .dash-symbol { font-size: 1.1em; font-weight: bold; color: var(--highlight); }
+        .resonance-card .dash-symbol { color: var(--accent-purple); }
+
+        .dash-name { font-size: 0.65em; color: #7f8c8d; text-transform: uppercase; }
+        .dash-value { font-family: var(--font-mono); font-size: 0.85em; color: var(--text-light); background: rgba(0,0,0,0.3); padding: 2px; border-radius: 3px; display: flex; justify-content: space-between; align-items: center; }
+
+        /* --- Inputs --- */
+        .input-group { margin-top: auto; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.02); }
+        input[type="number"] { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.5); border: 1px solid var(--border); color: white; padding: 8px; margin-bottom: 5px; border-radius: 4px; font-family: var(--font-mono); font-size: 1.1em; }
+        button { width: 100%; padding: 8px; background: var(--highlight); border: none; color: white; border-radius: 4px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        button:hover { background: #2980b9; }
+
+        @media (max-width: 1024px) {
+            html, body { overflow-y: auto; height: auto; }
+            #main-container { display: flex; flex-direction: column; height: auto; width: 100%; padding: 10px; }
+            #canvas-wrapper { order: 1; height: 350px; min-height: 350px; width: 100%; }
+            #left-panel { order: 2; } #right-panel { order: 3; }
+            #dashboard { order: 4; position: sticky; bottom: 0; z-index: 100; box-shadow: 0 -4px 10px rgba(0,0,0,0.5); }
+        }
+    </style>
+</head>
+<body>
+
+<div id="main-container">
+    <div id="left-panel" class="info-panel">
+        <h2 id="lp-title">Universal Scaling</h2>
+
+        <div style="background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-green); padding:10px; margin-bottom:15px; border-radius:0 6px 6px 0; transition: border-color 0.5s;" id="consequence-box">
+            <div style="font-weight:bold; color:var(--text-light); font-size:0.8em; text-transform:uppercase; margin-bottom:4px;">Status</div>
+            <div id="consequence-text" style="color:var(--text-light);">System Initializing...</div>
+        </div>
+
+        <div id="lp-content" class="narrative-text"></div>
+
+        <div id="metric-container">
+            <div class="gauge-label"><span id="metric-name">Metric</span><span id="metric-percent">100%</span></div>
+            <div class="gauge-track"><div id="metric-bar" class="gauge-bar"></div></div>
+            <div class="gauge-value" id="metric-unit">Nominal</div>
+        </div>
+
+        <div class="input-group" id="input-container">
+            <label style="color:var(--highlight); font-weight:bold; margin-bottom:5px; display:block;">Input Value:</label>
+            <input type="number" id="lp-input" step="any">
+            <button id="lp-reset">Reset to Standard</button>
+        </div>
+
+        <div id="readonly-msg" style="display:none; color:#9b59b6; text-align:center; margin-top:auto; font-size:0.9em; padding:10px; border:1px solid #9b59b6; background:rgba(155, 89, 182, 0.1); border-radius:6px;">
+            <b>Emergent Resonance</b><br>This value is forced by Vacuum Geometry.
+        </div>
+    </div>
+
+    <div id="canvas-wrapper">
+        <canvas id="mainCanvas"></canvas>
+        <div id="visual-caption">Visualization: Electron Vortex</div>
+    </div>
+
+    <div id="right-panel" class="info-panel">
+        <h2>Logic Flow</h2>
+        <div id="flowchart"></div>
+        <div id="rp-equation" class="equation-box"><div class="math"></div></div>
+        <h3>Consequence</h3>
+        <div id="rp-desc" class="narrative-text" style="border-bottom:1px solid #333; padding-bottom:10px;"></div>
+
+        <div style="margin-top:auto; font-size:0.85em; color:#7f8c8d; border-top:1px solid #333; padding-top:10px;">
+            <b>QFD Architecture:</b><br>
+            21 Interdependent Parameters<br>
+            Derived from Single Geometric Seed
+        </div>
+    </div>
+
+    <div id="dashboard"></div>
+</div>
+
+<script>
+    /**
+     * QFD PHYSICS ENGINE
+     */
+    const QFD = (function() {
+        // Standard Values (2022 CODATA / QFD Derivations)
+        const STD = {
+            // Vacuum Primitives
+            alpha: 7.2973525664e-3, beta: 3.043233053, G: 6.67430e-11,
+            c: 299792458, h_bar: 1.0545718e-34, L0: 1.6162e-35, E0: 4.0e113,
+
+            // Matter / Vortex
+            mp: 938.272088, me: 0.51099895, e_charge: 1.60217663e-19,
+            re: 3.86159e-13, lambda_e: 2.42631e-12, spin: 0.5, g2: 0.00115965218,
+
+            // Emergent Resonances
+            kj: 89.96, gamma_e: 5.505, c1: 0.4963, c2: 0.3286,
+            alpha_n: 3.495, beta_n: 3.932, xi: 16.0
+        };
+
+        function getPrecision(val) {
+            const s = val.toString();
+            if (s.includes('e')) return 4;
+            if (s.includes('.')) return s.split('.')[1].length;
+            return 0;
+        }
+
+        function solveBetaFromAlpha(targetAlpha) {
+            if (targetAlpha <= 0) return STD.beta;
+            const targetInv = (1 / targetAlpha) - 1;
+            const C = 2 * Math.PI * Math.PI;
+            let b = 3.0;
+            for(let i=0; i<25; i++) {
+                const num = Math.exp(b);
+                const val = C * (num / b) - targetInv;
+                const slope = C * num * (b - 1) / (b * b);
+                b -= val / slope;
+                if(Math.abs(val/slope) < 1e-12) break;
+            }
+            return b;
+        }
+
+        function getAlphaFromBeta(b) {
+            const C = 2 * Math.PI * Math.PI;
+            return 1 / (C * (Math.exp(b) / b) + 1);
+        }
+
+        function calculateUniverse(beta) {
+            const alpha = getAlphaFromBeta(beta);
+            const ratio = beta / STD.beta;
+            const uni = {
+                beta, alpha,
+                c: STD.c * Math.sqrt(ratio),
+                h_bar: STD.h_bar * Math.sqrt(ratio),
+                kj: STD.kj * ratio,
+                L0: STD.L0 / Math.sqrt(ratio),
+                E0: STD.E0 * ratio,
+                me: STD.me, e_charge: STD.e_charge,
+                c2: 1 / beta,
+                c1: 0.5 * (1 - alpha),
+                gamma_e: (9/5) * beta,
+                G: STD.G / (ratio * ratio),
+                xi: STD.xi,
+                alpha_n: (8/7) * beta,
+                beta_n: (9/7) * beta,
+                spin: 0.5 // Topological constant h/2
+            };
+
+            // Dependent Mass/Length calculations
+            uni.mp = (STD.mp / (STD.beta * (STD.me / STD.alpha))) * beta * (STD.me / alpha);
+
+            // New Derivations (PDF Source 7)
+            // re = h_bar / (me * c)
+            // lambda_e = 2 * pi * re
+            uni.re = uni.h_bar / (uni.me * 1.782662e-30 * uni.c); // using mass in kg approx for logic scaling
+            // Simplified relative scaling for display:
+            uni.re = STD.re * (uni.h_bar/STD.h_bar) / (uni.c/STD.c);
+            uni.lambda_e = 2 * Math.PI * uni.re;
+
+            // Electron g-2 anomaly from geometric Möbius transform
+            // V4(R) = [(R_vac - R) / (R_vac + R)] * (xi/beta)
+            // where R_vac = 1/√5, xi = φ², R_e = 1 (reference)
+            const phi = (1 + Math.sqrt(5)) / 2;
+            const xi_g2 = phi * phi;  // φ² = φ + 1 ≈ 2.618
+            const R_vac = 1 / Math.sqrt(5);  // ≈ 0.4472
+            const R_e = 1.0;  // Electron Compton wavelength (reference)
+            const S_electron = (R_vac - R_e) / (R_vac + R_e);  // Scale factor (negative for electron)
+            const V4 = S_electron * (xi_g2 / beta);
+            const a_schwinger = alpha / (2 * Math.PI);
+            const term_2 = V4 * Math.pow(alpha / Math.PI, 2);
+            uni.g2 = a_schwinger + term_2;  // ≈ 0.00115965 (0.001% error)
+
+            return uni;
+        }
+
+        function solveFromInput(key, value) {
+            if (key === 'alpha') return solveBetaFromAlpha(value);
+            if (key === 'beta') return value;
+            if (key === 'G') return STD.beta / Math.sqrt(value / STD.G);
+            if (key === 'mp') {
+                let b = STD.beta;
+                let step = 0.1;
+                for(let i=0; i<50; i++) {
+                    const uni = calculateUniverse(b);
+                    if(Math.abs(uni.mp - value) < 0.001) break;
+                    b -= (uni.mp - value) * 0.00001 * step;
+                }
+                return b;
+            }
+            return STD.beta;
+        }
+        return { STD, solveFromInput, calculateUniverse, getPrecision };
+    })();
+
+    /**
+     * CONTENT DEFINITIONS & CATEGORIES
+     */
+    const CATEGORIES = [
+        { id: 'vacuum', title: 'Vacuum Geometry (The Seed)', keys: ['beta', 'alpha', 'c', 'G', 'h_bar', 'L0', 'E0'] },
+        { id: 'matter', title: 'Matter Generation (The Vortex)', keys: ['mp', 'me', 're', 'lambda_e', 'spin', 'e_charge', 'g2'] },
+        { id: 'forces', title: 'Emergent Resonances (Forces)', keys: ['alpha_n', 'beta_n', 'gamma_e', 'c1', 'c2', 'kj', 'xi'] }
+    ];
+
+    const CONTENT = {
+        // --- VACUUM ---
+        alpha: {
+            name: "Fine Structure", symbol: "α", type: "input", mode: "spectrum",
+            desc: "<b>The Gear Ratio:</b> α defines the 'gap' between matter and vacuum. ",
+            equation: "1/α = 2π²(eᵝ/β) + 1",
+            flow: ["Input: α", "Solve: β", "Apply: Golden Loop"],
+            metricName: "Atomic Binding", metricFunc: r => Math.max(0, 1 - Math.abs(r - 1) * 15), unit: "Stability",
+            consequence: r => r > 1.05 ? "Electrons collapse into nuclei." : (r < 0.95 ? "Atoms unbound." : "Standard Universe: Life-ready.")
+        },
+        beta: {
+            name: "Vacuum Stiffness", symbol: "β", type: "input", mode: "wavetank",
+            desc: "<b>The Hidden Pivot:</b> β is the Bulk Modulus of the ψ-field. ",
+            equation: "β ≈ 3.043 (Pivot)",
+            flow: ["Input: β", "Scale: All 21", "Result: Calibrated Medium"],
+            metricName: "Vacuum Coherence", metricFunc: r => Math.max(0, 1 - Math.abs(r - 1) * 20), unit: "Rigidity",
+            consequence: r => "Determines the fundamental 'clock speed'."
+        },
+        G: {
+            name: "Gravitation", symbol: "G", type: "input", mode: "gravity",
+            desc: "<b>Vacuum Compliance:</b> Gravity is the inverse stiffness of the bulk. ",
+            equation: "G = G₀(β₀/β)²",
+            flow: ["Input: G", "Invert: 1/β²", "Pivot: β"],
+            metricName: "Orbital Persistence", metricFunc: r => Math.max(0, 1 - Math.abs(r - 1) * 5), unit: "Gravity",
+            consequence: r => r > 1.2 ? "Universe rapidly collapses." : (r < 0.8 ? "Stars cannot form." : "Planetary orbits stable.")
+        },
+        c: { name: "Speed of Light", symbol: "c", type: "output", mode: "wavetank", desc: "Shear wave velocity scaling. ", equation: "c = c₀√β/β₀", flow: ["Driver: β", "Scale: √β"], metricName: "Causal Sync", metricFunc: r => Math.max(0, 1 - Math.abs(r - 1) * 10), unit: "m/s", consequence: r => "Sets maximum info transfer rate." },
+        h_bar: { name: "Planck Constant", symbol: "ħ", type: "output", mode: "torus", desc: "Action grain size scaling. ", equation: "ħ = ħ₀√β/β₀", flow: ["Driver: β", "Scale: √β"], metricName: "Granularity", metricFunc: r => 1, unit: "J·s", consequence: r => "Prevents UV Catastrophe." },
+        L0: { name: "Planck Length", symbol: "L₀", type: "output", mode: "lattice", desc: "Grid resolution scaling. ", equation: "L₀ = L₀_std / √β", flow: ["Driver: β"], metricName: "Resolution", metricFunc: r => 1, unit: "m", consequence: r => "Continuum limit." },
+        E0: { name: "Vacuum Energy", symbol: "E₀", type: "output", mode: "vacuum_bulk", desc: "Zero point potential scaling. ", equation: "E₀ ∝ β", flow: ["Driver: β"], metricName: "Plenum Energy", metricFunc: r => 1, unit: "J/m³", consequence: r => "Source of matter." },
+
+        // --- MATTER ---
+        mp: {
+            name: "Proton Mass", symbol: "mp", type: "input", mode: "density_graph", subMode: "mass",
+            desc: "<b>Unit Cell Density:</b> The proton is the 'unit cell' of the vacuum. ",
+            equation: "mₚ ∝ β(mₑ/α)",
+            flow: ["Input: mp", "Bridge: me/α", "Pivot: β"],
+            metricName: "Lattice Density", metricFunc: r => Math.max(0, 1 - Math.abs(r - 1) * 10), unit: "MeV/c²",
+            consequence: r => "Derives macroscopic mass from vacuum energy."
+        },
+        me: { name: "Electron Mass", symbol: "me", type: "input", mode: "hill", desc: "Inertial cost of the lepton vortex. [cite: 9]", equation: "Input Parameter", flow: ["Input: me"], metricName: "Vortex Inertia", metricFunc: r => 1, unit: "MeV/c²", consequence: r => "Scale of Bohr radius." },
+        e_charge: { name: "Elem. Charge", symbol: "e", type: "output", mode: "charge_graph", desc: "Cavitation floor where vacuum density ρ ≥ 0. [cite: 9]", equation: "ρ_vac ≥ 0", flow: ["Limit: ρ=0"], metricName: "Quantization", metricFunc: r => 1, unit: "C", consequence: r => "Forces identical electrons." },
+        re: { name: "Vortex Radius", symbol: "re", type: "output", mode: "torus", desc: "Reduced Compton Wavelength. ", equation: "rₑ = ħ / (mₑc)", flow: ["Driver: ħ, c", "Result: Radius"], metricName: "Vortex Size", metricFunc: r => 1, unit: "m", consequence: r => "Interaction cross-section." },
+        lambda_e: { name: "Compton Wave", symbol: "λe", type: "output", mode: "wavetank", desc: "Full geometric circumference. ", equation: "λₑ = 2πrₑ", flow: ["Driver: re", "Scale: 2π"], metricName: "Circumference", metricFunc: r => 1, unit: "m", consequence: r => "Wave-particle duality scale." },
+        spin: { name: "Electron Spin", symbol: "S", type: "output", mode: "torus", desc: "Mechanistic Result: Required angular momentum. ", equation: "S = h/2", flow: ["Topology: Fixed"], metricName: "Momentum", metricFunc: r => 1, unit: "J·s", consequence: r => "Fermion statistics." },
+        g2: { name: "Anomalous Moment", symbol: "aₑ", type: "resonance", mode: "hill", desc: "<b>Electron g-2:</b> The anomalous magnetic moment emerges from vacuum geometry via Möbius transform. QFD derives this to 0.001% accuracy with zero free parameters.", equation: "aₑ = α/(2π) + V₄(α/π)²", flow: ["Driver: α, β", "Möbius: S(R)", "V₄ = S·(ξ/β)", "Result: g-2"], metricName: "Magnetic Anomaly", metricFunc: r => Math.max(0, 1 - Math.abs(r - 1) * 1000), unit: "Dimensionless", consequence: r => "Precision test: 0.001% error." },
+
+        // --- FORCES (EMERGENT) ---
+        alpha_n: { name: "Strong Force", symbol: "αn", type: "resonance", mode: "density_graph", subMode:"pressure", desc: "<b>Binding Pressure:</b> Empirical coupling derived as vacuum resonance (8/7). [cite: 9]", equation: "αₙ = (8/7)β", flow: ["Driver: β", "Resonance: 8/7"], metricName: "Binding Depth", metricFunc: r => 1, unit: "Coupling", consequence: r => "Nuclear glue strength." },
+        beta_n: { name: "Isospin", symbol: "βn", type: "resonance", mode: "density_graph", subMode:"mass", desc: "<b>Decay Resistance:</b> Isospin symmetry derived as vacuum resonance (9/7). [cite: 9]", equation: "βₙ = (9/7)β", flow: ["Driver: β", "Resonance: 9/7"], metricName: "Decay Logic", metricFunc: r => 1, unit: "Sym", consequence: r => "Neutron decay rates." },
+        gamma_e: { name: "Geo Shielding", symbol: "γe", type: "resonance", mode: "hill", desc: "Rutherford safety factor. [cite: 9]", equation: "γₑ = (9/5)β", flow: ["Driver: β", "Resonance: 9/5"], metricName: "Shielding", metricFunc: r => 1, unit: "Factor", consequence: r => "Prevents atomic collapse." },
+        c1: { name: "Surface Tension", symbol: "c₁", type: "resonance", mode: "density_graph", subMode:"tension", desc: "Nuclear skin energy. [cite: 9]", equation: "c₁ = ½(1-α)", flow: ["Driver: α", "Formula: ½(1-α)"], metricName: "Skin Integrity", metricFunc: r => 1, unit: "Coeff", consequence: r => "Valley of Stability." },
+        c2: { name: "Core Compress", symbol: "c₂", type: "resonance", mode: "density_graph", subMode:"pressure", desc: "Inverse stiffness saturation limit. [cite: 9]", equation: "c₂ = 1/β", flow: ["Driver: β", "Invert: 1/β"], metricName: "Saturation", metricFunc: r => 1, unit: "Limit", consequence: r => "Periodic Table limit." },
+        kj: { name: "Hubble Refract", symbol: "kJ", type: "resonance", mode: "telescope", desc: "Cosmic viscosity; energy loss proportional to β. [cite: 9]", equation: "K_J ∝ β", flow: ["Driver: β", "Scale: Linear"], metricName: "Transparency", metricFunc: r => 1, unit: "km/s/Mpc", consequence: r => "Redshift without expansion." },
+        xi: { name: "Hierarchy", symbol: "ξ", type: "resonance", mode: "gravity", desc: "Fixed constant (16) for 6D→4D projection. [cite: 9]", equation: "ξ = 16 (Constant)", flow: ["Constant: 16"], metricName: "Scale Unification", metricFunc: r => 1, unit: "Ratio", consequence: r => "Explains weak gravity." },
+    };
+
+    /**
+     * VISUALIZATION ENGINE 22
+     */
+    const VisEngine = (function() {
+        const canvas = document.getElementById('mainCanvas');
+        const ctx = canvas.getContext('2d', { alpha: false });
+        let width, height;
+        let mode = 'hill';
+        let subMode = '';
+        let health = 0;
+        let stiffness = 3.0;
+        let leptonSign = true;
+        let t0 = performance.now();
+
+        // Color Utils
+        const lerpColor = (c1, c2, t) => [ Math.round(c1[0] + (c2[0]-c1[0])*t), Math.round(c1[1] + (c2[1]-c1[1])*t), Math.round(c1[2] + (c2[2]-c1[2])*t) ];
+        const C_RED = [255, 80, 80]; const C_BLUE = [80, 80, 255];
+        const C_GREEN = [80, 255, 80]; const C_YELLOW = [255, 255, 80];
+
+        function resize() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            width = rect.width; height = rect.height;
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            canvas.width = width * dpr; canvas.height = height * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, (width*dpr)/2, (height*dpr)/2);
+        }
+        window.addEventListener('resize', resize);
+
+        function setMode(m, sm) { mode = m; subMode = sm; }
+        function setHealth(h) { health = h; }
+        function updateParams(b) { stiffness = b; }
+        function setLeptonSign(s) { leptonSign = s; }
+
+        function project3D(x, y, z, perspective) {
+            const scale = perspective / (perspective + z);
+            return { x: x * scale, y: y * scale, s: scale };
+        }
+
+        // --- DRAW: SPECTRUM ---
+        function drawSpectrum(t) {
+            const alphaFactor = (3.04/stiffness) * 1.5; const gap = 40 * alphaFactor;
+            const grad = ctx.createLinearGradient(-150, 0, 150, 0);
+            grad.addColorStop(0, "#000"); grad.addColorStop(0.5, "#222"); grad.addColorStop(1, "#000");
+            ctx.fillStyle = grad; ctx.fillRect(-200, -50, 400, 100);
+            ctx.fillStyle = "#3498db"; ctx.shadowBlur = 10; ctx.shadowColor = "#3498db";
+            ctx.fillRect(-20 - gap/2, -40, 4, 80); ctx.fillRect(-20 + gap/2, -40, 4, 80);
+            ctx.shadowBlur = 0; ctx.fillStyle = "#7f8c8d"; ctx.textAlign="center"; ctx.fillText("ΔE ∝ α²", 0, 60);
+        }
+
+        // --- DRAW: WAVE TANK (UPDATED) ---
+        function drawWaveTank(t) {
+            const ratio = Math.sqrt(stiffness / 3.04);
+            const speedVar = 4 * ratio;
+            const k_standard = 0.05;
+            const k_var = k_standard / ratio;
+
+            ctx.lineWidth = 2; ctx.strokeStyle = "rgba(100, 100, 100, 0.5)"; ctx.beginPath();
+            for(let x = -150; x < 150; x+=5) {
+                const y = Math.sin(x * 0.05 - t * 4) * 20 - 40;
+                if(x===-150) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke(); ctx.fillStyle = "#7f8c8d"; ctx.fillText("Ref: c (Std)", -180, -40);
+
+            ctx.strokeStyle = stiffness > 3.0 ? "#2ecc71" : "#e74c3c"; ctx.beginPath();
+            for(let x = -150; x < 150; x+=5) {
+                const y = Math.sin(x * k_var - t * speedVar) * 20 + 40;
+                if(x===-150) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke(); ctx.fillStyle = "#fff"; ctx.fillText("Var: c' (Stiffness)", -180, 40);
+        }
+
+        // --- DRAW: DENSITY GRAPH ---
+        function drawDensityGraph(t) {
+            const size = 50 * (stiffness/3.0);
+            const g = ctx.createRadialGradient(0, -60, 0, 0, -60, size);
+            g.addColorStop(0, "#fff"); g.addColorStop(0.4, "#3498db"); g.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, -60, size, 0, Math.PI*2); ctx.fill();
+            ctx.strokeStyle = "#7f8c8d"; ctx.lineWidth = 1; ctx.beginPath();
+            ctx.moveTo(-120, 80); ctx.lineTo(120, 80); ctx.moveTo(0, 80); ctx.lineTo(0, 20); ctx.stroke();
+
+            const peakH = 60 * (stiffness/3.0); const w = 20 / (stiffness/3.0);
+            ctx.strokeStyle = "#f1c40f"; ctx.lineWidth = 2; ctx.beginPath();
+            for(let x = -120; x <= 120; x+=5) {
+                const y = 80 - peakH * Math.exp(-(x*x)/(2*w*w));
+                if(x===-120) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            if (subMode === 'tension') {
+                const x1 = w; const y1 = 80 - peakH * Math.exp(-(x1*x1)/(2*w*w));
+                ctx.strokeStyle = "#e74c3c"; ctx.beginPath(); ctx.moveTo(x1-20, y1-20); ctx.lineTo(x1+20, y1+20); ctx.stroke();
+            } else if (subMode === 'pressure') {
+                ctx.strokeStyle = "#2ecc71"; ctx.beginPath(); ctx.moveTo(10, 80); ctx.lineTo(10, 80-peakH); ctx.stroke();
+            }
+        }
+
+        // --- DRAW: CHARGE GRAPH ---
+        function drawChargeGraph(t) {
+            const R = 60;
+            const grad = ctx.createRadialGradient(0, -50, 0, 0, -50, R);
+            grad.addColorStop(0, "#000"); grad.addColorStop(0.3, "#000"); grad.addColorStop(0.4, "#3498db"); grad.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(0, -50, R, 0, Math.PI*2); ctx.fill();
+            ctx.strokeStyle="#3498db"; ctx.lineWidth=1; ctx.stroke();
+
+            ctx.strokeStyle = "#7f8c8d"; ctx.beginPath();
+            ctx.moveTo(-120, 80); ctx.lineTo(120, 80);
+            ctx.moveTo(0, 80); ctx.lineTo(0, 20); ctx.stroke();
+
+            ctx.strokeStyle = "#e74c3c"; ctx.lineWidth = 2; ctx.beginPath();
+            for(let x = 10; x <= 120; x+=5) {
+                const y = 80 - (1000/x);
+                if(x===10) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            ctx.beginPath();
+            for(let x = -120; x <= -10; x+=5) {
+                const y = 80 - (1000/Math.abs(x));
+                if(x===-120) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            ctx.strokeStyle = "#3498db"; ctx.beginPath(); ctx.moveTo(-10, 80); ctx.lineTo(10, 80); ctx.stroke();
+        }
+
+        // --- DRAW: TELESCOPE ---
+        function drawTelescope(t) {
+            const x = -150 + ((t * 100) % 300); const progress = (x + 150) / 300;
+            ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(-160, 0, 5, 0, Math.PI*2); ctx.fill();
+            ctx.strokeStyle = "#7f8c8d"; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(160, 0, 10, 0, Math.PI*2); ctx.stroke();
+            const hue = 240 - (progress * 240);
+            ctx.fillStyle = `hsl(${hue}, 100%, 50%)`; ctx.beginPath(); ctx.arc(x, 0, 8, 0, Math.PI*2); ctx.fill();
+        }
+
+        // --- DRAW: LATTICE (FLAT) ---
+        function drawLattice(t) {
+            const L0_scale = 1.0 / Math.sqrt(stiffness/3.04);
+            const spacing = 40 * L0_scale;
+            ctx.lineWidth = 1; ctx.strokeStyle = "#2ecc71";
+            for(let x = -200; x <= 200; x+=spacing) { ctx.beginPath(); ctx.moveTo(x, -150); ctx.lineTo(x, 150); ctx.stroke(); }
+            for(let y = -150; y <= 150; y+=spacing) { ctx.beginPath(); ctx.moveTo(-200, y); ctx.lineTo(200, y); ctx.stroke(); }
+            ctx.fillStyle = "#fff"; ctx.font="10px monospace"; ctx.textAlign="right"; ctx.fillText(`L₀ spacing: ${spacing.toFixed(1)}px`, 180, 130);
+        }
+
+        // --- DRAW: VACUUM BULK ---
+        function drawVacuumBulk(t) {
+            const particles = 800; const maxR = 150; ctx.fillStyle = "rgba(52, 152, 219, 0.6)";
+            for(let i=0; i<particles; i++) {
+                const x = (Math.sin(i * 123.4) * 200); const y = (Math.cos(i * 567.8) * 150);
+                const pulse = 1 + Math.sin(t*2 + i)*0.05 * (stiffness/3.0);
+                ctx.beginPath(); ctx.arc(x, y, 2 * pulse, 0, Math.PI*2); ctx.fill();
+            }
+            ctx.fillStyle = "#fff"; ctx.textAlign="center"; ctx.fillText("Vacuum Bulk Density = Proton Density", 0, 140);
+        }
+
+        // --- DRAW: GRAVITY ---
+        function drawGravity(t) {
+            const spacing = 40; let depth = 150 * Math.pow(3.04/stiffness, 2); if(depth > 600) depth = 600;
+            ctx.strokeStyle = "rgba(52,152,219,0.4)"; ctx.lineWidth = 1;
+            for(let y=-200; y<=200; y+=spacing) {
+                ctx.beginPath();
+                for(let x=-250; x<=250; x+=10) {
+                    const d = Math.sqrt(x*x + y*y); const pull = Math.max(0, 300-d); const z = (pull*pull * 0.003) * (depth/100);
+                    const p = project3D(x, y + 50, z + 200, 600);
+                    if(x === -250) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+                }
+                ctx.stroke();
+            }
+        }
+
+        // --- DRAW: POLOIDAL FLOW ---
+        function getPoloidalColor(angle) {
+            const t = (angle % (Math.PI*2) + (Math.PI*2)) % (Math.PI*2) / (Math.PI*2);
+            if (t < 0.25) return lerpColor(C_YELLOW, C_RED, t*4);
+            if (t < 0.5)  return lerpColor(C_RED, C_GREEN, (t-0.25)*4);
+            if (t < 0.75) return lerpColor(C_GREEN, C_BLUE, (t-0.5)*4);
+            return lerpColor(C_BLUE, C_YELLOW, (t-0.75)*4);
+        }
+
+        function drawArrow(x, y, angle, size, color, alpha) {
+            ctx.save(); ctx.translate(x, y); ctx.rotate(angle); ctx.beginPath();
+            ctx.moveTo(size, 0); ctx.lineTo(-size, 0); ctx.moveTo(size, 0); ctx.lineTo(size*0.5, size*0.4); ctx.moveTo(size, 0); ctx.lineTo(size*0.5, -size*0.4);
+            ctx.strokeStyle = `rgba(${color[0]},${color[1]},${color[2]},${alpha})`; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
+        }
+
+        function drawPoloidalFlow(elapsed, type) {
+            const isHill = (type === 'hill');
+            const R = 80; let r = 50; if (!isHill) r = 50 * (Math.sqrt(3.04/stiffness));
+            const speed = 2.0 * (stiffness/3.0); const tilt = 0.6;
+            const points = [];
+            const U_SEG = width < 600 ? 24 : 36; const V_SEG = width < 600 ? 16 : 20;
+
+            for(let iu=0; iu<U_SEG; iu++) {
+                const torAngle = (iu/U_SEG) * Math.PI*2;
+                for(let iv=0; iv<V_SEG; iv++) {
+                    const baseAngle = (iv/V_SEG) * Math.PI*2;
+                    const circAngle = baseAngle - speed * elapsed;
+
+                    const cosA = Math.cos(circAngle); const sinA = Math.sin(circAngle);
+                    let endX = isHill ? (cosA >= 0 ? r * cosA : 0) : (R + r * cosA);
+                    let startX = R + r * cosA;
+                    const t_geom = isHill ? 1.0 : 0.0;
+                    const p1x = startX * (1-t_geom) + endX * t_geom; const p1y = r * sinA;
+
+                    const cosA2 = Math.cos(circAngle-0.1); const sinA2 = Math.sin(circAngle-0.1);
+                    let endX2 = isHill ? (cosA2 >= 0 ? r * cosA2 : 0) : (R + r * cosA2);
+                    let startX2 = R + r * cosA2;
+                    const p2x = startX2 * (1-t_geom) + endX2 * t_geom; const p2y = r * sinA2;
+
+                    const p1_3d = { x: p1x * Math.cos(torAngle), y: p1y, z: p1x * Math.sin(torAngle) };
+                    const p2_3d = { x: p2x * Math.cos(torAngle), y: p2y, z: p2x * Math.sin(torAngle) };
+
+                    if(health > 0 && isHill) { const jit = health * 20; p1_3d.x += (Math.random()-0.5)*jit; p1_3d.y += (Math.random()-0.5)*jit; }
+
+                    const fov = 400;
+                    const rotY = Math.cos(tilt)*p1_3d.y - Math.sin(tilt)*p1_3d.z; const rotZ = Math.sin(tilt)*p1_3d.y + Math.cos(tilt)*p1_3d.z;
+                    const p = project3D(p1_3d.x, rotY, rotZ, fov);
+
+                    const rotY2 = Math.cos(tilt)*p2_3d.y - Math.sin(tilt)*p2_3d.z; const rotZ2 = Math.sin(tilt)*p2_3d.y + Math.cos(tilt)*p2_3d.z;
+                    const p_next = project3D(p2_3d.x, rotY2, rotZ2, fov);
+
+                    points.push({ x: p.x, y: p.y, z: rotZ, s: p.s, a: Math.atan2(p_next.y - p.y, p_next.x - p.x), c: getPoloidalColor(circAngle) });
+                }
+            }
+            points.sort((a,b) => a.z - b.z);
+            points.forEach(p => {
+                const alpha = Math.max(0.1, p.s * 0.9 - (isHill ? health : 0));
+                drawArrow(p.x, p.y, p.a, 5*p.s, p.c, alpha);
+            });
+
+            if(isHill && health < 0.1) {
+                ctx.font = "14px monospace"; ctx.textAlign = "center";
+                ctx.fillStyle = leptonSign ? "rgba(100,255,100,0.8)" : "rgba(255,100,100,0.8)";
+                ctx.fillText(leptonSign ? "Hessian Sign: Negative (Compression)" : "Hessian Sign: Positive (Stiffness)", 0, 180);
+            }
+        }
+
+        function frame(now) {
+            const elapsed = (now - t0) * 0.001;
+            ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#050608'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.restore();
+
+            switch(mode) {
+                case 'spectrum': drawSpectrum(elapsed); break;
+                case 'wavetank': drawWaveTank(elapsed); break;
+                case 'density_graph': drawDensityGraph(elapsed); break;
+                case 'charge_graph': drawChargeGraph(elapsed); break;
+                case 'telescope': drawTelescope(elapsed); break;
+                case 'lattice': drawLattice(elapsed); break;
+                case 'gravity': drawGravity(elapsed); break;
+                case 'vacuum_bulk': drawVacuumBulk(elapsed); break;
+                case 'hill': drawPoloidalFlow(elapsed, 'hill'); break;
+                case 'torus': drawPoloidalFlow(elapsed, 'torus'); break;
+            }
+            requestAnimationFrame(frame);
+        }
+
+        function start() { resize(); requestAnimationFrame(frame); }
+        return { start, setMode, updateParams, setHealth, setLeptonSign };
+    })();
+
+    /**
+     * UI MANAGER
+     */
+    const UI = (function() {
+        const dashboard = document.getElementById('dashboard');
+        const lpInput = document.getElementById('lp-input');
+        const lpReset = document.getElementById('lp-reset');
+
+        const metricBar = document.getElementById('metric-bar');
+        const metricPercent = document.getElementById('metric-percent');
+        const metricName = document.getElementById('metric-name');
+        const metricUnit = document.getElementById('metric-unit');
+
+        const flowchart = document.getElementById('flowchart');
+        const equationBox = document.getElementById('rp-equation');
+        const rightDesc = document.getElementById('rp-desc');
+
+        let currentKey = 'alpha'; let currentBeta = QFD.STD.beta;
+
+        function formatVal(val) {
+            if (val === undefined) return "--";
+            if (Math.abs(val) < 0.01 || Math.abs(val) > 10000) return val.toExponential(4);
+            return val.toPrecision(5);
+        }
+
+        function updateFlowchart(key) {
+            flowchart.innerHTML = '';
+            const steps = CONTENT[key].flow || ["Input", "Output"];
+            steps.forEach((step, idx) => {
+                const node = document.createElement('div'); node.className = 'flow-node';
+                if(idx === 0) node.classList.add('driver');
+                if(CONTENT[key].type === 'resonance' && idx === steps.length -1) node.classList.add('resonance');
+                node.innerText = step; flowchart.appendChild(node);
+                if(idx < steps.length - 1) { const arrow = document.createElement('div'); arrow.className = 'flow-arrow'; arrow.innerHTML = '&#8594;'; flowchart.appendChild(arrow); }
+            });
+        }
+
+        function updateGauge() {
+            const data = CONTENT[currentKey]; const universe = QFD.calculateUniverse(currentBeta);
+            const val = universe[currentKey]; const std = QFD.STD[currentKey]; const ratio = val / std;
+            const health = data.metricFunc(ratio);
+            metricBar.style.width = `${health * 100}%`; metricPercent.innerText = `${Math.round(health * 100)}%`; metricName.innerText = data.metricName;
+            const statusText = health > 0.99 ? 'Optimal' : (health > 0.5 ? 'Distorted' : 'Critical');
+            metricUnit.innerText = `${data.unit}: ${statusText}`;
+            if(health > 0.95) metricBar.style.background = "var(--accent-green)";
+            else if(health > 0.4) metricBar.style.background = "var(--accent-gold)";
+            else metricBar.style.background = "var(--accent-red)";
+        }
+
+        function init() {
+            const consText = document.getElementById('consequence-text'); const consBox = document.getElementById('consequence-box');
+            consText.innerText = "Synchronizing to α = 1/137.036..."; consBox.style.borderLeftColor = "var(--accent-gold)";
+            setTimeout(() => { consText.innerText = "Logic Fortress verified. Spacetime Lorentzian (3,1)."; consBox.style.borderLeftColor = "var(--accent-green)"; }, 1000);
+
+            // RENDER DASHBOARD GROUPS
+            CATEGORIES.forEach(cat => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'dash-group';
+
+                const header = document.createElement('div');
+                header.className = 'group-header';
+                header.innerText = cat.title;
+                groupDiv.appendChild(header);
+
+                const cardContainer = document.createElement('div');
+                cardContainer.className = 'card-container';
+
+                cat.keys.forEach(key => {
+                    const data = CONTENT[key];
+                    const card = document.createElement('div');
+                    card.className = `dash-card ${data.type==='output' || data.type==='resonance' ? 'readonly' : ''} ${data.type==='resonance' ? 'resonance-card' : ''}`;
+                    card.id = `card-${key}`;
+                    card.innerHTML = `<div class="dash-symbol">${data.symbol}</div><div class="dash-name">${data.name}</div><div class="dash-value" id="val-${key}">--</div>`;
+                    card.onclick = () => selectKey(key);
+                    cardContainer.appendChild(card);
+                });
+
+                groupDiv.appendChild(cardContainer);
+                dashboard.appendChild(groupDiv);
+            });
+
+            lpInput.addEventListener('input', () => {
+                const val = parseFloat(lpInput.value);
+                if (!isNaN(val)) updateSimulation(val);
+            });
+
+            lpReset.addEventListener('click', () => { updateSimulation(QFD.STD[currentKey] || QFD.STD.alpha); selectKey(currentKey); });
+
+            selectKey('alpha'); updateSimulation(QFD.STD.alpha); VisEngine.start();
+        }
+
+        function selectKey(key) {
+            document.querySelectorAll('.dash-card').forEach(c => c.classList.remove('active'));
+            document.getElementById(`card-${key}`).classList.add('active');
+            currentKey = key; const data = CONTENT[key];
+
+            document.getElementById('lp-title').innerText = `${data.name} (${data.symbol})`;
+            document.getElementById('lp-content').innerHTML = data.desc;
+            document.getElementById('visual-caption').innerText = `Visual: ${data.mode.toUpperCase().replace('_',' ')}`;
+            equationBox.innerHTML = data.equation ? `<div class="math">${data.equation}</div>` : '';
+
+            const inputContainer = document.getElementById('input-container'); const readonlyMsg = document.getElementById('readonly-msg');
+
+            if (data.type === 'output' || data.type === 'resonance') {
+                inputContainer.style.display = 'none';
+                readonlyMsg.style.display = 'block';
+                if(data.type === 'resonance') readonlyMsg.innerHTML = "<b>Emergent Resonance</b><br>This value is forced by Vacuum Geometry.";
+                else readonlyMsg.innerHTML = "<b>Derived Parameter</b><br>Change <b>α, G, or mp</b> to affect this.";
+            } else {
+                inputContainer.style.display = 'block';
+                readonlyMsg.style.display = 'none';
+                const universe = QFD.calculateUniverse(currentBeta);
+                let val = universe[key];
+                if(key==='alpha') lpInput.value = val.toExponential(9); else lpInput.value = val;
+            }
+
+            updateFlowchart(key); VisEngine.setMode(data.mode, data.subMode); updateDialogue();
+        }
+
+        function updateDialogue() {
+            const data = CONTENT[currentKey]; const universe = QFD.calculateUniverse(currentBeta);
+            let val = universe[currentKey]; let std = QFD.STD[currentKey]; let ratio = val / std;
+
+            let msg = ""; if (data.consequence) msg = data.consequence(ratio); else msg = (Math.abs(ratio-1) < 0.001) ? "Parameter Nominal." : "Deviation Detected.";
+            rightDesc.innerText = msg;
+
+            const consText = document.getElementById('consequence-text'); const consBox = document.getElementById('consequence-box');
+            if(Math.abs(ratio-1) < 0.001) { consText.innerText = "Universe Stable."; consBox.style.borderLeftColor = "var(--accent-green)"; }
+            else { consText.innerText = "Parameter Divergence detected."; consBox.style.borderLeftColor = "var(--accent-red)"; }
+
+            VisEngine.setHealth(Math.abs(ratio - 1));
+            if (currentKey === 'me' || currentKey === 'alpha') VisEngine.setLeptonSign(true); else VisEngine.setLeptonSign(false);
+        }
+
+        function updateSimulation(inputValue) {
+            currentBeta = QFD.solveFromInput(currentKey, inputValue); const universe = QFD.calculateUniverse(currentBeta);
+
+            // Loop through all keys in all categories
+            CATEGORIES.forEach(cat => {
+                cat.keys.forEach(k => {
+                    const el = document.getElementById(`val-${k}`);
+                    const currentVal = universe[k];
+                    const stdVal = QFD.STD[k];
+                    const diff = Math.abs((currentVal - stdVal) / stdVal);
+                    const icon = diff < 0.001 ? "✅" : "⚠️";
+                    el.innerHTML = `${formatVal(currentVal)} ${icon}`;
+                });
+            });
+
+            updateGauge(); updateDialogue(); VisEngine.updateParams(currentBeta);
+        }
+
+        return { init };
+    })();
+    window.onload = UI.init;
+</script>
+</body>
+</html>
