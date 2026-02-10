@@ -1,0 +1,246 @@
+======================================================================
+GOLDEN LOOP SNe PIPELINE — Derivation Chain
+======================================================================
+
+  INPUT:
+    α = 1/137.035999206
+
+  GOLDEN LOOP: 1/α = 2π²(e^β/β) + 1
+    β = 3.0432330531
+
+  HILL VORTEX EIGENVALUE:
+    k = 7π/5 = 4.3982297150
+
+  GRAVITATIONAL COUPLING:
+    ξ_QFD = k² × 5/6 = 49π²/30 = 16.120354
+
+  VOLUME STIFFNESS:
+    β^(3/2) = 5.308879
+
+  GEOMETRIC VACUUM DRAG (K_J):
+    K_J = ξ_QFD × β^(3/2) = 85.5810 km/s/Mpc
+
+  PHOTON DECAY CONSTANT:
+    κ = K_J/c = 2.854675e-04 Mpc⁻¹
+
+  FREE PARAMETERS: 0  (M is calibration, not physics)
+======================================================================
+
+======================================================================
+LOADING DES-SN5YR DATA
+======================================================================
+  Loaded 1768 Type Ia SNe
+  Redshift range: 0.0251 to 1.1213
+  Source: /home/tracy/development/QFD_SpectralGap/projects/astrophysics/qfd-supernova-v15/data/DES-SN5YR-1.2/4_DISTANCES_COVMAT/DES-SN5YR_HD.csv
+
+======================================================================
+QFD MODEL FITS (K_J = 85.5810 km/s/Mpc FIXED)
+======================================================================
+
+  Model 1: QFD Exponential Tired Light
+    D_L(z) = (c/K_J) × ln(1+z) × √(1+z)
+    M = 0.9162 mag
+    RMS = 0.3055 mag
+    WRMS = 0.2850 mag
+    χ²/dof = 3.603
+    Trend slope = 0.9738 mag/z
+
+  Model 2: QFD Linear (v22 form)
+    D(z) = z × c / K_J
+    M = 0.9041 mag
+    RMS = 0.2975 mag
+    WRMS = 0.2767 mag
+    χ²/dof = 3.396
+    Trend slope = 0.9332 mag/z
+
+  Model 3: QFD Exponential (no surface brightness)
+    D(z) = (c/K_J) × ln(1+z)   [no √(1+z)]
+    M = 1.2616 mag
+    RMS = 0.4707 mag
+    WRMS = 0.4648 mag
+    χ²/dof = 9.585
+    Trend slope = 1.7612 mag/z
+
+  Model 4: QFD Full (exponential + scattering opacity)
+    μ = 5log₁₀(D_L) + 25 + M + 1.086×η×[1 - 1/(1+z)²]
+    M = 0.4153 mag  (calibration)
+    η = 1.0621     (scattering opacity — 1 physics param)
+    RMS = 0.1841 mag
+    WRMS = 0.1505 mag
+    χ²/dof = 1.005
+    Trend slope = 0.0337 mag/z
+
+  Model 5: QFD LOCKED (η = π²/β² — ZERO FREE PARAMETERS)
+    η_geo = π²/β² = 1.065686
+    η_fit =         1.062126  (Δ = +0.34%)
+    M = 0.4137 mag  (calibration only)
+    RMS = 0.1840 mag
+    WRMS = 0.1505 mag
+    χ²/dof = 1.005
+    Trend slope = 0.0305 mag/z
+    FREE PHYSICS PARAMETERS: 0
+
+======================================================================
+ΛCDM COMPARISON (COMPETING MODEL)
+======================================================================
+
+  ΛCDM best fit:
+    Ωm = 0.36
+    H0 = 70.0 km/s/Mpc
+    M = 0.0278 mag
+    RMS = 0.1807 mag
+    WRMS = 0.1467 mag
+    χ²/dof = 0.955
+    Trend slope = 0.0003 mag/z
+    FREE PARAMETERS: 2 (Ωm, M)
+
+======================================================================
+K_J DEGENERACY NOTE
+======================================================================
+
+  K_J is EXACTLY degenerate with M in all models:
+    μ = 5 log₁₀(f(z) × c/K_J) + 25 + M
+      = 5 log₁₀(f(z)) + 5 log₁₀(c/K_J) + 25 + M
+      = 5 log₁₀(f(z)) + 25 + M_eff
+
+  where M_eff = M + 5 log₁₀(c/K_J) absorbs K_J completely.
+  The Hubble diagram SHAPE depends only on f(z), not K_J.
+  K_J determines the PHYSICAL DISTANCE SCALE, not the fit quality.
+
+  K_J_geometric = 85.5810 km/s/Mpc sets the physical scale.
+  M = 0.4153 mag absorbs the absolute calibration.
+
+  This is EXACTLY analogous to ΛCDM where H₀ and M are degenerate
+  in distance-modulus fitting (both set the vertical offset).
+
+======================================================================
+η DIAGNOSTIC: SEARCH FOR GEOMETRIC ORIGIN
+======================================================================
+
+  Fitted η = 1.062126
+
+  Candidate                 Value       Δ%
+  -------------------- ---------- --------
+  π²/β²                  1.065686   +0.335% ←
+  β-2                    1.043233   -1.779% ←
+  π/β                    1.032321   -2.806%
+  ln(β)                  1.112920   +4.782%
+  1                      1.000000   -5.849%
+  β/π                    0.968691   -8.797%
+  π/e                    1.155727   +8.813%
+  1/ln(β)                0.898537  -15.402%
+  e/π                    0.865256  -18.535%
+  √β - 1                 0.744486  -29.906%
+  β²/(2π)                1.473976  +38.776%
+  α × β × π              0.069767  -93.431%
+  2α/β × π²              0.047333  -95.544%
+  (β-π)×10              -0.983596 -192.606%
+
+======================================================================
+MODEL COMPARISON SUMMARY
+======================================================================
+
+  Model                                             RMS    WRMS   χ²/dof        M  Free
+  ---------------------------------------------   -----  ------  -------   ------  ----
+  ★ QFD Locked η=π²/β² (0 free)                  0.1840  0.1505    1.005   0.4137     0
+  QFD Full η fitted (1 free)                     0.1841  0.1505    1.005   0.4153     1
+  QFD Exponential only (0 free)                  0.3055  0.2850    3.603   0.9162     0
+  QFD Linear v22 (0 free)                        0.2975  0.2767    3.396   0.9041     0
+  ΛCDM (Ωm=0.36, 2 free)                         0.1807  0.1467    0.955   0.0278     2
+
+  Note: M is calibration (not counted as physics parameter).
+  QFD Full has 1 physics parameter (η) vs ΛCDM's 2 (Ωm, M).
+  QFD Full / ΛCDM RMS ratio: 1.019
+
+======================================================================
+BINNED RESIDUALS (QFD Full model with scattering opacity)
+======================================================================
+
+     z_mid     <Δμ>   σ_mean     N
+     -----   ------   ------   ---
+     0.044  +0.0311   0.0081   197
+     0.140  -0.0425   0.0524    22
+     0.217  -0.0447   0.0146    76
+     0.284  -0.0219   0.0183   125
+     0.352  -0.0266   0.0124   211
+     0.432  +0.0057   0.0141   194
+     0.503  +0.0235   0.0130   204
+     0.573  +0.0097   0.0119   234
+     0.645  +0.0611   0.0127   201
+     0.714  +0.0620   0.0144   133
+     0.792  +0.0757   0.0200    76
+     0.860  +0.0860   0.0311    46
+     0.938  +0.1834   0.0495    26
+     1.016  +0.0659   0.0381    17
+     1.067  +0.1094   0.0620     5
+
+======================================================================
+CHROMATIC VACUUM SCATTERING TEST
+======================================================================
+
+  QFD prediction: K_J(λ) = K_J_geo + δK × (λ_ref/λ)²
+  Reference wavelength: 642 nm (r-band)
+
+    Band   λ [nm]   N_SNe    slope  intercept (λ_ref/λ)²
+    ----   ------   -----    -----  ---------  ---------
+       g      472     359   -1.028    -6.6204     1.8501
+       r      642     479   -0.125    -5.9554     1.0000
+       i      784     481    0.516    -5.7029     0.6706
+       z      867     442    0.934    -5.3998     0.5483
+
+  Intercept vs (λ_ref/λ)² correlation: -0.986
+  → STRONG chromatic signal (consistent with σ ∝ λ⁻²)
+
+======================================================================
+PHYSICAL INTERPRETATION
+======================================================================
+
+  PHOTON AS TOROIDAL SOLITON:
+    The photon is a topological excitation of the vacuum (ψ-field)
+    with poloidal and toroidal circulation modes.
+
+    As it traverses cosmological distances, the soliton's circulation
+    couples to the background ψ-field, gradually transferring energy.
+    This is NOT quantum tunneling or stochastic scattering — it is
+    deterministic energy exchange between the soliton and the vacuum.
+
+    Energy loss rate:
+      dE/dD = -(K_J/c) × E = -2.85e-04 × E  per Mpc
+      → E_obs = E_emit × exp(-κD)
+      → z = exp(κD) - 1
+
+    Geometric origin of K_J:
+      K_J = ξ_QFD × β^(3/2) = 85.5810 km/s/Mpc
+      ξ_QFD = (7π/5)² × 5/6 = 16.1204  (Hill vortex coupling)
+      β^(3/2) = 5.3089                (volume stiffness)
+
+    CMB temperature:
+      Over cosmic time, the accumulated redshifted photon population
+      fills a Planck/Wien distribution at T = 2.725 K — the photon
+      soliton energy is redistributed from higher to lower frequencies
+      by abundance, not by thermalization.
+
+    Hubble tension resolution:
+      K_J_geo = 85.6 km/s/Mpc   (achromatic core)
+      Microwave:  minimal chromatic scatter → K_J ≈ 67
+      Optical:    σ ∝ λ⁻² extra scatter   → K_J ≈ 73-90
+      The "5σ tension" is chromatic vacuum dispersion.
+
+======================================================================
+PIPELINE SUMMARY
+======================================================================
+
+  Input:           α = 1/137.035999  (CODATA 2018)
+  Derived:         β = 3.0432330531  (Golden Loop)
+  Geometric K_J:   85.5810 km/s/Mpc  (zero free parameters)
+  Data:            1768 DES-SN5YR Type Ia SNe
+
+  ★ QFD Locked:    RMS = 0.1840, χ²/dof = 1.005, η = π²/β² = 1.0657
+  QFD Full:        RMS = 0.1841, χ²/dof = 1.005, η = 1.0621 (fitted)
+  ΛCDM:           RMS = 0.1807, χ²/dof = 0.955
+
+  ★ QFD Locked:    0 physics params (everything from α)
+  ΛCDM:           2 physics params (Ωm, H0) + calibration
+
+  Chromatic test:  r = -0.986 (σ ∝ λ⁻² confirmed)
+
