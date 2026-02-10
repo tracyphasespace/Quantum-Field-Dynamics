@@ -1,0 +1,2 @@
+numpy>=1.24
+matplotlib>=3.7   # only needed for qfd_6d_heatmap.py
