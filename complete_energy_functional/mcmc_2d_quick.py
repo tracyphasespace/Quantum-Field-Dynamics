@@ -52,9 +52,9 @@ class QuickModel:
 
     def __init__(self):
         # Fixed geometry (normalized units)
-        # These are placeholders - should be calibrated from V22 or Koide
+        # Book v8.5 Appendix G: all leptons share universal circulation U = 0.876c
         self.R_e = 1.0    # Electron vortex radius (normalized)
-        self.U_e = 0.5    # Electron velocity (fraction of c)
+        self.U_e = 0.876  # Universal circulation velocity (fraction of c, Book v8.5)
         self.A_e = 1.0    # Electron amplitude
 
         # Scale for heavier leptons (geometric scaling)

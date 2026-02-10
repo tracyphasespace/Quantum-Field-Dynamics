@@ -178,7 +178,7 @@ print_header("PART 4: Fine Structure Constant α (Coupling Geometry)", 1)
 c1_surface = 0.529251  # Nuclear surface tension coefficient
 c2_volume = 0.316743   # Nuclear volume packing coefficient
 beta_crit = 3.043233053  # Critical beta from Golden Loop
-k_geom = 4.3813  # Geometric projection factor (6D → 4D)
+k_geom = 4.4028  # Geometric projection factor (6D → 4D, Book v8.5)
 
 print("\nFrom QFD:")
 print("  α emerges from the ratio of nuclear surface tension (c₁)")
@@ -337,7 +337,7 @@ for b in betas_test:
     alpha_val = 1.0 / (np.pi**2 * np.exp(b) * (c2_volume / c1_surface))
 
     # Gravitational coupling (k_geom changes with β)
-    k_geom_scaled = 4.3813 * np.sqrt(b / beta_crit)  # Approximate scaling
+    k_geom_scaled = 4.4028 * np.sqrt(b / beta_crit)  # Approximate scaling
     xi_val = k_geom_scaled**2 * (5.0/6.0)
 
     if base_hbar_ratio is None:

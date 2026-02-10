@@ -8,14 +8,17 @@ Licensed under the MIT License
 This file contains two categories of constants:
 
 1. DERIVED CONSTANTS (from α alone):
-   - BETA, C1_SURFACE, C2_VOLUME, V4_QED
+   - BETA, C1_SURFACE, C2_VOLUME, V4_QED, K_GEOM, K_CIRC, XI_QFD
    - These are the core QFD predictions with ZERO free parameters
 
 2. REFERENCE CONSTANTS (for unit conversion and comparison):
    - SI units (c, ℏ, masses), empirical targets, H0
    - These are NOT claimed to be derived - they're for validation/plotting
 
-Reference: Lean4 proofs in formalization/QFD/Constants/GoldenLoop.lean
+NOTE: This is a copy of qfd/shared_constants.py for standalone scripts.
+      The canonical version is qfd/shared_constants.py.
+Reference: Lean4 proofs in projects/Lean4/QFD/Nuclear/VacuumStiffness.lean
+Standardized β = 3.043233053 across all Lean proofs (see BUILD_STATUS.md)
 
 How to use:
     from shared_constants import ALPHA, BETA, C1_SURFACE, C2_VOLUME
@@ -42,9 +45,9 @@ PI_SQ = np.pi ** 2
 #
 # Rearranged: e^β / β = (1/α - 1) / (2π²)
 #
-# This transcendental equation has a unique solution β ≈ 3.04309
+# This transcendental equation has a unique solution β ≈ 3.043233
 #
-# Reference: formalization/QFD/Constants/GoldenLoop.lean
+# Reference: projects/Lean4/QFD/Physics/GoldenLoop_Existence.lean
 
 def _solve_golden_loop():
     """Solve the Golden Loop transcendental equation for β."""
@@ -61,10 +64,12 @@ def _solve_golden_loop():
     return beta
 
 # Vacuum stiffness (DERIVED from α)
-BETA = _solve_golden_loop()  # ≈ 3.04309
+BETA = _solve_golden_loop()  # ≈ 3.043233053
 
-# Verification: should match 3.04309 to high precision
-assert abs(BETA - 3.04309) < 0.001, f"Golden Loop β={BETA} differs from expected 3.04309"
+# Verification: should match standardized value from Lean proofs
+BETA_STANDARDIZED = 3.043233053
+assert abs(BETA - BETA_STANDARDIZED) < 0.0001, \
+    f"Golden Loop β={BETA} differs from standardized {BETA_STANDARDIZED}"
 
 # =============================================================================
 # NUCLEAR COEFFICIENTS (Derived from α and β)
@@ -75,7 +80,7 @@ assert abs(BETA - 3.04309) < 0.001, f"Golden Loop β={BETA} differs from expecte
 # c₁ = ½(1 - α)  [Surface tension minus electromagnetic drag]
 # c₂ = 1/β       [Bulk modulus from vacuum stiffness]
 #
-# Reference: formalization/QFD/Nuclear/CoreCompressionLaw.lean
+# Reference: projects/Lean4/QFD/Nuclear/CoreCompressionLaw.lean
 
 # Surface tension coefficient (DERIVED)
 # Physical interpretation: Virial theorem geometry (½) minus EM drag (α)
@@ -83,7 +88,27 @@ C1_SURFACE = 0.5 * (1 - ALPHA)  # = 0.496351
 
 # Volume coefficient (DERIVED)
 # Physical interpretation: Vacuum bulk modulus (saturation limit)
-C2_VOLUME = 1.0 / BETA  # = 0.328615
+C2_VOLUME = 1.0 / BETA  # = 0.328598
+
+# =============================================================================
+# GEOMETRIC EIGENVALUES (Book v8.5, Ch. 12 & Appendix Z.12)
+# =============================================================================
+#
+# k_geom is the radial stability eigenvalue of the Cl(3,3) soliton.
+# It is NOT a fitted parameter — it emerges from the vortex variational
+# equation via a 5-stage pipeline (see K_GEOM_REFERENCE.md).
+#
+# Book v8.5 value: 4.4028 (used consistently in Chs. 12, 12.X, 12.Y, Z.12)
+# Lean values: 4.3813–4.3982 (different pipeline stages, ~0.5% spread)
+# The spread is documented and may reflect alpha-conditioning physics.
+
+K_GEOM = 4.4028               # Radial stability eigenvalue (book v8.5)
+K_CIRC = np.pi * K_GEOM       # Loop-closure eigenvalue ≈ 13.83
+                               # Use k_geom for mass ratios, k_circ for Compton/phase
+
+# Gravitational coupling (Appendix Z, Ch. 9)
+# ξ_QFD = k_geom² × (active_dims / total_dims) = k_geom² × (5/6)
+XI_QFD = K_GEOM**2 * (5.0 / 6.0)  # ≈ 16.2
 
 # =============================================================================
 # VACUUM PARAMETERS
@@ -97,6 +122,13 @@ C_NATURAL = np.sqrt(BETA)  # ≈ 1.745
 # V₄ = -ξ/β where ξ ≈ 1 (surface tension in natural units)
 XI_SURFACE_TENSION = 1.0  # Natural units
 V4_QED = -XI_SURFACE_TENSION / BETA  # ≈ -0.329
+
+# Universal circulation velocity (Appendix G, all leptons)
+U_CIRC = 0.876  # fraction of c (Book v8.5: U = 0.876c)
+
+# Saturation coefficient (Appendix V)
+# Ratio of shear to bulk stiffness, fixed by the Golden Loop
+GAMMA_S = 2 * ALPHA / BETA  # ≈ 0.0048
 
 # =============================================================================
 # REFERENCE CONSTANTS (SI units - NOT derived, for unit conversion only)
@@ -119,13 +151,35 @@ M_ELECTRON_MEV = 0.51099895000  # MeV
 M_PROTON_SI = 1.67262192369e-27  # kg
 M_PROTON_MEV = 938.27208816  # MeV
 
-# Hubble constant
-H0_KM_S_MPC = 70.0  # km/s/Mpc
+# Muon mass
+M_MUON_MEV = 105.6583755  # MeV
+
+# Tau mass
+M_TAU_MEV = 1776.86  # MeV
+
+# Hubble constant (standard cosmology reference)
+H0_KM_S_MPC = 70.0  # km/s/Mpc (ΛCDM consensus)
 MPC_TO_M = 3.086e22  # meters per Mpc
 H0_SI = H0_KM_S_MPC * 1000 / MPC_TO_M  # s⁻¹
 
-# QFD photon decay constant: κ = H₀/c
+# QFD Hubble refraction parameter (Book v8.5, Ch. 9–12)
+# K_J is the QFD-derived vacuum drag coefficient from photon–ψ coupling.
+# It is NOT the same as H₀ — it replaces expansion with refraction.
+#
+# Derivation chain (zero free parameters):
+#   α → β (Golden Loop) → k_geom (soliton eigenvalue)
+#   → ξ_QFD = k_geom² × 5/6 (gravitational coupling)
+#   → K_J = ξ_QFD × β^(3/2)  (volume stiffness)
+#
+# Note: The SNe pipeline uses the exact soliton BC k = 7π/5 = 4.3982
+# giving K_J = 85.581 km/s/Mpc. With book v8.5 k_geom = 4.4028 the
+# value is ~85.9. Both are consistent within the k_geom spread (~0.5%).
+K_J_KM_S_MPC = XI_QFD * BETA**1.5  # km/s/Mpc (derived from α alone)
+
+# QFD photon decay constant: κ = H₀/c (using standard H0 for comparison)
 KAPPA_MPC = H0_KM_S_MPC / (C_SI / 1000)  # Mpc⁻¹
+# QFD photon decay constant using K_J
+KAPPA_QFD_MPC = K_J_KM_S_MPC / (C_SI / 1000)  # Mpc⁻¹
 
 # =============================================================================
 # VALIDATION TARGETS (Independent measurements - NOT inputs to QFD)
@@ -139,9 +193,51 @@ C2_EMPIRICAL = 0.32704   # Fitted to nuclear data (independent of α)
 # QED vacuum polarization from Feynman diagrams
 A2_QED_SCHWINGER = -0.328479  # From perturbation theory
 
-# Lepton masses for isomer validation
-M_MUON_MEV = 105.6583755
-M_TAU_MEV = 1776.86
+# =============================================================================
+# FUNDAMENTAL SOLITON EQUATION
+# =============================================================================
+
+def fundamental_soliton_equation(A):
+    """
+    The Fundamental Soliton Equation: predicts stable Z for given mass A.
+
+    Q(A) = c₁ × A^(2/3) + c₂ × A
+
+    Where:
+        c₁ = ½(1 - α) = 0.496351  (surface tension)
+        c₂ = 1/β = 0.328598       (bulk modulus)
+
+    This equation has ZERO free parameters - both coefficients
+    derive from the fine structure constant α.
+
+    Args:
+        A: Mass number (can be scalar or numpy array)
+
+    Returns:
+        Predicted stable charge Z
+    """
+    A = np.asarray(A, dtype=float)
+    return C1_SURFACE * A**(2.0/3.0) + C2_VOLUME * A
+
+# =============================================================================
+# PROTON BRIDGE (Book v8.5, Ch. 12.1)
+# =============================================================================
+#
+# λ = k_geom × β × (m_e / α)
+#
+# The proton mass is a geometric consequence of soliton stability.
+# m_p / m_e ≈ k_geom × β / α
+#
+# NOTE on c₂ definition inconsistency in Book v8.5:
+#   Line 417 (Ch. 1.2):  c₂ = (1+α)/4 ≈ 0.2518  (introductory summary)
+#   Appendix/Ch.12:       c₂ = 1/β ≈ 0.3286       (nuclear analysis)
+#   Resolution: c₂ = 1/β is the CORRECT definition used in all nuclear
+#   predictions and validated against NuBase 2020 data. The (1+α)/4
+#   definition in the introduction appears to be a remnant from an
+#   earlier version of the book and should be corrected there.
+
+PROTON_MASS_PREDICTED_MEV = K_GEOM * BETA * (M_ELECTRON_MEV / ALPHA)
+PROTON_ELECTRON_RATIO_PREDICTED = K_GEOM * BETA / ALPHA
 
 # =============================================================================
 # SELF-TEST
@@ -150,19 +246,41 @@ M_TAU_MEV = 1776.86
 def verify_constants():
     """Verify all derived constants match expected values."""
     print("=" * 60)
-    print("QFD SHARED CONSTANTS - VERIFICATION")
+    print("QFD SHARED CONSTANTS - VERIFICATION (Book v8.5)")
     print("=" * 60)
 
     print(f"\nMASTER INPUT:")
     print(f"  α = 1/{ALPHA_INV:.9f}")
 
     print(f"\nGOLDEN LOOP DERIVED:")
-    print(f"  β = {BETA:.6f} (vacuum stiffness)")
+    print(f"  β = {BETA:.9f} (vacuum stiffness)")
+    print(f"  β_standardized = {BETA_STANDARDIZED} (Lean proofs)")
     print(f"  c = √β = {C_NATURAL:.6f} (natural units)")
+
+    print(f"\nGEOMETRIC EIGENVALUES:")
+    print(f"  k_geom = {K_GEOM} (radial stability)")
+    print(f"  k_circ = π × k_geom = {K_CIRC:.4f} (loop-closure)")
+    print(f"  ξ_QFD  = k_geom² × 5/6 = {XI_QFD:.4f}")
 
     print(f"\nNUCLEAR COEFFICIENTS:")
     print(f"  c₁ = ½(1-α) = {C1_SURFACE:.6f}")
     print(f"  c₂ = 1/β    = {C2_VOLUME:.6f}")
+
+    print(f"\nPROTON BRIDGE:")
+    mp_err = abs(PROTON_MASS_PREDICTED_MEV - M_PROTON_MEV) / M_PROTON_MEV * 100
+    ratio_exp = M_PROTON_MEV / M_ELECTRON_MEV
+    ratio_err = abs(PROTON_ELECTRON_RATIO_PREDICTED - ratio_exp) / ratio_exp * 100
+    print(f"  λ = k_geom × β × (m_e/α) = {PROTON_MASS_PREDICTED_MEV:.3f} MeV")
+    print(f"  m_p (experiment)           = {M_PROTON_MEV:.3f} MeV")
+    print(f"  error: {mp_err:.4f}%")
+    print(f"  m_p/m_e predicted = {PROTON_ELECTRON_RATIO_PREDICTED:.2f}")
+    print(f"  m_p/m_e experiment = {ratio_exp:.2f}")
+
+    print(f"\nVACUUM PARAMETERS:")
+    print(f"  U_circ = {U_CIRC}c (universal circulation)")
+    print(f"  γ_s = 2α/β = {GAMMA_S:.6f} (saturation coefficient)")
+    print(f"  K_J = ξ_QFD × β^(3/2) = {XI_QFD:.4f} × {BETA**1.5:.4f} = {K_J_KM_S_MPC:.4f} km/s/Mpc")
+    print(f"  κ = K_J/c = {KAPPA_QFD_MPC:.6e} Mpc⁻¹")
 
     print(f"\nVALIDATION vs EMPIRICAL:")
     c1_err = abs(C1_SURFACE - C1_EMPIRICAL) / C1_EMPIRICAL * 100
@@ -173,13 +291,20 @@ def verify_constants():
     print(f"  c₂: derived={C2_VOLUME:.6f}, empirical={C2_EMPIRICAL:.6f}, error={c2_err:.3f}%")
     print(f"  V₄: derived={V4_QED:.6f}, QED={A2_QED_SCHWINGER:.6f}, error={v4_err:.2f}%")
 
+    print(f"\nNUCLEAR PREDICTIONS (Fundamental Soliton Equation):")
+    test_nuclei = [(56, 26, "Fe-56"), (208, 82, "Pb-208"), (238, 92, "U-238")]
+    for A, Z_actual, name in test_nuclei:
+        Z_pred = fundamental_soliton_equation(A)
+        print(f"  {name}: Z_pred={Z_pred:.2f}, Z_actual={Z_actual}, Δ={Z_pred-Z_actual:+.2f}")
+
     print(f"\nSTATUS: All constants derived from α = 1/137.036")
     print("=" * 60)
 
     return {
         'c1_error': c1_err,
         'c2_error': c2_err,
-        'v4_error': v4_err
+        'v4_error': v4_err,
+        'proton_mass_error': mp_err
     }
 
 if __name__ == "__main__":

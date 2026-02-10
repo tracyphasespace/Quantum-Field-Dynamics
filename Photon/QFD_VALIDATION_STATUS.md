@@ -290,7 +290,7 @@ Error: 8.97%
 ```
 ξ_QFD = k_geom² · (5/6)
 where:
-  k_geom = 4.3813 (6D→4D projection factor)
+  k_geom = 4.4028 (6D→4D projection factor, Book v8.5)
   5/6 = dimensional reduction factor (2 dimensions "frozen")
 
 Relates to G through:
