@@ -19,6 +19,8 @@ import QFD.Classical.Conservation
 import QFD.Soliton.HardWall
 import QFD.Soliton.Quantization
 import QFD.Empirical.CoreCompression
+import QFD.Cosmology.AchromaticDrag
+import QFD.Renormalization.FiniteLoopIntegral
 
 /-!
 # QFD - Quantum Field Dynamics Formalization
