@@ -2,9 +2,12 @@
 """Fe-56 anchored QFD optimization with discrete isomer ladder."""
 
 import numpy as np
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA as _ALPHA, BETA as _BETA_VAC
 
-ALPHA = 1.0 / 137.036
-BETA = 1.0 / 3.043233053
+ALPHA = _ALPHA
+BETA = 1.0 / _BETA_VAC  # Note: scripts use BETA = 1/β_vac = c₂
 LAMBDA = 0.42
 M_PROTON = 938.272
 

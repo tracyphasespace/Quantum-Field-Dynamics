@@ -13,11 +13,15 @@ Changes:
 
 import numpy as np
 from scipy.optimize import minimize
+import sys, os
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA
 
 # --- UNIVERSAL CONSTANTS ---
 M_PROTON = 938.272       # MeV
 M_NEUTRON = 939.565      # MeV (Mass difference matters now!)
-ALPHA_EM = 1.0/137.036
+ALPHA_EM = ALPHA
 HC = 197.327             # MeV*fm
 LAMBDA_FIXED = 0.42      # Universal parameter
 

@@ -2,10 +2,14 @@
 """Two-layer soliton model with vortex shielding."""
 
 import csv
+import sys, os
 from math import pi
 
-ALPHA = 1.0 / 137.036
-BETA = 1.0 / 3.043233053
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA as _ALPHA, BETA as _BETA_VAC
+
+ALPHA = _ALPHA
+BETA = 1.0 / _BETA_VAC  # Note: scripts use BETA = 1/β_vac = c₂
 LAMBDA = 0.42
 M_PROTON = 938.272
 

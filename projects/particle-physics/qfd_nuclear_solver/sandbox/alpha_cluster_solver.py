@@ -18,11 +18,14 @@ Cluster spacing optimized; internal He-4 structure fixed.
 import numpy as np
 from scipy.optimize import minimize
 import math
+import sys, os
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA, BETA
 
 # Physical constants (same as qfd_metric_solver.py)
 M_PROTON = 938.272       # MeV
-BETA = 3.043233053          # Vacuum stiffness
-ALPHA_EM = 1/137.036     # Fine structure constant
+ALPHA_EM = ALPHA         # Fine structure constant
 HC = 197.327             # ℏc in MeV·fm
 
 # Temporal metric coupling (fixed from He-4 calibration)

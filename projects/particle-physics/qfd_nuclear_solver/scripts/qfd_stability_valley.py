@@ -41,13 +41,16 @@ ASYMPTOTIC LIMIT:
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize_scalar
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA, BETA as BETA_VAC
 
 # ============================================================================
-# FUNDAMENTAL CONSTANTS
+# FUNDAMENTAL CONSTANTS (from shared_constants)
 # ============================================================================
 
-alpha_fine   = 1.0 / 137.036
-beta_vacuum  = 1.0 / 3.043233053
+alpha_fine   = ALPHA
+beta_vacuum  = 1.0 / BETA_VAC  # Note: this script uses 1/β convention
 lambda_time  = 0.42
 M_proton     = 938.272  # MeV (mass scale)
 

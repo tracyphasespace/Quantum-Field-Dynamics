@@ -22,11 +22,14 @@ import numpy as np
 from scipy.optimize import minimize
 from scipy.spatial import distance_matrix
 import math
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA, BETA
 
 # Physical constants (natural units: ℏ = c = 1)
 M_PROTON = 938.272       # MeV (measured H-1 total mass)
-BETA = 3.043233053          # Vacuum stiffness
-ALPHA_EM = 1/137.036     # Fine structure constant
+# BETA imported from shared_constants (Golden Loop derived)
+ALPHA_EM = ALPHA         # Fine structure constant
 HC = 197.327             # ℏc in MeV·fm
 
 # Temporal metric coupling strength (dimensionless)

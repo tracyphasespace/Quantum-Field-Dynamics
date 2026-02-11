@@ -9,9 +9,13 @@ and compares it against true proton numbers for a set of reference nuclei.
 """
 
 import math
+import sys, os
 
-COEFF_SURFACE = 0.529
-COEFF_BULK = 1.0 / 3.043233053
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA, C1_SURFACE, C2_VOLUME
+
+COEFF_SURFACE = C1_SURFACE  # Was 0.529 (old Lean value); canonical = 0.4964
+COEFF_BULK = C2_VOLUME      # = 1/β ≈ 0.3286
 
 # (A, Z_true, label)
 REFERENCE_NUCLEI = [
