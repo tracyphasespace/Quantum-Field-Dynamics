@@ -77,7 +77,7 @@ try:
     USING_SHARED_CONSTANTS = True
 except ImportError:
     USING_SHARED_CONSTANTS = False
-    BETA = 3.043233053
+    BETA = 3.0432330531027074
     C2_VOLUME = 1.0 / BETA
 
 

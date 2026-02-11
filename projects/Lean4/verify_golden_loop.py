@@ -11,6 +11,11 @@ See: QFD/TRANSCENDENTAL_VERIFICATION.md for detailed documentation
 
 import math
 import sys
+import os
+
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
+from qfd.shared_constants import BETA as _BETA_SHARED
 
 def verify_axiom_1():
     """
@@ -61,7 +66,7 @@ def verify_axiom_2(K_target):
     print("AXIOM 2: beta_satisfies_transcendental")
     print("=" * 70)
 
-    beta = 3.043233053
+    beta = _BETA_SHARED  # From qfd/shared_constants.py
 
     # Evaluate transcendental equation
     exp_beta = math.exp(beta)

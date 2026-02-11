@@ -43,11 +43,13 @@ import numpy as np
 import os
 import sys
 
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA
+
 # ============================================================
 # STAGE 0: GOLDEN LOOP DERIVATION (α → everything)
 # ============================================================
-
-ALPHA = 1.0 / 137.035999206      # Fine structure constant (CODATA 2018)
 PI = np.pi
 EU = np.e
 C_LIGHT_KM_S = 299792.458        # Speed of light [km/s]

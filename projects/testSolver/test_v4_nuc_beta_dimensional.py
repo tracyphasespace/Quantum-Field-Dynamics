@@ -17,12 +17,15 @@ Dimensional coupling:
 where E₀ is a characteristic energy scale (e.g., nucleon mass)
 """
 
+import sys
+import os
 import numpy as np
 from scipy.optimize import minimize, root_scalar
 import matplotlib.pyplot as plt
 
-# Constants
-BETA = 3.043233053
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
+from qfd.shared_constants import BETA
 HBAR_C = 197.3269804  # MeV·fm
 M_N = 939.0  # MeV (nucleon mass)
 

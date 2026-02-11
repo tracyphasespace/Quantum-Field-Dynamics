@@ -9,10 +9,16 @@ The Conundrum:
 This script explores the physics of this tension systematically.
 """
 
+import sys
+import os
 import numpy as np
 from scipy.optimize import brentq, minimize_scalar
 from scipy.special import lambertw
 import matplotlib.pyplot as plt
+
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA as _BETA_SHARED
 
 # =============================================================================
 # EMPIRICAL CONSTANTS (Independent Measurements)
@@ -101,7 +107,7 @@ def analyze_tension():
     K = K_target()
     beta_transcendental = find_transcendental_root()
     beta_c2_optimal = find_c2_optimal_beta()
-    beta_golden = 3.043233053  # Current GoldenLoop.lean value
+    beta_golden = _BETA_SHARED  # From qfd/shared_constants.py
 
     print("EMPIRICAL INPUTS:")
     print(f"  α⁻¹ = {ALPHA_INV} (CODATA 2018)")
@@ -303,7 +309,7 @@ def plot_tension():
     K = K_target()
     beta_trans = find_transcendental_root()
     beta_c2 = find_c2_optimal_beta()
-    beta_golden = 3.043233053
+    beta_golden = _BETA_SHARED  # From qfd/shared_constants.py
 
     # Create figure
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))

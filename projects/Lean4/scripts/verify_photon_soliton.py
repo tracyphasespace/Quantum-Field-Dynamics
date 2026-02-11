@@ -46,13 +46,18 @@ References:
 import numpy as np
 from scipy.ndimage import laplace
 import sys
+import os
+
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))
+from qfd.shared_constants import ALPHA
 
 # =============================================================================
 # PHYSICAL PARAMETERS (Derived from Golden Loop)
 # =============================================================================
 
 # Beta derived from alpha via Golden Loop: e^beta/beta = (alpha^-1 - 1)/(2*pi^2)
-ALPHA = 1.0 / 137.035999206
+# ALPHA imported from qfd/shared_constants.py
 K = (1.0/ALPHA - 1.0) / (2 * np.pi**2)
 
 def solve_beta():

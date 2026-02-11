@@ -18,13 +18,19 @@ Energy functional:
 Test: Does V₄_nuc = β = 3.043233053 reproduce nuclear observables?
 """
 
+import sys
+import os
 import numpy as np
 from scipy.optimize import minimize, root_scalar
 from scipy.integrate import quad
 import matplotlib.pyplot as plt
 
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
+from qfd.shared_constants import BETA as _BETA_SHARED
+
 # Constants
-BETA_GOLDEN = 3.043233053  # From Golden Loop
+BETA_GOLDEN = _BETA_SHARED  # From qfd/shared_constants.py
 HBAR_C = 197.3269804  # MeV·fm (natural units)
 
 # Nuclear observables (targets for validation)

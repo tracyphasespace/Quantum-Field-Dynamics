@@ -10,7 +10,11 @@ HONEST FRAMING: This assumes the Γ, λ, L₀ remain constant.
 Cannot claim ℏ "emerges" since we use measured ℏ to set the scale.
 """
 
+import sys, os
 import numpy as np
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 def validate_hbar_scaling():
     print("="*70)
@@ -31,7 +35,7 @@ def validate_hbar_scaling():
     rho_vac = 1.0  # Normalized in natural units
     
     # 2. DERIVE L₀ FROM MEASURED ℏ (for reference β = 3.043233053)
-    beta_ref = 3.043233053
+    beta_ref = BETA
     c_ref = np.sqrt(beta_ref / rho_vac)  # Natural units
     
     # Convert to SI: need to find what natural unit → SI conversion is
@@ -50,7 +54,7 @@ def validate_hbar_scaling():
     print("\n[3] SCALING LAW: ℏ(β) = ℏ_ref · √(β/β_ref)")
     print("    Assuming Γ, λ, L₀ remain constant (hypothesis)")
     
-    beta_values = np.array([1.0, 2.0, 3.043233053, 4.0, 5.0])
+    beta_values = np.array([1.0, 2.0, BETA, 4.0, 5.0])
     
     print("\n    β       c/c_ref    ℏ/ℏ_ref    ℏ (×10⁻³⁴ J·s)")
     print("    " + "-"*55)

@@ -10,8 +10,12 @@ Calculate photon properties from fundamental constants:
 Goal: Derive all electromagnetic phenomena from these three.
 """
 
+import sys, os
 import numpy as np
 import matplotlib.pyplot as plt
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 # ============================================================================
 # FUNDAMENTAL CONSTANTS (measured)
@@ -40,7 +44,7 @@ GeV = 1e9 * eV
 
 # The Three Constants
 alpha_qfd = alpha_measured  # For now, use measured (goal: derive from β, c₂/c₁)
-beta = 3.043233053  # Vacuum stiffness (from nuclear binding + α formula)
+beta = BETA  # Vacuum stiffness (from shared_constants)
 lambda_sat = m_p * c**2  # Saturation scale ≈ 938.3 MeV (proton mass energy)
 
 # Nuclear coupling ratio (empirical - needs geometric derivation!)

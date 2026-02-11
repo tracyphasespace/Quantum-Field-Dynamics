@@ -6,6 +6,12 @@ xi_qfd = alpha_g * (L0 / lp)**2 ≈ 16
 """
 
 import math
+import sys
+import os
+
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA as _BETA_SHARED
 
 G = 6.67430e-11
 mp = 1.672619e-27
@@ -13,7 +19,7 @@ c = 299_792_458
 hbar = 1.054571817e-34
 L0 = 0.8414e-15
 lp = 1.616255e-35
-beta = 3.043233053
+beta = _BETA_SHARED
 
 def compute_alpha_g():
     return G * mp**2 / (hbar * c)

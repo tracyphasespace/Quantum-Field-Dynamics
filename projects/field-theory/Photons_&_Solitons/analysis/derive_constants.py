@@ -8,7 +8,11 @@ but emergent properties of the vacuum structure.
 Key Result: β (vacuum stiffness) → c, ℏ (derived)
 """
 
+import sys, os
 import numpy as np
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 def derive_constants():
     """
@@ -18,7 +22,7 @@ def derive_constants():
 
     # 1. PARAMETERS (The "Input")
     # Beta: Vacuum Stiffness (from Nuclear/Cosmology)
-    beta = 3.043233053
+    beta = BETA
     # Rho: Vacuum Inertia (arbitrary normalization for now)
     rho_vac = 1.0
 

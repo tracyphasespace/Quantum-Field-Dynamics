@@ -46,6 +46,11 @@ References:
 
 import numpy as np
 import sys
+import os
+
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))
+from qfd.shared_constants import ALPHA as _ALPHA_SHARED
 
 
 def solve_beta_golden_loop(alpha_target: float, max_iter: int = 20) -> float:
@@ -139,7 +144,7 @@ def run_validation():
     # =========================================================================
     print("\n[1] INPUT CONSTANTS (from Nature)")
 
-    ALPHA = 1.0 / 137.035999206  # Fine structure constant (CODATA 2018)
+    ALPHA = _ALPHA_SHARED  # Fine structure constant from qfd/shared_constants.py
     PHI = (1 + np.sqrt(5)) / 2   # Golden ratio
 
     # Lepton masses (MeV/c^2) - PDG 2024

@@ -20,10 +20,16 @@ PHYSICS:
 GOAL: Derive T_CMB = 2.725 K from first principles without Big Bang.
 """
 
+import sys
+import os
 import numpy as np
 from scipy.constants import c, h, k, sigma, pi, G
 from scipy.integrate import quad
 from scipy.optimize import brentq
+
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA as _ALPHA_SHARED, BETA as _BETA_SHARED
 
 # =============================================================================
 # PHYSICAL CONSTANTS
@@ -53,8 +59,8 @@ T_CMB_OBS = 2.7255  # K (Planck 2018)
 # QFD PARAMETERS FROM LEAN4
 # =============================================================================
 
-# Golden Loop eigenvalue (from GoldenLoop.lean)
-BETA_GOLDEN = 3.043233053
+# Golden Loop eigenvalue (from qfd/shared_constants.py)
+BETA_GOLDEN = _BETA_SHARED
 
 # Proton mass (vacuum density scale from VacuumParameters.lean)
 M_PROTON_KG = 1.6726e-27  # kg
@@ -223,7 +229,7 @@ def photon_photon_cross_section(E_photon_ev):
 
     At CMB energies (~meV), this is extremely small.
     """
-    ALPHA = 1/137.036
+    ALPHA = _ALPHA_SHARED
     M_E_EV = 0.511e6  # electron mass in eV
     R_E = 2.82e-15  # classical electron radius, m
 

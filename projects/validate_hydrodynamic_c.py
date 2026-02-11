@@ -10,10 +10,16 @@ The critical computation is the geometric shape factor Γ from the Hill Spherica
 which is a known exact solution to the Euler equations.
 """
 
+import sys
+import os
 import numpy as np
 from scipy import integrate
 from scipy.constants import hbar as hbar_si, c as c_si, m_e
 import matplotlib.pyplot as plt
+
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+from qfd.shared_constants import BETA as _BETA_SHARED
 
 # ============================================================================
 # SECTION 1: VACUUM PROPERTIES (INPUT)
@@ -29,7 +35,7 @@ print_header("QFD HYDRODYNAMIC VALIDATION: The c - ℏ Bridge")
 
 # Vacuum Stiffness β derived from Golden Loop (Alpha-Beta bridge)
 # See QFD/Lepton/GoldenLoop.lean for derivation
-beta_vac = 3.043233053  # Vacuum Stiffness (dimensionless)
+beta_vac = _BETA_SHARED  # Vacuum Stiffness from qfd/shared_constants.py
 
 # Vacuum Density ρ (normalized to unity in natural units)
 # In SI units, this would be related to Planck density or vacuum energy density
@@ -194,7 +200,7 @@ print_header("STIFFNESS SCALING TEST: ℏ ∝ √β")
 print("\nTesting: Does Planck's constant scale with √β?")
 print("\nIf we vary vacuum stiffness β, does ℏ follow the scaling law?")
 
-betas = [1.0, 2.0, 3.043233053, 5.0, 10.0]
+betas = [1.0, 2.0, _BETA_SHARED, 5.0, 10.0]
 results = []
 
 print(f"\n{'β':>8} | {'c':>8} | {'ℏ_calc':>10} | {'ℏ/√β':>10} | {'Status':>10}")

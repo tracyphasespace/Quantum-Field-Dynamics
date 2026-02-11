@@ -13,7 +13,11 @@ HONEST STATUS:
 - fine_structure_from_beta NOT yet complete (has sorry)
 """
 
+import sys, os
 import numpy as np
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 def validate_unified_forces():
     print("="*70)
@@ -24,7 +28,7 @@ def validate_unified_forces():
     
     # 1. REFERENCE VALUES
     print("\n[1] REFERENCE VALUES (β = 3.043233053)")
-    beta_ref = 3.043233053
+    beta_ref = BETA
     
     # Natural units (normalized)
     rho = 1.0
@@ -44,8 +48,8 @@ def validate_unified_forces():
     print("    Source: UnifiedForces.lean line 106")
     print("    Status: ✅ PROVEN (no sorry)")
     
-    beta_values = np.array([1.0, 2.0, 3.043233053, 4.0, 5.0])
-    
+    beta_values = np.array([1.0, 2.0, BETA, 4.0, 5.0])
+
     print("\n    β       G/G_ref   Expected (β_ref/β)")
     print("    " + "-"*45)
     

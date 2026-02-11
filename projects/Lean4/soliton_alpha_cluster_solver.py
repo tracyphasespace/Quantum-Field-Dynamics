@@ -19,16 +19,21 @@ ALPHA LADDER TEST: Can topological solitons predict both alpha-cluster
 AND non-alpha nuclei with the SAME physics?
 """
 
+import sys
+import os
 import numpy as np
 from scipy.optimize import minimize
 from scipy.special import erf
 import math
 
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
+from qfd.shared_constants import ALPHA as _ALPHA_SHARED, BETA
+
 # Physical constants
 M_PROTON = 938.272       # MeV
 M_NEUTRON = 939.565      # MeV
-BETA = 3.043233053          # Vacuum stiffness (from GoldenLoop.lean)
-ALPHA_EM = 1/137.036     # Fine structure constant
+ALPHA_EM = _ALPHA_SHARED  # Fine structure constant from qfd/shared_constants.py
 HC = 197.327             # ℏc in MeV·fm
 
 # SOLITON PARAMETERS (from TopologicalStability theory)

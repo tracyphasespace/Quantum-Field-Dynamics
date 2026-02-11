@@ -9,7 +9,11 @@ CRITICAL CORRECTION:
 This resolves the "mystery factor" 1.6919.
 """
 
+import sys, os
 import numpy as np
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 def dimensional_audit():
     print("=== DIMENSIONAL AUDIT: EMERGENT ℏ ===")
@@ -103,7 +107,7 @@ def dimensional_audit():
     # 7. THE √β CONNECTION
     print("\n[7] THE √β CONNECTION")
 
-    beta = 3.043233053
+    beta = BETA
     c_emergent = np.sqrt(beta)
 
     print(f"    From vacuum stiffness: c_emergent = √β = {c_emergent:.4f}")

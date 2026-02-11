@@ -60,7 +60,7 @@ try:
     BETA_GOLDEN = BETA  # Use the derived value
 except ImportError:
     USING_SHARED_CONSTANTS = False
-    BETA_GOLDEN = 3.043233053  # Fallback to standardized value
+    BETA_GOLDEN = 3.0432330531027074  # Fallback to standardized value
     C_SI = 299792458.0
     H0_KM_S_MPC = 70.0
     MPC_TO_M = 3.086e22

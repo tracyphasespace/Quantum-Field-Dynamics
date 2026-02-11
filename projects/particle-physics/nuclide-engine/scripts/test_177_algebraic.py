@@ -24,12 +24,16 @@ Provenance: QFD_DERIVED (constants from Golden Loop)
 
 import math
 import itertools
+import sys
+import os
+
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA, BETA
 
 # ═══════════════════════════════════════════════════════════════
-# QFD Constants
+# QFD Constants (imported from qfd/shared_constants.py)
 # ═══════════════════════════════════════════════════════════════
-ALPHA = 1.0 / 137.035999084
-BETA = 3.043233053
 PI = math.pi
 E_NUM = math.e
 PHI = (1 + math.sqrt(5)) / 2  # golden ratio

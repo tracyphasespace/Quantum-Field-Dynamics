@@ -16,7 +16,11 @@ Strategy:
 4. Compare with nuclear-derived α
 """
 
+import sys, os
 import numpy as np
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..'))
+from qfd.shared_constants import BETA as BETA_CONST
 
 # Physical constants
 e = 1.602176634e-19  # C (electron charge, exact)
@@ -26,7 +30,7 @@ epsilon_0 = 8.854187817e-12  # F/m
 alpha_measured = 1 / 137.035999084  # Fine structure constant (CODATA 2018)
 
 # QFD parameters
-beta = 3.043233053  # Vacuum stiffness
+beta = BETA_CONST  # Vacuum stiffness (from shared_constants)
 c2_over_c1 = 6.42  # Nuclear coupling ratio (from saturation density fits)
 
 

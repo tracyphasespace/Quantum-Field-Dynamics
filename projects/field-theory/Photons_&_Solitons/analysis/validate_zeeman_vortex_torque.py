@@ -13,8 +13,12 @@ Physical model (from Lean):
 5. Prediction: δE should match experimental Zeeman splitting
 """
 
+import sys, os
 import numpy as np
 import matplotlib.pyplot as plt
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA as ALPHA_CONST
 
 print("="*70)
 print("QFD ZEEMAN EFFECT: VORTEX TORQUE VALIDATION")
@@ -34,7 +38,7 @@ MU_B = 9.2740100783e-24   # Bohr magneton (J/T)
 C = 299792458             # Speed of light (m/s)
 
 # Hydrogen parameters
-ALPHA = 1/137.036         # Fine structure constant
+ALPHA = ALPHA_CONST       # Fine structure constant (from shared_constants)
 A_BOHR = 5.29177210903e-11  # Bohr radius (m)
 E_RYDBERG = 13.605693122994  # Rydberg energy (eV)
 

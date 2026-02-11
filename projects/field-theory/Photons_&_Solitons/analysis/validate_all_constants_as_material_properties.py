@@ -55,7 +55,7 @@ print()
 print_header("PART 1: The Two Primary Vacuum Properties", 1)
 
 # From Golden Loop and Nuclear analysis
-beta_vacuum = 3.043233053  # Dimensionless vacuum stiffness (bulk modulus)
+beta_vacuum = BETA  # Dimensionless vacuum stiffness (from shared_constants)
 rho_vacuum_normalized = 1.0  # Normalized vacuum density
 
 print("\nPrimary Properties (Natural Units):")
@@ -202,7 +202,7 @@ print()
 # Let's calculate:
 alpha_from_nuclear = 1.0 / (np.pi**2 * np.exp(beta_crit) * (c2_volume / c1_surface))
 
-alpha_empirical = 1.0 / 137.035999206
+alpha_empirical = ALPHA
 
 print(f"Prediction from QFD:")
 print(f"  1/α = π² · exp(β) · (c₂/c₁)")
@@ -321,7 +321,7 @@ print("\nIf we change β (vacuum stiffness), what happens?")
 print()
 
 # Test different β values
-betas_test = np.array([1.0, 2.0, 3.043233053, 5.0, 10.0])
+betas_test = np.array([1.0, 2.0, BETA, 5.0, 10.0])
 
 print(f"{'β':<8} {'c=√(β/ρ)':<12} {'ℏ/√β':<12} {'α (approx)':<15} {'ξ_QFD':<10}")
 print("-"*80)

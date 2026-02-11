@@ -29,15 +29,21 @@ minima (positive second derivative and the correct ratio).
 
 from __future__ import annotations
 
+import sys
+import os
 from dataclasses import dataclass
 from typing import List
 
 import numpy as np
 
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA as _BETA_SHARED
+
 
 ELECTRON_MASS_MEV = 0.510_998_95
 MUON_MASS_MEV = 105.658_375_5
-GOLDEN_LOOP_BETA = 3.043233053_230_856
+GOLDEN_LOOP_BETA = _BETA_SHARED
 
 
 @dataclass(frozen=True)

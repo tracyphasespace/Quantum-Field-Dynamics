@@ -84,7 +84,7 @@ def validate_g2_prediction():
     print(f"      Match electron? {abs(V4 - scale_e) < 0.01}")
 
     # Option 2: V₄ ~ sqrt(2α/π) * some factor
-    alpha = 1/137.036  # Fine structure constant
+    alpha = ALPHA  # Fine structure constant (from shared_constants)
 
     print(f"\n    If V₄ ~ √(2α/π):")
     factor = np.sqrt(2 * alpha / np.pi)

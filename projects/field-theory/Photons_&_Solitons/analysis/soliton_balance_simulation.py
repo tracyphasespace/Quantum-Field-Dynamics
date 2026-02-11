@@ -9,9 +9,13 @@ Key Update: Tests if dispersion is topologically protected (ξ = 0)
 versus merely suppressed (ξ ~ 1/exp(β)).
 """
 
+import sys, os
 import numpy as np
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 # ==========================================
 # QFD Photon Sector: Three-Constant Model
@@ -21,7 +25,7 @@ from dataclasses import dataclass
 class QFDModel:
     # 1. Fundamental Parameters (From QFD_CONSTANTS_SCHEMA.md)
     alpha_inv: float = 137.036      # Fine structure (ALPHA_EM^-1, exact)
-    beta: float      = 3.043233053        # Vacuum stiffness (BETA)
+    beta: float      = BETA               # Vacuum stiffness (from shared_constants)
     lambda_sat: float = 0.938272    # Saturation scale in GeV (M_PROTON)
 
     # 2. Derived Constants (From schema)
@@ -254,8 +258,8 @@ def plot_dispersion_models():
     # Fermi LAT limit
     plt.axhline(1e-15, color='k', linestyle=':', linewidth=2, label='Fermi LAT Limit')
 
-    # QFD value β = 3.043233053
-    plt.axvline(3.043233053, color='orange', linestyle='--', linewidth=2, alpha=0.7, label='QFD β = 3.043233053')
+    # QFD value β
+    plt.axvline(BETA, color='orange', linestyle='--', linewidth=2, alpha=0.7, label=f'QFD β = {BETA}')
 
     plt.xlabel('Vacuum Stiffness (β)', fontsize=12)
     plt.ylabel('Dispersion Coefficient (ξ)', fontsize=12)

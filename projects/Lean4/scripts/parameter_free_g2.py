@@ -11,7 +11,13 @@ All constants are derived from:
 Results: Electron error 0.0013%, Muon error 0.0027%
 """
 
+import sys
+import os
 import numpy as np
+
+# Import QFD shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))
+from qfd.shared_constants import ALPHA as _ALPHA_SHARED
 
 def solve_beta_golden_loop(alpha_target):
     """
@@ -32,7 +38,7 @@ def validate_geometric_g2():
     print("="*70)
 
     # 1. INPUTS (CONSTANTS OF NATURE ONLY)
-    ALPHA_EXP = 1.0 / 137.035999206
+    ALPHA_EXP = _ALPHA_SHARED  # From qfd/shared_constants.py
 
     # Lepton masses (MeV/c²)
     MASS_E = 0.5109989461

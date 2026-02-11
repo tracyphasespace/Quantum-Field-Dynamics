@@ -10,7 +10,11 @@ HONEST STATUS:
 - This validates the NUMERICAL CONSEQUENCE if theorem is proven
 """
 
+import sys, os
 import numpy as np
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 def validate_fine_structure():
     print("="*70)
@@ -21,7 +25,7 @@ def validate_fine_structure():
     
     # 1. REFERENCE VALUES
     print("\n[1] REFERENCE VALUES (β = 3.043233053)")
-    beta_ref = 3.043233053
+    beta_ref = BETA
     alpha_inv_ref = 137.036  # Fine structure constant (inverse)
     
     print(f"    β_ref = {beta_ref}")
@@ -37,7 +41,7 @@ def validate_fine_structure():
     # 3. SCALING LAW TEST
     print("\n[3] SCALING LAW: α⁻¹(β) = α⁻¹_ref · (β/β_ref)")
     
-    beta_values = np.array([1.0, 2.0, 3.043233053, 4.0, 5.0])
+    beta_values = np.array([1.0, 2.0, BETA, 4.0, 5.0])
     
     print("\n    β       α⁻¹       Ratio to ref")
     print("    " + "-"*45)
