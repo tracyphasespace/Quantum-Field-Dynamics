@@ -9,9 +9,12 @@ This connects Top-Down (5,842 isotope empirical fit) with Bottom-Up
 (QFD soliton solver).
 """
 import sys
+import os
 import pandas as pd
 import numpy as np
 sys.path.insert(0, 'src')
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))
+from qfd.shared_constants import C1_SURFACE, C2_VOLUME
 
 from parallel_objective import ccl_stress
 from ccl_seeded_solver import backbone_charge
@@ -30,8 +33,8 @@ print("CCL STRESS CONSTRAINT VALIDATION")
 print("=" * 80)
 print()
 print("Core Compression Law: Q(A) = c1·A^(2/3) + c2·A")
-print(f"  c1 = {0.5293:.4f} (surface term)")
-print(f"  c2 = {0.3167:.4f} (volume term)")
+print(f"  c1 = {C1_SURFACE:.4f} (surface term)")
+print(f"  c2 = {C2_VOLUME:.4f} (volume term)")
 print()
 print("Stress = |Z - Q_backbone(A)|")
 print("  Stress < 1: Stable isotope")

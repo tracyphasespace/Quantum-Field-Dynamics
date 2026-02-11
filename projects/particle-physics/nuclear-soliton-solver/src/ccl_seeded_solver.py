@@ -10,15 +10,18 @@ Uses Core Compression Law Q(A) = c1·A^(2/3) + c2·A to:
 This should dramatically improve convergence vs. random initialization.
 """
 import sys
+import os
 import numpy as np
 import torch
 from typing import Dict, Tuple
 
 sys.path.insert(0, 'src')
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import C1_SURFACE, C2_VOLUME
 
-# CCL validated parameters from Lean formalization
-CCL_C1 = 0.5292508558990585  # Surface term (from CoreCompressionLaw.lean:248)
-CCL_C2 = 0.31674263258172686  # Volume term (from CoreCompressionLaw.lean:249)
+# CCL parameters (from shared_constants, originally CoreCompressionLaw.lean)
+CCL_C1 = C1_SURFACE  # Surface term
+CCL_C2 = C2_VOLUME   # Volume term
 
 def backbone_charge(A: int) -> float:
     """

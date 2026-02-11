@@ -18,6 +18,11 @@ ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+# QFD root for shared_constants
+QFD_ROOT = Path(__file__).resolve().parents[5]
+if str(QFD_ROOT) not in sys.path:
+    sys.path.insert(0, str(QFD_ROOT))
+
 DIR = Path(__file__).resolve().parent
 if str(DIR) not in sys.path:
     sys.path.insert(0, str(DIR))
@@ -601,8 +606,7 @@ def main() -> None:
             R_soliton = float(model.energy_ratio().detach())
 
             # CCL backbone prediction for this mass
-            CCL_C1 = 0.5292508558990585
-            CCL_C2 = 0.31674263258172686
+            from qfd.shared_constants import C1_SURFACE as CCL_C1, C2_VOLUME as CCL_C2
             Q_backbone = CCL_C1 * (args.A ** (2.0/3.0)) + CCL_C2 * args.A
 
             # Stress vector using INPUT charge (Z) vs CCL prediction

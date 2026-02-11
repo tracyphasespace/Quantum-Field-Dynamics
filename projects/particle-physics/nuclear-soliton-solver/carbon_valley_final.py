@@ -15,6 +15,7 @@ Physical Expectation:
 Zero-crossing at C-12 validates geometric resonance.
 """
 import sys
+import os
 import json
 import subprocess
 import numpy as np
@@ -22,10 +23,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, 'src')
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))
+from qfd.shared_constants import C1_SURFACE, C2_VOLUME
 
-# CCL constants
-CCL_C1 = 0.5292508558990585
-CCL_C2 = 0.31674263258172686
+# CCL constants (from shared_constants)
+CCL_C1 = C1_SURFACE
+CCL_C2 = C2_VOLUME
 
 # Carbon isotopes
 carbon_isotopes = [

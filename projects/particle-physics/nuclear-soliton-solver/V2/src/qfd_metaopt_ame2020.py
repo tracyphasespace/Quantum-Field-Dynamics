@@ -168,6 +168,7 @@ def run_qfd_solver(A: int, Z: int, params: Dict, verbose: bool = False, retry: b
 
     # Direct imports - replaces subprocess
     sys.path.insert(0, str(Path(__file__).parent))
+    sys.path.insert(0, str(Path(__file__).resolve().parents[5]))  # QFD root for shared_constants
     from qfd_solver import Phase8Model, RotorParams, scf_minimize, torch_det_seed
 
     # Fast search defaults or full verification
@@ -190,8 +191,9 @@ def run_qfd_solver(A: int, Z: int, params: Dict, verbose: bool = False, retry: b
             B_target=0.01
         )
 
-        # Coulomb coupling (fine structure constant)
-        alpha_coul = 1.0 / 137.036
+        # Coulomb coupling (fine structure constant from shared_constants)
+        from qfd.shared_constants import ALPHA as _ALPHA
+        alpha_coul = _ALPHA
 
         # Create model (matches qfd_solver.py Phase8Model instantiation)
         model = Phase8Model(

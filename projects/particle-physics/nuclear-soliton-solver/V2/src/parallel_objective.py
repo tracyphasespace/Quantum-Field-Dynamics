@@ -8,15 +8,19 @@ This connects the Top-Down empirical analysis (5,842 isotopes) with the
 Bottom-Up soliton solver, focusing optimization on stable isotopes.
 """
 import time
+import sys
+import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Dict, List, Tuple, Any
 import pandas as pd
 
-# Core Compression Law constants (from Lean formalization)
-# Source: projects/Lean4/QFD/Nuclear/CoreCompressionLaw.lean:248-249
-CCL_C1 = 0.5292508558990585  # Surface term
-CCL_C2 = 0.31674263258172686  # Volume term
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..'))
+from qfd.shared_constants import C1_SURFACE, C2_VOLUME, ALPHA
+
+# Core Compression Law constants (from shared_constants)
+CCL_C1 = C1_SURFACE
+CCL_C2 = C2_VOLUME
 
 def ccl_stress(Z: int, A: int) -> float:
     """
@@ -82,7 +86,7 @@ def run_solver_direct(A: int, Z: int, params: Dict,
         )
 
         # Calculate derived parameters (matching qfd_solver.py logic)
-        alpha_coul = 1.0 / 137.036  # Fine structure constant
+        alpha_coul = ALPHA  # Fine structure constant (from shared_constants)
         kappa_rho_used = params['kappa_rho']
 
         # Create model (direct instantiation - NO subprocess!)
