@@ -1,14 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import root_scalar
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 def lepton_stability_analysis():
     print("=== LEPTON STABILITY ANALYSIS ===")
     print("Goal: Find stable isomers (roots) of the Hill Vortex in Beta-Vacuum")
 
-    # 1. CONSTANTS (The only inputs)
-    # 2026-01-06: Updated from 3.043233053 (fitted) to 3.04309 (derived from α)
-    BETA = 3.04309  # Vacuum Stiffness (derived from Golden Loop)
+    # 1. CONSTANTS (Golden Loop derived from α via shared_constants)
 
     print(f"Input: β = {BETA}")
 

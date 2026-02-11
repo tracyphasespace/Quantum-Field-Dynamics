@@ -11,6 +11,9 @@ Energy: E = β(δρ)² + ½ξ|∇ρ|² + τ(∂ρ/∂t)²
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize, root_scalar
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 def lepton_stability_3param():
     print("=" * 70)
@@ -23,8 +26,7 @@ def lepton_stability_3param():
     # ========================================================================
     print("[1] QFD PARAMETERS (from g-2 validation)")
 
-    # Golden Loop values (2026-01-06: β derived from α, not fitted)
-    BETA = 3.04309  # Bulk modulus (derived from Golden Loop)
+    # Golden Loop values (from shared_constants)
     XI = 1.0       # Gradient stiffness (surface tension)
     TAU = 1.01     # Temporal stiffness (inertia)
 

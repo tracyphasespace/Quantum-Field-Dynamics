@@ -21,15 +21,18 @@ Strategy:
 """
 
 import numpy as np
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA, C_SI, HBAR_SI
 
 # Physical constants (for comparison)
-c_measured = 299792458  # m/s (exact, by definition)
-hbar = 1.054571817e-34  # J⋅s
+c_measured = C_SI  # m/s (exact, by definition)
+hbar = HBAR_SI  # J⋅s
 epsilon_0 = 8.854187817e-12  # F/m
 mu_0 = 1.25663706212e-6  # H/m
 
-# QFD parameter (2026-01-06: derived from α via Golden Loop, not fitted)
-beta = 3.04309  # Vacuum stiffness (derived from α: e^β/β = (α⁻¹ × c₁)/π²)
+# QFD parameter (Golden Loop derived from α via shared_constants)
+beta = BETA  # Vacuum stiffness (derived from α: 1/α = 2π²·e^β/β + 1)
 
 def derive_speed_of_light():
     """

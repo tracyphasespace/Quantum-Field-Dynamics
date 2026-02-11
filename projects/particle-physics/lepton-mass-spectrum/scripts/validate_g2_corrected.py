@@ -9,6 +9,9 @@ Shows how V₄ is extracted from experimental g-2 and whether it matches geometr
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA as ALPHA_SHARED, BETA as BETA_SHARED
 
 def create_g2_figure(V4_predictions, V4_electron, V4_muon, output_dir='.'):
     """Create comparison figure for g-2 validation."""
@@ -54,10 +57,9 @@ def validate_g2_corrected():
     print("=" * 70)
     print("\nBased on: validate_g2_anomaly_corrected.py from GitHub")
 
-    # Constants
-    ALPHA = 1.0 / 137.035999206  # Fine structure constant
-    # Derived from Golden Loop: 1/ALPHA = 2π² * (e^BETA / BETA) + 1
-    BETA = 3.043233053 
+    # Constants (from Golden Loop via shared_constants)
+    ALPHA = ALPHA_SHARED
+    BETA = BETA_SHARED
 
     # 1. EXPERIMENTAL G-2 DATA
     print("\n[1] EXPERIMENTAL ANOMALOUS MAGNETIC MOMENTS")

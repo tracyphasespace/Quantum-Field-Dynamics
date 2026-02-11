@@ -1,12 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 def analyze_energy_partition():
     print("=== LEPTON ENERGY PARTITION ANALYSIS ===")
     print("Goal: Visualize the transition from Surface-dominated to Bulk-dominated mass.\n")
 
-    # 1. GOLDEN LOOP PARAMETERS (2026-01-06: β derived from α)
-    BETA = 3.04309  # Bulk Stiffness (derived from Golden Loop)
+    # 1. GOLDEN LOOP PARAMETERS (from shared_constants)
     XI   = 0.998   # Surface Tension (Gradient)
     TAU  = 1.010   # Inertia (Time)
 

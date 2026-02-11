@@ -9,15 +9,18 @@ Cannot predict SI value of c without independent measurement of ρ.
 """
 
 import numpy as np
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 def validate_hydrodynamic_c():
     print("="*70)
     print("HYDRODYNAMIC DERIVATION: c = √(β/ρ)")
     print("="*70)
-    
-    # 1. PARAMETERS (2026-01-06: β now derived from α via Golden Loop)
+
+    # 1. PARAMETERS (Golden Loop derived from α via shared_constants)
     print("\n[1] VACUUM PARAMETERS")
-    beta = 3.04309  # Vacuum stiffness (derived from α: e^β/β = (α⁻¹ × c₁)/π²)
+    beta = BETA  # Vacuum stiffness (derived from α: 1/α = 2π²·e^β/β + 1)
     rho_vac = 1.0  # Vacuum density (normalized to 1 in natural units)
     
     print(f"    β (stiffness) = {beta}")
@@ -55,7 +58,7 @@ def validate_hydrodynamic_c():
     
     # 5. SCALING LAW
     print("\n[5] SCALING LAW: c ∝ √β")
-    beta_values = np.array([1.0, 2.0, 3.04309, 4.0, 5.0])  # α-derived β
+    beta_values = np.array([1.0, 2.0, BETA, 4.0, 5.0])  # α-derived β
     c_values = np.sqrt(beta_values / rho_vac)
     
     print("    β       c = √(β/ρ)")

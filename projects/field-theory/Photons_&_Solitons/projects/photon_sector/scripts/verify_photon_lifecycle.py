@@ -13,12 +13,13 @@ MECHANISMS TESTED:
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.ndimage import laplace
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 # --- QFD Vacuum Parameters ---
 # The stiffness of the vacuum field. High beta = Stiff = High c.
-# 2026-01-06: β derived from α via Golden Loop, not fitted
-BETA = 3.04309  # Vacuum stiffness (derived from α)
+# Golden Loop derived from α via shared_constants
 VACUUM_DENSITY = 1.0  
 C_VAC = np.sqrt(BETA / VACUUM_DENSITY)  # Emergent speed of light
 

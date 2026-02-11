@@ -18,15 +18,16 @@ import numpy as np
 from scipy.integrate import quad, dblquad
 from scipy.optimize import minimize_scalar
 import matplotlib.pyplot as plt
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA, BETA
 
 # Constants
-ALPHA = 1/137.035999177
 HBARC = 197.3269804  # MeV·fm
 PI = np.pi
 HBAR = 1.0  # Natural units
 
-# QFD parameters
-BETA = 3.043233053
+# QFD parameters (from Golden Loop via shared_constants)
 XI = 1.0
 
 # Known result

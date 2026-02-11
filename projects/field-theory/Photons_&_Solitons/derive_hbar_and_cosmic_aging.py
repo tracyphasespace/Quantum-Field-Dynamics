@@ -19,10 +19,12 @@ from datetime import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 import math
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 # --- 1. QFD Vacuum Constants (The Medium) ---
-# 2026-01-06: β derived from α via Golden Loop (not fitted)
-BETA = 3.04309  # Vacuum stiffness (derived from α)
+# Golden Loop derived from α via shared_constants
 # Speed of light c = sqrt(beta/rho), setting rho_vac ~ m_proton scale -> 1.0 (natural units)
 # For the purpose of scaling ratios, c_vac is scale-invariant.
 C_VAC = np.sqrt(BETA)

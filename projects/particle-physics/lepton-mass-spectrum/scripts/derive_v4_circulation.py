@@ -24,15 +24,15 @@ Physical mechanism:
 import numpy as np
 from scipy.integrate import quad
 import matplotlib.pyplot as plt
-import os
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA, BETA
 
 # Constants
-ALPHA = 1/137.035999177
 HBARC = 197.3269804  # MeV·fm
 C_LIGHT = 299792458  # m/s (for v/c ratios)
 
-# QFD parameters (from MCMC/Golden Loop)
-BETA = 3.043233053
+# QFD parameters (from Golden Loop via shared_constants)
 XI = 1.0
 
 # Experimental values

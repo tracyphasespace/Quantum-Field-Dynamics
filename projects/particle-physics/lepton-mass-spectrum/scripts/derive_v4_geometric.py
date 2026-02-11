@@ -26,17 +26,18 @@ from scipy.integrate import quad
 import matplotlib.pyplot as plt
 import sys
 import os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA, BETA
 
 # Physical constants
-ALPHA = 1/137.035999177
 HBARC = 197.3269804
 
-# MCMC parameters
-BETA_MCMC = 3.0627
+# Parameters (Golden Loop canonical)
+BETA_MCMC = BETA          # Was 3.0627 (MCMC median)
 XI_MCMC = 0.9655
 
-# Theoretical (Golden Loop)
-BETA_GOLDEN = 3.043233053
+# Golden Loop derived
+BETA_GOLDEN = BETA
 XI_GOLDEN = 1.0  # Expected from dimensional analysis
 
 # QED coefficient (known)

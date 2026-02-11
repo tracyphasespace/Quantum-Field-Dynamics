@@ -7,15 +7,15 @@ Shows how V₄ is extracted from experimental g-2 and whether it matches geometr
 """
 
 import numpy as np
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA, BETA
 
 def validate_g2_corrected():
     print("=" * 70)
     print("G-2 ANOMALY: CORRECTED VALIDATION")
     print("=" * 70)
     print("\nBased on: validate_g2_anomaly_corrected.py from GitHub")
-
-    # Constants
-    ALPHA = 1.0 / 137.036  # Fine structure constant
 
     # 1. EXPERIMENTAL G-2 DATA
     print("\n[1] EXPERIMENTAL ANOMALOUS MAGNETIC MOMENTS")
@@ -90,10 +90,10 @@ def validate_g2_corrected():
 
     # 5. GEOMETRIC PREDICTION FROM FITTED PARAMETERS
     print("\n[5] GEOMETRIC PREDICTION FROM β, ξ")
-    print("    From mass fit: β = 3.063, ξ = 0.97")
+    print(f"    From Golden Loop: β = {BETA:.9f}, ξ = 1.0 (natural units)")
 
-    beta = 3.063
-    xi = 0.97
+    beta = BETA
+    xi = 1.0  # Surface tension in natural units (XI_SURFACE_TENSION)
 
     V4_geometric = -xi / beta
 

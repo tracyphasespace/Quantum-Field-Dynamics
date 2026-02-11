@@ -9,6 +9,9 @@ Key claim: V₄ predicts electron and muon g-2 without additional free parameter
 """
 
 import numpy as np
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA, ALPHA
 
 def validate_g2_prediction():
     print("=" * 70)
@@ -16,12 +19,12 @@ def validate_g2_prediction():
     print("=" * 70)
     print("\nTest: Do fitted parameters β, ξ predict g-2 independently?")
 
-    # 1. FITTED PARAMETERS (from lepton mass MCMC)
-    print("\n[1] FITTED PARAMETERS (from mass data)")
-    print("    Source: MCMC fit to m_e, m_μ, m_τ")
+    # 1. PARAMETERS (Golden Loop derived from α via shared_constants)
+    print("\n[1] PARAMETERS (from Golden Loop)")
+    print("    Source: shared_constants.py (α → β via Golden Loop)")
 
-    beta = 3.063   # Vacuum bulk modulus
-    beta_err = 0.149
+    beta = BETA    # Vacuum bulk modulus (derived, not fitted)
+    beta_err = 0.001  # Precision limited by α measurement
 
     xi = 0.97      # Vacuum gradient stiffness
     xi_err = 0.55

@@ -16,7 +16,10 @@ import sys
 import os
 
 # Add src directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src'))
+# Add QFD root for shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA as BETA_GOLDEN
 import functionals as func
 import solvers as solv
 
@@ -133,8 +136,8 @@ def log_prior(params):
     """Prior for (β, ξ, τ)."""
     beta, xi, tau = params
 
-    # β prior (centered on theoretical prediction)
-    beta_mean = 3.043233053
+    # β prior (centered on Golden Loop prediction)
+    beta_mean = BETA_GOLDEN
     beta_std = 0.15
     lp_beta = -0.5 * ((beta - beta_mean) / beta_std)**2
 
@@ -217,7 +220,7 @@ def run_mcmc(
     print()
 
     # Initialize walkers
-    beta_init = 3.043233053
+    beta_init = BETA_GOLDEN
     xi_init = 1.0
     tau_init = 1.0
 

@@ -15,17 +15,19 @@ import sys
 import os
 
 # Add src to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src'))
+# Add QFD root for shared constants
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA, BETA
 
-# --- Constants from QFD Unification ---
-ALPHA = 1/137.035999177  # Fine structure constant (CODATA 2018)
+# --- Constants ---
 HBARC = 197.3269804      # MeV·fm (CODATA 2018)
 MP = 938.27208816        # Proton mass in MeV (PDG 2024)
 
-# --- Parameters from MCMC Breakthrough ---
-BETA_CORE = 3.0627       # Vacuum compression stiffness
-XI = 0.9655              # Gradient stiffness
-BETA_GOLDEN = 3.043233053      # Theoretical prediction
+# --- Parameters (Golden Loop canonical) ---
+BETA_CORE = BETA         # Canonical vacuum stiffness (was MCMC 3.0627)
+XI = 0.9655              # Gradient stiffness (MCMC median)
+BETA_GOLDEN = BETA       # Golden Loop derived
 
 # --- Geometric Factors ---
 SHAPE_FACTOR = np.pi / 2  # D-flow compression

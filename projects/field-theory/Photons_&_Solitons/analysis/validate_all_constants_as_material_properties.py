@@ -21,6 +21,10 @@ This is the "Material Science of the Vacuum"
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.constants import c as c_si, hbar as hbar_si, m_p as m_p_si, m_e as m_e_si, G as G_si
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import (BETA, K_GEOM, XI_QFD, C1_SURFACE, C2_VOLUME,
+                                   ALPHA, ALPHA_INV)
 
 def print_header(title, level=1):
     if level == 1:
@@ -174,11 +178,11 @@ print("This proves ℏ ∝ √β (action quantum scales with vacuum stiffness)")
 
 print_header("PART 4: Fine Structure Constant α (Coupling Geometry)", 1)
 
-# From FineStructure.lean
-c1_surface = 0.529251  # Nuclear surface tension coefficient
-c2_volume = 0.316743   # Nuclear volume packing coefficient
-beta_crit = 3.043233053  # Critical beta from Golden Loop
-k_geom = 4.3813  # Geometric projection factor (6D → 4D)
+# From shared_constants (Golden Loop + Book v8.5)
+c1_surface = C1_SURFACE  # Nuclear surface tension coefficient = ½(1-α)
+c2_volume = C2_VOLUME    # Nuclear volume packing coefficient = 1/β
+beta_crit = BETA          # Critical beta from Golden Loop
+k_geom = K_GEOM           # Geometric projection factor (6D → 4D) = 4.4028
 
 print("\nFrom QFD:")
 print("  α emerges from the ratio of nuclear surface tension (c₁)")

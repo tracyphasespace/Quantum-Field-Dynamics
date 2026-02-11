@@ -13,6 +13,9 @@ HONEST STATUS:
 """
 
 import numpy as np
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA
 
 def validate_lepton_isomers():
     print("="*70)
@@ -20,11 +23,11 @@ def validate_lepton_isomers():
     print("="*70)
     print("\nStatus: Specification provided for LeptonIsomers.lean")
     print("Validation: IF mass_formula axiom is correct")
-    
+
     # 1. CONSTANTS
     print("\n[1] CONSTANTS")
-    # 2026-01-06: β derived from α (Golden Loop), not fitted
-    beta = 3.04309  # Vacuum stiffness (derived from Golden Loop)
+    # Golden Loop derived from α via shared_constants
+    beta = BETA  # Vacuum stiffness (derived from Golden Loop)
     lambda_mass = 1.66053906660e-27  # 1 AMU in kg
     
     # Convert to MeV/c² for particle physics
