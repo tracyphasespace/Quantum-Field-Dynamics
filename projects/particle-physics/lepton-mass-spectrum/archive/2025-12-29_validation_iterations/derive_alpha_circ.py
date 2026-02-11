@@ -23,17 +23,21 @@ HYPOTHESES:
 """
 
 import numpy as np
+import sys, os
 from scipy.integrate import quad
 from scipy.optimize import minimize_scalar
 import matplotlib.pyplot as plt
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', '..', '..'))
+from qfd.shared_constants import ALPHA as _ALPHA, BETA as _BETA
+
 # Constants
-ALPHA = 1/137.035999177
+ALPHA = _ALPHA
 HBARC = 197.3269804  # MeV·fm
 PI = np.pi
 
 # QFD parameters
-BETA = 3.043233053
+BETA = _BETA
 XI = 1.0
 
 # Known result

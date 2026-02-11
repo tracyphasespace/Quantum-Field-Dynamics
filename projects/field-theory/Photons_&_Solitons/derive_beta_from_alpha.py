@@ -10,7 +10,11 @@ Both should give consistent β values.
 """
 
 import numpy as np
+import sys, os
 from scipy.optimize import brentq
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
+from qfd.shared_constants import BETA as _BETA_SHARED
 
 # =============================================================================
 # EMPIRICAL CONSTANTS
@@ -180,7 +184,7 @@ def main():
     print()
 
     # What k would make β = 3.043233053?
-    beta_target = 3.043233053
+    beta_target = _BETA_SHARED
     # exp(β) = α⁻¹ / (π² × (c₂/c₁)_eff)
     # (c₂/c₁)_eff = α⁻¹ / (π² × exp(β))
     c2_c1_needed = ALPHA_INV / (PI_SQ * np.exp(beta_target))
