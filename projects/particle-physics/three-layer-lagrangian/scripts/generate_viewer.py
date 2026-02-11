@@ -26,8 +26,11 @@ DATA_DIR = os.environ.get('TLG_DATA_DIR', os.path.join(_ROOT_DIR, 'data'))
 RESULTS_DIR = os.environ.get('TLG_RESULTS_DIR', os.path.join(_ROOT_DIR, 'results'))
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
+sys.path.insert(0, os.path.join(_ROOT_DIR, '..', '..', '..'))
+from qfd.shared_constants import BETA as _BETA_IMPORT
+
 # ── Constants ──
-BETA = 3.043233053
+BETA = _BETA_IMPORT
 N_MAX = 2 * np.pi * BETA**3
 A_CRIT = 2 * np.e**2 * BETA**2
 WIDTH = 2 * np.pi * BETA**2

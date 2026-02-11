@@ -22,6 +22,10 @@ DATA_DIR = os.environ.get('TLG_DATA_DIR', os.path.join(_ROOT_DIR, 'data'))
 RESULTS_DIR = os.environ.get('TLG_RESULTS_DIR', os.path.join(_ROOT_DIR, 'results'))
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
+import sys
+sys.path.insert(0, os.path.join(_ROOT_DIR, '..', '..', '..'))
+from qfd.shared_constants import BETA
+
 import numpy as np
 import pandas as pd
 import re
@@ -29,7 +33,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # ── Constants ──
-beta_val = 3.043233053
+beta_val = BETA
 N_MAX = 2 * np.pi * beta_val**3
 A_CRIT = 2 * np.e**2 * beta_val**2
 WIDTH = 2 * np.pi * beta_val**2

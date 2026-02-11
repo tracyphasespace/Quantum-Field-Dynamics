@@ -26,15 +26,19 @@ DATA_DIR = os.environ.get('TLG_DATA_DIR', os.path.join(_ROOT_DIR, 'data'))
 RESULTS_DIR = os.environ.get('TLG_RESULTS_DIR', os.path.join(_ROOT_DIR, 'results'))
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
+import sys
+sys.path.insert(0, os.path.join(_ROOT_DIR, '..', '..', '..'))
+from qfd.shared_constants import BETA
+
 import numpy as np
 import pandas as pd
 import warnings
 warnings.filterwarnings('ignore')
 
 # ======================================================================
-# QFD Constants — all from alpha = 1/137.036 via beta = 3.043233053
+# QFD Constants — all from Golden Loop via shared_constants
 # ======================================================================
-beta_val = 3.043233053
+beta_val = BETA
 PI = np.pi
 E_CONST = np.e
 
