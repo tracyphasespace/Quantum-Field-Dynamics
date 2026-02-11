@@ -1,8 +1,0 @@
-# QFD 10 Realms Pipeline - Golden Loop Requirements
-# Minimal dependencies for reproducing α → β → (e, μ, τ) results
-
-numpy>=1.20.0
-scipy>=1.7.0
-
-# Optional dependencies for visualization (not required for replication)
-# matplotlib>=3.3.0
