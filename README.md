@@ -209,16 +209,14 @@ This framework is mathematically rigorous (1,100 Lean proofs) but empirically un
 
 Machine-readable indexes for automated discovery ([llmstxt.org](https://llmstxt.org/) convention):
 
-| Resource | Description |
-|----------|-------------|
-| [llms.txt](llms.txt) | AI discovery file — structured overview, key entry points, cross-links |
-| [LEAN_PROOF_INDEX.txt](LEAN_PROOF_INDEX.txt) | Flat index of 249 Lean proof files with descriptions and theorem counts |
-| [SOLVER_INDEX.txt](SOLVER_INDEX.txt) | Flat index of 326 Python solvers with descriptions and status |
-| [robots.txt](robots.txt) | Crawler metadata with discovery file pointers |
+| Resource | Raw URL |
+|----------|---------|
+| llms.txt | https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/llms.txt |
+| Lean proof index | https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/LEAN_PROOF_INDEX.txt |
+| Solver index | https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/SOLVER_INDEX.txt |
+| robots.txt | https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/robots.txt |
 
-**Raw URL access** — prepend `https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/` to any path above.
-
-See also: [QFD-Universe llms.txt](https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/llms.txt) for the curated repo.
+**Curated repo**: https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/llms.txt
 
 ---
 
