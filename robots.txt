@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# AI/LLM discovery — see https://llmstxt.org/
+# llms.txt: https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/llms.txt
+# Lean proof index: https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/LEAN_PROOF_INDEX.txt
+# Solver index: https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/SOLVER_INDEX.txt

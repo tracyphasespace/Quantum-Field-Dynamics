@@ -1,0 +1,331 @@
+# SOLVER_INDEX.txt — Auto-generated 2026-02-12
+# 326 Python solver/validation files
+#
+# Format: path | description | status
+#
+Photon/analysis/alpha_derivation.py | Derive fine structure constant α from vacuum geometry. | active
+Photon/analysis/derive_constants.py | QFD Emergent Constants Derivation | active
+Photon/analysis/dimensional_audit.py | QFD: Dimensional Audit of Emergent ℏ | active
+Photon/analysis/integrate_hbar.py | QFD: Numerical Integration of Vortex Spin | active
+Photon/analysis/lepton_energy_partition.py | Lepton energy partition | active
+Photon/analysis/lepton_stability.py | Lepton stability | active
+Photon/analysis/lepton_stability_3param.py | QFD: Lepton Stability Analysis - Full 3-Parameter Model | active
+Photon/analysis/soliton_balance_simulation.py | QFD Photon Sector: Soliton Balance Simulation | active
+Photon/analysis/speed_of_light.py | Derive speed of light from vacuum stiffness parameter β. | active
+Photon/analysis/three_constant_model.py | QFD Photon Physics: The Three-Constant Model | active
+Photon/analysis/validate_all_constants_as_material_properties.py | QFD Material Science: ALL Constants as Vacuum Properties | validated
+Photon/analysis/validate_chaos_alignment_decay.py | QFD Atomic Resonance: Chaotic Phase Alignment → Exponential Decay | validated
+Photon/analysis/validate_fine_structure_scaling.py | QFD: Fine Structure Constant Scaling | validated
+Photon/analysis/validate_g2_corrected.py | QFD: Parameter-Free Geometric g-2 Validation | validated
+Photon/analysis/validate_g2_from_v4.py | QFD: Validate g-2 Anomalous Magnetic Moment Prediction from V₄ | validated
+Photon/analysis/validate_g2_prediction.py | QFD: G-2 Prediction Validation - Acid Test | validated
+Photon/analysis/validate_hbar_scaling.py | QFD: Planck Constant Scaling Law | validated
+Photon/analysis/validate_hydrodynamic_c.py | QFD: Hydrodynamic Derivation of Speed of Light | validated
+Photon/analysis/validate_hydrodynamic_c_hbar_bridge.py | QFD Hydrodynamic Validation: The c - ℏ Bridge | validated
+Photon/analysis/validate_lepton_isomers.py | QFD: Lepton Isomers - Geometric Mass Generation | validated
+Photon/analysis/validate_lyapunov_predictability_horizon.py | QFD Lyapunov Predictability Horizon: Why QM Probability is Emergent | validated
+Photon/analysis/validate_spinorbit_chaos.py | QFD Spin-Orbit Chaos: Validation of Non-Linear Coupling | validated
+Photon/analysis/validate_unified_forces.py | QFD: Unified Forces Validation | validated
+Photon/analysis/validate_vortex_electron_shielding.py | QFD Vortex Electron: Shielding Mechanism Validation | validated
+Photon/analysis/validate_vortex_force_law.py | QFD Vortex Electron: Phase 1 Validation | validated
+Photon/analysis/validate_zeeman_vortex_torque.py | QFD Zeeman Effect: Vortex Torque → Frequency Shift | validated
+Photon/analysis/vortex_electron_corrected.py | QFD Vortex Electron: CORRECTED Physical Model | active
+Photon/run_all.py | QFD Photon Sector: Run All Numerical Calculations | active
+Photon/validation/alpha_consistency/test_alpha_universality.py | Test: Fine structure constant α universality across QFD sectors. | test
+V22_Lepton_Analysis/create_manuscript_figures.py | Generate manuscript figures for V22 Lepton Analysis paper. | active
+V22_Lepton_Analysis/create_publication_figures.py | Generate publication-quality figures for lepton Hill vortex manuscript. | active
+V22_Lepton_Analysis/integration_attempts/test_beta_v2_v4_mapping.py | Test Beta -> V2, V4 Mapping | test
+V22_Lepton_Analysis/integration_attempts/v22_enhanced_hill_vortex_solver.py | V22 Enhanced Lepton Mass Solver - Hill Vortex Formulation | active
+V22_Lepton_Analysis/integration_attempts/v22_enhanced_hill_vortex_solver_v2.py | V22 Enhanced Lepton Mass Solver - Hill Vortex (v2 with Unit Scaling) | active
+V22_Lepton_Analysis/integration_attempts/v22_hill_vortex_with_circulation.py | V22 Hill Vortex Solver with Circulation Energy - CORRECTED FORMULATION | active
+V22_Lepton_Analysis/integration_attempts/v22_hill_vortex_with_density_gradient.py | V22 Hill Vortex Solver with CORRECTED Density Gradient | active
+V22_Lepton_Analysis/integration_attempts/v22_muon_enhanced_circulation.py | V22 Muon Mass Solver - Enhanced Circulation Pattern | active
+V22_Lepton_Analysis/integration_attempts/v22_muon_refined_search.py | V22 Muon Mass - Refined Search Around U ≈ 0.30-0.35 | active
+V22_Lepton_Analysis/integration_attempts/v22_tau_test.py | V22 Tau Mass Test - β = 3.1 Universal | test
+V22_Lepton_Analysis/scripts/v22_lepton_mass_solver.py | V22 Lepton Mass Solver - The 3.1 Question | active
+V22_Lepton_Analysis/validation_tests/analyze_run2_results.py | Quick analysis of Run 2 results | test
+V22_Lepton_Analysis/validation_tests/analyze_solution_degeneracy.py | Analyze Solution Degeneracy from Multi-Start Test | test
+V22_Lepton_Analysis/validation_tests/analyze_t3b_lambda_sweep.py | Post-processing analysis for T3b λ_curv sweep. | test
+V22_Lepton_Analysis/validation_tests/calibrate_magnetic_moment.py | Calibrate magnetic moment normalization factor. | test
+V22_Lepton_Analysis/validation_tests/diagnose_run2_failure.py | Diagnose Run 2 Failure: Why did localized vortex break the fit? | test
+V22_Lepton_Analysis/validation_tests/energy_balance_precheck.py | Energy-Balance Precheck (Quick) | test
+V22_Lepton_Analysis/validation_tests/energy_component_breakdown.py | Energy Component Breakdown | test
+V22_Lepton_Analysis/validation_tests/extract_tracy_metrics.py | Extract Tracy's Four Critical Metrics | test
+V22_Lepton_Analysis/validation_tests/inspect_density_profiles.py | Inspect Density Profiles | test
+V22_Lepton_Analysis/validation_tests/inspect_energy_dict.py | Quick inspection of energy dictionary structure | test
+V22_Lepton_Analysis/validation_tests/inspect_overshoot_profiles.py | Inspect where overshoot shell sits relative to velocity field | test
+V22_Lepton_Analysis/validation_tests/lepton_energy_boundary_layer.py | Lepton Energy Functional with Non-Self-Similar Boundary Layer | test
+V22_Lepton_Analysis/validation_tests/lepton_energy_localized_v0.py | Lepton Energy Functional with Localized Vortex v0 | test
+V22_Lepton_Analysis/validation_tests/lepton_energy_localized_v1.py | Lepton Energy Functional with Localized Vortex v1 | test
+V22_Lepton_Analysis/validation_tests/lepton_energy_overshoot_v0.py | Lepton Energy Functional with Overshoot Shell v0 | test
+V22_Lepton_Analysis/validation_tests/lepton_energy_with_gradient.py | Lepton Energy Functional with Gradient (Curvature) Term | test
+V22_Lepton_Analysis/validation_tests/overnight_batch_test.py | Overnight Batch Test: Sequential Localization Configuration Sweep | test
+V22_Lepton_Analysis/validation_tests/plot_multi_objective_results.py | Visualize multi-objective β-scan results. | test
+V22_Lepton_Analysis/validation_tests/profile_likelihood_beta.py | Profile Likelihood in β | test
+V22_Lepton_Analysis/validation_tests/profile_likelihood_boundary_layer.py | Profile Likelihood with Non-Self-Similar Boundary Layer (Path B') | test
+V22_Lepton_Analysis/validation_tests/profile_likelihood_with_gradient.py | Profile Likelihood in β with Gradient (Curvature) Term | test
+V22_Lepton_Analysis/validation_tests/profile_likelihood_with_radius.py | Profile Likelihood in β with Radius Constraint | test
+V22_Lepton_Analysis/validation_tests/quick_scale_check.py | Quick Scale Sanity Check (<1 minute) | test
+V22_Lepton_Analysis/validation_tests/radius_constraint.py | Radius Constraint Functions | test
+V22_Lepton_Analysis/validation_tests/renormalized_sanity_check.py | Corrected Sign Convention Sanity Check | test
+V22_Lepton_Analysis/validation_tests/resolution_sensitivity_test.py | Resolution Sensitivity Tests for Path B' Boundary Layer | test
+V22_Lepton_Analysis/validation_tests/run2_emu_regression_corrected.py | Run 2: e,μ Regression with CORRECTED SIGN CONVENTION | test
+V22_Lepton_Analysis/validation_tests/t1_widened_bounds_extended_beta.py | T1: e,μ Regression with WIDENED BOUNDS + EXTENDED β RANGE | test
+V22_Lepton_Analysis/validation_tests/t1a_monte_carlo_feasibility.py | T1a: Monte Carlo Feasibility Scan | test
+V22_Lepton_Analysis/validation_tests/t1b_seeded_verification_beta315.py | T1b: Seeded Verification at β = 3.15 | test
+V22_Lepton_Analysis/validation_tests/t1c_coarse_beta_scan.py | T1c: Coarse β Scan (Stage 2a) | test
+V22_Lepton_Analysis/validation_tests/t2_mass_g_identifiability.py | T2': Mass + g-factor Identifiability Test | test
+V22_Lepton_Analysis/validation_tests/t2b_mass_g_profiled_normalization.py | T2b: Mass + g-factor with PROFILED g-normalization | test
+V22_Lepton_Analysis/validation_tests/t2c_cavitation_saturated.py | T2c: Mass + g-factor with CAVITATION-SATURATED Amplitude | test
+V22_Lepton_Analysis/validation_tests/t2d_refined_beta_scan.py | T2d: Refined β Scan Around Minimum | test
+V22_Lepton_Analysis/validation_tests/t3a_single_beta_test.py | T3a Single-β Test: Validate 3-lepton + universal U implementation | test
+V22_Lepton_Analysis/validation_tests/t3a_three_lepton_universal_U.py | T3a: Three-Lepton Fit with Universal Boundary Speed | test
+V22_Lepton_Analysis/validation_tests/t3b_fine_scan_overnight.py | T3b STRATEGY 4: Fine Beta Scan at Lambda Sweet Spot | test
+V22_Lepton_Analysis/validation_tests/t3b_fixed_beta_alpha.py | 3-Lepton Fit with β FIXED by α Constraint | test
+V22_Lepton_Analysis/validation_tests/t3b_restart_4gb.py | T3b RESTART: 4GB Memory Budget with Coarse Beta Grid | test
+V22_Lepton_Analysis/validation_tests/t3b_restart_memory_optimized.py | T3b RESTART: Memory-Optimized Continuation from OOM Crash | test
+V22_Lepton_Analysis/validation_tests/t3b_three_lepton_overnight.py | T3b STRATEGY 2: Three-Lepton Fit (Most Robust) | test
+V22_Lepton_Analysis/validation_tests/t3b_two_lepton_curvature_penalty.py | T3b: Two-Lepton Fit with Dilation-Mode Curvature Penalty | test
+V22_Lepton_Analysis/validation_tests/tau_collapse_diagnostics.py | Tau Collapse Diagnostics | test
+V22_Lepton_Analysis/validation_tests/test_01_grid_convergence.py | Grid Convergence Test for V22 Hill Vortex Electron Solution | test
+V22_Lepton_Analysis/validation_tests/test_02_multistart_robustness.py | Multi-Start Robustness Test for V22 Hill Vortex Electron Solution | test
+V22_Lepton_Analysis/validation_tests/test_03_profile_sensitivity.py | Profile Sensitivity Test for V22 Hill Vortex Electron Solution | test
+V22_Lepton_Analysis/validation_tests/test_all_leptons_beta_from_alpha.py | Complete Three-Lepton Test with β from Fine Structure Constant | test
+V22_Lepton_Analysis/validation_tests/test_beta_degeneracy_diagnostic.py | β-Degeneracy Diagnostic Tests | test
+V22_Lepton_Analysis/validation_tests/test_beta_from_alpha.py | Golden Loop Test: β from Fine Structure Constant | test
+V22_Lepton_Analysis/validation_tests/test_beta_scan_falsifiability.py | β-Scan Falsifiability Test | test
+V22_Lepton_Analysis/validation_tests/test_beta_scan_production.py | β-Scan Falsifiability Test - Production Solver Version | test
+V22_Lepton_Analysis/validation_tests/test_circulation_prefactor.py | Test 2: Circulation Functional Profile-Sensitivity | test
+V22_Lepton_Analysis/validation_tests/test_cross_lepton_fit.py | Cross-Lepton Multi-Objective Fit | test
+V22_Lepton_Analysis/validation_tests/test_emergent_time_factor.py | Test Emergent-Time Factor F_t | test
+V22_Lepton_Analysis/validation_tests/test_fixed_amplitude_beta_scan.py | Option 2: Fixed-Amplitude β-Scan (Diagnostic Symmetry-Break Test) | test
+V22_Lepton_Analysis/validation_tests/test_global_scale_profiling.py | Test Global Scale Profiling (S_opt) | test
+V22_Lepton_Analysis/validation_tests/test_lambda_zero_baseline.py | Check C: λ=0 Baseline Test | test
+V22_Lepton_Analysis/validation_tests/test_multi_objective_beta_scan.py | Option 1: Multi-Objective β-Scan with Magnetic Moment Constraint | test
+V22_Lepton_Analysis/validation_tests/test_tau_recovery_localized.py | Run 3: τ Recovery with Localized Vortex | test
+V22_Lepton_Analysis/validation_tests/test_two_lepton_fit.py | Test 3: Two-Lepton Fit (e, μ Only) | test
+V22_Lepton_Analysis/validation_tests/test_two_lepton_localized.py | Run 2: e,μ Regression with Localized Vortex | test
+V22_Lepton_Analysis/validation_tests/test_widened_bounds.py | Test 1: Remove Bound Artifacts | test
+V22_Lepton_Analysis/validation_tests/u_star_positivity_scan.py | U_star Positivity Scan | test
+V22_Nuclear_Analysis/scripts/plot_ccl_validation.py | Create validation plots for V22 Core Compression Law analysis. | validated
+V22_Nuclear_Analysis/scripts/plot_phase1_v22_comparison.py | Create comparison plots for Phase 1 vs V22 nuclear analysis. | active
+V22_Nuclear_Analysis/scripts/v22_ccl_fit_lean_constrained.py | V22 Nuclear Analysis - Lean-Constrained Core Compression Law | active
+V22_Supernova_Analysis/scripts/plot_v21_v22_comparison.py | Create comparison plots for V21 vs V22 supernova analysis. | active
+V22_Supernova_Analysis/scripts/v22_qfd_fit_lean_constrained.py | V22 QFD Supernova Analysis - Lean-Constrained Fit | active
+V22_Supernova_Analysis/scripts/v22_qfd_fit_proper.py | V22 QFD Supernova Analysis - Proper Implementation | active
+V22_Supernova_Analysis/scripts/v22_validate_v18_params.py | V22: Validate V18 Best-Fit Parameters Against Lean Constraints | validated
+complete_energy_functional/analytical_scaling.py | Analytical Scaling Analysis: Map (β, ξ) degeneracy structure | active
+complete_energy_functional/functionals.py | Energy functional implementations for QFD lepton model. | active
+complete_energy_functional/mcmc_2d_quick.py | Quick 2D MCMC: Fit only (β, ξ) with geometry fixed | exploration
+complete_energy_functional/mcmc_compton_scale.py | D-Flow Model: Compton Scale with π/2 Geometry | active
+complete_energy_functional/mcmc_fixed_beta.py | MCMC with Fixed β: Test Golden Loop Hypothesis | exploration
+complete_energy_functional/mcmc_stage1_gradient.py | Stage 1 MCMC: Gradient-only energy functional | exploration
+complete_energy_functional/mcmc_stage2_temporal.py | Stage 2 MCMC: Add Temporal Term τ | exploration
+complete_energy_functional/mcmc_stage3_fixed_radius.py | Stage 3 CORRECTED: Fix R_e = 0.84 fm (Hard Length Scale) | active
+complete_energy_functional/mcmc_stage3_radius.py | Stage 3 MCMC: Add Charge Radius Constraint | exploration
+complete_energy_functional/solvers.py | Variational solvers for Euler-Lagrange equations. | active
+complete_energy_functional/test_implementation.py | Quick test script to verify complete energy functional implementation. | test
+projects/Lean4/schema/v0/GrandSolver_PythonBridge.py | GrandSolver_PythonBridge.py | active
+projects/Lean4/scripts/derive_hbar_from_topology_gpu.py | QFD Topological Action Derivation (GPU/PyTorch Optimized) | active
+projects/Lean4/scripts/derive_hbar_from_topology_parallel.py | QFD Topological Action Derivation (CPU Parallel Optimized) | active
+projects/Lean4/scripts/parameter_free_g2.py | QFD: Parameter-Free G-2 Validation | active
+projects/Lean4/scripts/verify_lepton_g2.py | Verify Lepton g-2: Parameter-Free Geometric Derivation | validated
+projects/Lean4/scripts/verify_photon_soliton.py | Verify Photon Soliton: Stability in QFD Vacuum | validated
+projects/astrophysics/achromaticity/achromaticity_derivation.py | achromaticity_derivation.py -- QFD Achromaticity Proof: From Lagrangian to K_J | active
+projects/astrophysics/achromaticity/spectral_line_test.py | spectral_line_test.py -- Spectral Line Integrity Through the QFD Vacuum | test
+projects/astrophysics/chromatic-vacuum-test/chromatic_kj_test.py | chromatic_kj_test.py — Test for wavelength-dependent vacuum refraction (K_J) | test
+projects/astrophysics/cmb-solver/cmb_solver.py | QFD CMB Solver: The Thermalized Universe | active
+projects/astrophysics/golden-loop-sne/golden_loop_sne.py | golden_loop_sne.py — Golden Loop Supernova Pipeline | active
+projects/astrophysics/photon-transport/mc_photon_transport.py | mc_photon_transport.py -- Monte Carlo photon transport in the QFD vacuum | active
+projects/astrophysics/photon-transport/optical_transfer_function.py | optical_transfer_function.py -- Modulation Transfer Function of the QFD Vacuum | active
+projects/astrophysics/photon-transport/tolman_test.py | tolman_test.py -- Quantitative Tolman Surface Brightness Test for QFD | test
+projects/astrophysics/qfd-sn-v22/scripts/quick_validation_v21_data.py | Quick Validation Script - V21 Filtered Data | validated
+projects/astrophysics/qfd-sn-v22/src/qfd_sn/cosmology.py | QFD Cosmological Model | active
+projects/astrophysics/qfd-sn-v22/src/qfd_sn/lean_validation/constraints.py | Lean 4 Parameter Constraints | validated
+projects/astrophysics/qfd-sn-v22/src/qfd_sn/lean_validation/report_generator.py | Lean Validation Report Generation | validated
+projects/astrophysics/qfd-sn-v22/src/qfd_sn/lean_validation/schema_interface.py | QFD Unified Schema V2.0 Interface | validated
+projects/astrophysics/qfd-sn-v22/src/qfd_sn/qc.py | Quality Control Gates and Diagnostics | active
+projects/astrophysics/qfd-sn-v22/src/qfd_sn/stage1_fit.py | Stage 1: Per-Supernova Light Curve Fitting | active
+projects/astrophysics/qfd-sn-v22/src/qfd_sn/stage2_mcmc.py | Stage 2: Global MCMC Parameter Fitting | exploration
+projects/astrophysics/qfd-sn-v22/src/qfd_sn/stage3_hubble.py | Stage 3: Hubble Diagram and Model Comparison | active
+projects/astrophysics/qfd-sn-v22/tests/test_with_v21_data.py | Test V22 Core Modules with Existing V21 Filtered Data | test
+projects/field-theory/Photons_&_Solitons/analysis/alpha_derivation.py | Derive fine structure constant α from vacuum geometry. | active
+projects/field-theory/Photons_&_Solitons/analysis/derive_constants.py | QFD Emergent Constants Derivation | active
+projects/field-theory/Photons_&_Solitons/analysis/dimensional_audit.py | QFD: Dimensional Audit of Emergent ℏ | active
+projects/field-theory/Photons_&_Solitons/analysis/integrate_hbar.py | QFD: Numerical Integration of Vortex Spin | active
+projects/field-theory/Photons_&_Solitons/analysis/lepton_energy_partition.py | Lepton energy partition | active
+projects/field-theory/Photons_&_Solitons/analysis/lepton_stability.py | Lepton stability | active
+projects/field-theory/Photons_&_Solitons/analysis/lepton_stability_3param.py | QFD: Lepton Stability Analysis - Full 3-Parameter Model | active
+projects/field-theory/Photons_&_Solitons/analysis/soliton_balance_simulation.py | QFD Photon Sector: Soliton Balance Simulation | active
+projects/field-theory/Photons_&_Solitons/analysis/speed_of_light.py | Derive speed of light from vacuum stiffness parameter β. | active
+projects/field-theory/Photons_&_Solitons/analysis/three_constant_model.py | QFD Photon Physics: The Three-Constant Model | active
+projects/field-theory/Photons_&_Solitons/analysis/validate_all_constants_as_material_properties.py | QFD Material Science: ALL Constants as Vacuum Properties | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_chaos_alignment_decay.py | QFD Atomic Resonance: Chaotic Phase Alignment → Exponential Decay | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_fine_structure_scaling.py | QFD: Fine Structure Constant Scaling | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_g2_corrected.py | QFD: G-2 Validation - Corrected Calculation | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_g2_from_v4.py | QFD: Validate g-2 Anomalous Magnetic Moment Prediction from V₄ | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_g2_prediction.py | QFD: G-2 Prediction Validation - Acid Test | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_hbar_scaling.py | QFD: Planck Constant Scaling Law | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_hydrodynamic_c.py | QFD: Hydrodynamic Derivation of Speed of Light | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_hydrodynamic_c_hbar_bridge.py | QFD Hydrodynamic Validation: The c - ℏ Bridge | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_lepton_isomers.py | QFD: Lepton Isomers - Geometric Mass Generation | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_lyapunov_predictability_horizon.py | QFD Lyapunov Predictability Horizon: Why QM Probability is Emergent | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_spinorbit_chaos.py | QFD Spin-Orbit Chaos: Validation of Non-Linear Coupling | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_unified_forces.py | QFD: Unified Forces Validation | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_vortex_electron_shielding.py | QFD Vortex Electron: Shielding Mechanism Validation | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_vortex_force_law.py | QFD Vortex Electron: Phase 1 Validation | validated
+projects/field-theory/Photons_&_Solitons/analysis/validate_zeeman_vortex_torque.py | QFD Zeeman Effect: Vortex Torque → Frequency Shift | validated
+projects/field-theory/Photons_&_Solitons/analysis/vortex_electron_corrected.py | QFD Vortex Electron: CORRECTED Physical Model | active
+projects/field-theory/Photons_&_Solitons/cmb_thermalization_model.py | QFD CMB Thermalization Model | active
+projects/field-theory/Photons_&_Solitons/derive_beta_from_alpha.py | Derive β from α (Fine Structure Constant) | active
+projects/field-theory/Photons_&_Solitons/derive_cmb_equilibrium.py | QFD CMB Temperature Derivation - Equilibrium Model | active
+projects/field-theory/Photons_&_Solitons/derive_cmb_temperature.py | QFD CMB Temperature Derivation from First Principles | active
+projects/field-theory/Photons_&_Solitons/derive_hbar_and_cosmic_aging.py | QFD Photon Soliton: Topological Quantization & Adiabatic Cosmic Aging | active
+projects/field-theory/Photons_&_Solitons/derive_hbar_from_topology.py | QFD Photon Toroid Test: Helicity-locked scaling => E ∝ ω | active
+projects/field-theory/Photons_&_Solitons/explore_beta_tension.py | Beta Transcendental Tension Explorer | active
+projects/field-theory/Photons_&_Solitons/generate_nucleus_field.py | Generate nucleus field | active
+projects/field-theory/Photons_&_Solitons/hubble_validation_lean4.py | QFD Hubble Constant Validation - Lean4 Formalism Aligned | validated
+projects/field-theory/Photons_&_Solitons/projects/photon_sector/scripts/verify_photon_lifecycle.py | QFD PHOTON LIFECYCLE SIMULATOR | validated
+projects/field-theory/Photons_&_Solitons/run_all.py | QFD Photon Sector: Run All Numerical Calculations | active
+projects/field-theory/Photons_&_Solitons/validate_cmb_planck.py | Validate QFD CMB Model Against Planck Power Spectra | validated
+projects/field-theory/Photons_&_Solitons/validate_hydrodynamic_c.py | Hill Vortex Validation Script - QFD Hydrodynamic c-ℏ Bridge | validated
+projects/particle-physics/LaGrangianSolitons/src/experiments/exp1_existence.py | Experiment 1: Out-of-sample existence prediction. | active
+projects/particle-physics/LaGrangianSolitons/src/experiments/integer_ladder_test.py | Integer Ladder Test: Do Nuclei Quantize at Integer Harmonic Modes? | test
+projects/particle-physics/LaGrangianSolitons/src/experiments/tacoma_narrows_test.py | Tacoma Narrows Test: Does ε anti-correlate with half-life? | test
+projects/particle-physics/LaGrangianSolitons/src/experiments/validate_fission_pythagorean.py | ENGINE B: Fission Mode Analysis - Tacoma Narrows Interpretation | validated
+projects/particle-physics/LaGrangianSolitons/src/fit_families.py | Fit harmonic family parameters to training data. | active
+projects/particle-physics/LaGrangianSolitons/src/harmonic_model.py | Harmonic Family Model for Nuclear Structure | active
+projects/particle-physics/LaGrangianSolitons/src/nucleus_classifier.py | Nucleus Classification using 3-Family Harmonic Resonance Model | active
+projects/particle-physics/LaGrangianSolitons/src/null_models.py | Generate null models and candidate universe for Experiment 1. | active
+projects/particle-physics/LaGrangianSolitons/src/parse_ame.py | Parse AME2020 (Atomic Mass Evaluation) and compute Q-values for decay modes. | active
+projects/particle-physics/LaGrangianSolitons/src/parse_nubase.py | Parse NUBASE2020 raw text file into structured Parquet dataset. | active
+projects/particle-physics/LaGrangianSolitons/src/quick_diagnostics.py | Quick diagnostic analysis of harmonic scores. | active
+projects/particle-physics/LaGrangianSolitons/src/score_harmonics.py | Score all nuclides using fitted harmonic family parameters. | active
+projects/particle-physics/LaGrangianSolitons/src/test_harmonic_model.py | Unit tests for harmonic_model.py | test
+projects/particle-physics/lepton-isomer-ladder/appendix_g_solver.py | QFD Appendix G Solver: The Lepton Isomer Ladder | active
+projects/particle-physics/lepton-isomer-ladder/tau_anomaly_test.py | Tau Anomaly Test: U_tau > c Investigation | test
+projects/particle-physics/lepton-mass-spectrum/scripts/derive_alpha_circ_energy_based.py | Derive α_circ Circulation Coupling - ENERGY-BASED DENSITY (Correct QFD Physics) | active
+projects/particle-physics/lepton-mass-spectrum/scripts/derive_v4_circulation.py | V₄(R) from Hill Vortex Circulation Integrals | active
+projects/particle-physics/lepton-mass-spectrum/scripts/derive_v4_geometric.py | V₄ Geometric Derivation: From Vacuum Stiffness to QED | exploration
+projects/particle-physics/lepton-mass-spectrum/scripts/derive_v6_higher_order.py | V₆ Higher-Order Geometric Correction | active
+projects/particle-physics/lepton-mass-spectrum/scripts/lepton_stability.py | Lepton stability | active
+projects/particle-physics/lepton-mass-spectrum/scripts/run_mcmc.py | MCMC parameter estimation for QFD lepton mass model. | exploration
+projects/particle-physics/lepton-mass-spectrum/scripts/validate_g2_anomaly.py | Numerical Zeeman Probe: g-2 Anomaly Validation | validated
+projects/particle-physics/lepton-mass-spectrum/scripts/validate_g2_anomaly_corrected.py | Numerical Zeeman Probe: g-2 Anomaly Validation (CORRECTED) | validated
+projects/particle-physics/lepton-mass-spectrum/scripts/validate_g2_corrected.py | QFD: G-2 Validation - Corrected Calculation | validated
+projects/particle-physics/lepton-mass-spectrum/scripts/verify_installation.py | Verify that the installation is correct and all dependencies are available. | validated
+projects/particle-physics/lepton-mass-spectrum/src/functionals.py | Energy functional implementations for QFD lepton model. | active
+projects/particle-physics/lepton-mass-spectrum/src/solvers.py | Density profile implementations for Hill's spherical vortex model. | active
+projects/particle-physics/nuclear-soliton-solver/V2/run_parallel_optimization_v2.py | Run overnight optimization with ParallelObjective for GPU-efficient parallel evaluation. | active
+projects/particle-physics/nuclear-soliton-solver/V2/src/parallel_objective.py | Parallel objective function for optimization with GPU memory management. | active
+projects/particle-physics/nuclear-soliton-solver/V2/src/qfd_metaopt_ame2020.py | QFD Meta-Optimizer: Calibrate Field Parameters Against AME2020 Experimental Data | active
+projects/particle-physics/nuclear-soliton-solver/V2/src/qfd_solver.py | Phase-8 SCF solver with compounding cohesion (v4 - Merged from ChatSolver). | active
+projects/particle-physics/nuclear-soliton-solver/analyze_overnight_results.py | Analyze the overnight optimization results in detail. | active
+projects/particle-physics/nuclear-soliton-solver/calibrate_gc_proton.py | Calibrate g_c Using Hydrogen-1 (Proton) | active
+projects/particle-physics/nuclear-soliton-solver/carbon_sweep_diagnostic.py | Carbon Isotope Sweep - Critical Diagnostic | active
+projects/particle-physics/nuclear-soliton-solver/carbon_valley_final.py | Final Carbon Valley Test - Corrected Physics | active
+projects/particle-physics/nuclear-soliton-solver/detailed_analysis.py | Detailed analysis of optimized parameters - run each isotope individually. | active
+projects/particle-physics/nuclear-soliton-solver/diagnose_c_v2_base_sweep.py | Diagnose energy components as we vary c_v2_base | active
+projects/particle-physics/nuclear-soliton-solver/diagnose_energy_components.py | Diagnose individual energy components for C-12 | active
+projects/particle-physics/nuclear-soliton-solver/monitor_batch.py | Real-time monitoring for batch optimization. | active
+projects/particle-physics/nuclear-soliton-solver/quick_c12_test_verbose.py | Quick test of C-12 with c_sym=0 and verbose output | test
+projects/particle-physics/nuclear-soliton-solver/quick_test_4workers.py | Quick test with 4 workers on 2 isotopes | test
+projects/particle-physics/nuclear-soliton-solver/run_parallel_optimization.py | Run overnight optimization with ParallelObjective for GPU-efficient parallel evaluation. | active
+projects/particle-physics/nuclear-soliton-solver/run_simple_optimization.py | Simple single-job optimization with visible progress. | active
+projects/particle-physics/nuclear-soliton-solver/src/analyze_isotopes.py | analyze_isotopes.py | active
+projects/particle-physics/nuclear-soliton-solver/src/batch_optimize.py | Parallel Batch Optimization for Nuclear Soliton Solver | active
+projects/particle-physics/nuclear-soliton-solver/src/ccl_seeded_solver.py | CCL-Seeded Soliton Solver | active
+projects/particle-physics/nuclear-soliton-solver/src/parallel_objective.py | Parallel objective function for optimization with GPU memory management. | active
+projects/particle-physics/nuclear-soliton-solver/src/qfd_metaopt_ame2020.py | QFD Meta-Optimizer: Calibrate Field Parameters Against AME2020 Experimental Data | active
+projects/particle-physics/nuclear-soliton-solver/src/qfd_regional_calibration.py | QFD Regional Calibration: Separate Parameter Sets by Mass Region | active
+projects/particle-physics/nuclear-soliton-solver/src/qfd_solver.py | Phase-8 SCF solver with compounding cohesion (v4 - Merged from ChatSolver). | active
+projects/particle-physics/nuclear-soliton-solver/src/qfd_solver_temporal.py | Phase-8 SCF solver with compounding cohesion (v4 - Merged from ChatSolver). | active
+projects/particle-physics/nuclear-soliton-solver/src/runspec_adapter.py | RunSpec Adapter for Nuclear Soliton Solver | active
+projects/particle-physics/nuclear-soliton-solver/src/validate_trial32_full.py | Validate Trial 32 parameters on representative isotopes with FULL solver resolution. | validated
+projects/particle-physics/nuclear-soliton-solver/test_broader_initialization.py | Test broader initialization to access the expanded-branch (low-energy) state | test
+projects/particle-physics/nuclear-soliton-solver/test_c12_finer_grid.py | Test C-12 with finer grid to reduce kinetic energy artifacts | test
+projects/particle-physics/nuclear-soliton-solver/test_c12_grid64_v4_sweep.py | Test C-12 with grid=64 and varying c_v2_base to find sign flip | test
+projects/particle-physics/nuclear-soliton-solver/test_c12_modified_scf.py | Test C-12 with MODIFIED SCF loss function that favors negative energies | test
+projects/particle-physics/nuclear-soliton-solver/test_c12_no_csym.py | Test if C-12 works with c_sym=0 | test
+projects/particle-physics/nuclear-soliton-solver/test_c12_optimized_params.py | Test C-12 with the ACTUAL optimized parameters from the golden probe run | test
+projects/particle-physics/nuclear-soliton-solver/test_c12_strong_penalty.py | Test C-12 with VERY STRONG penalties to force sign flip | test
+projects/particle-physics/nuclear-soliton-solver/test_c12_stronger_v4.py | Test C-12 with stronger V4 potential to fix sign flip | test
+projects/particle-physics/nuclear-soliton-solver/test_ccl_seeded_optimization.py | Test CCL-seeded optimization on a single isotope. | test
+projects/particle-physics/nuclear-soliton-solver/test_ccl_stress_constraint.py | Test CCL Stress Constraint Integration | test
+projects/particle-physics/nuclear-soliton-solver/test_explicit_baseline_addition.py | Test if we need to ADD A×M_proton baseline to solver output | test
+projects/particle-physics/nuclear-soliton-solver/test_initial_params.py | Test initial parameters to see if they work better. | test
+projects/particle-physics/nuclear-soliton-solver/test_parallel_objective.py | Test parallel objective function with GPU memory monitoring. | test
+projects/particle-physics/nuclear-soliton-solver/test_single_proton_baseline.py | Compute the baseline energy of a single proton soliton | test
+projects/particle-physics/nuclear-soliton-solver/test_stability_energy_fix.py | Test corrected stability energy comparison for C-12 | test
+projects/particle-physics/nuclear-soliton-solver/verify_geometric_resonance.py | Geometric Resonance Verification - Carbon Valley Test (Option B) | validated
+projects/particle-physics/nuclear-soliton-solver/verify_geometric_resonance_calibrated.py | Geometric Resonance Verification - CALIBRATED Carbon Valley | validated
+projects/particle-physics/nuclide-engine/run_all.py | run_all.py — Orchestrator for QFD Nuclide Engine analysis suite. | active
+projects/particle-physics/nuclide-engine/scripts/channel_analysis.py | Mode-First Channel Analysis with Per-Channel Empirical Fits | active
+projects/particle-physics/nuclide-engine/scripts/isomer_clock_analysis.py | Isomer-Aware Clock Analysis — Reparametrized Fits + Residual Structure Hunt | active
+projects/particle-physics/nuclide-engine/scripts/model_nuclide_topology.py | QFD Nuclide Engine — Topological Terrain Model | active
+projects/particle-physics/nuclide-engine/scripts/qfd_6d_heatmap.py | QFD 6-Dimensional Nuclide Diagnostic Heat Map | active
+projects/particle-physics/nuclide-engine/scripts/test_177_algebraic.py | Test: Does N = 177 Connect to QFD Constants? | test
+projects/particle-physics/nuclide-engine/scripts/test_density_shells.py | Density Shell Test — Is the ~36 AMU periodicity fixed or geometric? | test
+projects/particle-physics/nuclide-engine/scripts/test_diameter_ceiling.py | Diameter Ceiling Test — Does the neutral core saturate at maximum size? | test
+projects/particle-physics/nuclide-engine/scripts/test_lyapunov_clock.py | Test: Clock Slopes as Lyapunov Exponents of Chaotic Core Oscillations | test
+projects/particle-physics/nuclide-engine/scripts/test_overflow_unified.py | Overflow Unified Test — Rates from stress, modes from geometry | test
+projects/particle-physics/nuclide-engine/scripts/test_resonance_spacing.py | Resonance Spacing Analysis — Are the "7 Paths" Vacuum Harmonics? | test
+projects/particle-physics/nuclide-engine/scripts/test_tennis_racket.py | Test: Tennis Racket Theorem (Intermediate Axis Theorem) Applied to Peanut Solitons | test
+projects/particle-physics/renormalization/one_loop_qfd.py | QFD 1-Loop Electron Self-Energy: Finite by Construction | active
+projects/particle-physics/renormalization/qed_qfd_comparison.py | qed_qfd_comparison.py -- QED vs QFD Coefficient Comparison Table | active
+projects/particle-physics/renormalization/rg_flow_qfd.py | rg_flow_qfd.py -- Renormalization Group Flow in QFD | active
+projects/particle-physics/soliton-fragmentation/soliton_jet_exploratory.py | Soliton Jet Fragmentation: Exploratory QFD Reinterpretation of DIS/Jets | exploration
+projects/particle-physics/three-layer-lagrangian/run_all.py | run_all.py — Master orchestrator for Three-Layer LaGrangian reviewer package. | active
+projects/particle-physics/three-layer-lagrangian/scripts/clean_species_sort.py | Clean Species Sort — Separate NUBASE into proper decay channels. | active
+projects/particle-physics/three-layer-lagrangian/scripts/generate_viewer.py | generate_viewer.py — Build interactive nuclide species heatmap viewer. | active
+projects/particle-physics/three-layer-lagrangian/scripts/lagrangian_decomposition.py | LaGrangian Decomposition — Three-Layer Half-Life Structure | active
+projects/particle-physics/three-layer-lagrangian/scripts/lagrangian_layer_a_orthogonal.py | LaGrangian Layer A — Orthogonal Decomposition | active
+projects/particle-physics/three-layer-lagrangian/scripts/layer_c_investigation.py | Layer C Investigation — What explains the Dzhanibekov residual? | active
+projects/particle-physics/three-layer-lagrangian/scripts/model_comparison.py | Unified Model Comparison — AI2 Atomic Clock vs Three-Layer LaGrangian | active
+projects/particle-physics/three-layer-lagrangian/scripts/rate_competition.py | Rate Competition Test — Proves the Lagrangian Separates | active
+projects/particle-physics/three-layer-lagrangian/scripts/tracked_channel_fits.py | Tracked-Only Channel Fits — Per-channel models on clean, well-characterized | active
+projects/particle-physics/three-layer-lagrangian/scripts/zero_param_clock.py | Zero-Parameter Clock — Derive ALL coefficients from (α, β, π, e) | active
+projects/testSolver/solve.py | QFD Grand Solver v0.2 (Hardened) | test
+projects/testSolver/test_v4_nuc_beta_dimensional.py | V₄_nuc = β Hypothesis Test (Dimensional Analysis Corrected) | test
+projects/testSolver/test_v4_nuc_equals_beta.py | Test V₄_nuc = β Hypothesis | test
+qfd/Cl33.py | Cl(3,3) Clifford Algebra Implementation for QFD | active
+qfd/adapters/cosmology/cmb_boltzmann_transport.py | QFD Cosmology Adapter: Unified Transport (Spherical Scattering) | active
+qfd/adapters/cosmology/cmb_power_spectrum.py | QFD CMB Power Spectrum Adapter - Vacuum Refraction Modulation | active
+qfd/adapters/cosmology/cmb_vacuum_domains.py | QFD Cosmology Adapter: Vacuum Soliton Domain Structure | active
+qfd/adapters/cosmology/distance_modulus.py | QFD Cosmology Adapter: Distance Modulus with Scattering Corrections | active
+qfd/adapters/cosmology/radiative_transfer.py | QFD Cosmology: Two-Channel Radiative Transfer | active
+qfd/adapters/cosmology/redshift_direct.py | QFD Cosmology Adapter: Direct RedShift Projection | active
+qfd/adapters/nuclear/binding_energy.py | QFD Nuclear Adapter: Binding Energy | active
+qfd/adapters/nuclear/charge_prediction.py | QFD Nuclear Adapter: Charge Prediction (Dimensionally-Typed) | active
+qfd/adapters/nuclear/charge_prediction_legacy.py | QFD Nuclear Adapter: Charge Prediction (Core Compression Law) | active
+qfd/adapters/nuclear/charge_prediction_three_regime.py | QFD Nuclear Adapter: Three-Regime Charge Prediction and Decay Mode | active
+qfd/adapters/nuclear/decay_mode_classifier.py | Multi-Mode Nuclear Decay Classifier | active
+qfd/derive_beta_from_alpha.py | Derive β from α (Fine Structure Constant) | active
+qfd/figure_style.py | QFD Unified Figure Style — Publication-quality defaults for all book figures. | active
+qfd/qfd_proof.py | QFD Universe Validation - Zero Dependencies | active
+qfd/schema/dimensional_analysis.py | QFD Schema: Dimensional Analysis | active
+qfd/shared_constants.py | QFD Shared Constants - Single Source of Truth | active
+qfd/verify_golden_loop.py | Verify Golden Loop: α → β Derivation | validated
+simulation/scripts/derive_hbar_clifford.py | QFD: ħ Derivation from Cl(3,3) Beltrami Equation | active
+simulation/scripts/derive_hbar_from_topology.py | QFD Photon Toroid Test: Helicity-locked scaling => E ∝ ω | active
+simulation/scripts/derive_hbar_parallel.py | QFD Parallel Sweep: Optimized Helicity-locked E ∝ ω derivation | active
+validation_scripts/QFD_ALPHA_DERIVED_CONSTANTS.py | QFD Alpha-Derived Constants | validated
+validation_scripts/derive_beta_from_alpha.py | Derive β from α (Fine Structure Constant) | validated
+validation_scripts/derive_cmb_temperature.py | QFD CMB Temperature Derivation from Photon Decay Physics | validated
+validation_scripts/derive_hbar_from_topology.py | QFD Photon Toroid Test: Helicity-locked scaling => E ∝ ω | validated
+validation_scripts/derive_k_geom_from_integrals.py | k_geom Derivation from Hill Vortex Integrals | validated
+validation_scripts/explore_beta_tension.py | Beta Transcendental Tension Explorer | validated
+validation_scripts/golden_loop_error_propagation.py | Golden Loop Error Propagation & Monte Carlo | validated
+validation_scripts/lepton_stability.py | Lepton stability | validated
+validation_scripts/nuclear/analyze_all_decay_transitions.py | COMPREHENSIVE DECAY ANALYSIS: All Possible Transitions in AME2020 | validated
+validation_scripts/nuclear/harmonic_model.py | Harmonic family model for nuclear structure. | validated
+validation_scripts/nuclear/integer_ladder_test.py | Integer Ladder Test: Do Nuclei Quantize at Integer Harmonic Modes? | test
+validation_scripts/nuclear/validate_fission_pythagorean.py | ENGINE B: Fission Mode Analysis - Tacoma Narrows Interpretation | validated
+validation_scripts/run_all_validations.py | Run all validations | validated
+validation_scripts/run_core_validations.py | QFD Core Validation Runner | validated
+validation_scripts/shared_constants.py | QFD Shared Constants - Single Source of Truth | validated
+validation_scripts/validate_conservation_law.py | Universal Harmonic Conservation Law Validation | validated
+validation_scripts/validate_g2_corrected.py | QFD: G-2 Validation - Corrected Calculation | validated
+validation_scripts/validate_lepton_isomers.py | QFD: Lepton Isomers - Geometric Mass Generation | validated
+validation_scripts/validate_proton_engine.py | ENGINE D: PROTON DRIP LINE & EMISSION VALIDATOR | validated
+validation_scripts/verify_golden_loop.py | Verify Golden Loop: α → β Derivation | validated

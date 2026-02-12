@@ -207,12 +207,18 @@ This framework is mathematically rigorous (1,100 Lean proofs) but empirically un
 
 ## For AI/LLM Tools
 
-Machine-readable indexes for automated access:
+Machine-readable indexes for automated discovery ([llmstxt.org](https://llmstxt.org/) convention):
 
-| Resource | URL |
-|----------|-----|
-| File Index | https://tracyphasespace.github.io/QFD-Universe/llms.txt |
-| JSON Index | https://tracyphasespace.github.io/QFD-Universe/files.json |
+| Resource | Description |
+|----------|-------------|
+| [llms.txt](llms.txt) | AI discovery file — structured overview, key entry points, cross-links |
+| [LEAN_PROOF_INDEX.txt](LEAN_PROOF_INDEX.txt) | Flat index of 249 Lean proof files with descriptions and theorem counts |
+| [SOLVER_INDEX.txt](SOLVER_INDEX.txt) | Flat index of 326 Python solvers with descriptions and status |
+| [robots.txt](robots.txt) | Crawler metadata with discovery file pointers |
+
+**Raw URL access** — prepend `https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/` to any path above.
+
+See also: [QFD-Universe llms.txt](https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/llms.txt) for the curated repo.
 
 ---
 

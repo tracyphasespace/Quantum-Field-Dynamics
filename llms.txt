@@ -1,0 +1,100 @@
+# Quantum Field Dynamics
+
+> Full working codebase for Quantum Field Dynamics — formal Lean 4 proofs, numerical solvers, simulations, and active research. One measured input (alpha = 1/137) derives particle masses, nuclear binding, and cosmological observables.
+
+## Overview
+
+- Lean 4 proof files: 249
+- Proven theorems + lemmas: 1230
+- Python solvers/validators: 326
+- Updated: 2026-02-12
+
+## Raw file access
+
+Prepend to any path below: https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/
+
+## Key entry points
+
+- [README.md](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/README.md): Project overview and key results
+- [projects/Lean4/QFD/ProofLedger.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/ProofLedger.lean): Master proof index
+- [projects/Lean4/QFD/Physics/Postulates.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Physics/Postulates.lean): Axiomatic foundation
+- [projects/Lean4/QFD/GoldenLoop.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/GoldenLoop.lean): Golden Loop: alpha -> beta
+- [projects/Lean4/QFD/GA/Cl33.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/GA/Cl33.lean): Core Clifford algebra Cl(3,3)
+- [qfd/shared_constants.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/qfd/shared_constants.py): Single source of truth for all constants
+- [LEAN_PROOF_INDEX.txt](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/LEAN_PROOF_INDEX.txt): Flat index of all Lean proofs
+- [SOLVER_INDEX.txt](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/SOLVER_INDEX.txt): Flat index of all Python solvers
+
+## Related repositories
+
+- [QFD-Universe](https://github.com/tracyphasespace/QFD-Universe): Curated researcher-friendly repo with sector-organized validation
+- [QFD-Universe llms.txt](https://raw.githubusercontent.com/tracyphasespace/QFD-Universe/main/llms.txt): AI discovery file for QFD-Universe
+
+## Repository structure
+
+- `projects/Lean4/QFD/` — Lean 4 formal proofs (1100+ theorems)
+- `projects/particle-physics/` — Nuclear and lepton solvers
+- `projects/astrophysics/` — CMB, SNe, cosmology
+- `projects/field-theory/` — Field theory validators
+- `qfd/` — Core Python framework + shared constants
+- `validation_scripts/` — Independent validation suite
+- `visualizations/` — Interactive HTML demos
+- `V22_Lepton_Analysis/` — Hill vortex lepton analysis
+- `V22_Supernova_Analysis/` — SNe Ia cosmology fit
+- `Photon/` — g-2 prediction suite
+
+## Top Lean proof files (by theorem count)
+
+- [projects/Lean4/QFD/Renormalization/FiniteLoopIntegral.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Renormalization/FiniteLoopIntegral.lean): QFD Loop Integral Finiteness (36 theorems)
+- [projects/Lean4/QFD/Gravity/NoetherProjection.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Gravity/NoetherProjection.lean): Noether Projection: Deriving ξ_QFD = k_geom² × (5/6) (24 theorems)
+- [projects/Lean4/QFD/Nuclear/BetaNGammaEDerivation.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Nuclear/BetaNGammaEDerivation.lean): # Asymmetry Coupling β_n (21 theorems)
+- [projects/Lean4/QFD/Nuclear/BetaNGammaEDerivation_Complete.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Nuclear/BetaNGammaEDerivation_Complete.lean): # Asymmetry Coupling β_n (21 theorems)
+- [projects/Lean4/QFD/Nuclear/CoreCompressionLaw.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Nuclear/CoreCompressionLaw.lean): # Theorems: Proven Parameter Space Properties (21 theorems)
+- [projects/Lean4/QFD/Lepton/RVacDerivation.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Lepton/RVacDerivation.lean): First-Principles Derivation of R_vac = 1/√5 (20 theorems)
+- [projects/Lean4/QFD/Lepton/VortexStability.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Lepton/VortexStability.lean): # Hill Vortex Geometry Constants (19 theorems)
+- [projects/Lean4/QFD/Cosmology/AxisExtraction.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Cosmology/AxisExtraction.lean): # Phase 2: Full Uniqueness (AxisSet = {n, -n}) (17 theorems)
+- [projects/Lean4/QFD/EmergentAlgebra.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/EmergentAlgebra.lean): Algebraic Emergence of 4D Spacetime (17 theorems)
+- [projects/Lean4/QFD/GA/BasisProducts.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/GA/BasisProducts.lean): Basis Product Library for Cl(3,3) (17 theorems)
+- [projects/Lean4/QFD/NeutrinoMassTopology.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/NeutrinoMassTopology.lean): # Topological Winding Numbers (17 theorems)
+- [projects/Lean4/QFD/BlackHole/SaturationLimit.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/BlackHole/SaturationLimit.lean): # Vacuum Saturation Density (16 theorems)
+- [projects/Lean4/QFD/Cosmology/GalacticScaling.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Cosmology/GalacticScaling.lean): # Vacuum Density Profile (16 theorems)
+- [projects/Lean4/QFD/Gravity/GeometricCoupling.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Gravity/GeometricCoupling.lean): # k_geom Derivation Pipeline: Bare Eigenvalue (16 theorems)
+- [projects/Lean4/QFD/Photon/HelicityDecay.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Photon/HelicityDecay.lean): # Photon Soliton Structure (16 theorems)
+- [projects/Lean4/QFD/StabilityCriterion.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/StabilityCriterion.lean): QFD Theorem Z.1.5: Requirement for Global Stability (16 theorems)
+- [projects/Lean4/QFD/Math/Exp_Bounds_Analysis.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Math/Exp_Bounds_Analysis.lean): # Section 1: Basic Properties (15 theorems)
+- [projects/Lean4/QFD/Lepton/Generations.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Lepton/Generations.lean): Generations as Spatial Isomers (Cl(3,3)) (14 theorems)
+- [projects/Lean4/QFD/Nuclear/AlphaNDerivation.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Nuclear/AlphaNDerivation.lean): # Nuclear Fine Structure Constant (14 theorems)
+- [projects/Lean4/QFD/Nuclear/AlphaNDerivation_Complete.lean](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/projects/Lean4/QFD/Nuclear/AlphaNDerivation_Complete.lean): # Nuclear Fine Structure Constant (14 theorems)
+
+## Key Python solvers
+
+- [Photon/analysis/alpha_derivation.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/alpha_derivation.py): Derive fine structure constant α from vacuum geometry. [active]
+- [Photon/analysis/derive_constants.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/derive_constants.py): QFD Emergent Constants Derivation [active]
+- [Photon/analysis/dimensional_audit.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/dimensional_audit.py): QFD: Dimensional Audit of Emergent ℏ [active]
+- [Photon/analysis/integrate_hbar.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/integrate_hbar.py): QFD: Numerical Integration of Vortex Spin [active]
+- [Photon/analysis/lepton_energy_partition.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/lepton_energy_partition.py): Lepton energy partition [active]
+- [Photon/analysis/lepton_stability.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/lepton_stability.py): Lepton stability [active]
+- [Photon/analysis/lepton_stability_3param.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/lepton_stability_3param.py): QFD: Lepton Stability Analysis - Full 3-Parameter Model [active]
+- [Photon/analysis/soliton_balance_simulation.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/soliton_balance_simulation.py): QFD Photon Sector: Soliton Balance Simulation [active]
+- [Photon/analysis/speed_of_light.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/speed_of_light.py): Derive speed of light from vacuum stiffness parameter β. [active]
+- [Photon/analysis/three_constant_model.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/three_constant_model.py): QFD Photon Physics: The Three-Constant Model [active]
+- [Photon/analysis/validate_all_constants_as_material_properties.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/validate_all_constants_as_material_properties.py): QFD Material Science: ALL Constants as Vacuum Properties [validated]
+- [Photon/analysis/validate_chaos_alignment_decay.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/validate_chaos_alignment_decay.py): QFD Atomic Resonance: Chaotic Phase Alignment → Exponential Decay [validated]
+- [Photon/analysis/validate_fine_structure_scaling.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/validate_fine_structure_scaling.py): QFD: Fine Structure Constant Scaling [validated]
+- [Photon/analysis/validate_g2_corrected.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/validate_g2_corrected.py): QFD: Parameter-Free Geometric g-2 Validation [validated]
+- [Photon/analysis/validate_g2_from_v4.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/validate_g2_from_v4.py): QFD: Validate g-2 Anomalous Magnetic Moment Prediction from V₄ [validated]
+- [Photon/analysis/validate_g2_prediction.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/validate_g2_prediction.py): QFD: G-2 Prediction Validation - Acid Test [validated]
+- [Photon/analysis/validate_hbar_scaling.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/validate_hbar_scaling.py): QFD: Planck Constant Scaling Law [validated]
+- [Photon/analysis/validate_hydrodynamic_c.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/validate_hydrodynamic_c.py): QFD: Hydrodynamic Derivation of Speed of Light [validated]
+- [Photon/analysis/validate_hydrodynamic_c_hbar_bridge.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/validate_hydrodynamic_c_hbar_bridge.py): QFD Hydrodynamic Validation: The c - ℏ Bridge [validated]
+- [Photon/analysis/validate_lepton_isomers.py](https://raw.githubusercontent.com/tracyphasespace/Quantum-Field-Dynamics/main/Photon/analysis/validate_lepton_isomers.py): QFD: Lepton Isomers - Geometric Mass Generation [validated]
+
+## Physics summary
+
+QFD derives from one measured input (alpha = 1/137.036):
+- Golden Loop equation: 1/alpha = 2*pi^2 * (e^beta/beta) + 1 => beta = 3.043
+- Lepton masses: Hill vortex geometry with beta => e, mu, tau (chi^2 < 1e-11)
+- Anomalous g-2: Vortex surface/bulk ratio => 0.001% error (no free params)
+- Nuclear binding: 3,558 masses from soliton packing (< 1% light nuclei)
+- Cosmology: SNe Ia fit with 0 free params (chi^2/dof = 1.005)
+- 1100+ Lean 4 theorems proving internal mathematical consistency
+

@@ -1,0 +1,255 @@
+# LEAN_PROOF_INDEX.txt — Auto-generated 2026-02-12
+# 249 Lean 4 proof files
+# Total theorems+lemmas: 1230
+#
+# Format: path | description | theorem_count
+#
+projects/Lean4/QFD/AdjointStability_Complete.lean | QFD Appendix A: Vacuum Stability Theorem | 8
+projects/Lean4/QFD/AngularSelection.lean | Scalar product induced by the spacetime scalar part on bivectors. | 1
+projects/Lean4/QFD/Atomic/ChaosCore.lean | Minimal data for the spin–orbit vibration system. | 0
+projects/Lean4/QFD/Atomic/LyapunovCore.lean | Compact representation of the coupled phase state (r,p,S). | 0
+projects/Lean4/QFD/Atomic/LyapunovInstability.lean | Lyapunov Stability vs. Chaos | 2
+projects/Lean4/QFD/Atomic/ResonanceDynamics.lean | Coupled Oscillator Dynamics: The Mechanism of Spectroscopy | 5
+projects/Lean4/QFD/Atomic/ResonanceDynamicsCore.lean | Basic inertial component with mass, response time, phase, and orientation. | 0
+projects/Lean4/QFD/Atomic/SpinOrbitChaos.lean | The Genesis of Chaos: Spin-Linear Coupling | 2
+projects/Lean4/QFD/BivectorClasses_Complete.lean | QFD Appendix A: Bivector Trichotomy Theorem | 7
+projects/Lean4/QFD/BlackHole/BlackHole_Saturation.lean | Black Hole Saturation | 1
+projects/Lean4/QFD/BlackHole/SaturationLimit.lean | # Vacuum Saturation Density | 16
+projects/Lean4/QFD/Charge/Asymptotic_Charge_Fraction.lean | Asymptotic Charge Fraction | 1
+projects/Lean4/QFD/Charge/Coulomb.lean | Gate C-L3: Virtual Force (Derivation of Coulomb's Law) | 3
+projects/Lean4/QFD/Charge/GeometricCharge.lean | # 1. PRIMARY INPUTS: The Vacuum Geometry | 5
+projects/Lean4/QFD/Charge/Potential.lean | Gate C-L2: Harmonic Decay (Deriving 1/r from 3D Geometry) | 3
+projects/Lean4/QFD/Charge/Quantization.lean | # Physical Significance | 4
+projects/Lean4/QFD/Charge/ShellTheorem.lean | Electrostatic Shell Theorem: Monopoles Appear as Point Charges | 6
+projects/Lean4/QFD/Charge/Vacuum.lean | Gate C-L1: Vacuum Floor and Refractive Polarity | 1
+projects/Lean4/QFD/Classical/Conservation.lean | Energy Conservation & Bound States | 7
+projects/Lean4/QFD/Conservation/NeutrinoID.lean | ## Implications for QFD | 5
+projects/Lean4/QFD/Conservation/NeutrinoID_Automated.lean | Disjoint bivectors commute (all four indices distinct). | 4
+projects/Lean4/QFD/Conservation/NeutrinoID_Fixed.lean | The Neutrino Remainder Theorem | 3
+projects/Lean4/QFD/Conservation/NeutrinoID_Production.lean | Neutrino Electromagnetic Decoupling - Production Version | 4
+projects/Lean4/QFD/Conservation/NeutrinoID_Simple.lean | Neutrino Electromagnetic Decoupling - Simplified Version | 3
+projects/Lean4/QFD/Conservation/NeutrinoMixing.lean | Neutrino Mixing (PMNS Matrix) | 2
+projects/Lean4/QFD/Conservation/Noether.lean | Generalized Noether Theorem (6D Conservation) | 2
+projects/Lean4/QFD/Conservation/Unitarity.lean | The Unitarity Theorem (Resolving the Information Paradox) | 3
+projects/Lean4/QFD/Cosmology/AchromaticDrag.lean | QFD Achromatic Drag: Formal Proof | 10
+projects/Lean4/QFD/Cosmology/AxisExtraction.lean | # Phase 2: Full Uniqueness (AxisSet = {n, -n}) | 17
+projects/Lean4/QFD/Cosmology/CoaxialAlignment.lean | # Uniqueness of Axis from AxisSet | 3
+projects/Lean4/QFD/Cosmology/GalacticScaling.lean | # Vacuum Density Profile | 16
+projects/Lean4/QFD/Cosmology/HubbleDrift.lean | Hubble Flow as Drift | 1
+projects/Lean4/QFD/Cosmology/KernelAxis.lean | Kernel property on [0,1]: maximum at 1 with uniqueness. | 4
+projects/Lean4/QFD/Cosmology/LightCurveStretch.lean | QFD: Type Ia Supernova Light Curve Stretch Factor | 7
+projects/Lean4/QFD/Cosmology/OctupoleExtraction.lean | # Algebraic Bound on P₃ | 8
+projects/Lean4/QFD/Cosmology/PhotonScatteringKdV.lean | Photon Scattering as KdV Soliton Interaction | 2
+projects/Lean4/QFD/Cosmology/Polarization.lean | # Legendre Polynomial Definitions (for Polarization Module) | 6
+projects/Lean4/QFD/Cosmology/RadiativeTransfer.lean | QFD Two-Channel Radiative Transfer | 6
+projects/Lean4/QFD/Cosmology/RealTimeCosmology.lean | Real-Time Cosmological Drift (Sandage-Loeb Test) | 1
+projects/Lean4/QFD/Cosmology/ScatteringBias.lean | QFD Scattering Bias and Distance Inflation | 6
+projects/Lean4/QFD/Cosmology/VacuumDensityMatch.lean | Resolution of the Vacuum Catastrophe | 2
+projects/Lean4/QFD/Cosmology/VacuumRefraction.lean | QFD Vacuum Refraction and CMB Power Spectrum Modulation | 5
+projects/Lean4/QFD/Cosmology/VolumeBalance.lean | # 1. THE VACUUM PARAMETERS | 6
+projects/Lean4/QFD/Electrodynamics/AharonovBohm.lean | Aharonov-Bohm Phase | 2
+projects/Lean4/QFD/Electrodynamics/CerenkovReal.lean | Geometric Cerenkov Radiation | 1
+projects/Lean4/QFD/Electrodynamics/DispersionRelation.lean | Vacuum Dispersion Relation | 1
+projects/Lean4/QFD/Electrodynamics/LarmorPrecession.lean | Larmor Precession Geometry | 2
+projects/Lean4/QFD/Electrodynamics/MagneticHelicity.lean | Magnetic Helicity (Topological Field Knots) | 2
+projects/Lean4/QFD/Electrodynamics/MaxwellReal.lean | Field is a bivector-valued field. | 1
+projects/Lean4/QFD/Electrodynamics/NoMonopoles.lean | The Absence of Magnetic Monopoles | 1
+projects/Lean4/QFD/Electrodynamics/PoyntingTheorem.lean | The 6D Poynting Theorem (Geometric Energy Flow) | 3
+projects/Lean4/QFD/Electrodynamics/ProcaReal.lean | Real Proca Equation (Massive Photons) | 1
+projects/Lean4/QFD/Electron/AlphaCirc.lean | Circulation coupling on the Hill vortex boundary | 1
+projects/Lean4/QFD/Electron/AxisAlignment.lean | Gate C-L5: Axis Alignment (The Singular Attribute) | 1
+projects/Lean4/QFD/Electron/CirculationTopology.lean | The D-Flow Identity: Topological Linear Density | 1
+projects/Lean4/QFD/Electron/HillVortex.lean | Gate C-L4: The Hill Spherical Vortex Structure | 3
+projects/Lean4/QFD/EmergentAlgebra.lean | Algebraic Emergence of 4D Spacetime | 17
+projects/Lean4/QFD/EmergentAlgebra_Heavy.lean | Heavyweight Emergent Algebra | 12
+projects/Lean4/QFD/Empirical/CoreCompression.lean | Gate C-2: The Core Compression Law (CCL) | 3
+projects/Lean4/QFD/GA/BasisOperations.lean | Basis Operations for Cl(3,3) | 2
+projects/Lean4/QFD/GA/BasisProducts.lean | Basis Product Library for Cl(3,3) | 17
+projects/Lean4/QFD/GA/BasisReduction.lean | Basis Reduction Engine - Complete Automation for Cl(3,3) | 8
+projects/Lean4/QFD/GA/Cl33.lean | A basis vector eᵢ in V = (Fin 6 → ℝ), represented as Pi.single i 1. | 5
+projects/Lean4/QFD/GA/Cl33Instances.lean | `Cl33` is a nontrivial algebra (the identity is not zero). | 4
+projects/Lean4/QFD/GA/Cl33_Minimal.lean | Cl33 Minimal | 0
+projects/Lean4/QFD/GA/Conjugation.lean | Geometric Conjugation (Reversion & Grade Involution) | 3
+projects/Lean4/QFD/GA/GradeProjection.lean | Grade Projection Operators | 3
+projects/Lean4/QFD/GA/HodgeDual.lean | The Hodge Dual (Pseudoscalar I) | 1
+projects/Lean4/QFD/GA/MultivectorGrade.lean | Multivector Grade Projections | 3
+projects/Lean4/QFD/GA/PhaseCentralizer.lean | The Phase Centralizer Completeness Theorem | 6
+projects/Lean4/QFD/GA/Tactics.lean | Geometric Algebra Tactics for QFD | 0
+projects/Lean4/QFD/GoldenLoop.lean | # 1. Geometric Inputs (Independent Measures) | 8
+projects/Lean4/QFD/GoldenLoop_PathIntegral.lean | # 1. Physical Parameters | 7
+projects/Lean4/QFD/Gravity/G_Derivation.lean | Gravity from Vacuum Stiffness | 0
+projects/Lean4/QFD/Gravity/GeodesicEquivalence.lean | The Geodesic Equivalence Theorem | 1
+projects/Lean4/QFD/Gravity/GeodesicForce.lean | Gate G-L2: Radial Force from Time Potential (No Filters) | 3
+projects/Lean4/QFD/Gravity/GeometricCoupling.lean | # k_geom Derivation Pipeline: Bare Eigenvalue | 16
+projects/Lean4/QFD/Gravity/GeometricProjection_Integration.lean | Volume of unit n-sphere: V_n = π^(n/2) / Γ(n/2 + 1) | 1
+projects/Lean4/QFD/Gravity/Gravity_Projection.lean | Total dimensions in Phase Space. | 2
+projects/Lean4/QFD/Gravity/NoetherProjection.lean | Noether Projection: Deriving ξ_QFD = k_geom² × (5/6) | 24
+projects/Lean4/QFD/Gravity/PerihelionShift.lean | Perihelion Precession via Drift | 1
+projects/Lean4/QFD/Gravity/ResidualStrain.lean | # 1. THE CARPET PROBLEM | 8
+projects/Lean4/QFD/Gravity/SchwarzschildLink.lean | Gate G-L3: Schwarzschild Link (No Filters, No Series) | 3
+projects/Lean4/QFD/Gravity/Shell_Theorem_Harmonic.lean | The radial Laplacian operator for a function f(r): Lap(f) = (1/r²) * d/dr (r² * df/dr) | 4
+projects/Lean4/QFD/Gravity/SnellLensing.lean | Gravitational Lensing as Refraction | 1
+projects/Lean4/QFD/Gravity/TimeRefraction.lean | Gate G-L1: Time Refraction (No Filters) | 2
+projects/Lean4/QFD/Hydrogen/HbarDerivation.lean | A field configuration representing a toroidal photon soliton. | 2
+projects/Lean4/QFD/Hydrogen/PhotonResonance.lean | Photon Resonance | 1
+projects/Lean4/QFD/Hydrogen/PhotonScattering.lean | Unified Scattering Theory: From Absorption to Spectroscopy | 5
+projects/Lean4/QFD/Hydrogen/PhotonSoliton.lean | QFD Photon Sector: Kinematic Soliton Model | 9
+projects/Lean4/QFD/Hydrogen/PhotonSolitonEmergentConstants.lean | Emergent Constants Layer (v2 - Scaling Bridge) | 8
+projects/Lean4/QFD/Hydrogen/PhotonSolitonStable.lean | Photon + Hydrogen soliton: stability + momentum/wavelength addendum | 5
+projects/Lean4/QFD/Hydrogen/PhotonSoliton_Kinematic.lean | QFD Photon Sector: Kinematic Soliton Model | 2
+projects/Lean4/QFD/Hydrogen/SpeedOfLight.lean | Speed of Light Derivation (Hydrodynamic Limit) - Corrected | 10
+projects/Lean4/QFD/Hydrogen/TopologicalCharge.lean | QFD Photon Sector: Topological Protection | 4
+projects/Lean4/QFD/Hydrogen/UnifiedForces.lean | Unified Forces from Vacuum Stiffness | 7
+projects/Lean4/QFD/Hydrogen/UnifiedForces_v2.lean | Unified Forces from Vacuum Stiffness (Model Theorem) | 9
+projects/Lean4/QFD/Insights/CommutatorDecomposition.lean | # 1. Fundamental Definitions | 8
+projects/Lean4/QFD/Insights/ComplexEmbedding.lean | # 1. Internal Bivector Definition | 5
+projects/Lean4/QFD/Insights/ScleronomicConservation.lean | # 1. Smooth Derivatives Structure | 4
+projects/Lean4/QFD/Lepton/AnomalousMoment.lean | # Physical Constants | 9
+projects/Lean4/QFD/Lepton/Antimatter.lean | Geometric Chirality: The Origin of Antimatter | 2
+projects/Lean4/QFD/Lepton/FineStructure.lean | The Fine Structure Constant | 3
+projects/Lean4/QFD/Lepton/FormFactorCore.lean | Dimensionless shape factor `F = bulk/grad`. | 0
+projects/Lean4/QFD/Lepton/FormFactors.lean | QFD: Geometric Form Factors & The Isoperimetric Inequality | 1
+projects/Lean4/QFD/Lepton/Generations.lean | Generations as Spatial Isomers (Cl(3,3)) | 14
+projects/Lean4/QFD/Lepton/GeometricAnomaly.lean | Geometric Origin of the g-2 Anomaly (Theorem G.1) | 4
+projects/Lean4/QFD/Lepton/GeometricG2.lean | Parameter-Free Geometric Derivation of Lepton g-2 | 11
+projects/Lean4/QFD/Lepton/GeometricSignFlip.lean | Geometric Sign Flip | 1
+projects/Lean4/QFD/Lepton/IsomerCore.lean | Stable isomer configurations sit at local minima of the stability potential. | 0
+projects/Lean4/QFD/Lepton/KoideAlgebra.lean | Koide Algebra | 1
+projects/Lean4/QFD/Lepton/KoideRelation.lean | The Geometric Koide Relation | 5
+projects/Lean4/QFD/Lepton/LeptonG2Prediction.lean | Lepton Mass & G-2 Prediction (The "Golden Loop") | 5
+projects/Lean4/QFD/Lepton/LeptonIsomers.lean | Lepton Isomers: The Geometric Origin of Mass | 5
+projects/Lean4/QFD/Lepton/MassFunctional.lean | The Mass Functional (Geometric Origin of Mass) | 3
+projects/Lean4/QFD/Lepton/MassSpectrum.lean | QFD Appendix Y: Lepton Mass Spectrum | 3
+projects/Lean4/QFD/Lepton/PairProduction.lean | Pair Production as Knot Splitting | 1
+projects/Lean4/QFD/Lepton/Physics/Postulates.lean | A placeholder for a physical system. | 0
+projects/Lean4/QFD/Lepton/QBallStructure.lean | QBallStructure | 7
+projects/Lean4/QFD/Lepton/RVacDerivation.lean | First-Principles Derivation of R_vac = 1/√5 | 20
+projects/Lean4/QFD/Lepton/StabilityGuards.lean | Stability Constraints (The Factorization Guardrail) | 2
+projects/Lean4/QFD/Lepton/TopologicalEnergy.lean | The stability polynomial is continuous | 8
+projects/Lean4/QFD/Lepton/Topology.lean | The Topological Protection Theorem (Why Matter is Stable) | 4
+projects/Lean4/QFD/Lepton/VortexElectron.lean | Vortex Electron | 2
+projects/Lean4/QFD/Lepton/VortexStability.lean | # Hill Vortex Geometry Constants | 19
+projects/Lean4/QFD/Lepton/VortexStability_v3.lean | # Hill Vortex Geometry Constants | 6
+projects/Lean4/QFD/Math/AlphaFormFactor.lean | AlphaFormFactor | 3
+projects/Lean4/QFD/Math/BetaCriticality.lean | BetaCriticality | 7
+projects/Lean4/QFD/Math/Exp_Bounds_Analysis.lean | # Section 1: Basic Properties | 15
+projects/Lean4/QFD/Math/Function_Monotonicity.lean | The derivative of x * e^x is e^x * (1 + x). | 2
+projects/Lean4/QFD/Math/ReciprocalIneq.lean | If 0 < a and a ≤ b then 1/b ≤ 1/a | 7
+projects/Lean4/QFD/Math/Sin_Phase_Closure.lean | Lemma: If sin(N * 2pi) = 0 and cos(N * 2pi) = 1, then N is an integer. | 1
+projects/Lean4/QFD/Math/SpectralGapBounds.lean | QFD: Spectral Gap Bounds from Geometry | 9
+projects/Lean4/QFD/Math/VacuumSaturation.lean | Vacuum Saturation | 4
+projects/Lean4/QFD/Math/VacuumSaturation_aristotle.lean | VacuumSaturation | 4
+projects/Lean4/QFD/Matter/ProtonTopology.lean | Net winding of the three-soliton composite. | 1
+projects/Lean4/QFD/Neutrino.lean | Appendix N: The Neutrino as a Minimal Rotor | 4
+projects/Lean4/QFD/NeutrinoMassTopology.lean | # Topological Winding Numbers | 17
+projects/Lean4/QFD/Neutrino_Bleaching.lean | Appendix N.2 — Bleaching Limit (Formal Scaffold) | 2
+projects/Lean4/QFD/Neutrino_Chirality.lean | The Chirality Lock (The Bleaching Theorem) | 2
+projects/Lean4/QFD/Neutrino_MassScale.lean | Gate N-L6: Mass Scale Estimate (Dimensional Analysis) | 1
+projects/Lean4/QFD/Neutrino_MinimalRotor.lean | Gate N-L2C: QFD Minimal Rotor + Bleaching Specialization | 5
+projects/Lean4/QFD/Neutrino_Oscillation.lean | Gate N-L3: Flavor/Isomer Oscillation as Unitary Phase Evolution | 4
+projects/Lean4/QFD/Neutrino_Production.lean | Gate N-L5: The Neutrino as an Algebraic Remainder | 2
+projects/Lean4/QFD/Neutrino_Topology.lean | Appendix N.2 — Toy Topology Instantiation (Gate N-L2B) | 4
+projects/Lean4/QFD/Nuclear/AlphaNDerivation.lean | # Nuclear Fine Structure Constant | 14
+projects/Lean4/QFD/Nuclear/AlphaNDerivation_Complete.lean | # Nuclear Fine Structure Constant | 14
+projects/Lean4/QFD/Nuclear/BetaNGammaEDerivation.lean | # Asymmetry Coupling β_n | 21
+projects/Lean4/QFD/Nuclear/BetaNGammaEDerivation_Complete.lean | # Asymmetry Coupling β_n | 21
+projects/Lean4/QFD/Nuclear/BindingMassScale.lean | Nuclear Binding Mass Scale equals Vacuum Density | 8
+projects/Lean4/QFD/Nuclear/BoundaryCondition.lean | Soliton Boundary Conditions | 1
+projects/Lean4/QFD/Nuclear/CoreCompression.lean | Gate C-2: The Core Compression Law (CCL) | 4
+projects/Lean4/QFD/Nuclear/CoreCompressionLaw.lean | # Theorems: Proven Parameter Space Properties | 21
+projects/Lean4/QFD/Nuclear/DecayHalfLife.lean | QFD: Nuclear Decay Half-Life from Vacuum Tunneling | 10
+projects/Lean4/QFD/Nuclear/DeuteronFit.lean | Deuteron Binding (The Strong Force Test) | 1
+projects/Lean4/QFD/Nuclear/FissionLimit.lean | # The Fissility Parameter | 9
+projects/Lean4/QFD/Nuclear/FissionTopology.lean | # Harmonic Soliton States | 5
+projects/Lean4/QFD/Nuclear/Fission_Asymmetry.lean | Theorem: If the parent is Odd, fragments cannot be equal. | 1
+projects/Lean4/QFD/Nuclear/IsobarStability.lean | Structural Resonance: Soliton Packing Efficiency | 1
+projects/Lean4/QFD/Nuclear/IsomerDecay.lean | Isomer Transitions | 1
+projects/Lean4/QFD/Nuclear/MagicNumbers.lean | Nuclear Magic Numbers | 1
+projects/Lean4/QFD/Nuclear/NuclearScale_Bound.lean | Physical constants (SI Units) | 7
+projects/Lean4/QFD/Nuclear/Nuclear_Coefficients_Derivation.lean | The Fine Structure Constant | 8
+projects/Lean4/QFD/Nuclear/ProtonBridge_Derivation.lean | Proton Bridge Derivation | 1
+projects/Lean4/QFD/Nuclear/ProtonBridge_Geometry.lean | Proton Bridge Geometry | 1
+projects/Lean4/QFD/Nuclear/ProtonSpin.lean | Proton Spin Decomposition | 1
+projects/Lean4/QFD/Nuclear/QuarticStiffness.lean | # Quartic Soliton Stiffness | 12
+projects/Lean4/QFD/Nuclear/SelectionRules.lean | Geometric Nuclear Selection Rules | 3
+projects/Lean4/QFD/Nuclear/SymmetryEnergyMinimization.lean | # Nuclear Energy Functional | 9
+projects/Lean4/QFD/Nuclear/TimeCliff.lean | Nuclear Binding from Time Refraction (No Filters) | 8
+projects/Lean4/QFD/Nuclear/TimeCliff_Complete.lean | Nuclear Binding from Time Refraction (No Filters) | 8
+projects/Lean4/QFD/Nuclear/VacuumStiffness.lean | The Proton Bridge: Vacuum Stiffness from α-Derived Geometry | 1
+projects/Lean4/QFD/Nuclear/WellDepth.lean | # Nuclear Well Depth | 14
+projects/Lean4/QFD/Nuclear/YukawaDerivation.lean | The Yukawa Derivation (Vacuum Pressure) | 2
+projects/Lean4/QFD/Photon/Casimir_Mode_Restriction.lean | Mode Condition: k_n * d = n * pi | 2
+projects/Lean4/QFD/Photon/CliffordBeltrami.lean | Cl(3,3) Beltrami Equation: Force-Free Fields in Phase Centralizer | 6
+projects/Lean4/QFD/Photon/HelicityDecay.lean | # Photon Soliton Structure | 16
+projects/Lean4/QFD/Photon/Interaction.lean | QFD: Photon Emission & Absorption as Geometric Resonance | 8
+projects/Lean4/QFD/Photon/Photon_KdV_Interaction.lean | Photon Kd V Interaction | 1
+projects/Lean4/QFD/Photon/Photon_Soliton_Stability.lean | Photon Soliton Stability | 1
+projects/Lean4/QFD/Photon/QuantumJump.lean | QFD: The Mechanic's Guide to the Quantum Jump | 10
+projects/Lean4/QFD/Photon/SolitonQuantization.lean | QFD: Soliton Quantization Theorem | 5
+projects/Lean4/QFD/Physics/GoldenLoop_Existence.lean | alpha is positive | 10
+projects/Lean4/QFD/Physics/GoldenLoop_Solver.lean | The target constant derived from Alpha and c1 | 8
+projects/Lean4/QFD/Physics/IntegerLadder_Quantization.lean | QFD: Integer Ladder Quantization | 3
+projects/Lean4/QFD/Physics/Photon_Drag_Derivation.lean | Photon Drag Derivation | 1
+projects/Lean4/QFD/Physics/Postulates.lean | Centralized QFD Postulates | 11
+projects/Lean4/QFD/Physics/Postulates_layered.lean | Postulates layered | 0
+projects/Lean4/QFD/Physics/Scale_Dependent_Hessian.lean | Theorem: The response sign is determined by the scale ratio. | 1
+projects/Lean4/QFD/Physics/Topological_Mass_Generation.lean | The winding energy term gamma * N^2 / R increases without bound as R decreases. | 3
+projects/Lean4/QFD/ProofLedger.lean | QFD Proof Ledger: Book Claims → Lean Theorems | 1
+projects/Lean4/QFD/QM_Translation/DiracRealization.lean | ## Conclusion | 5
+projects/Lean4/QFD/QM_Translation/Heisenberg.lean | The Geometric Heisenberg Theorem | 4
+projects/Lean4/QFD/QM_Translation/MeasurementCollapse.lean | Geometric Wavefunction Collapse | 2
+projects/Lean4/QFD/QM_Translation/PauliBridge.lean | The Pauli Bridge (Geometric Spin Theorem) | 6
+projects/Lean4/QFD/QM_Translation/PauliExclusion.lean | Geometric Pauli Exclusion | 2
+projects/Lean4/QFD/QM_Translation/RealDiracEquation.lean | The Real Dirac Equation (Grand Unification of Spin) | 2
+projects/Lean4/QFD/QM_Translation/SchrodingerEvolution.lean | The Schrödinger Evolution (Phase-as-Rotation) | 4
+projects/Lean4/QFD/Relativity/LorentzRotors.lean | Lorentz Boosts as Rotors | 1
+projects/Lean4/QFD/Relativity/SagnacEffect.lean | Geometric Sagnac Effect | 1
+projects/Lean4/QFD/Relativity/TimeDilationMechanism.lean | Time Dilation as Geometric Factor | 2
+projects/Lean4/QFD/Renormalization/FiniteLoopIntegral.lean | QFD Loop Integral Finiteness | 36
+projects/Lean4/QFD/Rift/ChargeEscape.lean | QFD Black Hole Rift Physics: Charge-Mediated Escape | 3
+projects/Lean4/QFD/Rift/RotationDynamics.lean | QFD Black Hole Rift Physics: Rotation Dynamics | 4
+projects/Lean4/QFD/Rift/SequentialEruptions.lean | QFD Black Hole Rift Physics: Sequential Eruptions and Charge Accumulation | 4
+projects/Lean4/QFD/Rift/SpinSorting.lean | QFD Black Hole Rift Physics: Spin-Sorting Ratchet | 4
+projects/Lean4/QFD/SaturationLimit.lean | High-Energy Saturation Potential (V6 Reinterpretation Module) | 6
+projects/Lean4/QFD/Schema/Constraints.lean | Parameter Constraints for Grand Solver | 3
+projects/Lean4/QFD/Schema/Couplings.lean | Grand Solver Parameter Schema | 0
+projects/Lean4/QFD/Schema/DimensionalAnalysis.lean | Dimensional Analysis System | 0
+projects/Lean4/QFD/Soliton/AdvancedTopologicalCore.lean | Helper record bundling an analytic trial profile we can differentiate. | 0
+projects/Lean4/QFD/Soliton/BreatherModes.lean | Soliton Breather Modes | 1
+projects/Lean4/QFD/Soliton/GaussianMoments.lean | Gaussian Moment Integrals (Eliminating Quantization Axiom) | 7
+projects/Lean4/QFD/Soliton/HardWall.lean | Gate Q-1: The Hard Wall Mechanism | 8
+projects/Lean4/QFD/Soliton/MassEnergyCore.lean | Minimal abstraction of the stress-energy tensor for the vortex model. | 0
+projects/Lean4/QFD/Soliton/MassEnergyDensity.lean | # Kinetic Energy and Field Gradients | 3
+projects/Lean4/QFD/Soliton/Quantization.lean | Gate Q-2: Charge Quantization (Soliton & Vortex) | 6
+projects/Lean4/QFD/Soliton/RickerAnalysis.lean | Ricker Wavelet Analysis (Eliminating HardWall Axioms) | 12
+projects/Lean4/QFD/Soliton/Soliton_Packing_Geometry.lean | Kepler Conjecture limit for hard spheres | 1
+projects/Lean4/QFD/Soliton/TopologicalCore.lean | Core Definitions for Density-Matched Topological Solitons | 2
+projects/Lean4/QFD/Soliton/TopologicalStability.lean | # Phase 1: Formalizing the Domain and Fields | 9
+projects/Lean4/QFD/Soliton/TopologicalStability_Refactored.lean | The QFD Vacuum parameters (universal constants derived in Chapter 12). | 4
+projects/Lean4/QFD/SpacetimeEmergence_Complete.lean | QFD Appendix Z: Spacetime Emergence Theorem | 10
+projects/Lean4/QFD/SpectralGap.lean | # 1. Geometric Operators | 1
+projects/Lean4/QFD/StabilityCriterion.lean | QFD Theorem Z.1.5: Requirement for Global Stability | 16
+projects/Lean4/QFD/Test/TestKoide.lean | Test Koide | 1
+projects/Lean4/QFD/Test/TrivialProof.lean | Trivial Proof | 1
+projects/Lean4/QFD/Thermodynamics/BoltzmannEntropy.lean | # 1. THE HOLOGRAPHIC PRINCIPLE | 9
+projects/Lean4/QFD/Topology/FormFactorCore.lean | A field configuration in physical space. | 0
+projects/Lean4/QFD/Topology/IntegerBridge.lean | # 1. THE GEOMETRIC CONSTANT: 1/√2 | 10
+projects/Lean4/QFD/TopologyFormFactor.lean | QFD: Topological Form Factors | 2
+projects/Lean4/QFD/ToyModel.lean | Toy Model: Fourier Series Blueprint | 0
+projects/Lean4/QFD/Vacuum/StrongCP.lean | A discrete relaxation step that damps the CP-violating angle. | 1
+projects/Lean4/QFD/Vacuum/VacuumHydrodynamics.lean | Vacuum Hydrodynamics: The Material Origin of Constants | 2
+projects/Lean4/QFD/Vacuum/VacuumParameters.lean | # Vacuum Bulk Modulus (Compression Stiffness) | 10
+projects/Lean4/QFD/Vacuum/ZetaPhysics.lean | Placeholder for the lattice-mode sum before regularization. | 0
+projects/Lean4/QFD/VacuumEigenvalue.lean | Vacuum Stiffness as Eigenvalue (Ab Initio Beta Module) | 9
+projects/Lean4/QFD/VacuumHydrodynamics.lean | Vacuum Hydrodynamics: The Material Origin of Constants | 4
+projects/Lean4/QFD/Validation/BackbonePredictionBridge.lean | Backbone Prediction Bridge | 2
+projects/Lean4/QFD/Validation/DerivedConstantConsistency.lean | Derived Constant Consistency | 6
+projects/Lean4/QFD/Validation/IntegerLadderConstraint.lean | Integer Ladder Constraint | 2
+projects/Lean4/QFD/Validation/KdVRedshiftBridge.lean | KdV Interaction → Redshift Bridge | 3
+projects/Lean4/QFD/Validation/ShellGravityBridge.lean | Shell Theorem → Cosmic Potential Bridge | 2
+projects/Lean4/QFD/Validation/SolitonBackboneFromModel.lean | Soliton Backbone from the QFD Model | 2
+projects/Lean4/QFD/Validation/ValidationLockstep.lean | Validation Lockstep Summary | 2
+projects/Lean4/QFD/Weak/CPViolation.lean | Geometric CP Violation | 1
+projects/Lean4/QFD/Weak/ChiralAnomaly.lean | Geometric Chiral Anomaly (ABJ) | 2
+projects/Lean4/QFD/Weak/DoubleBetaDecay.lean | Neutrino Conjugation (Majorana?) | 1
+projects/Lean4/QFD/Weak/PionGeometry.lean | Pions as Geometric Phase Slips | 2
