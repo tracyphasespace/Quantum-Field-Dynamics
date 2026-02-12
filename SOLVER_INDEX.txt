@@ -125,7 +125,7 @@ complete_energy_functional/mcmc_stage3_fixed_radius.py | Stage 3 CORRECTED: Fix 
 complete_energy_functional/mcmc_stage3_radius.py | Stage 3 MCMC: Add Charge Radius Constraint | exploration
 complete_energy_functional/solvers.py | Variational solvers for Euler-Lagrange equations. | active
 complete_energy_functional/test_implementation.py | Quick test script to verify complete energy functional implementation. | test
-projects/Lean4/schema/v0/GrandSolver_PythonBridge.py | GrandSolver_PythonBridge.py | active
+projects/Lean4/schema/v0/GrandSolver_PythonBridge.py | Bounty Target: Reality Check (5,000 Points) | active
 projects/Lean4/scripts/derive_hbar_from_topology_gpu.py | QFD Topological Action Derivation (GPU/PyTorch Optimized) | active
 projects/Lean4/scripts/derive_hbar_from_topology_parallel.py | QFD Topological Action Derivation (CPU Parallel Optimized) | active
 projects/Lean4/scripts/parameter_free_g2.py | QFD: Parameter-Free G-2 Validation | active
@@ -232,7 +232,7 @@ projects/particle-physics/nuclear-soliton-solver/quick_c12_test_verbose.py | Qui
 projects/particle-physics/nuclear-soliton-solver/quick_test_4workers.py | Quick test with 4 workers on 2 isotopes | test
 projects/particle-physics/nuclear-soliton-solver/run_parallel_optimization.py | Run overnight optimization with ParallelObjective for GPU-efficient parallel evaluation. | active
 projects/particle-physics/nuclear-soliton-solver/run_simple_optimization.py | Simple single-job optimization with visible progress. | active
-projects/particle-physics/nuclear-soliton-solver/src/analyze_isotopes.py | analyze_isotopes.py | active
+projects/particle-physics/nuclear-soliton-solver/src/analyze_isotopes.py | This script analyzes the results from the polish and isotope sweeps to verify | active
 projects/particle-physics/nuclear-soliton-solver/src/batch_optimize.py | Parallel Batch Optimization for Nuclear Soliton Solver | active
 projects/particle-physics/nuclear-soliton-solver/src/ccl_seeded_solver.py | CCL-Seeded Soliton Solver | active
 projects/particle-physics/nuclear-soliton-solver/src/parallel_objective.py | Parallel objective function for optimization with GPU memory management. | active

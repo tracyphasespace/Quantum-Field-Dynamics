@@ -95,6 +95,17 @@ SKIP_FILES = {"__init__.py", "conftest.py", "setup.py"}
 # Lean file analysis
 # ---------------------------------------------------------------------------
 
+def clean_description(desc: str) -> str:
+    """Clean up a raw description string."""
+    # Strip leading markdown heading markers (# ## ### etc.)
+    desc = re.sub(r'^#+\s*', '', desc).strip()
+    # Strip trailing punctuation artifacts
+    desc = desc.rstrip('-').rstrip(':').strip()
+    # Collapse whitespace
+    desc = re.sub(r'\s+', ' ', desc)
+    return desc[:120]
+
+
 def extract_lean_description(filepath: Path) -> str:
     """Extract description from a Lean file's doc comments."""
     try:
@@ -102,23 +113,20 @@ def extract_lean_description(filepath: Path) -> str:
     except Exception:
         return humanize_filename(filepath.stem)
 
-    # Pattern 1: /-! # Title -/ module doc
-    m = re.search(r'/\-!\s*#\s*(.+?)(?:\n|\-/)', text)
+    # Pattern 1: /-! # Title -/ module doc (grab first meaningful line)
+    m = re.search(r'/\-!\s*\n?(.*?)(?:\n\n|\-/)', text, re.DOTALL)
     if m:
-        return m.group(1).strip()
+        # Take the first non-empty line from the doc block
+        for line in m.group(1).strip().split('\n'):
+            line = line.strip()
+            if len(line) > 5:
+                return clean_description(line)
 
-    # Pattern 2: /-! description -/ (first line)
-    m = re.search(r'/\-!\s*\n?\s*(.+?)(?:\n|\-/)', text)
-    if m:
-        desc = m.group(1).strip().rstrip('-').strip()
-        if len(desc) > 10:
-            return desc[:120]
-
-    # Pattern 3: /-- description -/ before first theorem/def
+    # Pattern 2: /-- description -/ before first theorem/def
     m = re.search(r'/\-\-\s*(.+?)\s*\-/', text)
     if m:
-        desc = m.group(1).strip()
-        if len(desc) > 10 and len(desc) < 150:
+        desc = clean_description(m.group(1))
+        if len(desc) > 10:
             return desc
 
     return humanize_filename(filepath.stem)
@@ -151,19 +159,42 @@ def extract_python_description(filepath: Path) -> str:
     stripped = re.sub(r'^(#!.*\n|#\s*-\*-.*\n)*', '', text)
     m = re.match(r'\s*(?:"""|\'\'\')(.*?)(?:"""|\'\'\')', stripped, re.DOTALL)
     if m:
-        first_line = m.group(1).strip().split('\n')[0].strip()
-        if len(first_line) > 5:
-            return first_line[:120]
+        docstring_lines = [l.strip() for l in m.group(1).strip().split('\n')
+                           if l.strip()]
+        # Take first line that looks like a real description (not just a filename)
+        for line in docstring_lines:
+            # Skip lines that are just the filename repeated
+            if line.lower().replace('.py', '') == filepath.stem.lower():
+                continue
+            # Skip lines that are just dashes or equals
+            if re.match(r'^[-=~]+$', line):
+                continue
+            if len(line) > 10:
+                return clean_description(line)
 
-    # Pattern 2: first # comment line (not shebang)
-    for line in text.split('\n')[:10]:
+    # Pattern 2: comment block at top of file (first substantive # comment)
+    for line in text.split('\n')[:15]:
         line = line.strip()
-        if line.startswith('#!'):
+        if line.startswith('#!') or line.startswith('# -*-'):
             continue
-        if line.startswith('# ') and len(line) > 5:
-            return line[2:].strip()[:120]
+        if line.startswith('# ') and len(line) > 10:
+            desc = line[2:].strip()
+            # Skip lines that are just the filename
+            if desc.lower().replace('.py', '').replace(' ', '_') == filepath.stem.lower():
+                continue
+            if desc.startswith('-'):
+                continue
+            return clean_description(desc)
+        # Stop at first non-comment, non-blank line (but allow blank gaps)
         if line and not line.startswith('#'):
             break
+
+    # Pattern 3: look for a main() docstring or first class/function docstring
+    m = re.search(r'def (?:main|run)\(.*?\):\s*\n\s*"""(.+?)"""', text, re.DOTALL)
+    if m:
+        first_line = m.group(1).strip().split('\n')[0].strip()
+        if len(first_line) > 10:
+            return clean_description(first_line)
 
     return humanize_filename(filepath.stem)
 
@@ -278,6 +309,65 @@ def collect_python_files(repo_root: Path, python_dirs: list[str]) -> list[dict]:
 # ---------------------------------------------------------------------------
 # File generators
 # ---------------------------------------------------------------------------
+
+def rank_python_files(python_files: list[dict]) -> list[dict]:
+    """Rank Python files by importance for the llms.txt key solvers section.
+
+    Prioritizes entry points and solvers over internal/utility modules.
+    """
+    # Internal module names that are not useful as top-level entries
+    INTERNAL_NAMES = {
+        "config", "core", "visualization", "utils", "helpers",
+        "constants", "plotting", "shared_constants",
+    }
+
+    def score(f: dict) -> int:
+        name = Path(f["path"]).stem.lower()
+        fname = Path(f["path"]).name.lower()
+
+        # Skip internal modules entirely
+        if name in INTERNAL_NAMES:
+            return -1
+
+        s = 0
+        # Entry points score highest
+        if fname == "run_all.py":
+            s += 100
+        if "solver" in name or "qfd_solver" in name:
+            s += 80
+        if fname.startswith("validate_") or fname.startswith("verify_"):
+            s += 70
+        if "main" == name:
+            s += 60
+        if "pipeline" in name or "golden_loop" in name:
+            s += 50
+        if "test_" in fname and "test" not in f.get("status", ""):
+            s += 10  # low priority for test files
+
+        # Validated status boosts
+        if f.get("status") == "validated":
+            s += 30
+        elif f.get("status") == "active":
+            s += 20
+        elif f.get("status") == "exploration":
+            s += 10
+
+        # Penalize deep nesting (more path components = less prominent)
+        depth = f["path"].count("/")
+        s -= depth * 2
+
+        # Good descriptions boost
+        desc = f.get("description", "")
+        if "QFD" in desc or "Golden Loop" in desc or "soliton" in desc.lower():
+            s += 15
+
+        return s
+
+    scored = [(score(f), f) for f in python_files]
+    scored = [(s, f) for s, f in scored if s >= 0]
+    scored.sort(key=lambda x: x[0], reverse=True)
+    return [f for _, f in scored]
+
 
 def generate_lean_index(lean_files: list[dict]) -> str:
     """Generate LEAN_PROOF_INDEX.txt content."""
@@ -417,8 +507,8 @@ def generate_llms_txt(config: dict, lean_files: list[dict],
                 )
         lines.append("")
 
-    # Key Python solvers
-    key_py = [f for f in python_files if f["status"] in ("validated", "active")][:20]
+    # Key Python solvers — prioritize entry points over internal modules
+    key_py = rank_python_files(python_files)[:25]
     if key_py:
         lines.append("## Key Python solvers")
         lines.append("")
@@ -427,6 +517,29 @@ def generate_llms_txt(config: dict, lean_files: list[dict],
                 f"- [{f['path']}]({raw_base}{f['path']}): "
                 f"{f['description']} [{f['status']}]"
             )
+        lines.append("")
+
+    # Validated results (QFD-Universe only — show what the tests produce)
+    if config["github_repo"] == "QFD-Universe":
+        lines.append("## Validated results")
+        lines.append("")
+        lines.append("Each sector has runnable tests (`python run_all.py --sector <name>`):")
+        lines.append("")
+        lines.append("**Lepton**: Golden Loop alpha -> beta -> (e, mu, tau) masses "
+                      "(chi^2 < 1e-11), g-2 anomaly (0.45% error, no free params), "
+                      "Koide relation Q = 2/3 (exact)")
+        lines.append("")
+        lines.append("**Nuclear**: Soliton solver for 3,558 nuclear masses (< 1% light nuclei), "
+                      "nuclide scaling law across 5,842 isotopes (R^2 = 0.98), "
+                      "nuclide engine for 4,477 nuclides (77% mode accuracy)")
+        lines.append("")
+        lines.append("**Cosmology**: Supernova fit for 1,829 Type Ia SNe "
+                      "(chi^2/nu = 0.939, matches Lambda-CDM), "
+                      "Golden Loop SNe with 0 free parameters (chi^2/dof = 1.005), "
+                      "black hole escape simulation (~1% escape rate)")
+        lines.append("")
+        lines.append("**Cross-scale**: Ten-realms pipeline from alpha through "
+                      "all physical scales (chi^2 < 1e-9)")
         lines.append("")
 
     # Physics summary
