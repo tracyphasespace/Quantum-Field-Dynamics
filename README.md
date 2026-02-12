@@ -64,7 +64,7 @@ Explore QFD concepts in your browser — no installation required:
 | Result | Method | Accuracy |
 |--------|--------|----------|
 | Electron, muon, tau masses | Golden Loop: alpha -> beta -> Hill vortex geometry | chi^2 < 10^-11 |
-| Electron g-2 anomaly | Vacuum polarization from vortex surface/bulk ratio | 0.001% error |
+| Electron g-2 anomaly | Geometric V₄ coefficient, no free params | 0.45% error |
 | Koide relation Q = 2/3 | Geometric phase angle projection | Exact |
 
 **Scripts**: [`V22_Lepton_Analysis/`](V22_Lepton_Analysis/), [`Photon/`](Photon/)
@@ -199,7 +199,7 @@ This framework is mathematically rigorous (1,100 Lean proofs) but empirically un
 
 **What they don't establish**: That the framework describes nature. Fitting 3 masses with 3 parameters is necessary but not sufficient.
 
-**The acid test**: The g-2 prediction (0.001% accuracy on an independent observable) is the strongest evidence. Cross-sector beta consistency across lepton, nuclear, and cosmological scales is the second.
+**The acid test**: The g-2 prediction (0.45% accuracy on an independent observable, zero free parameters) is the strongest evidence. Cross-sector beta consistency across lepton, nuclear, and cosmological scales is the second.
 
 **What's needed**: Independent predictions tested against new data — charge radius, form factors, beta derived from first principles rather than fitted.
 

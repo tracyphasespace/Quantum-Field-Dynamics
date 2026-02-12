@@ -548,7 +548,7 @@ def generate_llms_txt(config: dict, lean_files: list[dict],
     lines.append("QFD derives from one measured input (alpha = 1/137.036):")
     lines.append("- Golden Loop equation: 1/alpha = 2*pi^2 * (e^beta/beta) + 1 => beta = 3.043")
     lines.append("- Lepton masses: Hill vortex geometry with beta => e, mu, tau (chi^2 < 1e-11)")
-    lines.append("- Anomalous g-2: Vortex surface/bulk ratio => 0.001% error (no free params)")
+    lines.append("- Anomalous g-2: Geometric V₄ coefficient => 0.45% error on a_e (no free params)")
     lines.append("- Nuclear binding: 3,558 masses from soliton packing (< 1% light nuclei)")
     lines.append("- Cosmology: SNe Ia fit with 0 free params (chi^2/dof = 1.005)")
     lines.append("- 1100+ Lean 4 theorems proving internal mathematical consistency")
