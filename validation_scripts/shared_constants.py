@@ -94,15 +94,17 @@ C2_VOLUME = 1.0 / BETA  # = 0.328598
 # GEOMETRIC EIGENVALUES (Book v8.5, Ch. 12 & Appendix Z.12)
 # =============================================================================
 #
-# k_geom is the radial stability eigenvalue of the Cl(3,3) soliton.
-# It is NOT a fitted parameter — it emerges from the vortex variational
-# equation via a 5-stage pipeline (see K_GEOM_REFERENCE.md).
+# k_geom is the vacuum-renormalized eigenvalue of the Cl(3,3) soliton.
+# k_geom = k_Hill × (π/α)^(1/5), where k_Hill = (56/15)^(1/5) ≈ 1.30
+# is the bare vortex shape factor and (π/α)^(1/5) ≈ 3.39 is the
+# vacuum electromagnetic enhancement. NOT a fitted parameter.
+# See Appendix Z.12 and K_GEOM_REFERENCE.md.
 #
 # Book v8.5 value: 4.4028 (used consistently in Chs. 12, 12.X, 12.Y, Z.12)
 # Lean values: 4.3813–4.3982 (different pipeline stages, ~0.5% spread)
 # The spread is documented and may reflect alpha-conditioning physics.
 
-K_GEOM = 4.4028               # Radial stability eigenvalue (book v8.5)
+K_GEOM = 4.4028               # Vacuum-renormalized eigenvalue (book v8.5)
 K_CIRC = np.pi * K_GEOM       # Loop-closure eigenvalue ≈ 13.83
                                # Use k_geom for mass ratios, k_circ for Compton/phase
 
@@ -167,14 +169,14 @@ H0_SI = H0_KM_S_MPC * 1000 / MPC_TO_M  # s⁻¹
 # It is NOT the same as H₀ — it replaces expansion with refraction.
 #
 # Derivation chain (zero free parameters):
-#   α → β (Golden Loop) → k_geom (soliton eigenvalue)
+#   α → β (Golden Loop) → k_geom (vacuum-renormalized eigenvalue)
 #   → ξ_QFD = k_geom² × 5/6 (gravitational coupling)
-#   → K_J = ξ_QFD × β^(3/2)  (volume stiffness)
+#   → κ̃ = ξ_QFD × β^(3/2)  (dimensionless scattering rate)
 #
 # Note: The SNe pipeline uses the exact soliton BC k = 7π/5 = 4.3982
-# giving K_J = 85.581 km/s/Mpc. With book v8.5 k_geom = 4.4028 the
-# value is ~85.9. Both are consistent within the k_geom spread (~0.5%).
-K_J_KM_S_MPC = XI_QFD * BETA**1.5  # km/s/Mpc (derived from α alone)
+# giving κ̃ = 85.581. With book v8.5 k_geom = 4.4028 the value is ~85.9.
+# Both are consistent within the k_geom spread (~0.5%).
+K_J_KM_S_MPC = XI_QFD * BETA**1.5  # dimensionless κ̃ ≈ 85.6 (see §9.3.1 for dimensional status)
 
 # QFD photon decay constant: κ = H₀/c (using standard H0 for comparison)
 KAPPA_MPC = H0_KM_S_MPC / (C_SI / 1000)  # Mpc⁻¹

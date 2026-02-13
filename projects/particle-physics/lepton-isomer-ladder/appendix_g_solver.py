@@ -29,7 +29,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 from qfd.shared_constants import (
     ALPHA, ALPHA_INV, BETA,
-    V4_QED, XI_SURFACE_TENSION,
+    V4_QED, XI_SURFACE_TENSION, XI_QFD,
     U_CIRC, GAMMA_S,
     C_SI, HBAR_SI,
     M_ELECTRON_MEV, M_MUON_MEV, M_TAU_MEV,
@@ -274,10 +274,61 @@ def lifetime_M5(mass_mev, cal_mass=M_MUON_MEV, cal_lifetime=TAU_MUON_LIFETIME):
 
 
 # =============================================================================
-# STEP 8: SHEAR MODULUS (Appendix V)
+# STEP 8: SHEAR MODULUS & V6 REBOUND (Appendix V)
 # =============================================================================
-SIGMA_SHEAR = BETA**3 / (4 * np.pi**2)  # ≈ 0.714
+#
+# At the tau Compton scale (R ~ 0.11 fm), the vacuum transitions from
+# fluid-like to solid-like behavior. The V6 shear modulus stores elastic
+# energy that partially converts to additional magnetic moment — the
+# "hyper-elastic rebound."
+#
+# Physical picture:
+#   - Below ξ_QFD (electron, muon): vacuum responds as compressible fluid
+#     → V4 (bulk modulus) dominates, V6 negligible
+#   - Above ξ_QFD (tau): vacuum responds as elastic solid
+#     → V6 (shear modulus) activates, boosting effective V4
+#
+# The transition scale is ξ_QFD = k_geom² × 5/6 ≈ 16.15, the same
+# gravitational coupling that appears in the Hubble refraction derivation.
+# This is not a coincidence: ξ sets the boundary between "soft" and "hard"
+# vacuum response across ALL QFD sectors.
+
+SIGMA_SHEAR = BETA**3 / (4 * np.pi**2)  # ≈ 0.714 (Appendix V, line 16400)
 V4_MAX = abs(V4_compression()) + 1.0 / (4 * BETA**2)  # ≈ 0.354 (asymptotic limit)
+
+
+def V6_shear_rebound(R_fm, R_ref=R_REF):
+    """
+    V6 hyper-elastic shear rebound (Appendix V).
+
+    When compression x = (R_ref/R)^2 exceeds the gravitational coupling ξ_QFD,
+    the vacuum shear modulus σ = β³/(4π²) stores energy that contributes
+    additional magnetic moment beyond the Pade-saturated V4.
+
+    V6(R) = σ_shear × I_circ × x / (x + ξ_QFD)
+
+    This saturates at σ_shear × I_circ ≈ 6.71 for x >> ξ_QFD.
+    The transition scale ξ_QFD ≈ 16.15 ensures:
+      Electron (x ~ 0):     V6 ≈ 0   (fluid regime, no shear)
+      Muon     (x ~ 0.29):  V6 ≈ 0.12 (near elastic limit)
+      Tau      (x ~ 81):    V6 ≈ 5.6  (fully hyper-elastic)
+
+    All parameters derived from α (via β, k_geom, I_circ). No free parameters.
+    """
+    x = (R_ref / R_fm)**2
+    V6_amplitude = SIGMA_SHEAR * I_CIRC_TILDE  # σ × I_circ ≈ 6.71
+    return V6_amplitude * x / (x + XI_QFD)
+
+
+def V4_with_shear(R_fm, R_ref=R_REF, gamma_s=GAMMA_S, delta_s=DELTA_S):
+    """
+    Total effective V4 = V4_saturated + V6_shear_rebound.
+
+    For electron and muon, V6 ≈ 0 and V4_eff ≈ V4_saturated (no change).
+    For tau, V6 dominates and V4_eff jumps from ~0.03 to ~5.6,
+    producing a_tau ≈ 1192 × 10⁻⁶ (Book v8.5, Appendix V).
+    """
+    return V4_saturated(R_fm, R_ref, gamma_s, delta_s) + V6_shear_rebound(R_fm, R_ref)
 
 
 # =============================================================================
@@ -418,12 +469,15 @@ def run_full_validation():
     print(f"  Schwinger:     alpha/(2*pi)  = {SCHWINGER:.9e}")
     print(f"  (alpha/pi)^2                 = {ALPHA_PI_SQ:.6e}\n")
 
+    # --- Model A: V4 only (Pade saturation, no shear rebound) ---
+    print("  === MODEL A: V4 ONLY (Pade saturation) ===\n")
+
     # Electron
     V4_e = V4_saturated(R_ELECTRON)
     a_e = g_minus_2_over_2(V4_e)
     err_e = (a_e - a_e_exp) / a_e_exp * 100
     print(f"  ELECTRON (R = {R_ELECTRON:.1f} fm, pure compression):")
-    print(f"    V4     = {V4_e:+.6f}")
+    print(f"    V4_sat = {V4_e:+.6f}")
     print(f"    a(QFD) = {a_e:.12e}")
     print(f"    a(exp) = {a_e_exp:.12e}")
     print(f"    error  = {err_e:+.4f}%\n")
@@ -433,7 +487,7 @@ def run_full_validation():
     a_mu = g_minus_2_over_2(V4_mu)
     err_mu = (a_mu - a_mu_exp) / a_mu_exp * 100
     print(f"  MUON (R = {R_MUON:.3f} fm, compression + circulation):")
-    print(f"    V4     = {V4_mu:+.6f}")
+    print(f"    V4_sat = {V4_mu:+.6f}")
     print(f"    a(QFD) = {a_mu:.12e}")
     print(f"    a(exp) = {a_mu_exp:.12e}")
     print(f"    error  = {err_mu:+.4f}%\n")
@@ -442,11 +496,68 @@ def run_full_validation():
     V4_tau = V4_saturated(R_TAU)
     a_tau = g_minus_2_over_2(V4_tau)
     print(f"  TAU (R = {R_TAU:.3f} fm, saturated):")
-    print(f"    V4     = {V4_tau:+.6f}")
+    print(f"    V4_sat = {V4_tau:+.6f}")
     print(f"    a(QFD) = {a_tau:.9e}")
     print(f"    a(SM)  = {a_tau_sm:.9e}")
-    print(f"    Book:    a_tau ~ 1192e-6")
-    print(f"    diff from SM = {(a_tau - a_tau_sm)/a_tau_sm*100:+.2f}%")
+    print(f"    diff from SM = {(a_tau - a_tau_sm)/a_tau_sm*100:+.2f}%\n")
+
+    # --- Model B: V4 + V6 shear rebound (hyper-elastic) ---
+    print("  === MODEL B: V4 + V6 SHEAR REBOUND (hyper-elastic) ===\n")
+    print(f"  V6 parameters:")
+    print(f"    sigma_shear  = beta^3/(4*pi^2) = {SIGMA_SHEAR:.4f}")
+    print(f"    I_circ       = {I_CIRC_TILDE}")
+    print(f"    V6_amplitude = sigma * I_circ  = {SIGMA_SHEAR * I_CIRC_TILDE:.4f}")
+    print(f"    xi_QFD       = {XI_QFD:.4f} (transition scale)")
+    print()
+
+    V6_e = V6_shear_rebound(R_ELECTRON)
+    V4_e_eff = V4_with_shear(R_ELECTRON)
+    a_e_v6 = g_minus_2_over_2(V4_e_eff)
+    err_e_v6 = (a_e_v6 - a_e_exp) / a_e_exp * 100
+    print(f"  ELECTRON (V6 ≈ 0, unchanged):")
+    print(f"    V6     = {V6_e:+.6f}")
+    print(f"    V4_eff = {V4_e_eff:+.6f}")
+    print(f"    a(QFD) = {a_e_v6:.12e}")
+    print(f"    error  = {err_e_v6:+.4f}%\n")
+
+    V6_mu = V6_shear_rebound(R_MUON)
+    V4_mu_eff = V4_with_shear(R_MUON)
+    a_mu_v6 = g_minus_2_over_2(V4_mu_eff)
+    err_mu_v6 = (a_mu_v6 - a_mu_exp) / a_mu_exp * 100
+    print(f"  MUON (V6 small, near elastic limit):")
+    print(f"    V6     = {V6_mu:+.6f}")
+    print(f"    V4_eff = {V4_mu_eff:+.6f}")
+    print(f"    a(QFD) = {a_mu_v6:.12e}")
+    print(f"    a(exp) = {a_mu_exp:.12e}")
+    print(f"    error  = {err_mu_v6:+.4f}%  (was {err_mu:+.4f}%)\n")
+
+    V6_tau = V6_shear_rebound(R_TAU)
+    V4_tau_eff = V4_with_shear(R_TAU)
+    a_tau_v6 = g_minus_2_over_2(V4_tau_eff)
+    err_tau_v6 = (a_tau_v6 - a_tau_sm) / a_tau_sm * 100
+    a_tau_book = 1.192e-3
+    err_tau_book = (a_tau_v6 - a_tau_book) / a_tau_book * 100
+    print(f"  TAU (V6 dominant — hyper-elastic regime):")
+    print(f"    V6     = {V6_tau:+.6f}")
+    print(f"    V4_eff = {V4_tau_eff:+.6f}")
+    print(f"    a(QFD+V6)  = {a_tau_v6:.6e}")
+    print(f"    a(Book)    = {a_tau_book:.6e}")
+    print(f"    a(SM)      = {a_tau_sm:.6e}")
+    print(f"    vs Book: {err_tau_book:+.2f}%")
+    print(f"    vs SM:   {err_tau_v6:+.2f}%")
+
+    # Decision gate
+    print("\n  --- DECISION GATE ---")
+    a_tau_model_a = a_tau       # V4 only
+    a_tau_model_b = a_tau_v6    # V4 + V6
+    print(f"  Model A (V4 only):   a_tau = {a_tau_model_a*1e6:.1f} x 10^-6")
+    print(f"  Model B (V4 + V6):   a_tau = {a_tau_model_b*1e6:.1f} x 10^-6")
+    print(f"  SM prediction:       a_tau = {a_tau_sm*1e6:.1f} x 10^-6")
+    print(f"  Book v8.5 claim:     a_tau = 1192.0 x 10^-6")
+    if abs(a_tau_model_b - a_tau_book) / a_tau_book < 0.005:
+        print(f"  VERDICT: Model B matches book prediction. V6 shear rebound confirmed.")
+    else:
+        print(f"  VERDICT: Model B does NOT match book. Book claim needs revision.")
 
     # ── Step 8: Lifetime ──
     print("\n" + "-" * 72)
@@ -496,11 +607,17 @@ def run_full_validation():
 
     print("\n  CALIBRATED (muon data):")
     print(f"    alpha_circ = {ALPHA_CIRC:.4f}  fitted to muon g-2 = e/(2*pi)")
-    print(f"    a_mu error:          {err_mu:+.4f}%")
+    print(f"    a_mu error:          {err_mu:+.4f}% (V4 only), {err_mu_v6:+.4f}% (V4+V6)")
+
+    print("\n  V6 SHEAR REBOUND (Appendix V):")
+    print(f"    sigma_shear = beta^3/(4*pi^2) = {SIGMA_SHEAR:.4f}")
+    print(f"    V6(tau) = {V6_tau:.4f}  (dominant at tau scale)")
+    print(f"    a_tau(V4+V6) = {a_tau_v6*1e6:.1f} x 10^-6  (Book: 1192)")
+    print(f"    a_tau(SM)    = {a_tau_sm*1e6:.1f} x 10^-6")
 
     print("\n  OPEN:")
-    print(f"    V6 for tau precision")
     print(f"    Mass ratio derivation (why m_mu/m_e ~ 207?)")
+    print(f"    DIS structure functions F1, F2 from soliton profile")
 
     # Curious relation G.7.2
     curious = V4_mu + 1.0 / (8 * BETA)
@@ -518,9 +635,17 @@ def run_full_validation():
         'I_z_analytic': eta_analytic, 'I_eff_book': I_EFF_BOOK,
         'U_derived': U_BOOK, 'eta_eff': ETA_EFF,
         'V4_comp': V4_comp,
+        # Model A (V4 only)
         'V4_electron': V4_e, 'V4_muon': V4_mu, 'V4_tau': V4_tau,
         'a_e': a_e, 'a_mu': a_mu, 'a_tau': a_tau,
         'a_e_error_pct': err_e, 'a_mu_error_pct': err_mu,
+        # Model B (V4 + V6 shear)
+        'V6_electron': V6_e, 'V6_muon': V6_mu, 'V6_tau': V6_tau,
+        'V4_eff_tau': V4_tau_eff,
+        'a_e_v6': a_e_v6, 'a_mu_v6': a_mu_v6, 'a_tau_v6': a_tau_v6,
+        'a_mu_v6_error_pct': err_mu_v6,
+        'a_tau_v6_vs_book_pct': err_tau_book,
+        # Lifetime
         'tau_tau_pred': tau_tau_pred,
     }
 

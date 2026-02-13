@@ -41,9 +41,28 @@ PI_SQ = np.pi ** 2
 #
 # Master Equation: 1/α = 2π² × (e^β / β) + 1
 #
-# Rearranged: e^β / β = (1/α - 1) / (2π²)
+# Physical interpretation of each factor:
 #
-# This transcendental equation has a unique solution β ≈ 3.043233
+#   2π²  = Surface area of the unit 3-sphere (S³).
+#          The electron vortex is a topological object embedded in S³ × R,
+#          so its self-energy integral samples the full solid angle of S³.
+#
+#   e^β/β = Boltzmann-like probability factor for maintaining a topological
+#           knot at vacuum stiffness β. At low β (soft vacuum), knots untie
+#           easily → e^β/β is small. At high β (stiff vacuum), the
+#           exponential dominates → e^β/β is large. The equation demands
+#           a β where knot survival probability exactly matches α⁻¹.
+#
+#   +1   = Ground-state winding contribution (topological zero-point term).
+#           Even with zero vacuum stiffness, one unit of twist persists.
+#
+# Together: α measures the twist-to-compression ratio of the vacuum —
+# the fraction of vortex energy stored in shear (EM winding) versus
+# bulk (volume compression). This is the continuum-mechanics analogue
+# of G/K (shear modulus / bulk modulus) in solid-state physics.
+#
+# Rearranged: e^β / β = (1/α - 1) / (2π²)
+# Unique solution β ≈ 3.043233 (moderately stiff: knots survive, but barely)
 #
 # Reference: projects/Lean4/QFD/Physics/GoldenLoop_Existence.lean
 
@@ -78,29 +97,43 @@ assert abs(BETA - BETA_STANDARDIZED) < 0.0001, \
 # c₁ = ½(1 - α)  [Surface tension minus electromagnetic drag]
 # c₂ = 1/β       [Bulk modulus from vacuum stiffness]
 #
+# Physical mechanism:
+#   c₁ governs the SURFACE term (∝ A^{2/3}). The ½ comes from the virial
+#   theorem (kinetic = ½ potential for bound systems). The (1-α) factor
+#   means EM coupling REDUCES surface tension: the electric field of the
+#   protons partially cancels the vacuum confinement at the nuclear surface.
+#   More protons → more EM drag → weaker surface binding → drip line.
+#
+#   c₂ governs the VOLUME term (∝ A). This is the vacuum bulk modulus
+#   crushing the soliton core: each nucleon added to the interior costs
+#   1/β units of compression energy. Stiffer vacuum (larger β) → smaller
+#   c₂ → less volume energy per nucleon → more tightly bound nuclei.
+#
 # Reference: projects/Lean4/QFD/Nuclear/CoreCompressionLaw.lean
 
 # Surface tension coefficient (DERIVED)
-# Physical interpretation: Virial theorem geometry (½) minus EM drag (α)
+# EM drag reduces surface tension: ½ × (1 - α) where α is the EM coupling
 C1_SURFACE = 0.5 * (1 - ALPHA)  # = 0.496351
 
 # Volume coefficient (DERIVED)
-# Physical interpretation: Vacuum bulk modulus (saturation limit)
+# Vacuum crushing: each interior nucleon costs 1/β compression energy
 C2_VOLUME = 1.0 / BETA  # = 0.328598
 
 # =============================================================================
 # GEOMETRIC EIGENVALUES (Book v8.5, Ch. 12 & Appendix Z.12)
 # =============================================================================
 #
-# k_geom is the radial stability eigenvalue of the Cl(3,3) soliton.
-# It is NOT a fitted parameter — it emerges from the vortex variational
-# equation via a 5-stage pipeline (see K_GEOM_REFERENCE.md).
+# k_geom is the vacuum-renormalized eigenvalue of the Cl(3,3) soliton.
+# k_geom = k_Hill × (π/α)^(1/5), where k_Hill = (56/15)^(1/5) ≈ 1.30
+# is the bare vortex shape factor and (π/α)^(1/5) ≈ 3.39 is the
+# vacuum electromagnetic enhancement. NOT a fitted parameter.
+# See Appendix Z.12 and K_GEOM_REFERENCE.md.
 #
 # Book v8.5 value: 4.4028 (used consistently in Chs. 12, 12.X, 12.Y, Z.12)
 # Lean values: 4.3813–4.3982 (different pipeline stages, ~0.5% spread)
 # The spread is documented and may reflect alpha-conditioning physics.
 
-K_GEOM = 4.4028               # Radial stability eigenvalue (book v8.5)
+K_GEOM = 4.4028               # Vacuum-renormalized eigenvalue (book v8.5)
 K_CIRC = np.pi * K_GEOM       # Loop-closure eigenvalue ≈ 13.83
                                # Use k_geom for mass ratios, k_circ for Compton/phase
 
@@ -122,10 +155,13 @@ XI_SURFACE_TENSION = 1.0  # Natural units
 V4_QED = -XI_SURFACE_TENSION / BETA  # ≈ -0.329
 
 # Universal circulation velocity (Appendix G, all leptons)
+# Back-calculated from L = hbar/2 given I_eff ≈ 2.32 MR²
+# NOTE: U/c_s = 0.876/sqrt(beta) ≈ 0.502 (Mach 0.5 to 0.4%)
+# Whether Mach 0.5 is exact remains an open conjecture — see edits28.md
 U_CIRC = 0.876  # fraction of c (Book v8.5: U = 0.876c)
 
 # Saturation coefficient (Appendix V)
-# Ratio of shear to bulk stiffness, fixed by the Golden Loop
+# Leading electromagnetic correction to elastic response (NOT shear/bulk ratio)
 GAMMA_S = 2 * ALPHA / BETA  # ≈ 0.0048
 
 # =============================================================================
@@ -160,19 +196,22 @@ H0_KM_S_MPC = 70.0  # km/s/Mpc (ΛCDM consensus)
 MPC_TO_M = 3.086e22  # meters per Mpc
 H0_SI = H0_KM_S_MPC * 1000 / MPC_TO_M  # s⁻¹
 
-# QFD Hubble refraction parameter (Book v8.5, Ch. 9–12)
-# K_J is the QFD-derived vacuum drag coefficient from photon–ψ coupling.
-# It is NOT the same as H₀ — it replaces expansion with refraction.
+# QFD vacuum scattering rate (Book v8.5, Ch. 9–12)
+# κ̃ = ξ_QFD × β^(3/2) is a DIMENSIONLESS scattering rate derived from α alone.
+# The identification κ̃ ≈ K_J [km/s/Mpc] is a numerical coincidence whose
+# dimensional bridge is not yet derived from first principles.
+# The physically testable content is the SHAPE of μ(z), not the absolute
+# value of K_J (which is degenerate with magnitude calibration M).
 #
 # Derivation chain (zero free parameters):
-#   α → β (Golden Loop) → k_geom (soliton eigenvalue)
+#   α → β (Golden Loop) → k_geom (vacuum-renormalized eigenvalue)
 #   → ξ_QFD = k_geom² × 5/6 (gravitational coupling)
-#   → K_J = ξ_QFD × β^(3/2)  (volume stiffness)
+#   → κ̃ = ξ_QFD × β^(3/2)  (dimensionless scattering rate)
 #
 # Note: The SNe pipeline uses the exact soliton BC k = 7π/5 = 4.3982
-# giving K_J = 85.581 km/s/Mpc. With book v8.5 k_geom = 4.4028 the
-# value is ~85.9. Both are consistent within the k_geom spread (~0.5%).
-K_J_KM_S_MPC = XI_QFD * BETA**1.5  # km/s/Mpc (derived from α alone)
+# giving κ̃ = 85.581. With book v8.5 k_geom = 4.4028 the value is ~85.9.
+# Both are consistent within the k_geom spread (~0.5%).
+K_J_KM_S_MPC = XI_QFD * BETA**1.5  # dimensionless κ̃ ≈ 85.6 (see §9.3.1 for dimensional status)
 
 # QFD photon decay constant: κ = H₀/c (using standard H0 for comparison)
 KAPPA_MPC = H0_KM_S_MPC / (C_SI / 1000)  # Mpc⁻¹
@@ -218,13 +257,25 @@ def fundamental_soliton_equation(A):
     return C1_SURFACE * A**(2.0/3.0) + C2_VOLUME * A
 
 # =============================================================================
-# PROTON BRIDGE (Book v8.5, Ch. 12.1)
+# PROTON BRIDGE (Book v8.5, Ch. 12.2)
 # =============================================================================
 #
 # λ = k_geom × β × (m_e / α)
 #
 # The proton mass is a geometric consequence of soliton stability.
 # m_p / m_e ≈ k_geom × β / α
+#
+# Physical picture: The proton is a CAVITATION BUBBLE in the vacuum
+# superfluid — a region where compression energy (β) balances the
+# electromagnetic pressure of the confined charge (m_e/α). The factor
+# k_geom is the geometric shape factor of this cavity, determined by
+# the Cl(3,3) → Cl(3,1) dimensional projection.
+#
+# Complete derivation chain (zero free parameters after α):
+#   α → β (Golden Loop) → c (vacuum sound speed)
+#   → m_p (Proton Bridge) → (c₁, c₂) (nuclear coefficients)
+#   → K_J (Hubble refraction)
+# Each step is algebraically determined; there is no freedom to adjust.
 #
 # NOTE on c₂ definition inconsistency in Book v8.5:
 #   Line 417 (Ch. 1.2):  c₂ = (1+α)/4 ≈ 0.2518  (introductory summary)

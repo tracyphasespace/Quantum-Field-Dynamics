@@ -9,11 +9,11 @@ Derivation chain:
     ↓  Golden Loop: 1/α = 2π²(e^β/β) + 1
     β = 3.043233053        (vacuum stiffness, derived from α)
     ↓  Hill vortex eigenvalue
-    k = 7π/5               (soliton boundary condition, pure geometry)
+    k = 7π/5               (exact analytical Hill vortex eigenvalue)
     ↓  Gravitational coupling
     ξ_QFD = k² × (5/6) = 49π²/30
-    ↓  Volume stiffness
-    K_J = ξ_QFD × β^(3/2)  ≈ 85.6 km/s/Mpc
+    ↓  Dimensionless scattering rate
+    κ̃ = ξ_QFD × β^(3/2)  ≈ 85.6  (dimensionless; see §9.3.1 for dimensional status)
 
 Physical model:
     Photon = toroidal soliton with poloidal + toroidal circulation.
@@ -60,7 +60,7 @@ def solve_golden_loop(alpha):
     """Solve 1/α = 2π²(e^β/β) + 1 for β via Newton-Raphson.
 
     This is THE master equation of QFD. From α alone, we get β.
-    All other constants follow from β and pure geometry.
+    All other constants follow from β and vacuum-renormalized geometry.
     """
     target = (1.0 / alpha) - 1.0   # = 2π²(e^β/β)
     C = 2.0 * PI * PI              # = 2π²
