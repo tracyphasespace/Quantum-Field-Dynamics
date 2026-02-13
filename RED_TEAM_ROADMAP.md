@@ -222,24 +222,65 @@ remains a postulate. Possible escape routes:
 
 ---
 
+---
+
+## Gap 5: PDE Ground State Existence (Analytic Gap)
+
+**Red-team claim**: The spectral gap proof (SpectralGap.lean) assumes the ground-state
+soliton exists. StabilityCriterion.lean proves the 1D potential has a global minimum,
+but the infinite-dimensional energy functional E[ψ] on H¹(ℝ⁶; Cl(3,3)) has not been
+shown to admit a minimizer. This is the QFD analogue of the Yang-Mills mass gap problem.
+
+**What exists (Lean, 0 sorries)**:
+- `StabilityCriterion.lean`: V(x) = -μ²x + λx² + κx³ + βx⁴ has global min (1D, EVT)
+- `SpectralGap.lean`: IF ψ₀ exists with quantized topology THEN ΔE > 0
+- `VacuumEigenvalue.lean`: β unique eigenvalue of Golden Loop
+- `Soliton/Quantization.lean`: Vortex charge is quantized (hard-wall → discrete spectrum)
+
+**What exists (numerical, `projects/field-theory/pde-existence/`)**:
+- Hardy constant C_H = 4 in d=6 (verified numerically)
+- Angular eigenvalues Λ_ℓ = ℓ(ℓ+4) on S⁵
+- Sobolev critical exponent p* = 3 (supercritical |ψ|⁴)
+- Strauss decay |u(r)| ≤ C·r^{-5/2}·‖u‖_{H¹} (radial compactness)
+- Derrick scaling: d²E/dλ² = -8T < 0 (scalar unstable, needs topology)
+- Centrifugal barrier Λ₁ = 5 for winding m=1 (prevents collapse)
+- Coercivity: E ≥ -μ²M on {∫|ψ|² = M}
+- Concentration-compactness checklist: all 4 conditions verified
+
+**What's missing**:
+- STEP A: Binding energy inequality E(m₁)+E(m₂) > E(m) (excludes dichotomy)
+- STEP B: Weak lower semicontinuity of E[ψ] (Strauss + supercritical quartic)
+- STEP C: Regularity of minimizer (elliptic bootstrap, standard)
+- STEP D: Lean formalization (Mathlib lacks concentration-compactness)
+
+**Difficulty**: HIGH for rigorous proof, MEDIUM for the mathematical argument.
+The path is clear (Hardy + topology + concentration-compactness → existence),
+but the supercritical exponent (p* = 3, quartic = 4) in d=6 requires the
+equivariant/radial restriction for compact embedding.
+
+**Key insight**: Topology provides the coercivity that Derrick's theorem denies
+to pure scalars. The winding number m ≥ 1 creates a centrifugal barrier
+(Λ_min = 5) analogous to angular momentum in the hydrogen atom.
+
+---
+
 ## Priority Assessment
 
 | Gap | Impact if Closed | Difficulty | Testability | Priority |
 |-----|-----------------|------------|-------------|----------|
-| 3 (σ from Hessian) | Promotes tau sector to "derived" | MEDIUM-HIGH | Belle II τ g-2 | **1st** |
+| 5 (PDE existence) | Closes the "IF" in spectral gap | HIGH | Mathematical proof | **1st** |
+| 3 (σ from Hessian) | ~~Promotes tau sector~~ **CLOSED** — constitutive postulate | N/A | Belle II τ g-2 | Done |
 | 1 (κ̃ → H₀) | Unifies cosmology with particle physics | HIGH | Already tested (K_J) | 2nd |
 | 2 (Inelastic 6D) | Extends framework to hot/dense regimes | VERY HIGH | LHC, heavy-ion | 3rd |
 | 4 (G hierarchy) | Solves the deepest problem in physics | VERY HIGH | Already tested (G) | 4th |
 
-**Recommendation**: Start with Gap 3 (σ eigenvalue). It has a well-defined computation path, the intermediate results are checkable numerically, and the prediction (τ g-2) will be tested by Belle II within a few years.
+**Recommendation**: Gap 5 (PDE existence) is now the highest priority. It has the
+clearest mathematical path (functional analysis, not physics), and closing it would
+make SpectralGap.lean's conclusion unconditional.
 
 ---
 
-## Numerical Scaffolding
+## Computation Reference
 
-See `projects/particle-physics/sigma_eigenvalue/` for the computation setup (to be created).
-
-The computation has three phases:
-1. **Radial Sturm-Liouville**: Solve L_ℓ f_ℓ = λ f_ℓ for ℓ = 0, 2, 4 using the Hill vortex profile
-2. **Check**: Does λ₀ ∝ β (bulk)? Does λ₂ ∝ β³/(4π²) (shear)?
-3. **Derive**: If yes, extract the exact coefficient and compare to the constitutive postulate
+- `projects/particle-physics/sigma-eigenvalue/` — Gap 3 (σ, CLOSED: v1-v9)
+- `projects/field-theory/pde-existence/` — Gap 5 (PDE existence, IN PROGRESS)
