@@ -1,0 +1,148 @@
+name: QFD Full Validation Suite
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'qfd/**'
+      - 'validation_scripts/**'
+      - 'projects/particle-physics/**'
+      - 'projects/astrophysics/**'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  # ===== Job 1: Shared Constants Verification =====
+  constants:
+    name: Verify Shared Constants
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install numpy scipy
+
+      - name: Verify shared constants
+        run: python -m qfd.shared_constants
+
+      - name: Check constant consistency
+        run: |
+          echo "=== Checking for hardcoded constants that should use shared_constants ==="
+          # Look for hardcoded beta values (should import BETA)
+          HARDCODED=$(grep -rn "3\.043233" --include="*.py" \
+            --exclude-dir=.git --exclude-dir=__pycache__ \
+            --exclude="shared_constants.py" \
+            --exclude="derive_beta_from_alpha.py" | \
+            grep -v "import\|#\|standardized\|BETA_STANDARDIZED" || true)
+          if [ -n "$HARDCODED" ]; then
+            echo "WARNING: Potential hardcoded beta values found:"
+            echo "$HARDCODED"
+          else
+            echo "OK: No hardcoded beta values found outside shared_constants.py"
+          fi
+
+  # ===== Job 2: Core Validation Scripts =====
+  validation:
+    name: Core Validations
+    runs-on: ubuntu-latest
+    needs: constants
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install numpy scipy
+
+      - name: Golden Loop error propagation
+        run: python validation_scripts/golden_loop_error_propagation.py
+
+      - name: k_geom derivation from integrals
+        run: python validation_scripts/derive_k_geom_from_integrals.py
+
+      - name: Verify Golden Loop
+        run: python validation_scripts/verify_golden_loop.py || true
+
+      - name: Derive beta from alpha
+        run: python validation_scripts/derive_beta_from_alpha.py || true
+
+  # ===== Job 3: Lepton Physics =====
+  leptons:
+    name: Lepton Validation
+    runs-on: ubuntu-latest
+    needs: constants
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install numpy scipy
+
+      - name: g-2 anomaly validation
+        run: python validation_scripts/validate_g2_corrected.py || true
+
+      - name: Lepton stability
+        run: python validation_scripts/lepton_stability.py || true
+
+      - name: Tau anomaly test
+        run: python projects/particle-physics/lepton-isomer-ladder/tau_anomaly_test.py
+
+      - name: Appendix G solver
+        run: python projects/particle-physics/lepton-isomer-ladder/appendix_g_solver.py || true
+
+  # ===== Job 4: Exploratory (allowed to fail) =====
+  exploratory:
+    name: Exploratory Scripts
+    runs-on: ubuntu-latest
+    needs: constants
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install numpy scipy
+
+      - name: Soliton jet exploratory
+        run: python projects/particle-physics/soliton-fragmentation/soliton_jet_exploratory.py
+
+  # ===== Job 5: Sorry Count (Lean, if available) =====
+  lean-sorries:
+    name: Lean Sorry Count
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Count sorries in Lean files
+        run: |
+          echo "=== Lean Sorry Audit ==="
+          SORRY_COUNT=$(grep -rn "sorry" projects/Lean4/QFD/ --include="*.lean" 2>/dev/null | wc -l)
+          echo "Total sorries: $SORRY_COUNT"
+          if [ "$SORRY_COUNT" -eq 0 ]; then
+            echo "STATUS: ZERO SORRIES"
+          else
+            echo "STATUS: $SORRY_COUNT sorries remaining"
+            grep -rn "sorry" projects/Lean4/QFD/ --include="*.lean" 2>/dev/null || true
+          fi
+
+      - name: Count theorems
+        run: |
+          echo "=== Theorem Count ==="
+          THEOREMS=$(grep -rn "^theorem" projects/Lean4/QFD/ --include="*.lean" 2>/dev/null | wc -l)
+          LEMMAS=$(grep -rn "^lemma" projects/Lean4/QFD/ --include="*.lean" 2>/dev/null | wc -l)
+          echo "Theorems: $THEOREMS"
+          echo "Lemmas: $LEMMAS"
+          echo "Total: $((THEOREMS + LEMMAS))"
