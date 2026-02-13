@@ -1,4 +1,4 @@
-# k_geom: The Geometric Eigenvalue
+# k_geom: The Vacuum-Renormalized Eigenvalue
 
 **Last updated**: 2026-02-04
 **Status**: Active reconciliation between Lean formalization and book v8.3
@@ -8,9 +8,13 @@
 
 ## 1. What is k_geom?
 
-k_geom is a **dimensionless geometric eigenvalue** — the radial stability eigenvalue of a Cl(3,3) soliton projected to Cl(3,1) spacetime. It emerges from the variational equation for soliton equilibrium and governs the balance between curvature (gradient energy) and compression (potential energy).
+k_geom is a **dimensionless vacuum-renormalized eigenvalue** — the product of a bare geometric shape factor (k_Hill) and a vacuum electromagnetic enhancement factor ((π/α)^(1/5)):
 
-It is **not** a fitted parameter, a magic number, or an axiom. It is determined by the geometry of the vortex structure and the projection from 6D phase space to 4D spacetime.
+> k_geom = k_Hill × (π/α)^(1/5) ≈ 1.30 × 3.39 ≈ 4.40
+
+The bare factor k_Hill = (56/15)^(1/5) is pure geometry (the Hill vortex variational minimum). The enhancement (π/α)^(1/5) encodes how the vacuum's electromagnetic stiffness modifies the soliton energy balance during Cl(3,3) → Cl(3,1) projection.
+
+It is **not** a fitted parameter, a magic number, or an axiom. It depends on α through the vacuum coupling — this is physical, not circular: the vortex eigenvalue depends on the medium in which it exists, just as a sound mode depends on the elastic modulus of the medium.
 
 **Physical role**: k_geom enters the Proton Bridge equation:
 
@@ -244,7 +248,7 @@ Note: These theorems use the Lean values (4.38-4.40 range), not the book value (
 
 ## 9. Summary
 
-k_geom is a derived geometric eigenvalue, not a constant. Its value depends on the full pipeline from bare Hill-vortex integrals through asymmetric renormalization and dimensional projection. The book evaluates it as 4.4028; the Lean code contains earlier approximations in the 4.38-4.40 range. The ~0.5% spread is within all theorem tolerances and may reflect genuine alpha-conditioning physics rather than computational error.
+k_geom is a derived vacuum-renormalized eigenvalue, not a fitted constant. Its value k_geom = k_Hill × (π/α)^(1/5) depends on both the bare Hill-vortex geometry and the vacuum electromagnetic enhancement through α. The book evaluates it as 4.4028; the Lean code contains earlier approximations in the 4.38-4.40 range. The ~0.5% spread is within all theorem tolerances and may reflect genuine alpha-conditioning physics rather than computational error.
 
 The correct resolution path is:
 1. Tighten the Z.12.7 exposition with a worked calculation

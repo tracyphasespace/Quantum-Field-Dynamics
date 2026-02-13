@@ -99,7 +99,7 @@ It is derived from Beta and Alpha via the geometric factor k_geom.
 
 **The Proton Bridge equation**: λ = k_geom × β × (m_e / α)
 
-where k_geom is the radial stability eigenvalue of a Cl(3,3) soliton
+where k_geom is the vacuum-renormalized eigenvalue of a Cl(3,3) soliton
 projected to Cl(3,1) spacetime, derived through a five-stage pipeline
 (book v8.3, Appendix Z.12):
 

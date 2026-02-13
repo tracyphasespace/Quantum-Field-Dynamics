@@ -51,6 +51,9 @@ spacetime emergence from higher-dimensional phase space.
 - `QFD.Neutrino_Production` - Neutrino necessity from conservation laws (Gate N-L5)
 - `QFD.Neutrino_MassScale` - Geometric mass suppression hierarchy (Gate N-L6)
 - `QFD.Lepton.GeometricAnomaly` - g-2 anomaly as geometric necessity (Gate G-L1)
+- `QFD.Cosmology.AchromaticDrag` - Achromatic redshift from linear cross-section
+- `QFD.Renormalization.FiniteLoopIntegral` - QFD loop integrals are finite
+- `QFD.Gravity.NoetherProjection` - Derives 5/6 projection from Noether charge
 
 ## The Complete Story
 

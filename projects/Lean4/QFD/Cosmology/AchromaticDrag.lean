@@ -205,6 +205,6 @@ This matches the Hubble law z ≈ (H₀/c) · D, with K_J replacing H₀.
     Used in the small-z Hubble law approximation. -/
 theorem exp_gt_one_add (x : ℝ) (hx : 0 < x) :
     1 + x < exp x := by
-  sorry -- [ANALYSIS] Strict convexity: exp is strictly convex, tangent at 0 is 1+x
+  linarith [add_one_lt_exp (ne_of_gt hx)]
 
 end QFD.Cosmology.AchromaticDrag

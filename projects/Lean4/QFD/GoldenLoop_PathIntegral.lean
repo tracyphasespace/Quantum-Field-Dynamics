@@ -40,7 +40,7 @@ Proton Bridge equation:
 
     λ = k_geom × β × (m_e / α)
 
-where k_geom is the geometric eigenvalue from the Hill-vortex derivation
+where k_geom is the vacuum-renormalized eigenvalue from the Hill-vortex derivation
 (Z.12). The Golden Loop determines β; the k_geom pipeline determines the
 geometric enhancement factor. Together they predict the proton mass from
 α and m_e alone.

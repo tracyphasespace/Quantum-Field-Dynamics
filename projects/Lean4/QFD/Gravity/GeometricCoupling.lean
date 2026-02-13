@@ -330,15 +330,15 @@ theorem gravity_weaker_than_planck :
 
 /-! ## Path to Full Derivation -/
 
-/-- Main theorem (current status: numerical validation)
+/-- Main theorem (numerical validation + derived projection factor)
 
-Future work: Derive projection_reduction = 5/6 from Cl(3,3) structure
-instead of treating it as empirical.
+The 5/6 factor is now DERIVED in NoetherProjection.lean from:
+1. Cl(3,3) bivector centralizer: B = e₄e₅ gives 4 commuting + 2 anticommuting
+2. Internal polar decomposition: 2 = 1 phase + 1 amplitude
+3. Noether decoupling: phase is cyclic → zero torque → no gravity coupling
+4. Result: 5 active / 6 total = 5/6
 
-Potential approaches:
-1. Spectral gap analysis (frozen vs. active energy)
-2. Centralizer projection (observable subalgebra)
-3. Volume measure on Clifford algebra
+See: QFD.Gravity.NoetherProjection.projection_factor_is_five_sixths
 -/
 theorem xi_from_geometric_projection :
     xi_qfd_theoretical = k_geom^2 * (5/6) ∧
