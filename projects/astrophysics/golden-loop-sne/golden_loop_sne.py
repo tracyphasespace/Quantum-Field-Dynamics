@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-golden_loop_sne.py — Golden Loop Supernova Pipeline
+golden_loop_sne.py — Golden Loop Supernova Pipeline (v2: Kelvin Wave Framework)
 
 ZERO FREE PARAMETERS (except absolute magnitude calibration M).
 
@@ -16,27 +16,34 @@ Derivation chain:
     κ̃ = ξ_QFD × β^(3/2)  ≈ 85.6  (dimensionless; see §9.3.1 for dimensional status)
 
 Physical model:
-    Photon = toroidal soliton with poloidal + toroidal circulation.
-    Traversing the vacuum (ψ-field), circulation decays:
+    Photon = Helmholtz vortex ring with poloidal + toroidal circulation.
+    Traversing the vacuum (ψ-field), circulation decays via forward
+    coherent drag:
         dE/dD = -(K_J/c) × E
     This gives exponential energy loss:
         E_obs = E_emit × exp(-κD),  κ = K_J/c
         1 + z = exp(κD)
         D(z) = (c/K_J) × ln(1 + z)
 
-    In static Minkowski spacetime (no expansion), the luminosity
-    distance includes a single (1+z) surface-brightness factor
-    from photon energy reduction (no time-dilation factor):
-        D_L(z) = D × √(1 + z) = (c/K_J) × ln(1+z) × √(1+z)
+    Thermodynamic luminosity distance (f=2, γ=2):
+        Vortex ring has f=2 DOF (poloidal + toroidal circulation,
+        purely kinetic energy). Adiabatic expansion TV=const gives
+        V ∝ (1+z), isotropic L ∝ (1+z)^(1/3), arrival rate drops
+        by (1+z)^(-1/3). Combined with energy loss (1+z)^(-1):
+            D_L(z) = D × (1+z)^(2/3)
+
+    Non-forward Kelvin wave scattering:
+        σ_nf ∝ √E (from ω∝k² dispersion + Fermi's Golden Rule)
+        τ(z) = η × [1 - 1/√(1+z)], η = π²/β²
 
 Chromatic vacuum scattering:
-    Non-forward four-photon vertex: σ ∝ E² ∝ λ^(-2)
-    K_J(λ) = K_J_geo + δK × (λ_ref/λ)²
+    Non-forward Kelvin wave vertex: σ ∝ E^(1/2) ∝ λ^(-1/2)
+    K_J(λ) = K_J_geo + δK × (λ_ref/λ)^(1/2)
     This resolves the Hubble tension:
         CMB (microwave):  K_J ≈ K_J_geo ≈ 67 inferred
-        Optical (SNe):    K_J ≈ K_J_geo + δK ≈ 73-90
+        Optical (SNe):    K_J ≈ K_J_geo + δK ≈ 73-85
 
-Data: DES-SN5YR Hubble diagram (1,829 Type Ia SNe)
+Data: DES-SN5YR Hubble diagram (1,768 Type Ia SNe after quality cuts)
 """
 
 import numpy as np
@@ -149,21 +156,23 @@ def distance_qfd_linear(z, kj=KJ_GEOMETRIC):
     return z * C_LIGHT_KM_S / kj
 
 
-def luminosity_distance_qfd(z, kj=KJ_GEOMETRIC):
-    """QFD luminosity distance in static spacetime.
+def luminosity_distance_qfd(z, kj=KJ_GEOMETRIC, q=2.0/3.0):
+    """QFD luminosity distance with thermodynamic wavepacket expansion.
 
-    In static Minkowski: photon energy is reduced by (1+z),
-    but there is NO time-dilation of photon arrival rate
-    (no expansion → no cosmological time dilation).
+    The photon vortex ring has f=2 internal DOF (poloidal + toroidal
+    circulation, purely kinetic). Adiabatic expansion (γ=2, TV=const)
+    gives isotropic 3D wavepacket expansion V ∝ (1+z), so the 1D
+    longitudinal stretch is L ∝ (1+z)^(1/3).
 
-    Flux ∝ L / (4π D²) × 1/(1+z)
-    → D_L = D × √(1+z)
+    Flux = L/(4π D²) × (1+z)^(-1) × (1+z)^(-1/3)
+         = L/(4π D²) × (1+z)^(-4/3)
+    → D_L = D × (1+z)^(2/3)
 
-    This is the correct tired-light luminosity distance.
+    The exponent q=2/3 is the thermodynamic consequence of f=2 DOF.
     """
     z = np.asarray(z, dtype=float)
     D = distance_qfd_exponential(z, kj)
-    return D * np.sqrt(1.0 + z)
+    return D * (1.0 + z)**q
 
 
 def distance_modulus_qfd(z, M=0.0, kj=KJ_GEOMETRIC):
@@ -246,6 +255,8 @@ def find_des_data():
         '/home/tracy/development/QFD_SpectralGap/projects/astrophysics/'
         'qfd-supernova-v15/data/DES-SN5YR-1.2/4_DISTANCES_COVMAT/'
         'DES-SN5YR_HD.csv',
+        '/home/tracy/development/SupernovaSrc/qfd-supernova-v15/data/'
+        'DES-SN5YR-1.2/4_DISTANCES_COVMAT/DES-SN5YR_HD.csv',
     ]
     for path in candidates:
         path = os.path.abspath(path)
@@ -358,60 +369,62 @@ def compute_statistics(z, mu_obs, mu_err, mu_model):
     }
 
 
-def scattering_opacity(z):
-    """Vacuum scattering opacity from four-photon vertex.
+def scattering_opacity(z, n=0.5):
+    """Vacuum scattering opacity from non-forward Kelvin wave excitation.
 
-    Physics: Non-forward scattering removes photons from the beam.
-    The cross-section σ ∝ E² decreases as the photon redshifts.
+    Physics: Non-forward incoherent scattering removes photons from
+    the beam by exciting real Kelvin waves on the vortex core.
+    The cross-section σ_nf ∝ E^(1/2) (from ω∝k² dispersion giving
+    ρ(E) ∝ E^(-1/2), combined with |M|²∝E derivative coupling).
 
     Optical depth:
-        τ(z) = (n_ψ σ₀)/(2κ) × [1 - 1/(1+z)²]
+        τ(z) = η × [1 - 1/(1+z)^n]   with n=1/2
 
     Properties:
-        - At z→0: τ ≈ 2z  (linear, absorbed into slope)
-        - At z→∞: τ → const (saturates — key for curvature!)
+        - At z→0: τ ≈ η×n×z  (linear, absorbed into slope)
+        - At z→∞: τ → η (saturates — key for curvature!)
         - The saturation creates the "acceleration" signal in
           the Hubble diagram that ΛCDM attributes to dark energy.
 
-    Returns the dimensionless shape function [1 - 1/(1+z)²].
-    The amplitude η is fitted as the single physics parameter.
+    Returns the dimensionless shape function [1 - 1/(1+z)^n].
+    The amplitude η = π²/β² is fixed from the Golden Loop.
     """
     z = np.asarray(z, dtype=float)
-    return 1.0 - 1.0 / (1.0 + z)**2
+    return 1.0 - 1.0 / (1.0 + z)**n
 
 
-def distance_modulus_qfd_full(z, M=0.0, eta=0.0, kj=KJ_GEOMETRIC):
-    """Full QFD distance modulus with scattering opacity.
+def distance_modulus_qfd_full(z, M=0.0, eta=0.0, kj=KJ_GEOMETRIC, q=2.0/3.0, n=0.5):
+    """Full QFD distance modulus with Kelvin wave scattering opacity.
 
-    μ = 5 log₁₀(D_L) + 25 + M + 1.0857 × η × [1 - 1/(1+z)²]
+    μ = 5 log₁₀(D_L) + 25 + M + (5/ln10) × η × [1 - 1/√(1+z)]
 
     Parameters:
         M:   Absolute magnitude calibration (not physics)
-        eta: Scattering opacity scale (ONE physics parameter)
-             η = (n_ψ σ₀)/(2κ), where n_ψ is ψ-field density,
-             σ₀ is the four-photon cross-section at reference energy,
-             κ = K_J/c is the energy loss rate.
+        eta: Scattering opacity scale
+             η = π²/β² = 1.0657 (geometric, from Golden Loop)
         kj:  Vacuum drag parameter (FIXED from Golden Loop)
+        q:   Surface brightness exponent (2/3 from f=2 thermodynamics)
+        n:   Scattering power (1/2 from Kelvin wave dispersion)
     """
     z = np.asarray(z, dtype=float)
-    D_L = luminosity_distance_qfd(z, kj)
+    D_L = luminosity_distance_qfd(z, kj, q=q)
     mask = D_L > 0
     mu = np.full_like(z, np.nan)
-    K_MAG = 2.5 / np.log(10.0)  # ≈ 1.0857
+    K_MAG = 5.0 / np.log(10.0)  # ≈ 2.1715 (book convention: μ += K_MAG × η × f(z))
     mu[mask] = (5.0 * np.log10(D_L[mask]) + 25.0 + M
-                + K_MAG * eta * scattering_opacity(z[mask]))
+                + K_MAG * eta * scattering_opacity(z[mask], n=n))
     return mu
 
 
-def fit_eta_and_M(z, mu_obs, mu_err, kj=KJ_GEOMETRIC):
+def fit_eta_and_M(z, mu_obs, mu_err, kj=KJ_GEOMETRIC, q=2.0/3.0, n=0.5):
     """Fit scattering opacity η and magnitude offset M.
 
     Two-parameter weighted least squares:
-        μ_obs = 5 log₁₀(D_L) + 25 + M + 1.0857 × η × f(z)
+        μ_obs = 5 log₁₀(D_L) + 25 + M + (5/ln10) × η × f(z)
 
     This is linear in (M, η), so has an analytic solution.
     """
-    D_L = luminosity_distance_qfd(z, kj)
+    D_L = luminosity_distance_qfd(z, kj, q=q)
     valid = (D_L > 0) & np.isfinite(mu_obs) & (mu_err > 0)
 
     z_v = z[valid]
@@ -421,13 +434,13 @@ def fit_eta_and_M(z, mu_obs, mu_err, kj=KJ_GEOMETRIC):
 
     # Base model: μ₀ = 5 log₁₀(D_L) + 25
     mu_base = 5.0 * np.log10(D_L_v) + 25.0
-    K_MAG = 2.5 / np.log(10.0)
+    K_MAG = 5.0 / np.log(10.0)  # book convention: μ += K_MAG × η × f(z)
 
     # Design matrix: μ_obs = μ_base + M × 1 + (K_MAG × η) × f(z)
     # Let p₁ = M, p₂ = K_MAG × η
     y = mu_v - mu_base
     A1 = np.ones_like(z_v)                  # coefficient of M
-    A2 = scattering_opacity(z_v)            # coefficient of K_MAG × η
+    A2 = scattering_opacity(z_v, n=n)       # coefficient of K_MAG × η
     w = 1.0 / err_v**2
 
     # Weighted normal equations
@@ -535,7 +548,8 @@ def chromatic_kj_per_band(data_path=None):
     For each band, estimate the effective K_J by fitting
     D(z) = z × c / K_J to peak flux vs redshift.
 
-    QFD prediction: K_J(λ) = K_J_geo + δK × (λ_ref/λ)²
+    QFD prediction: K_J(λ) = K_J_geo + δK × (λ_ref/λ)^(1/2)
+    (from Kelvin wave scattering σ_nf ∝ E^(1/2) ∝ λ^(-1/2))
     Blue bands see MORE vacuum scatter → higher effective K_J.
     """
     if data_path is None:
@@ -610,7 +624,7 @@ def chromatic_kj_per_band(data_path=None):
             'n_sne': int(np.sum(valid)),
             'slope': slope,
             'intercept': intercept,
-            'lambda_factor': (LAMBDA_REF_NM / lam)**2,
+            'lambda_factor': (LAMBDA_REF_NM / lam)**0.5,
         }
 
     return results
@@ -646,17 +660,17 @@ def run_pipeline():
 
     models = {}
 
-    # Model 1: Exponential tired light with √(1+z) surface brightness
+    # Model 1: Thermodynamic D_L with (1+z)^(2/3)
     M1 = fit_offset(z, mu_obs, mu_err, distance_modulus_qfd, kj=KJ_GEOMETRIC)
     mu_qfd_exp = distance_modulus_qfd(z, M=M1, kj=KJ_GEOMETRIC)
     stats1 = compute_statistics(z, mu_obs, mu_err, mu_qfd_exp)
     models['QFD_exponential'] = {
-        'label': 'QFD exponential: D = (c/K_J)ln(1+z)√(1+z)',
+        'label': 'QFD thermodynamic: D = (c/K_J)ln(1+z)(1+z)^(2/3)',
         'M': M1, 'mu': mu_qfd_exp, 'stats': stats1,
-        'description': 'Exact tired-light with surface brightness correction',
+        'description': 'Exponential drag + f=2 thermodynamic wavepacket expansion',
     }
-    print(f"\n  Model 1: QFD Exponential Tired Light")
-    print(f"    D_L(z) = (c/K_J) × ln(1+z) × √(1+z)")
+    print(f"\n  Model 1: QFD Thermodynamic (f=2, q=2/3)")
+    print(f"    D_L(z) = (c/K_J) × ln(1+z) × (1+z)^(2/3)")
     print(f"    M = {M1:.4f} mag")
     print(f"    RMS = {stats1['rms']:.4f} mag")
     print(f"    WRMS = {stats1['wrms']:.4f} mag")
@@ -706,19 +720,19 @@ def run_pipeline():
     print(f"    χ²/dof = {stats3['chi2_dof']:.3f}")
     print(f"    Trend slope = {stats3['trend_slope']:.4f} mag/z")
 
-    # Model 4: Full QFD with scattering opacity (1 physics parameter)
+    # Model 4: Full QFD with Kelvin wave opacity (1 physics parameter)
     M4, eta4 = fit_eta_and_M(z, mu_obs, mu_err, kj=KJ_GEOMETRIC)
     mu_qfd_full = distance_modulus_qfd_full(z, M=M4, eta=eta4, kj=KJ_GEOMETRIC)
     stats4 = compute_statistics(z, mu_obs, mu_err, mu_qfd_full)
     models['QFD_full'] = {
-        'label': 'QFD full: exponential + scattering opacity',
+        'label': 'QFD full: thermodynamic + Kelvin wave opacity',
         'M': M4, 'eta': eta4, 'mu': mu_qfd_full, 'stats': stats4,
-        'description': 'Exponential tired light + four-photon scattering opacity',
+        'description': 'f=2 thermodynamic D_L + Kelvin wave scattering opacity',
     }
-    print(f"\n  Model 4: QFD Full (exponential + scattering opacity)")
-    print(f"    μ = 5log₁₀(D_L) + 25 + M + 1.086×η×[1 - 1/(1+z)²]")
+    print(f"\n  Model 4: QFD Full (thermodynamic + Kelvin wave opacity)")
+    print(f"    μ = 5log₁₀(D_L) + 25 + M + (5/ln10)×η×[1 - 1/√(1+z)]")
     print(f"    M = {M4:.4f} mag  (calibration)")
-    print(f"    η = {eta4:.4f}     (scattering opacity — 1 physics param)")
+    print(f"    η = {eta4:.4f}     (Kelvin wave opacity — 1 physics param)")
     print(f"    RMS = {stats4['rms']:.4f} mag")
     print(f"    WRMS = {stats4['wrms']:.4f} mag")
     print(f"    χ²/dof = {stats4['chi2_dof']:.3f}")
@@ -880,12 +894,12 @@ def run_pipeline():
     try:
         chrom = chromatic_kj_per_band()
         if chrom:
-            print(f"\n  QFD prediction: K_J(λ) = K_J_geo + δK × (λ_ref/λ)²")
+            print(f"\n  QFD prediction: K_J(λ) = K_J_geo + δK × (λ_ref/λ)^(1/2)")
             print(f"  Reference wavelength: {LAMBDA_REF_NM:.0f} nm (r-band)")
             print(f"\n  {'Band':>6} {'λ [nm]':>8} {'N_SNe':>7} {'slope':>8}"
-                  f" {'intercept':>10} {'(λ_ref/λ)²':>10}")
+                  f" {'intercept':>10} {'(λ_ref/λ)^½':>12}")
             print(f"  {'----':>6} {'------':>8} {'-----':>7} {'-----':>8}"
-                  f" {'---------':>10} {'---------':>10}")
+                  f" {'---------':>10} {'----------':>12}")
             for band in ['g', 'r', 'i', 'z']:
                 if band in chrom:
                     c = chrom[band]
@@ -900,12 +914,12 @@ def run_pipeline():
                 intercepts = [chrom[b]['intercept'] for b in bands_ordered]
                 lam_factors = [chrom[b]['lambda_factor'] for b in bands_ordered]
 
-                # Correlation between intercept and λ^(-2) factor
+                # Correlation between intercept and λ^(-1/2) factor
                 if len(intercepts) >= 3:
                     corr = np.corrcoef(intercepts, lam_factors)[0, 1]
-                    print(f"\n  Intercept vs (λ_ref/λ)² correlation: {corr:.3f}")
+                    print(f"\n  Intercept vs (λ_ref/λ)^(1/2) correlation: {corr:.3f}")
                     if abs(corr) > 0.9:
-                        print(f"  → STRONG chromatic signal (consistent with σ ∝ λ⁻²)")
+                        print(f"  → STRONG chromatic signal (consistent with σ ∝ λ^(-1/2))")
                     elif abs(corr) > 0.5:
                         print(f"  → Moderate chromatic signal")
                     else:
@@ -918,36 +932,34 @@ def run_pipeline():
     print("PHYSICAL INTERPRETATION")
     print("=" * 70)
     print(f"""
-  PHOTON AS TOROIDAL SOLITON:
-    The photon is a topological excitation of the vacuum (ψ-field)
-    with poloidal and toroidal circulation modes.
+  PHOTON AS HELMHOLTZ VORTEX RING:
+    The photon is a topological Helmholtz vortex ring in the β-stiff
+    superfluid vacuum, with f=2 internal DOF (poloidal + toroidal
+    circulation, purely kinetic energy — no potential energy).
 
-    As it traverses cosmological distances, the soliton's circulation
-    couples to the background ψ-field, gradually transferring energy.
-    This is NOT quantum tunneling or stochastic scattering — it is
-    deterministic energy exchange between the soliton and the vacuum.
+    Two distinct interaction vertices:
+      1. FORWARD COHERENT DRAG (σ_fwd ∝ E):
+         Virtual coupling to bulk vacuum. No real final state.
+         dE/dx = -αE → achromatic redshift z = exp(αD) - 1
+      2. NON-FORWARD KELVIN WAVE SCATTERING (σ_nf ∝ √E):
+         Real Kelvin wave excitation on vortex core (ω∝k²).
+         ρ(E) ∝ E^(-1/2) → Fermi's Golden Rule → σ ∝ E^(1/2)
+         τ(z) = η[1 - 1/√(1+z)], η = π²/β²
 
-    Energy loss rate:
-      dE/dD = -(K_J/c) × E = -{KAPPA:.2e} × E  per Mpc
-      → E_obs = E_emit × exp(-κD)
-      → z = exp(κD) - 1
+    Thermodynamic D_L:
+      f=2 → γ=2 → TV=const → V∝(1+z) → L∝(1+z)^(1/3)
+      Arrival rate × energy = (1+z)^(-4/3) → D_L = D(1+z)^(2/3)
 
     Geometric origin of K_J:
       K_J = ξ_QFD × β^(3/2) = {KJ_GEOMETRIC:.4f} km/s/Mpc
       ξ_QFD = (7π/5)² × 5/6 = {XI_QFD:.4f}  (Hill vortex coupling)
       β^(3/2) = {BETA_3_2:.4f}                (volume stiffness)
 
-    CMB temperature:
-      Over cosmic time, the accumulated redshifted photon population
-      fills a Planck/Wien distribution at T = 2.725 K — the photon
-      soliton energy is redistributed from higher to lower frequencies
-      by abundance, not by thermalization.
-
     Hubble tension resolution:
-      K_J_geo = {KJ_GEOMETRIC:.1f} km/s/Mpc   (achromatic core)
-      Microwave:  minimal chromatic scatter → K_J ≈ 67
-      Optical:    σ ∝ λ⁻² extra scatter   → K_J ≈ 73-90
-      The "5σ tension" is chromatic vacuum dispersion.
+      K_J_geo = {KJ_GEOMETRIC:.1f} km/s/Mpc    (achromatic core)
+      Microwave:  minimal chromatic scatter  → K_J ≈ 67
+      Optical:    σ_nf ∝ λ^(-1/2) scatter   → K_J ≈ 73-85
+      The "5σ tension" is chromatic Kelvin wave dispersion.
 """)
 
     # --- Summary ---
@@ -967,7 +979,7 @@ def run_pipeline():
   ★ QFD Locked:    0 physics params (everything from α)
   ΛCDM:           2 physics params (Ωm, H0) + calibration
 
-  Chromatic test:  r = -0.986 (σ ∝ λ⁻² confirmed)
+  Chromatic test:  σ ∝ λ^(-1/2) (Kelvin wave prediction)
 """)
 
     return {
