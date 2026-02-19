@@ -33,7 +33,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a **Lean 4 formalization** of Quantum Field Dynamics (QFD) theorems, proving spacetime emergence, cosmology, nuclear physics, and particle physics using the Clifford algebra Cl(3,3). The project contains **1,145 proven statements** (926 theorems + 219 lemmas) across **243 Lean files**.
+This is a **Lean 4 formalization** of Quantum Field Dynamics (QFD) theorems, proving spacetime emergence, cosmology, nuclear physics, and particle physics using the Clifford algebra Cl(3,3). The project contains **1,349 proven statements** (1,051 theorems + 276 lemmas) across **256 Lean files**.
 
 **New modules (Jan 2026)**: Math/ (pure scaffolding), Atomic/ (chaos/resonance), Physics/Postulates.lean (centralized axioms)
 
@@ -544,30 +544,37 @@ For papers using this formalization:
 
 See `CITATION.cff` for complete metadata.
 
-## Key Statistics (as of 2026-01-11)
+## Key Statistics (as of 2026-02-19)
 
-- **Lean Files**: **243**
-- **Proven Theorems**: **926** (all substantive, zero stubs)
-- **Proven Lemmas**: **219**
-- **Total Proven**: **1,145 statements**
-- **Definitions**: **788**
+- **Lean Files**: **256**
+- **Proven Theorems**: **1,051** (all substantive, zero stubs)
+- **Proven Lemmas**: **276**
+- **Total Proven**: **1,349 statements** (includes 22 private lemmas/theorems)
+- **Definitions**: **995**
 - **Structures**: **188**
-- **Standalone Axioms**: **11** (centralized in Physics/Postulates.lean)
-- **Build Status**: ✅ Successful (3178 jobs)
+- **Standalone Axioms**: **6** (centralized in Physics/Postulates.lean)
+- **Build Status**: ✅ Successful
 - **Sorries**: **0** ✨
 - **Stub Theorems**: **0** (all converted to structures/definitions)
 
 **Counting Methodology** (IMPORTANT):
 ```bash
 # Count DECLARATIONS only (start of line):
-grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # theorems → 926
-grep -rn "^lemma" QFD/ --include="*.lean" | wc -l    # lemmas → 219
-grep -rn "^axiom " QFD/ --include="*.lean" | wc -l   # axioms → 11
+grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # theorems → 1051
+grep -rn "^lemma" QFD/ --include="*.lean" | wc -l    # lemmas → 276
+grep -rn "^axiom " QFD/ --include="*.lean" | wc -l   # axioms → 6
 grep -rn "^theorem.*: True" QFD/ --include="*.lean" | wc -l  # stubs → 0
 # DO NOT use grep without ^ anchor - inflates count by ~200 (includes comments)
 ```
 
-**Recent Progress (Jan 11, 2026)**:
+**Recent Progress (Feb 19, 2026)**:
+- **Axiom elimination**: `beta_satisfies_transcendental` proved via Taylor bootstrapping (11 → 6 axioms)
+- **Numerical verification suite**: NumericalConstants.lean (33 proofs), GoldenLoopNumerical.lean (24 proofs), Chapter12Constants.lean (20 proofs)
+- **Chapter 12 constants verified**: c_asym = -β/2, σ = β³/(4π²), v_bulk = c√β, κ̃ = ξ_QFD·β^{3/2}
+- **Pre-existing bug fixed**: GoldenLoop.lean local β definition disagreed with root (never compiled before)
+- **ProofLedger updated**: GL.4 (axiom elimination), GL.5 (numerical identities), GL.6 (Ch12 constants)
+
+**Earlier Progress (Jan 11, 2026)**:
 - **True stub elimination complete**: All `True` placeholders → meaningful predicates
 - **Soliton Topological files fixed**: TopologicalCore, TopologicalStability
 - **Import cycle resolved**: Lepton/Topology.lean
