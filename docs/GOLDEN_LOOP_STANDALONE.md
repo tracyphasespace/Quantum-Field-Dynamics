@@ -233,17 +233,19 @@ The Golden Loop and its derived constants have been formalized in Lean 4 (versio
 | Fissility limit within 0.1 of 45.0 | `theoretical_fissility_approx` | norm_num |
 | ξ_QFD = k²·(5/6) within 0.1 of 16 | `xi_from_geometric_projection` | norm_num |
 | Z/A → 1/β for large A | `charge_fraction_limit` | Functional minimization |
+| c_asym = −β/2 within 0.0001 of −1.5216 | `c_asym_bound` | linarith on β bounds |
+| σ = β³/(4π²) within 0.002 of 0.714 | `sigma_bound` | β³ + π² bounds |
+| √β ∈ (1.744, 1.745) | `sqrt_beta_bound` | sqrt monotonicity |
+| κ̃ = ξ_QFD·β^{3/2} ∈ (85.5, 85.8) | `kappa_bound` | ξ + β·√β bounds |
+| N_max = 2πβ³ ∈ (177, 178) | `nmax_bound` | π + β³ bounds |
+| η = π²/β² ∈ (1.065, 1.067) | `eta_bound` | div-to-mul conversion |
+| A_crit = 2e²β² ∈ (136, 138) | `acrit_bound` | exp² + β² bounds |
 
 ### The Axiom Status
 
-The Lean formalization rests on **one irreducible axiom**:
+**The Golden Loop axiom has been eliminated.** The Lean formalization previously relied on one irreducible axiom (`beta_satisfies_transcendental`). This has been constructively proved and the axiom removed from `Physics/Postulates.lean` (Feb 2026).
 
-```lean
-axiom beta_satisfies_transcendental :
-    |exp(beta_golden) / beta_golden - 6.891| < 0.001
-```
-
-This axiom exists because Lean 4 cannot natively evaluate `Real.exp` for arbitrary reals. **However, a constructive proof replacement exists** (`beta_satisfies_transcendental_proved` in `Validation/GoldenLoopNumerical.lean`) using a 5-stage chain:
+The constructive proof (`beta_satisfies_transcendental_proved` in `Validation/GoldenLoopNumerical.lean`) uses a 5-stage chain:
 
 1. Decompose β = 3 + δ where δ = 0.043233053
 2. Bound exp(3) = (exp 1)³ using Mathlib's 9-digit exp(1) bounds
@@ -251,7 +253,7 @@ This axiom exists because Lean 4 cannot natively evaluate `Real.exp` for arbitra
 4. Multiply: 20.9727 < exp(β) < 20.9734
 5. Divide by β: 6.890 < exp(β)/β < 6.892
 
-This proved replacement has not yet been wired into the main import chain, but it eliminates the axiom in principle.
+This proof is fully wired into the import chain. All downstream theorems (GoldenLoop.lean, GoldenLoop_PathIntegral.lean) now reference the proved theorem instead of the axiom.
 
 **Additionally proved (zero axioms):**
 - The transcendental equation exp(x)/x = K has exactly one root for x > 1, via IVT + strict monotonicity of the derivative exp(x)(x−1)/x²
@@ -260,7 +262,7 @@ This proved replacement has not yet been wired into the main import chain, but i
 ### Proof Dependency Graph
 
 ```
-[Proved] exp(β)/β ∈ (6.890, 6.892)    ← Taylor bounds + Mathlib exp(1)
+[Proved] exp(β)/β ∈ (6.890, 6.892)    ← Taylor bounds + Mathlib exp(1) (AXIOM ELIMINATED)
 [Proved] Unique root exists             ← IVT + monotonicity
 [Proved] 1/α = 2π²(e^β/β) + 1         ← ring (definitional)
     │
@@ -269,13 +271,17 @@ This proved replacement has not yet been wired into the main import chain, but i
     ├──→ [Proved] m_p/m_e = k_geom·β/α matches to 1%
     ├──→ [Proved] Nuclear params α_n, β_n, γ_e match data
     ├──→ [Proved] Fissility limit ≈ 45
-    └──→ [Proved] ξ_QFD ≈ 16
+    ├──→ [Proved] ξ_QFD ≈ 16
+    ├──→ [Proved] c_asym = −β/2 ≈ −1.5216          ← Chapter12Constants.lean
+    ├──→ [Proved] σ = β³/(4π²) ≈ 0.714              ← Chapter12Constants.lean
+    ├──→ [Proved] v_bulk/c = √β ∈ (1.744, 1.745)   ← Chapter12Constants.lean
+    ├──→ [Proved] κ̃ = ξ_QFD·β^{3/2} ∈ (85.5, 85.8) ← Chapter12Constants.lean
+    ├──→ [Proved] N_max = 2πβ³ ∈ (177, 178)         ← NumericalConstants.lean
+    ├──→ [Proved] η = π²/β² ∈ (1.065, 1.067)        ← NumericalConstants.lean
+    └──→ [Proved] A_crit = 2e²β² ∈ (136, 138)       ← NumericalConstants.lean
 
-[Not yet proved in Lean]
-    ├── k_geom = k_Hill·(π/α)^{1/5} (defined as constant, not derived from Hill vortex)
-    ├── c_asym = −β/2
-    ├── κ̃ = ξ_QFD·β^{3/2}
-    └── σ = β³/(4π²)
+[Not yet derived in Lean]
+    └── k_geom = k_Hill·(π/α)^{1/5} (defined as constant, not derived from Hill vortex)
 ```
 
 ---
@@ -325,8 +331,8 @@ The effective potential V_eff(ρ) = βρ(ln ρ − 1) used in Step 1 is derived 
 ### 8.3 Branch Selection
 The transcendental equation e^β/β = K has two real solutions (Lambert-W branches). QFD selects the large root β ≈ 3.04 (corresponding to the W₋₁ branch), not the small root β ≈ 0.17 (the W₀ branch). The physical argument is that the small root is unstable — it represents a nearly-flat vacuum that cannot sustain solitons. A rigorous stability proof has not been formalized.
 
-### 8.4 Constants Not Yet in Lean
-Four of the 17 derived constants lack Lean formalization: c_asym = −β/2, κ̃ = ξ_QFD·β^{3/2}, σ = β³/(4π²), and v_bulk = c√β. These are algebraic compositions of already-proved quantities and could be added straightforwardly.
+### 8.4 Constants Now All in Lean ✅
+~~Four of the 17 derived constants lack Lean formalization.~~ **All four have been proved** (Feb 2026) in `Validation/Chapter12Constants.lean`: c_asym = −β/2 (|c_asym + 1.5216| < 0.0001), σ = β³/(4π²) (|σ − 0.714| < 0.002), v_bulk/c = √β ∈ (1.744, 1.745), and κ̃ = ξ_QFD·β^{3/2} ∈ (85.5, 85.8). All 17 derived constants from the Golden Loop are now formally verified.
 
 ---
 
@@ -402,7 +408,7 @@ The Golden Loop 1/α = 2π²(e^β/β) + 1 is:
 
 - **Derived** in 6 steps from entropic Boltzmann statistics on a spinor manifold (not guessed)
 - **Over-constrained** across electromagnetic, nuclear, leptonic, gravitational, and cosmological sectors
-- **Formally verified** in Lean 4 (one axiom with a proved replacement, 10+ downstream theorems sorry-free)
+- **Formally verified** in Lean 4 (zero axioms, all 17 derived constants proved, 0 sorry)
 - **Falsifiable** via the tau anomalous magnetic moment (QFD predicts a_τ ≈ 1192 × 10⁻⁶ vs SM 1177 × 10⁻⁶)
 
 The equation has structural content — every factor (2π², e^β, β, +1) maps to a specific physical mechanism. The strongest evidence is not the 9-digit match to α (which could be coincidence) but the simultaneous match to nuclear physics, the electron g−2, the proton mass, and the supernova Hubble diagram using the same β with zero adjustable parameters.
