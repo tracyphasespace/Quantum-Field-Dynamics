@@ -827,14 +827,12 @@ theorem c2_from_packing_hypothesis :
     rw [this]
     norm_num
 
-/-! ### Golden Loop Axioms -/
+/-! ### Golden Loop -/
 
-/--
-β satisfies the transcendental equation e^β/β = K to high precision.
-Source: `GoldenLoop.lean`
--/
-axiom beta_satisfies_transcendental :
-    abs (Real.exp beta_golden / beta_golden - 6.891) < 0.001
+-- `beta_satisfies_transcendental` was formerly an axiom here.
+-- It is now a PROVED THEOREM in `QFD/Validation/GoldenLoopNumerical.lean`.
+-- Files that need it should `import QFD.Validation.GoldenLoopNumerical`
+-- and use `QFD.Validation.GoldenLoopNumerical.beta_satisfies_transcendental_proved`.
 
 /--
 The Golden Loop identity: β predicts c₂ = 1/β within NuBase uncertainty.
@@ -996,19 +994,19 @@ structure SolitonAdmissibility where
 /-!
 ## Axiom Inventory
 
-### Centralized Here (10 standalone + ~43 structure fields):
+### Centralized Here (9 standalone + ~43 structure fields):
 - `numerical_nuclear_scale_bound` - L₀ ≈ 1.25×10⁻¹⁶ m
 - `shell_theorem_timeDilation` - Harmonic exterior → 1/r decay
 - `v4_from_vacuum_hypothesis` - Nuclear well depth from β
 - `alpha_n_from_qcd_hypothesis` - Nuclear fine structure from QCD
 - `c2_from_packing_hypothesis` - Volume term from packing
-- `beta_satisfies_transcendental` - β solves e^β/β = K
 - `golden_loop_identity` - β predicts c₂
 - `python_root_finding_beta` - Numerical root finding
 - `kdv_phase_drag_interaction` - Photon energy transfer
 - `c2_from_beta_minimization` - Asymptotic charge fraction
 
 ### Recently Proven (converted from axioms):
+- `beta_satisfies_transcendental` - β solves e^β/β = K (→ GoldenLoopNumerical.lean)
 - `golden_loop_prediction_accuracy` - g-2 prediction (interval arithmetic)
 - `rpow_strict_subadd` - Concavity of x^p for 0<p<1 (convex analysis)
 - `rayleigh_scattering_wavelength_dependence` - λ^(-4) scattering (trivial existence)

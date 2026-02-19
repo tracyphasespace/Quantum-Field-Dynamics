@@ -69,6 +69,7 @@ import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import QFD.Physics.Postulates
+import QFD.Validation.GoldenLoopNumerical
 
 noncomputable section
 
@@ -172,8 +173,7 @@ surface coefficient (dominated by short-lived heavy nuclei).
 
 **Audit trail**: β depends ONLY on α (CODATA) and c₁ (NuBase surface).
 -/
-def beta_golden : ℝ :=
-  (3043089491989851 : ℝ) / 1000000000000000
+def beta_golden : ℝ := _root_.beta_golden
 
 /-- The consistency predicate: Beta from transcendental equation predicts c₂.
 
@@ -310,9 +310,7 @@ theorem K_target_approx :
 Lemma: Local beta_golden equals the one in Postulates.lean.
 Both represent 3.043233053 but with different encodings.
 -/
-theorem beta_golden_eq_root : beta_golden = _root_.beta_golden := by
-  unfold beta_golden _root_.beta_golden
-  norm_num
+theorem beta_golden_eq_root : beta_golden = _root_.beta_golden := rfl
 
 /--
 Bridge lemma: Convert the centralized axiom (which uses literal 6.891) to the local form
@@ -325,7 +323,7 @@ theorem beta_satisfies_transcendental_local :
   have h_eq : beta_golden = _root_.beta_golden := beta_golden_eq_root
   have h1 : abs (Real.exp beta_golden / beta_golden - 6.891) < 0.001 := by
     rw [h_eq]
-    exact Physics.beta_satisfies_transcendental
+    exact QFD.Validation.GoldenLoopNumerical.beta_satisfies_transcendental_proved
   have h2 : abs (K_target - 6.891) < 0.01 := K_target_approx
   -- Triangle inequality: |a - c| ≤ |a - b| + |b - c|
   have h3 : abs (6.891 - K_target) < 0.01 := by
@@ -357,12 +355,12 @@ converge to this value.
 theorem beta_predicts_c2 :
     let c2_pred := 1 / beta_golden
     abs (c2_pred - c2_empirical) < 0.002 := by  -- 0.5% tolerance
-  unfold beta_golden c2_empirical
+  unfold beta_golden _root_.beta_golden c2_empirical
   norm_num
 
 /-- Beta is positive (required for physical validity). -/
 theorem beta_golden_positive : 0 < beta_golden := by
-  unfold beta_golden
+  unfold beta_golden _root_.beta_golden
   norm_num
 
 /-- Beta is in physically reasonable range [2, 4].
@@ -371,7 +369,7 @@ Vacuum stiffness must be order unity for stable solitons.
 -/
 theorem beta_physically_reasonable :
     2 < beta_golden ∧ beta_golden < 4 := by
-  unfold beta_golden
+  unfold beta_golden _root_.beta_golden
   constructor <;> norm_num
 
 -- ## 6. Physical Interpretation
@@ -409,9 +407,9 @@ theorem beta_physically_reasonable :
 This ensures consistency across the codebase (derived eigenvalue).
 -/
 theorem beta_matches_vacuum_parameters :
-    beta_golden = (3043089491989851 : ℝ) / 1000000000000000 := by
-  unfold beta_golden
-  rfl
+    beta_golden = (3043233053 : ℝ) / 1000000000 := by
+  unfold beta_golden _root_.beta_golden
+  norm_num
 
 /-! ## 8. Main Result Summary -/
 

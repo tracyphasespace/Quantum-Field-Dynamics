@@ -58,6 +58,7 @@ import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
 import QFD.Physics.Postulates
+import QFD.Validation.GoldenLoopNumerical
 
 noncomputable section
 
@@ -67,13 +68,15 @@ namespace QFD.GoldenLoopPI
 
 /-- Vacuum stiffness parameter β > 0.
     This is the bulk modulus of the vacuum medium.
-    Axiomatized as positive for physical validity. -/
-axiom beta_pos : 0 < beta_golden
+    Proved by unfolding the decimal literal. -/
+theorem beta_pos : 0 < beta_golden := by
+  unfold beta_golden; norm_num
 
 /-- Fine structure constant constraint: 0 < α < 1.
     The EM coupling must be positive and less than unity
     for perturbative consistency. -/
-axiom alpha_bounds : 0 < alpha_qfd ∧ alpha_qfd < 1
+theorem alpha_bounds : 0 < alpha_qfd ∧ alpha_qfd < 1 := by
+  unfold alpha_qfd; constructor <;> norm_num
 
 /-! ## 2. Path Integral Components -/
 
@@ -185,13 +188,13 @@ theorem Z_total_eq_product :
 -/
 theorem alpha_inv_reasonable_range :
     100 < alpha_inv_from_PI ∧ alpha_inv_from_PI < 200 := by
-  -- Strategy: Use Physics.beta_satisfies_transcendental which gives
+  -- Strategy: Use the proved exp(β)/β bound which gives
   -- |exp(β)/β - 6.891| < 0.001, so 6.890 < Z_vac < 6.892
   -- Combined with 18 < 2π² < 20, we get bounds on alpha_inv_from_PI
   unfold alpha_inv_from_PI Z_total Z_vac Z_top volume_S3
-  -- Get the axiom bound on exp(β)/β
+  -- Get the proved bound on exp(β)/β
   have h_zvac : abs (Real.exp beta_golden / beta_golden - 6.891) < 0.001 :=
-    Physics.beta_satisfies_transcendental
+    QFD.Validation.GoldenLoopNumerical.beta_satisfies_transcendental_proved
   -- Extract lower and upper bounds from absolute value
   have h_zvac_lower : 6.890 < Real.exp beta_golden / beta_golden := by
     have := abs_lt.mp h_zvac
