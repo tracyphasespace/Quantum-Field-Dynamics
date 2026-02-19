@@ -262,7 +262,9 @@ PREDICTIONS WITH CAVEATS (depend on k_geom or incomplete mappings)
 ├── k_geom·β/α = 1836.11 ── m_p/m_e (requires k_geom derivation)
 ├── −1/β = −0.3286 ────────── g-2 compliance (mapping to a_e incomplete)
 ├── ξ_QFD·β^{3/2} = 85.58 ── κ̃ (degenerate with M_B calibration)
-└── k²_geom·(5/6) ≈ 16 ───── ξ_QFD (inherits k_geom ambiguity)
+├── k²_geom·(5/6) ≈ 16 ───── ξ_QFD → G_N (bridges 36 orders of magnitude
+│                               between EM and gravity; inherits k_geom ambiguity)
+└── Hierarchy problem ──────── 10³⁶ EM/gravity ratio is geometric, not tuned
 
 OPEN DERIVATIONS
 ─────────────────
@@ -364,6 +366,8 @@ Testing all candidate topological volumes {π, 2π, 4π, 2π², 4π², 8π²}, o
 
 ### 7.3 Cross-Sector Rigidity (the strongest argument)
 A single β, extracted from EM data alone, predicts nuclear structure (c₂, c_asym, α_n, β_n, γ_e, N_max) AND the SN Ia Hubble diagram shape. These sectors have no free parameters connecting them. Adjusting β to improve one sector worsens the others.
+
+**The hierarchy problem:** In the Standard Model, gravity is ~10³⁶ times weaker than electromagnetism, and no mechanism explains why. In QFD, the same derivation chain that gives α also gives the gravitational coupling: α → β → k_geom → ξ_QFD = k²_geom·(5/6) ≈ 16. The 36 orders of magnitude between gravity and EM arise from the squared ratio of the Planck length to the proton Compton wavelength — a ratio fixed by k_geom and β, both derived from α. The hierarchy is a geometric consequence, not a coincidence. (Caveat: this chain inherits the k_geom ambiguity — see Section 8.1.)
 
 **Note:** This is NOT claiming independence from α. Every prediction starts from α → β. The independence is cross-sector: nuclear predictions use no nuclear calibration data, cosmological predictions use no cosmological calibration data.
 
@@ -506,7 +510,7 @@ The Golden Loop 1/α = 2π²(e^β/β) + 1 is:
 - **Over-constrained** across electromagnetic, nuclear, and cosmological sectors
 - **Formally verified** in Lean 4 (zero axioms, zero sorry, 1226 statements)
 
-**The strongest evidence is NOT the 9-digit match to α** (which is circular — β is defined from α). **The strongest evidence is the cross-sector rigidity:** one parameter from electromagnetism simultaneously predicts nuclear compressibility (0.5%), nuclear asymmetry (0.1%), nuclear volume/surface/symmetry coefficients (0.3-0.6%), the superheavy neutron ceiling (0.05%), and the SN Ia Hubble diagram shape (χ²/dof = 0.955) — all with zero refitting.
+**The strongest evidence is NOT the 9-digit match to α** (which is circular — β is defined from α). **The strongest evidence is the cross-sector rigidity:** one parameter from electromagnetism simultaneously predicts nuclear compressibility (0.5%), nuclear asymmetry (0.1%), nuclear volume/surface/symmetry coefficients (0.3-0.6%), the superheavy neutron ceiling (0.05%), and the SN Ia Hubble diagram shape (χ²/dof = 0.955) — all with zero refitting. The derivation chain also bridges the 36 orders of magnitude between electromagnetism and gravity (the hierarchy problem), though this prediction inherits the k_geom ambiguity (Section 8.1).
 
 **Open problems:** k_geom derivation (Section 8.1), a_e ↔ φ² mapping (Section 8.5), fluctuation determinant (Section 8.3), entropic action closure (Section 8.2).
 
