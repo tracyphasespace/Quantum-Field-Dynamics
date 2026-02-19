@@ -1,6 +1,6 @@
 # The Golden Loop: A Self-Contained Evaluation Guide
 
-**Version 1.0 — February 2026**
+**Version 1.1 — February 2026**
 **For researchers and automated evaluation systems**
 
 ---
@@ -69,9 +69,11 @@ The SAME β = 3.043233053 simultaneously predicts:
 | Particle (proton mass) | m_p/m_e | k_geom·β/α | 1836.11 | 1836.15 | 0.0023% |
 | Lepton (electron g−2) | φ² = −1/β | −0.3286 | C₂(QED) = −0.3285 | 0.04% | |
 | Gravity | ξ_QFD | k²_geom·(5/6) | 16.15 | ~16 | <1% |
-| Cosmology (opacity) | κ̃ | ξ_QFD·β^{3/2} | 85.58 | H₀ map | shape match |
+| Cosmology (opacity) | κ̃ | ξ_QFD·β^{3/2} | 85.58 | H₀ map | shape match † |
 | Cosmology (SNe) | χ²/dof | 0 free params | 0.955 | — | beats ΛCDM |
 | Atomic | R_∞ | α²m_e c/(2h) | 10,973,731.568 | 10,973,731.568 | <10⁻¹¹ |
+
+**†** κ̃ = 85.58 is the dimensionless vacuum opacity, not a direct prediction of H₀ in km/s/Mpc. It enters the Hubble diagram via D_L = D(1+z)^{2/3} with an extinction term whose absolute vertical scaling is degenerate with the supernova magnitude calibration M_B. QFD predicts the *shape* of μ(z) (χ²/dof = 0.955 with zero physics parameters), not the absolute value of H₀. The apparent numerical proximity to H₀ ≈ 67-73 is coincidental at this level of analysis.
 
 **The critical test:** If you tweak β by 0.1% to improve a nuclear fit, the electron g−2 match (0.04%) breaks. If you tweak it to fix g−2, the proton mass ratio (0.0023%) breaks. The parameter is over-constrained across sectors that have no obvious physical connection in the Standard Model. This cross-sector rigidity cannot be achieved by curve-fitting a single decimal parameter.
 
@@ -161,7 +163,7 @@ $$\frac{1}{\alpha} = \frac{1 + \beta e^{-\beta}/2\pi^2}{\beta e^{-\beta}/2\pi^2}
 |--------|-------|-----------------|
 | 2π² | 19.739 | Volume of S³ — the spinor orientation manifold. Identifies the defect as a **fermion** via the Hopf fibration. |
 | e^β/β | 6.892 | Boltzmann suppression (e^β) divided by Faddeev-Popov Jacobian (β). Encodes the **vacuum stiffness**. |
-| +1 | 1 | Empty vacuum ground state — the "ocean" against which the "island" (soliton) is measured. |
+| +1 | 1 | Statistical weight W_emp = 1 of the empty vacuum ground state in the Grand Canonical partition function Ξ = W_emp + W_occ. This is the "ocean" against which the "island" (soliton) is measured. |
 | β = 3.043... | — | Dimensionless bulk modulus. The vacuum's resistance to topological deformation. |
 | α = 1/137... | — | Occupation probability: the fraction of phase space containing a stable topological defect. |
 
@@ -381,14 +383,14 @@ alpha_inv = 137.035999
 K = 2 * np.pi**2 / (alpha_inv - 1)  # = 0.14509
 beta = -lambertw(-K, k=-1).real       # W_{-1} branch
 print(f"beta = {beta:.10f}")           # 3.0432330530
-print(f"1/beta = {1/beta:.6f}")        # 0.328597 (cf. QED C2 = -0.328479)
+print(f"-1/beta = {-1/beta:.6f}")       # -0.328597 (cf. QED C2 = -0.328479)
 print(f"Check: 2*pi^2*exp(beta)/beta + 1 = {2*np.pi**2*np.exp(beta)/beta + 1:.6f}")
 ```
 
 Expected output:
 ```
 beta = 3.0432330530
-1/beta = 0.328597
+-1/beta = -0.328597
 Check: 2*pi^2*exp(beta)/beta + 1 = 137.035999
 ```
 
