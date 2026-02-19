@@ -136,6 +136,9 @@ projects/astrophysics/achromaticity/spectral_line_test.py | spectral_line_test.p
 projects/astrophysics/chromatic-vacuum-test/chromatic_kj_test.py | chromatic_kj_test.py — Test for wavelength-dependent vacuum refraction (K_J) | test
 projects/astrophysics/cmb-solver/cmb_solver.py | QFD CMB Solver: The Thermalized Universe | active
 projects/astrophysics/golden-loop-sne/golden_loop_sne.py | golden_loop_sne.py — Golden Loop Supernova Pipeline | active
+projects/astrophysics/rift-abundance/rift_abundance_model.py | Hybrid v4 Rift Abundance Model: calibrated Boltzmann filter + stripped-nuclei decay physics, dual-model verification of cosmic H/He = 75/25 | validated
+projects/astrophysics/rift-abundance/qfd_rift_abundance_v3_tracy.py | Tracy v3 Rift Abundance: calibrated geometric filter (rift_k=5.48), minimal-parameter Boltzmann mass spectrography | validated
+projects/astrophysics/rift-abundance/compare_models.py | Side-by-side comparison of geometric (Tracy v3) and mechanistic (Claude v3) rift abundance models, confirming convergence | validated
 projects/astrophysics/photon-transport/mc_photon_transport.py | mc_photon_transport.py -- Monte Carlo photon transport in the QFD vacuum | active
 projects/astrophysics/photon-transport/optical_transfer_function.py | optical_transfer_function.py -- Modulation Transfer Function of the QFD Vacuum | active
 projects/astrophysics/photon-transport/tolman_test.py | tolman_test.py -- Quantitative Tolman Surface Brightness Test for QFD | test

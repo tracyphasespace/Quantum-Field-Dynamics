@@ -210,6 +210,8 @@ projects/Lean4/QFD/Rift/ChargeEscape.lean | QFD Black Hole Rift Physics: Charge-
 projects/Lean4/QFD/Rift/RotationDynamics.lean | QFD Black Hole Rift Physics: Rotation Dynamics | 4
 projects/Lean4/QFD/Rift/SequentialEruptions.lean | QFD Black Hole Rift Physics: Sequential Eruptions and Charge Accumulation | 4
 projects/Lean4/QFD/Rift/SpinSorting.lean | QFD Black Hole Rift Physics: Spin-Sorting Ratchet | 4
+projects/Lean4/QFD/Rift/MassSpectrography.lean | QFD Rift Mass Spectrography: Boltzmann selectivity from mass ratio, exponential filtering | 9
+projects/Lean4/QFD/Rift/AbundanceEquilibrium.lean | QFD Cosmic Abundance Equilibrium: attractor state, three-mechanism feedback, 75/25 lock | 12
 projects/Lean4/QFD/SaturationLimit.lean | High-Energy Saturation Potential (V6 Reinterpretation Module) | 6
 projects/Lean4/QFD/Schema/Constraints.lean | Parameter Constraints for Grand Solver | 3
 projects/Lean4/QFD/Schema/Couplings.lean | Grand Solver Parameter Schema | 0
