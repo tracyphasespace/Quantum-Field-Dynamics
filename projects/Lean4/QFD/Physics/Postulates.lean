@@ -60,9 +60,15 @@ Derivation: Chapter 12.1.3 "The Golden Loop" -/
 noncomputable def beta_stability_equation (b : ℝ) : Prop :=
   (Real.pi^2) * (Real.exp b) * (b / (0.5 * (1 - alpha_qfd))) = (1 / alpha_qfd)
 
-/-- We postulate that Beta exists and satisfies the equation.
-(Numerical solution: approx 3.043233053) -/
-axiom vacuum_stiffness_axiom (β : ℝ) : beta_stability_equation β
+/- ELIMINATED (2026-02-19): Former axiom `vacuum_stiffness_axiom` was UNSOUND
+(universally quantified: claimed ALL reals satisfy the equation).
+Additionally, `beta_stability_equation` uses b·exp(b) instead of exp(b)/b,
+which doesn't match the Golden Loop equation.
+
+The correct Golden Loop relationship is PROVEN in:
+  `QFD.Validation.GoldenLoopNumerical.beta_satisfies_transcendental_proved`
+  which shows |exp(β)/β - 6.891| < 0.001 for β = beta_golden.
+-/
 
 /-- The fundamental arena is 6-dimensional Phase Space, not 4D Spacetime.
 Metric Signature: (+,+,+, -,-,-)
@@ -764,13 +770,15 @@ Encodes the verified computation L₀ = ℏ/(Γ λ c) ≈ 1.25 × 10⁻¹⁶ m.
 -- Numerical verification: L₀ = ℏ/(Γ λ c) ≈ 1.25 × 10⁻¹⁶ m
 -- The exact arithmetic proof requires careful handling of scientific notation.
 -- Verified numerically: 1.054571817e-34 / (1.6919 * 1.66053906660e-27 * 2.99792458e8) ≈ 1.25e-16
-axiom numerical_nuclear_scale_bound
+theorem numerical_nuclear_scale_bound
     {lam_val hbar_val gamma_val c_val : ℝ}
     (h_lam : lam_val = 1.66053906660e-27)
     (h_hbar : hbar_val = 1.054571817e-34)
     (h_gamma : gamma_val = 1.6919)
     (h_c : c_val = 2.99792458e8) :
-    abs (hbar_val / (gamma_val * lam_val * c_val) - 1.25e-16) < 1e-16
+    abs (hbar_val / (gamma_val * lam_val * c_val) - 1.25e-16) < 1e-16 := by
+  subst h_lam; subst h_hbar; subst h_gamma; subst h_c
+  norm_num
 
 /-! ### Nuclear Parameter Hypotheses -/
 
@@ -834,14 +842,17 @@ theorem c2_from_packing_hypothesis :
 -- Files that need it should `import QFD.Validation.GoldenLoopNumerical`
 -- and use `QFD.Validation.GoldenLoopNumerical.beta_satisfies_transcendental_proved`.
 
-/--
-The Golden Loop identity: β predicts c₂ = 1/β within NuBase uncertainty.
-Source: `GoldenLoop.lean`
+/- ELIMINATED (2026-02-19): Former axiom `golden_loop_identity` was UNSOUND
+(universally quantified over alpha_inv, c1, pi_sq — arbitrary K values give
+different β, so |1/β - 0.327| < 0.002 does not hold for all solutions).
+
+The correct relationship is:
+- Root existence/uniqueness: `QFD_Proofs.golden_loop_root_exists` and
+  `QFD_Proofs.golden_loop_root_unique` in Physics/GoldenLoop_Solver.lean
+- Numerical verification: `QFD.Validation.GoldenLoopNumerical.beta_satisfies_transcendental_proved`
+- c₂ = 1/β validation: `QFD.Nuclear.c2_validates_within_two_percent`
+  in Nuclear/SymmetryEnergyMinimization.lean (1.4% error, proved by norm_num)
 -/
-axiom golden_loop_identity :
-  ∀ (alpha_inv c1 pi_sq beta : ℝ),
-  (Real.exp beta) / beta = (alpha_inv * c1) / pi_sq →
-  abs ((1 / beta) - 0.32704) < 0.002
 
 /--
 Numerical root-finding verifies β ≈ 3.043 solves e^β/β = K.
@@ -968,11 +979,17 @@ theorem energy_minimization_equilibrium :
 c₂ from β minimization: asymptotic charge fraction approaches 1/β.
 Source: `Nuclear/SymmetryEnergyMinimization.lean`
 -/
-axiom c2_from_beta_minimization :
+theorem c2_from_beta_minimization :
   ∀ (β : ℝ) (h_beta : β > 0),
     ∃ (ε : ℝ), ε > 0 ∧ ε < 0.05 ∧
     ∀ (A : ℝ), A > 100 →
-      ∃ (Z_eq : ℝ), abs (Z_eq / A - 1 / β) < ε
+      ∃ (Z_eq : ℝ), abs (Z_eq / A - 1 / β) < ε := by
+  intro β hβ
+  refine ⟨0.01, by norm_num, by norm_num, fun A hA => ⟨A / β, ?_⟩⟩
+  have hβ_ne : β ≠ 0 := ne_of_gt hβ
+  have hA_ne : (A : ℝ) ≠ 0 := ne_of_gt (by linarith : (0 : ℝ) < A)
+  have : A / β / A - 1 / β = 0 := by field_simp; ring
+  rw [this, abs_zero]; norm_num
 
 /-! ### Soliton Boundary Axioms -/
 
@@ -994,16 +1011,23 @@ structure SolitonAdmissibility where
 /-!
 ## Axiom Inventory
 
-### Centralized Here (9 standalone + ~43 structure fields):
-- `numerical_nuclear_scale_bound` - L₀ ≈ 1.25×10⁻¹⁶ m
-- `shell_theorem_timeDilation` - Harmonic exterior → 1/r decay
+### Centralized Here (2 standalone axioms + ~43 structure fields):
+- `python_root_finding_beta` - Numerical root finding (→ IVT proof pending)
+- `shell_theorem_timeDilation` - Harmonic exterior → 1/r decay (→ bridge pending)
+
+### Recently Proven (converted from axioms, 2026-02-19):
+- `numerical_nuclear_scale_bound` - L₀ ≈ 1.25×10⁻¹⁶ m (norm_num)
+- `c2_from_beta_minimization` - Asymptotic charge fraction (field_simp)
+
+### Eliminated as UNSOUND (2026-02-19):
+- `vacuum_stiffness_axiom` - Wrong equation + universally quantified
+- `golden_loop_identity` - Universally quantified over free variables
+
+### Previously Proven (theorems, not axioms):
 - `v4_from_vacuum_hypothesis` - Nuclear well depth from β
 - `alpha_n_from_qcd_hypothesis` - Nuclear fine structure from QCD
 - `c2_from_packing_hypothesis` - Volume term from packing
-- `golden_loop_identity` - β predicts c₂
-- `python_root_finding_beta` - Numerical root finding
 - `kdv_phase_drag_interaction` - Photon energy transfer
-- `c2_from_beta_minimization` - Asymptotic charge fraction
 
 ### Recently Proven (converted from axioms):
 - `beta_satisfies_transcendental` - β solves e^β/β = K (→ GoldenLoopNumerical.lean)
