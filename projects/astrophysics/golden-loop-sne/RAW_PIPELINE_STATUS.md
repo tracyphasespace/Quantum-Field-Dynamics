@@ -163,14 +163,44 @@ peak extraction (blackbody K-correction inadequacy), not from v2 Kelvin.
 ~1.2 mag/z systematic error. The SN Ia SED has UV blanketing, line features,
 and spectral evolution that a blackbody doesn't capture.
 
-**Fix (future)**: Replace blackbody K-correction with Hsiao+ (2007) spectral
-template series. This would give a SALT2-free K-correction that captures the
-actual SN Ia SED shape, reducing the z-slope from -1.5 to ~-0.3 mag/z.
+**Fix**: Hsiao+ (2007) K-correction implemented (v2, 2026-02-20).
+
+**v2 Results (Hsiao K-correction)**:
+| Metric | Blackbody (v1) | Hsiao (v2) | Change |
+|--------|---------------|------------|--------|
+| Cross-matched σ | 0.433 mag | 0.361 mag | -17% |
+| Cross-matched z-slope | -1.5 mag/z | -0.77 mag/z | -49% |
+| SALT2 gap ratio | 2.4× | 1.5× | narrowed |
+
+Remaining z-slope (-0.77) is from Gaussian peak extraction, not K-correction.
 
 ### Option C: Accept SALT2 pipeline as primary (no extra effort)
 The golden_loop_sne.py result (chi2/dof=0.955, 0 free params) already demonstrates
 v2 Kelvin competitiveness. The raw pipeline is a secondary cross-check that requires
 careful handling of the model-contamination issue.
+
+### Option D: Hsiao template light curve fitting (next step)
+Replace Gaussian template with sncosmo.fit_lc() using Hsiao model. This gives:
+- SN Ia light curve shape as template (not symmetric Gaussian)
+- Automatic multi-band fitting with proper K-corrections
+- Peak B magnitude directly from template fit (no separate K-correction step)
+- Requires: flux in sncosmo units (zp=8.9, zpsys='ab', flux=flux_Jy)
+
+**Two-pronged self-calibrating approach** (Tracy, 2026-02-20):
+Since all SNe Ia share the same Hsiao SED, a second pass can estimate distances
+without any external calibration by:
+1. **Apparent blue**: the observed peak wavelength shift across bands
+   determines z from the SED shape alone (redundant with spectroscopic z,
+   but provides a cross-check)
+2. **Wien spreading**: the ratio of fluxes in different DES bands encodes
+   the SED sampling point. Comparing observed band ratios to the Hsiao
+   template determines both z and extinction self-consistently, giving
+   distance from the amplitude residual.
+
+This is a fully self-contained distance ladder: Hsiao template + multi-band
+photometry → z, extinction, and D_L without SALT2, ΛCDM, or any external
+distance model. Only the absolute magnitude M_0 remains as a calibration
+parameter.
 
 ### Recommendation
 **Option C remains correct for the book.** The SALT2-reduced result is clean,

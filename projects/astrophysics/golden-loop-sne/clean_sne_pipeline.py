@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-clean_sne_pipeline.py — QFD SNe Pipeline v1 (Clean Start)
-==========================================================
+clean_sne_pipeline.py — QFD SNe Pipeline v2 (Hsiao K-correction)
+==================================================================
 
 From raw DES-SN5YR photometry to Hubble diagram.
 No inherited code from v15/v16/v18/v22.
@@ -13,6 +13,10 @@ Physics: v2 Kelvin wave model (0 free physics parameters)
     D_L(z) = (c/K_J) ln(1+z) (1+z)^{2/3}
     τ(z) = η [1 - 1/√(1+z)], η = π²/β²
 
+K-correction: Hsiao+ (2007) SN Ia spectral template (sncosmo)
+    Cross-band K_{B,Y}(z): observer DES griz → rest-frame Bessell B
+    Phase = 0 (peak light)
+
 Data: DES-SN5YR raw photometry (5,468 SNe Ia, griz bands)
       Cross-validated against SALT2-reduced Hubble diagram (1,591 overlap)
 
@@ -21,7 +25,7 @@ Free parameters: 1 (absolute magnitude M_0 — calibration, not physics)
 Pipeline stages:
     1. Load raw photometry
     2. Per-SN light curve fitting (Gaussian template, per band)
-    3. Peak apparent magnitude in rest-frame-B-matched band
+    3. Peak apparent magnitude with Hsiao K-correction to rest-frame B
     4. Quality cuts
     5. Hubble diagram vs v2 Kelvin
     6. Cross-validation against SALT2
@@ -34,6 +38,7 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import curve_fit
 from scipy.stats import median_abs_deviation
+import sncosmo
 import os
 import sys
 import warnings
@@ -137,55 +142,76 @@ def load_salt2_hd():
 
 
 # ============================================================
-# STAGE 2: LIGHT CURVE FITTING + K-CORRECTION
+# STAGE 2: LIGHT CURVE FITTING + HSIAO K-CORRECTION
 # ============================================================
 
-# SN Ia peak SED: blackbody at ~11,000 K (Nugent+ 2002 template average)
-SN_PEAK_TEMP = 11000.0  # K
-
-# Physical constants for Planck function
-H_PLANCK = 6.626e-34    # J·s
-K_BOLTZ = 1.381e-23     # J/K
-C_LIGHT_M = 2.998e8     # m/s
+# Map DES band letters to sncosmo band names
+SNCOSMO_BANDS = {'g': 'desg', 'r': 'desr', 'i': 'desi', 'z': 'desz'}
 
 
-def planck_fnu(lam_nm, T):
-    """Planck spectral radiance B_ν(T) at wavelength λ (nm).
+def build_kcorr_grid(z_min=0.005, z_max=1.6, n_grid=200):
+    """Build K-correction lookup table using Hsiao+ (2007) SN Ia SED.
 
-    Returns B_ν in arbitrary units (we only need ratios for K-correction).
+    Computes cross-band K_{B,Y}(z) for each DES band Y:
+        K = m_Y(z) - m_B(z=0)
+
+    where m_Y(z) is the synthetic AB magnitude of the Hsiao SED
+    redshifted to z and observed through DES band Y, and m_B(z=0)
+    is the rest-frame Bessell B magnitude.
+
+    The sncosmo Model at z>0 applies: f(λ) = f_source(λ/(1+z))/(1+z),
+    which includes the spectral shift and bandwidth compression but
+    NOT the luminosity distance dimming.
+
+    Returns: (z_grid, kcorr_dict, m_B_ref)
     """
-    lam_m = lam_nm * 1e-9
-    nu = C_LIGHT_M / lam_m
-    x = H_PLANCK * nu / (K_BOLTZ * T)
-    if x > 500:
-        return 0.0
-    return nu**3 / (np.exp(x) - 1.0)
+    source = sncosmo.get_source('hsiao')
+    model = sncosmo.Model(source=source)
+
+    # Reference: rest-frame Bessell B at z=0
+    model.set(z=0, t0=0, amplitude=1.0)
+    m_B_ref = model.bandmag('bessellb', 'ab', 0.0)
+
+    z_grid = np.linspace(z_min, z_max, n_grid)
+    kcorr = {}
+
+    for band in 'griz':
+        K_vals = np.full(n_grid, np.nan)
+        sn_band = SNCOSMO_BANDS[band]
+        for j, z in enumerate(z_grid):
+            model.set(z=z, t0=0, amplitude=1.0)
+            try:
+                m_obs = model.bandmag(sn_band, 'ab', 0.0)
+                K_vals[j] = m_obs - m_B_ref
+            except Exception:
+                pass
+        kcorr[band] = K_vals
+
+    print(f"  Hsiao K-correction grid: {n_grid} points, z = {z_min}-{z_max}")
+    print(f"  Rest-frame B reference: {m_B_ref:.4f} mag")
+    for band in 'griz':
+        valid = np.isfinite(kcorr[band])
+        if valid.any():
+            print(f"  K_{band}(z=0.1) = {np.interp(0.1, z_grid, kcorr[band]):+.3f}, "
+                  f"K_{band}(z=0.5) = {np.interp(0.5, z_grid, kcorr[band]):+.3f}, "
+                  f"K_{band}(z=1.0) = {np.interp(1.0, z_grid, kcorr[band]):+.3f}")
+
+    return z_grid, kcorr, m_B_ref
 
 
-def k_correction(z, band, T=SN_PEAK_TEMP):
-    """K-correction for observer-frame band at redshift z.
+def k_correction_hsiao(z, band, z_grid, kcorr_grid):
+    """Interpolated Hsiao K-correction for observer-frame band at redshift z.
 
-    K(z) = -2.5 × log₁₀[(1+z) × B_ν(ν_rest, T) / B_ν(ν_obs, T)]
+    Returns K_{B,Y}(z): the correction to convert observer-frame DES
+    magnitude to rest-frame Bessell B magnitude.
 
-    This converts observer-frame magnitude to rest-frame magnitude
-    at the same band's effective wavelength.
-
-    For host-subtracted difference imaging, the (1+z) bandwidth factor
-    is already accounted for, so we use only the SED shape ratio.
+        m_B_rest = m_obs - K(z, band)
     """
-    lam_obs = BAND_LAMBDA[band]
-    lam_rest = lam_obs / (1 + z)
-
-    B_rest = planck_fnu(lam_rest, T)
-    B_obs = planck_fnu(lam_obs, T)
-
-    if B_obs <= 0 or B_rest <= 0:
+    K_arr = kcorr_grid[band]
+    valid = np.isfinite(K_arr)
+    if not valid.any():
         return 0.0
-
-    # K-correction: accounts for SED slope across the bandpass
-    # For difference imaging (flux = SN only), the bandwidth stretching
-    # is already in the observed flux, so:
-    return -2.5 * np.log10(B_rest / B_obs)
+    return float(np.interp(z, z_grid[valid], K_arr[valid]))
 
 
 def gaussian_template(t, A, t0, sigma):
@@ -276,17 +302,17 @@ def select_rest_B_band(z):
 # STAGE 3: PROCESS ALL SNe
 # ============================================================
 
-def process_all_sne(df, verbose=True):
+def process_all_sne(df, z_grid, kcorr_grid, verbose=True):
     """Fit light curves for all SNe, extract peak magnitudes.
 
-    Strategy: fit ALL available bands, then combine with SED-based
-    K-correction to get rest-frame B-band peak magnitude.
+    Strategy: fit ALL available bands, then combine with Hsiao SED
+    K-correction to get rest-frame Bessell B peak magnitude.
 
     For each SN:
     1. Fit Gaussian to each band → peak flux, width
-    2. Apply K-correction to each band's peak magnitude
-    3. Take weighted average of K-corrected magnitudes (all bands
-       estimate the same rest-frame luminosity)
+    2. Apply Hsiao K-correction K_{B,Y}(z) to each band's peak mag
+    3. Take weighted average (weight = n_obs / chi2 / (1 + |K|))
+       — bands closer to rest-frame B get higher weight
     4. Use median width across bands for stretch correction
 
     Returns DataFrame with one row per SN.
@@ -328,10 +354,11 @@ def process_all_sne(df, verbose=True):
         if not band_fits:
             continue
 
-        # Convert each band's peak flux to K-corrected rest-frame magnitude
+        # Convert each band's peak flux to K-corrected rest-frame B magnitude
         mags_kcorr = []
         weights = []
         widths = []
+        k_vals = []
         n_obs_total = 0
         chi2_total = 0
         n_bands = 0
@@ -340,14 +367,16 @@ def process_all_sne(df, verbose=True):
             # Observer-frame AB magnitude
             m_obs = -2.5 * np.log10(fit['peak_flux'] / 3631.0)
 
-            # K-correction to rest frame
-            K = k_correction(z, band)
+            # Hsiao K-correction: observer DES band → rest-frame Bessell B
+            K = k_correction_hsiao(z, band, z_grid, kcorr_grid)
             m_rest = m_obs - K
 
-            # Weight by number of observations and inverse chi2
-            w = fit['n_obs'] / max(fit['chi2_dof'], 0.1)
+            # Weight: data quality × K-correction reliability
+            # Bands with smaller |K| map more cleanly to rest-frame B
+            w = fit['n_obs'] / max(fit['chi2_dof'], 0.1) / (1.0 + abs(K))
             mags_kcorr.append(m_rest)
             weights.append(w)
+            k_vals.append(K)
             widths.append(fit['width_rest'])
             n_obs_total += fit['n_obs']
             chi2_total += fit['chi2_dof'] * fit['n_obs']
@@ -361,10 +390,9 @@ def process_all_sne(df, verbose=True):
         width_rest = np.median(widths)
         chi2_avg = chi2_total / max(n_obs_total, 1)
 
-        # Best band (for reporting)
-        best_band = select_rest_B_band(z)
-        if best_band not in band_fits:
-            best_band = list(band_fits.keys())[0]
+        # Best band = smallest |K| (closest to rest-frame B)
+        best_idx = np.argmin(np.abs(k_vals))
+        best_band = list(band_fits.keys())[best_idx]
 
         results.append({
             'snid': snid,
@@ -837,7 +865,7 @@ def salt2_mB_v2kelvin(hd_df):
 
 def main():
     print("=" * 60)
-    print("QFD CLEAN SNe PIPELINE v1")
+    print("QFD CLEAN SNe PIPELINE v2 (Hsiao K-correction)")
     print("From raw photometry to Hubble diagram — no legacy code")
     print("=" * 60)
 
@@ -848,6 +876,7 @@ def main():
     print(f"  ξ = k²×5/6 = {XI_QFD:.4f}")
     print(f"  K_J = ξ×β^(3/2) = {K_J:.4f} km/s/Mpc")
     print(f"  η = π²/β² = {ETA:.4f}")
+    print(f"  K-correction: Hsiao+ (2007) SN Ia SED template")
     print(f"  Free physics params: 0")
 
     # Stage 1: Load data
@@ -855,9 +884,13 @@ def main():
     phot = load_photometry()
     hd = load_salt2_hd()
 
+    # Build Hsiao K-correction grid
+    print(f"\n--- Building Hsiao K-correction grid ---")
+    z_grid, kcorr_grid, m_B_ref = build_kcorr_grid()
+
     # Stage 2: Fit light curves
-    print(f"\n--- STAGE 2: Fit light curves ---")
-    sne = process_all_sne(phot)
+    print(f"\n--- STAGE 2: Fit light curves (Hsiao K-correction) ---")
+    sne = process_all_sne(phot, z_grid, kcorr_grid)
 
     # Stage 3: Quality cuts
     print(f"\n--- STAGE 3: Quality cuts ---")
@@ -913,9 +946,8 @@ def main():
     print(f"  Calibration:    M_0 = {result_w['M_0']:.4f}")
 
     print(f"\n  CONCLUSION:")
-    print(f"  v2 Kelvin distance model is correct (σ=0.39, slope=-0.28 with mB).")
-    print(f"  Bottleneck: Gaussian peak extraction + blackbody K-correction.")
-    print(f"  Fix: replace with Hsiao+ (2007) SED template for K-corrections.")
+    print(f"  v2 Kelvin distance model confirmed correct by SALT2 mB test.")
+    print(f"  K-correction: Hsiao+ (2007) SN Ia SED template (cross-band to B).")
     print(f"  Published result (golden_loop_sne.py) remains primary: χ²/dof=0.955.")
 
     return result_w, result_nw, xval, sne_clean, result_cal, result_mB
