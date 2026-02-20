@@ -198,113 +198,12 @@ noncomputable def K_target : ℝ :=
   let pi_sq : ℝ := Real.pi ^ 2
   (α_inv * c1) / pi_sq
 
-/-! ## Uniqueness in Physical Range -/
+/-! ## Existence of the Derived β
 
-/--
-**Monotonicity of Transcendental Function**
-
-For β > 1, the function f(β) = e^β/β is strictly increasing.
-
-**Proof**:
-f'(β) = d/dβ (e^β/β)
-      = (β·e^β - e^β) / β²
-      = e^β(β - 1) / β²
-
-For β > 1: (β - 1) > 0, so f'(β) > 0 → f is increasing.
-
-**Consequence**: For each K, there is AT MOST one β > 1 with f(β) = K.
+Monotonicity of exp(x)/x for x > 1 is proved in `GoldenLoopLocation.lean`.
+Root existence via IVT is in `GoldenLoopIVT.lean`.
+The former axiom `python_root_finding_beta` has been eliminated.
 -/
-lemma deriv_transcendental (x : ℝ) (hx : x ≠ 0) :
-    deriv transcendental_equation x =
-      Real.exp x * (x - 1) / x ^ 2 := by
-  have hx' :
-      HasDerivAt (fun y : ℝ => Real.exp y * y⁻¹)
-        (Real.exp x * x⁻¹ + Real.exp x * (-(x ^ 2)⁻¹)) x := by
-    simpa [transcendental_equation, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc]
-      using ((Real.hasDerivAt_exp x).mul (hasDerivAt_inv hx))
-  have hx'' := hx'.deriv
-  have hx_ne : x ^ 2 ≠ 0 := pow_ne_zero _ hx
-  have h1 :
-      Real.exp x * x⁻¹ + Real.exp x * (-(x ^ 2)⁻¹) =
-        Real.exp x * (x - 1) / x ^ 2 := by
-    field_simp [one_div, pow_two, hx, hx_ne, mul_add, add_comm, add_left_comm,
-      add_assoc, mul_comm, mul_left_comm, mul_assoc] -- ensures final expression
-  simpa [transcendental_equation, div_eq_mul_inv, h1]
-
-lemma transcendental_strictMonoOn :
-    StrictMonoOn transcendental_equation (Set.Ioi (1 : ℝ)) := by
-  classical
-  refine strictMonoOn_of_deriv_pos (convex_Ioi (1 : ℝ)) ?hcont ?hpos
-  · -- continuity on domain
-    intro x hx
-    have hx1 : 1 < x := by simpa [Set.mem_Ioi] using hx
-    have hx0 : x ≠ 0 := ne_of_gt (lt_trans zero_lt_one hx1)
-    have hx_cont :
-        ContinuousAt (fun y : ℝ => Real.exp y * y⁻¹) x :=
-      (continuousAt_exp x).mul (continuousAt_inv₀ hx0)
-    simpa [transcendental_equation, div_eq_mul_inv] using
-      hx_cont.continuousWithinAt
-  · intro x hx
-    have hx1 : 1 < x := by simpa [Set.mem_Ioi] using hx
-    have hx0 : x ≠ 0 := by exact ne_of_gt (lt_trans (show (0 : ℝ) < 1 by norm_num) hx1)
-    have hx_pos : 0 < x := lt_trans zero_lt_one hx1
-    have hx_sq_pos : 0 < x ^ 2 := by
-      exact pow_pos hx_pos _
-    have hderiv :
-        deriv transcendental_equation x =
-          Real.exp x * (x - 1) / x ^ 2 := deriv_transcendental x hx0
-    have h_exp_pos : 0 < Real.exp x := Real.exp_pos x
-    have h_num_pos : 0 < x - 1 := sub_pos.mpr hx1
-    have h_div_pos : 0 < (x - 1) / x ^ 2 :=
-      div_pos h_num_pos hx_sq_pos
-    have : 0 < Real.exp x * ((x - 1) / x ^ 2) :=
-      mul_pos h_exp_pos h_div_pos
-    simpa [hderiv]
-  -- concluding StrictMonoOn finished
-
-/--
-**Monotonicity of the Transcendental Function**
-
-For β > 1, the map `β ↦ e^β / β` is strictly increasing.
--/
-theorem transcendental_strictly_increasing :
-    ∀ β₁ β₂ : ℝ, 1 < β₁ → β₁ < β₂ →
-      transcendental_equation β₁ < transcendental_equation β₂ := by
-  classical
-  intro β₁ β₂ hβ₁ hlt
-  have hβ₁_mem : β₁ ∈ Set.Ioi (1 : ℝ) := by simpa [Set.mem_Ioi]
-    using hβ₁
-  have hβ₂_mem : β₂ ∈ Set.Ioi (1 : ℝ) := by
-    have : 1 < β₂ := lt_trans hβ₁ hlt
-    simpa [Set.mem_Ioi] using this
-  exact transcendental_strictMonoOn hβ₁_mem hβ₂_mem hlt
-
-/-! ## Existence of the Derived β -/
-
-/--
-**Python Root Finding Axiom**: Numerical solution of e^β/β = K.
-
-**Specification for `solve_beta_eigenvalue.py`**:
-- Input: K (the geometric constant from Golden Loop)
-- Output: β satisfying |e^β/β - K| < 10⁻¹⁰
-
-**Algorithm**:
-1. Use scipy.optimize.brentq on f(β) = e^β/β - K
-2. Search interval: (2, 4) (known to bracket solution for K ≈ 6.891)
-3. Convergence: |f(β*)| < 10⁻¹⁵
-
-**Error Handling**:
-- If no solution in (2, 4): Report error (indicates K out of physical range)
-- If multiple solutions: Report error (should not occur for K > e)
-
-**Validation**:
-- Compare to beta_golden from GoldenLoop.lean
-- Should match to machine precision
-
-CENTRALIZED: Axiom moved to QFD/Physics/Postulates.lean
-Use: QFD.Physics.python_root_finding_beta (imported via QFD.Physics.Postulates)
--/
--- axiom python_root_finding_beta removed - now imported from QFD.Physics.Postulates
 
 /--
 Using IVT + monotonicity we obtain a β in the physical range with residual `0`
@@ -335,7 +234,7 @@ theorem beta_solution_matches_golden
     have : (6.901 : ℝ) < 54.50 / 4 := by norm_num
     linarith
   obtain ⟨β, hβ_mem, hβ_root⟩ :=
-    QFD.Validation.beta_root_exists' K_target h_ivt_lo h_ivt_hi
+    QFD.Validation.GoldenLoopIVT.beta_root_exists' K_target h_ivt_lo h_ivt_hi
   have hβ_lo : 2 ≤ β := hβ_mem.1
   have hβ_hi : β ≤ 4 := hβ_mem.2
   -- Step 2: Exact root → residual = 0 < 1e-10
@@ -355,30 +254,14 @@ theorem beta_solution_matches_golden
       div_lt_div_of_pos_right h_exp_hi (by norm_num)
     have : (6.901 : ℝ) < 21.284 / 3.058 := by norm_num
     linarith
-  have h_close : abs (β - 3.043) < 0.015 := by
-    have bounds := QFD.Validation.beta_root_bounds_in_interval K_target β 3.028 3.058
-      (by norm_num) (by norm_num) h_beta_ge hβ_root h_K_lower h_K_upper
-    rw [abs_lt]; constructor <;> linarith [bounds.1, bounds.2]
-  have h_golden :
-      abs ((3.043 : ℝ) - beta_golden) < 0.001 := by
-    unfold beta_golden
-    norm_num
-  have h_close_golden :
-      abs (β - beta_golden) < 0.02 := by
-    have h_tri :
-        abs (β - beta_golden) =
-          abs ((β - (3.043 : ℝ)) + ((3.043 : ℝ) - beta_golden)) := by ring
-    have :
-        abs (β - beta_golden) ≤
-          abs (β - (3.043 : ℝ)) + abs ((3.043 : ℝ) - beta_golden) := by
-      simpa [h_tri] using
-        (abs_add (β - (3.043 : ℝ)) ((3.043 : ℝ) - beta_golden))
-    have h_sum_lt :
-        abs (β - (3.043 : ℝ)) + abs ((3.043 : ℝ) - beta_golden) < 0.015 + 0.001 :=
-      add_lt_add h_close h_golden
-    have h_target : 0.015 + 0.001 < 0.02 := by norm_num
-    exact (lt_of_le_of_lt this (lt_trans h_sum_lt h_target))
-  exact ⟨β, h_low, h_high, h_res, h_close_golden⟩
+  have bounds := QFD.Validation.beta_root_bounds_in_interval K_target β 3.028 3.058
+    (by norm_num) (by norm_num) h_beta_ge hβ_root h_K_lower h_K_upper
+  -- bounds gives: 3.028 < β ∧ β < 3.058 (strict)
+  refine ⟨β, by linarith [bounds.1], by linarith [bounds.2], h_res, ?_⟩
+  show abs (β - _root_.beta_golden) < 0.02
+  rw [abs_lt]
+  unfold _root_.beta_golden
+  constructor <;> linarith [bounds.1, bounds.2]
 
 /-! ## Connection to Golden Loop -/
 

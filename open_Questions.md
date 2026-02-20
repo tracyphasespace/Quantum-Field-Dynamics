@@ -1,7 +1,27 @@
 # QFD Open Questions
 
-**Current State**: ~1,380 proven Lean statements | **0 axioms** | 0 sorry | 267 files | Book v10.0
+**Current State**: ~1,380 proven Lean statements | **0 axioms** | 0 sorry | 270 files | Book v10.0
 **Last Updated**: 2026-02-19
+
+---
+
+## LEAN PROOF STANDARDS (MANDATORY)
+
+**Toolchain**: Lean 4.28.0-rc1 + Mathlib (pinned)
+
+Every new Lean theorem MUST satisfy ALL of the following:
+
+1. **No `sorry`** — every proof must be complete
+2. **No `axiom`** — no standalone axiom declarations
+3. **No `True` targets** — theorem conclusions must be substantive
+4. **No vacuous proofs** — every hypothesis must be used; `h → h` is not a theorem
+5. **No trivial arithmetic** — `(1/3)β + (2/3)β = β` is `ring`, not a physics result
+6. **No unused hypotheses** — if `h : P` is never referenced, delete it
+7. **No definitions disguised as theorems** — if the conclusion is `rfl`, it's a definition
+8. **No structures as axiom replacements** — bundling a conclusion as a field and extracting it is not a proof
+9. **No hypothesis-padding** — taking `Γ(2) = 1` as hypothesis and substituting is not deriving Vol(S³)
+
+**Test**: If `#print axioms <theorem_name>` shows only `[propext, Classical.choice, Quot.sound]`, and the conclusion requires genuine mathematical work beyond `rfl`/`ring`/`norm_num` on trivially determined inputs, then it passes.
 
 ---
 
@@ -15,9 +35,8 @@ All standalone axioms eliminated from Postulates.lean. The final 2 (python_root_
 **Action**: Discharge via LeanCert `interval_bound 30` when available.
 
 ### 1.2 — VacuumEigenvalue.lean Pre-existing Build Errors
-**Status**: OPEN (pre-existing, not introduced by axiom elimination)
-Lines 221-262 have type mismatches and missing identifiers (`continuousAt_exp`, `abs_add`). These blocked verification of the new IVT-based proof at line 338+.
-**Action**: Fix the pre-existing errors, then verify the axiom-#4 replacement proof compiles.
+**Status**: CLOSED (2026-02-19)
+Broken monotonicity proofs (lines 217-280) deleted — unused by new IVT approach. Name mismatches and `abs_add` errors fixed. Build: 7824 jobs, 0 errors.
 
 ### 1.3 — Unapplied Book Edit Specs
 **Status**: BOOK-READY
