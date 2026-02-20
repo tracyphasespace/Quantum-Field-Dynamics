@@ -272,6 +272,102 @@ print(f"""
   'force picture' overestimates the barrier by {CONNECTION_BARRIER_FRAC*100:.1f}%.
 """)
 
+# ═══════════════════════════════════════════════════════════════
+# 9. SEPARATION DISTANCE EXTENSION
+# ═══════════════════════════════════════════════════════════════
+
+# Both gravity and ψ-tail go as 1/d, so the barrier scales as 1/d.
+# For the same escape probability at larger d:
+#   f(d_new) × (1 - corr) = f(d_old)  →  d_new = d_old / (1 - corr)
+D_FACTOR = 1.0 / (1.0 - CONNECTION_BARRIER_FRAC)
+V_FACTOR = D_FACTOR**3
+
+d_tidal_ab = d_tidal * D_FACTOR
+d_topo_ab = d_topo * D_FACTOR
+
+print(f"\n{'─'*74}")
+print(f"  G. SEPARATION DISTANCE EXTENSION")
+print(f"{'─'*74}")
+print(f"\n  Since both gravity and ψ-tail scale as 1/d, the 12.4% barrier")
+print(f"  reduction translates to a {(D_FACTOR-1)*100:.1f}% increase in maximum separation")
+print(f"  at which escape is possible.")
+print(f"")
+print(f"  Separation factor: 1/(1 - 2/ξ_QFD) = {D_FACTOR:.4f} (+{(D_FACTOR-1)*100:.1f}%)")
+print(f"  Volume factor:     {D_FACTOR:.4f}³ = {V_FACTOR:.3f} (+{(V_FACTOR-1)*100:.0f}%)")
+
+print(f"\n  {'':>28s} │ {'Classical':>10s} {'+ A-B':>10s} {'Change':>10s}")
+print(f"  {'─'*28} │ {'─'*10} {'─'*10} {'─'*10}")
+print(f"  {'Tidal disruption (d_tidal)':>28s} │ {d_tidal:8.2f} Rs {d_tidal_ab:8.2f} Rs  +{(D_FACTOR-1)*100:.1f}%")
+print(f"  {'Topological channel (d_topo)':>28s} │ {d_topo:8.2f} Rs {d_topo_ab:8.2f} Rs  +{(D_FACTOR-1)*100:.1f}%")
+
+print(f"\n  Processing VOLUME increase:")
+print(f"    Tidal sphere:  {4/3*np.pi*d_tidal**3:7.0f} Rs³ → {4/3*np.pi*d_tidal_ab**3:7.0f} Rs³  (+{(V_FACTOR-1)*100:.0f}%)")
+print(f"    Topo sphere:   {4/3*np.pi*d_topo**3:7.0f} Rs³ → {4/3*np.pi*d_topo_ab**3:7.0f} Rs³  (+{(V_FACTOR-1)*100:.0f}%)")
+
+
+# ═══════════════════════════════════════════════════════════════
+# 10. THREE-ZONE STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+print(f"\n{'─'*74}")
+print(f"  H. THREE NESTED RIFT PROCESSING ZONES")
+print(f"{'─'*74}")
+
+total_vol_ratio = (d_topo_ab / d_tidal)**3
+
+print(f"""
+  Zone 1 — CLASSICAL TIDAL (d ≤ {d_tidal:.2f} R_s)
+    Mechanism:  Force-level disruption (tidal stress > soliton binding)
+    Physics:    F_tidal ∝ 1/d³ (derivative of potential)
+    Volume:     {4/3*np.pi*d_tidal**3:.0f} R_s³
+
+  Zone 2 — TOPOLOGICAL CHANNEL ({d_tidal:.2f} < d ≤ {d_topo:.2f} R_s)
+    Mechanism:  ψ-overlap opens connection-level channel
+    Threshold:  δψ_gap/ψ₀ = η_topo = {ETA_TOPO} (separatrix condition)
+    Physics:    Potential-level (A-B); F = 0 but connection ≠ 0
+    Volume:     {4/3*np.pi*d_topo**3:.0f} R_s³  ({(d_topo/d_tidal)**3:.1f}× Zone 1)
+
+  Zone 3 — A-B EXTENDED ({d_topo:.2f} < d ≤ {d_topo_ab:.2f} R_s)
+    Mechanism:  Escape velocity lowered by {(1-np.sqrt(1-CONNECTION_BARRIER_FRAC))*100:.1f}%
+    Physics:    ψ-softening of soliton binding at L1
+    Volume:     {4/3*np.pi*d_topo_ab**3:.0f} R_s³  ({(d_topo_ab/d_tidal)**3:.1f}× Zone 1)
+
+  TOTAL: Zone 3 / Zone 1 = {total_vol_ratio:.1f}×  more processing volume
+         ({(d_topo/d_tidal)**3:.1f}× from topo channel) × ({V_FACTOR:.3f} from A-B extension)
+""")
+
+
+# ═══════════════════════════════════════════════════════════════
+# 11. RIFT THROUGHPUT IMPLICATIONS
+# ═══════════════════════════════════════════════════════════════
+
+print(f"{'─'*74}")
+print(f"  I. RIFT THROUGHPUT IMPLICATIONS")
+print(f"{'─'*74}")
+print(f"""
+  The rift processes ~{total_vol_ratio:.0f}× more matter per binary interaction
+  than the classical force picture predicts.
+
+  This does NOT change the H/He RATIO (attractor is protected — see
+  Section C above), but it changes the RATE of cosmic recycling.
+
+  For steady-state cosmology, the rate must be fast enough to replenish
+  hydrogen against stellar burndown. The {total_vol_ratio:.0f}× volume enhancement
+  means each BH binary interaction reprocesses {total_vol_ratio:.0f}× more matter,
+  relaxing the required interaction frequency by the same factor.
+
+  The three-zone structure is a falsifiable prediction:
+    - Zone 1 ejecta: collimated, high-velocity (classical jet core)
+    - Zone 2 ejecta: broad, moderate-velocity (topological precursor)
+    - Zone 3 ejecta: diffuse, low-velocity (connection-level outflow)
+  Resolved imaging should reveal this layered structure.
+""")
+
+
+# ═══════════════════════════════════════════════════════════════
+# SUMMARY
+# ═══════════════════════════════════════════════════════════════
+
 print("=" * 74)
 print("  SUMMARY")
 print("=" * 74)
@@ -282,12 +378,19 @@ print(f"""
   2. Escape velocity is reduced by {(1 - np.sqrt(1 - CONNECTION_BARRIER_FRAC))*100:.1f}%
      (v_esc → v_esc × √(1 - 2/ξ_QFD) = v_esc × {np.sqrt(1 - CONNECTION_BARRIER_FRAC):.4f})
 
-  3. The calibrated k=5.48 likely already includes this effect.
-     If so, the bare classical barrier would be k_bare = {k_bare:.3f}
+  3. Maximum separation extended by {(D_FACTOR-1)*100:.1f}%:
+     d_tidal: {d_tidal:.2f} → {d_tidal_ab:.2f} R_s
+     d_topo:  {d_topo:.2f} → {d_topo_ab:.2f} R_s
+     Processing volume: +{(V_FACTOR-1)*100:.0f}% (×{V_FACTOR:.3f})
 
-  4. If k=5.48 is the bare value (excluding A-B), then adding it gives:
-     k_eff = {k_ab:.3f} → Global H% = {r3['GLOBAL']['H%']:.2f}% (vs {r2['GLOBAL']['H%']:.2f}% at k=5.48)
+  4. THREE nested zones: tidal ({d_tidal:.2f}) → topo ({d_topo:.2f}) → A-B ({d_topo_ab:.2f} R_s)
+     Total volume ratio vs classical: {total_vol_ratio:.0f}×
 
-  5. The 12.4% barrier reduction is a ZERO-PARAMETER QFD prediction:
-     it follows from ξ_QFD = k_geom² × 5/6 alone.
+  5. H/He ratio UNCHANGED: 74.5–74.8% across all scenarios
+     (topological protection from discrete interior stratification)
+
+  6. Throughput gain: {total_vol_ratio:.0f}× more matter processed per interaction
+     (changes recycling RATE, not composition RATIO)
+
+  7. All from ξ_QFD = k_geom² × 5/6 — ZERO free parameters.
 """)

@@ -74,9 +74,27 @@ Remarkably, this 12.4% barrier change barely moves the cosmic output:
 
 Across the full range k = 4.80 to 6.25 — a ±25% swing in barrier strength — the hydrogen fraction shifts by only ±0.15 percentage points. The attractor is insensitive to the barrier because the interior stratification (the onion-layer composition) dominates the selectivity at all three rift depths. The A-B correction shifts the selectivity S(H/He) from 2.27 to 2.05 at the shallow rift, but the 89.9% hydrogen pool composition overwhelms this change.
 
+**Separation distance extension.** Since both gravity and the ψ-tail decay as 1/r, the 12.4% barrier reduction translates directly into a 14.1% increase in the maximum separation at which escape is possible:
+
+> d_escape = d_classical / (1 − 2/ξ_QFD) = 1.141 × d_classical
+
+This produces **three nested rift processing zones**:
+
+| Zone | Boundary | Mechanism | Volume (R_s³) |
+|------|----------|-----------|--------------|
+| 1. Classical tidal | d ≤ 3.45 R_s | Force-level: tidal stress > soliton binding | 172 |
+| 2. Topological channel | 3.45 < d ≤ 8.30 R_s | Connection-level: ψ-overlap > η_topo threshold | 2,395 |
+| 3. A-B extended | 8.30 < d ≤ 9.47 R_s | Escape velocity lowered 6.4% by ψ-softening | 3,560 |
+
+The total processing volume (Zone 3) exceeds the classical tidal volume (Zone 1) by a factor of **20.7×**. This is the product of two independent effects: the topological channel extends the boundary by 2.4× in radius (13.9× in volume), and the A-B escape velocity reduction extends it by a further 14.1% in radius (49% in volume).
+
+**Rift throughput.** The 21× volume enhancement does not change the H/He *ratio* (topologically protected), but it changes the *rate* of cosmic recycling. Each binary BH interaction processes 21× more matter than the force picture predicts, relaxing the required interaction frequency for maintaining steady-state hydrogen abundance against stellar burndown.
+
+**Falsifiable prediction.** The three-zone structure predicts layered ejecta morphology: a collimated high-velocity core (Zone 1), a broad moderate-velocity precursor (Zone 2), and a diffuse low-velocity halo (Zone 3). Resolved EHT imaging of binary BH systems should reveal this layered structure, with the broad base extending to ~2.7× the collimation radius.
+
 **This is the quantitative proof of topological protection.** The "topologically protected, not fine-tuned" claim in §11.3 is not an assertion — it is a computed result. The connection-level barrier modification, derived from ξ_QFD = k_geom² × 5/6 with zero adjustable parameters, demonstrates that the H/He attractor is insensitive to the precise barrier strength because the attractor's stability depends on the discrete structure of the interior stratification (winding-number-quantized layers), not on the continuous barrier parameter.
 
-**Computational verification.** The three scenarios above are computed in `rift-abundance/ab_barrier_calculation.py`. All numbers derive from ξ_QFD alone — no additional calibration.
+**Computational verification.** The three scenarios and three-zone structure are computed in `rift-abundance/ab_barrier_calculation.py`. All numbers derive from ξ_QFD alone — no additional calibration.
 ```
 
 **Priority**: HIGH — Closes the gap between U.2 and §11.3. Provides the missing quantitative calculation and converts the "topologically protected" claim from assertion to computed result.
@@ -103,11 +121,11 @@ The result is topologically protected, not fine-tuned. Appendix U.2.3 quantifies
 
 | Edit | Section | Action | Priority |
 |------|---------|--------|----------|
-| 74-A | U.2.3 (new) | INSERT escape velocity modification + topological protection proof | HIGH |
+| 74-A | U.2.3 (new) | INSERT escape velocity modification + three-zone structure + topological protection proof | HIGH |
 | 74-B | §11.3.4 | UPDATE "topologically protected" sentence with U.2.3 cross-reference | MEDIUM |
 
 **Total edits**: 2
 **Dependencies**: None (U.2 already in place)
 **Computation**: `rift-abundance/ab_barrier_calculation.py` (verified)
-**Key result**: 2/ξ_QFD = 12.4% barrier reduction, 6.4% v_esc reduction, ±0.15% H% sensitivity
+**Key results**: 2/ξ_QFD = 12.4% barrier reduction, 6.4% v_esc reduction, 14.1% separation extension, 21× volume gain, ±0.15% H% sensitivity
 **Zero free parameters**: All from ξ_QFD = k_geom² × 5/6
