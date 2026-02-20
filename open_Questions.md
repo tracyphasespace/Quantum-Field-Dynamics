@@ -2,6 +2,7 @@
 
 **Current State**: ~1,380 proven Lean statements | **0 axioms** | 0 sorry | 270 files | Book v10.0
 **Last Updated**: 2026-02-19
+**Reviewer Audit**: Incorporated 2026-02-19 (functional analysis, field theory, cosmology, epistemology)
 
 ---
 
@@ -25,40 +26,113 @@ Every new Lean theorem MUST satisfy ALL of the following:
 
 ---
 
-## TIER 1: CRITICAL
+## TIER 1: CRITICAL (Manuscript Survival)
 
-### 1.1 — LeanCert exp Bounds (Last Numerical Gap)
-**Status**: OPEN
-All standalone axioms eliminated from Postulates.lean. The final 2 (python_root_finding_beta, shell_theorem_timeDilation) were converted to theorems with hypotheses. The IVT+monotonicity proof in VacuumEigenvalue.lean takes 4 numerical bounds on Real.exp as hypotheses:
+### 1.1 — Gapped-Mode Functional Determinant (W.9.5) [REVIEWER 1A]
+**Status**: OPEN — **NEW, CRITICAL**
+The Golden Loop `1/α = 2π²(e^β/β) + 1` assumes the 11 gapped-mode fluctuation determinant `det'(-∇² + V'')^{-1/2}` contributes exactly 1. In standard instanton calculus ('t Hooft, Yang-Mills), this determinant yields a SPECIFIC numerical prefactor. If it evaluates to 1.02, the 9-digit match for 1/α collapses.
+**Fix**: Calculate the functional trace over SO(6)/SO(2) coset via:
+- Zeta-function regularization, OR
+- Heat kernel expansion on the instanton background
+- Prove the determinant is exactly 1 (perhaps via bosonic-fermionic cancellation in Cl(3,3)), OR
+- Show exactly how its value is absorbed into the topological volume 2π²
+**Book**: W.9.5, Z.8.B
+**Difficulty**: VERY HIGH — requires instanton calculus expertise
+
+### 1.2 — Redshift Line Straggling Bound [REVIEWER 3A]
+**Status**: OPEN — **NEW, CRITICAL**
+QFD postulates coherent forward drag with discrete energy exchange (ΔE ≈ k_B T_CMB per interaction). A photon from z=2 undergoes N interactions. By the Fluctuation-Dissipation Theorem, variance scales as √N, causing spectral line broadening ("straggling").
+**Fix**: Calculate predicted Δλ/λ from statistical straggling and prove it is strictly smaller than the observed width of the sharpest known quasar absorption lines (Lyman-alpha forest, Δv < 5 km/s).
+**Book**: §9.8, C.4.3
+**Difficulty**: MEDIUM — straightforward statistical mechanics calculation
+
+### 1.3 — Raw Supernova Pipeline (SALT2-Free) [REVIEWER 4B]
+**Status**: WORKING — v2 Kelvin on V22 data competitive with published results
+SALT2 cooks in ΛCDM assumptions. golden_loop_sne.py (χ²/dof=0.955) uses SALT2-reduced data.
+**Current result** (raw_sne_kelvin.py on V22 Stage 1, 5,046 SNe after QC):
+- v2 Kelvin (0 free physics params): σ = 2.270 mag, χ²/dof = 1.14
+- Published V17/V18 (3 fitted params): RMS = 2.381 mag — **v2 Kelvin is better with fewer params**
+- Both are fully SALT2-free (V22 Stage 1 = JAX blackbody fits, no ΛCDM)
+**Remaining gap**: z-dependent residual slope (+3.95 at low z to -2.90 at high z).
+**Next steps**:
+- QFD-native color correction (chromatic drag σ ∝ λ^{-1/2})
+- Investigate z-slope: ln_A calibration artifact or missing near-source physics (η', ξ)?
+- Published papers: Three-Population Model (DOI 10.5281/zenodo.17539391), IPI Letters (2025)
+**Data**: V22 `stage1_results_filtered.csv` (6,724 SNe), raw photometry (770K rows, 8,277 transients)
+
+### 1.4 — LeanCert exp Bounds (Last Numerical Gap)
+**Status**: OPEN — feasible with Taylor series approach
+The IVT+monotonicity proof in VacuumEigenvalue.lean takes 4 numerical bounds on Real.exp as hypotheses:
 - `exp(2) < 7.40`, `54.50 < exp(4)` (IVT interval)
 - `exp(3.028) < 20.656`, `21.284 < exp(3.058)` (location bracket)
-**Action**: Discharge via LeanCert `interval_bound 30` when available.
+**Action**: Discharge via Mathlib's `exp_one_gt_d9`/`exp_one_lt_d9` + `sum_le_exp_of_nonneg` + `exp_bound'`. Pattern already proven in GoldenLoopNumerical.lean.
 
-### 1.2 — VacuumEigenvalue.lean Pre-existing Build Errors
+### 1.5 — VacuumEigenvalue.lean Pre-existing Build Errors
 **Status**: CLOSED (2026-02-19)
-Broken monotonicity proofs (lines 217-280) deleted — unused by new IVT approach. Name mismatches and `abs_add` errors fixed. Build: 7824 jobs, 0 errors.
+Broken monotonicity proofs deleted. Name mismatches and `abs_add` errors fixed. Build: 7824 jobs, 0 errors.
 
-### 1.3 — Unapplied Book Edit Specs
+### 1.6 — Unapplied Book Edit Specs
 **Status**: BOOK-READY
 | Spec | Topic | Edits | Priority |
 |------|-------|-------|----------|
 | edits70 | DIS parton geometry + Bjorken scaling | 2 | MEDIUM |
 **Note**: edits64-69 are all APPLIED.
 
+### 1.7 — Lean Axiom vs Theorem Transparency [REVIEWER 4A]
+**Status**: PARTIALLY RESOLVED
+Front matter claims "0 axioms." Appendix Z.4.D.9 lists "Axiom 1, 2, 3" (constitutive physical postulates for spectral gap). These are DIFFERENT things: Lean has 0 `axiom` declarations; physics requires mapping math→reality.
+**Fix**: Create explicit table in front matter:
+- **Lean axioms**: 0 (all 1,380 theorems proved from [propext, Classical.choice, Quot.sound])
+- **Physical postulates**: List constitutive mappings (topological quantization, soliton stability criterion, etc.)
+- Acknowledge Lean proves mathematical consequences with zero missing steps, but physical ontological mappings are the foundational postulates
+**Book**: Front matter, Z.4.D.9
+
 ---
 
-## TIER 2: HIGH IMPACT
+## TIER 2: HIGH IMPACT (Theoretical Rigor)
 
-### 2.1 — V₄ → C₂ Bridge Theorem
+### 2.1 — V₆ Shear Modulus from Curved Hessian [REVIEWER 1B]
+**Status**: OPEN
+σ ≈ β³/(4π²) is a "constitutive postulate" because flat-space Hessian decoupling theorem proves it can't be derived in flat space. At tau scale, extreme field density curves local phase-space metric.
+**Fix**: Set up eigenvalue problem for stability operator L[ψ] on curved background metric. Calculate spectrum of Laplace-Beltrami operator on Clifford Torus T² ⊂ S³ in curved space. Prove lowest shear eigenvalue = β³/(4π²).
+**Impact**: Turns tau g-2 prediction from postulate to parameter-free theorem.
+**Book**: V.1, Z.8.B
+**Files**: `Lepton/AnomalousMoment.lean`, `Lepton/GeometricG2.lean`
+
+### 2.2 — η_topo from Field Gradients [REVIEWER 2A]
+**Status**: OPEN — **NEW**
+Boundary strain correction η_topo ≈ 0.02985 derived from classical 1D velocity partition (arch vs chord, δv = (π-2)/(π+2)). Applying piecewise classical fluid kinematics to a smooth 6D quantum topological defect is a heuristic leap.
+**Fix**: Numerically solve non-linear Euler-Lagrange equations for continuous 6D field profile ψ(r,θ) including electromagnetic self-interaction. Integrate exact curvature and compression energies ⟨∇ψ†∇ψ⟩ to derive η_topo from field gradients.
+**Book**: Z.12.7.4
+
+### 2.3 — I_eff from Noether Stress-Energy Tensor [REVIEWER 2B]
+**Status**: OPEN — **NEW**
+I_eff = 2.32 evaluated via fluid analogy (ρ_eff ∝ v²). Mass and angular momentum in relativistic field theory must come from the stress-energy tensor.
+**Fix**: From canonical Lagrangian L_6C, compute T^{0i} for exact D-flow Cl(3,3) multivector field. Integrate angular momentum L = ∫(r × T^{0i})d³x.
+**Book**: G.3.2
+
+### 2.4 — Kelvin Wave σ_nf from S-Matrix [REVIEWER 2C]
+**Status**: OPEN — **NEW**
+σ_nf ∝ √E derived from 1D classical fluid filament dispersion (ω ∝ k²). A QFD photon is a 3D toroidal Beltrami field in 6D multivector space.
+**Fix**: Calculate transition amplitude M from L_{int,scatter}. Use QFT phase-space integration for S-matrix element. Prove quantum phase-space integration yields exactly √E without 1D fluid analogy.
+**Book**: C.4.3, §9.8.2
+
+### 2.5 — D_L from Eikonal Approximation [REVIEWER 3B]
+**Status**: OPEN — **NEW**
+D_L = D(1+z)^{2/3} derived by treating photon wavepacket as f=2 thermodynamic gas. Applying macroscopic gas invariants to a single topological defect is a category error.
+**Fix**: Derive Poynting flux decay from eikonal approximation of modified Maxwell equations (∂_ν[h⁻¹ F^{νμ}] = 0) and optical scalars (Sachs equations) through dynamically refractive emergent metric.
+**Book**: §9.12.1
+
+### 2.6 — V₄ → C₂ Bridge Theorem
 **Status**: OPEN
 Book uses V₄ (circulation coefficient) and C₂ (QED Schwinger 2nd-order) interchangeably for e/μ. Need explicit bridge theorem with R_crit regime boundary.
 **Files**: `Lepton/AnomalousMoment.lean`, `Lepton/GeometricG2.lean`
 
-### 2.2 — 2π² = Vol(S³) Derivation
+### 2.7 — 2π² = Vol(S³) Derivation
 **Status**: OPEN
 `two_pi_sq : ℝ := 2 * Real.pi ^ 2` is a definition, not derived from geometry. Need Vol(S³) = 2π² via Gamma function or hyperspherical integration.
 
-### 2.3 — k_geom Downstream Migration
+### 2.8 — k_geom Downstream Migration
 **Status**: PARTIAL
 Pipeline file `QFD/Fundamental/KGeomPipeline.lean` exists as single source of truth. Downstream files still have independent definitions that should import from pipeline.
 
@@ -75,15 +149,11 @@ Energy minimum exists via coercivity, but no PDE solution constructed. Need radi
 **Status**: OPEN
 m_p/m_e prediction is 1836.111 vs experiment 1836.153 (42 ppm). Need exact separatrix integral.
 
-### 3.3 — V₆ Shear Modulus Derivation
-**Status**: OPEN
-σ ≈ β³/(4π²) is currently postulated. Need Hessian eigenvalue spectrum on curved Clifford Torus background.
-
-### 3.4 — Dimensional Yardstick (L₀)
+### 3.3 — Dimensional Yardstick (L₀)
 **Status**: OPEN
 QFD derives shape (κ̃ = 85.58) but mapping to dimensional K_J requires L₀.
 
-### 3.5 — ProofLedger Update
+### 3.4 — ProofLedger Update
 **Status**: OPEN
 8 major theorem clusters missing from ProofLedger (Golden Loop, Photon Soliton, Unified Forces, etc.)
 
@@ -93,16 +163,14 @@ QFD derives shape (κ̃ = 85.58) but mapping to dimensional K_J requires L₀.
 
 ### 4.1 — Tau g-2 (Kill Shot #1)
 QFD: a_τ ≈ 1192 × 10⁻⁶ | SM: 1177 × 10⁻⁶ | Timeline: Belle II ~2028-2030
+**Strength**: Becomes parameter-free theorem if 2.1 (V₆ Hessian) is solved.
 
 ### 4.2 — Chromatic SN Light Curve Asymmetry (Kill Shot #2)
 QFD: chromatic time dilation (σ ∝ √E) | ΛCDM: achromatic | Timeline: Rubin/LSST
+**Strength**: Becomes derivation if 2.4 (S-matrix σ_nf) is solved.
 
 ### 4.3 — E-Mode CMB Polarization Axis (Kill Shot #3)
 QFD: E-mode aligned with temperature quadrupole | ΛCDM: random
-
-### 4.4 — Raw Supernova Pipeline
-Build from-scratch pipeline on 8,277 raw light curves with v2 Kelvin Wave physics. No SALT2.
-**Data**: `archive/V21.../lightcurves_all_transients.csv` (770K photometry rows)
 
 ---
 
@@ -112,6 +180,20 @@ Build from-scratch pipeline on 8,277 raw light curves with v2 Kelvin Wave physic
 - Quark magnetic moments (G.4.3c)
 - Quantitative double-slit derivation
 - Muonic hydrogen finite-size effects
+
+---
+
+## REVIEWER AUDIT TRAIL
+
+**Date**: 2026-02-19
+**Source**: External theoretical physics review
+**Summary**: 9 actionable items across 4 categories:
+1. **Functional Analysis** (1A: determinant, 1B: Hessian) — 2 items
+2. **Fluid→Field Theory** (2A: η_topo, 2B: I_eff, 2C: Kelvin) — 3 items
+3. **Cosmology** (3A: straggling, 3B: eikonal D_L) — 2 items
+4. **Epistemology** (4A: axiom clarity, 4B: raw pipeline) — 2 items
+
+**Assessment**: Items 1A (determinant) and 3A (straggling) are the most dangerous to the manuscript's credibility. Item 4B (raw pipeline) is the most impactful empirically. Items 2A-2C are important but the 5th-root and topology dampen numerical sensitivity.
 
 ---
 
