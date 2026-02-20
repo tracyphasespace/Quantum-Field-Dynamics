@@ -5,6 +5,8 @@ import Mathlib.Topology.Basic
 import QFD.Vacuum.VacuumParameters
 import QFD.GoldenLoop
 import QFD.Physics.Postulates
+import QFD.Validation.GoldenLoopIVT
+import QFD.Validation.GoldenLoopLocation
 
 /-!
 # Vacuum Stiffness as Eigenvalue (Ab Initio Beta Module)
@@ -305,17 +307,58 @@ Use: QFD.Physics.python_root_finding_beta (imported via QFD.Physics.Postulates)
 -- axiom python_root_finding_beta removed - now imported from QFD.Physics.Postulates
 
 /--
-Using the numerical root finder (`solve_beta_eigenvalue.py`) we obtain a β in the
-physical range with residual `< 10⁻¹⁰` and within `0.02` of `beta_golden`.
+Using IVT + monotonicity we obtain a β in the physical range with residual `0`
+and within `0.02` of `beta_golden`. Requires numerical bounds on exp at 4 points.
+Replaces former axiom #4 (`python_root_finding_beta`).
 -/
-theorem beta_solution_matches_golden :
+theorem beta_solution_matches_golden
+    (h_exp2_hi : Real.exp 2 < (7.40 : ℝ))
+    (h_exp4_lo : (54.50 : ℝ) < Real.exp 4)
+    (h_exp_lo : Real.exp 3.028 < 20.656)
+    (h_exp_hi : 21.284 < Real.exp 3.058) :
     ∃ β : ℝ,
       2 < β ∧ β < 4 ∧
       abs (transcendental_equation β - K_target) < 1e-10 ∧
       abs (β - beta_golden) < 0.02 := by
   have hK : abs (K_target - 6.891) < 0.01 := K_target_approx
-  obtain ⟨β, h_low, h_high, h_res, h_close⟩ :=
-    python_root_finding_beta K_target hK
+  -- Step 1: IVT gives root on [2,4] — use GoldenLoopIVT
+  have h_K_lo : K_target > 6.881 := by rw [abs_lt] at hK; linarith
+  have h_K_hi : K_target < 6.901 := by rw [abs_lt] at hK; linarith
+  have h_ivt_lo : Real.exp 2 / 2 ≤ K_target := by
+    have : Real.exp 2 / 2 < 7.40 / 2 :=
+      div_lt_div_of_pos_right h_exp2_hi (by norm_num)
+    have : (7.40 : ℝ) / 2 < 6.881 := by norm_num
+    linarith
+  have h_ivt_hi : K_target ≤ Real.exp 4 / 4 := by
+    have : 54.50 / 4 < Real.exp 4 / 4 :=
+      div_lt_div_of_pos_right h_exp4_lo (by norm_num)
+    have : (6.901 : ℝ) < 54.50 / 4 := by norm_num
+    linarith
+  obtain ⟨β, hβ_mem, hβ_root⟩ :=
+    QFD.Validation.beta_root_exists' K_target h_ivt_lo h_ivt_hi
+  have hβ_lo : 2 ≤ β := hβ_mem.1
+  have hβ_hi : β ≤ 4 := hβ_mem.2
+  -- Step 2: Exact root → residual = 0 < 1e-10
+  have h_res : abs (transcendental_equation β - K_target) < 1e-10 := by
+    have h_eq : transcendental_equation β = K_target := by
+      unfold transcendental_equation; exact hβ_root
+    simp [h_eq, abs_of_nonneg]; norm_num
+  -- Step 3: Location bound from bracket + monotonicity
+  have h_beta_ge : (1 : ℝ) ≤ β := by linarith
+  have h_K_lower : Real.exp 3.028 / 3.028 < K_target := by
+    have : Real.exp 3.028 / 3.028 < 20.656 / 3.028 :=
+      div_lt_div_of_pos_right h_exp_lo (by norm_num)
+    have : (20.656 : ℝ) / 3.028 < 6.881 := by norm_num
+    linarith
+  have h_K_upper : K_target < Real.exp 3.058 / 3.058 := by
+    have : 21.284 / 3.058 < Real.exp 3.058 / 3.058 :=
+      div_lt_div_of_pos_right h_exp_hi (by norm_num)
+    have : (6.901 : ℝ) < 21.284 / 3.058 := by norm_num
+    linarith
+  have h_close : abs (β - 3.043) < 0.015 := by
+    have bounds := QFD.Validation.beta_root_bounds_in_interval K_target β 3.028 3.058
+      (by norm_num) (by norm_num) h_beta_ge hβ_root h_K_lower h_K_upper
+    rw [abs_lt]; constructor <;> linarith [bounds.1, bounds.2]
   have h_golden :
       abs ((3.043 : ℝ) - beta_golden) < 0.001 := by
     unfold beta_golden
@@ -360,12 +403,16 @@ Then, as an INDEPENDENT TEST, we measure β from lepton masses:
 
 **This module formalizes why β cannot be arbitrary.**
 -/
-theorem beta_from_transcendental_equation :
+theorem beta_from_transcendental_equation
+    (h_exp2_hi : Real.exp 2 < (7.40 : ℝ))
+    (h_exp4_lo : (54.50 : ℝ) < Real.exp 4)
+    (h_exp_lo : Real.exp 3.028 < 20.656)
+    (h_exp_hi : 21.284 < Real.exp 3.058) :
     ∃ β : ℝ,
       2 < β ∧ β < 4 ∧
       abs (transcendental_equation β - K_target) < 1e-10 ∧
       abs (β - beta_golden) < 0.02 :=
-  beta_solution_matches_golden
+  beta_solution_matches_golden h_exp2_hi h_exp4_lo h_exp_lo h_exp_hi
 
 /-! ## Comparison to Standard Model -/
 

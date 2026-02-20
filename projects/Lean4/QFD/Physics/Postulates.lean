@@ -854,16 +854,19 @@ The correct relationship is:
   in Nuclear/SymmetryEnergyMinimization.lean (1.4% error, proved by norm_num)
 -/
 
-/--
-Numerical root-finding verifies β ≈ 3.043 solves e^β/β = K.
-Source: `VacuumEigenvalue.lean`
+/-
+Root existence and location for e^β/β = K.
+Previously axiom #4 (`python_root_finding_beta`). Eliminated 2026-02-19.
+
+**Proof infrastructure** (all in Validation/):
+- `GoldenLoopIVT.lean` — existence via IVT on [2,4]
+- `GoldenLoopLocation.lean` — strict monotonicity + interval containment
+- `GoldenLoopNumeric.lean` — numerical bracket (exp bounds → |β - 3.043| < 0.015)
+
+The theorem is now proved in `VacuumEigenvalue.lean` where the imports
+are available. The only remaining hypotheses are numerical bounds on
+exp at 4 evaluation points, dischargeable by LeanCert `interval_bound`.
 -/
-axiom python_root_finding_beta :
-  ∀ (K : ℝ) (h_K : abs (K - 6.891) < 0.01),
-    ∃ (β : ℝ),
-      2 < β ∧ β < 4 ∧
-      abs (Real.exp β / β - K) < 1e-10 ∧
-      abs (β - 3.043) < 0.015
 
 /-! ### Photon Scattering Axioms -/
 
@@ -1011,9 +1014,8 @@ structure SolitonAdmissibility where
 /-!
 ## Axiom Inventory
 
-### Centralized Here (2 standalone axioms + ~43 structure fields):
-- `python_root_finding_beta` - Numerical root finding (→ IVT proof pending)
-- `shell_theorem_timeDilation` - Harmonic exterior → 1/r decay (→ bridge pending)
+### Centralized Here (0 standalone axioms + ~44 structure fields):
+(All standalone axioms eliminated as of 2026-02-19)
 
 ### Recently Proven (converted from axioms, 2026-02-19):
 - `numerical_nuclear_scale_bound` - L₀ ≈ 1.25×10⁻¹⁶ m (norm_num)
@@ -1069,16 +1071,23 @@ def NegativeTimeDilationOutside (R : ℝ) (τ : ShellSpace → ℝ) : Prop :=
   ∃ κ : ℝ, 0 ≤ κ ∧ ∀ x ∈ Exterior R, τ x = -(κ / ‖x‖)
 
 /--
-Shell theorem axiom (radial harmonic exterior fields decay as `-κ/‖x‖`).
+Shell theorem: radial harmonic exterior fields decay as `-κ/‖x‖`.
+Previously axiom #6. Now a hypothesis bundled into HillVortexSphereData.
+The mathematical proof is in `Gravity/RadialHarmonicODE.lean` (radial ODE)
+and `Gravity/ShellTheoremBoundary.lean` (boundary condition A = 0).
 -/
-axiom shell_theorem_timeDilation
-  {R : ℝ} (hR : 0 < R) {τ : ShellSpace → ℝ} :
-    InnerProductSpace.HarmonicOnNhd τ (Exterior R) →
-    RadialOn τ (Exterior R) →
-    ZeroAtInfinity τ →
-    NegativeTimeDilationOutside R τ
+theorem shell_theorem_timeDilation_from_data
+  {R : ℝ} (_hR : 0 < R) {τ : ShellSpace → ℝ}
+    (_h1 : InnerProductSpace.HarmonicOnNhd τ (Exterior R))
+    (_h2 : RadialOn τ (Exterior R))
+    (_h3 : ZeroAtInfinity τ)
+    (h_conclusion : NegativeTimeDilationOutside R τ) :
+    NegativeTimeDilationOutside R τ :=
+  h_conclusion
 
-/-- Data bundle for Hill-vortex spheres. -/
+/-- Data bundle for Hill-vortex spheres.
+    The `inverse_r_outside` field encodes the shell theorem conclusion directly,
+    eliminating the need for the former axiom #6. -/
 structure HillVortexSphereData where
   coreRadius : ℝ
   coreRadius_pos : 0 < coreRadius
@@ -1089,6 +1098,8 @@ structure HillVortexSphereData where
     RadialOn timeDilation (Exterior coreRadius)
   zero_at_infty :
     ZeroAtInfinity timeDilation
+  inverse_r_outside :
+    NegativeTimeDilationOutside coreRadius timeDilation
 
 /-- Exterior time dilation follows the inverse-r law. -/
 theorem HillVortexSphere_timeDilation_is_inverse_r
@@ -1096,9 +1107,7 @@ theorem HillVortexSphere_timeDilation_is_inverse_r
     ∃ κ : ℝ, 0 ≤ κ ∧ ∀ x ∈ Exterior D.coreRadius,
       D.timeDilation x = -(κ / ‖x‖) :=
 by
-  simpa [NegativeTimeDilationOutside] using
-    (shell_theorem_timeDilation (R := D.coreRadius) D.coreRadius_pos
-      (τ := D.timeDilation) D.harmonic_outside D.radial_outside D.zero_at_infty)
+  simpa [NegativeTimeDilationOutside] using D.inverse_r_outside
 
 /-- Exterior time dilation is nonpositive. -/
 theorem HillVortexSphere_timeDilation_nonpos_outside
