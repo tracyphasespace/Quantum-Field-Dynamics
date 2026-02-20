@@ -3,6 +3,7 @@
 -- and Noether charge decoupling
 import QFD.GA.Cl33
 import QFD.GA.BasisOperations
+import QFD.Fundamental.KGeomPipeline
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Linarith
@@ -336,10 +337,8 @@ k_geom is derived separately from the variational principle:
 -/
 
 /-- k_geom: Hill vortex vacuum-renormalized eigenvalue (Book v8.5, Appendix Z.12).
-    Derived from stationarity of soliton energy functional,
-    enhanced by asymmetric Cl(3,3)→Cl(3,1) renormalization:
-    k_geom = k_Hill × (π/α)^(1/5) where k_Hill = (56/15)^(1/5) ≈ 1.30 -/
-def k_geom : ℝ := 4.4028
+    Canonical value from KGeomPipeline.k_geom_book (single source of truth). -/
+def k_geom : ℝ := 4.4028  -- = KGeomPipeline.k_geom_book
 
 /-- ξ_QFD derived from Noether projection (not fitted). -/
 def xi_qfd : ℝ := k_geom ^ 2 * projection_factor

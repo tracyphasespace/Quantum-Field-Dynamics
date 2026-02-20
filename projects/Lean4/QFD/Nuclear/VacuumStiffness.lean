@@ -1,6 +1,7 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.Real.Pi.Bounds
+import QFD.Fundamental.KGeomPipeline
 
 noncomputable section
 
@@ -85,7 +86,7 @@ def beta_crit  : ℝ := 3.043233                -- Derived from α via Golden Lo
 -- Book v8.3 evaluates k_geom = 4.4028; this closed form gives 4.398.
 -- The ~0.1% difference is within all theorem tolerances.
 -- See K_GEOM_REFERENCE.md for complete pipeline documentation.
-def k_geom : ℝ := 7 * Real.pi / 5  -- = 4.398 (canonical closed form)
+def k_geom : ℝ := 7 * Real.pi / 5  -- = KGeomPipeline.k_geom_closed ≈ 4.398
 
 -- 4. THE PROTON BRIDGE EQUATION
 -- We solve for the stiffness lambda required to sustain the electron geometry.

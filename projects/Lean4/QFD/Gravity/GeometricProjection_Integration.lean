@@ -29,6 +29,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.FieldSimp
+import QFD.Fundamental.KGeomPipeline
 
 namespace QFD_Proofs.Starch
 

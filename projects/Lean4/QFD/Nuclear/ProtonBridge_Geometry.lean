@@ -31,6 +31,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Analysis.Real.Pi.Bounds
 import Mathlib.Tactic.NormNum
+import QFD.Fundamental.KGeomPipeline
 
 namespace QFD.ProtonBridge.Geometry
 
@@ -68,6 +69,8 @@ def TopologicalTax : ℝ := 1.046
   The ~0.5% difference is within all theorem tolerances (fifth-root suppression:
   10% ratio change → 2% k_geom change).
 -/
+-- Composite form: (4/3)π × 1.046 ≈ 4.381.
+-- Canonical: KGeomPipeline.k_geom_book = 4.4028 (book v8.3).
 noncomputable def k_geom : ℝ := VolUnitSphere * TopologicalTax
 
 /--

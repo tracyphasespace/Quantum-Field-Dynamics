@@ -25,6 +25,7 @@
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import QFD.Fundamental.KGeomPipeline
 
 namespace QFD_Proofs
 
@@ -47,7 +48,8 @@ noncomputable def volume_integrator : ℝ := (4 / 3) * Real.pi
 def topological_tax : ℝ := 1.04595
 
 /-- The composite geometric factor k_geom.
-  k_geom ≈ 4.3813 -/
+  Composite form: (4/3)π × 1.04595 ≈ 4.381.
+  Canonical: KGeomPipeline.k_geom_book = 4.4028 (book v8.3). -/
 noncomputable def k_geom : ℝ := volume_integrator * topological_tax
 
 /-- The Lepton energy scale depends on the winding alpha.

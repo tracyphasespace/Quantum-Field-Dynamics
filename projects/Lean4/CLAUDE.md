@@ -544,25 +544,25 @@ For papers using this formalization:
 
 See `CITATION.cff` for complete metadata.
 
-## Key Statistics (as of 2026-02-19)
+## Key Statistics (as of 2026-02-20)
 
-- **Lean Files**: **256**
-- **Proven Theorems**: **1,051** (all substantive, zero stubs)
-- **Proven Lemmas**: **276**
-- **Total Proven**: **1,349 statements** (includes 22 private lemmas/theorems)
-- **Definitions**: **995**
-- **Structures**: **188**
-- **Standalone Axioms**: **6** (centralized in Physics/Postulates.lean)
-- **Build Status**: ✅ Successful
+- **Lean Files**: **268**
+- **Proven Theorems**: **1,105** (all substantive, zero stubs)
+- **Proven Lemmas**: **274**
+- **Total Proven**: **1,379 statements**
+- **Definitions**: **995+**
+- **Structures**: **188+**
+- **Standalone Axioms**: **0** ✨ (all eliminated)
+- **Build Status**: ✅ Successful (7,849 jobs)
 - **Sorries**: **0** ✨
 - **Stub Theorems**: **0** (all converted to structures/definitions)
 
 **Counting Methodology** (IMPORTANT):
 ```bash
 # Count DECLARATIONS only (start of line):
-grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # theorems → 1051
-grep -rn "^lemma" QFD/ --include="*.lean" | wc -l    # lemmas → 276
-grep -rn "^axiom " QFD/ --include="*.lean" | wc -l   # axioms → 6
+grep -rn "^theorem" QFD/ --include="*.lean" | wc -l  # theorems → 1105
+grep -rn "^lemma" QFD/ --include="*.lean" | wc -l    # lemmas → 274
+grep -rn "^axiom " QFD/ --include="*.lean" | wc -l   # axioms → 0
 grep -rn "^theorem.*: True" QFD/ --include="*.lean" | wc -l  # stubs → 0
 # DO NOT use grep without ^ anchor - inflates count by ~200 (includes comments)
 ```

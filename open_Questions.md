@@ -1,7 +1,7 @@
 # QFD Open Questions
 
-**Current State**: ~1,380 proven Lean statements | **0 axioms** | 0 sorry | 270 files | Book v10.0
-**Last Updated**: 2026-02-19
+**Current State**: 1,379 proven Lean statements | **0 axioms** | 0 sorry | 268 files | Book v10.0
+**Last Updated**: 2026-02-20
 **Reviewer Audit**: Incorporated 2026-02-19 (functional analysis, field theory, cosmology, epistemology)
 
 ---
@@ -79,6 +79,8 @@ Broken monotonicity proofs deleted. Name mismatches and `abs_add` errors fixed. 
 | Spec | Topic | Edits | Priority |
 |------|-------|-------|----------|
 | edits70 | DIS parton geometry + Bjorken scaling | 2 | MEDIUM |
+| edits71 | Reviewer audit rigor upgrades | 10 | CRITICAL/HIGH/MEDIUM |
+| edits72 | V₄-C₂ bridge + axiom table + count update | 7 | HIGH/MEDIUM |
 **Note**: edits64-69 are all APPLIED.
 
 ### 1.7 — Lean Axiom vs Theorem Transparency [REVIEWER 4A]
@@ -136,8 +138,11 @@ Book uses V₄ (circulation coefficient) and C₂ (QED Schwinger 2nd-order) inte
 `two_pi_sq : ℝ := 2 * Real.pi ^ 2` is a definition, not derived from geometry. Need Vol(S³) = 2π² via Gamma function or hyperspherical integration.
 
 ### 2.8 — k_geom Downstream Migration
-**Status**: PARTIAL
-Pipeline file `QFD/Fundamental/KGeomPipeline.lean` exists as single source of truth. Downstream files still have independent definitions that should import from pipeline.
+**Status**: RESOLVED (2026-02-20)
+Pipeline file `QFD/Fundamental/KGeomPipeline.lean` enhanced with numerical exports (k_geom_book, k_geom_closed, k_geom_sq, xi_qfd, bound theorems). All 7 downstream files now import KGeomPipeline and reference the canonical value:
+- **Gravity**: GeometricCoupling.lean (4.3813→4.4028), NoetherProjection.lean, Gravity_Projection.lean (19.196→19.385), GeometricProjection_Integration.lean
+- **Nuclear**: VacuumStiffness.lean (7π/5, with pipeline reference), ProtonBridge_Derivation.lean, ProtonBridge_Geometry.lean
+- Full build: 7,849 jobs, 0 errors.
 
 ---
 
