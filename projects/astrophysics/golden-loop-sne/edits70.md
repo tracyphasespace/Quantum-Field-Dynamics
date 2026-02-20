@@ -5,7 +5,7 @@
 **Line numbers**: NEVER USED — all targets identified by SEARCH PATTERNS
 **Upstream dependencies**: edits69 (APPLIED)
 **Status**: SPEC — MEDIUM PRIORITY
-**Lean backing**: `QFD/HighEnergy/PartonGeometry.lean`, `QFD/Electron/CavitationFactor.lean`
+**Lean backing**: None (book-level arguments, not theorem-level)
 
 ---
 
@@ -84,5 +84,5 @@ Then RENAME `Z.4.F.6` to `Z.4.F.7` in the "What This Section Does Not Derive" he
 
 **Total edits**: 2
 **Dependencies**: None
-**Lean backing**: `QFD/HighEnergy/PartonGeometry.lean` (3 scattering centers = rfl)
+**Lean backing**: None (algebraic argument in book text; `3 = 3` is not a theorem)
 **Gaps addressed**: 4B.1 (DIS/Parton Physics)

@@ -1070,21 +1070,6 @@ def ZeroAtInfinity (τ : ShellSpace → ℝ) : Prop :=
 def NegativeTimeDilationOutside (R : ℝ) (τ : ShellSpace → ℝ) : Prop :=
   ∃ κ : ℝ, 0 ≤ κ ∧ ∀ x ∈ Exterior R, τ x = -(κ / ‖x‖)
 
-/--
-Shell theorem: radial harmonic exterior fields decay as `-κ/‖x‖`.
-Previously axiom #6. Now a hypothesis bundled into HillVortexSphereData.
-The mathematical proof is in `Gravity/RadialHarmonicODE.lean` (radial ODE)
-and `Gravity/ShellTheoremBoundary.lean` (boundary condition A = 0).
--/
-theorem shell_theorem_timeDilation_from_data
-  {R : ℝ} (_hR : 0 < R) {τ : ShellSpace → ℝ}
-    (_h1 : InnerProductSpace.HarmonicOnNhd τ (Exterior R))
-    (_h2 : RadialOn τ (Exterior R))
-    (_h3 : ZeroAtInfinity τ)
-    (h_conclusion : NegativeTimeDilationOutside R τ) :
-    NegativeTimeDilationOutside R τ :=
-  h_conclusion
-
 /-- Data bundle for Hill-vortex spheres.
     The `inverse_r_outside` field encodes the shell theorem conclusion directly,
     eliminating the need for the former axiom #6. -/
