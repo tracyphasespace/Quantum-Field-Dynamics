@@ -50,18 +50,18 @@ The non-forward opacity τ(z) = η·[1-1/√(1+z)] is already in μ_QFD as DIMMI
 **Book**: §9.8, C.4.3
 
 ### 1.3 — Raw Supernova Pipeline (SALT2-Free) [REVIEWER 4B]
-**Status**: WORKING — v2 Kelvin on V22 data competitive with published results
-SALT2 cooks in ΛCDM assumptions. golden_loop_sne.py (χ²/dof=0.955) uses SALT2-reduced data.
-**Current result** (raw_sne_kelvin.py on V22 Stage 1, 5,046 SNe after QC):
-- v2 Kelvin (0 free physics params): σ = 2.270 mag, χ²/dof = 1.14
-- Published V17/V18 (3 fitted params): RMS = 2.381 mag — **v2 Kelvin is better with fewer params**
-- Both are fully SALT2-free (V22 Stage 1 = JAX blackbody fits, no ΛCDM)
-**Remaining gap**: z-dependent residual slope (+3.95 at low z to -2.90 at high z).
-**Next steps**:
-- QFD-native color correction (chromatic drag σ ∝ λ^{-1/2})
-- Investigate z-slope: ln_A calibration artifact or missing near-source physics (η', ξ)?
-- Published papers: Three-Population Model (DOI 10.5281/zenodo.17539391), IPI Letters (2025)
-**Data**: V22 `stage1_results_filtered.csv` (6,724 SNe), raw photometry (770K rows, 8,277 transients)
+**Status**: DIAGNOSED — z-slope root cause identified (model contamination)
+**Primary result**: `golden_loop_sne.py` on SALT2-reduced DES-SN5YR: χ²/dof=0.955, σ=0.18 mag, **0 free physics params**. This is the publishable result.
+**Raw pipeline diagnosis** (2026-02-19):
+- V18 Stage 1 alpha values embed the V18 linear distance model (D=cz/k_J) in the template
+- v2 Kelvin (D_L=(c/K_J)ln(1+z)(1+z)^{2/3}) diverges from V18 by -1.6 to +0.7 mag across z
+- This 2.3-mag model contamination IS the z-slope — not a physics problem
+- V22 Stage 1 data also contaminated (undocumented fitter, processing_log mismatch)
+- **Reverse Malmquist**: high-z bright tail (19 outliers, 0 dim) is gravitational lensing of distant SNe, not classical selection bias. 13/19 extreme outliers hit alpha=30.0 (fitter saturation cap).
+**Raw pipeline best results** (V22 data, fitted scale, 2 free params): σ=1.99 mag, slope=-0.03 (flat) — beats V18 published RMS=2.18 (3 free), but fitted scale is unphysical (compensates for model contamination)
+**Path forward**: Either (a) re-fit from raw DES photometry with v2 Kelvin template (high effort), or (b) accept SALT2 pipeline as primary (recommended for book)
+**Reference**: `RAW_PIPELINE_STATUS.md` (full investigation documentation)
+**Data**: V18 `v18_hubble_data.csv` (4,885 SNe), V22 `stage1_results_filtered.csv` (6,724 SNe)
 
 ### 1.4 — LeanCert exp Bounds (Last Numerical Gap)
 **Status**: OPEN — feasible with Taylor series approach
@@ -196,7 +196,7 @@ QFD: E-mode aligned with temperature quadrupole | ΛCDM: random
 3. **Cosmology** (3A: straggling, 3B: eikonal D_L) — 2 items
 4. **Epistemology** (4A: axiom clarity, 4B: raw pipeline) — 2 items
 
-**Assessment**: Items 1A (determinant) and 3A (straggling) are the most dangerous to the manuscript's credibility. Item 4B (raw pipeline) is the most impactful empirically. Items 2A-2C are important but the 5th-root and topology dampen numerical sensitivity.
+**Assessment**: Item 1A (determinant) is the most dangerous to the manuscript's credibility. Item 3A (straggling) is RESOLVED. Item 4B (raw pipeline) is DIAGNOSED — z-slope caused by V18 model contamination in Stage 1 template, not physics; SALT2 pipeline remains primary. Items 2A-2C are important but the 5th-root and topology dampen numerical sensitivity.
 
 ---
 
