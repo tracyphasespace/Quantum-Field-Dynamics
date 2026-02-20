@@ -145,34 +145,82 @@ strength (a continuous parameter).  Small perturbations to k
 change the force magnitude but cannot change the topology.  The
 attractor is stable because it is topologically quantized.
 
-### Quantitative Estimate
+### Quantitative Results: Three Nested Rift Zones
 
-The connection radius R_conn where a soliton accumulates phase
-Δφ ~ π from the BH's vacuum connection scales as:
+The hand-wavy scaling estimate above is replaced by a computed
+result from the ψ-field tail framework (Appendix U.2).
 
-    R_conn ~ R_S × (M_BH / m_soliton)^(1/2)
+**The d-independent ratio.**  Each BH has a ψ-field tail
+δψ/ψ₀ = R_s/(ξ_QFD × r), and the gravitational potential
+|Φ|/c² = R_s/r.  Both decay as 1/r.  At the L1 saddle point
+between two equal-mass BHs at separation d, their ratio is
+therefore **constant** — independent of d:
 
-where R_S is the Schwarzschild radius.  For a solar-mass BH
-processing nuclear-scale solitons:
+    (δψ_gap/ψ₀) / (|Φ_L1|/c²) = 2/ξ_QFD = 2/16.157 = 0.1238
 
-    R_conn / R_tidal ~ (m_soliton / M_BH)^(-1/6) >> 1
+where ξ_QFD = k_geom² × 5/6 = 16.157 (zero free parameters).
 
-The connection radius exceeds the tidal radius by a factor that
-grows with the mass ratio.  For astrophysical BHs processing
-nuclear matter, this factor is large — the topological influence
-zone extends well beyond the classical disruption boundary.
+**Escape velocity reduction.**  The ψ-overlap at L1 raises the
+vacuum field, softening soliton binding.  The fractional barrier
+reduction is 2/ξ_QFD = 12.4%, giving:
+
+    v_esc(connection) = v_esc(classical) × √(1 − 2/ξ_QFD)
+                      = 0.936 × v_esc(classical)
+
+The escape velocity is 6.4% lower than the force picture predicts,
+independent of BH mass, separation, or rift type.
+
+**Separation distance extension.**  Since barrier ∝ 1/d, the 12.4%
+reduction extends the maximum escape separation by:
+
+    d_escape = d_classical / (1 − 2/ξ_QFD) = 1.141 × d_classical
+
+This produces **three nested processing zones**:
+
+| Zone | Boundary | Mechanism | Volume |
+|------|----------|-----------|--------|
+| 1. Classical tidal | d ≤ 3.45 R_s | Tidal stress > soliton binding | 172 R_s³ |
+| 2. Topological channel | d ≤ 8.30 R_s | ψ-overlap > η_topo threshold | 2,395 R_s³ |
+| 3. A-B extended | d ≤ 9.47 R_s | Escape velocity lowered 6.4% | 3,560 R_s³ |
+
+**Total volume ratio: Zone 3 / Zone 1 = 20.7×**
+(= 13.9× from topological channel × 1.49 from A-B extension)
+
+**Effect on H/He ratio.**  Despite the 12.4% barrier change, the
+cosmic abundance barely moves:
+
+| Scenario | k | Global H% |
+|----------|---|-----------|
+| Bare classical (no A-B) | 6.25 | 74.80% |
+| Current calibration | 5.48 | 74.68% |
+| With A-B on top | 4.80 | 74.54% |
+
+Across ±25% barrier swing, H% shifts by only ±0.15 percentage
+points.  The attractor is insensitive because the interior
+stratification (onion-layer composition) dominates the selectivity.
+This IS the quantitative proof of topological protection.
+
+**What changes is the rate, not the ratio.**  The 21× volume
+enhancement means each binary BH interaction processes 21× more
+matter, relaxing the required interaction frequency for steady-state
+hydrogen replenishment against stellar burndown.
 
 ### Summary
 
-| Quantity             | Force Picture        | Potential Picture           |
-|----------------------|----------------------|-----------------------------|
-| BH influence range   | Tidal radius (1/r²)  | Connection radius (phase)   |
-| Rift zone boundary   | Roche limit          | Coherence degradation       |
-| Ejection reach       | Coulomb 1/r²         | Topological phase imprint   |
-| Attractor stability  | Unexplained          | Winding number quantization |
+| Quantity             | Force Picture         | Connection Picture          |
+|----------------------|-----------------------|-----------------------------|
+| BH influence range   | d_tidal = 3.45 R_s    | d_AB = 9.47 R_s (2.7× farther) |
+| Processing volume    | 172 R_s³              | 3,560 R_s³ (21× larger)    |
+| Escape velocity      | v_esc(classical)      | 0.936 × v_esc (6.4% lower) |
+| Barrier reduction    | —                     | 2/ξ_QFD = 12.4% (zero parameters) |
+| H/He ratio           | 74.8%                 | 74.5% (±0.15%, protected)   |
+| Attractor stability  | Unexplained           | Winding number quantization |
 
 The Aharonov-Bohm principle does not just validate QFD's
 connection-level vacuum physics.  Applied to the rift model,
-it predicts that black holes process matter over a larger volume
-than the force picture allows — and that the resulting abundance
-ratios are topologically protected against perturbation.
+it predicts that black holes process matter over a **21× larger
+volume** than the force picture allows — and that the resulting
+abundance ratios are topologically protected against perturbation.
+
+**Computation:** `rift-abundance/ab_barrier_calculation.py`
+**Book edit spec:** `edits74.md` (Appendix U.2.3 + §11.3 cross-reference)
