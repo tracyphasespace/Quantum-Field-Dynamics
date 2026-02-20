@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-clean_sne_pipeline.py — QFD SNe Pipeline v2 (Hsiao K-correction)
-==================================================================
+clean_sne_pipeline.py — QFD SNe Pipeline v3 (Hsiao Template Fit)
+=================================================================
 
 From raw DES-SN5YR photometry to Hubble diagram.
 No inherited code from v15/v16/v18/v22.
@@ -13,9 +13,10 @@ Physics: v2 Kelvin wave model (0 free physics parameters)
     D_L(z) = (c/K_J) ln(1+z) (1+z)^{2/3}
     τ(z) = η [1 - 1/√(1+z)], η = π²/β²
 
-K-correction: Hsiao+ (2007) SN Ia spectral template (sncosmo)
-    Cross-band K_{B,Y}(z): observer DES griz → rest-frame Bessell B
-    Phase = 0 (peak light)
+Light curve fitting: Hsiao+ (2007) SN Ia spectral template via sncosmo
+    Multi-band simultaneous fit (DES griz)
+    Parameters: t0 (peak time), amplitude (distance-encoded)
+    K-corrections handled internally by the template SED
 
 Data: DES-SN5YR raw photometry (5,468 SNe Ia, griz bands)
       Cross-validated against SALT2-reduced Hubble diagram (1,591 overlap)
@@ -23,12 +24,12 @@ Data: DES-SN5YR raw photometry (5,468 SNe Ia, griz bands)
 Free parameters: 1 (absolute magnitude M_0 — calibration, not physics)
 
 Pipeline stages:
-    1. Load raw photometry
-    2. Per-SN light curve fitting (Gaussian template, per band)
-    3. Peak apparent magnitude with Hsiao K-correction to rest-frame B
-    4. Quality cuts
-    5. Hubble diagram vs v2 Kelvin
-    6. Cross-validation against SALT2
+    1. Load raw photometry + compute true errors from SNR
+    2. Hsiao template fit per SN (sncosmo.fit_lc)
+    3. Quality cuts
+    4. Hubble diagram vs v2 Kelvin
+    5. Cross-validation against SALT2
+    6. SALT2 mB test (control)
 
 Author: Tracy + Claude
 Date: 2026-02-20
@@ -39,10 +40,13 @@ import pandas as pd
 from scipy.optimize import curve_fit
 from scipy.stats import median_abs_deviation
 import sncosmo
+from astropy.table import Table
 import os
 import sys
+import time
 import warnings
 warnings.filterwarnings('ignore', category=RuntimeWarning)
+warnings.filterwarnings('ignore', category=UserWarning)
 
 # ============================================================
 # CONSTANTS (all from Golden Loop — zero free parameters)
@@ -77,9 +81,8 @@ K_J = XI_QFD * BETA**1.5                      # ≈ 85.6 km/s/Mpc
 ETA = PI**2 / BETA**2                         # ≈ 1.066 (scattering opacity)
 K_MAG = 5.0 / np.log(10.0)                    # ≈ 2.172 (mag conversion)
 
-# Band effective wavelengths (DES griz, nm)
-BAND_LAMBDA = {'g': 472.0, 'r': 641.5, 'i': 783.5, 'z': 926.0}
-REST_B_CENTER = 440.0  # B-band center (nm)
+# Band map: DES band letter → sncosmo name
+BAND_MAP = {'g': 'desg', 'r': 'desr', 'i': 'desi', 'z': 'desz'}
 
 # ============================================================
 # v2 KELVIN DISTANCE MODEL
@@ -103,20 +106,6 @@ def mu_v2k(z, M=0.0):
     return mu
 
 
-def mu_lcdm(z, H0=70.0, Om=0.3, M=0.0):
-    """ΛCDM distance modulus for comparison."""
-    from scipy.integrate import quad
-    z = np.atleast_1d(np.asarray(z, dtype=float))
-    mu = np.full_like(z, np.nan, dtype=float)
-    OL = 1.0 - Om
-    for i, zi in enumerate(z):
-        if zi > 0:
-            I, _ = quad(lambda zp: 1.0/np.sqrt(Om*(1+zp)**3 + OL), 0, zi)
-            D_L = (C_KMS / H0) * (1 + zi) * I
-            mu[i] = 5.0 * np.log10(D_L) + 25.0 + M
-    return mu
-
-
 # ============================================================
 # STAGE 1: LOAD RAW PHOTOMETRY
 # ============================================================
@@ -127,9 +116,21 @@ HD_FILE = os.path.join(DATA_DIR, 'DES-SN5YR-1.2/4_DISTANCES_COVMAT/DES-SN5YR_HD+
 
 
 def load_photometry():
-    """Load raw DES-SN5YR photometry."""
+    """Load raw DES-SN5YR photometry and compute true errors."""
     df = pd.read_csv(PHOTOMETRY_FILE)
+
+    # The flux_nu_jy_err column is a placeholder (all 0.02).
+    # True errors come from the SNR column: err = flux / SNR
+    df['flux_err_true'] = df['flux_nu_jy'] / df['snr']
+
+    # Error floor: at least 1% of flux (avoid zero/tiny errors)
+    min_err = df.groupby('snid')['flux_err_true'].transform('median') * 0.1
+    df['flux_err_true'] = np.maximum(df['flux_err_true'], min_err)
+    df['flux_err_true'] = np.maximum(df['flux_err_true'], df['flux_nu_jy'] * 0.01)
+
     print(f"Loaded {len(df):,} observations for {df['snid'].nunique():,} SNe")
+    print(f"  SNR range: {df['snr'].min():.1f} - {df['snr'].max():.0f}")
+    print(f"  True error range: {df['flux_err_true'].min():.2e} - {df['flux_err_true'].max():.2e} Jy")
     return df
 
 
@@ -142,293 +143,245 @@ def load_salt2_hd():
 
 
 # ============================================================
-# STAGE 2: LIGHT CURVE FITTING + HSIAO K-CORRECTION
+# STAGE 2: HSIAO TEMPLATE FITTING
 # ============================================================
 
-# Map DES band letters to sncosmo band names
-SNCOSMO_BANDS = {'g': 'desg', 'r': 'desr', 'i': 'desi', 'z': 'desz'}
+# Pre-load Hsiao source (shared across all fits)
+HSIAO_SOURCE = sncosmo.get_source('hsiao')
 
 
-def build_kcorr_grid(z_min=0.005, z_max=1.6, n_grid=200):
-    """Build K-correction lookup table using Hsiao+ (2007) SN Ia SED.
+def fit_sn_hsiao(sn_data, z):
+    """Fit Hsiao SN Ia template to multi-band light curve.
 
-    Computes cross-band K_{B,Y}(z) for each DES band Y:
-        K = m_Y(z) - m_B(z=0)
+    Uses sncosmo.fit_lc with the Hsiao+ (2007) spectral template.
+    The template handles K-corrections internally — no separate
+    K-correction step needed.
 
-    where m_Y(z) is the synthetic AB magnitude of the Hsiao SED
-    redshifted to z and observed through DES band Y, and m_B(z=0)
-    is the rest-frame Bessell B magnitude.
+    Parameters fitted: t0 (peak time), amplitude (encodes distance)
+    Fixed: z (from spectroscopy)
 
-    The sncosmo Model at z>0 applies: f(λ) = f_source(λ/(1+z))/(1+z),
-    which includes the spectral shift and bandwidth compression but
-    NOT the luminosity distance dimming.
-
-    Returns: (z_grid, kcorr_dict, m_B_ref)
+    Returns dict with: peak_mag, t0, amplitude, chi2_dof, n_obs, n_bands, success
     """
-    source = sncosmo.get_source('hsiao')
-    model = sncosmo.Model(source=source)
+    # Filter to valid griz observations
+    valid = sn_data['band'].isin(['g', 'r', 'i', 'z']) & (sn_data['flux_nu_jy'] > 0)
+    sv = sn_data[valid]
 
-    # Reference: rest-frame Bessell B at z=0
-    model.set(z=0, t0=0, amplitude=1.0)
-    m_B_ref = model.bandmag('bessellb', 'ab', 0.0)
+    if len(sv) < 5:
+        return None
 
-    z_grid = np.linspace(z_min, z_max, n_grid)
-    kcorr = {}
+    sn_bands = [BAND_MAP[b] for b in sv['band'].values]
+    flux = sv['flux_nu_jy'].values
+    flux_err = sv['flux_err_true'].values
 
-    for band in 'griz':
-        K_vals = np.full(n_grid, np.nan)
-        sn_band = SNCOSMO_BANDS[band]
-        for j, z in enumerate(z_grid):
-            model.set(z=z, t0=0, amplitude=1.0)
-            try:
-                m_obs = model.bandmag(sn_band, 'ab', 0.0)
-                K_vals[j] = m_obs - m_B_ref
-            except Exception:
-                pass
-        kcorr[band] = K_vals
+    # sncosmo data table: zp=8.9 converts Jy to AB magnitudes
+    data = Table({
+        'time': sv['mjd'].values,
+        'band': sn_bands,
+        'flux': flux,
+        'fluxerr': flux_err,
+        'zp': np.full(len(sv), 8.9),
+        'zpsys': ['ab'] * len(sv),
+    })
 
-    print(f"  Hsiao K-correction grid: {n_grid} points, z = {z_min}-{z_max}")
-    print(f"  Rest-frame B reference: {m_B_ref:.4f} mag")
-    for band in 'griz':
-        valid = np.isfinite(kcorr[band])
-        if valid.any():
-            print(f"  K_{band}(z=0.1) = {np.interp(0.1, z_grid, kcorr[band]):+.3f}, "
-                  f"K_{band}(z=0.5) = {np.interp(0.5, z_grid, kcorr[band]):+.3f}, "
-                  f"K_{band}(z=1.0) = {np.interp(1.0, z_grid, kcorr[band]):+.3f}")
+    # Set up Hsiao model at fixed z
+    model = sncosmo.Model(source=HSIAO_SOURCE)
+    model.set(z=z)
 
-    return z_grid, kcorr, m_B_ref
+    # Initial guesses
+    idx_peak = np.argmax(data['flux'])
+    t0_guess = float(data['time'][idx_peak])
+    peak_band = data['band'][idx_peak]
 
+    # Estimate amplitude from peak flux
+    ref_model = sncosmo.Model(source=HSIAO_SOURCE)
+    ref_model.set(z=z, t0=0, amplitude=1.0)
+    ref_flux = ref_model.bandflux(peak_band, 0.0, zp=8.9, zpsys='ab')
+    amp_guess = float(data['flux'][idx_peak]) / ref_flux if ref_flux > 0 else 1e-10
 
-def k_correction_hsiao(z, band, z_grid, kcorr_grid):
-    """Interpolated Hsiao K-correction for observer-frame band at redshift z.
+    model.set(t0=t0_guess, amplitude=amp_guess)
 
-    Returns K_{B,Y}(z): the correction to convert observer-frame DES
-    magnitude to rest-frame Bessell B magnitude.
+    try:
+        result, fitted_model = sncosmo.fit_lc(
+            data, model, ['t0', 'amplitude'],
+            bounds={
+                't0': (float(data['time'].min()) - 30,
+                       float(data['time'].max()) + 30),
+                'amplitude': (amp_guess * 0.001, amp_guess * 1000),
+            },
+            minsnr=0.0,
+        )
 
-        m_B_rest = m_obs - K(z, band)
-    """
-    K_arr = kcorr_grid[band]
-    valid = np.isfinite(K_arr)
-    if not valid.any():
-        return 0.0
-    return float(np.interp(z, z_grid[valid], K_arr[valid]))
+        # Peak rest-frame B magnitude (includes distance via amplitude)
+        m_B = fitted_model.source_peakmag('bessellb', 'ab')
+        chi2_dof = result.chisq / max(result.ndof, 1)
+        n_bands = len(set(data['band']))
+
+        return {
+            'peak_mag': m_B,
+            't0': fitted_model.get('t0'),
+            'amplitude': fitted_model.get('amplitude'),
+            'chi2_dof': chi2_dof,
+            'n_obs': len(data),
+            'n_bands': n_bands,
+            'success': True,
+        }
+
+    except Exception:
+        return None
 
 
 def gaussian_template(t, A, t0, sigma):
-    """Gaussian light curve template for host-subtracted data.
-
-    f(t) = A × exp(-0.5 × ((t - t0)/σ)²)
-
-    DES photometry is difference-imaged (host subtracted), so baseline = 0.
-    3 parameters: A (peak amplitude), t0 (peak time), σ (width).
-    """
+    """Gaussian light curve template (fallback)."""
     return A * np.exp(-0.5 * ((t - t0) / sigma)**2)
 
 
-def fit_single_band(mjd, flux, flux_err, z):
-    """Fit one band's light curve, return peak flux and width.
+def fit_sn_gaussian_fallback(sn_data, z):
+    """Gaussian fit fallback for SNe where Hsiao fails.
 
-    Returns dict with: peak_flux, peak_mjd, width_rest, chi2_dof, n_obs, success
+    Fits Gaussian to the best band (closest to rest-frame B at 440 nm),
+    returns peak magnitude without K-correction (less accurate but robust).
     """
-    n = len(mjd)
-    result = {'peak_flux': np.nan, 'peak_mjd': np.nan, 'width_rest': np.nan,
-              'chi2_dof': np.nan, 'n_obs': n, 'success': False}
+    band_lambda = {'g': 472.0, 'r': 641.5, 'i': 783.5, 'z': 926.0}
 
-    if n < 3:
-        return result
+    # Pick band closest to rest-frame B
+    best_band = min(band_lambda.keys(),
+                    key=lambda b: abs(band_lambda[b] / (1 + z) - 440.0))
 
-    # Initial guesses from data
+    bd = sn_data[sn_data['band'] == best_band]
+    if len(bd) < 3:
+        # Try any band
+        for b in ['r', 'i', 'g', 'z']:
+            bd = sn_data[sn_data['band'] == b]
+            if len(bd) >= 3:
+                best_band = b
+                break
+        else:
+            return None
+
+    mjd = bd['mjd'].values
+    flux = bd['flux_nu_jy'].values
+    flux_err = bd['flux_err_true'].values
+
     idx_max = np.argmax(flux)
-    A0 = max(flux[idx_max], 1e-10)
+    A0 = max(flux[idx_max], 1e-15)
     t0_0 = mjd[idx_max]
-    sigma0 = 15.0 * (1 + z)  # observer-frame: wider at higher z (time dilation)
 
     if A0 <= 0:
-        return result
+        return None
 
     try:
-        bounds = ([0, mjd.min() - 50, 3.0],
-                  [A0 * 10, mjd.max() + 50, 150.0])
-        popt, pcov = curve_fit(gaussian_template, mjd, flux,
-                               p0=[A0, t0_0, sigma0],
-                               sigma=flux_err, absolute_sigma=True,
-                               bounds=bounds, maxfev=2000)
+        bounds = ([0, mjd.min() - 50, 3.0], [A0 * 10, mjd.max() + 50, 150.0])
+        popt, _ = curve_fit(gaussian_template, mjd, flux,
+                            p0=[A0, t0_0, 15.0 * (1 + z)],
+                            sigma=flux_err, absolute_sigma=True,
+                            bounds=bounds, maxfev=2000)
         A, t0, sigma = popt
 
         if A <= 0:
-            return result
+            return None
 
-        # Residuals
+        m_obs = -2.5 * np.log10(A / 3631.0)
+
         model = gaussian_template(mjd, *popt)
         resid = (flux - model) / flux_err
         chi2 = np.sum(resid**2)
-        dof = max(n - 3, 1)
+        dof = max(len(mjd) - 3, 1)
 
-        result['peak_flux'] = A
-        result['peak_mjd'] = t0
-        result['width_rest'] = sigma / (1 + z)
-        result['chi2_dof'] = chi2 / dof
-        result['success'] = True
+        n_bands_total = sn_data['band'].isin(['g', 'r', 'i', 'z']).sum()
+        n_unique_bands = sn_data[sn_data['band'].isin(['g', 'r', 'i', 'z'])]['band'].nunique()
 
-    except (RuntimeError, ValueError, np.linalg.LinAlgError):
-        # Fit failed — fall back to max observed flux
-        if flux[idx_max] > 0:
-            result['peak_flux'] = flux[idx_max]
-            result['peak_mjd'] = mjd[idx_max]
-            result['width_rest'] = 15.0
-            result['success'] = True
-
-    return result
-
-
-def select_rest_B_band(z):
-    """Select observer-frame band closest to rest-frame B (440 nm).
-
-    rest_lambda = obs_lambda / (1 + z)
-    Pick band where rest_lambda is closest to 440 nm.
-    """
-    best_band = None
-    best_diff = np.inf
-    for band, lam in BAND_LAMBDA.items():
-        rest_lam = lam / (1 + z)
-        diff = abs(rest_lam - REST_B_CENTER)
-        if diff < best_diff:
-            best_diff = diff
-            best_band = band
-    return best_band
+        return {
+            'peak_mag': m_obs,
+            't0': t0,
+            'amplitude': A,
+            'chi2_dof': chi2 / dof,
+            'n_obs': len(bd),
+            'n_bands': n_unique_bands,
+            'success': True,
+        }
+    except Exception:
+        return None
 
 
-# ============================================================
-# STAGE 3: PROCESS ALL SNe
-# ============================================================
+def process_all_sne(df, verbose=True):
+    """Fit Hsiao template to all SNe, extract peak B magnitudes.
 
-def process_all_sne(df, z_grid, kcorr_grid, verbose=True):
-    """Fit light curves for all SNe, extract peak magnitudes.
-
-    Strategy: fit ALL available bands, then combine with Hsiao SED
-    K-correction to get rest-frame Bessell B peak magnitude.
-
-    For each SN:
-    1. Fit Gaussian to each band → peak flux, width
-    2. Apply Hsiao K-correction K_{B,Y}(z) to each band's peak mag
-    3. Take weighted average (weight = n_obs / chi2 / (1 + |K|))
-       — bands closer to rest-frame B get higher weight
-    4. Use median width across bands for stretch correction
+    Primary: sncosmo Hsiao template (multi-band simultaneous fit)
+    Fallback: Gaussian fit on best single band (for failed Hsiao fits)
 
     Returns DataFrame with one row per SN.
     """
     sne = df.groupby('snid')
     results = []
     n_total = len(sne)
+    n_hsiao = 0
+    n_gaussian = 0
+    n_failed = 0
+    t_start = time.time()
 
     for i, (snid, sn_data) in enumerate(sne):
-        if verbose and (i + 1) % 1000 == 0:
-            print(f"  Processing SN {i+1}/{n_total}...")
+        if verbose and (i + 1) % 500 == 0:
+            elapsed = time.time() - t_start
+            rate = (i + 1) / elapsed
+            eta = (n_total - i - 1) / rate
+            print(f"  {i+1}/{n_total} ({rate:.0f} SN/s, ETA {eta:.0f}s)  "
+                  f"[Hsiao:{n_hsiao} Gauss:{n_gaussian} fail:{n_failed}]")
 
         z = sn_data['z'].iloc[0]
         if z <= 0:
             continue
 
-        # Fit each band independently
-        band_fits = {}
-        for band in ['g', 'r', 'i', 'z']:
-            band_data = sn_data[sn_data['band'] == band]
-            if len(band_data) < 3:
-                continue
+        # Try Hsiao template first
+        fit = fit_sn_hsiao(sn_data, z)
+        method = 'hsiao'
 
-            mjd = band_data['mjd'].values
-            flux = band_data['flux_nu_jy'].values
-            flux_err = band_data['flux_nu_jy_err'].values
+        if fit is None:
+            # Fallback to Gaussian
+            fit = fit_sn_gaussian_fallback(sn_data, z)
+            method = 'gaussian'
 
-            # Replace bad errors
-            bad_err = flux_err <= 0
-            if bad_err.any():
-                med_err = np.median(flux_err[~bad_err]) if (~bad_err).any() else 1e-8
-                flux_err = flux_err.copy()
-                flux_err[bad_err] = med_err
-
-            fit = fit_single_band(mjd, flux, flux_err, z)
-            if fit['success'] and fit['peak_flux'] > 0:
-                band_fits[band] = fit
-
-        if not band_fits:
+        if fit is None:
+            n_failed += 1
             continue
 
-        # Convert each band's peak flux to K-corrected rest-frame B magnitude
-        mags_kcorr = []
-        weights = []
-        widths = []
-        k_vals = []
-        n_obs_total = 0
-        chi2_total = 0
-        n_bands = 0
-
-        for band, fit in band_fits.items():
-            # Observer-frame AB magnitude
-            m_obs = -2.5 * np.log10(fit['peak_flux'] / 3631.0)
-
-            # Hsiao K-correction: observer DES band → rest-frame Bessell B
-            K = k_correction_hsiao(z, band, z_grid, kcorr_grid)
-            m_rest = m_obs - K
-
-            # Weight: data quality × K-correction reliability
-            # Bands with smaller |K| map more cleanly to rest-frame B
-            w = fit['n_obs'] / max(fit['chi2_dof'], 0.1) / (1.0 + abs(K))
-            mags_kcorr.append(m_rest)
-            weights.append(w)
-            k_vals.append(K)
-            widths.append(fit['width_rest'])
-            n_obs_total += fit['n_obs']
-            chi2_total += fit['chi2_dof'] * fit['n_obs']
-            n_bands += 1
-
-        mags_kcorr = np.array(mags_kcorr)
-        weights = np.array(weights)
-
-        # Weighted average of K-corrected peak magnitude
-        peak_mag = np.average(mags_kcorr, weights=weights)
-        width_rest = np.median(widths)
-        chi2_avg = chi2_total / max(n_obs_total, 1)
-
-        # Best band = smallest |K| (closest to rest-frame B)
-        best_idx = np.argmin(np.abs(k_vals))
-        best_band = list(band_fits.keys())[best_idx]
+        if method == 'hsiao':
+            n_hsiao += 1
+        else:
+            n_gaussian += 1
 
         results.append({
             'snid': snid,
             'z': z,
-            'band_used': best_band,
-            'n_bands': n_bands,
-            'peak_mag': peak_mag,
-            'peak_flux': band_fits[best_band]['peak_flux'],
-            'width_rest': width_rest,
-            'chi2_dof': chi2_avg,
-            'n_obs': n_obs_total,
+            'peak_mag': fit['peak_mag'],
+            'chi2_dof': fit['chi2_dof'],
+            'n_obs': fit['n_obs'],
+            'n_bands': fit['n_bands'],
+            'method': method,
         })
 
+    elapsed = time.time() - t_start
     out = pd.DataFrame(results)
-    print(f"\nFitted {len(out)} / {n_total} SNe successfully")
-    print(f"  Multi-band (>=2): {(out['n_bands'] >= 2).sum()}")
-    print(f"  Single-band:      {(out['n_bands'] == 1).sum()}")
+    print(f"\nFitted {len(out)} / {n_total} SNe in {elapsed:.1f}s ({n_total/elapsed:.0f} SN/s)")
+    print(f"  Hsiao template: {n_hsiao} ({100*n_hsiao/max(len(out),1):.1f}%)")
+    print(f"  Gaussian fallback: {n_gaussian} ({100*n_gaussian/max(len(out),1):.1f}%)")
+    print(f"  Failed: {n_failed}")
     return out
 
 
 # ============================================================
-# STAGE 4: QUALITY CUTS
+# STAGE 3: QUALITY CUTS
 # ============================================================
 
-def apply_quality_cuts(sne_df, chi2_max=10.0, n_obs_min=8,
-                       n_bands_min=2, width_min=3.0, width_max=40.0,
-                       z_min=0.02):
+def apply_quality_cuts(sne_df, chi2_max=50.0, n_obs_min=5,
+                       n_bands_min=2, z_min=0.02):
     """Apply quality cuts to the fitted SN sample.
 
-    Cuts:
-        - chi2/dof < chi2_max (bad fits)
-        - n_obs >= n_obs_min (insufficient coverage)
-        - n_bands >= n_bands_min (need multi-band for K-correction)
-        - width_rest in [width_min, width_max] days (unphysical widths)
-        - z > z_min (peculiar velocity contamination)
-        - peak_mag finite and reasonable (15 < m < 28)
+    More permissive than v1/v2 since Hsiao template is more robust:
+    - chi2/dof < 50 (Hsiao chi2 can be large due to real photometric errors)
+    - n_obs >= 5 (Hsiao needs fewer points than Gaussian)
+    - n_bands >= 2 (multi-band for color information)
+    - z > 0.02 (peculiar velocity contamination)
+    - peak_mag finite and reasonable (15 < m < 30)
     """
     n_before = len(sne_df)
 
@@ -436,12 +389,10 @@ def apply_quality_cuts(sne_df, chi2_max=10.0, n_obs_min=8,
         (sne_df['chi2_dof'] < chi2_max) &
         (sne_df['n_obs'] >= n_obs_min) &
         (sne_df['n_bands'] >= n_bands_min) &
-        (sne_df['width_rest'] > width_min) &
-        (sne_df['width_rest'] < width_max) &
         (sne_df['z'] > z_min) &
         np.isfinite(sne_df['peak_mag']) &
         (sne_df['peak_mag'] > 15) &
-        (sne_df['peak_mag'] < 28)
+        (sne_df['peak_mag'] < 30)
     )
 
     out = sne_df[mask].copy().reset_index(drop=True)
@@ -449,111 +400,79 @@ def apply_quality_cuts(sne_df, chi2_max=10.0, n_obs_min=8,
     print(f"  chi2/dof < {chi2_max}: removed {(sne_df['chi2_dof'] >= chi2_max).sum()}")
     print(f"  n_obs >= {n_obs_min}: removed {(sne_df['n_obs'] < n_obs_min).sum()}")
     print(f"  n_bands >= {n_bands_min}: removed {(sne_df['n_bands'] < n_bands_min).sum()}")
-    print(f"  width [{width_min},{width_max}]: removed "
-          f"{((sne_df['width_rest'] <= width_min) | (sne_df['width_rest'] >= width_max)).sum()}")
     print(f"  z > {z_min}: removed {(sne_df['z'] <= z_min).sum()}")
+    n_hsiao = (out['method'] == 'hsiao').sum()
+    print(f"  After cuts: {n_hsiao} Hsiao ({100*n_hsiao/len(out):.1f}%), "
+          f"{len(out)-n_hsiao} Gaussian ({100*(len(out)-n_hsiao)/len(out):.1f}%)")
 
     return out
 
 
 # ============================================================
-# STAGE 5: HUBBLE DIAGRAM
+# STAGE 4: HUBBLE DIAGRAM
 # ============================================================
 
-def fit_hubble_diagram(sne_df, use_width_correction=True):
-    """Fit v2 Kelvin model to the raw Hubble diagram.
+def fit_hubble_diagram(sne_df, label=""):
+    """Fit v2 Kelvin model to the Hubble diagram.
 
-    Fits absolute magnitude M_0 (and optionally width correction α_w)
-    to minimize residuals.
-
-    With width correction:
-        m_corrected = m_peak - α_w × (w - w_ref)
-        μ_obs = m_corrected - M_0
-
-    Without:
-        μ_obs = m_peak - M_0
+    Fits only the absolute magnitude M_0 (median offset).
+    No width or stretch correction — Hsiao template already
+    captures the light curve shape.
 
     Returns dict with fit results.
     """
     z = sne_df['z'].values
     m = sne_df['peak_mag'].values
-    w = sne_df['width_rest'].values
 
     # v2 Kelvin prediction (M=0 for now)
     mu_model = mu_v2k(z, M=0.0)
-    valid = np.isfinite(mu_model)
-    z, m, w, mu_model = z[valid], m[valid], w[valid], mu_model[valid]
+    valid = np.isfinite(mu_model) & np.isfinite(m)
+    z, m, mu_model = z[valid], m[valid], mu_model[valid]
 
-    if use_width_correction and len(z) > 10:
-        # Fit: m_peak = mu_model + M_0 + alpha_w * (w - w_ref)
-        w_ref = np.median(w)
-        dw = w - w_ref
-
-        # Linear least squares: m = mu_model + M_0 + alpha_w * dw
-        # m - mu_model = M_0 + alpha_w * dw
-        y = m - mu_model
-        A_mat = np.column_stack([np.ones(len(z)), dw])
-        params, residuals, rank, sv = np.linalg.lstsq(A_mat, y, rcond=None)
-        M_0, alpha_w = params
-
-        m_corrected = m - alpha_w * dw
-        resid = m_corrected - mu_model - M_0
-    else:
-        # Simple offset only
-        M_0 = np.median(m - mu_model)
-        alpha_w = 0.0
-        w_ref = np.median(w)
-        m_corrected = m
-        resid = m - mu_model - M_0
+    # Simple offset (no stretch/color correction for Hsiao)
+    M_0 = np.median(m - mu_model)
+    resid = m - mu_model - M_0
 
     sigma = np.std(resid)
     mad = median_abs_deviation(resid)
-    chi2_dof = np.sum(resid**2) / max(len(resid) - 2, 1)
 
     # Outlier-clipped stats (3σ)
     clip = np.abs(resid) < 3 * sigma
     sigma_clipped = np.std(resid[clip]) if clip.sum() > 10 else sigma
     n_outliers = (~clip).sum()
 
+    # z-slope
+    slope, _ = np.polyfit(z, resid, 1) if len(z) > 10 else (0.0, 0.0)
+
     print(f"\n{'='*60}")
-    print(f"HUBBLE DIAGRAM FIT — v2 Kelvin (0 free physics params)")
+    print(f"HUBBLE DIAGRAM — v2 Kelvin (0 free physics params) {label}")
     print(f"{'='*60}")
     print(f"  SNe used:           {len(z)}")
     print(f"  M_0 (calibration):  {M_0:.4f} mag")
-    if use_width_correction:
-        print(f"  Width correction:   α_w = {alpha_w:.4f} mag/day")
-        print(f"  Reference width:    {w_ref:.1f} days (rest-frame)")
     print(f"  RMS scatter:        {sigma:.3f} mag")
     print(f"  MAD scatter:        {mad:.3f} mag")
     print(f"  3σ-clipped RMS:     {sigma_clipped:.3f} mag")
     print(f"  3σ outliers:        {n_outliers} ({100*n_outliers/len(z):.1f}%)")
-    print(f"  χ²/dof:             {chi2_dof:.3f}")
+    print(f"  z-slope:            {slope:+.3f} mag/z")
 
     return {
-        'z': z, 'mu_obs': m_corrected - M_0, 'mu_model': mu_model,
-        'resid': resid, 'M_0': M_0, 'alpha_w': alpha_w, 'w_ref': w_ref,
+        'z': z, 'mu_obs': m - M_0, 'mu_model': mu_model,
+        'resid': resid, 'M_0': M_0,
         'sigma': sigma, 'sigma_clipped': sigma_clipped,
-        'mad': mad, 'chi2_dof': chi2_dof, 'n_sne': len(z),
-        'n_outliers': n_outliers,
+        'mad': mad, 'slope': slope,
+        'n_sne': len(z), 'n_outliers': n_outliers,
     }
 
 
 # ============================================================
-# STAGE 6: CROSS-VALIDATION AGAINST SALT2
+# STAGE 5: CROSS-VALIDATION AGAINST SALT2
 # ============================================================
 
 def cross_validate_salt2(sne_df, hd_df, fit_result):
-    """Compare raw pipeline results to SALT2-reduced Hubble diagram.
-
-    For SNe in both datasets, compare:
-        1. mu_raw (from peak mag) vs mu_SALT2
-        2. Residual scatter improvement/degradation
-        3. z-slope in matched vs full sample
-    """
-    # Cross-match on SNID
+    """Compare Hsiao pipeline results to SALT2-reduced Hubble diagram."""
     sne_df = sne_df.copy()
     sne_df['snid_str'] = sne_df['snid'].astype(str)
-    merged = sne_df.merge(hd_df[['CID', 'zHD', 'MU', 'MUERR_FINAL', 'x1', 'c']],
+    merged = sne_df.merge(hd_df[['CID', 'zHD', 'MU', 'MUERR_FINAL', 'mB', 'x1', 'c']],
                           left_on='snid_str', right_on='CID', how='inner')
 
     if len(merged) == 0:
@@ -562,9 +481,8 @@ def cross_validate_salt2(sne_df, hd_df, fit_result):
 
     z = merged['z'].values
     mu_raw = merged['peak_mag'].values - fit_result['M_0']
-    if fit_result['alpha_w'] != 0:
-        mu_raw -= fit_result['alpha_w'] * (merged['width_rest'].values - fit_result['w_ref'])
     mu_salt2 = merged['MU'].values
+    mB_salt2 = merged['mB'].values
     mu_v2k_pred = mu_v2k(z, M=0.0)
 
     # Raw pipeline vs v2K
@@ -577,34 +495,35 @@ def cross_validate_salt2(sne_df, hd_df, fit_result):
     valid2 = np.isfinite(resid_salt2)
     sigma_salt2 = np.std(resid_salt2[valid2])
 
-    # Raw vs SALT2 directly
-    delta = mu_raw - mu_salt2
-    valid3 = np.isfinite(delta)
-    sigma_delta = np.std(delta[valid3])
+    # Direct comparison: Hsiao m_B vs SALT2 mB
+    delta_mB = merged['peak_mag'].values - mB_salt2
+    valid_mB = np.isfinite(delta_mB)
+    sigma_mB = np.std(delta_mB[valid_mB])
+    offset_mB = np.median(delta_mB[valid_mB])
 
-    # Fit linear z-slope for matched subset
+    # z-slopes
     z_v = z[valid]
     r_v = resid_raw[valid]
-    if len(z_v) > 10:
-        slope, intercept = np.polyfit(z_v, r_v, 1)
-    else:
-        slope, intercept = 0, 0
+    slope, _ = np.polyfit(z_v, r_v, 1) if len(z_v) > 10 else (0.0, 0.0)
 
     print(f"\n{'='*60}")
-    print(f"CROSS-VALIDATION: Raw Pipeline vs SALT2")
+    print(f"CROSS-VALIDATION: Hsiao Pipeline vs SALT2")
     print(f"{'='*60}")
-    print(f"  Matched SNe:        {len(merged)}")
-    print(f"  Raw vs v2K RMS:     {sigma_raw:.3f} mag")
-    print(f"  SALT2 vs v2K RMS:   {sigma_salt2:.3f} mag")
-    print(f"  Raw−SALT2 RMS:      {sigma_delta:.3f} mag")
-    print(f"  SALT2 improvement:  {sigma_raw/sigma_salt2:.1f}× less scatter")
-    print(f"  Raw z-slope:        {slope:+.3f} mag/unit-z")
+    print(f"  Matched SNe:           {len(merged)}")
+    print(f"  Hsiao vs v2K RMS:      {sigma_raw:.3f} mag")
+    print(f"  SALT2 vs v2K RMS:      {sigma_salt2:.3f} mag")
+    print(f"  SALT2 improvement:     {sigma_raw/sigma_salt2:.1f}×")
+    print(f"  Hsiao z-slope:         {slope:+.3f} mag/z")
+    print(f"  Hsiao−SALT2 mB offset: {offset_mB:+.3f} mag")
+    print(f"  Hsiao−SALT2 mB scatter:{sigma_mB:.3f} mag")
 
     # Binned residuals for matched subset
-    print(f"\n  BINNED RESIDUALS (matched SNe only, raw pipeline):")
-    print(f"  {'z_center':>8s}  {'<Δμ_raw>':>8s}  {'<Δμ_S2>':>8s}  {'σ_raw':>8s}  {'σ_S2':>8s}  {'N':>4s}")
+    print(f"\n  BINNED RESIDUALS (matched SNe):")
+    print(f"  {'z':>8s}  {'<Δμ_H>':>8s}  {'<Δμ_S2>':>8s}  {'σ_H':>8s}  {'σ_S2':>8s}  {'N':>4s}")
     sort = np.argsort(z)
-    z_s, rr_s, rs_s = z[sort], resid_raw[sort], resid_salt2[sort]
+    z_s = z[sort]
+    rr_s = resid_raw[sort]
+    rs_s = resid_salt2[sort]
     n_bins = min(10, len(z_s) // 30)
     edges = np.linspace(z_s.min(), z_s.max(), n_bins + 1)
     for j in range(n_bins):
@@ -612,26 +531,23 @@ def cross_validate_salt2(sne_df, hd_df, fit_result):
         if mask.sum() < 5:
             continue
         zc = np.mean(z_s[mask])
-        mr = np.mean(rr_s[mask])
-        ms = np.mean(rs_s[mask])
-        sr = np.std(rr_s[mask])
-        ss = np.std(rs_s[mask])
-        print(f"  {zc:8.3f}  {mr:+8.3f}  {ms:+8.3f}  {sr:8.3f}  {ss:8.3f}  {mask.sum():4d}")
+        print(f"  {zc:8.3f}  {np.mean(rr_s[mask]):+8.3f}  {np.mean(rs_s[mask]):+8.3f}  "
+              f"{np.std(rr_s[mask]):8.3f}  {np.std(rs_s[mask]):8.3f}  {mask.sum():4d}")
 
     return {
         'n_matched': len(merged), 'sigma_raw': sigma_raw,
-        'sigma_salt2': sigma_salt2, 'sigma_delta': sigma_delta,
-        'slope': slope,
+        'sigma_salt2': sigma_salt2, 'sigma_mB': sigma_mB,
+        'offset_mB': offset_mB, 'slope': slope,
         'z': z, 'mu_raw': mu_raw, 'mu_salt2': mu_salt2,
         'resid_raw': resid_raw, 'resid_salt2': resid_salt2,
     }
 
 
 # ============================================================
-# STAGE 7: BINNED HUBBLE DIAGRAM
+# STAGE 6: BINNED HUBBLE DIAGRAM
 # ============================================================
 
-def binned_hubble(z, resid, n_bins=15):
+def binned_hubble(z, resid, n_bins=15, label=""):
     """Compute binned residuals for visual inspection."""
     valid = np.isfinite(resid)
     z, resid = z[valid], resid[valid]
@@ -640,9 +556,9 @@ def binned_hubble(z, resid, n_bins=15):
 
     bin_edges = np.linspace(z.min(), z.max(), n_bins + 1)
     print(f"\n{'='*60}")
-    print(f"BINNED RESIDUALS (v2 Kelvin)")
+    print(f"BINNED RESIDUALS {label}")
     print(f"{'='*60}")
-    print(f"  {'z_center':>8s}  {'<Δμ>':>8s}  {'σ':>8s}  {'N':>5s}")
+    print(f"  {'z':>8s}  {'<Δμ>':>8s}  {'σ':>8s}  {'N':>5s}")
     print(f"  {'-'*8}  {'-'*8}  {'-'*8}  {'-'*5}")
 
     for j in range(n_bins):
@@ -656,174 +572,38 @@ def binned_hubble(z, resid, n_bins=15):
 
 
 # ============================================================
-# STAGE 7: K-CORRECTION CALIBRATION
-# ============================================================
-
-def kcorr_calibrated_hubble(sne_df, hd_df, xval_result):
-    """Calibrate K-correction residual using SALT2 cross-match.
-
-    The blackbody K-correction leaves a z-dependent residual because
-    SN Ia SEDs have UV blanketing, line features, and spectral evolution
-    that a simple blackbody doesn't capture.
-
-    Strategy:
-    1. In the cross-matched sample, fit: ΔK(z) = a + b×z + c×z²
-       where ΔK = m_raw - m_SALT2 (the K-correction error)
-    2. Apply correction to ALL raw SNe
-    3. Re-fit Hubble diagram
-
-    This uses SALT2 as a K-correction CALIBRATOR only — not for
-    standardization, distance model, or light curve fitting. The
-    K-correction is a well-understood photometric effect, not a
-    cosmological assumption.
-    """
-    # Get the K-correction residual from cross-match
-    z_cal = xval_result['z']
-    delta = xval_result['mu_raw'] - xval_result['mu_salt2']
-    valid = np.isfinite(delta)
-    z_cal, delta = z_cal[valid], delta[valid]
-
-    if len(z_cal) < 50:
-        print("  Insufficient cross-match for calibration")
-        return None
-
-    # Fit quadratic K-correction residual
-    coeffs = np.polyfit(z_cal, delta, 2)
-    kcorr_resid = np.poly1d(coeffs)
-
-    print(f"\n  K-correction calibration (from {len(z_cal)} matched SNe):")
-    print(f"    ΔK(z) = {coeffs[0]:+.4f}×z² {coeffs[1]:+.4f}×z {coeffs[2]:+.4f}")
-    print(f"    ΔK(0.1) = {kcorr_resid(0.1):+.3f}, ΔK(0.5) = {kcorr_resid(0.5):+.3f}, "
-          f"ΔK(1.0) = {kcorr_resid(1.0):+.3f}")
-
-    # Apply correction to full sample, capping at calibration range
-    z_cal_max = z_cal.max()
-    z_all = sne_df['z'].values
-    z_capped = np.clip(z_all, 0, z_cal_max)  # don't extrapolate
-    m_corrected = sne_df['peak_mag'].values - kcorr_resid(z_capped)
-
-    # Re-fit Hubble diagram with corrected magnitudes
-    mu_model = mu_v2k(z_all, M=0.0)
-    valid = np.isfinite(mu_model) & np.isfinite(m_corrected)
-    z_v = z_all[valid]
-    m_v = m_corrected[valid]
-    w_v = sne_df['width_rest'].values[valid]
-    mu_v = mu_model[valid]
-
-    # Fit: m_corr = mu_model + M_0 + alpha_w * (w - w_ref)
-    w_ref = np.median(w_v)
-    dw = w_v - w_ref
-    y = m_v - mu_v
-    A_mat = np.column_stack([np.ones(len(z_v)), dw])
-    params, _, _, _ = np.linalg.lstsq(A_mat, y, rcond=None)
-    M_0, alpha_w = params
-
-    m_std = m_v - alpha_w * dw
-    resid = m_std - mu_v - M_0
-
-    sigma = np.std(resid)
-    mad = median_abs_deviation(resid)
-    clip = np.abs(resid) < 3 * sigma
-    sigma_clipped = np.std(resid[clip]) if clip.sum() > 10 else sigma
-    n_outliers = (~clip).sum()
-
-    # Check z-slope of corrected residuals
-    slope, _ = np.polyfit(z_v, resid, 1)
-
-    print(f"\n  K-CORRECTED HUBBLE DIAGRAM:")
-    print(f"    SNe:              {len(z_v)}")
-    print(f"    M_0:              {M_0:.4f} mag")
-    print(f"    Width corr:       α_w = {alpha_w:.4f} mag/day")
-    print(f"    RMS scatter:      {sigma:.3f} mag")
-    print(f"    MAD scatter:      {mad:.3f} mag")
-    print(f"    3σ-clipped RMS:   {sigma_clipped:.3f} mag")
-    print(f"    Outliers:         {n_outliers} ({100*n_outliers/len(z_v):.1f}%)")
-    print(f"    Residual z-slope: {slope:+.3f} mag/unit-z")
-
-    # Binned residuals
-    print(f"\n  BINNED RESIDUALS (K-corrected):")
-    print(f"  {'z':>8s}  {'<Δμ>':>8s}  {'σ':>8s}  {'N':>5s}")
-    sort = np.argsort(z_v)
-    z_s, r_s = z_v[sort], resid[sort]
-    edges = np.linspace(z_s.min(), z_s.max(), 11)
-    for j in range(10):
-        mask = (z_s >= edges[j]) & (z_s < edges[j+1])
-        if mask.sum() < 5:
-            continue
-        print(f"  {np.mean(z_s[mask]):8.3f}  {np.mean(r_s[mask]):+8.4f}  "
-              f"{np.std(r_s[mask]):8.4f}  {mask.sum():5d}")
-
-    # Restricted analysis: z < z_cal_max (within calibration range)
-    in_range = z_v < z_cal_max
-    if in_range.sum() > 50:
-        resid_r = resid[in_range]
-        z_r = z_v[in_range]
-        sigma_r = np.std(resid_r)
-        clip_r = np.abs(resid_r) < 3 * sigma_r
-        sigma_r_clip = np.std(resid_r[clip_r]) if clip_r.sum() > 10 else sigma_r
-        slope_r, _ = np.polyfit(z_r, resid_r, 1)
-        mad_r = median_abs_deviation(resid_r)
-        print(f"\n  WITHIN CALIBRATION RANGE (z < {z_cal_max:.2f}):")
-        print(f"    SNe:              {in_range.sum()}")
-        print(f"    RMS scatter:      {sigma_r:.3f} mag")
-        print(f"    MAD scatter:      {mad_r:.3f} mag")
-        print(f"    3σ-clipped RMS:   {sigma_r_clip:.3f} mag")
-        print(f"    Residual z-slope: {slope_r:+.3f} mag/unit-z")
-
-    return {
-        'sigma': sigma, 'sigma_clipped': sigma_clipped,
-        'mad': mad, 'M_0': M_0, 'alpha_w': alpha_w,
-        'slope': slope, 'n_outliers': n_outliers,
-        'coeffs': coeffs, 'n_sne': len(z_v),
-    }
-
-
-# ============================================================
-# STAGE 8: SALT2 mB (UNSTANDARDIZED) + v2 KELVIN
+# STAGE 7: SALT2 mB (UNSTANDARDIZED) + v2 KELVIN
 # ============================================================
 
 def salt2_mB_v2kelvin(hd_df):
     """Test v2 Kelvin using SALT2's peak B-band magnitude WITHOUT standardization.
 
-    SALT2 gives mB (peak rest-frame B magnitude) from its SED-template
-    light curve fit. This is the BEST available peak extraction — it
-    handles K-corrections, template matching, and multi-band fitting
-    optimally. But we don't apply stretch (x1) or color (c) corrections.
-
-    This isolates the test: does v2 Kelvin match the Hubble diagram
-    shape when given good peak magnitudes?
-
-    Comparison levels:
-        1. mB alone (no corrections) — raw Hubble diagram
-        2. mB + stretch correction — α×x1
-        3. mB + stretch + color — α×x1 - β×c = mB_corr (full SALT2)
+    This is the control experiment: uses SALT2's excellent peak extraction
+    with v2 Kelvin's distance model. 0 free physics params.
     """
     z = hd_df['zHD'].values
     mB = hd_df['mB'].values
     x1 = hd_df['x1'].values
     c = hd_df['c'].values
     mu_salt2 = hd_df['MU'].values
-    mu_err = hd_df['MUERR_FINAL'].values
 
     valid = (z > 0.01) & np.isfinite(mB) & np.isfinite(mu_salt2)
     z, mB, x1, c = z[valid], mB[valid], x1[valid], c[valid]
-    mu_salt2, mu_err = mu_salt2[valid], mu_err[valid]
+    mu_salt2 = mu_salt2[valid]
 
     mu_model = mu_v2k(z, M=0.0)
     vm = np.isfinite(mu_model)
     z, mB, x1, c, mu_model = z[vm], mB[vm], x1[vm], c[vm], mu_model[vm]
-    mu_salt2, mu_err = mu_salt2[vm], mu_err[vm]
+    mu_salt2 = mu_salt2[vm]
 
     print(f"\n  Using {len(z)} SNe from SALT2 HD (z = {z.min():.3f}-{z.max():.3f})")
 
     results = {}
     for label, m_use in [
         ("mB raw (no corrections)", mB),
-        ("mB + stretch (α×x1)", mB + 0.15 * x1),  # typical α ≈ 0.15
-        ("mB + stretch + color", mB + 0.15 * x1 - 3.1 * c),  # typical β ≈ 3.1
+        ("mB + stretch + color", mB + 0.15 * x1 - 3.1 * c),
         ("SALT2 fully standardized", mu_salt2),
     ]:
-        # Fit M offset
         if label == "SALT2 fully standardized":
             resid = m_use - mu_model
         else:
@@ -841,21 +621,6 @@ def salt2_mB_v2kelvin(hd_df):
 
         results[label] = {'sigma': sigma, 'sigma_clip': sigma_clip, 'slope': slope}
 
-    # Binned residuals for mB raw
-    M_fit = np.median(mB - mu_model)
-    resid = mB - mu_model - M_fit
-    print(f"\n  BINNED RESIDUALS (mB raw, v2 Kelvin):")
-    print(f"  {'z':>8s}  {'<Δμ>':>8s}  {'σ':>8s}  {'N':>5s}")
-    sort = np.argsort(z)
-    z_s, r_s = z[sort], resid[sort]
-    edges = np.linspace(z_s.min(), z_s.max(), 11)
-    for j in range(10):
-        mask = (z_s >= edges[j]) & (z_s < edges[j + 1])
-        if mask.sum() < 5:
-            continue
-        print(f"  {np.mean(z_s[mask]):8.3f}  {np.mean(r_s[mask]):+8.4f}  "
-              f"{np.std(r_s[mask]):8.4f}  {mask.sum():5d}")
-
     return results
 
 
@@ -865,7 +630,7 @@ def salt2_mB_v2kelvin(hd_df):
 
 def main():
     print("=" * 60)
-    print("QFD CLEAN SNe PIPELINE v2 (Hsiao K-correction)")
+    print("QFD CLEAN SNe PIPELINE v3 (Hsiao Template Fit)")
     print("From raw photometry to Hubble diagram — no legacy code")
     print("=" * 60)
 
@@ -876,7 +641,7 @@ def main():
     print(f"  ξ = k²×5/6 = {XI_QFD:.4f}")
     print(f"  K_J = ξ×β^(3/2) = {K_J:.4f} km/s/Mpc")
     print(f"  η = π²/β² = {ETA:.4f}")
-    print(f"  K-correction: Hsiao+ (2007) SN Ia SED template")
+    print(f"  Template: Hsiao+ (2007) SN Ia SED (sncosmo)")
     print(f"  Free physics params: 0")
 
     # Stage 1: Load data
@@ -884,41 +649,36 @@ def main():
     phot = load_photometry()
     hd = load_salt2_hd()
 
-    # Build Hsiao K-correction grid
-    print(f"\n--- Building Hsiao K-correction grid ---")
-    z_grid, kcorr_grid, m_B_ref = build_kcorr_grid()
-
-    # Stage 2: Fit light curves
-    print(f"\n--- STAGE 2: Fit light curves (Hsiao K-correction) ---")
-    sne = process_all_sne(phot, z_grid, kcorr_grid)
+    # Stage 2: Hsiao template fitting
+    print(f"\n--- STAGE 2: Hsiao template fitting ---")
+    sne = process_all_sne(phot)
 
     # Stage 3: Quality cuts
     print(f"\n--- STAGE 3: Quality cuts ---")
     sne_clean = apply_quality_cuts(sne)
 
-    # Stage 4: Hubble diagram (with width correction)
-    print(f"\n--- STAGE 4: Hubble diagram ---")
-    result_w = fit_hubble_diagram(sne_clean, use_width_correction=True)
+    # Separate Hsiao-only sample for clean comparison
+    sne_hsiao = sne_clean[sne_clean['method'] == 'hsiao'].copy().reset_index(drop=True)
 
-    # Also without width correction
-    print(f"\n--- STAGE 4b: Hubble diagram (no width correction) ---")
-    result_nw = fit_hubble_diagram(sne_clean, use_width_correction=False)
+    # Stage 4: Hubble diagram
+    print(f"\n--- STAGE 4: Hubble diagram ---")
+    result_all = fit_hubble_diagram(sne_clean, label="[ALL]")
+    result_hsiao = fit_hubble_diagram(sne_hsiao, label="[Hsiao only]")
 
     # Stage 5: Binned residuals
-    binned_hubble(result_w['z'], result_w['resid'])
+    binned_hubble(result_hsiao['z'], result_hsiao['resid'], label="(Hsiao only, v2 Kelvin)")
 
     # Stage 6: Cross-validation
     print(f"\n--- STAGE 5: Cross-validation ---")
-    xval = cross_validate_salt2(sne_clean, hd, result_w)
+    xval = cross_validate_salt2(sne_clean, hd, result_all)
 
-    # Stage 7: K-correction calibration using cross-match
-    print(f"\n--- STAGE 6: K-correction calibration ---")
-    result_cal = None
-    if xval and xval['n_matched'] > 50:
-        result_cal = kcorr_calibrated_hubble(sne_clean, hd, xval)
+    # Also cross-validate Hsiao-only
+    if sne_hsiao is not None and len(sne_hsiao) > 100:
+        print(f"\n  --- Hsiao-only cross-validation ---")
+        xval_hsiao = cross_validate_salt2(sne_hsiao, hd, result_hsiao)
 
-    # Stage 8: Use SALT2 mB (no standardization) with v2 Kelvin
-    print(f"\n--- STAGE 7: SALT2 mB (unstandardized) + v2 Kelvin ---")
+    # Stage 7: SALT2 mB control test
+    print(f"\n--- STAGE 6: SALT2 mB control test ---")
     result_mB = salt2_mB_v2kelvin(hd)
 
     # Summary
@@ -926,31 +686,25 @@ def main():
     print(f"SUMMARY")
     print(f"{'='*60}")
     print(f"  Raw SNe processed:   {len(sne)}")
-    print(f"  After quality cuts:  {len(sne_clean)}")
+    print(f"  After quality cuts:  {len(sne_clean)} (Hsiao: {len(sne_hsiao)})")
     print(f"  z range:             {sne_clean['z'].min():.3f} - {sne_clean['z'].max():.3f}")
-    print(f"  With width corr:     σ = {result_w['sigma']:.3f} mag, "
-          f"σ_clip = {result_w['sigma_clipped']:.3f} mag")
-    print(f"  Without width corr:  σ = {result_nw['sigma']:.3f} mag, "
-          f"σ_clip = {result_nw['sigma_clipped']:.3f} mag")
+    print(f"")
+    print(f"  ALL (Hsiao+Gauss):   σ = {result_all['sigma']:.3f} mag, "
+          f"slope = {result_all['slope']:+.3f}")
+    print(f"  Hsiao only:          σ = {result_hsiao['sigma']:.3f} mag, "
+          f"slope = {result_hsiao['slope']:+.3f}")
     if xval:
-        print(f"  SALT2 cross-match:   {xval['n_matched']} SNe, "
-              f"raw σ = {xval['sigma_raw']:.3f}, SALT2 σ = {xval['sigma_salt2']:.3f}")
-    if result_cal:
-        print(f"  K-corr calibrated:   σ = {result_cal['sigma']:.3f} mag, "
-              f"σ_clip = {result_cal['sigma_clipped']:.3f} mag")
+        print(f"  Cross-matched:       Hsiao σ = {xval['sigma_raw']:.3f}, "
+              f"SALT2 σ = {xval['sigma_salt2']:.3f}")
     if result_mB:
         mB_raw = result_mB.get("mB raw (no corrections)", {})
-        print(f"  SALT2 mB + v2K:      σ = {mB_raw.get('sigma', 0):.3f} mag, "
-              f"z-slope = {mB_raw.get('slope', 0):+.3f}")
+        print(f"  SALT2 mB + v2K:      σ = {mB_raw.get('sigma', 0):.3f}, "
+              f"slope = {mB_raw.get('slope', 0):+.3f}")
+
     print(f"\n  Physics params: 0 (all from Golden Loop)")
-    print(f"  Calibration:    M_0 = {result_w['M_0']:.4f}")
+    print(f"  Calibration:    M_0 = {result_all['M_0']:.4f}")
 
-    print(f"\n  CONCLUSION:")
-    print(f"  v2 Kelvin distance model confirmed correct by SALT2 mB test.")
-    print(f"  K-correction: Hsiao+ (2007) SN Ia SED template (cross-band to B).")
-    print(f"  Published result (golden_loop_sne.py) remains primary: χ²/dof=0.955.")
-
-    return result_w, result_nw, xval, sne_clean, result_cal, result_mB
+    return result_all, result_hsiao, xval, sne_clean, result_mB
 
 
 if __name__ == '__main__':
