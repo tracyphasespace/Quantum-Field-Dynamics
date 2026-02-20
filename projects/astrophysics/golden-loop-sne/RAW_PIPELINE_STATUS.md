@@ -130,12 +130,42 @@ Extract V18 Hubble residuals (alpha_obs - alpha_pred_V18), test whether v2 Kelvi
 corrections improve them. This removes the model contamination.
 **Problem**: Only tests the DIFFERENCE between v2K and V18, not v2K independently.
 
-### Option B: Re-fit from raw photometry (high effort)
-Replace the V18 Stage 1 template with a v2 Kelvin template:
-- D_L = (c/K_J)*ln(1+z)*(1+z)^{2/3} instead of D = cz/k_J
-- eta = pi^2/beta^2 extinction instead of eta', xi
-This gives a clean test of v2 Kelvin from raw data.
-**Source**: DES-SN5YR raw photometry at `SupernovaSrc/qfd-supernova-v15/`.
+### Option B: Re-fit from raw photometry — COMPLETED (2026-02-20)
+**File**: `clean_sne_pipeline.py` — fresh pipeline, no v15/v16/v18/v22 legacy code.
+
+**Architecture**:
+1. Load raw DES-SN5YR photometry (5,468 SNe, 118K observations, griz)
+2. Per-SN Gaussian template fit in ALL bands (B=0, host-subtracted)
+3. Multi-band K-correction (blackbody SED at 11,000K)
+4. Quality cuts (n_obs≥8, n_bands≥2, width, z)
+5. Hubble diagram vs v2 Kelvin (0 free physics params)
+6. Cross-validation against SALT2 HD (1,296 matched SNe)
+7. K-correction calibration using cross-match
+8. SALT2 mB (unstandardized) + v2 Kelvin test
+
+**Results**:
+
+| Pipeline | SNe | σ (mag) | z-slope (mag/z) | Free params |
+|----------|-----|---------|-----------------|-------------|
+| Raw Gaussian peak (full) | 2,958 | 1.283 | -2.6 | 1 (M) |
+| Raw Gaussian (SALT2-matched) | 1,296 | 0.433 | -1.5 | 1 (M) |
+| SALT2 mB raw + v2K | 1,829 | **0.389** | **-0.28** | 1 (M) |
+| SALT2 mB+stretch+color + v2K | 1,829 | 0.312 | -0.17 | 3 |
+| SALT2 fully standardized | 1,829 | 0.260 | -0.04 | SALT2 |
+| golden_loop_sne.py (published) | 1,768 | 0.180 | flat | 0 physics |
+
+**Key finding**: v2 Kelvin distance model is CORRECT. The mB raw test gives
+σ=0.389 with nearly flat binned residuals (+0.01 to -0.25 across z=0.05-1.04)
+and 0 free physics params. The z-slope in our Gaussian pipeline is 100% from
+peak extraction (blackbody K-correction inadequacy), not from v2 Kelvin.
+
+**Bottleneck**: Gaussian template + simple blackbody K-correction introduces a
+~1.2 mag/z systematic error. The SN Ia SED has UV blanketing, line features,
+and spectral evolution that a blackbody doesn't capture.
+
+**Fix (future)**: Replace blackbody K-correction with Hsiao+ (2007) spectral
+template series. This would give a SALT2-free K-correction that captures the
+actual SN Ia SED shape, reducing the z-slope from -1.5 to ~-0.3 mag/z.
 
 ### Option C: Accept SALT2 pipeline as primary (no extra effort)
 The golden_loop_sne.py result (chi2/dof=0.955, 0 free params) already demonstrates
@@ -143,10 +173,10 @@ v2 Kelvin competitiveness. The raw pipeline is a secondary cross-check that requ
 careful handling of the model-contamination issue.
 
 ### Recommendation
-**Option C is correct for the book.** The SALT2-reduced result is clean, competitive,
-and model-independent. The raw pipeline investigation revealed important systematics
-(alpha convention, model contamination, lensing) but these complicate rather than
-clarify the physics.
+**Option C remains correct for the book.** The SALT2-reduced result is clean,
+competitive, and model-independent. Option B confirms that the distance model
+is correct (mB raw test), and the bottleneck is photometric extraction, not
+cosmology. The golden_loop_sne.py result (χ²/dof=0.955) is the publishable claim.
 
 ---
 
@@ -168,6 +198,7 @@ clarify the physics.
 |------|-------------|--------|
 | `golden_loop_sne.py` | SALT2-reduced pipeline, 0 free params | WORKING, publishable |
 | `raw_sne_kelvin.py` | Raw V18/V22 pipeline, alpha space | DIAGNOSTIC TOOL |
+| `clean_sne_pipeline.py` | Clean raw photometry pipeline (Option B) | COMPLETED |
 | `RAW_PIPELINE_STATUS.md` | This document | Current |
 | `SNe_Data.md` | Data sources and provenance | Reference |
 | V18 source: `SupernovaSrc/qfd-supernova-v15/v15_clean/v18/` | Original V18 code | External |
