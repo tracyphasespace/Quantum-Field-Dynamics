@@ -86,6 +86,19 @@ This is the correct qualitative behavior: alpha emission turns on smoothly as th
 
 The tradeoff is stark: pushing SF recall from 31% to 92% costs 13 percentage points of alpha accuracy, because SF and alpha are landscape-degenerate at Z ≥ 98. No combination of topological variables (epsilon, pf, cf, N/Z, parity) cleanly separates them. This is consistent with the Lagrangian separation — the landscape decides that fracture will occur, but the specific fracture mode (tip shedding vs. global bifurcation) requires dynamical information that geometry alone cannot provide.
 
+**Per-Species Competition.** The species-level view makes the gate competition explicit. For each decay mode, the best achievable accuracy across all tested configurations is shown alongside the average — the gap reveals which species are stable across configurations and which are sacrificed when other gates are tuned:
+
+| Species | Best | Average | Spread | Competes with | Notes |
+|---------|------|---------|--------|---------------|-------|
+| B- | 93.4% | 93.4% | 0.1% | — | Stable; gradient gate robust across all configs |
+| B+ | 89.3% | 87.8% | 2.2% | Alpha | B+ precision drops when alpha gate opens wider |
+| Alpha | 73.7% | 67.9% | 12.8% | SF, B+ | Most volatile; every SF improvement costs alpha |
+| SF | 91.8% | 61.9% | 61.2% | Alpha | Massive range: 30.6% to 91.8% depending on gate |
+| Proton | 40.8% | 37.4% | 10.2% | B+ | Heavy proton gate steals B+ nuclides |
+| Neutron | 100% | 100% | 0% | — | Core overflow gate is perfect and independent |
+
+The pattern is clear: B- and neutron gates are independent — they do not compete with any other species. But alpha, SF, B+, and proton form a tangled web of competition. Optimizing any one of these four degrades at least one other. The alpha/SF competition is the most severe: their best accuracies (73.7% and 91.8%) cannot be achieved simultaneously — the configuration that maximizes SF (91.8%) drives alpha down to 60.9%.
+
 **What This Tells Us.** Three findings are robust:
 
 1. **Core overflow IS the neutron trigger.** cf > 1.0 catches all 16 neutron emitters with no false negatives. This is a physical gate, not a coordinate threshold.
