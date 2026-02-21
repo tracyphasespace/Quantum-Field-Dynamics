@@ -57,8 +57,9 @@ The geometric gates above use coordinate thresholds: pf ≥ 0.5 for alpha, pf > 
 | Alpha | Is the scission barrier open? | B_eff ≤ 0 | 80.1% | 69.3% |
 | SF | Is the neck ready to rupture? | pf > 1.74, cf > 0.881, even-even | 30.6% | 30.6% |
 | Stable | Is there no gradient and no fracture risk? | No beta gain, pf < 0.3 | 39.7% | 74.5% |
+| IT/gamma | Is the spin state mismatched? | (not modeled) | 0% | — |
 
-Each tool is evaluated independently on all 3111 ground-state nuclides. When multiple gates fire simultaneously, a priority order resolves the conflict: neutron > proton > SF > alpha > beta > stable.
+IT depends on angular momentum coupling (Delta-J between parent and daughter spin states), which is outside the topological landscape. Each tool is evaluated independently on all 3111 ground-state nuclides. When multiple gates fire simultaneously, a priority order resolves the conflict: neutron > proton > SF > alpha > beta > stable.
 
 **The Alpha Scission Barrier.** The key physics in this approach is a computable scission barrier for alpha emission. Surface tension resists fracture; peanut deformation and Coulomb repulsion drive it:
 
@@ -96,6 +97,8 @@ The tradeoff is stark: pushing SF recall from 31% to 92% costs 13 percentage poi
 | SF | 91.8% | 61.9% | 61.2% | Alpha | Massive range: 30.6% to 91.8% depending on gate |
 | Proton | 40.8% | 37.4% | 10.2% | B+ | Heavy proton gate steals B+ nuclides |
 | Neutron | 100% | 100% | 0% | — | Core overflow gate is perfect and independent |
+| IT/gamma | 0% | 0% | 0% | — | Not modeled; spin physics (Delta-J), not topology |
+| Stable | 39.7% | 39.7% | 0% | B- | Residual category; 173/287 show weak beta gradient |
 
 The pattern is clear: B- and neutron gates are independent — they do not compete with any other species. But alpha, SF, B+, and proton form a tangled web of competition. Optimizing any one of these four degrades at least one other. The alpha/SF competition is the most severe: their best accuracies (73.7% and 91.8%) cannot be achieved simultaneously — the configuration that maximizes SF (91.8%) drives alpha down to 60.9%.
 
