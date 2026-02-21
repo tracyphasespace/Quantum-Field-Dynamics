@@ -3,8 +3,8 @@
 QFD Nuclide Predictor — Reviewer Edition
 ==========================================
 
-PURPOSE:  Predict charge, mass range, decay mode, and half-life for any
-          nuclide — ALL from a single measured input:
+PURPOSE:  Predict charge winding number, mass range, decay mode, and
+          half-life for any Q-ball soliton — ALL from a single measured input:
 
               α = 0.0072973525693  (fine-structure constant, CODATA 2018)
 
@@ -28,7 +28,7 @@ PROVENANCE:
     Clock constants: model_nuclide_topology.py lines 1401-1411
     Mode accuracy:   76.6% (ground-state, 253 nuclides)
     β-direction:     97.4%
-    Valley RMSE:     0.495 protons
+    Valley RMSE:     0.495 charge units
 
 Date: 2026-02-20
 """
@@ -282,8 +282,12 @@ def z0_backbone(A):
 def z_star(A):
     """Full compression law Z*(A) = backbone + harmonic resonance.
 
-    RMSE = 0.495 protons against 253 stable nuclides.
+    RMSE = 0.495 charge units against 253 stable nuclides.
     Zero free parameters — all 11 constants derived from α.
+
+    QFD ontology: A = mass charge (integrated soliton density),
+    Z = electromagnetic winding number (topological, integer-quantized).
+    There are no constituent nucleons inside the soliton.
     """
     f = _sigmoid(A)
     a3 = float(A) ** (1.0 / 3.0)
@@ -308,11 +312,14 @@ GeometricState = namedtuple('GeometricState', [
 
 
 def n_max_geometric(Z):
-    """Maximum neutron count for a given Z from geometric core growth.
+    """Maximum neutral core density capacity for a soliton of charge Z.
 
-    Z <= 10:  N_max = 2·Z  (light regime)
+    The soliton has a layered density: charge shell + neutral core.
+    N = A - Z is the neutral core mass, not a neutron count.
+
+    Z <= 10:  N_max = 2·Z  (light regime, fast core growth)
     Z > 10:   N_max = min(Z·(1 + CORE_SLOPE), N_MAX_ABSOLUTE)
-    Saturation at Z ≈ 106 where Z·1.671 = 177.
+    Saturation at Z ≈ 106 where Z·1.671 = 177 (density ceiling).
     """
     if Z <= 1:
         return 0.0
@@ -428,11 +435,11 @@ def predict_decay(Z, A):
         if geo.peanut_f >= PF_DEEP_PEANUT:
             return 'alpha', {'geo': geo}
 
-        # Moderate peanut with proton excess
+        # Moderate peanut with charge excess
         if geo.eps > 0:
             return 'alpha', {'geo': geo}
 
-        # Neutron-rich peanut: check β gradients
+        # Under-charged peanut: check β gradients
         current = survival_score(Z, A)
         gains = {}
         if Z + 1 <= A:
@@ -481,11 +488,11 @@ def predict_decay(Z, A):
 
     # ═══ ZONE 1: PRE-PEANUT (pf <= 0) ═══
 
-    # Neutron emission: core above capacity + light
+    # Neutral core ejection: core above capacity + light
     if geo.core_full > 1.0 and A < 50:
         return 'n', {'geo': geo}
 
-    # Proton emission: drastically under-filled + very proton-rich + light
+    # Charge ejection: drastically under-filled core + very over-charged + light
     if geo.core_full < 0.55 and geo.eps > 3.0 and A < 120:
         return 'p', {'geo': geo}
 
@@ -613,7 +620,7 @@ def predict_isotope_range(Z):
         if N < 0:
             continue
         eps = Z - z_star(A)
-        # Only show nuclides within ~15 protons of the valley
+        # Only show nuclides within ~15 charge units of the valley
         if abs(eps) > 15:
             continue
         mode, info = predict_decay(Z, A)
@@ -627,12 +634,12 @@ def predict_isotope_range(Z):
 
 MODE_DESCRIPTIONS = {
     'stable': 'topologically stable',
-    'B-':     'beta-minus (neutron conversion)',
-    'B+':     'beta-plus / EC (proton conversion)',
-    'alpha':  'alpha (soliton shedding)',
+    'B-':     'beta-minus (charge winding +1)',
+    'B+':     'beta-plus / EC (charge winding -1)',
+    'alpha':  'alpha (density pinch-off, A-4)',
     'SF':     'spontaneous fission (topological bifurcation)',
-    'n':      'neutron emission (core overflow)',
-    'p':      'proton emission (charge overflow)',
+    'n':      'n-emission (neutral core overflow)',
+    'p':      'p-emission (charge shell overflow)',
     'unknown':'unknown',
 }
 
@@ -644,22 +651,22 @@ def mode_reason(mode, geo):
     if mode == 'stable':
         return f'|eps|={geo.abs_eps:.2f} < threshold, no favorable gradient'
     elif mode == 'B-':
-        return f'eps={geo.eps:+.2f} (neutron-rich, Z < Z*)'
+        return f'eps={geo.eps:+.2f} (under-charged, Z < Z*)'
     elif mode == 'B+':
-        return f'eps={geo.eps:+.2f} (proton-rich, Z > Z*)'
+        return f'eps={geo.eps:+.2f} (over-charged, Z > Z*)'
     elif mode == 'alpha':
         if geo.peanut_f >= PF_DEEP_PEANUT:
             return f'pf={geo.peanut_f:.2f} >= {PF_DEEP_PEANUT} (deep peanut)'
         elif geo.peanut_f >= PF_ALPHA_POSSIBLE:
-            return f'pf={geo.peanut_f:.2f}, eps={geo.eps:+.2f} (peanut + proton-rich)'
+            return f'pf={geo.peanut_f:.2f}, eps={geo.eps:+.2f} (peanut + over-charged)'
         else:
             return f'eps={geo.eps:+.2f}, pf={geo.peanut_f:.2f}'
     elif mode == 'SF':
         return f'pf={geo.peanut_f:.2f}, cf={geo.core_full:.3f}, ee, A={geo.A}'
     elif mode == 'n':
-        return f'cf={geo.core_full:.2f} > 1.0 (core overflow)'
+        return f'cf={geo.core_full:.2f} > 1.0 (neutral core overflow)'
     elif mode == 'p':
-        return f'cf={geo.core_full:.2f}, eps={geo.eps:+.1f} (charge overflow)'
+        return f'cf={geo.core_full:.2f}, eps={geo.eps:+.1f} (charge shell overflow)'
     return ''
 
 
@@ -1007,7 +1014,7 @@ def format_comparison_box(Z, A):
             actual_hl_str = f"log10={comp['actual_log_hl']:.1f}"
 
     lines.append(f"  Actual:  {comp['actual_raw']} decay, t_half = {actual_hl_str}")
-    lines.append(f"  Z* err:  {Z - z_star(A):.2f} protons")
+    lines.append(f"  Z* err:  {Z - z_star(A):.2f} charge units")
 
     if comp['mode_match'] is True:
         lines.append(f"  Mode:    MATCH")
@@ -1043,7 +1050,7 @@ def format_batch_results(stats):
     lines.append(f"")
     lines.append(f"  === Batch: {stats['total']} nuclides ===")
     lines.append(f"")
-    lines.append(f"  Valley RMSE:       {stats['rmse']:.2f} protons")
+    lines.append(f"  Valley RMSE:       {stats['rmse']:.2f} charge units")
     if stats['beta_dir_total'] > 0:
         pct = 100.0 * stats['beta_dir_correct'] / stats['beta_dir_total']
         lines.append(f"  beta-direction:    {stats['beta_dir_correct']}/{stats['beta_dir_total']} = {pct:.1f}%")
