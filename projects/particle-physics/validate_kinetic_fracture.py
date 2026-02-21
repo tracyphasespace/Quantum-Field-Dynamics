@@ -2078,4 +2078,444 @@ if __name__ == '__main__':
               f"{alpha_acc:5.1f}% α  {sf_acc:4.1f}% SF  "
               f"({100*delta:+.1f}%)")
 
+    # ══════════════════════════════════════════════════════════════════
+    # ZONE-FIRST BARRIER ARCHITECTURE
+    # Use v8's zone structure as primary decision framework.
+    # Apply barrier corrections ONLY at mode competition boundaries.
+    # Hypothesis: barrier helps Zone 3, may regress Zone 2.
+    # ══════════════════════════════════════════════════════════════════
+    print(f"\n{'='*72}")
+    print(f"  ZONE-FIRST BARRIER ARCHITECTURE")
+    print(f"  Hypothesis: barrier helps Zone 3, may regress Zone 2")
+    print(f"  Strategy: use v8 where it works, barrier where it helps")
+    print(f"{'='*72}")
+
+    # ── Helper: zone-resolved accuracy ──
+    def zone_resolved_stats(data, pred_fn, label):
+        """Run predictor and return per-zone accuracy stats."""
+        zone_data = {1: [], 2: [], 3: []}
+        for d in data:
+            geo = compute_geometric_state(d['Z'], d['A'])
+            zone_data[geo.zone].append(d)
+        results = {}
+        for z in [1, 2, 3]:
+            st = run_comparison(zone_data[z], pred_fn, f"{label} Z{z}")
+            results[z] = st
+            results[z]['n'] = len(zone_data[z])
+        return results
+
+    # ── Step 1: Zone-resolved diagnostic — v8 vs Additive Coulomb ──
+    print(f"\n  ── Step 1: Zone-Resolved Diagnostic ──")
+    print(f"  Comparing v8 vs Additive Coulomb accuracy per zone\n")
+
+    zr_v8 = zone_resolved_stats(data, predict_decay_wrapper, "v8")
+    zr_coul = zone_resolved_stats(data, best_coul_pred, "Coulomb")
+
+    print(f"  {'Model':<22s} {'Zone1':>7s} {'Zone2':>7s} {'Zone3':>7s} "
+          f"{'Total':>7s}  {'N1':>5s} {'N2':>5s} {'N3':>5s}")
+    print(f"  {'-'*72}")
+    for label, zr, st_total in [("v8 gradient", zr_v8, stats_v8),
+                                  ("Additive Coulomb", zr_coul, stats_coul)]:
+        z1 = 100 * zr[1]['accuracy']
+        z2 = 100 * zr[2]['accuracy']
+        z3 = 100 * zr[3]['accuracy']
+        tot = 100 * st_total['accuracy']
+        print(f"  {label:<22s} {z1:6.1f}% {z2:6.1f}% {z3:6.1f}% "
+              f"{tot:6.1f}%  {zr[1]['n']:5d} {zr[2]['n']:5d} {zr[3]['n']:5d}")
+
+    for z in [1, 2, 3]:
+        delta = zr_coul[z]['accuracy'] - zr_v8[z]['accuracy']
+        print(f"  Zone {z} delta (Coulomb - v8): {100*delta:+.1f}%")
+
+    # Per-zone, per-mode breakdown for Zone 2 and 3
+    modes_show = ['stable', 'B-', 'B+', 'alpha', 'SF', 'p', 'n']
+    for z_show in [2, 3]:
+        print(f"\n  Zone {z_show} per-mode breakdown:")
+        print(f"  {'Mode':<10s} | {'v8':>6s} | {'Coulomb':>7s} | "
+              f"{'Delta':>7s} | {'N':>5s}")
+        print(f"  {'-'*50}")
+        for m in modes_show:
+            row_v8 = zr_v8[z_show]['confusion'].get(m, {})
+            row_c = zr_coul[z_show]['confusion'].get(m, {})
+            n_v8 = sum(row_v8.values())
+            if n_v8 == 0:
+                continue
+            acc_v8 = 100 * row_v8.get(m, 0) / n_v8
+            n_c = sum(row_c.values())
+            acc_c = 100 * row_c.get(m, 0) / n_c if n_c > 0 else 0
+            delta = acc_c - acc_v8
+            marker = '▲' if delta > 1 else ('▼' if delta < -1 else ' ')
+            print(f"  {m:<10s} | {acc_v8:5.1f}% | {acc_c:6.1f}% | "
+                  f"{delta:+6.1f}% | {n_v8:5d} {marker}")
+
+    # Zone 2 wins/losses: Coulomb vs v8
+    z2_wins = []
+    z2_losses = []
+    for d in data:
+        geo = compute_geometric_state(d['Z'], d['A'])
+        if geo.zone != 2:
+            continue
+        actual = d['mode']
+        p_v8, _ = predict_decay(d['Z'], d['A'])
+        p_c = best_coul_pred(d['Z'], d['A'])
+        if p_v8 != p_c:
+            entry = (d['Z'], d['A'], element_name(d['Z']), actual, p_v8, p_c,
+                     geo.eps, geo.peanut_f, geo.parity)
+            if p_c == actual and p_v8 != actual:
+                z2_wins.append(entry)
+            elif p_v8 == actual and p_c != actual:
+                z2_losses.append(entry)
+
+    print(f"\n  Zone 2 disagreements (Coulomb vs v8):")
+    print(f"  Coulomb WINS in Z2: {len(z2_wins)}")
+    for Z_d, A_d, el, act, v8p, cp, eps, pf, par in z2_wins:
+        print(f"    {el}-{A_d:3d} (Z={Z_d:3d}) actual={act:6s} v8={v8p:6s} "
+              f"coul={cp:6s} ε={eps:+.2f} pf={pf:.2f} {par}")
+    print(f"  Coulomb LOSSES in Z2: {len(z2_losses)}")
+    for Z_d, A_d, el, act, v8p, cp, eps, pf, par in z2_losses:
+        print(f"    {el}-{A_d:3d} (Z={Z_d:3d}) actual={act:6s} v8={v8p:6s} "
+              f"coul={cp:6s} ε={eps:+.2f} pf={pf:.2f} {par}")
+    print(f"  Zone 2 net: +{len(z2_wins)} wins, -{len(z2_losses)} losses")
+
+    # ── Step 2: Zone-first predictor variants ──
+
+    def predict_zone_strict(Z, A, K_SHEAR=PI, k_coul_scale=4.0):
+        """Zone-first strict: v8 Zone 1-2, full barrier Zone 3 only."""
+        if A < 1 or Z < 0 or A < Z:
+            return 'unknown'
+        if Z <= 1:
+            return 'stable' if A <= 2 else 'B-'
+        geo = compute_geometric_state(Z, A)
+        if geo.zone <= 2:
+            mode, _ = predict_decay(Z, A)
+            return mode
+        return predict_kinetic_coulomb(Z, A, K_SHEAR=K_SHEAR,
+                                        k_coul_scale=k_coul_scale, k_align=0.0)
+
+    def predict_zone_hybrid(Z, A, K_SHEAR=PI, k_coul_scale=4.0,
+                            eps_z2_thresh=0.5):
+        """Zone-first hybrid: v8 Zone 1, conservative-barrier Zone 2,
+        full-barrier Zone 3.
+
+        Zone 2 uses barrier BUT requires eps > eps_z2_thresh
+        (v8's overcharge requirement).
+        """
+        if A < 1 or Z < 0 or A < Z:
+            return 'unknown'
+        if Z <= 1:
+            return 'stable' if A <= 2 else 'B-'
+
+        geo = compute_geometric_state(Z, A)
+
+        # Zone 1: pure v8
+        if geo.zone == 1:
+            mode, _ = predict_decay(Z, A)
+            return mode
+
+        # Zone 3: full additive Coulomb barrier
+        if geo.zone == 3:
+            return predict_kinetic_coulomb(Z, A, K_SHEAR=K_SHEAR,
+                                            k_coul_scale=k_coul_scale,
+                                            k_align=0.0)
+
+        # Zone 2: barrier alpha check with conservative eps gate
+        pf = geo.peanut_f
+        eps = geo.eps
+
+        # Compute barrier
+        elastic = K_SHEAR * pf ** 2
+        coulomb = k_coul_scale * k_coulomb(A) * max(0.0, eps)
+        if A >= 6 and Z >= 3:
+            B_surf = bare_scission_barrier(A, 4)
+            B_eff = max(0.0, B_surf - elastic - coulomb)
+        else:
+            B_eff = 9999.0
+
+        # Conservative alpha: barrier open AND eps requirement
+        if B_eff <= 0.0 and eps > eps_z2_thresh:
+            current = survival_score(Z, A)
+            gain_bp = survival_score(Z - 1, A) - current if Z >= 1 else -9999.0
+            if gain_bp < PAIRING_SCALE:
+                return 'alpha'
+
+        # Fall through to v8 beta logic
+        current = survival_score(Z, A)
+        gain_bm = survival_score(Z + 1, A) - current if Z + 1 <= A else -9999.0
+        gain_bp = survival_score(Z - 1, A) - current if Z >= 1 else -9999.0
+        if gain_bm > 0 or gain_bp > 0:
+            return 'B-' if gain_bm >= gain_bp else 'B+'
+        return 'stable'
+
+    def predict_zone_override(Z, A, K_SHEAR=PI, k_coul_scale=4.0,
+                              beff_open=-1.0, beff_block=2.0):
+        """Zone-first override: start with v8 everywhere, override ONLY
+        when barrier strongly disagrees.
+
+        Override v8→alpha when signed B_eff < beff_open (strongly open)
+        Override v8→beta  when signed B_eff > beff_block (strongly blocked)
+        """
+        if A < 1 or Z < 0 or A < Z:
+            return 'unknown'
+        if Z <= 1:
+            return 'stable' if A <= 2 else 'B-'
+
+        v8_mode, _ = predict_decay(Z, A)
+        if v8_mode in ('n', 'p'):
+            return v8_mode
+
+        geo = compute_geometric_state(Z, A)
+        pf = geo.peanut_f
+        eps = geo.eps
+
+        # Compute signed barrier (not clipped)
+        elastic = K_SHEAR * pf ** 2
+        coulomb = k_coul_scale * k_coulomb(A) * max(0.0, eps)
+        if A >= 6 and Z >= 3:
+            B_surf = bare_scission_barrier(A, 4)
+            B_signed = B_surf - elastic - coulomb
+        else:
+            B_signed = 9999.0
+
+        # Override: barrier strongly open but v8 says beta
+        if B_signed < beff_open and v8_mode in ('B-', 'B+') and eps > 0:
+            return 'alpha'
+
+        # Override: barrier strongly blocks alpha but v8 says alpha
+        if B_signed > beff_block and v8_mode == 'alpha':
+            current = survival_score(Z, A)
+            gain_bm = (survival_score(Z + 1, A) - current
+                       if Z + 1 <= A else -9999.0)
+            gain_bp = (survival_score(Z - 1, A) - current
+                       if Z >= 1 else -9999.0)
+            if gain_bm > 0 or gain_bp > 0:
+                return 'B-' if gain_bm >= gain_bp else 'B+'
+            return 'stable'
+
+        return v8_mode
+
+    # ── Step 3: Test zone-first variants ──
+    print(f"\n  ── Steps 2-3: Zone-First Variants (K_SHEAR=π, cs=4.0) ──")
+
+    stats_zs = run_comparison(data, predict_zone_strict,
+                               "Zone-first STRICT")
+    stats_zh = run_comparison(data, predict_zone_hybrid,
+                               "Zone-first HYBRID")
+    stats_zo = run_comparison(data, predict_zone_override,
+                               "Zone-first OVERRIDE")
+
+    zr_zs = zone_resolved_stats(data, predict_zone_strict, "Strict")
+    zr_zh = zone_resolved_stats(data, predict_zone_hybrid, "Hybrid")
+    zr_zo = zone_resolved_stats(data, predict_zone_override, "Override")
+
+    print(f"\n  {'Model':<24s} {'Zone1':>7s} {'Zone2':>7s} {'Zone3':>7s} "
+          f"{'Total':>7s} {'vs v8':>7s}")
+    print(f"  {'-'*65}")
+
+    all_zone_models = [
+        ("v8 gradient", zr_v8, stats_v8),
+        ("Additive Coulomb", zr_coul, stats_coul),
+        ("Zone-first strict", zr_zs, stats_zs),
+        ("Zone-first hybrid", zr_zh, stats_zh),
+        ("Zone-first override", zr_zo, stats_zo),
+    ]
+    for label, zr, st in all_zone_models:
+        z1 = 100 * zr[1]['accuracy']
+        z2 = 100 * zr[2]['accuracy']
+        z3 = 100 * zr[3]['accuracy']
+        tot = 100 * st['accuracy']
+        vs_v8 = 100 * (st['accuracy'] - stats_v8['accuracy'])
+        print(f"  {label:<24s} {z1:6.1f}% {z2:6.1f}% {z3:6.1f}% "
+              f"{tot:6.1f}% {vs_v8:+6.1f}%")
+
+    # Per-mode delta for best variant vs v8
+    print(f"\n  ── Per-mode: v8 → Zone-first STRICT ──")
+    print_per_mode_delta(stats_v8, stats_zs)
+    print(f"\n  ── Per-mode: v8 → Zone-first HYBRID ──")
+    print_per_mode_delta(stats_v8, stats_zh)
+
+    # ── Step 4: Scan Zone 2 eps threshold (hybrid variant) ──
+    print(f"\n{'='*72}")
+    print(f"  Step 4: Zone 2 eps Threshold Scan (hybrid variant)")
+    print(f"  K_SHEAR=π, k_coul_scale=4.0, varying eps_z2_thresh")
+    print(f"{'='*72}")
+
+    eps_z2_values = [0.0, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0]
+    print(f"\n  {'ε_z2':>6s} {'Mode%':>7s} {'Z2%':>7s} {'vs v8':>7s}")
+    print(f"  {'-'*35}")
+
+    best_z2_acc = 0
+    best_z2_thresh = 0
+
+    for eps_t in eps_z2_values:
+        def pred_fn(Z, A, _et=eps_t):
+            return predict_zone_hybrid(Z, A, K_SHEAR=PI, k_coul_scale=4.0,
+                                        eps_z2_thresh=_et)
+        st = run_comparison(data, pred_fn, f"ε_z2={eps_t}")
+        # Zone 2 accuracy
+        z2_data = [d for d in data
+                   if compute_geometric_state(d['Z'], d['A']).zone == 2]
+        st_z2 = run_comparison(z2_data, pred_fn, f"ε_z2={eps_t} Z2")
+        z2_acc = 100 * st_z2['accuracy']
+        vs_v8 = 100 * (st['accuracy'] - stats_v8['accuracy'])
+        marker = ''
+        if st['accuracy'] > best_z2_acc:
+            best_z2_acc = st['accuracy']
+            best_z2_thresh = eps_t
+            marker = ' ◄'
+        print(f"  {eps_t:6.2f} {100*st['accuracy']:6.1f}% {z2_acc:6.1f}% "
+              f"{vs_v8:+6.1f}%{marker}")
+
+    print(f"\n  BEST: eps_z2_thresh={best_z2_thresh:.2f} "
+          f"→ {100*best_z2_acc:.1f}%")
+
+    # Rebuild best hybrid with optimal threshold
+    def best_hybrid_pred(Z, A):
+        return predict_zone_hybrid(Z, A, K_SHEAR=PI, k_coul_scale=4.0,
+                                    eps_z2_thresh=best_z2_thresh)
+
+    stats_zh_best = run_comparison(data, best_hybrid_pred,
+                                    f"Hybrid (ε_z2={best_z2_thresh})")
+
+    # ── Step 5: Full comparison ──
+    print(f"\n{'='*72}")
+    print(f"  Step 5: ZONE-FIRST COMPARISON — ALL VARIANTS")
+    print(f"{'='*72}")
+
+    zr_zh_best = zone_resolved_stats(data, best_hybrid_pred, "Hybrid*")
+
+    final_zone_models = [
+        ("v8 gradient", zr_v8, stats_v8),
+        ("Additive Coulomb", zr_coul, stats_coul),
+        ("Zone-first strict", zr_zs, stats_zs),
+        ("Zone-first hybrid*", zr_zh_best, stats_zh_best),
+        ("Zone-first override", zr_zo, stats_zo),
+    ]
+
+    print(f"\n  {'Model':<24s} {'Zone1':>7s} {'Zone2':>7s} {'Zone3':>7s} "
+          f"{'Total':>7s} {'vs v8':>7s}")
+    print(f"  {'-'*65}")
+    for label, zr, st in final_zone_models:
+        z1 = 100 * zr[1]['accuracy']
+        z2 = 100 * zr[2]['accuracy']
+        z3 = 100 * zr[3]['accuracy']
+        tot = 100 * st['accuracy']
+        vs_v8 = 100 * (st['accuracy'] - stats_v8['accuracy'])
+        print(f"  {label:<24s} {z1:6.1f}% {z2:6.1f}% {z3:6.1f}% "
+              f"{tot:6.1f}% {vs_v8:+6.1f}%")
+    print(f"\n  * hybrid eps_z2_thresh = {best_z2_thresh:.2f}")
+
+    # Find the best zone-first model
+    zone_first_cands = [
+        ("strict", stats_zs, predict_zone_strict, zr_zs),
+        ("hybrid*", stats_zh_best, best_hybrid_pred, zr_zh_best),
+        ("override", stats_zo, predict_zone_override, zr_zo),
+    ]
+    zone_first_cands.sort(key=lambda x: -x[1]['accuracy'])
+    best_zf_name, best_zf_stats, best_zf_pred, best_zf_zr = (
+        zone_first_cands[0])
+
+    # Per-mode for best zone-first
+    print(f"\n  ── Per-mode: v8 → Best zone-first ({best_zf_name}) ──")
+    print_per_mode_delta(stats_v8, best_zf_stats)
+    print(f"\n  ── Per-mode: Additive Coulomb → Best zone-first ──")
+    print_per_mode_delta(stats_coul, best_zf_stats)
+
+    # ── Step 6: Wins/losses diagnostic per zone ──
+    print(f"\n{'='*72}")
+    print(f"  Step 6: WINS/LOSSES — Best zone-first ({best_zf_name}) "
+          f"vs Additive Coulomb")
+    print(f"{'='*72}")
+
+    zf_wins_by_zone = {1: [], 2: [], 3: []}
+    zf_losses_by_zone = {1: [], 2: [], 3: []}
+
+    for d in data:
+        Z_d, A_d = d['Z'], d['A']
+        actual = d['mode']
+        geo = compute_geometric_state(Z_d, A_d)
+        pred_ac = best_coul_pred(Z_d, A_d)
+        pred_zf = best_zf_pred(Z_d, A_d)
+        if pred_ac != pred_zf:
+            entry = (Z_d, A_d, element_name(Z_d), actual, pred_ac, pred_zf,
+                     geo.eps, geo.peanut_f, geo.parity)
+            if pred_zf == actual and pred_ac != actual:
+                zf_wins_by_zone[geo.zone].append(entry)
+            elif pred_ac == actual and pred_zf != actual:
+                zf_losses_by_zone[geo.zone].append(entry)
+
+    for z in [1, 2, 3]:
+        w = len(zf_wins_by_zone[z])
+        l = len(zf_losses_by_zone[z])
+        net = w - l
+        print(f"\n  Zone {z}: +{w} wins, -{l} losses = net {net:+d}")
+        if zf_wins_by_zone[z]:
+            print(f"    WINS:")
+            for (Z_d, A_d, el, act, ac, zf, eps, pf, par
+                 ) in zf_wins_by_zone[z][:10]:
+                print(f"      {el}-{A_d:3d} (Z={Z_d:3d}) actual={act:6s} "
+                      f"Coul={ac:6s} ZF={zf:6s} ε={eps:+.2f} "
+                      f"pf={pf:.2f} {par}")
+        if zf_losses_by_zone[z]:
+            print(f"    LOSSES:")
+            for (Z_d, A_d, el, act, ac, zf, eps, pf, par
+                 ) in zf_losses_by_zone[z][:10]:
+                print(f"      {el}-{A_d:3d} (Z={Z_d:3d}) actual={act:6s} "
+                      f"Coul={ac:6s} ZF={zf:6s} ε={eps:+.2f} "
+                      f"pf={pf:.2f} {par}")
+
+    total_wins = sum(len(v) for v in zf_wins_by_zone.values())
+    total_losses = sum(len(v) for v in zf_losses_by_zone.values())
+    print(f"\n  TOTAL: +{total_wins} wins, -{total_losses} losses = "
+          f"net {total_wins - total_losses:+d}")
+
+    # Also compare best zone-first vs v8 per-zone wins/losses
+    print(f"\n  ── Best zone-first ({best_zf_name}) vs v8: per-zone ──")
+    v8_wins_zone = {1: 0, 2: 0, 3: 0}
+    v8_losses_zone = {1: 0, 2: 0, 3: 0}
+    for d in data:
+        Z_d, A_d = d['Z'], d['A']
+        actual = d['mode']
+        geo = compute_geometric_state(Z_d, A_d)
+        p_v8, _ = predict_decay(Z_d, A_d)
+        p_zf = best_zf_pred(Z_d, A_d)
+        if p_v8 != p_zf:
+            if p_zf == actual and p_v8 != actual:
+                v8_wins_zone[geo.zone] += 1
+            elif p_v8 == actual and p_zf != actual:
+                v8_losses_zone[geo.zone] += 1
+    for z in [1, 2, 3]:
+        w = v8_wins_zone[z]
+        l = v8_losses_zone[z]
+        print(f"  Zone {z}: +{w} wins, -{l} losses vs v8 = net {w-l:+d}")
+
+    # ── Zone-first verdict ──
+    print(f"\n{'='*72}")
+    print(f"  ZONE-FIRST VERDICT")
+    print(f"{'='*72}")
+    zf_vs_coul = best_zf_stats['accuracy'] - stats_coul['accuracy']
+    zf_vs_v8 = best_zf_stats['accuracy'] - stats_v8['accuracy']
+    print(f"  Best zone-first:    {best_zf_name} "
+          f"→ {100*best_zf_stats['accuracy']:.1f}%")
+    print(f"  Additive Coulomb:   {100*stats_coul['accuracy']:.1f}%")
+    print(f"  v8 gradient:        {100*stats_v8['accuracy']:.1f}%")
+    print(f"  Zone-first vs Coulomb: {100*zf_vs_coul:+.1f}%")
+    print(f"  Zone-first vs v8:     {100*zf_vs_v8:+.1f}%")
+
+    z2_regressions_prevented = len(zf_wins_by_zone[2])
+    z3_acc_zf = 100 * best_zf_zr[3]['accuracy']
+    z3_acc_coul = 100 * zr_coul[3]['accuracy']
+
+    if zf_vs_coul >= -0.001:
+        print(f"\n  Zone-first MATCHES or IMPROVES on Coulomb:")
+        print(f"    Zone 2 regressions prevented: {z2_regressions_prevented}")
+        print(f"    Zone 3 accuracy: {z3_acc_zf:.1f}% "
+              f"(Coulomb: {z3_acc_coul:.1f}%)")
+    else:
+        print(f"\n  Zone-first REGRESSES vs Coulomb by "
+              f"{100*abs(zf_vs_coul):.1f}%:")
+        print(f"    Coulomb barrier is already zone-aware "
+              f"(elastic=0 when pf≤0)")
+        print(f"    Zone 2 wins: {z2_regressions_prevented}, "
+              f"Zone 2 losses: {len(zf_losses_by_zone[2])}")
+
     print(f"\n  Done.")

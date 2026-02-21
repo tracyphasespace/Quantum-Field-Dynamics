@@ -392,11 +392,30 @@ Additive Coulomb       81.3    98.6    79.0   30.6   +3.8  ◄ WINNER
 Perturbation           81.8    98.6    85.3    6.1   +4.3
 Mult-Dzhanibekov       78.2    99.1    48.2   28.6   +0.7
 Coupled Coulomb        79.3    98.5    73.4   22.4   +1.8
+Zone-first strict      79.6    —       63.4   30.6   +2.1
+Zone-first hybrid      79.7    —       63.4   30.6   +2.2
+Zone-first override    79.3    —       —      —      +1.8
 Triaxiality (all f(T)) <v8    —       —      —      <0
 ```
 
 **Winner (balanced)**: Additive Coulomb (81.3%), best α + SF accuracy.
 **Winner (alpha-only)**: Perturbation (85.3% α), trades SF to 6.1%.
+
+### Zone-resolved accuracy
+
+```
+Model                  Zone1   Zone2   Zone3
+──────────────────────────────────────────────
+v8 gradient            85.0%   80.1%   58.3%
+Additive Coulomb       85.0%   86.2%   67.3%
+Zone-first strict      85.0%   80.1%   67.3%
+Zone-first hybrid      85.0%   80.5%   67.3%
+Zone-first override    85.0%   85.0%   60.1%
+```
+
+Zone 2 is where the additive Coulomb model shines: +6.1% over v8,
+driven by correct alpha detections in high-ε nuclides (A=165–195).
+See §15 for full analysis.
 
 ### Best model: Additive Coulomb + v8 SF gate
 
@@ -528,3 +547,152 @@ magnitude (~12 at A=200) makes normalization unclear.
    B_eff = max(0, B_surf(A,4) − π·pf² − 4·K_COUL(A)·max(0,ε))
    ```
    All other constants derive from α via the Golden Loop.
+
+9. **Zone-first architecture doesn't help** (§15): restricting the
+   barrier to Zone 3 only LOSES 1.6% vs applying it everywhere,
+   because the Coulomb barrier's Zone 2 alpha detections are correct.
+
+---
+
+## 15. Zone-First Barrier Architecture — Negative Result
+
+**Date**: 2026-02-21
+**Hypothesis**: The additive Coulomb model may regress in Zone 2
+(0 < pf < 1) by opening alpha where v8 correctly predicts beta.
+Restricting barrier physics to Zone 3 only would prevent these
+regressions while keeping Zone 3 improvements.
+
+### The three zones
+
+| Zone | pf range | A range   | v8 acc | Dominant modes            |
+|------|----------|-----------|--------|---------------------------|
+| 1    | pf ≤ 0   | A < ~137  | 85.0%  | B-, B+, stable, n, p      |
+| 2    | 0 < pf < 1| ~137–195 | 80.1%  | B-, B+, alpha onset       |
+| 3    | pf ≥ 1   | A ≥ ~195  | 58.3%  | alpha, B+, SF             |
+
+### Zone-resolved diagnostic
+
+The first step was measuring WHERE the additive Coulomb model
+wins and loses vs v8, zone by zone:
+
+```
+Model                  Zone1   Zone2   Zone3   Total
+─────────────────────────────────────────────────────
+v8 gradient            85.0%   80.1%   58.3%   77.5%
+Additive Coulomb       85.0%   86.2%   67.3%   81.3%
+─────────────────────────────────────────────────────
+Delta                   0.0%   +6.1%   +9.0%   +3.8%
+```
+
+**Key finding**: The Coulomb model improves Zone 2 by +6.1%, not
+regresses it. Zone 2 contains +73 wins and -20 losses vs v8.
+
+### Why Zone 2 improves
+
+Zone 2 nuclides with high pf (0.7–1.0) AND high ε (6–10) are
+overwhelmingly alpha emitters (Tl, Pb, Bi, Po at A=165–195). The
+v8 model misclassifies these as B+ because its alpha gate requires
+`pf ≥ PF_ALPHA_POSSIBLE (0.5) AND eps > 0.5 AND gain_bp < PAIRING_SCALE`.
+The Coulomb barrier model correctly opens alpha for these nuclides
+because the combination of elastic (π·pf²) + Coulomb (4·K_COUL·ε)
+exceeds the surface barrier.
+
+The 20 Zone 2 losses are B+ nuclides (Hg, Tl, Pb, Bi) with
+moderately high ε (5–8) where the barrier opens but B+ is correct.
+These are alpha/B+ boundary cases where the Coulomb term slightly
+overreaches — but the 73 wins far outweigh.
+
+### Three zone-first variants tested
+
+1. **Strict**: v8 Zone 1–2, full barrier Zone 3 only
+2. **Hybrid**: v8 Zone 1, conservative-barrier Zone 2 (require
+   barrier open AND eps > threshold), full barrier Zone 3
+3. **Override**: v8 everywhere, override only when barrier
+   strongly disagrees (signed B_eff < −1 or > +2)
+
+```
+Model                  Zone1   Zone2   Zone3   Total   vs v8
+─────────────────────────────────────────────────────────────
+v8 gradient            85.0%   80.1%   58.3%   77.5%    —
+Additive Coulomb       85.0%   86.2%   67.3%   81.3%   +3.8%
+Zone-first strict      85.0%   80.1%   67.3%   79.6%   +2.1%
+Zone-first hybrid*     85.0%   80.5%   67.3%   79.7%   +2.2%
+Zone-first override    85.0%   85.0%   60.1%   79.3%   +1.8%
+```
+
+ALL zone-first variants REGRESS vs additive Coulomb (−1.6% to −2.0%).
+
+### Zone 2 eps threshold scan (hybrid variant)
+
+Scanned eps_z2_thresh ∈ {0, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0}.
+**All values give identical results** (79.7%). The barrier barely opens
+in Zone 2 under the hybrid's conservative conditions (barrier open
+AND eps > threshold AND gain_bp < PAIRING_SCALE), so the threshold
+is irrelevant. The hybrid's Zone 2 logic almost never fires.
+
+### Wins/losses: best zone-first (hybrid) vs Coulomb
+
+```
+Zone 1: +0 wins, −0 losses = net  0  (identical by construction)
+Zone 2: +20 wins, −70 losses = net −50  (REGRESSION)
+Zone 3: +0 wins, −0 losses = net  0  (identical by construction)
+TOTAL:  +20 wins, −70 losses = net −50
+```
+
+The 20 Zone 2 wins (correctly blocking Coulomb's false alphas) are
+overwhelmed by the 70 Zone 2 losses (missing Coulomb's correct alphas).
+
+### Why the hypothesis was wrong
+
+The barrier model is **already zone-aware by construction**:
+- Zone 1 (pf ≤ 0): elastic = K_SHEAR · 0² = 0. Barrier ≈ B_surf.
+  Only the Coulomb term remains, and at A < 137 the surface barrier
+  B_surf ≈ 5–6 is much larger than Coulomb contributions. The barrier
+  never opens → identical to v8.
+- Zone 2 (0 < pf < 1): elastic grows as pf increases. Combined with
+  Coulomb, the barrier opens for high-ε nuclides (correctly). The
+  continuous barrier provides a better alpha gate than v8's hard
+  threshold (PF_ALPHA_POSSIBLE = 0.5).
+- Zone 3 (pf ≥ 1): full barrier physics with elastic and Coulomb
+  both significant.
+
+There is no Zone 2 regression to prevent. The additive barrier is
+a smooth, physically motivated replacement for v8's empirical
+thresholds, and it works BETTER in Zone 2, not worse.
+
+### Per-mode impact of zone-first restriction
+
+| Mode   | Coulomb | Hybrid  | Delta   |
+|--------|---------|---------|---------|
+| stable | 55.7%   | 55.7%   |  0.0%   |
+| B-     | 90.2%   | 90.2%   |  0.0%   |
+| B+     | 85.1%   | 86.9%   | +1.9%   |
+| alpha  | 79.0%   | 63.4%   | −15.6%  |
+| SF     | 30.6%   | 30.6%   |  0.0%   |
+
+The zone-first model prevents 20 false alpha calls in Zone 2 (B+
+accuracy +1.9%) but misses 70 correct alpha calls (alpha accuracy
+−15.6%). The net is strongly negative.
+
+### Lessons
+
+1. **Don't assume the map is doing the work.** The barrier's pf²
+   term IS the map — it smoothly encodes zone information without
+   hard boundaries.
+
+2. **Continuous physics > discrete zones.** The v8 zone boundaries
+   at pf = 0 and pf = 1 are arbitrary cuts through a smooth
+   physical landscape. The barrier model replaces these cuts with
+   a continuous function that happens to be small in Zone 1, growing
+   in Zone 2, and large in Zone 3.
+
+3. **The Coulomb term is the key Zone 2 innovation.** Without
+   Coulomb (flat kinetic), Zone 2 accuracy = 80.1% (same as v8).
+   With Coulomb, Zone 2 = 86.2%. The Z-dependence from K_COUL·ε
+   is what allows the barrier to discriminate alpha from B+ within
+   Zone 2.
+
+4. **The additive Coulomb model is optimal.** No variant tested
+   (zone-first, triaxial, coupled, multiplicative, perturbation
+   spectrum) improves on the simple three-term additive barrier for
+   balanced mode accuracy.
